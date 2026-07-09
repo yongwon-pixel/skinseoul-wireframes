@@ -205,6 +205,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <button class="wf-tab" data-state="s4">4 · 반품 모드</button>
     <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
     <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
+    <button class="wf-tab" data-modal="m-restock">모달: 반품 입고</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -588,7 +589,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <thead><tr>
         <th style="width:34px"><input type="checkbox" checked></th>
         <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>입고 수량</th><th>재입고 로케이션</th><th>Actions</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr class="row-exist">
@@ -597,8 +598,6 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
           <td class="num">✓ 8809738317481</td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
-          <td class="anno"><div class="loc-inline"><input value="1" style="width:56px"></div><span class="dot" style="top:-12px;right:-4px">4</span></td>
-          <td><div class="loc-inline anno"><input value="A-03-2"><span class="dot" style="top:-12px;right:-12px">3</span></div></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
@@ -607,8 +606,6 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td><td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10322198837710</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
-          <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
-          <td><div class="loc-inline"><input value="B-01-4"></div></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
@@ -617,15 +614,13 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
           <td class="num">✓ 8809640733458</td><td class="num">24101467999310</td><td class="num" style="color:var(--blue)">10322198837710</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
-          <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
-          <td class="anno"><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div><span class="dot" style="top:-12px;right:-4px">5</span></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
       </tbody>
     </table>
     <div class="bulkbar anno">
-      <button class="btn btn-green">선택 제품 창고 입고 처리 (3개)</button>
-      <span class="cnt">행별 입고 수량 기준으로 처리 · 입고 완료 시 Current Stocks 재고·로케이션에 자동 반영 · <b style="color:var(--amber)">로케이션 미지정 행 포함 시 처리 불가</b></span>
+      <button class="btn btn-green" data-modal="m-restock">선택 제품 창고 입고 처리 (3개)</button>
+      <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션 확정 후 일괄 처리</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
     </div>
   </div>
@@ -634,10 +629,9 @@ body.no-anno .dot,body.no-anno .legend{display:none}
   <h3>State 4 변경사항 — 반품 제품 입고 프로세스</h3>
   <ol>
     <li><span class="n">1</span><span>반품된 송장 바코드 스캔 시 "반품 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">2</span><span>전체/선택 후 창고 입고 처리 버튼 → 재고 자동 편입 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">3</span><span>재입고 로케이션 입력 — 입고 시 로케이션 결정 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">4</span><span>입고 수량 칼럼 — 기본값=주문 수량, 부분 반품 시 수정 가능 (예: 2개 중 1개만 반품 → 1로 수정 후 일괄 처리) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">5</span><span>로케이션 자동 채움 규칙 — 기존 재고 SKU는 현재 로케이션 자동 입력, 창고 로케이션이 없는 SKU(JIT 전용)는 "로케이션 지정 필요" 표시 → 지정 전에는 일괄 입고 처리 차단 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">2</span><span>선택 제품 창고 입고 처리 버튼 → 입고 확인 모달 오픈 (테이블의 수량·로케이션 칼럼은 제거, 모달로 이동. 버튼 클릭해서 확인) <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">3</span><span>입고 확인 모달(M3) — 제품별 입고 여부 체크 + 입고 수량(기본=주문 수량, 부분 반품 시 수정) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">4</span><span>로케이션 미지정 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
   </ol>
 </div>
 </section>
@@ -656,6 +650,10 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <div class="qrow">
         <b style="color:var(--ink)">2. 복구 수량</b>
         <input value="2"> <span class="mut">기본값 = 인바운드됐던 개수 (수정 가능)</span>
+      </div>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink)">3. 메모 (Optional)</b>
+        <textarea placeholder="취소 사유나 참고사항 — 작성 시 오더 코멘트 히스토리에 함께 기록됩니다" style="width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:64px;resize:vertical"></textarea>
       </div>
       <div class="note">해당 SKU의 <b>Reserved Quantity → Available</b>로 자동 반영됩니다.<br>용도: 오더 중간 취소, 창고 재고가 있는데 실수로 JIT 주문한 경우.</div>
     </div>
@@ -686,6 +684,31 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
       <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 반품 창고 입고 확인 ══════════════ -->
+<div class="overlay" id="m-restock">
+  <div class="modal anno" style="max-width:680px">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>창고 입고 처리 — Order 412990<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다.</p>
+      <table class="tbl" style="margin-top:0;font-size:12.5px">
+        <thead><tr><th style="width:30px"><input type="checkbox" checked></th><th>Product</th><th>주문 수량</th><th>입고 수량</th><th>로케이션</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked></td><td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="A-03-2"></div></td></tr>
+          <tr><td><input type="checkbox" checked></td><td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="B-01-4"></div></td></tr>
+          <tr><td><input type="checkbox" checked></td><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div></td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">로케이션 미지정 제품 1개</b> — 지정 전에는 입고 확정이 비활성입니다.</div>
+      <div class="note">입고 완료 시 Current Stocks 재고·로케이션에 자동 반영됩니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-gray btn-sm">3개 입고 확정</button>
     </div>
   </div>
 </div>
