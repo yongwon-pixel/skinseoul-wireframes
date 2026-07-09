@@ -324,10 +324,10 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <h4>인바운드 / 아웃바운드 로그</h4>
       <span class="dot" style="top:-8px;left:190px">13</span>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>작업자</th></tr>
-        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td>Dean</td></tr>
-        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구 +1)</td><td class="num">100038120</td><td>Dean</td></tr>
-        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td>Miranti</td></tr>
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
@@ -361,7 +361,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <li><span class="n">10</span><span>"Outbound to Deleo Baroship" → "Outbound"로 라벨 변경 <span class="ref">— C 동작</span></span></li>
     <li><span class="n">11</span><span>오더 코멘트 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">13</span><span>행위자 로그 — 누가 인/아웃바운드·취소했는지, 결과창 하단 노출 <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~4) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
     <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 날짜별 export <span class="ref">— C 로그</span></span></li>
@@ -449,6 +449,17 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       </tbody>
     </table>
     <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>인바운드 / 아웃바운드 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
   </div>
 </div></div>
 <div class="legend">
@@ -539,6 +550,18 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       </tbody>
     </table>
     <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>인바운드 / 아웃바운드 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">07-09 11:47</td><td class="act-out">OUTBOUND</td><td class="num">전체 (3 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
   </div>
 </div></div>
 <div class="legend">
@@ -622,6 +645,16 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <button class="btn btn-green" data-modal="m-restock">선택 제품 창고 입고 처리 (3개)</button>
       <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션 확정 후 일괄 처리</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
+    </div>
+
+    <div class="logsec anno">
+      <h4>인바운드 / 아웃바운드 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">반품 입고 (Stock 추가)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">고객 변심 반품 — 외관 이상 없음</span></td></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">반품 입고 (Stock 추가)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-02 09:12</td><td class="act-out">OUTBOUND</td><td class="num">전체 (3 SKU)</td><td class="num">4</td><td>Miranti</td><td>–</td></tr>
+      </table>
     </div>
   </div>
 </div></div>
