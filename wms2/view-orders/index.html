@@ -281,8 +281,8 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+        <th>SKU</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;right:-8px">18</span></th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th class="anno">Location<span class="dot" style="top:-11px;right:-8px">17</span></th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
@@ -293,7 +293,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-pending">PENDING</span></td><td>Coupang</td>
+          <td><span class="tag tag-pending">PENDING</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-green btn-sm anno">Inbound + Outbound<span class="dot" style="top:-12px;right:-10px">8</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -303,7 +303,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td>–</td><td>–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td class="anno"><span class="tag tag-exist">EXISTING INVENTORY</span><span class="dot" style="right:-8px;top:-11px">6</span></td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td class="anno"><span class="tag tag-exist">EXISTING INVENTORY</span><span class="dot" style="right:-8px;top:-11px">6</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -314,7 +314,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td class="anno"><span class="qty qty-warn">2</span><span class="dot" style="right:-6px;top:-11px">7</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -367,6 +367,8 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 날짜별 export <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">17</span><span>Location 칼럼 신설 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~4) 공통 <span class="ref">— B/E 연계</span></span></li>
+    <li><span class="n">18</span><span>Product Name 맨 앞에 브랜드명 항상 노출 — 브랜드명 누락 제품은 제품명 로직 수정 필요 <span class="ref">— B</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
 </div>
@@ -411,7 +413,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
         <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
@@ -422,7 +424,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm anno" data-modal="m-cancel">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">2</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -432,7 +434,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td class="num">–</td><td class="num">–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -443,7 +445,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -501,7 +503,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
         <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
@@ -512,7 +514,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-gray btn-sm anno">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">4</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -522,7 +524,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td class="num">–</td><td class="num">–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -533,7 +535,7 @@ body.no-anno .dot,body.no-anno .legend{display:none}
           <td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -588,26 +590,36 @@ body.no-anno .dot,body.no-anno .legend{display:none}
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox" checked></th>
-        <th>SKU</th><th>Image</th><th>Product Name</th><th>Qty</th><th>입고 수량</th><th>재입고 로케이션</th><th>Actions</th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>입고 수량</th><th>재입고 로케이션</th><th>Actions</th>
       </tr></thead>
       <tbody>
-        <tr>
+        <tr class="row-exist">
           <td><input type="checkbox" checked></td><td class="num">100031877</td><td><div class="thumb">IMG</div></td>
-          <td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td>
+          <td><b>Beauty of Joseon</b> Glow Serum, 30ml</td>
+          <td>글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
+          <td class="num">✓ 8809738317481</td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
           <td class="anno"><div class="loc-inline"><input value="1" style="width:56px"></div><span class="dot" style="top:-12px;right:-4px">4</span></td>
           <td><div class="loc-inline anno"><input value="A-03-2"><span class="dot" style="top:-12px;right:-12px">3</span></div></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td><td class="num">100038120</td><td><div class="thumb">IMG</div></td>
-          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td><td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10322198837710</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
           <td><div class="loc-inline"><input value="B-01-4"></div></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td><td class="num">100045210</td><td><div class="thumb">IMG</div></td>
-          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
+          <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
+          <td class="num">✓ 8809640733458</td><td class="num">24101467999310</td><td class="num" style="color:var(--blue)">10322198837710</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
           <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
           <td class="anno"><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div><span class="dot" style="top:-12px;right:-4px">5</span></td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
