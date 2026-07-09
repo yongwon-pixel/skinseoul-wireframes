@@ -1,0 +1,721 @@
+<title>WMS 2.0 — View Orders 와이어프레임</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}   /* C: 좌우 여백 축소 */
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--ink);border-radius:7px;overflow:hidden}
+.seg button{border:none;background:var(--page);color:var(--ink);padding:8px 14px;font-size:13.5px;border-right:1px solid var(--ink)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--ink);color:var(--page);font-weight:600}
+.search-input{flex:1;min-width:300px;display:flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden}
+.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:8px 12px;font-size:14px;outline:none}
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+.shelf{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:7px;
+  padding:4px 12px;background:var(--page)}
+.shelf label{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.shelf input{width:74px;border:1px solid var(--line-strong);border-radius:5px;padding:5px 8px;font-size:14px;
+  background:var(--page);color:var(--ink);text-align:center;font-weight:700}
+
+/* order header card */
+.ordercard{margin-top:16px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:14px 18px;
+  display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--line)}
+.ordercard .kv{font-size:13.5px;color:var(--ink-2)} .ordercard .kv b{color:var(--ink)}
+.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
+.st-processing{background:var(--green-soft);color:var(--green)}
+.st-prepare{background:var(--blue-soft);color:var(--blue)}
+.chip-return{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.comment-btn{position:relative;margin-left:auto}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.row-hit td{background:var(--hl);border-top:2px solid var(--hl-line);border-bottom:2px solid var(--hl-line)}
+.row-exist td{background:color-mix(in srgb,var(--blue-soft) 55%,var(--page))}
+.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.tag-pending{background:#FFC107;color:#3D2E00}
+.tag-inbounded{background:var(--green);color:#fff}
+.tag-exist{background:var(--blue);color:#fff}
+.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+.mut{color:var(--ink-3);font-size:12.5px}
+.bar-under{text-decoration:underline;text-underline-offset:2px;font-weight:800}
+
+/* comment panel — Order 페이지 Operator Comments와 동일 문법 */
+.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.cpanel .c-item:last-of-type{border-bottom:none}
+.cpanel .who{font-weight:700;white-space:nowrap}
+.cpanel .at{color:var(--blue);font-weight:700}
+.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
+.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+
+/* actor log */
+.logsec{margin-top:26px}
+.logsec h4{font-size:14px;margin:0 0 8px}
+.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
+.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
+.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
+
+/* floating scan panel — 기본 접힘, 클릭 시 펼침 */
+.scanfloat{position:fixed;left:16px;bottom:16px;width:330px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:30;overflow:hidden}
+.scanfloat header{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--page);padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer}
+.scanfloat header .x{margin-left:auto;background:none;border:none;color:inherit;font-size:14px;line-height:1;cursor:pointer}
+.scanfloat.collapsed{width:auto;border-radius:99px}
+.scanfloat.collapsed ul,.scanfloat.collapsed footer{display:none}
+.scanfloat.collapsed header{border-radius:99px;padding:8px 16px}
+.scanfloat ul{list-style:none;margin:0;padding:6px 0;max-height:170px;overflow:auto}
+.scanfloat li{display:flex;gap:8px;padding:4px 12px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.scanfloat li b{color:var(--ink)}
+.scanfloat li time{margin-left:auto;color:var(--ink-3)}
+.scanfloat footer{border-top:1px solid var(--line);padding:6px 12px;display:flex;justify-content:space-between;align-items:center}
+.scanfloat footer span{font-size:11px;color:var(--ink-3)}
+.scanfloat footer button{font-size:11.5px;border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:5px;padding:3px 8px}
+
+/* toast */
+.toast{position:absolute;top:14px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red)}
+.toast small{opacity:.85;font-weight:400}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);overflow:hidden;position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal .qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
+.auto input{width:100%;border:none;padding:9px 12px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
+.auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
+.auto .opt.sel{background:var(--blue-soft);font-weight:600}
+.auto .opt small{color:var(--ink-3)}
+
+/* header comment inbox dropdown */
+.inboxdd{position:absolute;top:46px;right:110px;width:360px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd header{padding:10px 14px;font-weight:700;font-size:13px;border-bottom:1px solid var(--line);display:flex}
+.inboxdd header small{margin-left:auto;color:var(--blue);font-weight:600}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{float:right;color:var(--ink-3);font-size:11px}
+
+.state{display:none}
+.state.on{display:block}
+.retbanner{margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:8px;
+  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.retbanner b{color:var(--red);font-size:15px}
+.loc-inline{display:flex;align-items:center;gap:6px}
+.loc-need input{border:1.5px solid var(--amber-line);background:var(--amber-soft)}
+.loc-need input::placeholder{color:var(--amber);font-weight:700;font-size:11.5px}
+.loc-inline input{width:88px;border:1px solid var(--line-strong);border-radius:6px;padding:5px 8px;background:var(--page);color:var(--ink);text-align:center;font-weight:600}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · View Orders 와이어프레임</h1>
+  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · 스캔 결과 (마지막 1개)</button>
+    <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
+    <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
+    <button class="wf-tab" data-state="s4">4 · 반품 모드</button>
+    <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
+    <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
+    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : 스캔 결과 — 마지막 1개 남음 ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="toast"><span>✓ 인바운드 완료 — 100040311</span><small>새로고침 없음 · 바로 다음 스캔 가능</small><span class="dot" style="top:-9px;right:-9px;position:absolute">15</span></div>
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:-11px;left:-11px">3</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <header>내가 태그된 코멘트 <small>모두 읽음 처리</small></header>
+      <div class="it unread"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<time>10:42</time></div>
+      <div class="it unread"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<time>09:15</time></div>
+      <div class="it unread"><b>Order 413650</b> · Kai: "@Yongwon 반품 재입고 로케이션 어디로?"<time>어제</time></div>
+      <div class="it"><b>Order 413501</b> · Dean: "해결 완료했습니다"<time>어제</time></div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">4</span>
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+        <span class="dot" style="top:-10px;right:8px">12</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <div class="shelf anno">
+        <label>선반 위치</label><input value="3">
+        <span class="dot" style="top:-11px;right:-11px">2</span>
+      </div>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
+
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard anno">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>4</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
+      <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">10</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1">💬 코멘트 <span class="badge-n">2</span></button>
+      <span class="dot" style="top:-11px;right:-8px">11</span>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
+      <button class="btn btn-green btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
+      <span class="cnt">1개 선택됨 · 전체 처리 시 자동 Outbound (Hold 오더는 Inbound까지만)</span>
+      <span class="dot" style="top:-11px;left:-10px">9</span>
+    </div>
+
+    <div class="cpanel" id="cpanel1" style="display:none">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time></div>
+      <div class="cwrite"><input placeholder="코멘트 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-hit">
+          <td><input type="checkbox" checked></td>
+          <td class="num anno">100040311<span class="dot" style="left:-14px;top:-11px">5</span></td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-pending">PENDING</span></td><td>Coupang</td>
+          <td><button class="btn btn-green btn-sm anno">Inbound + Outbound<span class="dot" style="top:-12px;right:-10px">8</span></button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">–</td><td>–</td><td>–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td class="anno"><span class="tag tag-exist">EXISTING INVENTORY</span><span class="dot" style="right:-8px;top:-11px">6</span></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td class="anno"><span class="qty qty-warn">2</span><span class="dot" style="right:-6px;top:-11px">7</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+          <span class="dot" style="left:236px;top:-11px">7</span>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>인바운드 / 아웃바운드 로그</h4>
+      <span class="dot" style="top:-8px;left:190px">13</span>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>작업자</th></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td>Dean</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구 +1)</td><td class="num">100038120</td><td>Dean</td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td>Miranti</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="scanfloat anno collapsed" id="scanfloat">
+    <header>📡 실시간 바코드 기록 <span style="background:var(--blue);border-radius:99px;padding:1px 8px;font-size:11px">4</span><button class="x">▾</button></header>
+    <span class="dot" style="top:-11px;right:-11px">16</span>
+    <ul>
+      <li><b>Dean</b><span class="num">8801051283860</span><time>11:32:04</time></li>
+      <li><b>Dean</b><span class="num">8809894261234</span><time>11:31:48</time></li>
+      <li><b>Miranti</b><span class="num">10323775316153</span><time>11:30:02</time></li>
+      <li><b>Miranti</b><span class="num">8806182573156</span><time>11:29:41</time></li>
+    </ul>
+    <footer><span>화면 최대 20건 · 백엔드 전체 누적</span><button>날짜별 Export</button></footer>
+  </div>
+
+</div></div>
+
+<div class="legend">
+  <h3>State 1 변경사항 — 스캔 결과 (마지막 1개 남음)</h3>
+  <ol>
+    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order No 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">2</span><span>선반 위치 입력란 — 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
+    <li><span class="n">3</span><span>우상단 코멘트 알림함 — 내가 태그된 코멘트, 미읽음 badge <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
+    <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">6</span><span>Existing Inventory 구분 — Sourcing Route 칼럼을 파란 배지로 표시 + 행 배경 틴트 (제품명 밑 라벨 중복 제거) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">7</span><span>Quantity ≠ 1 → 옅은 주황 강조 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">8</span><span>마지막 제품 인바운드 조건 → Inbound + Outbound 동시 처리 버튼 <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">9</span><span>일괄 처리 버튼은 테이블 상단 배치 — 선택 항목 일괄 Inbound / 남은 제품 전체 일괄 Inbound + Outbound (전체 인바운드 = 오더 완결이므로 자동 아웃바운드까지, 단 Hold Shipment 오더는 Inbound까지만) <span class="ref">— C 동작 + F Hold</span></span></li>
+    <li><span class="n">10</span><span>"Outbound to Deleo Baroship" → "Outbound"로 라벨 변경 <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">11</span><span>오더 코멘트 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">13</span><span>행위자 로그 — 누가 인/아웃바운드·취소했는지, 결과창 하단 노출 <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 날짜별 export <span class="ref">— C 로그</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : 전체 인바운드 완료 ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <div class="shelf"><label>선반 위치</label><input value="3"></div>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>4</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
+      <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">2</span></button>
+    </div>
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
+      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
+      <span class="cnt">일괄 처리할 남은 제품 없음 — 전 품목 인바운드 완료</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><button class="btn btn-red-line btn-sm anno" data-modal="m-cancel">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">2</span></button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">–</td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 변경사항 — 전체 인바운드 완료</h3>
+  <ol>
+    <li><span class="n">1</span><span>전 품목 인바운드 완료 시 Outbound 버튼 활성화(초록) — 라벨은 "Outbound" <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">2</span><span>Cancel Inbound 클릭 → 재고 복구 팝업 (버튼 눌러서 확인) <span class="ref">— C 동작</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : 아웃바운드 완료 ══════════════ -->
+<section class="state" id="s3">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast anno"><span>✓ Outbound 완료 — Order 413865</span><small>상태: prepare shipment</small><span class="dot" style="top:-11px;left:-11px">3</span></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <div class="shelf"><label>선반 위치</label><input value="3"></div>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-prepare">Prepare Shipment</span>
+      <span class="kv">Total Quantity: <b>4</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
+      <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;right:-11px">1</span></button>
+      <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">2</span></button>
+    </div>
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
+      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
+      <span class="cnt">일괄 처리할 남은 제품 없음 — 전 품목 인바운드 완료</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><button class="btn btn-gray btn-sm anno">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">4</span></button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">–</td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 변경사항 — 아웃바운드 완료</h3>
+  <ol>
+    <li><span class="n">1</span><span>아웃바운드 후 버튼이 "✓ Outbounded"로 바뀌고 클릭 불가 (회색 비활성) <span class="ref">— 유저 요청</span></span></li>
+    <li><span class="n">2</span><span>Cancel Outbound 버튼 — 취소 시 오더 상태 prepare shipment → processing 롤백 <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">3</span><span>완료 후 새로고침 없이 토스트 알림 → 바로 다음 바코드 스캔 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">4</span><span>아웃바운드 완료 후 개별 Cancel Inbound 비활성 — 되돌리려면 Cancel Outbound 먼저 (순서 꼬임 방지) <span class="ref">— 제안</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 4 : 반품 모드 ══════════════ -->
+<section class="state" id="s4">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <div class="shelf"><label>선반 위치</label><input value=""></div>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="retbanner anno">
+      <b>⟲ 반품 오더</b>
+      <span>반품된 송장 바코드가 스캔되었습니다 — Order <b>412990</b> · Tracking 10322198837710</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+    </div>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">412990</b></span>
+      <span class="kv">Order Status:</span><span class="status st-prepare">Returned</span>
+      <span class="kv">Total Quantity: <b>4</b></span>
+      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">1</span></button>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox" checked></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Qty</th><th>입고 수량</th><th>재입고 로케이션</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" checked></td><td class="num">100031877</td><td><div class="thumb">IMG</div></td>
+          <td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td>
+          <td class="anno"><div class="loc-inline"><input value="1" style="width:56px"></div><span class="dot" style="top:-12px;right:-4px">4</span></td>
+          <td><div class="loc-inline anno"><input value="A-03-2"><span class="dot" style="top:-12px;right:-12px">3</span></div></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td><td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td>
+          <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
+          <td><div class="loc-inline"><input value="B-01-4"></div></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td><td class="num">100045210</td><td><div class="thumb">IMG</div></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td>
+          <td><div class="loc-inline"><input value="1" style="width:56px"></div></td>
+          <td class="anno"><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div><span class="dot" style="top:-12px;right:-4px">5</span></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="bulkbar anno">
+      <button class="btn btn-green">선택 제품 창고 입고 처리 (3개)</button>
+      <span class="cnt">행별 입고 수량 기준으로 처리 · 입고 완료 시 Current Stocks 재고·로케이션에 자동 반영 · <b style="color:var(--amber)">로케이션 미지정 행 포함 시 처리 불가</b></span>
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 4 변경사항 — 반품 제품 입고 프로세스</h3>
+  <ol>
+    <li><span class="n">1</span><span>반품된 송장 바코드 스캔 시 "반품 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">2</span><span>전체/선택 후 창고 입고 처리 버튼 → 재고 자동 편입 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">3</span><span>재입고 로케이션 입력 — 입고 시 로케이션 결정 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">4</span><span>입고 수량 칼럼 — 기본값=주문 수량, 부분 반품 시 수정 가능 (예: 2개 중 1개만 반품 → 1로 수정 후 일괄 처리) <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">5</span><span>로케이션 자동 채움 규칙 — 기존 재고 SKU는 현재 로케이션 자동 입력, 창고 로케이션이 없는 SKU(JIT 전용)는 "로케이션 지정 필요" 표시 → 지정 전에는 일괄 입고 처리 차단 <span class="ref">— C 반품</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : 인바운드 취소 재고 복구 ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>인바운드 취소 — 100038120<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">1. 재고를 복구하시겠습니까?</b>
+      <div class="qrow">
+        <label><input type="radio" name="restock" checked> 예 — 재고로 복구</label>
+        <label><input type="radio" name="restock"> 아니오</label>
+      </div>
+      <div class="qrow">
+        <b style="color:var(--ink)">2. 복구 수량</b>
+        <input value="2"> <span class="mut">기본값 = 인바운드됐던 개수 (수정 가능)</span>
+      </div>
+      <div class="note">해당 SKU의 <b>Reserved Quantity → Available</b>로 자동 반영됩니다.<br>용도: 오더 중간 취소, 창고 재고가 있는데 실수로 JIT 주문한 경우.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>닫기</button>
+      <button class="btn btn-red-line btn-sm" data-close>복구 없이 취소</button>
+      <button class="btn btn-blue btn-sm" data-close>재고 복구 + 인바운드 취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 미인식 바코드 ══════════════ -->
+<div class="overlay" id="m-unrec">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>바코드 인식 실패<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">스캔한 바코드 <span class="num">8809110223344</span>와 일치하는 오더가 없습니다.<br>미입력 리스트로 보내시겠습니까?</b>
+      <p class="mut" style="margin:10px 0 4px">제품명 입력 (영어 — 자동완성)</p>
+      <div class="auto">
+        <input value="glow ser">
+        <div class="opt sel">Beauty of Joseon — <b>Glow Serum : Propolis + Niacinamide, 30ml</b> <small>100031877</small></div>
+        <div class="opt">Beauty of Joseon — Glow Deep Serum : Rice + Arbutin, 30ml <small>100031891</small></div>
+        <div class="opt">COSRX — The Vitamin C 23 Glow Serum, 20ml <small>100029554</small></div>
+      </div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>아니오</button>
+      <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    document.getElementById(t.dataset.state).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+const sf=document.getElementById('scanfloat');
+sf.querySelector('header').addEventListener('click',()=>{
+  sf.classList.toggle('collapsed');
+  sf.querySelector('.x').textContent = sf.classList.contains('collapsed') ? '▾' : '–';
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+</script>
