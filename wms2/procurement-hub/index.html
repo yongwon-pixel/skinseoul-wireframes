@@ -1,0 +1,730 @@
+<title>WMS 2.0 — Procurement Hub 어드민 와이어프레임</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.search-input{flex:1;min-width:300px;display:flex;border:1px solid var(--line-strong);border-radius:7px}
+.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:8px 12px;font-size:14px;outline:none;border-radius:7px}
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.row-exist td{background:color-mix(in srgb,var(--blue-soft) 55%,var(--page))}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+/* 소싱 루트 / Buy Alert 트리거 배지 — View Orders와 동일 팔레트 계승 */
+.tag-smartbuy{background:var(--blue);color:#fff}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.tag-partnership{background:var(--amber);color:#fff}
+.route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
+.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+.mut{color:var(--ink-3);font-size:12.5px}
+
+/* comment panel — Order 페이지 Comments와 동일 문법 */
+.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.cpanel .c-item:last-of-type{border-bottom:none}
+.cpanel .who{font-weight:700;white-space:nowrap}
+.cpanel .at{color:var(--blue);font-weight:700}
+.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
+.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:560px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+
+/* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+
+.state{display:none}
+.state.on{display:block}
+
+/* ══ Procurement Hub 전용 신규 요소 (View Orders 변수만 사용) ══ */
+/* 시트 6탭을 어드민 탭으로 편입한 서브 탭 스트립 */
+.sheettabs{display:flex;gap:3px;border-bottom:2px solid var(--line);margin-top:16px;flex-wrap:wrap}
+.sheettabs a{padding:8px 15px;font-size:13px;font-weight:600;color:var(--ink-3);border:1px solid transparent;border-bottom:none;
+  border-radius:8px 8px 0 0;cursor:pointer;text-decoration:none;display:inline-flex;gap:7px;align-items:center;margin-bottom:-2px}
+.sheettabs a.on{color:var(--blue);background:var(--page);border-color:var(--line);border-bottom:2px solid var(--page);font-weight:800}
+.sheettabs a .cnt{background:var(--line);color:var(--ink-2);border-radius:99px;font-size:11px;padding:0 7px;font-weight:700}
+.sheettabs a.on .cnt{background:var(--blue-soft);color:var(--blue)}
+.sheettabs a.soon{opacity:.5;cursor:not-allowed}.sheettabs a.soon .cnt{background:var(--amber-soft);color:var(--amber)}
+.sheetnote{font-size:12px;color:var(--ink-3);margin:8px 0 0}
+
+/* 구매팀 KPI / 재고자산 요약 카드 */
+.kpirow{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.kpicard{flex:1;min-width:186px;border:1px solid var(--line);border-radius:10px;padding:12px 16px;
+  background:color-mix(in srgb,var(--canvas) 40%,var(--page))}
+.kpicard .lbl{font-size:11.5px;color:var(--ink-3);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.kpicard .val{font-size:26px;font-weight:800;margin:3px 0 1px;font-variant-numeric:tabular-nums}
+.kpicard .tgt{font-size:12px;color:var(--ink-3)}
+.kpicard.good .val{color:var(--green)} .kpicard.warn .val{color:var(--amber)}
+.kpicard .kbar{height:6px;border-radius:99px;background:var(--line);margin-top:9px;overflow:hidden}
+.kpicard .kbar>i{display:block;height:100%;border-radius:99px}
+.kpicard .kbar>i.g{background:var(--green)} .kpicard .kbar>i.a{background:var(--amber-line)}
+
+/* Buy Alert Status 드롭다운(시트 A열) — 위젯 룩 */
+.stat-dd{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line-strong);border-radius:6px;
+  padding:3px 8px;font-size:11.5px;font-weight:800;background:var(--page);cursor:pointer;letter-spacing:.2px}
+.stat-dd .caret{color:var(--ink-3);font-size:9px;font-weight:400}
+.sd-pending{color:var(--amber);background:var(--amber-soft);border-color:var(--amber-line)}
+.sd-done{color:var(--green);background:var(--green-soft);border-color:var(--green)}
+.sd-partial{color:var(--blue);background:var(--blue-soft);border-color:var(--blue)}
+.sd-skip{color:var(--ink-3)}
+
+/* Needed Qty 강조 + DOH 위험/데드스톡 표기 */
+.need{display:inline-block;background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line);
+  border-radius:6px;padding:1.5px 8px;font-weight:800;font-variant-numeric:tabular-nums}
+.doh-urgent{color:var(--amber);font-weight:800}
+.doh-dead{display:inline-block;color:var(--amber);font-weight:800;background:var(--amber-soft);
+  border:1.5px solid var(--amber-line);border-radius:6px;padding:1.5px 8px}
+.doh-nosale{color:var(--ink-3);font-weight:700;font-size:11.5px;border:1px dashed var(--line-strong);border-radius:6px;padding:1.5px 7px}
+tr.row-dead td{background:var(--amber-soft)}
+.recv-auto{color:var(--green);font-weight:700}
+.recv-wait{color:var(--ink-3)}
+.kr-miss{color:var(--red);font-weight:800}
+.kr-hit{color:var(--green);font-weight:700}
+.cplink{color:var(--blue);text-decoration:none;font-weight:700}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · Procurement Hub 어드민 와이어프레임</h1>
+  <span class="hint">v1 — 현행 Google Sheets 6탭을 어드민 탭으로 편입 · 보라색 번호 = 신규 요소 주석</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · Buy Alert</button>
+    <button class="wf-tab" data-state="s2">2 · FIFO COGS (DOH)</button>
+    <button class="wf-tab" data-state="s3">3 · Purchase Orders</button>
+    <button class="wf-tab" data-state="s4">4 · KPI Dashboard</button>
+    <button class="wf-tab" data-modal="m-po">모달: 발주 (PO 등록)</button>
+    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : Buy Alert (구매 대상) ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+    </span>
+    <span class="user"><span class="avatar">V</span>Victoria (구매팀)</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>SKU 100007005</b> · Yongwon: "@Victoria 이 딜 절감률 17%라 사전 승인 필요합니다"<br><time>09:40</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>SKU 100039958</b> · Kai: "@Victoria Anua 토너 홀세일 벤더 2곳 견적 비교 부탁"<br><time>어제</time></div><button class="star on" title="저장됨">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>SKU 100039958</b> · Kai: "@Victoria Anua 토너 홀세일 벤더 2곳 견적 비교 부탁"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px;top:34px">1</span>
+    <h2>Procurement Hub</h2>
+    <p class="sub">스마트바이 재고 보충 · 구매팀 운영 도구</p>
+
+    <!-- KPI 요약 카드 3개 -->
+    <div class="kpirow anno">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      <div class="kpicard good">
+        <div class="lbl">KR1 · 가중평균 절감률</div>
+        <div class="val">31.4%</div>
+        <div class="tgt">목표 ≥ 30% · 딜당 ≥20% (미달 1건 승인대기)</div>
+        <div class="kbar"><i class="g" style="width:100%"></i></div>
+      </div>
+      <div class="kpicard warn">
+        <div class="lbl">KR2 · 스마트바이 주간 실행률</div>
+        <div class="val">82%</div>
+        <div class="tgt">목표 100% (리스트 발행 3일 이내)</div>
+        <div class="kbar"><i class="a" style="width:82%"></i></div>
+      </div>
+      <div class="kpicard warn">
+        <div class="lbl">KR3 · Days on Hand (DOH)</div>
+        <div class="val">72일</div>
+        <div class="tgt">목표 ≤ 60일 · 재고자산 ₩53.3M / 예산 ₩40M</div>
+        <div class="kbar"><i class="a" style="width:100%"></i></div>
+      </div>
+    </div>
+
+    <!-- 시트 6탭 → 어드민 서브 탭 -->
+    <div class="sheettabs anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <a class="on" data-state="s1">Buy Alert <span class="cnt">18</span></a>
+      <a data-state="s2">FIFO COGS</a>
+      <a data-state="s3">Purchase Orders</a>
+      <a data-state="s4">KPI Dashboard</a>
+      <a class="soon">Wholesaler DB <span class="cnt">예정</span></a>
+      <a class="soon">SKU Master <span class="cnt">예정</span></a>
+    </div>
+    <p class="sheetnote anno">
+      리스트는 <b>매주 월요일 07:00 SGT 자동 재생성</b> (Weekly Generator) · Status는 5분 주기 자동 갱신 · 발주 필요 SKU만 노출 (유효재고 충족·Skip 제외)
+      <span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">10</span>
+    </p>
+
+    <div class="searchrow anno" style="margin-top:12px">
+      <div class="search-input"><input value="" placeholder="SKU No. / Brand / Product Name 검색 — 자동 판별"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-blue btn-sm" data-modal="m-po">선택 항목 일괄 발주 (PO 등록)</button>
+      <button class="btn btn-line btn-sm">선택 항목 Skip 표시</button>
+      <span class="cnt">2개 선택됨 · 발주 시 Purchase Orders 탭 + 입고 요청(I) 스마트바이 루트로 자동 등록</span>
+      <span class="dot" style="top:-11px;left:-10px">9</span>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th class="anno">Status<span class="dot" style="top:-11px;right:-8px">5</span></th>
+        <th class="anno">Type<span class="dot" style="top:-11px;right:-8px">6</span></th>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th>
+        <th>Current Stock</th><th>On Order</th><th>Target Stock</th>
+        <th class="anno">Needed Qty<span class="dot" style="top:-11px;right:-8px">7</span></th>
+        <th>Est. Amount (KRW)</th>
+        <th class="anno">DOH<span class="dot" style="top:-11px;right:-8px">8</span></th>
+        <th>CP</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td><span class="stat-dd sd-pending">PENDING <span class="caret">▾</span></span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY 1</span><span class="route-note">OOS · 4주 품절세션 ≥3</span></td>
+          <td class="num">100007005</td><td>Beauty of Joseon</td>
+          <td>Relief Sun Rice + Probiotics, 50ml</td>
+          <td class="num">4</td><td class="num">0</td><td class="num">40</td>
+          <td class="num"><span class="need">36</span></td>
+          <td class="num">₩612,000</td>
+          <td class="num"><span class="doh-urgent">8일</span></td>
+          <td><a class="cplink" href="#">쿠팡 ↗</a></td>
+          <td><button class="btn btn-blue btn-sm anno" data-modal="m-po">발주<span class="dot" style="top:-12px;right:-10px">M1</span></button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td><span class="stat-dd sd-pending">PENDING <span class="caret">▾</span></span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">재고 &lt; Tier A 커버(3개월)</span></td>
+          <td class="num">100039958</td><td>Anua</td>
+          <td>Heartleaf 77% Soothing Toner, 250ml</td>
+          <td class="num">28</td><td class="num">0</td><td class="num">180</td>
+          <td class="num"><span class="need">152</span></td>
+          <td class="num">₩1,824,000</td>
+          <td class="num"><span class="doh-urgent">11일</span></td>
+          <td><a class="cplink" href="#">쿠팡 ↗</a></td>
+          <td><button class="btn btn-blue btn-sm" data-modal="m-po">발주</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td><span class="stat-dd sd-done">DONE <span class="caret">▾</span></span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY 2</span><span class="route-note">Cost Var · P75 변동 ≥20%</span></td>
+          <td class="num">100051390</td><td>Medicube</td>
+          <td>Zero Pore Pad 2.0, 1+1</td>
+          <td class="num">60</td><td class="num">40</td><td class="num">120</td>
+          <td class="num">20</td>
+          <td class="num">₩380,000</td>
+          <td class="num">34일</td>
+          <td><a class="cplink" href="#">쿠팡 ↗</a></td>
+          <td><span class="mut">PO 20260707-0012</span></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td><span class="stat-dd sd-partial">PARTIAL <span class="caret">▾</span></span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY 3</span><span class="route-note">Non-Rocket 출고 ≥3건</span></td>
+          <td class="num">100005611</td><td>COSRX</td>
+          <td>Advanced Snail 96 Mucin Power Essence, 100ml</td>
+          <td class="num">45</td><td class="num">30</td><td class="num">150</td>
+          <td class="num"><span class="need">75</span></td>
+          <td class="num">₩1,050,000</td>
+          <td class="num">22일</td>
+          <td><a class="cplink" href="#">쿠팡 ↗</a></td>
+          <td><button class="btn btn-blue btn-sm" data-modal="m-po">추가 발주</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td><span class="stat-dd sd-skip">SKIP <span class="caret">▾</span></span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">구매팀 수동 제외</span></td>
+          <td class="num">100012649</td><td>Round Lab</td>
+          <td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">90</td><td class="num">0</td><td class="num">160</td>
+          <td class="num">70</td>
+          <td class="num">₩910,000</td>
+          <td class="num">41일</td>
+          <td><a class="cplink" href="#">쿠팡 ↗</a></td>
+          <td><span class="mut">자동화 제외</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">발주 필요 SKU 18건 · Pending 9 / Partial 3 / Done 4 / Skip 2 (이번 주 리스트)</p>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1 — Buy Alert (구매 대상)</h3>
+  <ol>
+    <li><span class="n">1</span><span>현행 Google Sheets Procurement Hub를 어드민에 편입 — 시트를 그대로 화면화(과설계 없이 탭+테이블 유지) <span class="ref">— J</span></span></li>
+    <li><span class="n">2</span><span>구매팀 KPI 3개 요약 카드 — KR1 가중평균 절감률(≥30%, 딜당 ≥20%) / KR2 스마트바이 주간 실행률(100%, 3일 내) / KR3 DOH(≤60일) <span class="ref">— J / KPI</span></span></li>
+    <li><span class="n">3</span><span>시트 6탭 = 어드민 서브 탭 — Buy Alert / FIFO COGS / Purchase Orders / KPI Dashboard (구현) + Wholesaler DB / SKU Master (예정) <span class="ref">— J</span></span></li>
+    <li><span class="n">4</span><span>통합 검색 — SKU No./Brand/Product 자동 판별 (View Orders 검색 규약 계승) <span class="ref">— C 계승</span></span></li>
+    <li><span class="n">5</span><span>Status 드롭다운(시트 A열 그대로) — Pending / Partial / Done / Skip. 월요일 07:00 재생성 + 5분 주기 Done 자동 마킹 <span class="ref">— J 시트</span></span></li>
+    <li><span class="n">6</span><span>Type = Buy Alert 트리거 4종 배지 — Wholesale / Smart Buy 1(OOS) / 2(Cost Var) / 3(Non-Rocket), 아래 Alert Reason 노출 <span class="ref">— J</span></span></li>
+    <li><span class="n">7</span><span>Needed Qty 강조 — 유효재고(현재고+On Order) 부족분. 발주 대상만 노출(음수·0 행 제외) <span class="ref">— J</span></span></li>
+    <li><span class="n">8</span><span>DOH 낮음 강조 — 소진 임박 SKU 주황(구매 우선순위). 데드스톡 판정은 FIFO COGS 탭에서 <span class="ref">— J</span></span></li>
+    <li><span class="n">9</span><span>일괄 처리 바 테이블 상단 고정(View Orders 규약 계승) — 선택 항목 일괄 발주 / Skip 표시 <span class="ref">— C 계승</span></span></li>
+    <li><span class="n">10</span><span>리스트 재생성 주기 안내 — 매주 월 07:00 SGT 자동(Weekly Generator), Status 5분 주기 갱신 <span class="ref">— J 시트</span></span></li>
+    <li><span class="n">M1</span><span>발주 버튼 → PO 등록 모달(상단 "모달" 탭 참조). 스마트바이 루트 발주는 이 PO 기반 <span class="ref">— J + I</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : FIFO COGS (DOH · 재고자산) ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">V</span>Victoria (구매팀)</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>Procurement Hub</h2>
+    <p class="sub">FIFO 재고 원가 · 재고자산 · DOH</p>
+
+    <div class="sheettabs">
+      <a data-state="s1">Buy Alert <span class="cnt">18</span></a>
+      <a class="on" data-state="s2">FIFO COGS</a>
+      <a data-state="s3">Purchase Orders</a>
+      <a data-state="s4">KPI Dashboard</a>
+      <a class="soon">Wholesaler DB <span class="cnt">예정</span></a>
+      <a class="soon">SKU Master <span class="cnt">예정</span></a>
+    </div>
+
+    <!-- 시트 Row 3 요약을 카드화 -->
+    <div class="kpirow anno">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+      <div class="kpicard warn">
+        <div class="lbl">구매팀 재고자산 (KRW)</div>
+        <div class="val">₩53.3M</div>
+        <div class="tgt">목표 ₩40.0M · 예산 초과 ₩13.3M</div>
+      </div>
+      <div class="kpicard warn">
+        <div class="lbl">DOH (재고 소진일수)</div>
+        <div class="val">72일</div>
+        <div class="tgt">목표 ≤ 60일 · 수량 기반(30일 판매)</div>
+      </div>
+      <div class="kpicard">
+        <div class="lbl">BP 재고자산 (KRW)</div>
+        <div class="val">₩8.1M</div>
+        <div class="tgt">브랜드 파트너십 · DOH 산정 제외</div>
+      </div>
+      <div class="kpicard good">
+        <div class="lbl">잔여 예산 (KRW)</div>
+        <div class="val">−₩13.3M</div>
+        <div class="tgt">예산 한도 ₩40.0M − 재고자산</div>
+      </div>
+    </div>
+    <p class="sheetnote">🕐 최종 업데이트: 2026-07-13 12:35 SGT · FIFO Calculator n8n 5분 주기 자동 · A~F 재고, G~L 원가(Purchase Orders PO No. 조인)</p>
+
+    <div class="bulkbar anno" style="margin-top:14px">
+      <button class="btn btn-line btn-sm">데드스톡만 보기 (DOH&gt;90 · No Sale 30D)</button>
+      <button class="btn btn-line btn-sm">CSV Export</button>
+      <span class="cnt">데드스톡 기준 = DOH 91일 이상 또는 30일 무판매 · 24 SKU / ₩38.5M (조달 재고 72%)</span>
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th>PO No.</th><th>Channel</th><th>SKU No.</th><th>Brand</th><th>Product Name</th>
+        <th>Current Stock</th><th>Unit Cost (KRW)</th><th>Unit Cost (USD)</th><th>JIT Price (KRW)</th>
+        <th>Savings %</th><th>Supplier</th>
+        <th class="anno">DOH<span class="dot" style="top:-11px;right:-8px">2</span></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-dead">
+          <td class="num">20260512-0007</td><td>Smart Buy 1</td><td class="num">100061204</td><td>Centellian24</td>
+          <td>Madeca Time Reverse Cream, 50ml</td>
+          <td class="num">2,459</td><td class="num">₩6,600</td><td class="num">$4.79</td><td class="num">₩9,900</td>
+          <td class="num">33.3%</td><td>Dongguk</td>
+          <td class="num"><span class="doh-dead">442일</span></td>
+        </tr>
+        <tr class="row-dead">
+          <td class="num">20260430-0003</td><td>Smart Buy 1</td><td class="num">100061199</td><td>Centellian24</td>
+          <td>The Madeca Cream, 50ml</td>
+          <td class="num">1,180</td><td class="num">₩7,020</td><td class="num">$5.10</td><td class="num">₩10,500</td>
+          <td class="num">33.1%</td><td>Dongguk</td>
+          <td class="num"><span class="doh-dead">1,185일</span></td>
+        </tr>
+        <tr class="row-dead">
+          <td class="num">예외처리</td><td>Wholesale</td><td class="num">100042778</td><td>Torriden</td>
+          <td>Dive-In Low Molecular Hyaluronic Acid Gel Mask</td>
+          <td class="num">140</td><td class="num">₩3,200</td><td class="num">$2.32</td><td class="num">N/A</td>
+          <td class="num">N/A</td><td>N/A</td>
+          <td class="num"><span class="doh-nosale">No Sale 30D</span></td>
+        </tr>
+        <tr>
+          <td class="num">20260707-0012</td><td>Smart Buy 2</td><td class="num">100051390</td><td>Medicube</td>
+          <td>Zero Pore Pad 2.0, 1+1</td>
+          <td class="num">100</td><td class="num">₩8,900</td><td class="num">$6.46</td><td class="num">₩12,900</td>
+          <td class="num">31.0%</td><td>Coupang</td>
+          <td class="num">34일</td>
+        </tr>
+        <tr>
+          <td class="num">20260709-0004</td><td>Wholesale</td><td class="num">100039958</td><td>Anua</td>
+          <td>Heartleaf 77% Soothing Toner, 250ml</td>
+          <td class="num">28</td><td class="num">₩9,180</td><td class="num">$6.67</td><td class="num">₩13,900</td>
+          <td class="num">34.0%</td><td>ABC Trading</td>
+          <td class="num">11일</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">보유 재고 257 SKU · 조달(Wholesale+SB) 74 SKU · 데드스톡 24 SKU (DOH&gt;90 18 + 무판매 6)</p>
+
+    <div class="cpanel anno" style="margin-top:16px">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Victoria</span> Centellian24 2종이 데드스톡 금액의 87%입니다. 프로모션 메인 배정 전까지 추가 발주 보류해주세요.</span><time>07-13 12:10</time><button class="star on" title="저장됨">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (SKU·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 2 — FIFO COGS (DOH · 재고자산)</h3>
+  <ol>
+    <li><span class="n">1</span><span>재고자산 요약 카드(시트 Row 3 그대로) — 구매팀 재고자산 / 목표 ₩40M / DOH / BP 재고자산 / 잔여 예산 <span class="ref">— J</span></span></li>
+    <li><span class="n">2</span><span>DOH 컬럼 — 수량 기반(재고 ÷ 30일 판매/30). 채널 Wholesale+SB만 산정, BP 공백 <span class="ref">— J</span></span></li>
+    <li><span class="n">3</span><span>데드스톡 강조 — DOH&gt;90일 행 주황 틴트 + 'No Sale 30D'(30일 무판매) 라벨. 데드스톡 컷 = 91일↑ 또는 무판매 <span class="ref">— J</span></span></li>
+    <li><span class="n">4</span><span>SKU 코멘트(오더 코멘트와 동일 문법) — @태그 시 Slack 알림, 히스토리 누적 <span class="ref">— 0. UI 1</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">FIFO 원가(G~L)는 Purchase Orders 탭과 PO No.로 조인 — 시트에서 이미 n8n 5분 주기로 자동 계산 중. 어드민은 이 값을 조회·필터·Export만 (재계산 로직은 백엔드).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : Purchase Orders (발주 이력) ══════════════ -->
+<section class="state" id="s3">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">V</span>Victoria (구매팀)</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>Procurement Hub</h2>
+    <p class="sub anno">발주 이력 (Purchase Orders)<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">1</span></p>
+
+    <div class="sheettabs">
+      <a data-state="s1">Buy Alert <span class="cnt">18</span></a>
+      <a data-state="s2">FIFO COGS</a>
+      <a class="on" data-state="s3">Purchase Orders</a>
+      <a data-state="s4">KPI Dashboard</a>
+      <a class="soon">Wholesaler DB <span class="cnt">예정</span></a>
+      <a class="soon">SKU Master <span class="cnt">예정</span></a>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:16px">
+      <button class="btn btn-blue btn-sm" data-modal="m-po">+ 신규 발주 (PO 등록)</button>
+      <span class="cnt">PO No. = YYYYMMDD + 시퀀스 (FIFO 정렬 기준) · 발주 = 입고 요청(I) 스마트바이 루트 생성점</span>
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th>PO No.</th><th>Channel</th><th>SKU No.</th><th>Brand</th><th>Product Name</th>
+        <th>Order Qty</th><th>Unit Cost (KRW)</th><th>JIT Price (KRW)</th>
+        <th class="anno">Savings %<span class="dot" style="top:-11px;right:-8px">4</span></th>
+        <th>Supplier</th>
+        <th class="anno">Received Date<span class="dot" style="top:-11px;right:-8px">2</span></th>
+        <th>Carrier</th><th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="num">20260713-0002</td><td>Smart Buy 1</td><td class="num">100007005</td><td>Beauty of Joseon</td>
+          <td>Relief Sun Rice + Probiotics, 50ml</td>
+          <td class="num">36</td><td class="num">₩12,240</td><td class="num">₩17,000</td>
+          <td class="num kr-hit">28.0%</td><td>Coupang</td>
+          <td class="num recv-wait">입고 대기</td><td>–</td><td>–</td>
+        </tr>
+        <tr>
+          <td class="num">20260709-0004</td><td>Wholesale</td><td class="num">100039958</td><td>Anua</td>
+          <td>Heartleaf 77% Soothing Toner, 250ml</td>
+          <td class="num">152</td><td class="num">₩9,180</td><td class="num">₩13,900</td>
+          <td class="num kr-hit">34.0%</td><td>ABC Trading</td>
+          <td class="num recv-auto">07-12 (자동)</td><td>CJ대한통운</td><td>부분 입고 120/152</td>
+        </tr>
+        <tr>
+          <td class="num">20260707-0012</td><td>Smart Buy 2</td><td class="num">100051390</td><td>Medicube</td>
+          <td>Zero Pore Pad 2.0, 1+1</td>
+          <td class="num">80</td><td class="num">₩8,900</td><td class="num">₩12,900</td>
+          <td class="num kr-hit">31.0%</td><td>Coupang</td>
+          <td class="num recv-auto">07-09 (자동)</td><td>쿠팡</td><td>–</td>
+        </tr>
+        <tr>
+          <td class="num">예외처리</td><td>Smart Buy 1</td><td class="num">100061204</td><td>Centellian24</td>
+          <td>Madeca Time Reverse Cream, 50ml</td>
+          <td class="num">2,500</td><td class="num">₩6,600</td><td class="num">N/A</td>
+          <td class="num">N/A</td><td>Dongguk</td>
+          <td class="num">N/A</td><td>N/A</td><td>초기 재고 이관</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">이번 주 발주 12건 · 입고 완료 8 / 부분 입고 1 / 입고 대기 3</p>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 3 — Purchase Orders (발주 이력)</h3>
+  <ol>
+    <li><span class="n">1</span><span>발주 이력 로그(시트 Purchase Orders 탭 그대로) — 구매팀 수동 입력 + WMS n8n 자동 갱신 <span class="ref">— J</span></span></li>
+    <li><span class="n">2</span><span>Received Date — 입고 요청(I) 물량이 창고 입고되면 n8n(COGS Inbound Sync)이 자동 기입. 구매–입고 연결점 <span class="ref">— I 연동</span></span></li>
+    <li><span class="n">3</span><span>신규 발주 버튼 → PO 등록 모달. 발주 시점 = 입고 요청(I) 스마트바이 루트 자동 생성점 <span class="ref">— J + I</span></span></li>
+    <li><span class="n">4</span><span>Savings % = (JIT Price − Unit Cost) / JIT — KR1 절감률 산정 기준 <span class="ref">— KPI</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 4 : KPI Dashboard ══════════════ -->
+<section class="state" id="s4">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">V</span>Victoria (구매팀)</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>Procurement Hub</h2>
+    <p class="sub">KPI Dashboard — KR1 / KR2 / KR3 월별 달성</p>
+
+    <div class="sheettabs">
+      <a data-state="s1">Buy Alert <span class="cnt">18</span></a>
+      <a data-state="s2">FIFO COGS</a>
+      <a data-state="s3">Purchase Orders</a>
+      <a class="on" data-state="s4">KPI Dashboard</a>
+      <a class="soon">Wholesaler DB <span class="cnt">예정</span></a>
+      <a class="soon">SKU Master <span class="cnt">예정</span></a>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th class="anno">KR<span class="dot" style="top:-11px;left:-8px">1</span></th><th>지표</th><th>목표</th>
+        <th>2026-05</th><th>2026-06</th><th>2026-07 (MTD)</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="num">KR1</td><td>Wholesale Prestock 전환율</td><td>100%</td>
+          <td class="num kr-hit">100%</td><td class="num kr-hit">100%</td><td class="num kr-hit">100%</td>
+        </tr>
+        <tr>
+          <td class="num">KR1</td><td class="anno">딜당 절감률 (미달 = Yongwon 승인)<span class="dot" style="top:-11px;right:-8px">2</span></td><td>≥ 20%</td>
+          <td class="num kr-hit">전건 통과</td><td class="num kr-miss">1건 미달 (17%)</td><td class="num kr-miss">1건 미달 (17%)</td>
+        </tr>
+        <tr>
+          <td class="num">KR1</td><td>전체 가중평균 절감률</td><td>≥ 30%</td>
+          <td class="num kr-hit">32.1%</td><td class="num kr-hit">30.8%</td><td class="num kr-hit">31.4%</td>
+        </tr>
+        <tr>
+          <td class="num">KR2</td><td>스마트바이 주간 리스트 실행률 (3일 내)</td><td>100%</td>
+          <td class="num kr-hit">100%</td><td class="num kr-miss">88%</td><td class="num kr-miss">82%</td>
+        </tr>
+        <tr>
+          <td class="num">KR3</td><td>Days on Hand (30일 판매 기준)</td><td>≤ 60일</td>
+          <td class="num kr-hit">54일</td><td class="num kr-miss">68일</td><td class="num kr-miss">72일</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">KPI Dashboard 탭 — KR1/2/3 월별 히스토리 (시트에서 부분 자동 집계)</p>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 4 — KPI Dashboard</h3>
+  <ol>
+    <li><span class="n">1</span><span>KR1/2/3 월별 달성 히스토리(시트 KPI Dashboard 탭 그대로) <span class="ref">— J / KPI</span></span></li>
+    <li><span class="n">2</span><span>미달 항목 강조 — 딜당 절감률 &lt;20% 건은 Yongwon 사전 승인 필요(빨강 표시) <span class="ref">— KPI</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : 발주 (PO 등록) ══════════════ -->
+<div class="overlay" id="m-po">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>발주 (PO 등록) — 100007005 Beauty of Joseon<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p style="margin:0 0 10px">Buy Alert의 발주 대상 SKU를 발주(PO)로 등록합니다.</p>
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:8px 12px;align-items:center">
+        <b style="color:var(--ink)">Product</b><span>Relief Sun Rice + Probiotics, 50ml</span>
+        <b style="color:var(--ink)">PO No. (자동)</b><span class="num">20260713-0003 <span class="mut">· YYYYMMDD + 시퀀스 (FIFO 정렬)</span></span>
+        <b style="color:var(--ink)">Order Qty</b><span><input value="36" style="width:90px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px;text-align:center;font-weight:700"> <span class="mut">기본값 = Needed Qty</span></span>
+        <b style="color:var(--ink)">Supplier</b><span><span class="stat-dd" style="font-weight:600">Coupang (쿠팡 사입) <span class="caret">▾</span></span> <span class="mut">Wholesaler DB에서 선택</span></span>
+        <b style="color:var(--ink)">Unit Cost (KRW)</b><span><input value="12,240" style="width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px;text-align:right;font-weight:700"></span>
+        <b style="color:var(--ink)">JIT Price (KRW)</b><span class="num">₩17,000 <span class="mut">쿠팡 기준가</span></span>
+        <b style="color:var(--ink)">Savings %</b><span class="kr-hit">28.0% <span class="mut">= (JIT − Unit Cost) / JIT</span></span>
+      </div>
+      <div class="note anno" style="margin-top:14px">
+        <span class="dot" style="top:-9px;left:-11px">M1b</span>
+        <b>핵심 연동</b> — 발주 확정 시:<br>
+        (1) <b>Purchase Orders 탭</b>에 기록 (FIFO 원가 계산 소스)<br>
+        (2) <b>입고 요청(I)</b>에 <b>스마트바이 루트</b>로 자동 등록 → 물량 발송 후 송장번호 입력 → <b>View Orders</b> 바코드 스캔 시 <b>SMART BUY</b> 배지로 매칭
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>발주 확정 + 입고 요청 등록</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showState(id){
+  document.querySelectorAll('.state').forEach(s=>s.classList.toggle('on', s.id===id));
+  document.querySelectorAll('.wf-tab[data-state]').forEach(t=>t.classList.toggle('on', t.dataset.state===id));
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('[data-state]').forEach(t=>{
+  t.addEventListener('click',e=>{e.preventDefault();showState(t.dataset.state);});
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+</script>

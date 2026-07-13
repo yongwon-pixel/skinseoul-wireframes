@@ -1,0 +1,772 @@
+<title>WMS 2.0 — 입고 요청 (Inbound Request) 와이어프레임</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-purple-line{background:var(--page);border-color:var(--ss-purple);color:var(--ss-purple)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+/* 소싱 루트 배지 3종 (View Orders와 동일 색 규약) */
+.tag-smartbuy{background:var(--blue);color:#fff}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.tag-partnership{background:var(--amber);color:#fff}
+/* 요청 상태 배지 3종 — 신청 / 발송 / 입고완료 */
+.tag-requested{background:#FFC107;color:#3D2E00}
+.tag-shipped{background:var(--blue-soft);color:var(--blue);border:1px solid var(--blue)}
+.tag-inbounded{background:var(--green);color:#fff}
+.route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
+.mut{color:var(--ink-3);font-size:12.5px}
+.po-link{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--blue)}
+.vo-link{color:var(--ss-purple);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--ss-purple)}
+
+.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+
+/* ── 입고 요청 폼 (신규) ─────────────────────── */
+.formcard{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:var(--page);
+  padding:18px 20px;box-shadow:var(--shadow)}
+.formcard .flabel{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:7px}
+.fsec{margin-top:20px}
+.frow{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12px;font-weight:600;color:var(--ink-3)}
+.fld input,.fld select{border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px;
+  font:inherit;font-size:13.5px;background:var(--page);color:var(--ink);outline:none;min-width:0}
+.fld input:focus,.fld select:focus{border-color:var(--blue)}
+.fld.opt input::placeholder{color:var(--ink-3)}
+.fld-inv input{border:1.5px dashed var(--line-strong);background:color-mix(in srgb,var(--canvas) 40%,var(--page))}
+
+/* 소싱 루트 라디오 카드 */
+.routecards{display:flex;gap:12px;flex-wrap:wrap}
+.routecard{flex:1;min-width:210px;border:1.5px solid var(--line-strong);border-radius:10px;
+  padding:13px 15px;cursor:pointer;background:var(--page);display:flex;gap:11px;align-items:flex-start;position:relative}
+.routecard input[type=radio]{margin-top:3px;accent-color:var(--blue)}
+.routecard b{display:block;font-size:14px;color:var(--ink)}
+.routecard small{color:var(--ink-3);font-size:11.5px;display:block;margin-top:2px}
+.routecard.on{border-color:var(--blue);background:var(--blue-soft)}
+.routecard.on.rc-wholesale{border-color:var(--ss-purple);background:var(--ss-purple-50)}
+.routecard.on.rc-partnership{border-color:var(--amber);background:var(--amber-soft)}
+.routecard .rc-badge{position:absolute;top:11px;right:12px}
+
+/* Procurement Hub PO 매칭 패널 */
+.pomatch{margin-top:10px;border:1px solid var(--blue);background:var(--blue-soft);border-radius:10px;padding:13px 15px}
+.pomatch .po-head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--blue)}
+.pomatch select{margin-top:9px;width:100%;max-width:520px;border:1px solid var(--blue);border-radius:7px;
+  padding:8px 11px;font:inherit;font-size:13.5px;background:var(--page);color:var(--ink)}
+.pomatch .po-note{margin-top:9px;font-size:12px;color:var(--ink-2)}
+.directnote{margin-top:10px;border:1px dashed var(--line-strong);border-radius:10px;padding:12px 14px;
+  font-size:12.5px;color:var(--ink-2);background:color-mix(in srgb,var(--canvas) 45%,var(--page))}
+
+/* 제품 입력 행 (자동완성) */
+.prodtbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.prodtbl th{background:var(--ink);color:var(--page);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;font-size:12px}
+.prodtbl td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:middle}
+.prodtbl input{border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font:inherit;font-size:13px;
+  background:var(--page);color:var(--ink);outline:none;width:100%}
+.prodtbl .rm{border:none;background:none;color:var(--red);font-size:15px;cursor:pointer;line-height:1}
+.prefill td{background:color-mix(in srgb,var(--blue-soft) 45%,var(--page))}
+
+/* 자동완성 드롭다운 (View Orders 미인식 모달과 동일 문법) */
+.auto{border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;background:var(--page);position:relative;z-index:5}
+.auto input{width:100%;border:none;padding:8px 11px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
+.auto .opt{padding:8px 11px;border-top:1px solid var(--line);font-size:13px;cursor:pointer}
+.auto .opt.sel{background:var(--blue-soft);font-weight:600}
+.auto .opt small{color:var(--ink-3)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;
+  font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:54px;resize:vertical}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.note.purple{background:var(--ss-purple-50);border:1px solid var(--ss-purple-100)}
+.submitrow{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
+
+/* filter chips (요청 리스트 상태 필터) */
+.filterchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:99px;
+  padding:5px 13px;font-size:12.5px;font-weight:600}
+.chip.on{background:var(--ink);color:var(--page);border-color:var(--ink)}
+
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast small{opacity:.85;font-weight:400}
+
+/* comment inbox dropdown — View Orders와 동일 */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal .qrow input{flex:1;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 11px;background:var(--page);color:var(--ink)}
+
+/* View Orders 연동 미니 목업 (M2) */
+.vomock{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.vomock .vh{background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;font-weight:600}
+.vomock .vr{display:flex;align-items:center;gap:10px;padding:9px 10px;font-size:12.5px;border-top:1px solid var(--line)}
+
+.state{display:none}
+.state.on{display:block}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · 입고 요청 (Inbound Request) 와이어프레임</h1>
+  <span class="hint">v1 — 보라색 번호 = 신규/변경 주석 · 섹션 I</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · 신규 요청 (스마트바이 · PO 매칭)</button>
+    <button class="wf-tab" data-state="s2">2 · 신규 요청 (홀세일 / 파트너십)</button>
+    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/발송/입고완료)</button>
+    <button class="wf-tab" data-modal="m-invoice">모달: 송장번호 입력</button>
+    <button class="wf-tab" data-modal="m-vo">모달: View Orders 연동</button>
+    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : 신규 요청 — 스마트바이 (PO 매칭) ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+      <span class="dot" style="top:3px;left:-30px">14</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>REQ-2026-0331</b> · Dean: "@Yongwon 이 홀세일 건 송장번호 언제 나와요?"<br><time>11:20</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>REQ-2026-0327</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장됨">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>REQ-2026-0327</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">15</span>
+    <h2>WMS - 입고 요청</h2>
+    <p class="sub">Inbound Request — 신규 신청</p>
+
+    <div class="formcard anno">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+
+      <!-- 소싱 루트 -->
+      <div class="fsec anno" style="margin-top:2px">
+        <span class="dot" style="top:-2px;left:-14px">2</span>
+        <span class="flabel">소싱 루트 <span class="mut" style="font-weight:400">— 창고로 들어오는 모든 물량의 공통 신청 관문</span></span>
+        <div class="routecards">
+          <label class="routecard on"><input type="radio" name="route" checked>
+            <span><b>스마트바이</b><small>재고 보충 · Coupang JIT 소싱 (PH 경유)</small></span>
+            <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
+          <label class="routecard rc-wholesale"><input type="radio" name="route">
+            <span><b>홀세일</b><small>도매 대량 입고 (직접 신청)</small></span>
+            <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
+          <label class="routecard rc-partnership"><input type="radio" name="route">
+            <span><b>브랜드 파트너십</b><small>브랜드 협찬·마케팅 물량 (직접 신청)</small></span>
+            <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
+        </div>
+      </div>
+
+      <!-- Procurement Hub PO 매칭 (스마트바이 전용) -->
+      <div class="fsec anno" id="poSec">
+        <span class="dot" style="top:16px;left:-14px">3</span>
+        <span class="flabel">Procurement Hub PO 매칭 <span class="mut" style="font-weight:400">— 스마트바이 루트 전용 (발주 → 입고 요청 연결)</span></span>
+        <div class="pomatch">
+          <div class="po-head">🔗 발주된 PO를 선택하면 제품·수량이 자동으로 채워집니다</div>
+          <select>
+            <option>PO-2026-0142 · COSRX 외 3종 · 4 SKU / 620개 · 발주 07-10 (Harshit)</option>
+            <option>PO-2026-0139 · Anua 외 1종 · 2 SKU / 180개 · 발주 07-08 (Harshit)</option>
+            <option>PO 없이 수동 입력</option>
+          </select>
+          <div class="po-note">선택됨: <a class="po-link">PO-2026-0142</a> — Buy Alert 발주 건. 입고 완료 시 PH의 GRN(입고 확인)에 자동 반영됩니다.</div>
+        </div>
+      </div>
+
+      <!-- 제품 입력 -->
+      <div class="fsec anno">
+        <span class="dot" style="top:-2px;left:-14px">4</span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 브랜드·제품·SKU·수량 (제품명/SKU 자동완성)</span></span>
+        <table class="prodtbl">
+          <thead><tr>
+            <th style="width:150px">브랜드</th><th>제품명 · SKU (자동완성)</th><th style="width:90px">사이즈</th><th style="width:90px">수량</th><th style="width:40px"></th>
+          </tr></thead>
+          <tbody>
+            <tr class="prefill">
+              <td><input value="COSRX" readonly></td>
+              <td><input value="Advanced Snail 96 Mucin Power Essence · 100040311" readonly></td>
+              <td><input value="100ml" readonly></td>
+              <td><input value="200" class="num"></td>
+              <td><button class="rm" title="행 삭제">✕</button></td>
+            </tr>
+            <tr class="prefill">
+              <td><input value="Beauty of Joseon" readonly></td>
+              <td><input value="Relief Sun : Rice + Probiotics · 100031820" readonly></td>
+              <td><input value="50ml" readonly></td>
+              <td><input value="300" class="num"></td>
+              <td><button class="rm" title="행 삭제">✕</button></td>
+            </tr>
+            <tr class="anno">
+              <td><input value="Anua" placeholder="브랜드"></td>
+              <td>
+                <div class="auto">
+                  <input value="heartleaf 77" placeholder="영어 제품명 입력 → 자동완성에서 선택">
+                  <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
+                  <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
+                  <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
+                </div>
+                <span class="dot" style="top:-11px;right:-8px">5</span>
+              </td>
+              <td><input value="" placeholder="자동"></td>
+              <td><input value="120" class="num"></td>
+              <td><button class="rm" title="행 삭제">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="anno" style="margin-top:8px">
+          <button class="btn btn-line btn-sm">＋ 제품 행 추가</button>
+          <span class="dot" style="top:-11px;right:-8px">6</span>
+        </div>
+      </div>
+
+      <!-- 송장번호 + 예상 입고일 + 메모 -->
+      <div class="fsec">
+        <div class="frow">
+          <div class="fld opt fld-inv anno" style="flex:1;min-width:280px">
+            <label>송장번호 (Tracking No)</label>
+            <input value="" placeholder="발송 후 입력 — 비워두고 신청 가능 (나중에 입력)">
+            <span class="dot" style="top:14px;right:-8px">7</span>
+          </div>
+          <div class="fld anno" style="min-width:180px">
+            <label>예상 입고일</label>
+            <input type="date" value="2026-07-16">
+            <span class="dot" style="top:14px;right:-8px">8</span>
+          </div>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>메모 (Optional)</label>
+          <textarea class="mtextarea" placeholder="입고 관련 참고사항 — 작성 시 요청 건 Comments 히스토리에 함께 기록됩니다"></textarea>
+        </div>
+      </div>
+
+      <div class="note purple anno">
+        <span class="dot" style="top:-11px;left:-10px">9</span>
+        송장번호를 입력하면 <b>View Orders와 자동 매칭</b>됩니다 — 센터에서 해당 송장 바코드를 스캔하면 이 요청의 <b>소싱 루트가 배지로 표시</b>(SMART BUY / WHOLESALE / PARTNERSHIP)됩니다. <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
+      </div>
+
+      <div class="submitrow">
+        <button class="btn btn-blue">입고 요청 등록</button>
+        <button class="btn btn-line">송장번호 없이 등록 (나중에 입력)</button>
+        <span class="mut">등록 시 상태 = <span class="tag tag-requested">신청</span> · 요청 리스트에 추가됩니다</span>
+      </div>
+    </div>
+
+    <p class="mut" style="margin-top:14px">등록된 요청은 상단 <b>[3 · 요청 리스트]</b> 탭에서 상태별로 조회·관리합니다.</p>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1 신규/변경 — 신규 입고 요청 (스마트바이 · PO 매칭)</h3>
+  <ol>
+    <li><span class="n">1</span><span>입고 요청 화면 신설 — 창고로 들어오는 <b>모든 물량의 공통 신청 관문</b>. 스마트바이 재고보충뿐 아니라 홀세일·브랜드 파트너십 입고도 여기서 신청 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>소싱 루트 지정 — 라디오 카드 3종(스마트바이 / 홀세일 / 브랜드 파트너십), 선택 루트에 따라 아래 폼이 바뀜. 배지 색은 View Orders 소싱루트 배지와 동일 규약 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">3</span><span>Procurement Hub PO 매칭 (스마트바이 전용) — 발주된 PO 선택 시 제품·수량 자동 채움, 입고 완료 시 PH의 GRN에 자동 반영 (구매–입고 연결). 홀세일·파트너십은 이 패널 미노출 <span class="ref">— I + J Procurement Hub</span></span></li>
+    <li><span class="n">4</span><span>입고 제품 입력 — 브랜드·제품·SKU·사이즈·수량. PO 매칭 시 상단 행 자동 프리필(파란 틴트), 추가 제품은 수동 입력 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">5</span><span>제품명/SKU 자동완성 — 영어 입력 시 카탈로그에서 제품 검색(View Orders 미인식 모달과 동일 문법), 선택 시 브랜드·사이즈·SKU 자동 채움 <span class="ref">— I + F 자동완성</span></span></li>
+    <li><span class="n">6</span><span>제품 행 추가 버튼 — 한 요청에 여러 SKU 신청 가능 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">7</span><span>송장번호 입력란 — <b>신청 시점엔 미입력 가능</b>(대시 테두리로 선택 필드 표시), 물량 발송 후 나중에 입력 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시. 클릭 시 연동 방식 모달(M2) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">14</span><span>우상단 Comments 허브 — 요청 건에 태그된 Comments(@Mentions/★Saved). View Orders와 동일 컴포넌트 <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">15</span><span>좌우 여백 축소 — 폼 전체가 스크롤 없이 한 화면 <span class="ref">— C 화면 규약</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스마트바이 루트 = J. Procurement Hub PO 기반(발주 → 입고 요청 등록으로 연결). 홀세일·파트너십은 PH 미경유로 직접 신청. 모든 라벨은 "Comments"로 통일(한글 "코멘트" 금지).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : 신규 요청 — 홀세일 / 파트너십 (직접) ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - 입고 요청</h2>
+    <p class="sub">Inbound Request — 신규 신청</p>
+
+    <div class="formcard">
+      <div class="fsec" style="margin-top:2px">
+        <span class="flabel">소싱 루트 <span class="mut" style="font-weight:400">— 창고로 들어오는 모든 물량의 공통 신청 관문</span></span>
+        <div class="routecards">
+          <label class="routecard"><input type="radio" name="route2">
+            <span><b>스마트바이</b><small>재고 보충 · Coupang JIT 소싱 (PH 경유)</small></span>
+            <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
+          <label class="routecard on rc-wholesale"><input type="radio" name="route2" checked>
+            <span><b>홀세일</b><small>도매 대량 입고 (직접 신청)</small></span>
+            <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
+          <label class="routecard rc-partnership"><input type="radio" name="route2">
+            <span><b>브랜드 파트너십</b><small>브랜드 협찬·마케팅 물량 (직접 신청)</small></span>
+            <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
+        </div>
+      </div>
+
+      <!-- 홀세일/파트너십: PO 미경유 안내 -->
+      <div class="fsec anno">
+        <span class="dot" style="top:16px;left:-14px">1</span>
+        <span class="flabel">Procurement Hub PO 매칭</span>
+        <div class="directnote">
+          <b style="color:var(--ss-purple)">홀세일 · 브랜드 파트너십 = PH 미경유 직접 신청</b> — Procurement Hub PO 없이 이 화면에서 바로 등록합니다. (PO 매칭은 스마트바이 루트 전용)
+        </div>
+      </div>
+
+      <div class="fsec anno">
+        <span class="dot" style="top:-2px;left:-14px">2</span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 전량 수동 입력 (자동완성 지원)</span></span>
+        <table class="prodtbl">
+          <thead><tr>
+            <th style="width:150px">브랜드</th><th>제품명 · SKU (자동완성)</th><th style="width:90px">사이즈</th><th style="width:90px">수량</th><th style="width:40px"></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><input value="Round Lab" readonly></td>
+              <td><input value="1025 Dokdo Toner · 100052117" readonly></td>
+              <td><input value="200ml" readonly></td>
+              <td><input value="500" class="num"></td>
+              <td><button class="rm" title="행 삭제">✕</button></td>
+            </tr>
+            <tr>
+              <td><input value="Round Lab" readonly></td>
+              <td><input value="1025 Dokdo Cleanser · 100052124" readonly></td>
+              <td><input value="150ml" readonly></td>
+              <td><input value="300" class="num"></td>
+              <td><button class="rm" title="행 삭제">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:8px"><button class="btn btn-line btn-sm">＋ 제품 행 추가</button></div>
+      </div>
+
+      <div class="fsec">
+        <div class="frow">
+          <div class="fld opt fld-inv" style="flex:1;min-width:280px">
+            <label>송장번호 (Tracking No)</label>
+            <input value="10325661220417" placeholder="발송 후 입력 — 비워두고 신청 가능">
+          </div>
+          <div class="fld" style="min-width:180px">
+            <label>예상 입고일</label>
+            <input type="date" value="2026-07-18">
+          </div>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>메모 (Optional)</label>
+          <textarea class="mtextarea" placeholder="입고 관련 참고사항">홀세일 벤더 직송 — 파레트 2개, 지게차 필요</textarea>
+        </div>
+      </div>
+
+      <div class="note purple">
+        송장번호가 입력되어 있으므로 등록 즉시 <b>View Orders와 매칭</b>됩니다 — 스캔 시 <span class="tag tag-wholesale">WHOLESALE</span> 배지로 표시됩니다.
+      </div>
+
+      <div class="submitrow">
+        <button class="btn btn-blue">입고 요청 등록</button>
+        <span class="mut">송장번호가 있어 등록 시 상태 = <span class="tag tag-shipped">발송</span>으로 바로 설정됩니다</span>
+      </div>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 신규/변경 — 홀세일 / 브랜드 파트너십 (직접 신청)</h3>
+  <ol>
+    <li><span class="n">1</span><span>홀세일·파트너십은 <b>PH 미경유 직접 신청</b> — Procurement Hub PO 매칭 패널 대신 안내 문구. PO 매칭은 스마트바이 루트에서만 노출 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>제품 전량 수동 입력(자동완성 지원) — PO 프리필 없음 <span class="ref">— I 입고요청</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">신청 시 송장번호를 이미 아는 경우(예: 벤더 직송 송장 확보) 바로 입력하면 등록과 동시에 "발송" 상태로 설정되고 View Orders 매칭이 즉시 활성화됩니다. 미입력이면 "신청" 상태.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : 요청 리스트 (상태별) ══════════════ -->
+<section class="state" id="s3">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ 입고 요청 등록됨 — REQ-2026-0334</span><small>새로고침 없음 · 리스트 상단에 추가</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - 입고 요청</h2>
+    <p class="sub">Inbound Request — 요청 리스트</p>
+
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ 신규 입고 요청</button>
+      <div class="filterchips anno" style="margin-top:0">
+        <span class="dot" style="top:-11px;left:-10px">1</span>
+        <button class="chip on">전체 12</button>
+        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 4</button>
+        <button class="chip"><span class="tag tag-shipped" style="margin-right:5px">발송</span> 5</button>
+        <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">입고완료</span> 3</button>
+      </div>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:12px">
+      <button class="btn btn-purple-line btn-sm">선택 항목 일괄 송장번호 입력</button>
+      <button class="btn btn-green-line btn-sm">선택 항목 발송 처리</button>
+      <span class="cnt">2개 선택됨 · 입고 처리(입고완료 전환)는 View Orders 스캔에서 자동 반영</span>
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>요청 ID</th><th class="anno">소싱 루트<span class="dot" style="top:-11px;left:80px">3</span></th><th>브랜드 · 제품</th><th>SKU</th><th>수량</th>
+        <th class="anno">PO 매칭<span class="dot" style="top:-11px;left:64px">4</span></th><th class="anno">송장번호<span class="dot" style="top:-11px;left:70px">5</span></th><th>예상 입고일</th><th>신청자</th><th class="anno">상태<span class="dot" style="top:-11px;right:-8px">6</span></th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <!-- 신청 (송장 미입력) -->
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td class="num">REQ-2026-0334</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Essence, 100ml 외 2종</td>
+          <td class="num">100040311 +2</td>
+          <td class="num">620</td>
+          <td><a class="po-link">PO-2026-0142</a></td>
+          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button><span class="dot" style="top:-12px;right:-8px">7</span></td>
+          <td class="num">07-16</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-requested">신청</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td class="num">REQ-2026-0331</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml 외 1종</td>
+          <td class="num">100052117 +1</td>
+          <td class="num">800</td>
+          <td class="num">–</td>
+          <td><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button></td>
+          <td class="num">07-18</td>
+          <td>Dean</td>
+          <td><span class="tag tag-requested">신청</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button></td>
+        </tr>
+        <!-- 발송 (송장 입력됨, View Orders 매칭 활성) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">REQ-2026-0327</td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (협찬)</td>
+          <td class="num">100038120</td>
+          <td class="num">300</td>
+          <td class="num">–</td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417</span> <span class="route-note">✓ View Orders 매칭됨</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
+          <td class="num">07-15</td>
+          <td>Miranti</td>
+          <td><span class="tag tag-shipped">발송</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">REQ-2026-0322</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
+          <td class="num">100045210</td>
+          <td class="num">180</td>
+          <td><a class="po-link">PO-2026-0139</a></td>
+          <td class="num" style="color:var(--blue)">10324880021991</td>
+          <td class="num">07-14</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-shipped">발송</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+        </tr>
+        <!-- 입고완료 (View Orders 스캔으로 자동 전환) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">REQ-2026-0318</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Beauty of Joseon</b> Relief Sun, 50ml 외 1종</td>
+          <td class="num">100031820 +1</td>
+          <td class="num">1,000</td>
+          <td class="num">–</td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note"><a class="vo-link" data-modal="m-vo">View Orders에서 스캔 완료 →</a></span><span class="dot" style="top:-12px;right:-8px">9</span></td>
+          <td class="num">07-11</td>
+          <td>Dean</td>
+          <td><span class="tag tag-inbounded">입고완료</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">REQ-2026-0311</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td class="num">100040311</td>
+          <td class="num">240</td>
+          <td><a class="po-link">PO-2026-0128</a></td>
+          <td class="num" style="color:var(--blue)">10322198837710</td>
+          <td class="num">07-09</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-inbounded">입고완료</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 4 · 발송 5 · 입고완료 3</p>
+
+    <div class="note purple anno" style="max-width:none">
+      <span class="dot" style="top:-11px;left:-10px">10</span>
+      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 신규/변경 — 요청 리스트 (신청 / 발송 / 입고완료)</h3>
+  <ol>
+    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / 신청 / 발송 / 입고완료. 3개 상태로 요청 라이프사이클 관리 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력 / 일괄 발송 처리. 입고완료 전환은 View Orders 스캔에서 자동 <span class="ref">— I + C 일괄바 규약</span></span></li>
+    <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지(View Orders와 동일 색) <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">4</span><span>PO 매칭 칼럼 — 스마트바이 건만 Procurement Hub PO 번호 링크 표시, 홀세일·파트너십은 "–" <span class="ref">— I + J Procurement Hub</span></span></li>
+    <li><span class="n">5</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">6</span><span>상태 칼럼 — <b>신청</b>(송장 미입력/발송 전) → <b>발송</b>(송장 입력·발송) → <b>입고완료</b>(센터 스캔 입고) <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">7</span><span>신청 상태 = 송장 미입력 → 발송 후 "미입력 → 입력"으로 나중에 송장번호 등록 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">8</span><span>발송 상태 = 송장 입력됨 → <b>View Orders 매칭 활성</b> 표시. 아직 물량 미도착 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">9</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">10</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : 송장번호 입력 (발송 후) ══════════════ -->
+<div class="overlay" id="m-invoice">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>송장번호 입력 — REQ-2026-0334<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">물량 발송 후 송장번호(Tracking No)를 입력하세요.</b>
+      <p class="mut" style="margin:8px 0 0">신청 시점에 미입력했던 건 — 발송이 완료되면 이 번호로 View Orders와 매칭됩니다.</p>
+      <div class="qrow">
+        <input value="" placeholder="예: 10325661220417 — 라스트마일/쿠팡 송장번호">
+      </div>
+      <div class="qrow" style="margin-top:14px">
+        <label style="font-size:13px;color:var(--ink)"><input type="checkbox" checked> 입력과 동시에 상태를 <span class="tag tag-shipped" style="margin:0 3px">발송</span>으로 변경</label>
+      </div>
+      <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 스마트바이 건은 <a class="po-link">PO-2026-0142</a>와 연결됩니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>송장번호 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : View Orders 연동 안내 ══════════════ -->
+<div class="overlay" id="m-vo">
+  <div class="modal anno" style="max-width:560px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>View Orders 연동 — 송장 스캔 시 소싱 루트 배지<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p style="margin:0 0 6px">입고 요청에 입력된 <b>송장번호</b>가 View Orders와 매칭됩니다. 센터에서 도착 물량의 송장 바코드를 스캔하면:</p>
+      <ol style="margin:8px 0 0;padding-left:18px;color:var(--ink-2);font-size:13px">
+        <li>해당 입고 요청 건이 자동 조회되고,</li>
+        <li>스캔 결과에 이 요청의 <b>소싱 루트 배지</b>가 표시되며,</li>
+        <li>Inbound 처리 시 요청 상태가 <span class="tag tag-inbounded">입고완료</span>로 전환됩니다.</li>
+      </ol>
+      <div class="vomock">
+        <div class="vh">View Orders — 스캔 결과 (미리보기)</div>
+        <div class="vr"><span class="thumb">IMG</span><span><b>COSRX</b> Advanced Snail 96 Mucin Essence</span><span class="tag tag-smartbuy" style="margin-left:auto">SMART BUY</span><span class="route-note" style="margin:0">Coupang JIT · PO-0142</span></div>
+        <div class="vr"><span class="thumb">IMG</span><span><b>Round Lab</b> 1025 Dokdo Toner</span><span class="tag tag-wholesale" style="margin-left:auto">WHOLESALE</span><span class="route-note" style="margin:0">홀세일 직접</span></div>
+        <div class="vr"><span class="thumb">IMG</span><span><b>Medicube</b> Zero Pore Pad 2.0</span><span class="tag tag-partnership" style="margin-left:auto">PARTNERSHIP</span><span class="route-note" style="margin:0">브랜드 협찬</span></div>
+      </div>
+      <div class="note">스마트바이 건은 배지 옆에 <b>PO 번호</b>가 함께 표기되어 구매–입고 연결이 한눈에 확인됩니다(J. Procurement Hub). 홀세일·파트너십은 PO 없이 소싱 루트만 표시됩니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-blue btn-sm" data-close>확인</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    document.getElementById(t.dataset.state).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+/* 리스트의 "신규 입고 요청" → State 1 점프 */
+document.querySelectorAll('[data-state-jump]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const tab=document.querySelector('.wf-tab[data-state="'+b.dataset.stateJump+'"]');
+    if(tab) tab.click();
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments 허브 탭 전환 (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ 저장 토글 */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* 소싱 루트 라디오 카드 선택 (폼 내 시각 전환) */
+document.querySelectorAll('.routecards').forEach(group=>{
+  group.querySelectorAll('.routecard').forEach(card=>{
+    card.addEventListener('click',()=>{
+      group.querySelectorAll('.routecard').forEach(c=>c.classList.remove('on'));
+      card.classList.add('on');
+    });
+  });
+});
+/* 필터 칩 토글 */
+document.querySelectorAll('.filterchips .chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    c.closest('.filterchips').querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+  });
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+</script>

@@ -1,0 +1,759 @@
+<title>WMS 2.0 — 마감 페이지 와이어프레임</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.mut{color:var(--ink-3);font-size:12.5px}
+
+/* comment panel — View Orders와 동일 문법 */
+.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.cpanel .c-item:last-of-type{border-bottom:none}
+.cpanel .who{font-weight:700;white-space:nowrap}
+.cpanel .at{color:var(--blue);font-weight:700}
+.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
+.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+
+/* ★ 저장(북마크) 토글 — Mentions/Saved 공통 */
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* actor log */
+.logsec{margin-top:26px}
+.logsec h4{font-size:14px;margin:0 0 8px}
+.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
+.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
+.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
+
+/* floating scan panel — 기본 접힘, 클릭 시 펼침 */
+.scanfloat{position:fixed;left:16px;bottom:16px;width:330px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:30}
+.scanfloat header{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--page);padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0}
+.scanfloat header .x{margin-left:auto;background:none;border:none;color:inherit;font-size:14px;line-height:1;cursor:pointer}
+.scanfloat.collapsed{width:auto;border-radius:99px}
+.scanfloat.collapsed ul,.scanfloat.collapsed footer{display:none}
+.scanfloat.collapsed header{border-radius:99px;padding:8px 16px}
+.scanfloat ul{list-style:none;margin:0;padding:6px 0;max-height:170px;overflow:auto}
+.scanfloat li{display:flex;gap:8px;padding:4px 12px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.scanfloat li b{color:var(--ink)}
+.scanfloat li time{margin-left:auto;color:var(--ink-3)}
+.scanfloat footer{border-top:1px solid var(--line);padding:6px 12px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 10px 10px;background:var(--page)}
+.scanfloat footer span{font-size:11px;color:var(--ink-3)}
+.scanfloat footer button{font-size:11.5px;border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:5px;padding:3px 8px}
+
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red)}
+.toast small{opacity:.85;font-weight:400}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+
+/* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+
+.state{display:none}
+.state.on{display:block}
+
+/* ══ 마감 페이지 전용 신규 요소 (색은 기존 팔레트만 사용) ══ */
+/* 대형 바코드 스캔 입력 — 창고에서 스캐너로 빠르게 연속 스캔 */
+.scanbig{display:flex;gap:10px;align-items:stretch;margin-top:14px;max-width:900px}
+.scanbig input{flex:1;font-size:22px;font-weight:700;letter-spacing:1px;padding:14px 18px;
+  border:2px solid var(--ink);border-radius:9px;background:var(--page);color:var(--ink);outline:none;font-variant-numeric:tabular-nums}
+.scanbig .btn{font-size:16px;padding:0 26px}
+
+/* 음성 알림 토글 바 */
+.voicebar{display:flex;align-items:center;gap:16px;margin-top:10px;flex-wrap:wrap}
+.vswitch{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--ink-2);cursor:pointer;user-select:none}
+.vtrack{width:42px;height:22px;border-radius:99px;background:var(--green);position:relative;transition:background .15s}
+.vtrack.off{background:var(--line-strong)}
+.vtrack i{position:absolute;top:2px;left:22px;width:18px;height:18px;border-radius:99px;background:#fff;transition:left .15s}
+.vtrack.off i{left:2px}
+
+/* 대형 상태 표시 — 멀리서도 인지 (Dean 요청 핵심) */
+.bigstatus{display:flex;align-items:center;gap:22px;margin-top:16px;border-radius:12px;padding:24px 30px}
+.bigstatus .ic{font-size:56px;line-height:1;flex:none}
+.bigstatus .big{font-size:38px;font-weight:800;letter-spacing:-.5px;line-height:1.05}
+.bigstatus .bmeta{font-size:15px;font-weight:600;margin-top:7px;color:var(--ink-2)}
+.bigstatus .bside{margin-left:auto;text-align:right;font-size:13px;color:var(--ink-2)}
+.bigstatus .bside b{font-size:19px;color:var(--ink)}
+.bs-ok{background:var(--green-soft);border:2px solid var(--green);color:var(--green)}
+.bs-warn{background:var(--red-soft);border:3px solid var(--red);color:var(--red);animation:bspulse 1s ease-in-out infinite}
+.bs-neutral{background:var(--canvas);border:2px solid var(--line-strong);color:var(--ink-2)}
+@keyframes bspulse{0%,100%{box-shadow:0 0 0 0 rgba(220,53,69,0)}50%{box-shadow:0 0 0 7px rgba(220,53,69,.20)}}
+
+/* 마감 진행 카운트 + 프로그래스 */
+.clsstat{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.tile{flex:1;min-width:132px;border:1px solid var(--line);border-radius:9px;padding:12px 16px;background:var(--page)}
+.tile .lab{font-size:12px;color:var(--ink-3);font-weight:600}
+.tile .val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;color:var(--ink)}
+.tile.ok .val{color:var(--green)} .tile.warn .val{color:var(--red)}
+.prog{height:14px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:14px;display:flex}
+.prog i{display:block;height:100%}
+.prog .p-ok{background:var(--green)} .prog .p-warn{background:var(--red)}
+.proglab{font-size:12px;color:var(--ink-3);margin-top:6px}
+
+/* 마감 상태 pill */
+.cs-shipped{background:var(--green-soft);color:var(--green);border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.cs-processing{background:var(--red-soft);color:var(--red);border:1px solid var(--red);border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.cs-dup{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.row-bad td{background:color-mix(in srgb,var(--red-soft) 60%,var(--page))}
+.row-ok td{background:color-mix(in srgb,var(--green-soft) 38%,var(--page))}
+
+/* 배너 (Ready to be Outbounded 재확인 등) */
+.clsbanner{margin-top:16px;border-radius:8px;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.clsbanner.info{background:var(--blue-soft);border:1px solid var(--blue)}
+.clsbanner.info b{color:var(--blue)}
+.clsbanner.warn{background:var(--amber-soft);border:1px solid var(--amber-line)}
+.clsbanner.warn b{color:var(--amber)}
+.clsbanner.done{background:var(--green-soft);border:1px solid var(--green)}
+.clsbanner.done b{color:var(--green)}
+.clsbanner .btn{margin-left:auto}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · 마감 페이지 와이어프레임</h1>
+  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · 정상 스캔 (출고 완료)</button>
+    <button class="wf-tab" data-state="s2">2 · 경고 · Processing(미출고)</button>
+    <button class="wf-tab" data-state="s3">3 · 경고 · 중복 스캔</button>
+    <button class="wf-tab" data-state="s4">4 · 마감 완료</button>
+    <button class="wf-tab" data-modal="m-process">모달: Processing 건 처리</button>
+    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : 정상 스캔 (출고 완료) ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="toast"><span>✓ 출고 완료 확인 — 10323775316153</span><small>다음 바코드 바로 스캔 가능</small></div>
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+      <span class="dot" style="top:3px;left:-30px">8</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413540</b> · Dean: "@Yongwon 이 오더 마감 때 Processing 떠서 제로패킹 확인했습니다"<br><time>18:02</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 중복 스캔 3건 — 합포장 건이라 정상입니다"<br><time>17:44</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413330</b> · Kai: "오늘 마감 완료 확인했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 중복 스캔 3건 — 합포장 건이라 정상입니다"<br><time>17:44</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">10</span>
+    <h2>WMS - 마감 (Closing)</h2>
+    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+
+    <div class="scanbig anno">
+      <input value="10323775316153" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+      <button class="btn btn-blue">스캔</button>
+    </div>
+    <div class="voicebar anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <span class="vswitch" id="voiceToggle"><span class="vtrack"><i></i></span> 음성 알림: <span id="voiceState" style="color:var(--green)">켜짐</span> — 경고 시 "확인 필요" 자동 재생</span>
+      <button class="btn btn-line btn-sm" id="voiceTest">🔊 음성 테스트</button>
+    </div>
+    <p class="mut" style="margin:8px 0 0">페이지 아무 곳이나 클릭해도 커서는 스캔창으로 복귀(전체 선택) — 스캐너로 연속 스캔 지원. 새로고침 없이 우상단 토스트만.</p>
+
+    <!-- 대형 상태 표시 -->
+    <div class="bigstatus bs-ok anno">
+      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <span class="ic">✓</span>
+      <div>
+        <div class="big">출고 완료 — OK</div>
+        <div class="bmeta">Order 413540 · Tracking 10323775316153 · 상태: Prepare Shipment (출고처리 완료)</div>
+      </div>
+      <div class="bside">스캔 시각<br><b>18:41:07</b><br>작업자 Dean</div>
+    </div>
+
+    <!-- 마감 진행 카운트 -->
+    <div class="clsstat anno">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
+      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:84.5%"></i><i class="p-warn" style="width:3.6%"></i></div>
+    <p class="proglab">마감 진행 84.5% — 71/84건 확인 · 경고 3건은 해소 필요 (전 건 확인 + 경고 0 이어야 마감 확정 가능)</p>
+
+    <div class="clsbanner info anno">
+      <span class="dot" style="top:-11px;left:-10px">7</span>
+      <b>↺ 마감 전 재확인</b>
+      <span>마감 확정 직전 <b>Ready to be Outbounded</b>를 한 번 더 확인하세요 — 인바운드는 끝났지만 마지막 Outbound가 안 눌린 건 잔존 여부 점검</span>
+      <button class="btn btn-line btn-sm">Ready to be Outbounded 열기 ↗</button>
+    </div>
+
+    <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 정상(초록) / 경고(빨강) 구분, 최신 스캔이 상단</span></p>
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">6</span>
+      <thead><tr>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-ok">
+          <td class="num">18:41:07</td><td class="num">10323775316153</td><td class="num" style="color:var(--blue)">413540</td>
+          <td>Box M</td><td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num">18:40:55</td><td class="num">10324880021991</td><td class="num" style="color:var(--blue)">413511</td>
+          <td>Box S</td><td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
+        </tr>
+        <tr>
+          <td class="num">18:40:31</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
+          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>–</td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num">18:40:18</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
+          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Miranti</td><td class="mut">직전 18:40:31 스캔과 동일 송장 (합포장 확인 필요)</td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num">18:39:52</td><td class="num">10323775099821</td><td class="num" style="color:var(--blue)">413472</td>
+          <td>Box M</td><td class="num">2</td><td><span class="cs-shipped">Shipped</span></td>
+          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:12px">오늘 스캔 71건 표시 · 백엔드 전체 누적 (마감 리포트 Export 시 전량 포함)</p>
+
+    <div class="clsbanner done anno" style="margin-top:20px">
+      <span class="dot" style="top:-11px;left:-10px">9</span>
+      <b>마감 확정</b>
+      <span>전 건 확인 + 경고 0건이 되면 활성화됩니다 — 확정 시 마감 로그 기록 + <b>Daily Shipping Status</b> 자동 갱신(스프레드시트 수기 과정 대체)</span>
+      <button class="btn btn-gray btn-sm">마감 확정 (경고 3건 해소 후)</button>
+    </div>
+
+    <div class="logsec anno">
+      <h4>마감 / 입출고 로그</h4>
+      <span class="dot" style="top:-8px;left:118px">11</span>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">18:41:07</td><td class="act-in">마감 스캔 (출고 확인)</td><td class="num">413540</td><td class="num">10323775316153</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">18:40:55</td><td class="act-cancel">마감 스캔 경고 (Processing)</td><td class="num">413511</td><td class="num">10324880021991</td><td>Dean</td><td><span style="color:var(--ink-2)">미출고 — 제로패킹 확인 후 Outbound 필요</span></td></tr>
+        <tr><td class="num">18:40:18</td><td class="act-cancel">마감 스캔 경고 (중복)</td><td class="num">413498</td><td class="num">10322198837710</td><td>Miranti</td><td><span style="color:var(--ink-2)">동일 송장 재스캔 — 합포장 여부 확인</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="scanfloat anno collapsed" id="scanfloat">
+    <header>📡 실시간 바코드 기록 <span style="background:var(--blue);border-radius:99px;padding:1px 8px;font-size:11px">71</span><button class="x">▾</button></header>
+    <span class="dot" style="top:-11px;right:-11px">12</span>
+    <ul>
+      <li><b>Dean</b><span class="num">10323775316153</span><time>18:41:07</time></li>
+      <li><b>Dean</b><span class="num">10324880021991</span><time>18:40:55</time></li>
+      <li><b>Miranti</b><span class="num">10322198837710</span><time>18:40:31</time></li>
+      <li><b>Miranti</b><span class="num">10322198837710</span><time>18:40:18</time></li>
+    </ul>
+    <footer><span>화면 최대 20건 · 백엔드 전체 누적</span><button>날짜별 Export</button></footer>
+  </div>
+
+</div></div>
+
+<div class="legend">
+  <h3>State 1 변경사항 — 정상 스캔 (출고 완료)</h3>
+  <ol>
+    <li><span class="n">1</span><span>마감 전용 대형 바코드 스캔 입력 — 오늘 포장 건을 바코드만 찍어 확인(스프레드시트 복잡 작업 대체), 스캔 즉시 출고 상태 판정 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">2</span><span>대형 상태 표시 — 멀리서도 보이는 큰 색상 패널. 정상은 초록 "출고 완료 — OK" <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">3</span><span>음성 알림 토글(기본 켜짐) — 경고 시 "확인 필요" 자동 재생, 스캐너로 빠르게 찍을 때 화면 안 봐도 인지. 음성 테스트 버튼 제공 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 Prepare Shipment/Shipped(출고처리 완료)인 건 → 초록 "출고 완료"(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, 시각·송장·Order·박스·상태·판정·작업자 기록. 최신 스캔 상단 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">7</span><span>마감 전 Ready to be Outbounded 재확인 배너(현재 마감 과정 5단계) — 링크로 바로 이동 <span class="ref">— F 마감 / D</span></span></li>
+    <li><span class="n">8</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved], 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">9</span><span>마감 확정 버튼 — 전 건 확인 + 경고 0 이어야 활성. 확정 시 로그 기록 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">10</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
+    <li><span class="n">11</span><span>마감/입출고 행위자 로그 — 누가 언제 무엇을 스캔/경고했는지 기록, 전 상태 하단 공통 <span class="ref">— C 로그(공통)</span></span></li>
+    <li><span class="n">12</span><span>좌하단 실시간 바코드 플로팅 패널 — 방금 찍은 바코드·작업자·시간, 기본 접힘, 날짜별 Export <span class="ref">— C 로그(공통)</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스캔한 송장의 오더 상태를 즉시 조회 → Prepare Shipment/Shipped면 정상(초록·무음), Processing(미출고)이거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). 마감 페이지는 상태 변경이 아니라 <b>출고 확인 전용</b>(Processing 건만 모달로 Outbound 처리 가능).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : 경고 · Processing (미출고) ══════════════ -->
+<section class="state" id="s2" data-voice="확인 필요">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - 마감 (Closing)</h2>
+    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <div class="scanbig">
+      <input value="10324880021991" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
+      <button class="btn btn-blue">스캔</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "확인 필요" 자동 재생</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
+    </div>
+
+    <div class="bigstatus bs-warn anno">
+      <span class="dot" style="top:-11px;right:-11px">1</span>
+      <span class="ic">⚠</span>
+      <div>
+        <div class="big">확인 필요 — 미출고 (Processing)</div>
+        <div class="bmeta" style="color:var(--red)">Order 413511 · Tracking 10324880021991 · 상태: <b>Processing</b> — 출고(Outbound) 처리 안 됨. 선반에서 빼지 마세요.</div>
+      </div>
+      <div class="bside anno" style="color:var(--red)"><span class="dot" style="top:-11px;right:-11px">2</span>🔊 음성<br><b style="color:var(--red)">"확인 필요"</b><br>자동 재생됨</div>
+    </div>
+
+    <div class="clsbanner warn anno" style="margin-top:14px">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      <b>조치</b>
+      <span>제로패킹에서 이 오더의 패킹 상태를 확인 → 정상이면 <b>Outbound 처리</b> 후 다시 마감 스캔. 미완이면 별도 처리 후 재스캔.</span>
+      <button class="btn btn-red-line btn-sm" data-modal="m-process">Processing 건 처리 (제로패킹 확인 → Outbound)</button>
+    </div>
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
+      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:84.5%"></i><i class="p-warn" style="width:3.6%"></i></div>
+    <p class="proglab">마감 진행 84.5% — 경고 3건 해소 후 마감 확정 가능</p>
+
+    <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 경고 건이 상단 강조</span></p>
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">3</span>
+      <thead><tr>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-bad">
+          <td class="num">18:40:55</td><td class="num">10324880021991</td><td class="num" style="color:var(--blue)">413511</td>
+          <td>Box S</td><td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num">18:41:07</td><td class="num">10323775316153</td><td class="num" style="color:var(--blue)">413540</td>
+          <td>Box M</td><td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="logsec">
+      <h4>마감 / 입출고 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">18:40:55</td><td class="act-cancel">마감 스캔 경고 (Processing)</td><td class="num">413511</td><td class="num">10324880021991</td><td>Dean</td><td><span style="color:var(--ink-2)">미출고 — 제로패킹 확인 후 Outbound 필요</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 변경사항 — 경고 · Processing (미출고)</h3>
+  <ol>
+    <li><span class="n">1</span><span>바코드 스캔한 오더가 <b>Processing(미출고)</b> 상태면 대형 빨간 경고 패널 + 펄스. 멀리서도 즉시 인지 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">2</span><span>동시에 음성 "확인 필요" 자동 재생(음성 켜짐 시) — 스캐너 연속 작업 중 화면 안 봐도 감지. (탭 진입 시 실제 재생) <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">3</span><span>경고 행은 빨강 틴트로 리스트 상단 강조 — "상자 크기마다 찍으면서 빨간 거 뜨는지 확인"의 디지털화 <span class="ref">— F 마감(현재과정 4)</span></span></li>
+    <li><span class="n">4</span><span>조치 배너 — Processing 건은 제로패킹 확인 후 Outbound 처리 버튼(모달)으로 바로 해소(현재 마감 과정 6단계) <span class="ref">— F 마감(현재과정 6)</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : 경고 · 중복 스캔 ══════════════ -->
+<section class="state" id="s3" data-voice="확인 필요">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - 마감 (Closing)</h2>
+    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <div class="scanbig">
+      <input value="10322198837710" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
+      <button class="btn btn-blue">스캔</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "확인 필요" 자동 재생</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
+    </div>
+
+    <div class="bigstatus bs-warn anno">
+      <span class="dot" style="top:-11px;right:-11px">1</span>
+      <span class="ic">⚠</span>
+      <div>
+        <div class="big">확인 필요 — 중복 스캔</div>
+        <div class="bmeta" style="color:var(--red)">Tracking 10322198837710 · Order 413498 — <b>오늘 이미 18:40:31에 스캔된 송장</b>입니다 (작업자 Miranti). 합포장 건인지 확인하세요.</div>
+      </div>
+      <div class="bside anno" style="color:var(--red)"><span class="dot" style="top:-11px;right:-11px">2</span>🔊 음성<br><b style="color:var(--red)">"확인 필요"</b><br>자동 재생됨</div>
+    </div>
+
+    <div class="clsbanner warn anno" style="margin-top:14px">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <b>중복 원본</b>
+      <span>최초 스캔: <b>18:40:31 · Miranti · Order 413498</b>. 여러 박스 합포장이면 정상(코멘트로 사유 기록), 실수 재스캔이면 무시 — 어느 쪽이든 마감 카운트는 1건으로만 집계.</span>
+      <button class="btn btn-line btn-sm">💬 합포장 사유 Comment</button>
+    </div>
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
+      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:84.5%"></i><i class="p-warn" style="width:3.6%"></i></div>
+    <p class="proglab">마감 진행 84.5% — 중복은 카운트 중복 집계 안 됨</p>
+
+    <p class="sub" style="margin-top:22px">스캔 리스트</p>
+    <table class="tbl">
+      <thead><tr>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-bad">
+          <td class="num">18:41:44</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
+          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Dean</td><td class="mut">최초 18:40:31 (Miranti) 대비 재스캔</td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num">18:40:31</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
+          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="logsec">
+      <h4>마감 / 입출고 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">18:41:44</td><td class="act-cancel">마감 스캔 경고 (중복)</td><td class="num">413498</td><td class="num">10322198837710</td><td>Dean</td><td><span style="color:var(--ink-2)">동일 송장 재스캔 — 합포장 여부 확인</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 변경사항 — 경고 · 중복 스캔</h3>
+  <ol>
+    <li><span class="n">1</span><span>오늘 이미 스캔된 송장을 다시 스캔하면 대형 빨간 "중복 스캔" 경고 — 엑셀 A열 중복값 기능의 디지털 대체 <span class="ref">— F Dean / 현재과정 1</span></span></li>
+    <li><span class="n">2</span><span>음성 "확인 필요" 자동 재생(음성 켜짐 시) — Processing과 동일한 경고 채널 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">3</span><span>중복 원본 표시 — 최초 스캔 시각·작업자·오더를 함께 노출, 합포장 여부 판단 지원. 중복은 마감 카운트에 이중 집계 안 함 <span class="ref">— F Dean</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 4 : 마감 완료 ══════════════ -->
+<section class="state" id="s4">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ 오늘 마감 확정 완료 — 84/84건</span><small>Daily Shipping Status 자동 갱신됨</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - 마감 (Closing)</h2>
+    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <div class="scanbig">
+      <input value="" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
+      <button class="btn btn-blue">스캔</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span></span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 음성 테스트</button>
+    </div>
+
+    <div class="bigstatus bs-ok anno">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <span class="ic">✓</span>
+      <div>
+        <div class="big">오늘 마감 완료 — 전 건 확인</div>
+        <div class="bmeta">출고 대상 84건 전량 스캔 확인 · 경고 0건 · 2026-07-13 18:52 마감 확정 (Yongwon)</div>
+      </div>
+      <div class="bside">경고<br><b style="color:var(--green)">0</b><br>남은 스캔 0</div>
+    </div>
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">경고 (해소됨)</div><div class="val">0</div></div>
+      <div class="tile"><div class="lab">남은 스캔</div><div class="val">0</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:100%"></i></div>
+    <p class="proglab">마감 진행 100% — 전 건 확인 + 경고 0 → 마감 확정 완료</p>
+
+    <div class="clsbanner done anno">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      <b>마감 리포트</b>
+      <span>오늘 마감 결과를 Export — 기존 <b>SS Daily Shipping Status</b> 수기 복사/붙여넣기·수식 제거 과정을 대체. 마감 확정 시 자동 스냅샷 저장됨.</span>
+      <button class="btn btn-green-line btn-sm">마감 리포트 다운로드 (CSV)</button>
+      <button class="btn btn-line btn-sm">Daily Shipping Status 보기 ↗</button>
+    </div>
+
+    <div class="clsbanner info anno" style="margin-top:12px">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <b>경고 처리 요약</b>
+      <span>오늘 경고 총 3건 — Processing 1건(413511, Outbound 처리 후 해소) · 중복 2건(합포장 확인, 코멘트 기록). 상세는 로그·Comments 참조.</span>
+    </div>
+
+    <div class="logsec anno">
+      <h4>마감 / 입출고 로그</h4>
+      <span class="dot" style="top:-8px;left:118px">4</span>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">18:52:10</td><td class="act-out">마감 확정 (Daily Shipping Status 갱신)</td><td class="num">전체 (84건)</td><td class="num">–</td><td>Yongwon</td><td><span style="color:var(--ink-2)">경고 0 확인 후 확정 · 리포트 스냅샷 저장</span></td></tr>
+        <tr><td class="num">18:48:33</td><td class="act-out">OUTBOUND (경고 해소)</td><td class="num">413511</td><td class="num">10324880021991</td><td>Dean</td><td><span style="color:var(--ink-2)">제로패킹 확인 완료 → 출고 처리</span></td></tr>
+        <tr><td class="num">18:41:07</td><td class="act-in">마감 스캔 (출고 확인)</td><td class="num">413540</td><td class="num">10323775316153</td><td>Dean</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 4 변경사항 — 마감 완료</h3>
+  <ol>
+    <li><span class="n">1</span><span>전 건 확인 + 경고 0 → 대형 초록 "마감 완료" 상태, 마감 확정 시각·확정자 기록 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">2</span><span>마감 리포트 Export(CSV) — 기존 SS Daily Shipping Status 수기 복사/붙여넣기·수식 제거 과정을 대체 <span class="ref">— F 마감(현재과정)</span></span></li>
+    <li><span class="n">3</span><span>경고 처리 요약 — 오늘 발생한 Processing/중복 경고와 해소 결과 집계 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">4</span><span>마감 확정이 로그에 기록 — 언제/누가 확정, Daily Shipping Status 갱신까지 감사 추적 <span class="ref">— C 로그(공통)</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : Processing 건 처리 (제로패킹 확인 → Outbound) ══════════════ -->
+<div class="overlay" id="m-process">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Processing 건 처리 — Order 413511<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">이 오더는 아직 출고(Outbound) 처리되지 않았습니다.</b>
+      <p class="mut" style="margin:6px 0 0">Tracking 10324880021991 · Box S · 제품 1 · 상태 <span class="cs-processing">Processing</span></p>
+      <div style="margin-top:14px">
+        <label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox"> <span><b style="color:var(--ink)">제로패킹에서 이 오더 패킹 상태 확인함</b> — 정상 포장 완료 확인 시 체크 (현재 마감 과정 6단계)</span></label>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="패킹 상태·조치 내용 — 작성 시 오더 Comments 히스토리 및 마감 로그에 함께 기록됩니다"></textarea>
+      </div>
+      <div class="note">Outbound 처리 시 오더 상태 <b>Processing → Prepare Shipment</b>로 전환되고, 마감 리스트에서 이 건이 <b>초록 "출고 완료"</b>로 재판정됩니다. 패킹 미완이면 별도 처리 후 재스캔하세요.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>닫기</button>
+      <button class="btn btn-green btn-sm" data-close>Outbound 처리 → 경고 해소</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    const st=document.getElementById(t.dataset.state);
+    st.classList.add('on');
+    window.scrollTo({top:0});
+    /* 경고 상태로 진입하면 음성 자동 재생 (Dean 요청 시연) */
+    if(st.dataset.voice) speak(st.dataset.voice);
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments 허브 탭 전환 (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ 저장 토글 */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* 실시간 바코드 플로팅 패널 */
+const sf=document.getElementById('scanfloat');
+if(sf){sf.querySelector('header').addEventListener('click',()=>{
+  sf.classList.toggle('collapsed');
+  sf.querySelector('.x').textContent = sf.classList.contains('collapsed') ? '▾' : '–';
+});}
+
+/* ── 음성 알림 (Web Speech API) — 경고 시 "확인 필요" 실제 재생 ── */
+let voiceOn = true;
+function speak(text){
+  if(!voiceOn) return;
+  try{
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR'; u.rate = 1; u.pitch = 1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+const vt=document.getElementById('voiceToggle');
+if(vt){
+  vt.addEventListener('click',()=>{
+    voiceOn=!voiceOn;
+    vt.querySelector('.vtrack').classList.toggle('off',!voiceOn);
+    const st=document.getElementById('voiceState');
+    st.textContent = voiceOn?'켜짐':'꺼짐';
+    st.style.color = voiceOn?'var(--green)':'var(--ink-3)';
+    if(voiceOn) speak('확인 필요');
+  });
+}
+const vtest=document.getElementById('voiceTest');
+if(vtest) vtest.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('확인 필요');voiceOn=o;});
+document.querySelectorAll('.sim-voice').forEach(b=>b.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('확인 필요');voiceOn=o;}));
+
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+</script>
