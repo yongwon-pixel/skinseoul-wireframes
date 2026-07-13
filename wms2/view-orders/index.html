@@ -9,7 +9,7 @@
   --green:#198754; --green-soft:#D1E7DD;
   --red:#DC3545; --red-soft:#F8D7DA;
   --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
-  --hl:#FFFBD6; --hl-line:#F59E0B;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
 /* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
@@ -92,6 +92,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
 .st-processing{background:var(--green-soft);color:var(--green)}
 .st-prepare{background:var(--blue-soft);color:var(--blue)}
+.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
 .chip-return{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
 .comment-btn{position:relative;margin-left:auto}
 
@@ -111,6 +112,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-pending{background:#FFC107;color:#3D2E00}
 .tag-inbounded{background:var(--green);color:#fff}
 .tag-exist{background:var(--blue);color:#fff}
+/* 소싱 루트 배지 3종 (입고 요청 I에서 지정된 루트가 송장번호로 매칭되어 표시) */
+.tag-smartbuy{background:var(--blue);color:#fff}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.tag-partnership{background:var(--amber);color:#fff}
+.route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
 .bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
 .bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
 .mut{color:var(--ink-3);font-size:12.5px}
@@ -118,13 +124,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 /* comment panel — Order 페이지 Operator Comments와 동일 문법 */
 .cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
-.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
 .cpanel .c-item:last-of-type{border-bottom:none}
 .cpanel .who{font-weight:700;white-space:nowrap}
 .cpanel .at{color:var(--blue);font-weight:700}
 .cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
 .cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
 .cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+
+/* ★ 저장(북마크) 토글 — Mentions/Saved 공통 */
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
 
 /* actor log */
 .logsec{margin-top:26px}
@@ -172,23 +182,40 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
 .auto .opt.sel{background:var(--blue-soft);font-weight:600}
 .auto .opt small{color:var(--ink-3)}
+/* 미인식 모달 사진 등록 버튼 */
+.photobtn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;border:1px dashed var(--line-strong);
+  border-radius:8px;padding:10px 14px;background:var(--page);color:var(--ink-2);font-size:12.5px;font-weight:600}
+.photobtn .ic{width:26px;height:26px;border-radius:6px;background:var(--canvas);display:flex;align-items:center;justify-content:center;font-size:14px}
+.photothumbs{display:flex;gap:6px;margin-top:8px}
+.photothumbs .pt{width:44px;height:44px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3);position:relative}
+.photothumbs .pt .rm{position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:99px;background:var(--red);color:#fff;font-size:10px;border:none;display:flex;align-items:center;justify-content:center}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 
-/* header comment inbox dropdown */
-.inboxdd{position:absolute;top:46px;right:110px;width:360px;background:var(--page);border:1px solid var(--line-strong);
+/* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
-.inboxdd header{padding:10px 14px;font-weight:700;font-size:13px;border-bottom:1px solid var(--line);display:flex}
-.inboxdd header small{margin-left:auto;color:var(--blue);font-weight:600}
-.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
 .inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
 .inboxdd .it b{color:var(--ink)}
-.inboxdd .it time{float:right;color:var(--ink-3);font-size:11px}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
 
 .state{display:none}
 .state.on{display:block}
 .retbanner{margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:8px;
   padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .retbanner b{color:var(--red);font-size:15px}
+.holdbanner{margin-top:16px;background:var(--amber-soft);border:1.5px solid var(--amber-line);border-radius:8px;
+  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.holdbanner b{color:var(--amber);font-size:15px}
 .loc-inline{display:flex;align-items:center;gap:6px}
 .loc-need input{border:1.5px solid var(--amber-line);background:var(--amber-soft)}
 .loc-need input::placeholder{color:var(--amber);font-weight:700;font-size:11.5px}
@@ -197,12 +224,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <div class="wf-bar">
   <h1>WMS 2.0 · View Orders 와이어프레임</h1>
-  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
+  <span class="hint">v20 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s1">1 · 스캔 결과 (마지막 1개)</button>
     <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
     <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
     <button class="wf-tab" data-state="s4">4 · 반품 모드</button>
+    <button class="wf-tab" data-state="s5">5 · Hold 오더</button>
     <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
     <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
     <button class="wf-tab" data-modal="m-restock">모달: 반품 입고</button>
@@ -227,11 +255,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <header>내가 태그된 코멘트 <small>모두 읽음 처리</small></header>
-      <div class="it unread"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<time>10:42</time></div>
-      <div class="it unread"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<time>09:15</time></div>
-      <div class="it unread"><b>Order 413650</b> · Kai: "@Yongwon 반품 재입고 로케이션 어디로?"<time>어제</time></div>
-      <div class="it"><b>Order 413501</b> · Dean: "해결 완료했습니다"<time>어제</time></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반품 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반품 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
     </div>
   </div>
 
@@ -242,13 +281,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="searchrow">
       <div class="search-input anno">
-        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔">
+        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
         <span class="dot" style="top:-10px;left:-10px">1</span>
         <span class="dot" style="top:-10px;right:8px">12</span>
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
     <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
 
     <p class="sub" style="margin-top:18px">Search Results</p>
@@ -259,7 +298,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
       <div class="shelf anno"><label>선반 위치</label><input value="3"><span class="dot" style="top:-11px;right:-11px">2</span></div>
       <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">10</span></button>
-      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1">💬 코멘트 <span class="badge-n">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1">💬 Comments <span class="badge-n">2</span></button>
       <span class="dot" style="top:-11px;right:-8px">11</span>
     </div>
 
@@ -270,17 +309,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="dot" style="top:-11px;left:-10px">9</span>
     </div>
 
-    <div class="cpanel" id="cpanel1" style="display:none">
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time></div>
-      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time></div>
-      <div class="cwrite"><input placeholder="코멘트 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    <div class="cpanel anno" id="cpanel1" style="display:none">
+      <span class="dot" style="top:-11px;left:-10px">19</span>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
     </div>
 
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
         <th>SKU</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">18</span></th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th class="anno">Location<span class="dot" style="top:-11px;right:-8px">17</span></th><th>Actions</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th class="anno">Sourcing Route<span class="dot" style="top:-11px;left:104px">6</span></th><th class="anno">Location<span class="dot" style="top:-11px;right:-8px">17</span></th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
@@ -291,7 +331,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-pending">PENDING</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td><td class="num">–</td>
           <td><button class="btn btn-green btn-sm anno">Inbound + Outbound<span class="dot" style="top:-12px;right:-10px">8</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -301,7 +342,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td>–</td><td>–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td class="anno"><span class="tag tag-exist">EXISTING INVENTORY</span><span class="dot" style="right:-8px;top:-11px">6</span></td><td class="num">A-03-2</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">Existing Inventory</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -312,7 +354,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="anno"><span class="qty qty-warn">2</span><span class="dot" style="right:-6px;top:-11px">7</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span><span class="route-note">브랜드 협찬 물량</span></td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -349,24 +392,25 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 1 변경사항 — 스캔 결과 (마지막 1개 남음)</h3>
   <ol>
-    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order No 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) <span class="ref">— C 검색 + C 반품</span></span></li>
     <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
-    <li><span class="n">3</span><span>우상단 코멘트 알림함 — 내가 태그된 코멘트, 미읽음 badge <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
     <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">6</span><span>Existing Inventory 구분 — Sourcing Route 칼럼을 파란 배지로 표시 + 행 배경 틴트 (제품명 밑 라벨 중복 제거) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">6</span><span>Sourcing Route 칼럼 = 소싱 루트 배지 3종 — <b>SMART BUY</b>(스마트바이 재고보충·JIT 소싱) / <b>WHOLESALE</b>(홀세일) / <b>PARTNERSHIP</b>(브랜드 파트너십). 입고 요청(I)에서 지정된 루트가 송장번호로 매칭되어 표시. Existing Inventory는 행 배경 틴트로 구분 <span class="ref">— I 입고요청 + C 검색</span></span></li>
     <li><span class="n">7</span><span>Quantity ≠ 1 → 옅은 주황 강조 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">8</span><span>마지막 제품 인바운드 조건 → Inbound + Outbound 동시 처리 버튼 <span class="ref">— C 동작</span></span></li>
     <li><span class="n">9</span><span>일괄 처리 버튼은 테이블 상단 배치 — 선택 항목 일괄 Inbound / 남은 제품 전체 일괄 Inbound + Outbound (전체 인바운드 = 오더 완결이므로 자동 아웃바운드까지, 단 Hold Shipment 오더는 Inbound까지만) <span class="ref">— C 동작 + F Hold</span></span></li>
     <li><span class="n">10</span><span>"Outbound to Deleo Baroship" → "Outbound"로 라벨 변경 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">11</span><span>오더 코멘트 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">11</span><span>오더 Comments 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~4) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~5) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
     <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 날짜별 export <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">17</span><span>Location 칼럼 신설 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~4) 공통 <span class="ref">— B/E 연계</span></span></li>
+    <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
     <li><span class="n">18</span><span>Product Name 맨 앞에 브랜드명 항상 노출 — 브랜드명 누락 제품은 제품명 로직 수정 필요 <span class="ref">— B</span></span></li>
+    <li><span class="n">19</span><span>결과창 Comments 패널 — 각 코멘트 ★로 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
 </div>
@@ -387,10 +431,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow">
-      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
@@ -400,7 +444,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
       <div class="shelf"><label>선반 위치</label><input value="3"></div>
       <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
-      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">2</span></button>
     </div>
     <div class="bulkbar" style="margin-top:10px">
       <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
@@ -422,7 +466,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm anno" data-modal="m-cancel">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">2</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -432,7 +477,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td class="num">–</td><td class="num">–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">Existing Inventory</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -443,7 +489,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span><span class="route-note">브랜드 협찬 물량</span></td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -487,10 +534,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow">
-      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
@@ -501,7 +548,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="shelf"><label>선반 위치</label><input value="3"></div>
       <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;right:-11px">1</span></button>
       <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
-      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">2</span></button>
     </div>
     <div class="bulkbar" style="margin-top:10px">
       <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
@@ -523,7 +570,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="qty">1</span></td>
           <td class="num">✓ 8801051283860</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td><td class="num">–</td>
           <td><button class="btn btn-gray btn-sm anno">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">4</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -533,7 +581,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
           <td class="num">–</td><td class="num">–</td><td class="num">–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">Existing Inventory</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
         </tr>
         <tr>
@@ -544,7 +593,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span><span class="route-note">브랜드 협찬 물량</span></td><td class="num">–</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
         </tr>
       </tbody>
@@ -589,11 +639,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
-    <div class="searchrow">
-      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No — 아무 번호나 스캔"></div>
+    <div class="searchrow anno">
+      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
+      <span class="dot" style="top:-11px;left:-10px">5</span>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — 반품은 <b>라스트마일(반품) 바코드</b>로도 조회 가능. Tracking / Inbound Order / Product Order No 아무 번호나 입력하면 자동 판별</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="retbanner anno">
@@ -606,7 +657,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-prepare">Returned</span>
       <span class="kv">Total Quantity: <b>4</b></span>
       <div class="shelf"><label>선반 위치</label><input value=""></div>
-      <button class="btn btn-line btn-sm comment-btn">💬 코멘트 <span class="badge-n">1</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
     </div>
     <table class="tbl">
       <thead><tr>
@@ -620,7 +671,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>Beauty of Joseon</b> Glow Serum, 30ml</td>
           <td>글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
           <td class="num">✓ 8809738317481</td><td class="num">–</td><td class="num">–</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-exist">EXISTING INVENTORY</span></td><td class="num">A-03-2</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Existing Inventory</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
@@ -628,7 +680,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
           <td class="num">✓ 8809894261234</td><td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10322198837710</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span><span class="route-note">브랜드 협찬 물량</span></td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
         <tr>
@@ -636,14 +689,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
           <td class="num">✓ 8809640733458</td><td class="num">24101467999310</td><td class="num" style="color:var(--blue)">10322198837710</td>
-          <td><span class="tag tag-inbounded">INBOUNDED</span></td><td>Coupang</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td><td class="num">–</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
         </tr>
       </tbody>
     </table>
     <div class="bulkbar anno">
       <button class="btn btn-green" data-modal="m-restock">선택 제품 창고 입고 처리 (3개)</button>
-      <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션 확정 후 일괄 처리</span>
+      <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션·메모 확정 후 일괄 처리</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
     </div>
 
@@ -663,9 +717,107 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>반품된 송장 바코드 스캔 시 "반품 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">2</span><span>선택 제품 창고 입고 처리 버튼 → 입고 확인 모달 오픈 (테이블의 수량·로케이션 칼럼은 제거, 모달로 이동. 버튼 클릭해서 확인) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">3</span><span>입고 확인 모달(M3) — 제품별 입고 여부 체크 + 입고 수량(기본=주문 수량, 부분 반품 시 수정) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">3</span><span>입고 확인 모달(M3) — 제품별 입고 여부 체크 + 입고 수량(기본=주문 수량, 부분 반품 시 수정) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">4</span><span>로케이션 미지정 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">5</span><span>라스트마일(반품) 바코드로도 조회 가능 — 검색창 통합 검색이 반품 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
   </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 5 : Hold 오더 ══════════════ -->
+<section class="state" id="s5">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="holdbanner anno">
+      <b>⏸ Hold Shipment</b>
+      <span>CS팀이 고객 요청(배송지 변경)으로 이 오더를 Hold 처리했습니다 — Order <b>414102</b> · 요청자 Sara(CS) 07-13 09:20</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+    </div>
+    <div class="ordercard anno">
+      <span class="kv">Order ID: <b style="color:var(--blue)">414102</b></span>
+      <span class="kv">Order Status:</span><span class="status st-hold">On Hold</span>
+      <span class="kv">Total Quantity: <b>2</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
+      <div class="shelf"><label>선반 위치</label><input value="7"></div>
+      <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
+    </div>
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
+      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
+      <span class="cnt">Hold 오더 — Inbound는 가능하나 Outbound는 차단됨 (Hold 해제 후 출고)</span>
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
+          <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809416470726</td>
+          <td class="num">24101468120440</td><td class="num" style="color:var(--blue)">10324880021991</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td><td class="num">–</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100052117</td><td><div class="thumb">IMG</div></td>
+          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml</td>
+          <td>1025 독도 토너</td><td>200ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809556351025</td>
+          <td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">홀세일 입고 대기</span></td><td class="num">–</td>
+          <td><button class="btn btn-green-line btn-sm">Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 2 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>인바운드 / 아웃바운드 로그</h4>
+      <table class="logtbl">
+        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><td class="num">07-13 09:20</td><td class="act-cancel">HOLD 처리</td><td class="num">전체</td><td class="num">–</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">고객 배송지 변경 요청 — 출고 보류</span></td></tr>
+        <tr><td class="num">07-13 08:55</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 5 변경사항 — Hold 오더 (출고 보류)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Hold 배너 — CS팀이 OMS/Order 상세에서 Hold 처리한 오더는 스캔 시 배너로 즉시 구분 (요청자·사유·시간 표시) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">2</span><span>Hold 상태 오더는 <b>Outbound 버튼 비활성</b> — Hold 해제 전에는 출고 불가 <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">3</span><span>일괄 처리 — Inbound는 계속 가능(입고는 막지 않음), "전체 Inbound + Outbound"만 차단 <span class="ref">— F Hold + C 동작</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Hold 전환 자체는 OMS/Order 상세 또는 Order Management의 "Hold Shipment" 버튼에서 수행 (CS팀). View Orders는 그 결과 상태를 보여주고 출고를 차단하는 역할.</p>
 </div>
 </section>
 
@@ -686,7 +838,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div style="margin-top:14px">
         <b style="color:var(--ink)">3. 메모 (Optional)</b>
-        <textarea placeholder="취소 사유나 참고사항 — 작성 시 오더 코멘트 히스토리에 함께 기록됩니다" style="width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:64px;resize:vertical"></textarea>
+        <textarea class="mtextarea" placeholder="취소 사유나 참고사항 — 작성 시 오더 Comments 히스토리에 함께 기록됩니다"></textarea>
       </div>
       <div class="note">해당 SKU의 <b>Reserved Quantity → Available</b>로 자동 반영됩니다.<br>용도: 오더 중간 취소, 창고 재고가 있는데 실수로 JIT 주문한 경우.</div>
     </div>
@@ -712,7 +864,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <div class="opt">Beauty of Joseon — Glow Deep Serum : Rice + Arbutin, 30ml <small>100031891</small></div>
         <div class="opt">COSRX — The Vitamin C 23 Glow Serum, 20ml <small>100029554</small></div>
       </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
+      <div class="anno">
+        <span class="dot" style="top:0px;left:-12px">M2b</span>
+        <button class="photobtn"><span class="ic">📷</span> 사진 등록 — 제품/박스 촬영 첨부 (선택)</button>
+        <div class="photothumbs">
+          <div class="pt">IMG<button class="rm">✕</button></div>
+        </div>
+      </div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·사진 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
@@ -723,7 +882,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <!-- ══════════════ MODAL : 반품 창고 입고 확인 ══════════════ -->
 <div class="overlay" id="m-restock">
-  <div class="modal anno" style="max-width:680px">
+  <div class="modal anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
     <header>창고 입고 처리 — Order 412990<button class="x" data-close>✕</button></header>
     <div class="body">
@@ -736,6 +895,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <tr><td><input type="checkbox" checked></td><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div></td></tr>
         </tbody>
       </table>
+      <div class="anno" style="margin-top:12px">
+        <span class="dot" style="top:-9px;left:-12px">M3b</span>
+        <b style="color:var(--ink)">메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="반품 사유·상태(외관 이상 등)·참고사항 — 작성 시 오더 Comments 히스토리 및 입고 로그에 함께 기록됩니다"></textarea>
+      </div>
       <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">로케이션 미지정 제품 1개</b> — 지정 전에는 입고 확정이 비활성입니다.</div>
       <div class="note">입고 완료 시 Current Stocks 재고·로케이션에 자동 반영됩니다.</div>
     </div>
@@ -772,6 +936,22 @@ document.querySelectorAll('[data-open]').forEach(b=>{
     if(el.classList.contains('inboxdd')) el.classList.toggle('open');
     else el.style.display = el.style.display==='none' ? 'block' : 'none';
   });
+});
+/* Comments 허브 탭 전환 (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ 저장 토글 */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
 const sf=document.getElementById('scanfloat');
 sf.querySelector('header').addEventListener('click',()=>{
