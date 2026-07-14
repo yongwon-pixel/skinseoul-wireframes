@@ -93,9 +93,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .prov-yun{border-color:var(--green);color:var(--green)}
 .prov-deleo{border-color:var(--blue);color:var(--blue)}
 .tag{display:inline-block;border-radius:4px;padding:1.5px 6px;font-size:9.5px;font-weight:800;letter-spacing:.2px}
-.tag-smartbuy{background:var(--blue);color:#fff}
-.tag-wholesale{background:var(--ss-purple);color:#fff}
-.tag-partnership{background:var(--amber);color:#fff}
+/* 소싱 루트 4종 — 색 없이 검정 볼드 텍스트로만 구분 */
+.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0}
 .rowmenu{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;width:28px;height:26px;font-size:13px}
 
 /* pagination */
@@ -204,7 +203,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <th style="width:28px"></th><th>Order ID</th><th>Customer</th><th>Total Value</th><th>Total Items</th><th>Product Name KR</th><th>SKU (Sourcing / Order# / Tracking)</th><th>Tracking No</th><th></th>
         </tr></thead>
         <tbody>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407847</span></td><td>Maytal Saltoon</td><td class="num">AUD 129.80</td><td class="num">4</td><td>포어레미디 폼 외 3종</td><td class="num">100005104 <span class="tag tag-smartbuy">SB</span> · 12101316464794 · 10323100835644</td><td class="num">YT2618100709331860</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407847</span></td><td>Maytal Saltoon</td><td class="num">AUD 129.80</td><td class="num">4</td><td>포어레미디 폼 외 3종</td><td class="num">100005104 <span class="tag tag-jit">JIT</span> · 12101316464794 · 10323100835644</td><td class="num">YT2618100709331860</td><td><button class="rowmenu">⋮</button></td></tr>
           <tr><td><input type="checkbox"></td><td><span class="oid">407812</span></td><td>Sarah Kim</td><td class="num">AUD 88.40</td><td class="num">2</td><td>마데카솔 크림 외 1종</td><td class="num">100004819 <span class="tag tag-smartbuy">SB</span> · 12101316461102 · DL20260630072138</td><td class="num">DL20260630072138</td><td><button class="rowmenu">⋮</button></td></tr>
           <tr class="mkt"><td><input type="checkbox"></td><td>인플루언서 @glowwithjade</td><td class="num">–</td><td class="num">3</td><td>시카페어 세트</td><td class="num">100043697 <span class="tag tag-partnership">PT</span> · MKT-40129 · –</td><td class="num">–</td><td><button class="rowmenu">⋮</button></td></tr>
           <tr><td><input type="checkbox"></td><td>Hardeep Kaur</td><td class="num">NZD 142.00</td><td class="num">2</td><td>데일리 웨트 힐크림 외</td><td class="num">100005088 <span class="tag tag-wholesale">WS</span> · – · YT2618100707828990</td><td class="num">YT2618100707828990</td><td><button class="rowmenu">⋮</button></td></tr>
@@ -231,7 +230,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">4</span><span>Hold Shipment — CS 긴급 요청 시 선택 오더 일괄 출고 보류(Order 상세 On Hold와 동기화) <span class="ref">— F Hold</span></span></li>
     <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/WS/PT)는 View Orders·Order 상세와 통일.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일.</p>
 </div>
 
 <!-- 모달: 마케팅 Import -->
