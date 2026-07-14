@@ -4,7 +4,7 @@
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
   --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
   --line:#DEE2E6; --line-strong:#BBBABE;
-  --nav:#212529; --nav-fg:#ADB5BD;
+  --nav:#1B1F24; --nav-fg:#C7CBD1;
   --blue:#0D6EFD; --blue-soft:#E7F1FF;
   --green:#198754; --green-soft:#D1E7DD;
   --red:#DC3545; --red-soft:#F8D7DA;
@@ -12,166 +12,133 @@
   --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
-
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
   font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
 button{font:inherit;cursor:pointer}
 
-/* ── wireframe chrome ─────────────────────────── */
-.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
-  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+/* wireframe chrome */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
 .wf-bar .hint{font-size:12px;opacity:.75}
 .wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
-  border-radius:99px;padding:5px 14px;font-size:12.5px}
-.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:99px;padding:5px 14px;font-size:12.5px}
 .wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
 
-/* ── annotations ──────────────────────────────── */
+/* annotations */
 .anno{position:relative}
-.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
-  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
 body.no-anno .dot,body.no-anno .legend{display:none!important}
-.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
-  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);border:1px solid var(--ss-purple-100);border-radius:10px}
 .legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
 .legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
 .legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
-.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
-  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
 
-/* ── admin mock ───────────────────────────────── */
+/* admin mock */
 .mockwrap{overflow-x:auto}
 .mock{min-width:1180px;background:var(--page);min-height:520px;padding-bottom:120px}
-.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:15px;padding:9px 18px;font-size:13px;flex-wrap:wrap}
 .nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .navlink{font-size:11px;line-height:1.12;color:var(--nav-fg)}
 .nav .sp{flex:1}
-.nav .user{color:#fff;font-weight:600}
-.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
-  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
-.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
-  padding:4px 10px;font-size:13px}
-.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
-  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
-.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+.nav .user{color:#fff;font-weight:600;font-size:12.5px}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 10px;font-size:12.5px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
 
-.pagepad{padding:18px 16px 0}
-.crumb{font-size:12.5px;color:var(--ink-3);margin:0 0 2px}
-.crumb b{color:var(--blue)}
-.pagepad h2{font-size:27px;margin:2px 0 2px}
-.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+.pagepad{padding:16px 22px 0}
+.subbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.subbar .sp{flex:1}
+.link-btn{background:var(--page);border:1px solid var(--line-strong);border-radius:7px;padding:5px 12px;font-size:12.5px;color:var(--ink-2);font-weight:600}
+.link-btn.blue{border-color:var(--blue);color:var(--blue)}
+.link-btn.red{border-color:var(--red);color:var(--red)}
+.back{background:none;border:none;color:var(--blue);font-weight:600;font-size:13px}
 
-.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.otitle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 4px}
+.otitle h2{font-size:26px;margin:0}
+.status{border-radius:6px;padding:3px 12px;font-size:12.5px;font-weight:700}
+.st-completed{background:var(--blue-soft);color:var(--blue)}
+.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.carrier{background:var(--green);color:#fff;border-radius:6px;padding:3px 10px;font-size:11.5px;font-weight:800}
+.btn{border-radius:7px;border:1px solid transparent;padding:7px 14px;font-size:13px;font-weight:600}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
-.btn-green{background:var(--green);color:#fff}
 .btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
-.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
-.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
 .btn-sm{padding:5px 11px;font-size:12.5px}
-.btn-busy{background:var(--blue);color:#fff;opacity:.6;cursor:progress}
-.shelf{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:7px;
-  padding:4px 12px;background:var(--page)}
-.shelf label{font-size:12.5px;font-weight:700;color:var(--ink-2)}
-.shelf input{width:64px;border:1px solid var(--line-strong);border-radius:5px;padding:5px 8px;font-size:14px;
-  background:var(--page);color:var(--ink);text-align:center;font-weight:700}
 
-/* order header card */
-.ordercard{margin-top:6px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:14px 18px;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line)}
-.ordercard .kv{font-size:13.5px;color:var(--ink-2)} .ordercard .kv b{color:var(--ink)}
-.ordercard .div{width:1px;align-self:stretch;background:var(--line-strong);margin:0 2px}
-.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
-.st-processing{background:var(--green-soft);color:var(--green)}
-.st-prepare{background:var(--blue-soft);color:var(--blue)}
-.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
-.st-shipped{background:var(--ss-purple-100);color:var(--ss-purple)}
-.comment-btn{position:relative}
-.statuschg{display:flex;align-items:center;gap:6px}
-.statuschg select{border:1px solid var(--line-strong);border-radius:6px;padding:6px 10px;font:inherit;font-size:13px;
-  background:var(--page);color:var(--ink)}
-.statuschg label{font-size:12px;font-weight:700;color:var(--ink-3)}
+.info3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;margin-top:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.info3 h3{font-size:16px;margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.info3 .edit{color:var(--ink-3);font-size:12px;cursor:pointer}
+.kv{margin-bottom:9px}
+.kv .k{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.kv .v{font-size:13.5px;color:var(--ink)}
 
-/* order meta strip (customer / dates / shipping) */
-.ord-strip{display:flex;flex-wrap:wrap;gap:9px 30px;margin-top:10px;padding:12px 18px;border:1px solid var(--line);border-radius:8px;background:var(--page)}
-.ord-strip .kv{font-size:13px;color:var(--ink-3)} .ord-strip .kv b{color:var(--ink);font-weight:600}
+.sec{margin-top:22px}
+.sec > h3{font-size:17px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
 
-/* table */
-.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
-.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
-.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
-.tbl .num{font-variant-numeric:tabular-nums}
-.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
-.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
-  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
-.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
-.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.tag-pending{background:#FFC107;color:#3D2E00}
-.tag-inbounded{background:var(--green);color:#fff}
-.tag-outbounded{background:var(--ss-purple);color:#fff}
-.mut{color:var(--ink-3);font-size:12.5px}
-
-/* section blocks (comments + log share the same heading style) */
-.blk{margin-top:26px}
-.blk h4{font-size:14px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
-.blk h4 .cnt{font-size:12px;font-weight:500;color:var(--ink-3)}
-
-/* comment panel — 0.General Operator Comments (Order 페이지 상시 노출) */
-.cpanel{border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
-.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
-.cpanel .c-item:last-of-type{border-bottom:none}
-.cpanel .who{font-weight:700;white-space:nowrap}
-.cpanel .at{color:var(--blue);font-weight:700}
-.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
-.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
-.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
-
-/* ★ 저장(북마크) 토글 */
+/* comments */
+.cmt-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;margin-top:6px}
+.cmt-list{border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-height:96px}
+.c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.c-item:last-child{border-bottom:none}
+.c-item .who{font-weight:700;white-space:nowrap}
+.c-item .at{color:var(--blue);font-weight:700}
+.c-item time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cmt-new textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:10px 12px;font:inherit;font-size:13px;min-height:92px;resize:vertical;background:var(--page);color:var(--ink)}
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
 
+/* fulfillment */
+.ftbadge{display:flex;gap:8px;align-items:center;margin:2px 0 10px;flex-wrap:wrap}
+.minih{font-size:11.5px;color:var(--ink-3);font-weight:700;letter-spacing:.4px;margin:10px 0 4px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.st-delivered{background:var(--green-soft);color:var(--green);border-radius:5px;padding:2px 8px;font-size:10.5px;font-weight:800}
+.lastmile{display:inline-block;border:1px solid var(--line-strong);border-radius:6px;padding:3px 9px;font-size:11.5px;color:var(--ink-2);margin-top:8px}
+.trackscroll{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;margin-top:4px}
+.trackscroll table{width:100%;border-collapse:collapse;font-size:12px}
+.trackscroll th{position:sticky;top:0;background:var(--canvas);color:var(--ink-3);text-align:left;padding:6px 9px;font-weight:700;border-bottom:1px solid var(--line-strong)}
+.trackscroll td{padding:5px 9px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.node{background:var(--line);color:var(--ink-2);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700}
+
+/* line items */
+.liinfo{font-size:12px;color:var(--ink-3);margin:2px 0 10px}
+.litable-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.litable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:2020px}
+.litable th{background:var(--ink);color:var(--page);text-align:left;padding:8px 9px;font-weight:600;white-space:nowrap;font-size:11.5px}
+.litable td{border-bottom:1px solid var(--line);padding:8px 9px;vertical-align:middle}
+.litable .num{font-variant-numeric:tabular-nums}
+.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-3)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:10.5px;font-weight:800;letter-spacing:.3px}
+.tag-inbounded{background:var(--green);color:#fff}
+.tag-smartbuy{background:var(--blue);color:#fff}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.tag-partnership{background:var(--amber);color:#fff}
+.route-note{display:block;font-size:9.5px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
+.bot{color:var(--ink-3);font-size:10px}
+.act-ic{display:inline-flex;gap:5px}
+.act-ic button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line-strong);background:var(--page);font-size:12px}
+.act-ic .del{border-color:var(--red);color:var(--red)}
+.act-ic .edit{border-color:var(--blue);color:var(--blue)}
+.li-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.li-foot .tq{font-weight:700}
+.li-foot .sp{flex:1}
+
 /* actor log */
+.logsec{margin-top:24px}
+.logsec h4{font-size:14px;margin:0 0 8px;display:flex;gap:8px;align-items:center}
 .logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
 .logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
 .logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
-.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}
-.act-cancel{color:var(--red);font-weight:700}.act-status{color:var(--ss-purple);font-weight:700}
+.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
 
-/* toast */
-.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
-  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
-.toast.err{background:var(--red)}
-.toast small{opacity:.85;font-weight:400}
-.toast.hidden{display:none}
-
-/* banners */
-.holdbanner{margin-top:10px;background:var(--amber-soft);border:1.5px solid var(--amber-line);border-radius:8px;
-  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.holdbanner b{color:var(--amber);font-size:15px}
-
-/* modal */
-.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
-.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
-.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
-.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
-.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
-.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
-.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
-.mrow{display:flex;flex-direction:column;gap:4px;margin-top:12px}
-.mrow > b{color:var(--ink)}
-.mrow select{border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13.5px;background:var(--page);color:var(--ink)}
-
-/* header comment inbox dropdown — Comments 허브 (Mentions / Saved) */
-.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
-  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+/* inbox dropdown */
+.inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
 .inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
 .inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
@@ -184,37 +151,39 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
 
-.state{display:none}
-.state.on{display:block}
-.orderno-col{color:var(--blue);font-weight:600}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:460px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.opt-row{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.opt-row label{border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px;font-size:13px}
 </style>
 
 <div class="wf-bar">
   <h1>WMS 2.0 · Order 상세 와이어프레임</h1>
-  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석 (기획 0. General + A. 성능)</span>
+  <span class="hint">v1 — 실제 어드민(Order #407847) 기반 · 보라 번호 = 신규/변경 주석</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · Processing (기본)</button>
-    <button class="wf-tab" data-state="s2">2 · Prepare Shipment (아웃바운드 완료)</button>
-    <button class="wf-tab" data-state="s3">3 · On Hold (CS 보류)</button>
-    <button class="wf-tab" data-modal="m-hold">모달: Hold Shipment</button>
-    <button class="wf-tab" data-modal="m-status">모달: 상태 변경 확인</button>
+    <button class="wf-tab" data-modal="m-comment">모달: 코멘트 @태그</button>
+    <button class="wf-tab" data-modal="m-status">모달: 상태 변경</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 1 : Processing (기본) ══════════════ -->
-<section class="state on" id="s1">
 <div class="mockwrap"><div class="mock anno">
-
-  <div class="toast hidden" id="toast1"><span>✓ 상태 변경 완료</span><small>새로고침 없이 즉시 반영</small></div>
-
+  <!-- 글로벌 nav (실제 어드민 표준) -->
   <div class="nav">
     <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
+    <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
     <span class="sp"></span>
     <span style="position:relative">
       <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
-      <span class="dot" style="top:3px;left:-30px">1</span>
+      <span class="dot" style="top:2px;left:-26px">7</span>
     </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
@@ -225,431 +194,246 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div class="tabpane" data-pane="mentions">
         <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반품 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407847</b> · Dean: "@Yongwon 이 오더 각별 포장 요청"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 407790</b> · Kai: "해결 완료"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 413865</b> · Yongwon: "쿠팡 조회하니 오늘 오후 도착"<br><time>11:03</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 제거</small></div>
+        <div class="it"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
       </div>
     </div>
   </div>
 
   <div class="pagepad">
-    <p class="crumb">OMS Center ▸ Order Management ▸ <b>Order Detail</b></p>
-    <h2>Order #413865</h2>
+    <div class="subbar">
+      <button class="back">← Back to Orders</button>
+      <span class="sp"></span>
+      <button class="link-btn">↻ Audit History</button>
+      <button class="link-btn blue">↗ View in WP</button>
+      <button class="link-btn blue">⧉ Clone Order</button>
+      <button class="link-btn red">✕ Cancel Order</button>
+    </div>
 
-    <div class="ordercard anno">
-      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
-      <span class="kv">Status:</span>
-      <span class="status st-processing" id="stBadge1">Processing</span>
-      <span class="dot" style="top:-11px;left:60px">2</span>
-      <div class="statuschg anno">
-        <label>상태 변경</label>
-        <select id="stSel1">
-          <option value="processing" selected>Processing</option>
-          <option value="prepare">Prepare Shipment</option>
-          <option value="hold">On Hold</option>
-          <option value="shipped">Shipped</option>
-        </select>
-        <span class="dot" style="top:-11px;right:-9px">3</span>
-      </div>
-      <div class="div"></div>
-      <button class="btn btn-green-line btn-sm anno" id="inbBtn1">Inbound<span class="dot" style="top:-11px;left:-10px">4</span></button>
-      <button class="btn btn-blue btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-10px">5</span></button>
-      <span class="dot" style="top:-11px;right:88px">6</span>
-      <button class="btn btn-line btn-sm" data-modal="m-hold">⏸ Hold Shipment</button>
+    <div class="otitle">
+      <h2>Order # 407847</h2>
+      <span class="status st-completed">Completed</span>
+      <span class="carrier">YUN</span>
+      <button class="btn btn-line btn-sm">View Label</button>
       <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
-      <div class="shelf"><label>선반 위치</label><input value="3"></div>
+      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-status">Change Status ▾</button><span class="dot" style="top:-11px;right:-9px">8</span></span>
     </div>
 
-    <div class="ord-strip">
-      <span class="kv">Customer: <b>Emily Chen</b></span>
-      <span class="kv">Email: <b>emily.chen@example.com</b></span>
-      <span class="kv">Country: <b>Australia</b></span>
-      <span class="kv">Order Date: <b>2026-07-13 09:02 SGT</b></span>
-      <span class="kv">Payment: <b style="color:var(--green)">Paid</b></span>
-      <span class="kv">Shipping: <b>YUN Express</b></span>
-      <span class="kv">Tracking No: <b class="orderno-col">10323775316153</b></span>
+    <div class="info3">
+      <div>
+        <h3>📋 Order Information</h3>
+        <div class="kv"><div class="k">Order Date</div><div class="v">2026-06-30 SGT</div></div>
+        <div class="kv"><div class="k">Order Created At</div><div class="v">30/06/2026 19:55:28 SGT</div></div>
+        <div class="kv"><div class="k">Total Items</div><div class="v">4</div></div>
+        <div class="kv"><div class="k">Total Discount</div><div class="v">AUD 13.11</div></div>
+        <div class="kv"><div class="k">Total Amount</div><div class="v">AUD 129.8</div></div>
+        <div class="kv"><div class="k">PIC ✎</div><div class="v">Egita</div></div>
+      </div>
+      <div>
+        <h3>👤 Billing Address <span class="edit">✎</span></h3>
+        <div class="kv"><div class="k">First / Last Name</div><div class="v">Maytal · Saltoon</div></div>
+        <div class="kv"><div class="k">Email</div><div class="v">m.saltoon@gmail.com</div></div>
+        <div class="kv"><div class="k">Phone</div><div class="v">+61 415 999 051</div></div>
+        <div class="kv"><div class="k">Address</div><div class="v">25 Warren Road</div></div>
+        <div class="kv"><div class="k">City / State</div><div class="v">Bellevue Hill · NSW</div></div>
+        <div class="kv"><div class="k">Postcode / Country</div><div class="v">2023 · AU</div></div>
+      </div>
+      <div>
+        <h3>🚚 Shipping Address <span class="edit">✎</span></h3>
+        <div class="kv"><div class="k">Name</div><div class="v">Maytal Saltoon</div></div>
+        <div class="kv"><div class="k">Phone</div><div class="v">+61 415 999 051</div></div>
+        <div class="kv"><div class="k">Address</div><div class="v">25 Warren Road</div></div>
+        <div class="kv"><div class="k">City / State</div><div class="v">Bellevue Hill · NSW</div></div>
+        <div class="kv"><div class="k">Postcode / Country</div><div class="v">2023 · AU</div></div>
+        <div class="kv"><div class="k">Tax ID / Short Address Code</div><div class="v">– · –</div></div>
+      </div>
     </div>
 
-    <div class="blk">
-      <h4>Order Detail <span class="cnt">상품 3종 · Total Quantity 4</span></h4>
-      <table class="tbl">
-        <thead><tr>
-          <th style="width:34px"><input type="checkbox"></th>
-          <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-          <th class="anno">Product Order No<span class="dot" style="top:-11px;left:120px">7</span></th>
-          <th>Barcode</th><th>Inbound Status</th><th>Actions</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
-            <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
-            <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">413865-001</td>
-            <td class="num">8801051283860</td>
-            <td><span class="tag tag-pending">PENDING</span></td>
-            <td><button class="btn btn-green-line btn-sm">Inbound</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
-            <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
-            <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">413865-002</td>
-            <td class="num">✓ 8801051884321</td>
-            <td><span class="tag tag-inbounded">INBOUNDED</span></td>
-            <td><button class="btn btn-red-line btn-sm">Cancel Inbound</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
-            <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
-            <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
-            <td><span class="qty qty-warn">2</span></td>
-            <td class="num orderno-col">413865-003</td>
-            <td class="num">✓ 8809894261234</td>
-            <td><span class="tag tag-inbounded">INBOUNDED</span></td>
-            <td><button class="btn btn-red-line btn-sm">Cancel Inbound</button></td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="mut" style="margin-top:10px">3 item(s) · 상품별 주문번호(Product Order No)는 View Orders 통합 검색에서도 조회 키로 사용됩니다.</p>
-    </div>
-
-    <div class="blk anno">
-      <span class="dot" style="top:-9px;left:-10px">8</span>
-      <h4>💬 Operator Comments <span class="cnt">오더 히스토리 · 작성자·시간 자동 기록 · @태그 → Slack 알림</span></h4>
-      <div class="cpanel">
-        <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-13 10:42</time><button class="star" title="저장">★</button></div>
-        <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-13 11:03</time><button class="star on" title="저장됨">★</button></div>
-        <div class="c-item anno"><span class="who">Miranti</span><span><span class="at">@Dean</span> 이 오더는 고객 요청으로 각별히 신경 써서 포장 부탁드립니다.</span><time>07-13 11:20</time><button class="star" title="저장">★</button><span class="dot" style="top:-2px;right:-10px">11</span></span></div>
-        <div class="cwrite anno">
-          <input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자·태그대상 포함)">
-          <button class="btn btn-blue btn-sm">등록</button>
-          <span class="dot" style="top:-11px;left:40px">10</span>
+    <!-- Operator Comments -->
+    <div class="sec anno">
+      <span class="dot" style="top:24px;left:-10px">1</span>
+      <h3>💬 Operator Comments <button class="btn btn-line btn-sm" style="margin-left:6px">Hide Comments</button></h3>
+      <div class="cmt-wrap">
+        <div class="cmt-list">
+          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 각별히 신경 써서 포장 부탁드립니다. 재구매 VIP 고객이에요.</span><time>07-13 10:42</time><button class="star" title="저장">★</button></div>
+          <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 확인했습니다. 에어캡 추가 처리할게요.</span><time>07-13 10:55</time><button class="star on" title="저장됨">★</button></div>
+        </div>
+        <div class="cmt-new">
+          <textarea placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림(오더넘버·내용·시간·작성자·태그대상). 오더별 히스토리가 여기에 집적됩니다."></textarea>
+          <button class="btn btn-blue btn-sm" style="margin-top:8px" data-modal="m-comment">Add Comment</button>
         </div>
       </div>
     </div>
 
-    <div class="blk anno">
-      <span class="dot" style="top:-9px;left:-10px">9</span>
-      <h4>인바운드 / 아웃바운드 행위자 로그 <span class="cnt">누가 인바운드/취소/아웃바운드/상태변경 했는지 기록 · 오더 페이지 하단 상시 노출</span></h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 11:32</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
-        <tr><td class="num">07-13 11:05</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-13 10:48</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
-        <tr><td class="num">07-13 09:02</td><td class="act-status">주문 생성 (Processing)</td><td class="num">–</td><td class="num">–</td><td>System</td><td>–</td></tr>
-      </table>
-    </div>
-  </div>
-
-</div></div>
-
-<div class="legend">
-  <h3>State 1 변경사항 — Order 상세 (Processing 기본)</h3>
-  <ol>
-    <li><span class="n">1</span><span>우상단 Comments 허브 — 로그아웃 옆, 내가 태그된 코멘트([@ Mentions]) + 저장한 코멘트([★ Saved]), 미읽음 badge 카운트 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">2</span><span>오더 상태 배지 — Processing / Prepare Shipment / On Hold / Shipped 색상 구분 표시 <span class="ref">— A + 상태값</span></span></li>
-    <li><span class="n">3</span><span>상태 변경 컨트롤 — 선택 즉시 반영(새로고침 없이 상단 toast), 행위자 로그에 기록. 확인 필요 전환은 모달 <span class="ref">— A 상태변경</span></span></li>
-    <li><span class="n">4</span><span>Inbound 버튼 <b>활성화</b> — 현재 어드민에서 버튼은 있으나 클릭이 안 되는 버그 수정 <span class="ref">— A 버그</span></span></li>
-    <li><span class="n">5</span><span>Outbound 버튼 <b>활성화</b> — 동일 버그(클릭 불가) 수정, 즉시 적용 <span class="ref">— A 버그</span></span></li>
-    <li><span class="n">6</span><span>더블클릭/중복 클릭 시 2회 처리되는 버그 방지 — 버튼 클릭 즉시 "처리 중..."으로 잠금 후 완료 시 해제 (Inbound 버튼 클릭해 확인) <span class="ref">— A 버그</span></span></li>
-    <li><span class="n">7</span><span>Order Detail에 <b>상품별 주문번호(Product Order No)</b> 칼럼 노출 — View Orders 통합 검색의 조회 키로도 사용 <span class="ref">— A/C 오더디테일</span></span></li>
-    <li><span class="n">8</span><span>Operator Comments 섹션 — Order 페이지 내 상시 노출(펼침 아님). 작성자·시간 자동 기록, 한 오더의 히스토리가 전부 이 안에 집적 → Slack 분산 방지·AI 학습 <span class="ref">— 0. UI 1</span></span></li>
-    <li><span class="n">10</span><span>Comment 입력 시 <b>@이름 태그 → Slack 자동 알림</b> — 오더넘버·코멘트 내용·시간·작성자·태그대상까지 포함해 발송 <span class="ref">— 0. General</span></span></li>
-    <li><span class="n">11</span><span>각 코멘트 ★ 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
-    <li><span class="n">9</span><span>인/아웃바운드 <b>행위자 로그</b> — 누가 인바운드/취소/아웃바운드/상태변경 했는지 시간·SKU·수량·작업자·메모로 기록, 페이지 하단 상시 노출 <span class="ref">— A + C 로그</span></span></li>
-  </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">A. 성능 공통 요건(화면 밖): 상태 변경·Inbound·Outbound·바코드 조회 등 모든 동작이 <b>즉시 반영</b>(새로고침 없이 toast) + 모든 버튼 응답 속도 향상. Order Fulfillment Dashboard·View Orders 스캔/버튼 속도 개선은 각 해당 화면에 반영(이 화면은 "각 Order 페이지" 요건 담당).</p>
-</div>
-</section>
-
-<!-- ══════════════ STATE 2 : Prepare Shipment (아웃바운드 완료) ══════════════ -->
-<section class="state" id="s2">
-<div class="mockwrap"><div class="mock anno">
-  <div class="toast anno"><span>✓ Outbound 완료 — Order 413865</span><small>상태: Processing → Prepare Shipment (즉시 반영)</small><span class="dot" style="top:-11px;left:-11px">1</span></div>
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-  <div class="pagepad">
-    <p class="crumb">OMS Center ▸ Order Management ▸ <b>Order Detail</b></p>
-    <h2>Order #413865</h2>
-    <div class="ordercard anno">
-      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
-      <span class="kv">Status:</span><span class="status st-prepare">Prepare Shipment</span>
-      <div class="statuschg">
-        <label>상태 변경</label>
-        <select><option>Prepare Shipment</option><option>Processing</option><option>On Hold</option><option>Shipped</option></select>
+    <!-- Fulfillment Tracking -->
+    <div class="sec">
+      <h3>📦 Fulfillment Tracking</h3>
+      <div class="ftbadge">
+        <span class="carrier">YUN</span>
+        <button class="btn btn-line btn-sm">✎ Change Tracking #</button>
+        <button class="btn btn-sm" style="border:1px solid var(--amber-line);background:var(--page);color:var(--amber)">Reset Order</button>
       </div>
-      <div class="div"></div>
-      <button class="btn btn-gray btn-sm">Inbound</button>
-      <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;left:-10px">2</span></button>
-      <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: Prepare Shipment → Processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-10px">3</span></button>
-      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
-      <div class="shelf"><label>선반 위치</label><input value="3"></div>
-    </div>
-    <div class="ord-strip">
-      <span class="kv">Customer: <b>Emily Chen</b></span>
-      <span class="kv">Country: <b>Australia</b></span>
-      <span class="kv">Order Date: <b>2026-07-13 09:02 SGT</b></span>
-      <span class="kv">Payment: <b style="color:var(--green)">Paid</b></span>
-      <span class="kv">Shipping: <b>YUN Express</b></span>
-      <span class="kv">Tracking No: <b class="orderno-col">10323775316153</b></span>
-    </div>
-    <div class="blk">
-      <h4>Order Detail <span class="cnt">상품 3종 · Total Quantity 4</span></h4>
+      <div class="minih">SHIPMENT DETAILS</div>
       <table class="tbl">
-        <thead><tr>
-          <th style="width:34px"><input type="checkbox"></th>
-          <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-          <th>Product Order No</th><th>Barcode</th><th>Inbound Status</th><th>Actions</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
-            <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
-            <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">413865-001</td>
-            <td class="num">✓ 8801051283860</td>
-            <td><span class="tag tag-outbounded">OUTBOUNDED</span></td>
-            <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
-            <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
-            <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">413865-002</td>
-            <td class="num">✓ 8801051884321</td>
-            <td><span class="tag tag-outbounded">OUTBOUNDED</span></td>
-            <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
-            <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
-            <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
-            <td><span class="qty qty-warn">2</span></td>
-            <td class="num orderno-col">413865-003</td>
-            <td class="num">✓ 8809894261234</td>
-            <td><span class="tag tag-outbounded">OUTBOUNDED</span></td>
-            <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
-          </tr>
-        </tbody>
+        <thead><tr><th>Provider Order ID</th><th>Tracking Number</th><th>Status</th><th>Status Description</th><th>Created At</th><th>Updated At</th></tr></thead>
+        <tbody><tr>
+          <td class="num" style="color:var(--blue)">YT2618100709331860</td>
+          <td class="num">34YEM055929401000910906</td>
+          <td><span class="st-delivered">DELIVERED</span></td>
+          <td>Shipment information received</td>
+          <td class="num">6/30/2026, 8:55:53 PM</td>
+          <td class="num">7/13/2026, 10:10:32 AM</td>
+        </tr></tbody>
       </table>
-    </div>
+      <span class="lastmile">Last mile: AustraliaPost</span>
 
-    <div class="blk">
-      <h4>💬 Operator Comments <span class="cnt">오더 히스토리 · 작성자·시간 자동 기록 · @태그 → Slack 알림</span></h4>
-      <div class="cpanel">
-        <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-13 10:42</time><button class="star" title="저장">★</button></div>
-        <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-13 11:03</time><button class="star on" title="저장됨">★</button></div>
-        <div class="c-item"><span class="who">Dean</span><span>나머지 1개 입고 완료했습니다. Outbound까지 처리했어요.</span><time>07-13 12:10</time><button class="star" title="저장">★</button></div>
-        <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자·태그대상 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="minih" style="margin-top:14px">TRACKING HISTORY <span style="font-weight:400">(synced 7/13/2026, 10:10:32 AM)</span></div>
+      <div class="trackscroll">
+        <table>
+          <thead><tr><th>Time (local)</th><th>Node</th><th>Description</th><th>Location</th><th>UTC</th></tr></thead>
+          <tbody>
+            <tr><td>7/13 7:09:25 PM</td><td><span class="node">DELIVERED</span></td><td>Delivered - Left in a safe place</td><td>Bellevue Hill, AU</td><td>7/13 9:09:25 AM</td></tr>
+            <tr><td>7/13 4:22:07 PM</td><td><span class="node">DELIVERY_ATTEMPT</span></td><td>Onboard for delivery</td><td>Bellevue Hill, AU</td><td>7/13 6:22:07 AM</td></tr>
+            <tr><td>7/10 9:16:26 AM</td><td><span class="node">IN_TRANSIT_CARRIER</span></td><td>Item processed at sorting facility</td><td>AU</td><td>7/10 11:16:26 PM</td></tr>
+            <tr><td>7/9 10:29:00 PM</td><td><span class="node">TRANSITHUB_ARRIVE</span></td><td>Delivered to local carrier</td><td>Sydney, NSW, AU</td><td>7/9 12:29:00 PM</td></tr>
+            <tr><td>7/8 11:35:00 PM</td><td><span class="node">CUSTOMS_COMPLETE</span></td><td>Clearance processing completed - Import</td><td>Sydney, NSW, AU</td><td>7/8 1:35:00 PM</td></tr>
+            <tr><td>7/8 1:17:52 AM</td><td><span class="node">ARRIVE_CONFIRM_OC</span></td><td>Arrived at the origin international airport</td><td>Hong Kong, HK</td><td>7/7 5:17:52 PM</td></tr>
+            <tr><td>7/6 8:28:41 PM</td><td><span class="node">TRANSIT_OUT</span></td><td>Departed from sort facility</td><td>Incheon, KR</td><td>7/6 11:28:41 AM</td></tr>
+            <tr><td>7/1 4:55:50 AM</td><td><span class="node">ORDER_CREATION</span></td><td>Shipment information received</td><td>–</td><td>6/30 8:55:50 PM</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="blk">
-      <h4>인바운드 / 아웃바운드 행위자 로그</h4>
+    <!-- Line Items -->
+    <div class="sec anno">
+      <span class="dot" style="top:24px;left:-10px">4</span>
+      <h3>🧾 Line Items</h3>
+      <p class="liinfo">Edit 버튼으로 라인 수정. 체크박스로 inbound request에 포함할 품목 선택. * = Variation packs 재계산 전 WooCommerce 원본 · 🤖 = Agent 자동 기입 · 가로로 스크롤하면 Inventory 필드가 이어집니다.</p>
+      <div class="litable-wrap">
+        <table class="litable">
+          <thead>
+            <tr>
+              <th>Inbound<br>Request</th><th>SKU</th><th>Image</th>
+              <th colspan="6" style="text-align:center;background:#2B2F36">Product Information (WooCommerce)</th>
+              <th colspan="10" style="text-align:center;background:#2B2F36">Inventory</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <th></th><th></th><th></th>
+              <th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th><th>Subtotal</th><th>Total</th>
+              <th>Latest<br>Inv Count</th><th>Inbound<br>Status</th><th>Sourcing<br>Route</th><th>Order Number</th><th>Order Date</th><th>Product<br>Cost 🤖</th><th>Tracking Number</th><th>Delivery<br>Company</th><th>CP Link</th><th>Comments</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005104<br><span class="bot">(100005104*)</span></td><td><div class="thumb">IMG</div></td>
+              <td><b>Pore Remedy</b> Renewing Foam Cleanser</td><td>포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">31.77</td><td class="num">28.6</td>
+              <td class="num">0</td><td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩15,000</td><td class="num">10323100835644</td><td>–</td><td><a style="color:var(--blue)">coupang…7055</a></td><td>–</td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100043697<br><span class="bot">(100043697*)</span></td><td><div class="thumb">IMG</div></td>
+              <td><b>Cicapair</b> Gentle Cleansing Foam, 150ml</td><td>시카페어 젠틀 클렌징 폼</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">27.06</td><td class="num">24.36</td>
+              <td class="num">0</td><td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩17,100</td><td class="num">10323100835456</td><td>–</td><td><a style="color:var(--blue)">coupang…7923</a></td><td>–</td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005088<br><span class="bot">(100005088*)</span></td><td><div class="thumb">IMG</div></td>
+              <td><b>Dr.Jart+</b> Vital Hydra Solution Hydro Plump Water Cream, 50ml</td><td>바이탈 하이드라 솔루션 워터 크림</td><td>50ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">32.12</td><td class="num">28.9</td>
+              <td class="num">0</td><td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-wholesale">WHOLESALE</span><span class="route-note">Existing inventory</span></td><td>–</td><td>–</td><td class="num">₩22,425</td><td>–</td><td>–</td><td>–</td><td>–</td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100012534<br><span class="bot">(100012534*)</span></td><td><div class="thumb">IMG</div></td>
+              <td><b>Dr.Jart+</b> Cicapair Sleepair Intensive Soothing Repair Mask, 75ml</td><td>시카페어 슬리페어 인텐시브 리페어 마스크</td><td>75ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">40.16</td><td class="num">36.14</td>
+              <td class="num">0</td><td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩30,630</td><td class="num">10323100835261</td><td>–</td><td><a style="color:var(--blue)">coupang…7567</a></td><td>–</td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="li-foot">
+        <span class="tq">Total Quantity: 4</span>
+        <span class="anno"><button class="btn btn-line btn-sm">🚚 Request Inbound</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+        <button class="btn btn-green-line btn-sm">📦 Outbound to Deleo BaroShip</button>
+        <span class="sp"></span>
+        <button class="btn btn-line btn-sm">+ Add Line Item</button>
+      </div>
+    </div>
+
+    <!-- 행위자 로그 (신규) -->
+    <div class="logsec anno">
+      <span class="dot" style="top:-6px;left:170px">3</span>
+      <h4>인바운드 / 아웃바운드 행위자 로그 <span style="font-weight:400;color:var(--ink-3);font-size:12px">— 신규</span></h4>
       <table class="logtbl">
         <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 12:08</td><td class="act-status">상태 변경 Processing → Prepare Shipment</td><td class="num">–</td><td class="num">–</td><td>Dean</td><td><span style="color:var(--ink-2)">Outbound 처리에 따른 자동 전환</span></td></tr>
-        <tr><td class="num">07-13 12:08</td><td class="act-out">OUTBOUND</td><td class="num">전체 (3 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-13 12:05</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-13 11:32</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
-        <tr><td class="num">07-13 11:05</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-01 09:32</td><td class="act-out">OUTBOUND</td><td class="num">전체 (4 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-01 09:10</td><td class="act-in">INBOUND</td><td class="num">100012534</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+        <tr><td class="num">07-01 08:58</td><td class="act-in">INBOUND</td><td class="num">100043697</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+        <tr><td class="num">06-30 20:15</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100005104</td><td class="num">1</td><td>Dean</td><td>중복 입고 정정</td></tr>
       </table>
     </div>
   </div>
 </div></div>
-<div class="legend">
-  <h3>State 2 변경사항 — 아웃바운드 완료 (Prepare Shipment)</h3>
-  <ol>
-    <li><span class="n">1</span><span>Outbound 즉시 적용 → 오더 상태가 Processing → Prepare Shipment로 <b>즉시 반영</b>(새로고침 없이 toast) <span class="ref">— A 상태변경</span></span></li>
-    <li><span class="n">2</span><span>아웃바운드 후 버튼이 "✓ Outbounded"로 바뀌고 클릭 불가(회색) — 중복 처리 방지 <span class="ref">— A 버그</span></span></li>
-    <li><span class="n">3</span><span>Cancel Outbound 버튼 — 취소 시 오더 상태 Prepare Shipment → Processing 롤백, 로그에 기록 <span class="ref">— C 동작</span></span></li>
-  </ol>
-</div>
-</section>
 
-<!-- ══════════════ STATE 3 : On Hold (CS 보류) ══════════════ -->
-<section class="state" id="s3">
-<div class="mockwrap"><div class="mock anno">
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-  <div class="pagepad">
-    <p class="crumb">OMS Center ▸ Order Management ▸ <b>Order Detail</b></p>
-    <h2>Order #414102</h2>
-    <div class="holdbanner anno">
-      <b>⏸ Hold Shipment</b>
-      <span>CS팀이 고객 요청(배송지 변경)으로 이 오더를 Hold 처리했습니다 — 요청자 Sara(CS) · 07-13 09:20</span>
-      <span class="dot" style="top:-11px;left:-11px">1</span>
-    </div>
-    <div class="ordercard anno">
-      <span class="kv">Order ID: <b style="color:var(--blue)">414102</b></span>
-      <span class="kv">Status:</span><span class="status st-hold">On Hold</span>
-      <div class="statuschg">
-        <label>상태 변경</label>
-        <select><option>On Hold</option><option>Processing</option><option>Prepare Shipment</option></select>
-      </div>
-      <div class="div"></div>
-      <button class="btn btn-green-line btn-sm">Inbound</button>
-      <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-10px">2</span></button>
-      <button class="btn btn-line btn-sm">⏸ Hold 해제</button>
-      <button class="btn btn-line btn-sm">🖨 Print (YUN)</button>
-      <div class="shelf"><label>선반 위치</label><input value="7"></div>
-    </div>
-    <div class="ord-strip">
-      <span class="kv">Customer: <b>James Park</b></span>
-      <span class="kv">Country: <b>Canada</b></span>
-      <span class="kv">Order Date: <b>2026-07-13 07:44 SGT</b></span>
-      <span class="kv">Payment: <b style="color:var(--green)">Paid</b></span>
-      <span class="kv">Shipping: <b>YUN Express</b></span>
-      <span class="kv">Tracking No: <b class="orderno-col">10324880021991</b></span>
-    </div>
-    <div class="blk">
-      <h4>Order Detail <span class="cnt">상품 2종 · Total Quantity 2</span></h4>
-      <table class="tbl">
-        <thead><tr>
-          <th style="width:34px"><input type="checkbox"></th>
-          <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-          <th>Product Order No</th><th>Barcode</th><th>Inbound Status</th><th>Actions</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
-            <td><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
-            <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">414102-001</td>
-            <td class="num">✓ 8809416470726</td>
-            <td><span class="tag tag-inbounded">INBOUNDED</span></td>
-            <td><button class="btn btn-red-line btn-sm">Cancel Inbound</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox"></td>
-            <td class="num">100052117</td><td><div class="thumb">IMG</div></td>
-            <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml</td>
-            <td>1025 독도 토너</td><td>200ml</td>
-            <td><span class="qty">1</span></td>
-            <td class="num orderno-col">414102-002</td>
-            <td class="num">8809556351025</td>
-            <td><span class="tag tag-pending">PENDING</span></td>
-            <td><button class="btn btn-green-line btn-sm">Inbound</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="blk">
-      <h4>💬 Operator Comments <span class="cnt">오더 히스토리 · 작성자·시간 자동 기록 · @태그 → Slack 알림</span></h4>
-      <div class="cpanel">
-        <div class="c-item"><span class="who">Sara (CS)</span><span><span class="at">@Dean</span> 고객이 배송지 변경 요청했습니다. Hold 처리하니 출고 전까지 대기 부탁드려요.</span><time>07-13 09:20</time><button class="star" title="저장">★</button></div>
-        <div class="c-item"><span class="who">Dean</span><span><span class="at">@Sara</span> 확인했습니다. 새 주소 확정되면 알려주세요. 그전까지 출고 보류합니다.</span><time>07-13 09:26</time><button class="star" title="저장">★</button></div>
-        <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자·태그대상 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
-      </div>
-    </div>
-    <div class="blk">
-      <h4>인바운드 / 아웃바운드 행위자 로그</h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 09:20</td><td class="act-cancel">HOLD 처리 (Outbound 차단)</td><td class="num">전체</td><td class="num">–</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">고객 배송지 변경 요청 — 출고 보류</span></td></tr>
-        <tr><td class="num">07-13 08:55</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
-      </table>
-    </div>
-  </div>
-</div></div>
 <div class="legend">
-  <h3>State 3 변경사항 — On Hold (CS 보류)</h3>
+  <h3>Order 상세 — 신규 / 변경 주석 (기획 0 · A · C 반영)</h3>
   <ol>
-    <li><span class="n">1</span><span>Hold 배너 — CS팀이 Order 상세의 Hold Shipment로 보류한 오더는 배너로 즉시 구분(요청자·사유·시간). 상태 배지 = On Hold <span class="ref">— A 상태값 + F Hold</span></span></li>
-    <li><span class="n">2</span><span>Hold 상태 오더는 <b>Outbound 버튼 비활성</b> — Hold 해제 전에는 출고 불가. Inbound는 계속 가능 <span class="ref">— A 상태 + F Hold</span></span></li>
+    <li><span class="n">1</span><span>Operator Comments 강화 — @이름 태그 시 Slack 자동 알림(오더넘버·내용·시간·작성자·태그대상), 오더별 히스토리 집적. 각 코멘트 ★로 우상단 Comments 허브 Saved에 저장. 현 실화면은 "No comments yet"만 <span class="ref">— 0. General</span></span></li>
+    <li><span class="n">2</span><span>Request Inbound / Outbound 버튼 <b>활성화</b> — 현재 각 Order 페이지에 버튼은 있으나 클릭 안 되는 버그 수정, 상세에서 바로 인/아웃바운드 처리 <span class="ref">— A 버그</span></span></li>
+    <li><span class="n">3</span><span>인바운드/아웃바운드 행위자 로그 <b>신규</b> — 누가 언제 인/아웃바운드·취소했는지 오더 하단에 기록(현 실화면엔 없음). View Orders 로그와 동일 문법 <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">4</span><span>Line Items Sourcing Route를 배지(SMART BUY/WHOLESALE/PARTNERSHIP)로 — View Orders·입고요청(I)과 통일. Order Number = 상품별 주문번호로 조회 연동 <span class="ref">— I / C</span></span></li>
+    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
+    <li><span class="n">8</span><span>Change Status → 상태 변경 즉시 반영(모달). On Hold도 여기서 전환(CS팀), Hold 시 Outbound 비활성 <span class="ref">— A / F Hold</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Hold 전환은 이 화면의 "Hold Shipment" 버튼(상단 모달 탭)에서 수행 — CS팀이 야간·오프라인 시 수동 슬랙 의존을 대체. 전환 즉시 View Orders에도 반영되어 스캔 시 Outbound가 차단됩니다.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav는 실제 어드민 표준(Operation AI / Catalog Management / OMS Center / Site Management / System Management / Customer Management + Agent Telemetry · Role Assets · Shared Asset Health · SkinSeoul WP Admin)으로 교체 — 전 화면 공통 적용 예정. 실 데이터는 Order #407847(Maytal Saltoon) 기준. Line Items 테이블은 실화면처럼 가로 스크롤(WooCommerce → Inventory 필드 순).</p>
 </div>
-</section>
 
-<!-- ══════════════ MODAL : Hold Shipment ══════════════ -->
-<div class="overlay" id="m-hold">
+<!-- 모달: 코멘트 @태그 -->
+<div class="overlay" id="m-comment">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>Hold Shipment — Order 413865<button class="x" data-close>✕</button></header>
+    <header>Comment 작성 — @태그<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">이 오더의 출고를 보류(On Hold)하시겠습니까?</b>
-      <div class="mrow">
-        <b>보류 사유</b>
-        <select>
-          <option>고객 배송지 변경 요청</option>
-          <option>고객 주문 취소 요청</option>
-          <option>재고/품질 이슈</option>
-          <option>기타 (메모에 기재)</option>
-        </select>
-      </div>
-      <div class="mrow">
-        <b>메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="사유 상세 — 작성 시 오더 Comments 히스토리 및 행위자 로그에 함께 기록됩니다"></textarea>
-      </div>
-      <div class="note">On Hold 전환 시 <b>즉시 반영</b>(새로고침 없음) — 상태 배지·View Orders 스캔 결과에 반영되고 <b>Outbound 버튼이 비활성</b>됩니다. 요청자·시간이 로그와 Comments에 자동 기록됩니다.</div>
+      <textarea style="width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:10px;font:inherit;min-height:80px">@Dean 이 오더 확인 부탁드립니다</textarea>
+      <div class="note">등록 시 <b>#yongwon-agents / 태그된 사람</b>에게 Slack 자동 알림 — 오더넘버(407847)·내용·시간·작성자·태그대상 포함. 오더 히스토리에 영구 기록됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>Hold 처리</button>
+      <button class="btn btn-blue btn-sm" data-close>Add Comment</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 상태 변경 확인 ══════════════ -->
+<!-- 모달: 상태 변경 -->
 <div class="overlay" id="m-status">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>상태 변경 확인 — Order 413865<button class="x" data-close>✕</button></header>
+    <header>Change Status — Order 407847<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">Processing → Prepare Shipment 으로 변경하시겠습니까?</b>
-      <div class="mrow">
-        <b>메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="변경 사유 — 작성 시 행위자 로그·Comments 히스토리에 기록됩니다"></textarea>
+      <div class="opt-row">
+        <label><input type="radio" name="st"> Processing</label>
+        <label><input type="radio" name="st"> Prepare Shipment</label>
+        <label><input type="radio" name="st" checked> Completed</label>
+        <label><input type="radio" name="st"> <b style="color:var(--amber)">On Hold</b> — CS 긴급 요청(취소·배송지 변경) 시 출고 보류</label>
       </div>
-      <div class="note">확인 시 <b>즉시 적용</b>(새로고침 없이 상단 toast). 되돌리기(롤백) 버튼도 상태 카드에서 제공됩니다. 상태 변경 이력은 행위자 로그에 작성자·시간과 함께 남습니다.</div>
+      <div class="note">상태 변경 즉시 반영(새로고침 없음). <b>On Hold 선택 시</b> 이 오더의 Outbound 버튼이 비활성화되고, View Orders·Ready to be Outbounded에도 Hold로 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>변경 적용</button>
+      <button class="btn btn-blue btn-sm" data-close>상태 변경</button>
     </div>
   </div>
 </div>
 
 <script>
-document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
-    document.getElementById(t.dataset.state).classList.add('on');
-    window.scrollTo({top:0});
-  });
-});
 document.querySelectorAll('[data-modal]').forEach(b=>{
   b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
 });
@@ -660,55 +444,20 @@ document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
 document.querySelectorAll('[data-open]').forEach(b=>{
-  b.addEventListener('click',e=>{
-    e.stopPropagation();
-    const el=document.getElementById(b.dataset.open);
-    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
-    else el.style.display = el.style.display==='none' ? 'block' : 'none';
-  });
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.open).classList.toggle('open');});
 });
-/* Comments 허브 탭 전환 (Mentions / Saved) */
 document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
     const dd=b.closest('.inboxdd');
     dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
-    dd.querySelectorAll('.tabpane').forEach(p=>{
-      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
-    });
+    dd.querySelectorAll('.tabpane').forEach(p=>{p.style.display=p.dataset.pane===b.dataset.tab?'block':'none';});
   });
 });
-/* ★ 저장 토글 */
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-/* A. 상태 변경 즉시 반영 — 새로고침 없이 배지 갱신 + toast */
-const stSel=document.getElementById('stSel1');
-if(stSel){
-  const badge=document.getElementById('stBadge1');
-  const toast=document.getElementById('toast1');
-  const map={processing:['Processing','st-processing'],prepare:['Prepare Shipment','st-prepare'],hold:['On Hold','st-hold'],shipped:['Shipped','st-shipped']};
-  stSel.addEventListener('change',()=>{
-    const [label,cls]=map[stSel.value];
-    badge.textContent=label;
-    badge.className='status '+cls;
-    toast.querySelector('span').textContent='✓ 상태 변경 완료 — '+label;
-    toast.classList.remove('hidden');
-    clearTimeout(window._t);window._t=setTimeout(()=>toast.classList.add('hidden'),1800);
-  });
-}
-/* A. 더블클릭/중복 클릭 방지 — 클릭 즉시 잠금(처리 중) 후 완료 시 해제 */
-const inb=document.getElementById('inbBtn1');
-if(inb){
-  inb.addEventListener('click',()=>{
-    if(inb.classList.contains('btn-busy'))return; /* 중복 클릭 무시 */
-    const orig=inb.textContent;
-    inb.classList.remove('btn-green-line');inb.classList.add('btn-busy');
-    inb.textContent='⟳ 처리 중...';
-    setTimeout(()=>{inb.classList.remove('btn-busy');inb.classList.add('btn-green-line');inb.textContent=orig;},1200);
-  });
-}
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';

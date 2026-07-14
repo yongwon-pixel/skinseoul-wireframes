@@ -2,672 +2,254 @@
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
-  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --canvas:#E9EAEC; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
   --line:#DEE2E6; --line-strong:#BBBABE;
-  --nav:#212529; --nav-fg:#ADB5BD;
+  --nav:#1B1F24; --nav-fg:#C7CBD1;
   --blue:#0D6EFD; --blue-soft:#E7F1FF;
-  --green:#198754; --green-soft:#D1E7DD;
-  --red:#DC3545; --red-soft:#F8D7DA;
-  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
-  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
-  --desk:#E4E6E9;
-  --shadow:0 2px 10px rgba(20,16,27,.10);
+  --green:#198754; --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --paper:#111;
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
-
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
   font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
 button{font:inherit;cursor:pointer}
 
-/* ── wireframe chrome (View Orders 상속) ─────────── */
-.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
-  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700}
 .wf-bar .hint{font-size:12px;opacity:.75}
 .wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
-  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:99px;padding:5px 14px;font-size:12.5px}
 .wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
 .wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
 
-/* ── annotations ──────────────────────────────── */
 .anno{position:relative}
-.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
-  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
 body.no-anno .dot,body.no-anno .legend{display:none!important}
-.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
-  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend{max-width:1100px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);border:1px solid var(--ss-purple-100);border-radius:10px}
 .legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
-.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:7px 26px}
 .legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
-.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
-  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
 
-/* ── admin mock ───────────────────────────────── */
-.mockwrap{overflow-x:auto}
-.mock{min-width:1180px;background:var(--page);min-height:520px;padding-bottom:80px}
-.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:15px;padding:9px 18px;font-size:13px;flex-wrap:wrap}
 .nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .navlink{font-size:11px;line-height:1.12}
 .nav .sp{flex:1}
-.nav .user{color:#fff;font-weight:600}
-.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
-  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
-.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 10px;font-size:13px}
-.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
-.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+.nav .user{color:#fff;font-weight:600;font-size:12.5px}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
 
-.pagepad{padding:18px 20px 0}
-.pagepad h2{font-size:27px;margin:6px 0 2px}
-.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
-
-.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.toolbar{background:var(--page);border-bottom:1px solid var(--line);padding:11px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar .lbl{font-size:13px;color:var(--ink-3)}
+.btn{border-radius:7px;border:1px solid transparent;padding:7px 13px;font-size:13px;font-weight:600}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
-.btn-green{background:var(--green);color:#fff}
-.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
-.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-gray{background:var(--page);border-color:var(--line-strong);color:var(--ink-2)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
-.mut{color:var(--ink-3);font-size:12.5px}
+.toolbar .sp{flex:1}
 
-/* order context bar */
-.ordercard{margin-top:6px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:12px 18px;
-  display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--line)}
-.ordercard .kv{font-size:13.5px;color:var(--ink-2)} .ordercard .kv b{color:var(--ink)}
-.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
-.st-processing{background:var(--green-soft);color:var(--green)}
-.st-prepare{background:var(--blue-soft);color:var(--blue)}
+/* label stage */
+.pane{display:none;padding:28px 22px 40px}
+.pane.on{display:block}
+.paneintro{max-width:900px;margin:0 auto 18px;font-size:13px;color:var(--ink-2)}
 
-/* print toolbar */
-.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
-.orient{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:7px;padding:5px 12px;font-size:12.5px;font-weight:700;color:var(--ink-2);background:var(--page)}
-.orient .land{width:30px;height:20px;border:1.5px solid var(--ink-2);border-radius:2px;flex:none}
-.pref{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);color:var(--green);border-radius:7px;padding:5px 12px;font-size:12.5px;font-weight:700;background:var(--page)}
-.pref .sw{width:32px;height:18px;border-radius:99px;background:var(--green);position:relative;flex:none}
-.pref .sw::after{content:"";position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:99px;background:#fff}
+/* generic paper */
+.paper{background:#fff;color:#000;box-shadow:0 6px 24px rgba(0,0,0,.18);margin:0 auto;position:relative}
+.barcode{height:46px;background:repeating-linear-gradient(90deg,#000 0,#000 2px,#fff 2px,#fff 3px,#000 3px,#000 4px,#fff 4px,#fff 6px);}
+.barcode.tall{height:70px}
+.barcode.short{height:34px}
+.mono{font-family:"SF Mono",Menlo,Consolas,monospace}
 
-/* ── print preview 'paper' ── */
-.previewcanvas{margin-top:14px;background:var(--desk);border-radius:8px;padding:26px 20px;display:flex;justify-content:center;overflow-x:auto}
-.papercol{flex:none}
-.papercap{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px;color:var(--ink-2);font-size:12px;font-weight:700}
-.papercap .pill{background:var(--page);border:1px solid var(--line-strong);border-radius:99px;padding:3px 11px}
-.sheet{width:900px;background:#fff;color:#000;box-shadow:0 6px 22px rgba(0,0,0,.22);border:1px solid #C9CCD1;
-  padding:22px 26px 24px;font-family:"Helvetica Neue",Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+/* DELEO A4 (현행) */
+.deleo{width:520px;padding:34px 40px;font-size:13px}
+.deleo .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+.deleo .logo{font-size:30px;font-weight:800;letter-spacing:1px}
+.deleo .bc{width:180px}
+.deleo .meta{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 14px;font-size:12.5px;margin-bottom:18px}
+.deleo .meta .k{color:#555}
+.deleo table{width:100%;border-collapse:collapse;font-size:13px}
+.deleo th,.deleo td{border:1px solid #000;padding:8px 10px;text-align:center}
+.deleo th{font-weight:700}
+.deleo td.item{text-align:left}
+.deleo .foot{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;color:#333}
 
-/* label header */
-.lbl-top{display:flex;align-items:flex-start;gap:18px;border-bottom:2.5px solid #000;padding-bottom:12px}
-.lbl-carrier .cname{font:800 22px/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.6px}
-.lbl-carrier .csvc{font-size:11px;color:#333;margin-top:4px}
-.lbl-track{flex:1;text-align:center}
-.bigbc{height:46px;background:repeating-linear-gradient(90deg,#000 0,#000 2px,#fff 2px,#fff 4px)}
-.lbl-track .tno{font:700 16px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:3px;margin-top:5px}
-.lbl-track .tlbl{font-size:10px;color:#555;letter-spacing:1px;text-transform:uppercase;margin-top:3px}
-.lbl-dest{border:2px solid #000;border-radius:4px;padding:5px 12px;text-align:center;min-width:74px}
-.lbl-dest .cc{font:800 26px/1 "Helvetica Neue",Arial,sans-serif}
-.lbl-dest .wt{font-size:10px;color:#333;margin-top:4px}
+/* YUN 4x6 */
+.yun{width:400px;padding:0;font-size:12.5px;border:2px solid #000}
+.yun .r1{display:grid;grid-template-columns:70px 1fr;border-bottom:2px solid #000}
+.yun .r1 .th{border-right:2px solid #000;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;padding:6px}
+.yun .r1 .route{font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;letter-spacing:2px}
+.yun .r2{display:grid;grid-template-columns:1fr 66px;border-bottom:2px solid #000}
+.yun .r2 .dest{font-size:38px;font-weight:800;text-align:center;padding:6px;border-right:2px solid #000}
+.yun .r2 .cls{font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.yun .bcwrap{padding:10px 14px 4px;text-align:center;border-bottom:2px solid #000}
+.yun .bcnum{font-size:12px;letter-spacing:1px;margin-top:3px}
+.yun .ship{padding:12px 14px;border-bottom:2px solid #000}
+.yun .ship .h{font-weight:700;margin-bottom:6px}
+.yun .ship .addr{padding-left:14px;line-height:1.55}
+.yun .tel{padding:8px 14px;border-bottom:2px solid #000;font-size:12px}
+.yun .bcwrap2{padding:10px 14px 2px}
+.yun .snum{font-size:11px;letter-spacing:1px;margin-top:3px}
+.yun .r-last{display:flex;justify-content:space-between;padding:6px 14px;font-size:11px;border-top:2px solid #000}
+.yun .star2{padding:2px 14px 8px;font-size:12px;font-weight:700}
 
-.lbl-addr{display:flex;gap:34px;padding:11px 0;border-bottom:1px solid #000;font-size:12px;line-height:1.45}
-.lbl-addr .cap{display:block;font-size:9.5px;color:#666;font-weight:700;margin-bottom:2px;letter-spacing:.6px;text-transform:uppercase}
-.lbl-meta{margin-left:auto;text-align:right;font-size:11px;color:#222}
-.lbl-meta b{font-size:12px}
-
-/* item table (print style — 얇은 검정 보더) */
-.labeltbl{width:100%;border-collapse:collapse;font-size:12.5px;color:#000;margin-top:12px}
-.labeltbl th{border:1px solid #000;padding:6px 8px;text-align:left;font-weight:700;background:#EFEFEF;white-space:nowrap;font-size:11px;letter-spacing:.2px}
-.labeltbl td{border:1px solid #000;padding:8px 8px;vertical-align:middle}
-.labeltbl .c-brand{font-weight:800}
-.labeltbl .pname{font-size:13px}
-.labeltbl .knm{color:#555;font-size:11px;margin-top:1px}
-.labeltbl .num{font-family:ui-monospace,"SF Mono",Menlo,monospace}
-.qu{text-decoration:underline;text-underline-offset:2px;font-weight:800;font-size:14px}
-.loc-yes{font-weight:800;font-family:ui-monospace,"SF Mono",Menlo,monospace}
-.loc-no{color:#999}
-.optbadge{display:inline-block;border:1px solid #000;border-radius:3px;padding:0 5px;font-size:10.5px;font-weight:700;margin-left:4px}
-
-/* left barcode cell */
-.bc{display:flex;flex-direction:column;align-items:center;gap:3px}
-.bc .bars{width:58px;height:26px;background:repeating-linear-gradient(90deg,#000 0,#000 1.5px,#fff 1.5px,#fff 3px)}
-.bc .d4{font:800 16px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:2px}
-.bc .full{font-size:8.5px;color:#777;font-family:ui-monospace,monospace;letter-spacing:.5px}
-
-/* sample set row */
-.samplerow td{background:#EDEDED;border:2px solid #000;font-weight:800}
-.samplerow .stag{display:inline-block;border:1.5px solid #000;border-radius:4px;padding:2px 10px;font-size:12px;font-weight:800;letter-spacing:.3px}
-.addword{font-weight:800;color:#000;border-bottom:2px solid #000}
-
-.lbl-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:10.5px;color:#444}
-
-/* auto-print banner (B6) */
-.autobanner{margin-top:6px;background:var(--green-soft);border:1.5px solid var(--green);border-radius:8px;
-  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.autobanner b{color:var(--green);font-size:15px}
-
-/* toast */
-.toast{position:absolute;top:60px;right:20px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
-  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
-.toast small{opacity:.85;font-weight:400}
-
-/* modal (View Orders 상속) */
-.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:520px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
-.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
-.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
-.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
-.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
-.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
-.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
-.cmp .col{border:1px solid var(--line-strong);border-radius:8px;padding:11px 13px;font-size:12.5px}
-.cmp .col h5{margin:0 0 7px;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
-.cmp .old h5{color:var(--red)} .cmp .new h5{color:var(--green)}
-.cmp ol{margin:0;padding-left:16px;color:var(--ink-2);line-height:1.6}
-
-.state{display:none}
-.state.on{display:block}
+/* DELEO 개선안 (가로, B) */
+.deleoNew{width:760px;padding:22px 26px;font-size:12.5px}
+.deleoNew .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.deleoNew .logo{font-size:24px;font-weight:800;letter-spacing:1px}
+.deleoNew .top .bc{width:220px}
+.deleoNew .meta{display:flex;gap:26px;flex-wrap:wrap;font-size:12px;margin-bottom:14px}
+.deleoNew .meta b{font-weight:700}
+.deleoNew table{width:100%;border-collapse:collapse;font-size:12.5px}
+.deleoNew th,.deleoNew td{border:1px solid #000;padding:7px 9px}
+.deleoNew th{background:#f0f0f0;text-align:left}
+.deleoNew td.qty{text-align:center;font-size:16px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.deleoNew tr.sample td{background:#FFF7E6}
+.deleoNew .sample-tag{background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800}
+.deleoNew .loc{font-weight:700;font-family:"SF Mono",Menlo,monospace}
+.deleoNew .brand{font-weight:700}
+.deleoNew .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:11.5px;color:#333}
+.hl-under{position:relative}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · 송장 / 라벨 레이아웃 와이어프레임</h1>
-  <span class="hint">v1 — 인쇄 미리보기 · 보라색 번호 = 변경사항 주석</span>
+  <h1>WMS 2.0 · 송장/라벨 레이아웃 와이어프레임</h1>
+  <span class="hint">실제 DELEO(피킹)·YUN(캐리어) 라벨 기반 · B 개선안 대비</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · YUN 라벨 (가로)</button>
-    <button class="wf-tab" data-state="s2">2 · DELEO 라벨</button>
-    <button class="wf-tab" data-state="s3">3 · 샘플 포함 오더</button>
-    <button class="wf-tab" data-state="s4">4 · 자동 출력 (즉시)</button>
-    <button class="wf-tab" data-modal="m-print">모달: 즉시 프린트</button>
+    <button class="wf-tab on" data-pane="p-deleo">DELEO 현행</button>
+    <button class="wf-tab" data-pane="p-deleoNew">DELEO 개선안 (B)</button>
+    <button class="wf-tab" data-pane="p-yun">YUN 캐리어 라벨</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 1 : YUN 라벨 (가로) ══════════════ -->
-<section class="state on" id="s1">
-<div class="mockwrap"><div class="mock anno">
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
+<div class="nav">
+  <span class="brand">SkinSeoul</span>
+  <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
+  <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
+  <span class="sp"></span>
+  <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+  <button class="logout">Logout</button>
+</div>
+
+<div class="toolbar">
+  <span class="lbl">Order 407506 · Deleo BaroShip 출고</span>
+  <span class="sp"></span>
+  <button class="btn btn-gray btn-sm">⬅ Order로</button>
+  <button class="btn btn-line btn-sm">라벨 PDF 다운로드</button>
+  <button class="btn btn-blue btn-sm">🖨 프린트</button>
+</div>
+
+<!-- ===== DELEO 현행 ===== -->
+<div class="pane on" id="p-deleo">
+  <p class="paneintro">현행 DELEO 피킹/패킹 라벨(A4 세로) — 실제 출력물 그대로. 상품명(한글)·수량만 있어 창고 피커가 SKU·로케이션을 알 수 없음. 개선안은 [DELEO 개선안 (B)] 탭 참고.</p>
+  <div class="paper deleo">
+    <div class="top">
+      <div class="logo">DELEO</div>
+      <div class="bc"><div class="barcode"></div></div>
+    </div>
+    <div class="meta">
+      <span class="k">Ref.</span><span>407506</span>
+      <span class="k">Tracking No.</span><span class="mono">DL20260630072138</span>
+      <span class="k">Order ID.</span><span class="mono">O20260630105170</span>
+      <span class="k">To.</span><span>FR</span>
+    </div>
+    <table>
+      <thead><tr><th style="width:44px">No.</th><th>Item</th><th style="width:64px">Qty.</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="item">데일리 웨트 힐크림</td><td>2</td></tr>
+        <tr><td colspan="2"><b>Total Qty.</b></td><td><b>2</b></td></tr>
+      </tbody>
+    </table>
+    <div class="foot"><span>2026-07-14</span><span>1 / 1</span></div>
   </div>
-  <div class="pagepad">
-    <h2>WMS - 송장 / 라벨 레이아웃</h2>
-    <p class="sub">Print Preview — YUN 라벨</p>
+</div>
 
-    <div class="ordercard">
-      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
-      <span class="kv">Status:</span><span class="status st-prepare">Prepare Shipment</span>
-      <span class="kv">Carrier: <b>YUN Express</b></span>
-      <span class="kv">Destination: <b>Australia</b></span>
-      <span class="kv">Total Qty: <b>4</b></span>
+<!-- ===== DELEO 개선안 (B) ===== -->
+<div class="pane" id="p-deleoNew">
+  <p class="paneintro">개선안(기획 B) — 가로 출력 + SKU·브랜드·사이즈·<b>로케이션</b> 추가, 수량 <u>밑줄 강조</u>(오집 방지), 샘플 세트 행 별도 표기. 창고 피커가 라벨만으로 어디서 무엇을 몇 개 집는지 즉시 파악.</p>
+  <div class="paper deleoNew anno">
+    <span class="dot" style="top:16px;right:26px">1</span>
+    <div class="top">
+      <div class="logo">DELEO</div>
+      <div class="bc"><div class="barcode short"></div></div>
     </div>
-
-    <div class="toolbar">
-      <button class="btn btn-green btn-sm anno">🖨 즉시 프린트 (YUN)<span class="dot" style="top:-11px;right:-10px">8</span></button>
-      <button class="btn btn-line btn-sm">🖨 즉시 프린트 (DELEO)</button>
-      <span class="orient anno"><span class="land"></span>A4 · 가로 (Landscape)<span class="dot" style="top:-11px;left:-10px">1</span></span>
-      <span class="pref"><span class="sw"></span>즉시 출력 ON</span>
-      <span class="mut">새 탭·인쇄 팝업 없이 라벨 프린터로 직접 전송 (모달: 즉시 프린트 참조)</span>
+    <div class="meta">
+      <span><b>Ref.</b> 407506</span>
+      <span><b>Tracking No.</b> <span class="mono">DL20260630072138</span></span>
+      <span><b>Order ID.</b> <span class="mono">O20260630105170</span></span>
+      <span><b>To.</b> FR</span>
+      <span><b>Date</b> 2026-07-14</span>
     </div>
+    <table>
+      <thead><tr>
+        <th style="width:36px">No.</th><th style="width:110px">SKU</th><th style="width:90px">Location</th><th>Brand · Item (옵션)</th><th style="width:70px">Qty.</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td><td class="mono">100012534</td><td class="loc">A-02-20</td>
+          <td><span class="brand">Dr.Jart+</span> · Cicapair Sleepair Mask <span style="color:#555">(75ml)</span><br>데일리 웨트 힐크림</td>
+          <td class="qty anno">2<span class="dot" style="top:-13px;right:-11px">2</span></td>
+        </tr>
+        <tr class="sample anno">
+          <td>2</td><td class="mono">SAMPLE-3SET</td><td class="loc">SMP-01</td>
+          <td><span class="sample-tag">SAMPLE</span> 리텐션 사쉐 3세트 (D60 캠페인)</td>
+          <td class="qty">3</td>
+          <span class="dot" style="top:8px;left:-10px">3</span>
+        </tr>
+        <tr><td colspan="4" style="text-align:right;font-weight:700">Total Qty.</td><td class="qty">5</td></tr>
+      </tbody>
+    </table>
+    <div class="foot"><span>SkinSeoul WMS · Deleo BaroShip</span><span>1 / 1</span></div>
+  </div>
+</div>
 
-    <div class="previewcanvas">
-      <div class="papercol anno">
-        <div class="papercap"><span>인쇄 미리보기</span><span class="pill">A4 210 × 297mm · 가로</span><span class="pill">1 / 1</span></div>
-        <span class="dot" style="top:2px;right:-12px">1</span>
-
-        <div class="sheet">
-          <!-- 라벨 헤더 -->
-          <div class="lbl-top">
-            <div class="lbl-carrier">
-              <div class="cname">YUN EXPRESS</div>
-              <div class="csvc">Standard · SkinSeoul Fulfillment Center</div>
-            </div>
-            <div class="lbl-track">
-              <div class="bigbc"></div>
-              <div class="tno">1 0323 7753 1615 3</div>
-              <div class="tlbl">Tracking No · YUN10323775316153</div>
-            </div>
-            <div class="lbl-dest">
-              <div class="cc">AU</div>
-              <div class="wt">0.42 kg</div>
-            </div>
-          </div>
-          <!-- 주소 -->
-          <div class="lbl-addr">
-            <div><span class="cap">To</span><b>Emily Watson</b><br>18 Harbour St, Sydney NSW 2000<br>Australia · +61 4xx xxx xxx</div>
-            <div><span class="cap">From</span>SkinSeoul Fulfillment<br>Seongnam-si, Gyeonggi-do<br>Republic of Korea</div>
-            <div class="lbl-meta"><span class="cap">Order</span><b>413865</b><br><span class="cap" style="margin-top:6px">Printed</span>2026-07-13 14:37</div>
-          </div>
-
-          <!-- 품목 표 -->
-          <table class="labeltbl">
-            <thead><tr>
-              <th class="anno" style="text-align:center">Barcode<span class="dot" style="top:-11px;left:-8px">2</span></th>
-              <th class="anno">Product (Brand + Name)<span class="dot" style="top:-11px;left:120px">3</span></th>
-              <th class="anno" style="text-align:center">SKU<span class="dot" style="top:-11px;right:-8px">4</span></th>
-              <th class="anno" style="text-align:center">Size<span class="dot" style="top:-11px;left:-6px">5</span></th>
-              <th style="text-align:center">Qty</th>
-              <th class="anno" style="text-align:center">Location<span class="dot" style="top:-11px;right:-8px">7</span></th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">3860</div><div class="full">8801051283860</div></div></td>
-                <td><div class="pname"><span class="c-brand">COSRX</span> Pomegranate &amp; Collagen Volume Lifting Cream</div><div class="knm">석류 엔 콜라겐 볼륨탄력 크림</div></td>
-                <td class="num" style="text-align:center">100040311</td>
-                <td style="text-align:center">100ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-no">–</td>
-              </tr>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">3156</div><div class="full">8806182573156</div></div></td>
-                <td><div class="pname"><span class="c-brand">The Face Shop</span> Rice Water Bright Cleansing Wipes</div><div class="knm">미감수 브라이트 클렌징 티슈</div></td>
-                <td class="num" style="text-align:center">100024743</td>
-                <td style="text-align:center">50ea</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-yes">A-03-2</td>
-              </tr>
-              <tr class="anno">
-                <td><div class="bc"><div class="bars"></div><div class="d4">1234</div><div class="full">8809894261234</div></div></td>
-                <td><div class="pname"><span class="c-brand">Medicube</span> Zero Pore Pad 2.0 <span class="optbadge">1+1</span></div><div class="knm">제로 모공 패드 2.0 (1+1)</div></td>
-                <td class="num" style="text-align:center">100038120</td>
-                <td style="text-align:center">70ea<span class="dot" style="top:-11px;left:-8px">5</span></td>
-                <td style="text-align:center"><span class="qu">2</span><span class="dot" style="top:-12px;right:-6px">6</span></td>
-                <td style="text-align:center" class="loc-yes">B-01-4</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="lbl-foot"><span>SkinSeoul · YUN Express Standard</span><span>Total Items: 3 SKU / 4 pcs</span></div>
-        </div>
+<!-- ===== YUN 캐리어 라벨 ===== -->
+<div class="pane" id="p-yun">
+  <p class="paneintro">YUN Express 국제배송 캐리어 라벨(4×6) — 배송사가 생성하는 규격 라벨이라 레이아웃 변경 불가. 어드민은 그대로 출력만. (실제 Order 407508 / NZ 배송)</p>
+  <div class="paper yun anno">
+    <span class="dot" style="top:-11px;left:-11px">4</span>
+    <div class="r1"><div class="th">TH</div><div class="route">KRTHZXR</div></div>
+    <div class="r2"><div class="dest">NZ</div><div class="cls">R</div></div>
+    <div class="bcwrap"><div class="barcode tall"></div><div class="bcnum mono">YT2618100707828990</div></div>
+    <div class="ship">
+      <div class="h">SHIP TO:</div>
+      <div class="addr">
+        Hardeep Kaur<br>
+        61 wellesley road<br>
+        Napier Hawke's Bay Region<br>
+        4110<br>
+        NEW ZEALAND
       </div>
     </div>
+    <div class="tel">Tel: +61434826165 +61434826165</div>
+    <div class="bcwrap2"><div class="barcode short"></div><div class="snum mono">SKINSEOUL_407508</div></div>
+    <div class="r-last"><span class="mono">KR0C540623</span><span>2026-07-14 09:00:08</span></div>
+    <div class="star2">*2</div>
   </div>
-</div></div>
+</div>
 
 <div class="legend">
-  <h3>State 1 — YUN 라벨 (가로 인쇄 미리보기)</h3>
+  <h3>송장/라벨 — 신규 / 변경 주석 (기획 B 반영)</h3>
   <ol>
-    <li><span class="n">1</span><span>세로 출력 → <b>가로(Landscape) 출력</b>으로 변경 — 제품명이 잘리지 않고 전체 노출 (기존 YUN 세로 라벨은 긴 제품명이 잘림) <span class="ref">— B</span></span></li>
-    <li><span class="n">2</span><span>표 <b>좌측에 Barcode 란</b> 신설 — 스캔용 바코드 + 88바코드 <b>뒤 4자리</b>를 크게 표기(3860 / 3156 / 1234)로 선반에서 눈으로 매칭 <span class="ref">— B</span></span></li>
-    <li><span class="n">3</span><span>제품명 <b>맨 앞에 브랜드명 항상 노출</b> — 브랜드명 누락 제품은 제품명 로직 수정 필요(선반에서 오더 찾기 용이) <span class="ref">— B</span></span></li>
-    <li><span class="n">4</span><span><b>SKU 넘버</b> 컬럼 출력 <span class="ref">— B</span></span></li>
-    <li><span class="n">5</span><span><b>옵션(Size, Quantity) 값 출력</b> — 1+1·2개입인데 수량이 1로만 표시되던 제품도 size·quantity가 라벨에서 한눈에 확인(Medicube 1+1 배지 + 70ea / 2) <span class="ref">— B</span></span></li>
-    <li><span class="n">6</span><span>수량이 1개가 아닌 제품은 <b>갯수에 밑줄</b>로 다르게 표시 (<u>2</u>, <u>3</u>, <u>5</u> …) <span class="ref">— B</span></span></li>
-    <li><span class="n">7</span><span>이미 우리 창고에 있는 제품은 <b>맨 우측 Location 컬럼</b>에 로케이션 출력(A-03-2 / B-01-4), JIT로 새로 소싱된 제품은 "–". <b>YUN·DELEO 둘 다 적용</b> <span class="ref">— B / E 연계</span></span></li>
-    <li><span class="n">8</span><span><b>즉시 프린트</b> — 버튼 누르면 새 탭/로딩/인쇄 팝업 없이 라벨 프린터로 바로 출력 (상세는 모달: 즉시 프린트) <span class="ref">— B</span></span></li>
+    <li><span class="n">1</span><span>DELEO 피킹 라벨 <b>가로 출력</b> 전환 — SKU·브랜드·사이즈·Location 컬럼 추가로 피커가 라벨만 보고 집품 <span class="ref">— B</span></span></li>
+    <li><span class="n">2</span><span>수량 <u>밑줄+대형 폰트</u> 강조 — 다품목 오집 방지 <span class="ref">— B</span></span></li>
+    <li><span class="n">3</span><span>샘플 세트 행 별도 표기(앰버 틴트 + SAMPLE 배지) — 판매 상품과 구분, Order Management 샘플 배정과 연동 <span class="ref">— B / G</span></span></li>
+    <li><span class="n">4</span><span>YUN 캐리어 라벨은 배송사 규격이라 <b>변경 없이 출력만</b> — 목적지코드(NZ)·라우팅(R·KRTHZXR)·트래킹(YT…)·SKINSEOUL_오더번호 그대로 <span class="ref">— 실화면</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">라벨 상단 대형 바코드·주소·중량은 기존 YUN 송장 레이아웃 유지, 하단 품목 표에 B섹션 요건(바코드란·브랜드·SKU·옵션·수량 밑줄·로케이션)을 반영. 좌측 Barcode 란과 우측 Location 란이 표를 감싸 선반 피킹과 검수를 한 줄에서 처리.</p>
-</div>
-</section>
-
-<!-- ══════════════ STATE 2 : DELEO 라벨 ══════════════ -->
-<section class="state" id="s2">
-<div class="mockwrap"><div class="mock anno">
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-  <div class="pagepad">
-    <h2>WMS - 송장 / 라벨 레이아웃</h2>
-    <p class="sub">Print Preview — DELEO 라벨</p>
-
-    <div class="ordercard">
-      <span class="kv">Order ID: <b style="color:var(--blue)">413902</b></span>
-      <span class="kv">Status:</span><span class="status st-prepare">Prepare Shipment</span>
-      <span class="kv">Carrier: <b>DELEO 바로십</b></span>
-      <span class="kv">Total Qty: <b>3</b></span>
-    </div>
-
-    <div class="toolbar">
-      <button class="btn btn-green btn-sm">🖨 즉시 프린트 (DELEO)</button>
-      <button class="btn btn-line btn-sm">🖨 즉시 프린트 (YUN)</button>
-      <span class="orient"><span class="land"></span>A4 · 가로 (Landscape)</span>
-      <span class="pref"><span class="sw"></span>즉시 출력 ON</span>
-    </div>
-
-    <div class="previewcanvas">
-      <div class="papercol">
-        <div class="papercap"><span>인쇄 미리보기</span><span class="pill">A4 210 × 297mm · 가로</span><span class="pill">1 / 1</span></div>
-        <div class="sheet">
-          <div class="lbl-top">
-            <div class="lbl-carrier">
-              <div class="cname">DELEO 바로십</div>
-              <div class="csvc">국내 배송 · SkinSeoul Fulfillment Center</div>
-            </div>
-            <div class="lbl-track">
-              <div class="bigbc"></div>
-              <div class="tno">6 8842 1039 8871 0</div>
-              <div class="tlbl">Tracking No · DELEO68842103988710</div>
-            </div>
-            <div class="lbl-dest">
-              <div class="cc" style="font-size:18px">서울</div>
-              <div class="wt">0.31 kg</div>
-            </div>
-          </div>
-          <div class="lbl-addr">
-            <div><span class="cap">To</span><b>김서연</b><br>서울특별시 강남구 테헤란로 123<br>010-xxxx-xxxx</div>
-            <div><span class="cap">From</span>SkinSeoul Fulfillment<br>경기도 성남시</div>
-            <div class="lbl-meta"><span class="cap">Order</span><b>413902</b><br><span class="cap" style="margin-top:6px">Printed</span>2026-07-13 14:41</div>
-          </div>
-
-          <table class="labeltbl">
-            <thead><tr>
-              <th style="text-align:center">Barcode</th>
-              <th>Product (Brand + Name)</th>
-              <th style="text-align:center">SKU</th>
-              <th style="text-align:center">Size</th>
-              <th style="text-align:center">Qty</th>
-              <th class="anno" style="text-align:center">Location<span class="dot" style="top:-11px;right:-8px">1</span></th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">7481</div><div class="full">8809738317481</div></div></td>
-                <td><div class="pname"><span class="c-brand">Beauty of Joseon</span> Glow Serum : Propolis + Niacinamide</div><div class="knm">글로우 세럼 (프로폴리스+나이아신아마이드)</div></td>
-                <td class="num" style="text-align:center">100031877</td>
-                <td style="text-align:center">30ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-yes">A-03-2</td>
-              </tr>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">3458</div><div class="full">8809640733458</div></div></td>
-                <td><div class="pname"><span class="c-brand">Anua</span> Heartleaf 77% Soothing Toner</div><div class="knm">어성초 77% 수딩 토너</div></td>
-                <td class="num" style="text-align:center">100045210</td>
-                <td style="text-align:center">250ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-no">–</td>
-              </tr>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">1234</div><div class="full">8809894261234</div></div></td>
-                <td><div class="pname"><span class="c-brand">Medicube</span> Zero Pore Pad 2.0 <span class="optbadge">1+1</span></div><div class="knm">제로 모공 패드 2.0 (1+1)</div></td>
-                <td class="num" style="text-align:center">100038120</td>
-                <td style="text-align:center">70ea</td>
-                <td style="text-align:center"><span class="qu">2</span></td>
-                <td style="text-align:center" class="loc-yes">B-01-4</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="lbl-foot"><span>SkinSeoul · DELEO 바로십</span><span>Total Items: 3 SKU / 4 pcs</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div></div>
-
-<div class="legend">
-  <h3>State 2 — DELEO 라벨 (동일 레이아웃 적용)</h3>
-  <ol>
-    <li><span class="n">1</span><span><b>Location 컬럼은 YUN·DELEO 둘 다 적용</b> — 캐리어가 달라도 라벨 품목 표 구성(Barcode 4자리·브랜드 앞·SKU·옵션·수량 밑줄·Location)은 동일. 캐리어별로 상단 헤더(로고·트래킹·목적지)만 다름 <span class="ref">— B</span></span></li>
-  </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">지금은 Deleo가 아닌 경우가 더 많으므로 품목 표 규격은 공통 컴포넌트로 유지하고, 캐리어 헤더만 스왑. 두 라벨 모두 가로(Landscape) 고정.</p>
-</div>
-</section>
-
-<!-- ══════════════ STATE 3 : 샘플 포함 오더 ══════════════ -->
-<section class="state" id="s3">
-<div class="mockwrap"><div class="mock anno">
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-  <div class="pagepad">
-    <h2>WMS - 송장 / 라벨 레이아웃</h2>
-    <p class="sub">Print Preview — 샘플 포함 오더</p>
-
-    <div class="ordercard">
-      <span class="kv">Order ID: <b style="color:var(--blue)">414055</b></span>
-      <span class="kv">Status:</span><span class="status st-prepare">Prepare Shipment</span>
-      <span class="kv">Carrier: <b>YUN Express</b></span>
-      <span class="kv">Destination: <b>Canada</b></span>
-      <span class="kv">Total Qty: <b>2 + 샘플 세트</b></span>
-    </div>
-
-    <div class="toolbar">
-      <button class="btn btn-green btn-sm">🖨 즉시 프린트 (YUN)</button>
-      <span class="orient"><span class="land"></span>A4 · 가로 (Landscape)</span>
-      <span class="pref"><span class="sw"></span>즉시 출력 ON</span>
-    </div>
-
-    <div class="previewcanvas">
-      <div class="papercol">
-        <div class="papercap"><span>인쇄 미리보기</span><span class="pill">A4 210 × 297mm · 가로</span><span class="pill">1 / 1</span></div>
-        <div class="sheet">
-          <div class="lbl-top">
-            <div class="lbl-carrier">
-              <div class="cname">YUN EXPRESS</div>
-              <div class="csvc">Standard · SkinSeoul Fulfillment Center</div>
-            </div>
-            <div class="lbl-track">
-              <div class="bigbc"></div>
-              <div class="tno">1 0325 1120 4408 1</div>
-              <div class="tlbl">Tracking No · YUN10325112044081</div>
-            </div>
-            <div class="lbl-dest">
-              <div class="cc">CA</div>
-              <div class="wt">0.28 kg</div>
-            </div>
-          </div>
-          <div class="lbl-addr">
-            <div><span class="cap">To</span><b>Sophie Tremblay</b><br>440 Rue Sainte-Catherine, Montréal QC<br>Canada</div>
-            <div><span class="cap">From</span>SkinSeoul Fulfillment<br>경기도 성남시</div>
-            <div class="lbl-meta"><span class="cap">Order</span><b>414055</b><br><span class="cap" style="margin-top:6px">Printed</span>2026-07-13 14:52</div>
-          </div>
-
-          <table class="labeltbl">
-            <thead><tr>
-              <th style="text-align:center">Barcode</th>
-              <th>Product (Brand + Name)</th>
-              <th style="text-align:center">SKU</th>
-              <th style="text-align:center">Size</th>
-              <th style="text-align:center">Qty</th>
-              <th style="text-align:center">Location</th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">3458</div><div class="full">8809640733458</div></div></td>
-                <td><div class="pname"><span class="c-brand">Anua</span> Heartleaf 77% Soothing Toner</div><div class="knm">어성초 77% 수딩 토너</div></td>
-                <td class="num" style="text-align:center">100045210</td>
-                <td style="text-align:center">250ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-no">–</td>
-              </tr>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">7481</div><div class="full">8809738317481</div></div></td>
-                <td class="anno"><div class="pname"><span class="c-brand">Beauty of Joseon</span> Glow Serum : Propolis + Niacinamide <span class="addword">(+ sample set)</span></div><div class="knm">글로우 세럼 (프로폴리스+나이아신아마이드)</div><span class="dot" style="top:-11px;right:24px">11</span></td>
-                <td class="num" style="text-align:center">100031877</td>
-                <td style="text-align:center">30ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-yes">A-03-2</td>
-              </tr>
-              <tr class="samplerow">
-                <td class="anno" style="text-align:center">📦<span class="dot" style="top:-11px;left:-8px">10</span></td>
-                <td><span class="stag">샘플 세트 (Sample Set)</span> &nbsp; 사쉐 3종 · 미니어처 2종 (센터 배정)</td>
-                <td class="num" style="text-align:center">SMPL-STD</td>
-                <td style="text-align:center">assorted</td>
-                <td style="text-align:center">1 set</td>
-                <td style="text-align:center" class="loc-yes">S-01</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="lbl-foot"><span>SkinSeoul · YUN Express Standard</span><span>Total Items: 2 SKU / 2 pcs + 1 샘플 세트</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div></div>
-
-<div class="legend">
-  <h3>State 3 — 샘플 포함 오더 (B ↔ G 연계)</h3>
-  <ol>
-    <li><span class="n">10</span><span>샘플 포함 오더는 송장 <b>최하단에 "샘플 세트" 행</b>을 별도로 생성 — 센터에서 라벨 출력 시 샘플 세트가 한 행으로 구분되어 포장 시 누락 방지 <span class="ref">— B 연계 + G 샘플</span></span></li>
-    <li><span class="n">11</span><span>오더 <b>맨 아래 제품의 제품명에 "(+ sample set)" 워딩 자동 추가</b> — 배송사에 한 제품 세트처럼 전달해 세금 이슈 회피 (배송사 전달용 표기) <span class="ref">— G 샘플</span></span></li>
-  </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">두 규칙은 목적이 다름: "(+ sample set)" 워딩은 배송사로 나가는 제품명 표기(세금 회피용), 최하단 "샘플 세트" 행은 센터 내부 포장 검수용. 샘플 세트 행은 SKU=SMPL-STD, 로케이션=S-01(샘플 존)로 고정 표기.</p>
-</div>
-</section>
-
-<!-- ══════════════ STATE 4 : 자동 출력 (즉시) ══════════════ -->
-<section class="state" id="s4">
-<div class="mockwrap"><div class="mock anno">
-  <div class="toast">✓ 자동 출력 — Order 414130 <small>바코드 스캔 → 라벨 프린터 즉시 전송 (새 탭/팝업 없음)</small></div>
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-  <div class="pagepad">
-    <h2>WMS - 송장 / 라벨 레이아웃</h2>
-    <p class="sub">Print Preview — 바코드 스캔 시 자동 출력</p>
-
-    <div class="autobanner anno">
-      <b>⚡ 자동 출력</b>
-      <span>어차피 출고 라벨을 출력해야 하는 오더는 <b>바코드 찍자마자 자동 출력</b>됩니다 — ① 인바운드 이력이 하나도 없는 오더(제품 1개짜리 포함) 또는 ② 인바운드할 제품만 남은 오더. 단 <b>창고 재고(Existing Inventory)는 인바운드된 재고로 간주하지 않음</b>.</span>
-      <span class="dot" style="top:-11px;left:-11px">9</span>
-    </div>
-
-    <div class="ordercard">
-      <span class="kv">Order ID: <b style="color:var(--blue)">414130</b></span>
-      <span class="kv">Status:</span><span class="status st-prepare">Prepare Shipment</span>
-      <span class="kv">Carrier: <b>YUN Express</b></span>
-      <span class="kv">Destination: <b>United States</b></span>
-      <span class="kv">Total Qty: <b>1</b></span>
-      <span class="kv" style="color:var(--green);font-weight:700">단일 제품 · 인바운드 이력 없음 → 스캔 즉시 자동 출력</span>
-    </div>
-
-    <div class="toolbar">
-      <button class="btn btn-gray btn-sm">🖨 즉시 프린트 (YUN)</button>
-      <span class="mut">이미 자동 출력됨 — 재출력은 버튼으로 수동 실행</span>
-      <span class="orient"><span class="land"></span>A4 · 가로 (Landscape)</span>
-    </div>
-
-    <div class="previewcanvas">
-      <div class="papercol">
-        <div class="papercap"><span>자동 출력된 라벨</span><span class="pill">A4 210 × 297mm · 가로</span><span class="pill">1 / 1</span></div>
-        <div class="sheet">
-          <div class="lbl-top">
-            <div class="lbl-carrier">
-              <div class="cname">YUN EXPRESS</div>
-              <div class="csvc">Standard · SkinSeoul Fulfillment Center</div>
-            </div>
-            <div class="lbl-track">
-              <div class="bigbc"></div>
-              <div class="tno">1 0326 4471 2093 4</div>
-              <div class="tlbl">Tracking No · YUN10326447120934</div>
-            </div>
-            <div class="lbl-dest">
-              <div class="cc">US</div>
-              <div class="wt">0.19 kg</div>
-            </div>
-          </div>
-          <div class="lbl-addr">
-            <div><span class="cap">To</span><b>Hannah Miller</b><br>221 Baker Ave, Austin TX 78701<br>United States</div>
-            <div><span class="cap">From</span>SkinSeoul Fulfillment<br>경기도 성남시</div>
-            <div class="lbl-meta"><span class="cap">Order</span><b>414130</b><br><span class="cap" style="margin-top:6px">Auto-printed</span>2026-07-13 15:03</div>
-          </div>
-
-          <table class="labeltbl">
-            <thead><tr>
-              <th style="text-align:center">Barcode</th>
-              <th>Product (Brand + Name)</th>
-              <th style="text-align:center">SKU</th>
-              <th style="text-align:center">Size</th>
-              <th style="text-align:center">Qty</th>
-              <th style="text-align:center">Location</th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td><div class="bc"><div class="bars"></div><div class="d4">0726</div><div class="full">8809416470726</div></div></td>
-                <td><div class="pname"><span class="c-brand">COSRX</span> Advanced Snail 96 Mucin Power Essence</div><div class="knm">어드밴스드 스네일 96 뮤신 에센스</div></td>
-                <td class="num" style="text-align:center">100040311</td>
-                <td style="text-align:center">100ml</td>
-                <td style="text-align:center">1</td>
-                <td style="text-align:center" class="loc-no">–</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="lbl-foot"><span>SkinSeoul · YUN Express Standard</span><span>Total Items: 1 SKU / 1 pcs</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div></div>
-
-<div class="legend">
-  <h3>State 4 — 바코드 스캔 시 자동 출력</h3>
-  <ol>
-    <li><span class="n">9</span><span>어차피 라벨을 출력해야 하는 오더는 <b>바코드 스캔 즉시 자동 출력</b> — 인바운드 이력이 없는 오더(제품 1개짜리 포함) 또는 인바운드할 제품만 남은 오더. <b>Existing Inventory(창고 재고)는 인바운드 이력으로 보지 않음</b> → 새로 소싱된 제품이 실제로 들어와야 자동 출력 조건 성립 <span class="ref">— B (+ C 마지막 제품 Inbound+Outbound 동시 연계)</span></span></li>
-  </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">자동 출력도 새 탭/인쇄 팝업 없이 라벨 프린터로 직접 전송(즉시 프린트). 우상단 성공 토스트만 뜨고 화면 새로고침 없음 → 바로 다음 바코드 스캔 가능(View Orders 동작과 정합).</p>
-</div>
-</section>
-
-<!-- ══════════════ MODAL : 즉시 프린트 (B5) ══════════════ -->
-<div class="overlay" id="m-print">
-  <div class="modal anno" style="max-width:560px">
-    <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>즉시 프린트 설정<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <b style="color:var(--ink)">프린트 버튼을 누르면 라벨이 즉시 출력됩니다.</b>
-      <p class="mut" style="margin:6px 0 12px">새 탭·로딩 대기·인쇄 팝업·엔터 단계를 모두 생략하고 지정 라벨 프린터로 직접 전송.</p>
-      <div class="cmp">
-        <div class="col old">
-          <h5>기존 (느림)</h5>
-          <ol>
-            <li>YUN: 새 탭 열림 → 로딩 대기 → 엔터</li>
-            <li>DELEO: 인쇄 팝업 → 엔터</li>
-            <li>건별 3~4클릭 반복</li>
-          </ol>
-        </div>
-        <div class="col new">
-          <h5>변경 (즉시)</h5>
-          <ol>
-            <li>버튼 1회 → 라벨 프린터로 직접 출력</li>
-            <li>팝업·새 탭 없음</li>
-            <li>스캔 조건 충족 시 자동 출력</li>
-          </ol>
-        </div>
-      </div>
-      <div class="note">기본 프린터 미지정 시 최초 1회만 프린터 선택 → 이후 세션 동안 즉시 출력 유지. 출력 방향은 <b>가로(Landscape) 고정</b>.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>닫기</button>
-      <button class="btn btn-green btn-sm" data-close>즉시 출력 ON 저장</button>
-    </div>
-  </div>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">DELEO 현행/YUN은 실제 출력 PDF 그대로 재현. DELEO 개선안만 기획 B 적용. 프린트 화면이라 상단 Comments 허브는 생략(라벨 출력 전용). 브랜드명은 개선안에서 항상 노출.</p>
 </div>
 
 <script>
-document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
-    document.getElementById(t.dataset.state).classList.add('on');
-    window.scrollTo({top:0});
+document.querySelectorAll('.wf-tab[data-pane]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-pane]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===b.dataset.pane));
   });
-});
-document.querySelectorAll('[data-modal]').forEach(b=>{
-  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
-});
-document.querySelectorAll('[data-close]').forEach(b=>{
-  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
-});
-document.querySelectorAll('.overlay').forEach(o=>{
-  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
 });
 </script>

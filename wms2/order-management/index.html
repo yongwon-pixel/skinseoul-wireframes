@@ -4,695 +4,278 @@
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
   --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
   --line:#DEE2E6; --line-strong:#BBBABE;
-  --nav:#212529; --nav-fg:#ADB5BD;
+  --nav:#1B1F24; --nav-fg:#C7CBD1;
   --blue:#0D6EFD; --blue-soft:#E7F1FF;
   --green:#198754; --green-soft:#D1E7DD;
   --red:#DC3545; --red-soft:#F8D7DA;
   --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
-  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --mkt:#7C3AED; --mkt-soft:#F3EEFF;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
-
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
   font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
 button{font:inherit;cursor:pointer}
 
-/* ── wireframe chrome ─────────────────────────── */
-.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
-  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700}
 .wf-bar .hint{font-size:12px;opacity:.75}
 .wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
-  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:99px;padding:5px 14px;font-size:12.5px}
 .wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
 .wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
 
-/* ── annotations ──────────────────────────────── */
 .anno{position:relative}
-.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
-  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
 body.no-anno .dot,body.no-anno .legend{display:none!important}
-.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
-  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend{max-width:1500px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);border:1px solid var(--ss-purple-100);border-radius:10px}
 .legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
-.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:7px 26px}
 .legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
-.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
-  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
 
-/* ── admin mock ───────────────────────────────── */
 .mockwrap{overflow-x:auto}
-.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
-.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.mock{min-width:1240px;background:var(--page);min-height:520px;padding-bottom:80px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:15px;padding:9px 18px;font-size:13px;flex-wrap:wrap}
 .nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .navlink{font-size:11px;line-height:1.12}
 .nav .sp{flex:1}
-.nav .user{color:#fff;font-weight:600}
-.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
-  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
-.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
-  padding:4px 10px;font-size:13px}
-.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
-  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
-.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+.nav .user{color:#fff;font-weight:600;font-size:12.5px}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 10px;font-size:12.5px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
 
-.pagepad{padding:18px 16px 0}
-.pagepad h2{font-size:27px;margin:6px 0 2px}
-.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
-
-.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
-.search-input{flex:1;min-width:300px;display:flex;border:1px solid var(--line-strong);border-radius:7px}
-.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:8px 12px;font-size:14px;outline:none;border-radius:7px}
-.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.pagepad{padding:16px 22px 0}
+.ptitle{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ptitle h2{font-size:22px;margin:0}
+.ptitle .count{color:var(--ink-3);font-size:13px}
+.btn{border-radius:7px;border:1px solid transparent;padding:7px 13px;font-size:13px;font-weight:600}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
 .btn-green{background:var(--green);color:#fff}
-.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
-.btn-amber{background:var(--amber);color:#fff}
-.btn-amber-line{background:var(--page);border-color:var(--amber-line);color:var(--amber)}
-.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
-.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-mkt{background:var(--mkt);color:#fff}
+.btn-gray{background:var(--page);border-color:var(--line-strong);color:var(--ink-2)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
 
-/* 상단 액션 툴바 — 샘플 배정 / 배정 취소 / 마케팅 Import (항상 노출) */
-.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
-.toolbar .spacer{flex:1}
+/* filter bar */
+.filterbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px}
+.filterbar .sep{width:1px;height:26px;background:var(--line-strong);margin:0 2px}
+.sel,.inp,.date{border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font-size:12.5px;background:var(--page);color:var(--ink)}
+.inp{min-width:170px}
+.chkgrp{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--ink-2)}
+.chkgrp label{display:flex;gap:4px;align-items:center}
+.filterbar .sp{flex:1}
 
-/* Active Sample Assignments 패널 */
-.assign{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--page);overflow:hidden}
-.assign .ah{background:color-mix(in srgb,var(--canvas) 55%,var(--page));padding:9px 14px;font-weight:700;font-size:13px;
-  display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
-.assign .ah .cnt{margin-left:auto;font-weight:400;color:var(--ink-3);font-size:12px}
-.assign .arow{display:flex;align-items:center;gap:14px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap}
-.assign .arow:last-child{border-bottom:none}
-.assign .sk{font-variant-numeric:tabular-nums;color:var(--ink-3)}
-.assign .arow b{color:var(--ink)}
-.win{background:var(--blue-soft);color:var(--blue);border-radius:5px;padding:2px 8px;font-size:11.5px;font-weight:700}
-.win.forever{background:var(--green-soft);color:var(--green)}
-.assign .arow .sp{flex:1}
-
-/* bulk selection bar — 상단 고정, 항상 노출 */
-.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
-.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
-.mut{color:var(--ink-3);font-size:12.5px}
+/* actions row */
+.actionrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.actionrow .sel-info{font-size:12.5px;color:var(--ss-purple);font-weight:700}
+.actionrow .sp{flex:1}
 
 /* table */
-.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
-.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
-.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tblwrap{border:1px solid var(--line);border-radius:10px;overflow:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1180px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 11px;font-weight:600;white-space:nowrap;position:sticky;top:0}
+.tbl td{border-bottom:1px solid var(--line);padding:8px 11px;vertical-align:middle}
 .tbl .num{font-variant-numeric:tabular-nums}
-.row-mkt td{background:color-mix(in srgb,var(--amber-soft) 60%,var(--page))}
-.row-hold td{background:color-mix(in srgb,var(--red-soft) 32%,var(--page))}
-.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
-  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
-.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.tag-sample{background:var(--green);color:#fff}
-.tag-mkt{background:var(--amber);color:#fff}
-.tag-web{background:var(--line);color:var(--ink-2)}
-.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.tbl tr.mkt{background:var(--mkt-soft)}
+.tbl tr:hover{background:var(--blue-soft)}
+.tbl tr.mkt:hover{background:#EBE1FF}
+.oid{color:var(--blue);font-weight:700}
+.mkt-badge{display:inline-block;background:var(--mkt);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;letter-spacing:.3px;margin-left:5px;vertical-align:middle}
+.st{border-radius:5px;padding:2px 9px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.st-completed{background:var(--blue-soft);color:var(--blue)}
 .st-processing{background:var(--green-soft);color:var(--green)}
-.st-prepare{background:var(--blue-soft);color:var(--blue)}
-.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
-.samplenote{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
-.acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.st-prepare{background:#EDE7F6;color:var(--ss-purple)}
+.st-hold{background:var(--amber);color:#fff}
+.prov{border:1px solid var(--line-strong);border-radius:5px;padding:1px 7px;font-size:10.5px;font-weight:700}
+.prov-yun{border-color:var(--green);color:var(--green)}
+.prov-deleo{border-color:var(--blue);color:var(--blue)}
+.tag{display:inline-block;border-radius:4px;padding:1.5px 6px;font-size:9.5px;font-weight:800;letter-spacing:.2px}
+.tag-smartbuy{background:var(--blue);color:#fff}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.tag-partnership{background:var(--amber);color:#fff}
+.rowmenu{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;width:28px;height:26px;font-size:13px}
 
-/* comment panel */
-.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
-.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
-.cpanel .c-item:last-of-type{border-bottom:none}
-.cpanel .who{font-weight:700;white-space:nowrap}
-.cpanel .at{color:var(--blue);font-weight:700}
-.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
-.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
-.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
-.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
-.star.on{color:var(--star)}
-
-/* actor log */
-.logsec{margin-top:26px}
-.logsec h4{font-size:14px;margin:0 0 8px}
-.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
-.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
-.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
-.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-hold{color:var(--amber);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
-
-/* toast */
-.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
-  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
-.toast.hold{background:var(--amber)}
-.toast small{opacity:.85;font-weight:400}
-
-/* banners */
-.holdbanner{margin-top:16px;background:var(--amber-soft);border:1.5px solid var(--amber-line);border-radius:8px;
-  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.holdbanner b{color:var(--amber);font-size:15px}
+/* pagination */
+.pager{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:12px;font-size:12.5px}
+.pager button{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;padding:4px 10px}
+.pager button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
 /* modal */
 .overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
-.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative;max-height:92vh;overflow:auto}
-.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal{background:var(--page);border-radius:12px;max-width:560px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal.wide{max-width:680px}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
 .modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
-.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
-.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px;flex-wrap:wrap}
-.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
-.note.warn{background:var(--amber-soft)}
-.note.err{background:var(--red-soft)}
-.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
-.auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
-.auto input{width:100%;border:none;padding:9px 12px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
-.auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
-.auto .opt.sel{background:var(--blue-soft);font-weight:600}
-.auto .opt small{color:var(--ink-3)}
-
-/* datetime selectors — 년/월/일/시 */
-.dtblock{margin-top:12px}
-.dtrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:5px}
-.dtlabel{font-weight:700;color:var(--ink);font-size:13px;min-width:52px}
-.dtrow select{border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px;background:var(--page);color:var(--ink);font:inherit;font-size:13px}
-.dtrow select:disabled{background:var(--canvas);color:var(--ink-3);cursor:not-allowed}
-.foreverchk{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--green);font-size:12.5px}
-.chkline{display:flex;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid var(--amber-line);border-radius:7px;background:var(--amber-soft)}
-.chkline b{color:var(--amber)}
-.rads{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
-.rads label{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2)}
-
-/* CSV template */
-.tmpl{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.tmpl .col{background:var(--canvas);border:1px solid var(--line);border-radius:5px;padding:3px 8px;font-size:11.5px;color:var(--ink-2)}
-.dropzone{margin-top:12px;border:1.5px dashed var(--line-strong);border-radius:8px;padding:16px;text-align:center;color:var(--ink-3);font-size:12.5px;background:var(--canvas)}
-.miss td{background:var(--red-soft)}
-.miss .flag{color:var(--red);font-weight:800;font-size:11px}
-
-/* header comment inbox dropdown — Comments 허브 */
-.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
-  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
-.inboxdd.open{display:block}
-.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
-.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
-.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
-.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
-.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
-.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
-.inboxdd .it.unread{background:var(--blue-soft)}
-.inboxdd .it .body{flex:1}
-.inboxdd .it b{color:var(--ink)}
-.inboxdd .it time{color:var(--ink-3);font-size:11px}
-
-.state{display:none}
-.state.on{display:block}
+.modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.note{margin-top:10px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px}
+.note.mkt{background:var(--mkt-soft)}
+.fld{margin-bottom:11px}
+.fld label{display:block;font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:4px}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-size:13px;background:var(--page);color:var(--ink)}
+.dropzone{border:2px dashed var(--line-strong);border-radius:10px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px}
 </style>
 
 <div class="wf-bar">
   <h1>WMS 2.0 · Order Management Dashboard 와이어프레임</h1>
-  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석 · 섹션 G(샘플/마케팅) + F(Hold)</span>
+  <span class="hint">실제 대시보드 기반 · 기본/Columns 뷰 전환 · 보라 번호 = 신규 주석</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · 대시보드 기본</button>
-    <button class="wf-tab" data-state="s2">2 · Hold 적용됨</button>
-    <button class="wf-tab" data-modal="m-assign">모달: 샘플 배정</button>
-    <button class="wf-tab" data-modal="m-unassign">모달: 배정 취소</button>
+    <button class="wf-tab on" data-view="viewA">기본 컬럼</button>
+    <button class="wf-tab" data-view="viewB">Columns 전환</button>
     <button class="wf-tab" data-modal="m-import">모달: 마케팅 Import</button>
-    <button class="wf-tab" data-modal="m-import-err">모달: Import 에러</button>
-    <button class="wf-tab" data-modal="m-hold">모달: Hold Shipment</button>
+    <button class="wf-tab" data-modal="m-sample">모달: 샘플 배정</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 1 : 대시보드 기본 ══════════════ -->
-<section class="state on" id="s1">
 <div class="mockwrap"><div class="mock anno">
-
   <div class="nav">
     <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
+    <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
     <span class="sp"></span>
-    <span style="position:relative">
-      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
-      <span class="dot" style="top:3px;left:-30px">13</span>
-    </span>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-    <div class="inboxdd" id="inbox1">
-      <div class="tabs">
-        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
-        <button data-tab="saved">★ Saved</button>
-      </div>
-      <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 414102</b> · Sara(CS): "@Yongwon 이 오더 배송지 변경 요청 들어와서 Hold 걸었어요"<br><time>09:20</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order MKT-0091</b> · Miranti: "@Yongwon 이 마케팅 오더 창고에 없는 제품이라 확인 부탁"<br><time>08:55</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>샘플 배정</b> · Kai: "@Yongwon 7월 신규 오더 Relief Sun 샘플 배정 forever로 걸어주세요"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-      </div>
-      <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order MKT-0091</b> · Miranti: "@Yongwon 이 마케팅 오더 창고에 없는 제품이라 확인 부탁"<br><time>08:55</time></div><button class="star on" title="저장 해제">★</button></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pagepad">
-    <h2>OMS - Order Management Dashboard</h2>
-    <p class="sub">Orders</p>
-
-    <div class="searchrow">
-      <div class="search-input anno">
-        <input value="" placeholder="Order ID / Customer / Tracking No / Marketing Ref — 아무 번호나 입력하면 자동 판별">
-        <span class="dot" style="top:-10px;left:-10px">11</span>
-      </div>
-      <button class="btn btn-blue">🔍 Search</button>
-    </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Order ID / 고객명 / Tracking No / 마케팅 Ref 아무 값이나 입력하면 자동 판별 (View Orders와 동일 규약)</p>
-
-    <!-- 상단 액션 툴바 -->
-    <div class="toolbar anno">
-      <span class="dot" style="top:-11px;left:-10px">1</span>
-      <button class="btn btn-green btn-sm anno" data-modal="m-assign">🎁 샘플 배정<span class="dot" style="top:-13px;right:-10px">2</span></button>
-      <button class="btn btn-green-line btn-sm anno" data-modal="m-unassign">배정 취소<span class="dot" style="top:-13px;right:-10px">3</span></button>
-      <button class="btn btn-amber-line btn-sm anno" data-modal="m-import">⬆ 마케팅 오더 Import<span class="dot" style="top:-13px;right:-10px">4</span></button>
-      <span class="spacer"></span>
-      <button class="btn btn-line btn-sm">🖨 선택 오더 송장 일괄 출력</button>
-    </div>
-
-    <!-- Active Sample Assignments -->
-    <div class="assign anno">
-      <span class="dot" style="top:-11px;left:-10px">5</span>
-      <div class="ah">🎁 Active Sample Assignments <span class="cnt">현재 적용 중인 샘플 배정 규칙 2건</span></div>
-      <div class="arow">
-        <b>Beauty of Joseon — Relief Sun Sample 3ml</b> <span class="sk">SKU 900012</span>
-        <span class="win forever">기간: 2026-07-01 09:00 → Forever</span>
-        <span class="mut">대상: 이 기간 내 모든 신규 오더</span>
-        <span class="sp"></span>
-        <button class="btn btn-green-line btn-sm" data-modal="m-unassign">배정 취소</button>
-      </div>
-      <div class="arow">
-        <b>Anua — Heartleaf Cleansing Oil Sample 4ml</b> <span class="sk">SKU 900027</span>
-        <span class="win">기간: 2026-07-10 00:00 → 2026-07-20 23:00</span>
-        <span class="mut">대상: US / AU 오더</span>
-        <span class="sp"></span>
-        <button class="btn btn-green-line btn-sm" data-modal="m-unassign">배정 취소</button>
-      </div>
-    </div>
-    <p class="mut anno" style="margin:8px 0 0">
-      배정된 샘플은 오더 <b>맨 아래 제품의 제품명에 "(+ sample set)" 자동 추가</b>되어 배송사로 전달(세금 이슈 회피) · 샘플 포함 오더는 송장 출력 시 최하단 <b>"샘플 세트" 행</b> 별도 생성
-      <span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">6</span>
-    </p>
-
-    <!-- bulk selection bar (상단 고정, 항상 노출) -->
-    <div class="bulkbar anno" style="margin-top:14px">
-      <button class="btn btn-amber-line btn-sm" data-modal="m-hold">선택 오더 일괄 Hold Shipment</button>
-      <button class="btn btn-green-line btn-sm" data-modal="m-assign">선택 오더 일괄 샘플 배정</button>
-      <span class="cnt">1개 오더 선택됨 · Hold 오더는 출고 불가(Inbound만) · 처리 불가 항목은 자동 제외</span>
-      <span class="dot" style="top:-11px;left:-10px">12</span>
-    </div>
-
-    <!-- order comments panel (toggle) -->
-    <div class="cpanel anno" id="cpanel1" style="display:none">
-      <span class="dot" style="top:-11px;left:-10px">14</span>
-      <div class="c-item"><span class="who">Sara (CS)</span><span><span class="at">@Yongwon</span> 고객이 배송지 변경 요청했습니다. Hold 걸어두었으니 변경 확정 후 해제할게요.</span><time>07-13 09:20</time><button class="star on" title="저장됨">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
-    </div>
-
-    <table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Order Date</th><th>Customer</th><th>Country</th><th>Status</th><th>Qty</th>
-        <th class="anno">Sample<span class="dot" style="top:-11px;right:-8px">7</span></th>
-        <th class="anno">Type<span class="dot" style="top:-11px;right:-8px">8</span></th>
-        <th>Comments</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox" checked></td>
-          <td class="num" style="color:var(--blue)"><b>414220</b></td>
-          <td class="num">07-13 10:12</td>
-          <td>Emily Carter</td><td>US</td>
-          <td><span class="status st-processing">Processing</span></td>
-          <td><span class="qty">3</span></td>
-          <td><span class="tag tag-sample">+ SAMPLE SET</span><span class="samplenote">Relief Sun 3ml 배정됨</span></td>
-          <td><span class="tag tag-web">WEB</span></td>
-          <td><button class="btn btn-line btn-sm" data-open="cpanel1">💬 Comments <span class="badge-n" style="position:static">0</span></button></td>
-          <td><div class="acts">
-            <button class="btn btn-amber-line btn-sm anno" data-modal="m-hold">⏸ Hold Shipment<span class="dot" style="top:-12px;right:-10px">9</span></button>
-            <button class="btn btn-line btn-sm">🖨</button>
-          </div></td>
-        </tr>
-        <tr class="row-mkt">
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>MKT-0091</b></td>
-          <td class="num">07-13 08:40</td>
-          <td>@glowwithlia (Influencer)</td><td>AU</td>
-          <td><span class="status st-prepare">Prepare Shipment</span></td>
-          <td><span class="qty">2</span></td>
-          <td><span class="mut">–</span></td>
-          <td><span class="tag tag-mkt">MARKETING</span></td>
-          <td><button class="btn btn-line btn-sm">💬 Comments <span class="badge-n" style="position:static">1</span></button></td>
-          <td><div class="acts">
-            <button class="btn btn-amber-line btn-sm" data-modal="m-hold">⏸ Hold Shipment</button>
-            <button class="btn btn-line btn-sm">🖨</button>
-          </div></td>
-        </tr>
-        <tr class="row-hold">
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414102</b></td>
-          <td class="num">07-13 07:55</td>
-          <td>Sara Kim</td><td>CA</td>
-          <td><span class="status st-hold">On Hold</span></td>
-          <td><span class="qty">2</span></td>
-          <td><span class="tag tag-sample">+ SAMPLE SET</span></td>
-          <td><span class="tag tag-web">WEB</span></td>
-          <td><button class="btn btn-line btn-sm">💬 Comments <span class="badge-n" style="position:static">1</span></button></td>
-          <td><div class="acts">
-            <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-12px;right:-10px">10</span></button>
-            <button class="btn btn-amber btn-sm">▶ Release Hold</button>
-          </div></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414198</b></td>
-          <td class="num">07-12 21:33</td>
-          <td>Noah Park</td><td>SG</td>
-          <td><span class="status st-processing">Processing</span></td>
-          <td><span class="qty">1</span></td>
-          <td><span class="mut">–</span></td>
-          <td><span class="tag tag-web">WEB</span></td>
-          <td><button class="btn btn-line btn-sm">💬 Comments <span class="badge-n" style="position:static">0</span></button></td>
-          <td><div class="acts">
-            <button class="btn btn-amber-line btn-sm" data-modal="m-hold">⏸ Hold Shipment</button>
-            <button class="btn btn-line btn-sm">🖨</button>
-          </div></td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="mut" style="margin-top:14px">Showing 4 of 1,284 order(s) · 마케팅 오더 1건 · Hold 1건</p>
-
-    <div class="logsec anno">
-      <h4>샘플 배정 / Hold 로그</h4>
-      <span class="dot" style="top:-8px;left:170px">15</span>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>대상</th><th>상세</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 09:20</td><td class="act-hold">HOLD 처리</td><td class="num">414102</td><td>배송지 변경</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">고객 요청 — 변경 확정 후 해제</span></td></tr>
-        <tr><td class="num">07-13 08:40</td><td class="act-in">마케팅 오더 Import</td><td class="num">MKT-0091</td><td>1건 생성</td><td>Miranti</td><td>–</td></tr>
-        <tr><td class="num">07-01 09:00</td><td class="act-in">샘플 배정 (Forever)</td><td>Relief Sun 3ml</td><td>전체 신규 오더</td><td>Yongwon</td><td>–</td></tr>
-      </table>
-    </div>
-  </div>
-
-</div></div>
-
-<div class="legend">
-  <h3>State 1 변경사항 — Order Management Dashboard 기본</h3>
-  <ol>
-    <li><span class="n">1</span><span>상단 액션 툴바 — 샘플 배정 / 배정 취소 / 마케팅 오더 Import 항상 노출 <span class="ref">— G</span></span></li>
-    <li><span class="n">2</span><span>샘플 배정 버튼 → 배정 모달 (시작·끝 년/월/일/시 선택, 끝은 forever 지정 가능) <span class="ref">— G 샘플</span></span></li>
-    <li><span class="n">3</span><span>배정 취소 버튼 → 배정 취소 모달 (적용 중인 배정 규칙 해제) <span class="ref">— G 샘플</span></span></li>
-    <li><span class="n">4</span><span>마케팅 오더 수동 Import 버튼 → import 모달 (CSV 칼럼 템플릿 다운로드 + "마케팅 오더입니다" 체크) <span class="ref">— G 마케팅</span></span></li>
-    <li><span class="n">5</span><span>Active Sample Assignments 패널 — 적용 중인 샘플·기간(또는 Forever)·대상 범위·상태, 행별 배정 취소 <span class="ref">— G 샘플</span></span></li>
-    <li><span class="n">6</span><span>배정된 오더는 맨 아래 제품명에 <b>"(+ sample set)" 자동 추가</b>(배송사 전달·세금 회피) + 송장 최하단 <b>"샘플 세트" 행</b> 별도 생성 <span class="ref">— G 샘플 정의 + B 라벨</span></span></li>
-    <li><span class="n">7</span><span>Sample 칼럼 배지 "+ SAMPLE SET" — 샘플 배정된 오더 표시 <span class="ref">— G 샘플</span></span></li>
-    <li><span class="n">8</span><span>Type 칼럼 — 마케팅 오더는 <b>MARKETING 배지 + 행 별도 색(주황 틴트)</b>, Ready to be Outbounded와 동일 색 규칙 <span class="ref">— G 마케팅 + D</span></span></li>
-    <li><span class="n">9</span><span>Hold Shipment 버튼 (오더별 Actions) — CS팀이 고객 긴급 변경(취소/배송지 변경) 요청 시 즉시 출고 보류 <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">10</span><span>On Hold 상태 오더는 <b>Outbound 버튼 비활성</b>(회색) — Release Hold 후에만 출고 가능 <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">11</span><span>통합 검색 — 번호 유형 토글 없이 자동 판별 (View Orders 확정 규약) <span class="ref">— 확정 설계</span></span></li>
-    <li><span class="n">12</span><span>일괄 처리 바 상단 고정, 항상 노출 — 선택 오더 일괄 Hold / 일괄 샘플 배정 (처리 불가 항목은 자동 제외) <span class="ref">— 확정 설계</span></span></li>
-    <li><span class="n">13</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 저장 코멘트 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">14</span><span>오더별 Comments 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
-    <li><span class="n">15</span><span>샘플 배정 / Hold 행위자 로그 — 시간·행위·대상·상세·작업자·메모 <span class="ref">— 0 협업 + C 로그</span></span></li>
-  </ol>
-</div>
-</section>
-
-<!-- ══════════════ STATE 2 : Hold 적용됨 ══════════════ -->
-<section class="state" id="s2">
-<div class="mockwrap"><div class="mock anno">
-  <div class="toast hold anno"><span>⏸ Hold 처리됨 — Order 414198</span><small>출고 보류 · 새로고침 없음</small><span class="dot" style="top:-11px;left:-11px">1</span></div>
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">4</span></button>
+    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
   </div>
+
   <div class="pagepad">
-    <h2>OMS - Order Management Dashboard</h2>
-    <p class="sub">Orders</p>
-    <div class="searchrow">
-      <div class="search-input"><input value="414198" placeholder="Order ID / Customer / Tracking No / Marketing Ref — 아무 번호나 입력하면 자동 판별"></div>
-      <button class="btn btn-blue">🔍 Search</button>
-    </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Order ID / 고객명 / Tracking No / 마케팅 Ref 아무 값이나 입력하면 자동 판별</p>
-
-    <div class="holdbanner anno">
-      <b>⏸ Hold Shipment</b>
-      <span>이 오더는 CS팀 요청(고객 취소 요청)으로 Hold 처리되었습니다 — Order <b>414198</b> · 요청자 Yongwon 07-13 11:40 · 사유: 고객 취소 요청</span>
-      <span class="dot" style="top:-11px;left:-11px">2</span>
+    <div class="ptitle">
+      <h2>Order Management Dashboard</h2>
+      <span class="count">2,818 orders</span>
     </div>
 
-    <div class="toolbar">
-      <button class="btn btn-green btn-sm" data-modal="m-assign">🎁 샘플 배정</button>
-      <button class="btn btn-green-line btn-sm" data-modal="m-unassign">배정 취소</button>
-      <button class="btn btn-amber-line btn-sm" data-modal="m-import">⬆ 마케팅 오더 Import</button>
-      <span class="spacer"></span>
-      <button class="btn btn-line btn-sm">🖨 선택 오더 송장 일괄 출력</button>
+    <!-- filter bar -->
+    <div class="filterbar">
+      <input class="date" type="text" value="2026-06-01" title="Start Date">
+      <span style="color:var(--ink-3)">~</span>
+      <input class="date" type="text" value="2026-07-14" title="End Date">
+      <span class="sep"></span>
+      <input class="inp" placeholder="Search (order / product)">
+      <input class="inp" placeholder="PIC 검색" style="min-width:120px">
+      <select class="sel"><option>All Status</option><option>Processing</option><option>Prepare Shipment</option><option>Completed</option><option>On Hold</option></select>
+      <div class="chkgrp"><label><input type="checkbox" checked> Order #</label><label><input type="checkbox"> Tracking #</label></div>
+      <select class="sel"><option>Country: AU</option><option>All</option><option>NZ</option><option>US</option></select>
+      <select class="sel"><option>15</option><option>30</option><option>50</option></select>
+      <span class="sp"></span>
+      <span class="anno"><button class="btn btn-gray btn-sm">▦ Columns</button><span class="dot" style="top:-11px;right:-8px">1</span></span>
+      <button class="btn btn-gray btn-sm">⬇ Export</button>
+      <button class="btn btn-gray btn-sm">⬇ Yun Export</button>
+      <span class="anno"><button class="btn btn-mkt btn-sm" data-modal="m-import">⬆ Import</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
     </div>
 
-    <div class="bulkbar" style="margin-top:14px">
-      <button class="btn btn-amber-line btn-sm" data-modal="m-hold">선택 오더 일괄 Hold Shipment</button>
-      <button class="btn btn-green-line btn-sm" data-modal="m-assign">선택 오더 일괄 샘플 배정</button>
-      <span class="cnt">0개 선택됨 · Hold 오더는 출고 불가(Inbound만)</span>
+    <!-- action row -->
+    <div class="actionrow">
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
+      <span class="sel-info">2건 선택됨</span>
+      <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
+      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-sample">🎁 샘플 배정/취소</button><span class="dot" style="top:-11px;left:-9px">3</span></span>
+      <span class="anno"><button class="btn btn-sm" style="border:1px solid var(--amber-line);background:var(--page);color:var(--amber)">⏸ Hold Shipment</button><span class="dot" style="top:-11px;left:-9px">4</span></span>
+      <span class="sp"></span>
     </div>
 
-    <table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Order Date</th><th>Customer</th><th>Country</th><th>Status</th><th>Qty</th>
-        <th>Sample</th><th>Type</th><th>Comments</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr class="row-hold">
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414198</b></td>
-          <td class="num">07-12 21:33</td>
-          <td>Noah Park</td><td>SG</td>
-          <td><span class="status st-hold">On Hold</span></td>
-          <td><span class="qty">1</span></td>
-          <td><span class="mut">–</span></td>
-          <td><span class="tag tag-web">WEB</span></td>
-          <td><button class="btn btn-line btn-sm">💬 Comments <span class="badge-n" style="position:static">1</span></button></td>
-          <td><div class="acts">
-            <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-12px;right:-10px">3</span></button>
-            <button class="btn btn-amber btn-sm anno">▶ Release Hold<span class="dot" style="top:-12px;right:-10px">4</span></button>
-            <button class="btn btn-line btn-sm">🖨</button>
-          </div></td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="mut" style="margin-top:14px">Found 1 order(s)</p>
-
-    <div class="logsec">
-      <h4>샘플 배정 / Hold 로그</h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>대상</th><th>상세</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 11:40</td><td class="act-hold">HOLD 처리</td><td class="num">414198</td><td>고객 취소 요청</td><td>Yongwon</td><td><span style="color:var(--ink-2)">고객이 주문 취소 문의 — 확정 전 출고 보류</span></td></tr>
-      </table>
-    </div>
-  </div>
-</div></div>
-<div class="legend">
-  <h3>State 2 변경사항 — Hold Shipment 적용</h3>
-  <ol>
-    <li><span class="n">1</span><span>Hold 처리 토스트 — 새로고침 없이 우상단 알림 <span class="ref">— F Hold + C 검색</span></span></li>
-    <li><span class="n">2</span><span>Hold 배너 — 요청자·사유(취소/배송지 변경)·시간 표시, View Orders/Order 상세에도 동일 반영 <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">3</span><span>On Hold 오더 <b>Outbound 버튼 비활성</b> — 일괄 출고 대상에서도 자동 제외 <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">4</span><span>Release Hold 버튼 — Hold 해제 시 상태 원복(Processing/Prepare) → 정상 출고 흐름 복귀 <span class="ref">— F Hold</span></span></li>
-  </ol>
-</div>
-</section>
-
-<!-- ══════════════ MODAL : 샘플 배정 ══════════════ -->
-<div class="overlay" id="m-assign">
-  <div class="modal anno" style="max-width:540px">
-    <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>샘플 배정 (Assign Sample Set)<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <b style="color:var(--ink)">1. 배정할 샘플 제품</b>
-      <div class="auto">
-        <input value="relief sun">
-        <div class="opt sel">Beauty of Joseon — <b>Relief Sun : Rice + Probiotics Sample, 3ml</b> <small>900012</small></div>
-        <div class="opt">Anua — Heartleaf Cleansing Oil Sample, 4ml <small>900027</small></div>
-        <div class="opt">COSRX — Advanced Snail Mucin Sample, 5ml <small>900033</small></div>
-      </div>
-
-      <div style="margin-top:16px"><b style="color:var(--ink)">2. 배정 대상 범위</b>
-        <div class="rads">
-          <label><input type="radio" name="scope" checked> 이 기간 내 <b>모든 신규 오더</b></label>
-          <label><input type="radio" name="scope"> 선택한 오더만 (1건)</label>
-          <label><input type="radio" name="scope"> 특정 국가 (US/AU…)</label>
-        </div>
-      </div>
-
-      <div class="dtblock anno">
-        <span class="dot" style="top:-9px;left:-13px">M1b</span>
-        <b style="color:var(--ink)">3. 배정 시작 일시</b>
-        <div class="dtrow">
-          <span class="dtlabel">시작</span>
-          <select><option>2026</option><option>2027</option></select><span>년</span>
-          <select><option>07</option><option>08</option><option>09</option></select><span>월</span>
-          <select><option>13</option><option>14</option><option>15</option></select><span>일</span>
-          <select><option>09</option><option>10</option><option>18</option></select><span>시</span>
-        </div>
-      </div>
-
-      <div class="dtblock">
-        <b style="color:var(--ink)">4. 배정 종료 일시</b>
-        <div class="dtrow" id="endrow">
-          <span class="dtlabel">종료</span>
-          <select><option>2026</option><option>2027</option></select><span>년</span>
-          <select><option>07</option><option>08</option><option>12</option></select><span>월</span>
-          <select><option>20</option><option>31</option></select><span>일</span>
-          <select><option>23</option><option>18</option></select><span>시</span>
-        </div>
-        <label class="chkline"><input type="checkbox" id="foreverChk"> <b>♾ Forever</b> — 종료 없이 상시 배정 (해제 전까지 계속 적용)</label>
-      </div>
-
-      <div class="note">배정된 오더는 맨 아래 제품명에 <b>"(+ sample set)"</b> 자동 추가되어 배송사로 전달되고, 송장 최하단에 <b>"샘플 세트" 행</b>이 생성됩니다.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>닫기</button>
-      <button class="btn btn-green btn-sm" data-close>샘플 배정</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ MODAL : 배정 취소 ══════════════ -->
-<div class="overlay" id="m-unassign">
-  <div class="modal anno">
-    <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>샘플 배정 취소<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <b style="color:var(--ink)">아래 샘플 배정 규칙을 해제하시겠습니까?</b>
-      <div class="assign" style="margin-top:12px">
-        <div class="arow">
-          <b>Beauty of Joseon — Relief Sun Sample 3ml</b> <span class="sk">SKU 900012</span>
-          <span class="win forever" style="margin-left:auto">Forever</span>
-        </div>
-      </div>
-      <div class="note warn">해제 시 <b>이후 신규 오더에는 "(+ sample set)" 이 더 이상 추가되지 않습니다.</b> 이미 배정·출고 처리된 오더는 영향받지 않습니다.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>닫기</button>
-      <button class="btn btn-red-line btn-sm" data-close>배정 취소 확정</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ MODAL : 마케팅 오더 수동 Import ══════════════ -->
-<div class="overlay" id="m-import">
-  <div class="modal anno" style="max-width:720px">
-    <span class="dot" style="top:-11px;left:-11px">M3</span>
-    <header>마케팅 오더 수동 Import<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <p style="margin:0 0 6px">크리에이티브 허브를 거치지 않는 별도 마케팅 오더를 CSV로 직접 등록합니다.</p>
-      <div class="anno">
-        <span class="dot" style="top:-9px;left:-13px">M3b</span>
-        <b style="color:var(--ink)">1. CSV 칼럼 템플릿</b>
-        <div class="tmpl">
-          <span class="col">order_ref</span><span class="col">customer_name</span><span class="col">country</span>
-          <span class="col">address</span><span class="col">sku</span><span class="col">product_name</span>
-          <span class="col">size</span><span class="col">quantity</span><span class="col">note</span>
-        </div>
-        <button class="btn btn-line btn-sm" style="margin-top:10px">⬇ CSV 템플릿 다운로드</button>
-      </div>
-
-      <div class="dropzone">📄 CSV 파일을 여기에 끌어놓거나 클릭하여 업로드 — <b>marketing_orders_0713.csv</b> (3 rows)</div>
-
-      <label class="chkline anno" style="margin-top:14px">
-        <span class="dot" style="top:-11px;left:-13px">M3c</span>
-        <input type="checkbox" checked> <b>마케팅 오더입니다.</b> — 체크 시 Ready to be Outbounded에서 별도 색으로 표시됩니다.
-      </label>
-
-      <b style="color:var(--ink);display:block;margin-top:14px">2. 미리보기 (창고 재고 대조)</b>
-      <table class="tbl" style="margin-top:6px;font-size:12.5px">
-        <thead><tr><th>order_ref</th><th>customer</th><th>SKU</th><th>Product</th><th>Qty</th><th>재고 확인</th></tr></thead>
+    <!-- ===== VIEW A: 기본 컬럼 ===== -->
+    <div class="tblwrap" id="viewA">
+      <table class="tbl">
+        <thead><tr>
+          <th style="width:28px"></th><th>Order ID</th><th>Order Date</th><th>Country</th><th>Status</th><th>Provider</th><th>Provider Order ID</th><th>PIC</th><th>Customer</th><th>Shipping Address</th><th></th>
+        </tr></thead>
         <tbody>
-          <tr><td class="num">MKT-0091</td><td>@glowwithlia</td><td class="num">100031877</td><td>Beauty of Joseon Glow Serum</td><td><span class="qty">1</span></td><td><span class="tag tag-sample">재고 OK</span></td></tr>
-          <tr><td class="num">MKT-0091</td><td>@glowwithlia</td><td class="num">100045210</td><td>Anua Heartleaf Toner</td><td><span class="qty">1</span></td><td><span class="tag tag-sample">재고 OK</span></td></tr>
-          <tr class="miss"><td class="num">MKT-0092</td><td>@skinwithara</td><td class="num">100099001</td><td>Beplain Mung Bean Cleanser</td><td><span class="qty">1</span></td><td><span class="flag">✕ 창고에 없음</span></td></tr>
+          <tr><td><input type="checkbox" checked></td><td><span class="oid">407847</span></td><td class="num">2026-06-30</td><td>AU</td><td><span class="st st-completed">Completed</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100709331860</td><td>Egita</td><td>Maytal Saltoon</td><td>25 Warren Road, Bellevue Hill, NSW 2023</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox" checked></td><td><span class="oid">407812</span></td><td class="num">2026-06-30</td><td>AU</td><td><span class="st st-processing">Processing</span></td><td><span class="prov prov-deleo">Deleo</span></td><td class="num">DL20260630072138</td><td>Dean</td><td>Sarah Kim</td><td>12 George St, Sydney, NSW 2000</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr class="mkt"><td><input type="checkbox"></td><td><span class="oid">MKT-40129</span><span class="mkt-badge">MKT</span></td><td class="num">2026-06-29</td><td>KR</td><td><span class="st st-prepare">Prepare</span></td><td>–</td><td class="num">–</td><td>Harshit</td><td>인플루언서 배송 (@glowwithjade)</td><td>서울 강남구 …</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407790</span></td><td class="num">2026-06-29</td><td>NZ</td><td><span class="st st-hold">On Hold</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100707828990</td><td>Egita</td><td>Hardeep Kaur</td><td>61 Wellesley Rd, Napier 4110, NZ</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407506</span></td><td class="num">2026-06-28</td><td>FR</td><td><span class="st st-completed">Completed</span></td><td><span class="prov prov-deleo">Deleo</span></td><td class="num">DL20260630072138</td><td>Dean</td><td>Claire Dubois</td><td>18 Rue de Rivoli, Paris 75001, FR</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr class="mkt"><td><input type="checkbox"></td><td><span class="oid">MKT-40088</span><span class="mkt-badge">MKT</span></td><td class="num">2026-06-27</td><td>KR</td><td><span class="st st-completed">Completed</span></td><td>–</td><td class="num">–</td><td>Harshit</td><td>브랜드 협찬 (Dr.Jart+)</td><td>경기 성남시 …</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407455</span></td><td class="num">2026-06-27</td><td>AU</td><td><span class="st st-processing">Processing</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100707331240</td><td>Egita</td><td>Tom Nguyen</td><td>7 Chapel St, Melbourne, VIC 3000</td><td><button class="rowmenu">⋮</button></td></tr>
         </tbody>
       </table>
-      <div class="note err">「마케팅 오더입니다.」가 체크된 경우, <b>제품이 우리 창고에 없는 오더(MKT-0092)는 생성되지 않고 에러로 처리</b>됩니다. Import를 진행하면 재고 OK 오더만 생성되고, 누락 건은 에러 리스트로 표시됩니다.</div>
+    </div>
+
+    <!-- ===== VIEW B: Columns 전환 ===== -->
+    <div class="tblwrap anno" id="viewB" style="display:none">
+      <span class="dot" style="top:-9px;left:180px">5</span>
+      <table class="tbl">
+        <thead><tr>
+          <th style="width:28px"></th><th>Order ID</th><th>Customer</th><th>Total Value</th><th>Total Items</th><th>Product Name KR</th><th>SKU (Sourcing / Order# / Tracking)</th><th>Tracking No</th><th></th>
+        </tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407847</span></td><td>Maytal Saltoon</td><td class="num">AUD 129.80</td><td class="num">4</td><td>포어레미디 폼 외 3종</td><td class="num">100005104 <span class="tag tag-smartbuy">SB</span> · 12101316464794 · 10323100835644</td><td class="num">YT2618100709331860</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><span class="oid">407812</span></td><td>Sarah Kim</td><td class="num">AUD 88.40</td><td class="num">2</td><td>마데카솔 크림 외 1종</td><td class="num">100004819 <span class="tag tag-smartbuy">SB</span> · 12101316461102 · DL20260630072138</td><td class="num">DL20260630072138</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr class="mkt"><td><input type="checkbox"></td><td>인플루언서 @glowwithjade</td><td class="num">–</td><td class="num">3</td><td>시카페어 세트</td><td class="num">100043697 <span class="tag tag-partnership">PT</span> · MKT-40129 · –</td><td class="num">–</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td>Hardeep Kaur</td><td class="num">NZD 142.00</td><td class="num">2</td><td>데일리 웨트 힐크림 외</td><td class="num">100005088 <span class="tag tag-wholesale">WS</span> · – · YT2618100707828990</td><td class="num">YT2618100707828990</td><td><button class="rowmenu">⋮</button></td></tr>
+          <tr><td><input type="checkbox"></td><td>Claire Dubois</td><td class="num">EUR 76.50</td><td class="num">1</td><td>데일리 웨트 힐크림</td><td class="num">100012534 <span class="tag tag-smartbuy">SB</span> · O20260630105170 · DL20260630072138</td><td class="num">DL20260630072138</td><td><button class="rowmenu">⋮</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pager">
+      <span style="color:var(--ink-3)">1–15 of 2,818</span>
+      <button>‹ Prev</button>
+      <button class="on">1</button><button>2</button><button>3</button><button>…</button><button>188</button>
+      <button>Next ›</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>Order Management Dashboard — 신규 / 변경 주석 (기획 G + F 반영)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Columns 토글 — 기본 컬럼(Order ID·Date·Country·Status·Provider·Provider Order ID·PIC·Customer·Shipping) ↔ 상품/금액 컬럼(Total Value·Total Items·Product Name KR·SKU+소싱루트+주문번호+트래킹) 전환 <span class="ref">— 실화면</span></span></li>
+    <li><span class="n">2</span><span>Import — 마케팅/협찬 오더 대량 업로드 모달(엑셀/CSV). MKT- 오더로 생성 → View Orders 아웃바운드 연동 <span class="ref">— G</span></span></li>
+    <li><span class="n">3</span><span>샘플 배정/취소 — 선택 오더에 사쉐/샘플 세트 배정·회수(누적 1→2→3세트 규칙 반영) <span class="ref">— G 샘플</span></span></li>
+    <li><span class="n">4</span><span>Hold Shipment — CS 긴급 요청 시 선택 오더 일괄 출고 보류(Order 상세 On Hold와 동기화) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/WS/PT)는 View Orders·Order 상세와 통일.</p>
+</div>
+
+<!-- 모달: 마케팅 Import -->
+<div class="overlay" id="m-import">
+  <div class="modal wide anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>마케팅 오더 Import<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div class="fld"><label>오더 유형</label><select><option>인플루언서 협찬</option><option>브랜드 파트너십 샘플</option><option>내부 마케팅 물량</option></select></div>
+      <div class="dropzone">📄 엑셀/CSV 파일을 드래그하거나 클릭해서 업로드<br><span style="font-size:11.5px">컬럼: 수취인 · 주소 · SKU · 수량 · 소싱루트</span></div>
+      <div class="note mkt">업로드된 행은 <b>MKT- 오더</b>로 생성되어 물동량·정산에서 일반 판매와 분리됩니다. 생성 후 View Orders에서 스캔·아웃바운드 처리 가능. 소싱루트가 Brand Partnership이면 입고 요청(I)과 매칭됩니다.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-amber btn-sm" data-modal="m-import-err">Import 진행 (2건 생성)</button>
+      <button class="btn btn-gray btn-sm" data-close>취소</button>
+      <button class="btn btn-mkt btn-sm" data-close>Import (미리보기)</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : Import 에러 (창고에 없는 제품) ══════════════ -->
-<div class="overlay" id="m-import-err">
+<!-- 모달: 샘플 배정 -->
+<div class="overlay" id="m-sample">
   <div class="modal anno">
-    <span class="dot" style="top:-11px;left:-11px">M4</span>
-    <header>Import 결과 — 일부 오더 생성 실패<button class="x" data-close>✕</button></header>
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>샘플 배정 / 취소 — 2건 선택<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--green)">✓ 2건 생성 완료</b> · <b style="color:var(--red)">✕ 1건 실패</b>
-      <div class="note err" style="margin-top:12px">
-        <b>마케팅 오더 생성 실패 — 창고에 없는 제품</b><br>
-        <b>MKT-0092</b> · @skinwithara · SKU <span class="num">100099001</span> Beplain Mung Bean Cleanser<br>
-        「마케팅 오더입니다.」 체크 오더는 창고 재고가 없는 제품을 포함하면 오더를 생성하지 않습니다. 입고 후 다시 Import하거나, 입고 요청(I)으로 물량을 먼저 신청하세요.
-      </div>
-      <div class="note">생성된 마케팅 오더 2건은 Ready to be Outbounded에서 별도 색으로 표시됩니다.</div>
+      <div class="fld"><label>작업</label><select><option>샘플 배정</option><option>샘플 취소(회수)</option></select></div>
+      <div class="fld"><label>샘플 세트</label><select><option>1세트 (신규 고객)</option><option>2세트 (2차 구매)</option><option>3세트 (3차+, 60일 내)</option></select></div>
+      <div class="fld"><label>메모</label><textarea placeholder="예: D60 리텐션 캠페인 사쉐"></textarea></div>
+      <div class="note">누적 세트 규칙(1→2→3세트, 60일 창)에 따라 배정. 배정 시 Line Item에 샘플 행 추가 + 창고 피킹 라벨(B)에 샘플 세트 행 표기.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>실패 건 CSV로 내보내기</button>
-      <button class="btn btn-blue btn-sm" data-close>확인</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ MODAL : Hold Shipment ══════════════ -->
-<div class="overlay" id="m-hold">
-  <div class="modal anno">
-    <span class="dot" style="top:-11px;left:-11px">M5</span>
-    <header>Hold Shipment — Order 414198<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <b style="color:var(--ink)">출고를 보류하시겠습니까?</b>
-      <p class="mut" style="margin:6px 0 0">CS팀이 고객 긴급 변경(취소/배송지 변경) 요청 시 즉시 출고를 보류합니다.</p>
-
-      <div style="margin-top:14px"><b style="color:var(--ink)">1. Hold 사유</b>
-        <div class="rads">
-          <label><input type="radio" name="hold" checked> 고객 취소 요청</label>
-          <label><input type="radio" name="hold"> 배송지 변경</label>
-          <label><input type="radio" name="hold"> 기타</label>
-        </div>
-      </div>
-
-      <div style="margin-top:14px">
-        <b style="color:var(--ink)">2. 메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="Hold 사유·참고사항 — 작성 시 오더 Comments 히스토리 및 Hold 로그에 함께 기록됩니다"></textarea>
-      </div>
-
-      <div class="note warn">Hold 처리 시 이 오더의 <b>Outbound 버튼이 비활성</b>되고, 일괄 출고 대상에서 제외됩니다. View Orders·Order 상세에도 On Hold 상태로 반영됩니다. Release Hold 전까지 출고 불가.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-amber btn-sm" data-close>Hold 처리</button>
+      <button class="btn btn-gray btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>적용</button>
     </div>
   </div>
 </div>
 
 <script>
-document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
-    document.getElementById(t.dataset.state).classList.add('on');
-    window.scrollTo({top:0});
+document.querySelectorAll('.wf-tab[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-view]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('viewA').style.display=b.dataset.view==='viewA'?'block':'none';
+    document.getElementById('viewB').style.display=b.dataset.view==='viewB'?'block':'none';
   });
 });
 document.querySelectorAll('[data-modal]').forEach(b=>{
@@ -704,39 +287,8 @@ document.querySelectorAll('[data-close]').forEach(b=>{
 document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
-document.querySelectorAll('[data-open]').forEach(b=>{
-  b.addEventListener('click',e=>{
-    e.stopPropagation();
-    const el=document.getElementById(b.dataset.open);
-    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
-    else el.style.display = el.style.display==='none' ? 'block' : 'none';
-  });
-});
-/* Comments 허브 탭 전환 (Mentions / Saved) */
-document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
-  b.addEventListener('click',e=>{
-    e.stopPropagation();
-    const dd=b.closest('.inboxdd');
-    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    dd.querySelectorAll('.tabpane').forEach(p=>{
-      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
-    });
-  });
-});
-/* ★ 저장 토글 */
-document.querySelectorAll('.star').forEach(s=>{
-  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
-});
-/* Forever 체크 시 종료 일시 select 비활성 */
-const foreverChk=document.getElementById('foreverChk');
-if(foreverChk){
-  foreverChk.addEventListener('change',function(){
-    document.querySelectorAll('#endrow select').forEach(s=>s.disabled=this.checked);
-  });
-}
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
 });
 </script>
