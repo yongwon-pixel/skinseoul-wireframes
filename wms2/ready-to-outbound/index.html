@@ -106,6 +106,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .howto ul{margin:0;padding-left:22px}
 .howto li{margin-bottom:3px}
 
+/* 모달 */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:640px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px;cursor:pointer}
+.modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.picktbl{width:100%;border-collapse:collapse;font-size:13px}
+.picktbl th{background:var(--ink);color:var(--page);text-align:left;padding:7px 10px;font-weight:600}
+.picktbl td{border-bottom:1px solid var(--line);padding:7px 10px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+
 /* Comments 허브 */
 .inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
@@ -124,6 +137,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="wf-bar">
   <h1>WMS 2.0 · Ready to be Outbonded 와이어프레임</h1>
   <span class="hint">실제 어드민(2026-07-21 캡처) 기반 · 5개 오더 예시 · 보라 번호 = 신규 주석</span>
+  <button class="wf-toggle" data-modal="m-pick" style="background:rgba(255,255,255,.28)">모달: 로케이션 프린트(피킹 리스트)</button>
   <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
 </div>
 
@@ -170,7 +184,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="bulkbar anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
       <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" checked> 전체 선택</label>
-      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="로케이션 프린트">🖨 로케이션 프린트 (3개 오더 · 제품 7개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-pick">🖨 로케이션 프린트 (3개 오더 · 총 8개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
       <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="송장 일괄 프린트">🖨 송장 일괄 프린트 (3건)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
       <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="일괄 Outbound">📦 일괄 Outbound (3건)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
       <span class="cnt">3개 선택됨</span>
@@ -293,7 +307,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>Ready to be Outbonded — 신규 / 변경 주석 (기획 D + 0 반영)</h3>
   <ol>
     <li><span class="n">1</span><span>행별 체크박스 + 전체 선택 — 아래 일괄 버튼 3종의 대상 선택. 버튼에 <b>선택된 오더·제품 총 갯수 표시</b> <span class="ref">— D</span></span></li>
-    <li><span class="n">2</span><span>로케이션 프린트 — 선택 오더의 피킹 리스트(어느 로케이션에서 어떤 제품 몇 개). <b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번) 출력 <span class="ref">— D</span></span></li>
+    <li><span class="n">2</span><span>로케이션 프린트 — 클릭 시 <b>피킹 리스트 모달(M1)</b>: 선택 오더의 어느 로케이션에서 어떤 제품 몇 개, <b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번). 프린트 → 프로그래스 → 완료 토스트 <span class="ref">— D</span></span></li>
     <li><span class="n">3</span><span>송장 일괄 프린트 — 선택 오더 송장 한 번에 출력 (갯수 표시) <span class="ref">— D</span></span></li>
     <li><span class="n">4</span><span>일괄 Outbound — 선택 오더 한 번에 아웃바운드. <b>완료 후 새로고침</b> <span class="ref">— D</span></span></li>
     <li><span class="n">5</span><span>0~100% 프로그래스 바 — <b>로케이션 프린트·송장 일괄 프린트·일괄 Outbound 3개 버튼 공통</b>. 프린트류는 새로고침 금지+체크박스 유지, Outbound는 완료 후 새로고침 <span class="ref">— D</span></span></li>
@@ -308,7 +322,40 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순.</p>
 </div>
 
+<!-- 모달: 로케이션 프린트 — 피킹 리스트 (로케이션 오름차순) -->
+<div class="overlay" id="m-pick">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>로케이션 프린트 — 피킹 리스트 (선택 3개 오더 · 4개 SKU · 총 8개)<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <table class="picktbl">
+        <thead><tr><th>Location</th><th>SKU</th><th>Product</th><th>Qty</th><th>Order</th></tr></thead>
+        <tbody>
+          <tr><td><b>A-02-13</b></td><td class="num">100039958</td><td>AtoBarrier365 Body …</td><td><b>5</b></td><td>422221</td></tr>
+          <tr><td><b>A-03-02</b></td><td class="num">100039420</td><td>Madeca Cream Tight …</td><td>1</td><td>422165</td></tr>
+          <tr><td><b>B-01-07</b></td><td class="num">100035912</td><td>Ceramide Ato Conce…</td><td>1</td><td>422176</td></tr>
+          <tr><td><b>B-02-11</b></td><td class="num">100013286</td><td>Madeca Cream Time …</td><td>1</td><td>422165</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번) — 동선대로 한 번에 피킹. 프린트 시 새로고침 없음·체크박스 유지, 프로그래스 바 표시 후 우상단 완료 알림.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm bulk-run" data-label="로케이션 프린트" data-close>🖨 프린트</button>
+    </div>
+  </div>
+</div>
+
 <script>
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
 document.querySelectorAll('[data-open]').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
