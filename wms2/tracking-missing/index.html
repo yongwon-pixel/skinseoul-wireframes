@@ -167,14 +167,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
 .auto .opt.sel{background:var(--blue-soft);font-weight:600}
 .auto .opt small{color:var(--ink-3)}
-/* 미인식 모달 사진 등록 버튼 */
-.photobtn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;border:1px dashed var(--line-strong);
-  border-radius:8px;padding:10px 14px;background:var(--page);color:var(--ink-2);font-size:12.5px;font-weight:600}
-.photobtn .ic{width:26px;height:26px;border-radius:6px;background:var(--canvas);display:flex;align-items:center;justify-content:center;font-size:14px}
-.photothumbs{display:flex;gap:6px;margin-top:8px}
-.photothumbs .pt{width:44px;height:44px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3);position:relative}
-.photothumbs .pt .rm{position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:99px;background:var(--red);color:#fff;font-size:10px;border:none;display:flex;align-items:center;justify-content:center}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 
 /* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
@@ -262,13 +254,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="tabpane" data-pane="mentions">
         <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
         <div class="it unread"><div class="body"><b>Order 414190</b> · Dean: "@Yongwon 이 쿠팡 건 12시간째 트래킹넘버 안 뜹니다. 재확인 필요"<br><time>10:05</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>미인식 풀</b> · Miranti: "@Yongwon Snail 에센스 박스 사진 올렸어요. 누구 오더인지 확인 부탁"<br><time>10:12</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it unread"><div class="body"><b>미인식 풀</b> · Miranti: "@Yongwon Snail 에센스 메모 남겼어요(박스 라벨 훼손). 누구 오더인지 확인 부탁"<br><time>10:12</time></div><button class="star on" title="저장됨">★</button></div>
         <div class="it unread"><div class="body"><b>Order 414102</b> · Harshit: "@Yongwon 이거 제 오더 맞습니다. 트래킹 입력했어요"<br><time>09:50</time></div><button class="star" title="저장">★</button></div>
         <div class="it"><div class="body"><b>Order 413998</b> · Miranti: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
         <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>미인식 풀</b> · Miranti: "@Yongwon Snail 에센스 박스 사진 올렸어요. 누구 오더인지 확인 부탁"<br><time>10:12</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="it"><div class="body"><b>미인식 풀</b> · Miranti: "@Yongwon Snail 에센스 메모 남겼어요(박스 라벨 훼손). 누구 오더인지 확인 부탁"<br><time>10:12</time></div><button class="star on" title="저장 해제">★</button></div>
       </div>
     </div>
   </div>
@@ -297,7 +289,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
         <th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">8</span></th><th>Product Name KR</th><th>Size</th>
-        <th>Barcode</th><th>사진</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Slack 알림<span class="dot" style="top:-11px;right:-8px">4</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
+        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Slack 알림<span class="dot" style="top:-11px;right:-8px">4</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
@@ -305,7 +297,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
           <td class="num">8809416470726</td>
-          <td><span class="photothumbs" style="margin:0"><span class="pt">IMG</span></span></td>
+          <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
           <td>Miranti</td><td class="num">07-13 10:12</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -315,7 +307,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td>
           <td class="num">8809640733458</td>
-          <td class="mut">사진 없음</td>
+          <td class="num">1</td><td class="mut">–</td>
           <td>Dean</td><td class="num">07-13 09:48</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -325,7 +317,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
           <td class="num">8809894261234</td>
-          <td><span class="photothumbs" style="margin:0"><span class="pt">IMG</span><span class="pt">IMG</span></span></td>
+          <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -499,7 +491,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">13</span><span>Comments 패널 — 펼침형, 각 코멘트 ★로 저장 → 우상단 Saved 탭 집계 <span class="ref">— 0. UI 1+2</span></span></li>
     <li><span class="n">14</span><span>해결 완료 로그 — 시간·행위(미인식 등록/해결 완료)·Order·Tracking·PIC·메모 누적 기록 <span class="ref">— F 책임 추적</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업(M1) → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 사진 등록 → (4) #unrecognized-tracking 알림 → (5) 이 페이지 최상단 미인식 풀 표시 + PIC별 자기 오더에 트래킹넘버 입력 → (6) "해결 완료" → 리스트에서 제거 + Slack 알림. 모달 탭(M1)에서 (1)~(4) 확인.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업(M1) → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수·메모 입력 → (4) #unrecognized-tracking 알림 → (5) 이 페이지 최상단 미인식 풀 표시 + PIC별 자기 오더에 트래킹넘버 입력 → (6) "해결 완료" → 리스트에서 제거 + Slack 알림. 모달 탭(M1)에서 (1)~(4) 확인.</p>
 </div>
 </section>
 
@@ -536,7 +528,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
         <th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th>
-        <th>Barcode</th><th>사진</th><th>등록자 (센터)</th><th>등록 시각</th><th>Slack 알림</th><th>Action</th>
+        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th>Slack 알림</th><th>Action</th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
@@ -544,7 +536,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
           <td class="num">8809416470726</td>
-          <td><span class="photothumbs" style="margin:0"><span class="pt">IMG</span></span></td>
+          <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
           <td>Miranti</td><td class="num">07-13 10:12</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -554,7 +546,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td>
           <td class="num">8809640733458</td>
-          <td class="mut">사진 없음</td>
+          <td class="num">1</td><td class="mut">–</td>
           <td>Dean</td><td class="num">07-13 09:48</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -564,7 +556,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
           <td class="num">8809894261234</td>
-          <td><span class="photothumbs" style="margin:0"><span class="pt">IMG</span><span class="pt">IMG</span></span></td>
+          <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
           <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
@@ -730,12 +722,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div class="anno">
         <span class="dot" style="top:0px;left:-12px">M1c</span>
-        <button class="photobtn"><span class="ic">📷</span> 사진 등록 — 제품/박스 촬영 첨부 (필요 시)</button>
-        <div class="photothumbs">
-          <div class="pt">IMG<button class="rm">✕</button></div>
-        </div>
+      <div class="qrow" style="margin-top:12px">
+        <b style="color:var(--ink)">갯수</b>
+        <input value="1" style="width:64px">
       </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·사진 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단 <b>미인식 제품 풀</b>에 표시됩니다.</div>
+      <div style="margin-top:10px">
+        <b style="color:var(--ink)">메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="예: 박스 라벨 훼손, 1+1 세트로 보임 — 미입력 리스트와 Slack 알림에 함께 표시됩니다"></textarea>
+      </div>
+      </div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단 <b>미인식 제품 풀</b>에 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
