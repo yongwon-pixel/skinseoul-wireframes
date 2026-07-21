@@ -237,20 +237,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 포장 각별히 신경써주세요. VIP 고객입니다.</span><time>07-21 10:12</time><button class="star" title="저장">★</button></div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
-        <tr class="row-jit anno">
-          <td><input type="checkbox"></td>
-          <td><span class="oid">422164</span><span class="jit-badge">JIT 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
-          <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
-          <td><span class="cntbadge cb-total">1</span></td>
-          <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
-          <td><div class="locline"><span class="locpill">선반 3</span></div></td>
-          <td><button class="cmtbtn" data-open="crow4">💬</button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
-        </tr>
-        <tr class="crow" id="crow4" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
-        </td></tr>
         <tr class="row-mkt anno">
           <td><input type="checkbox"></td>
           <td><span class="oid">MKT-40233</span><span class="mkt-badge">MKT</span><span class="dot" style="top:-4px;left:-12px">8</span></td>
@@ -268,6 +254,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
         </tr>
         <tr class="crow" id="crow5" style="display:none"><td colspan="9">
+          <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
+          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
+        </td></tr>
+        <tr class="row-jit anno">
+          <td><input type="checkbox"></td>
+          <td><span class="oid">422164</span><span class="jit-badge">JIT 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
+          <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
+          <td><span class="cntbadge cb-total">1</span></td>
+          <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
+          <td><div class="locline"><span class="locpill">선반 3</span></div></td>
+          <td><button class="cmtbtn" data-open="crow4">💬</button></td>
+          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+        </tr>
+        <tr class="crow" id="crow4" style="display:none"><td colspan="9">
           <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
@@ -298,14 +298,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">4</span><span>일괄 Outbound — 선택 오더 한 번에 아웃바운드. <b>완료 후 새로고침</b> <span class="ref">— D</span></span></li>
     <li><span class="n">5</span><span>0~100% 프로그래스 바 — <b>로케이션 프린트·송장 일괄 프린트·일괄 Outbound 3개 버튼 공통</b>. 프린트류는 새로고침 금지+체크박스 유지, Outbound는 완료 후 새로고침 <span class="ref">— D</span></span></li>
     <li><span class="n">6</span><span>완료 알림 — <b>우상단 토스트</b>로 표시 후 몇 초 뒤 자동 사라짐. 실패 케이스 없음(전 건 성공이 정상 동작). 상단 일괄 버튼을 클릭하면 데모로 동작 <span class="ref">— D</span></span></li>
-    <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
-    <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b> <span class="ref">— D + G</span></span></li>
+    <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b>, <b>항상 목록 맨 아래로 정렬</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
+    <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b>, <b>일반 Ready 오더 아래·JIT 완료 위에 모아서 정렬</b> <span class="ref">— D + G</span></span></li>
     <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">11</span><span>좌우 여백 축소 — 화면 꽉 채우기 (View Orders와 동일 원칙) <span class="ref">— C/D</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순.</p>
 </div>
 
 <script>
