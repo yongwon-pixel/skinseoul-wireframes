@@ -181,14 +181,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
 .auto .opt.sel{background:var(--blue-soft);font-weight:600}
 .auto .opt small{color:var(--ink-3)}
-/* 미인식 모달 사진 등록 버튼 */
-.photobtn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;border:1px dashed var(--line-strong);
-  border-radius:8px;padding:10px 14px;background:var(--page);color:var(--ink-2);font-size:12.5px;font-weight:600}
-.photobtn .ic{width:26px;height:26px;border-radius:6px;background:var(--canvas);display:flex;align-items:center;justify-content:center;font-size:14px}
-.photothumbs{display:flex;gap:6px;margin-top:8px}
-.photothumbs .pt{width:44px;height:44px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3);position:relative}
-.photothumbs .pt .rm{position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:99px;background:var(--red);color:#fff;font-size:10px;border:none;display:flex;align-items:center;justify-content:center}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 
 /* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
@@ -1090,14 +1082,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <div class="opt">Beauty of Joseon — Glow Deep Serum : Rice + Arbutin, 30ml <small>100031891</small></div>
         <div class="opt">COSRX — The Vitamin C 23 Glow Serum, 20ml <small>100029554</small></div>
       </div>
-      <div class="anno">
-        <span class="dot" style="top:0px;left:-12px">M2b</span>
-        <button class="photobtn"><span class="ic">📷</span> 사진 등록 — 제품/박스 촬영 첨부 (선택)</button>
-        <div class="photothumbs">
-          <div class="pt">IMG<button class="rm">✕</button></div>
-        </div>
-      </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·사진 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
