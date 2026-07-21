@@ -173,7 +173,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
 .modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
 .modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
-.modal .qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
+.modal .qrow input:disabled{background:var(--canvas);color:var(--ink-3);cursor:not-allowed;border-style:dashed}
+.qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
 .auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
 .auto input{width:100%;border:none;padding:9px 12px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
@@ -225,6 +226,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <span class="hint">v20 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s1">1 · 스캔 결과 (마지막 제품 남은 오더)</button>
+    <button class="wf-tab" data-state="s1b">1b · 스캔 결과 (일반 — 남은 제품 2개)</button>
     <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
     <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
     <button class="wf-tab" data-state="s4">4 · 반품 모드</button>
@@ -427,6 +429,130 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 </section>
 
+<!-- ══════════════ STATE 1b : 스캔 결과 — 일반 (미인바운드 2개 남음) ══════════════ -->
+<section class="state" id="s1b">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox1b">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1b">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input">
+        <input value="10323775317888" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413902</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>5</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf"><label>선반 위치</label><input value=""></div>
+      <button class="btn btn-gray btn-sm">Outbound</button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1b">💬 Comments <span class="badge-n">1</span></button>
+    </div>
+    <div class="cpanel" id="cpanel1b" style="display:none">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Egita</span> 413902 JIT 2건 오늘 입고 예정 맞나요?</span><time>07-09 09:40</time><button class="star" title="저장">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
+      <button class="btn btn-green btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
+      <span class="cnt">미인바운드 2개 남음 — 전체 처리 시 자동 Outbound (Hold 오더는 Inbound까지만)</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td>석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">A-01-05</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr class="row-hit">
+          <td><input type="checkbox" checked></td>
+          <td class="num">100005104</td><td><div class="thumb">IMG</div></td>
+          <td><b>Pore Remedy</b> Renewing Foam Cleanser, 150ml</td>
+          <td>포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809571501234</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT</span></td><td class="num">–</td>
+          <td class="anno"><button class="btn btn-green btn-sm">Inbound</button><span class="dot" style="top:-11px;right:-10px">21</span></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td><input class="bcin" placeholder="바코드 입력"></td><td>–</td><td>–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">–</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT</span></td><td class="num">–</td>
+          <td><button class="btn btn-green-line btn-sm">Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1b — 스캔 결과 (일반: 미인바운드 제품이 2개 남음)</h3>
+  <ol>
+    <li><span class="n">21</span><span>마지막 제품 조건이 <b>아니면</b> 스캔된 행 버튼은 그냥 <b>Inbound</b> — 이 오더는 JIT 2개(스캔된 포어레미디 + 미도착 메디큐브)가 남아서 동시처리 아님. 남은 미인바운드가 1개가 되는 순간 State 1처럼 <b>Inbound + Outbound</b>로 바뀜. Outbound 버튼도 전 품목 인바운드 전까지 비활성 <span class="ref">— C 동작</span></span></li>
+  </ol>
+</div>
+</section>
+
+
 <!-- ══════════════ STATE 2 : 전체 인바운드 완료 ══════════════ -->
 <section class="state" id="s2">
 <div class="mockwrap"><div class="mock anno">
@@ -434,9 +560,26 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <button class="icon-btn" data-open="inbox2">💬 Comments<span class="badge-n">3</span></button>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox2">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+
   </div>
   <div class="pagepad">
     <h2>WMS - View Orders</h2>
@@ -455,8 +598,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm">🖨 Print</button>
       <div class="shelf"><label>선반 위치</label><input value="3"></div>
       <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel2">💬 Comments <span class="badge-n">2</span></button>
     </div>
+    <div class="cpanel" id="cpanel2" style="display:none">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+
     <div class="bulkbar" style="margin-top:10px">
       <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
       <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
@@ -537,9 +686,26 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <button class="icon-btn" data-open="inbox3">💬 Comments<span class="badge-n">3</span></button>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox3">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+
   </div>
   <div class="pagepad">
     <h2>WMS - View Orders</h2>
@@ -559,8 +725,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="shelf"><label>선반 위치</label><input value="3"></div>
       <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;right:-11px">1</span></button>
       <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel3">💬 Comments <span class="badge-n">2</span></button>
     </div>
+    <div class="cpanel" id="cpanel3" style="display:none">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+
     <div class="bulkbar" style="margin-top:10px">
       <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
       <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
@@ -643,9 +815,26 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <button class="icon-btn" data-open="inbox4">💬 Comments<span class="badge-n">3</span></button>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox4">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+
   </div>
   <div class="pagepad">
     <h2>WMS - View Orders</h2>
@@ -668,8 +857,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-prepare">Returned</span>
       <span class="kv">Total Quantity: <b>4</b></span>
       <div class="shelf"><label>선반 위치</label><input value=""></div>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel4">💬 Comments <span class="badge-n">1</span></button>
     </div>
+    <div class="cpanel" id="cpanel4" style="display:none">
+      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> 반품 재입고 로케이션 B-01-4로 통일해주세요.</span><time>07-08 16:20</time><button class="star on" title="저장됨">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox" checked></th>
@@ -742,9 +936,26 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <button class="icon-btn" data-open="inbox5">💬 Comments<span class="badge-n">3</span></button>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox5">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+
   </div>
   <div class="pagepad">
     <h2>WMS - View Orders</h2>
@@ -768,8 +979,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm">🖨 Print</button>
       <div class="shelf"><label>선반 위치</label><input value="7"></div>
       <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel5">💬 Comments <span class="badge-n">1</span></button>
     </div>
+    <div class="cpanel" id="cpanel5" style="display:none">
+      <div class="c-item"><span class="who">Mia (CS)</span><span><span class="at">@Dean</span> 고객 배송지 변경 요청으로 Hold 걸었습니다. 주소 확정되면 해제할게요.</span><time>07-09 09:02</time><button class="star" title="저장">★</button></div>
+      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+    </div>
+
     <div class="bulkbar anno" style="margin-top:10px">
       <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
       <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
@@ -840,12 +1056,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="body">
       <b style="color:var(--ink)">1. 재고를 복구하시겠습니까?</b>
       <div class="qrow">
-        <label><input type="radio" name="restock" checked> 예 — 재고로 복구</label>
-        <label><input type="radio" name="restock"> 아니오</label>
+        <label><input type="radio" name="restock" value="yes" checked> 예 — 재고로 복구</label>
+        <label><input type="radio" name="restock" value="no"> 아니오</label>
       </div>
       <div class="qrow">
         <b style="color:var(--ink)">2. 복구 수량</b>
-        <input value="2"> <span class="mut">기본값 = 인바운드됐던 개수 (수정 가능)</span>
+        <input value="2" id="restockQty"> <span class="mut">기본값 = 인바운드됐던 개수 (수정 가능) · "아니오" 선택 시 비활성</span>
       </div>
       <div style="margin-top:14px">
         <b style="color:var(--ink)">3. 메모 (Optional)</b>
@@ -972,5 +1188,15 @@ sf.querySelector('header').addEventListener('click',()=>{
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+
+/* 인바운드 취소 모달 — "아니오" 선택 시 복구 수량 비활성화 + 값 제거 */
+const rq=document.getElementById('restockQty');
+document.querySelectorAll('input[name="restock"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    const no=document.querySelector('input[name="restock"][value="no"]').checked;
+    if(no){rq.dataset.prev=rq.value;rq.value='';rq.disabled=true;}
+    else{rq.disabled=false;rq.value=rq.dataset.prev||'2';}
+  });
 });
 </script>
