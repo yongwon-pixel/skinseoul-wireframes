@@ -296,7 +296,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </table>
       <span class="lastmile">Last mile: AustraliaPost</span>
 
-      <div class="minih" style="margin-top:14px">TRACKING HISTORY <span style="font-weight:400">(synced 7/16/2026, 4:51:40 AM) · <b style="color:var(--ink-2)">기존 어드민과 동일 — 변경 없음, 간소화 표기</b></span></div>
+      <div class="minih anno" style="margin-top:14px">TRACKING HISTORY <span style="font-weight:400">(synced 7/16/2026, 4:51:40 AM)</span><span class="dot" style="top:-8px;left:118px">6</span></div>
       <div class="trackscroll">
         <table>
           <thead><tr><th>Time (local)</th><th>Node</th><th>Description</th><th>Location</th><th>UTC</th></tr></thead>
@@ -304,7 +304,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td>7/13 7:09:25 PM</td><td><span class="node">DELIVERED</span></td><td>Delivered - Left in a safe place</td><td>Bellevue Hill, AU</td><td>7/13 9:09:25 AM</td></tr>
             <tr><td>7/13 4:22:07 PM</td><td><span class="node">DELIVERY_ATTEMPT</span></td><td>Onboard for delivery</td><td>Bellevue Hill, AU</td><td>7/13 6:22:07 AM</td></tr>
             <tr><td>7/10 9:16:26 AM</td><td><span class="node">IN_TRANSIT_CARRIER</span></td><td>Item processed at sorting facility</td><td>AU</td><td>7/10 11:16:26 PM</td></tr>
-            <tr><td colspan="5" style="text-align:center;color:var(--ink-3)">⋯ (중략 — 실제로는 ORDER_CREATION까지 전체 이벤트 표시, 기존과 동일) ⋯</td></tr>
             <tr><td>7/1 4:55:50 AM</td><td><span class="node">ORDER_CREATION</span></td><td>Shipment information received</td><td>–</td><td>6/30 8:55:50 PM</td></tr>
           </tbody>
         </table>
@@ -363,7 +362,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="li-foot">
         <span class="tq">Total Quantity: 4</span>
         <span class="anno"><button class="btn btn-line btn-sm">🚚 Request Inbound</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
-        <button class="btn btn-green-line btn-sm">📦 Outbound to Deleo BaroShip</button>
+        <span class="anno"><button class="btn btn-green btn-sm">📦 Outbound</button><span class="dot" style="top:-11px;right:-9px">9</span></span>
         <span class="sp"></span>
         <button class="btn btn-line btn-sm">+ Add Line Item</button>
       </div>
@@ -392,6 +391,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">3</span><span>인바운드/아웃바운드 행위자 로그 <b>신규</b> — 누가 언제 인/아웃바운드·취소했는지 오더 하단에 기록(현 실화면엔 없음). View Orders 로그와 동일 문법 <span class="ref">— C 로그</span></span></li>
     <li><span class="n">4</span><span>Line Items Sourcing Route를 소싱 루트 4종(SMART BUY/JIT/WHOLESALE/PARTNERSHIP, 색 없이 검정 텍스트)으로 — View Orders·입고요청(I)과 통일. 이 오더의 쿠팡 소싱 3건은 오더 후 주문이라 JIT. Order Number = 상품별 주문번호로 조회 연동 <span class="ref">— I / C</span></span></li>
     <li><span class="n">5</span><span>PIC 수정 버튼 명시화 — 기존 연필 아이콘(✎)이 작아 클릭 가능한지 알기 어려움 → 테두리 있는 "✎ 수정" 버튼으로 교체 <span class="ref">— UI 개선</span></span></li>
+    <li><span class="n">6</span><span>Fulfillment Tracking·TRACKING HISTORY는 <b>기존 어드민과 동일 — 변경 없음</b>. 와이어프레임에서만 이벤트를 일부 행으로 간소화 표기(실제로는 ORDER_CREATION까지 전체 표시) <span class="ref">— 참고</span></span></li>
+    <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
     <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
     <li><span class="n">8</span><span>Change Status → 상태 변경 즉시 반영(모달). On Hold도 여기서 전환(CS팀), Hold 시 Outbound 비활성 <span class="ref">— A / F Hold</span></span></li>
   </ol>
