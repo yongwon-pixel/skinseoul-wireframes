@@ -305,7 +305,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div style="margin-top:12px;display:flex;gap:14px;align-items:center" class="audcol" hidden>
         <span style="font-size:13px">재고 손실 액수(차이 × product cost 합계): <b style="color:var(--amber)">+₩46,260</b> <span style="color:var(--ink-3)">— 목표 0</span></span>
-        <button class="btn btn-blue">실사 차이 확정 (ADJUST 기록)</button>
+        <button class="btn btn-blue" data-modal="m-adjust">실사 차이 확정 (ADJUST 기록)</button>
       </div>
     </div>
   </div>
@@ -320,14 +320,48 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">11</span><span>기본 정렬 = <b>Available 내림차순</b> — 팔 수 있는 재고가 많은 순. 헤더 클릭으로 재정렬 가능 <span class="ref">— E</span></span></li>
     <li><span class="n">5</span><span><b>Current Stocks 탭 신규·<b>기본 랜딩</b></b> — 실화면 Stock History는 조회 중심(SKU 검색 후 단건). 전체 현재고 목록 + 로케이션/소싱루트 필터를 첫 탭으로 <span class="ref">— E 신설</span></span></li>
     <li><span class="n">6</span><span>Reserved Qty 클릭 조회 — 예약 수량이 어떤 오더에 묶였는지 모달로 확인(현재는 숫자만) <span class="ref">— E</span></span></li>
-    <li><span class="n">7</span><span>재고 실사(Stock-take) 모드 — 켜면 <b>로케이션 오름차순 재정렬</b>(동선대로 실사, Notion E "로케이션 순서대로 표시"), 끄면 Available 내림차순 복귀. 실물 수량 입력 → Diff 자동 계산 + <b>손실액 칼럼(차이×product cost)</b> → 하단 <b>합계=재고 손실 액수(목표 0)</b> → 확정 시 ADJUST 이벤트 기록, 매월 실사 로그 보존 <span class="ref">— E</span></span></li>
+    <li><span class="n">7</span><span>재고 실사(Stock-take) 모드 — 켜면 <b>로케이션 오름차순 재정렬</b>(동선대로 실사, Notion E "로케이션 순서대로 표시"), 끄면 Available 내림차순 복귀. 실물 수량 입력 → Diff 자동 계산 + <b>손실액 칼럼(차이×product cost)</b> → 하단 <b>합계=재고 손실 액수(목표 0)</b> → 확정 클릭 시 <b>요약 모달(M1)</b>: ADJUST 목록·신규 편입·Reserved 부족 검증·손실액 합계 확인 후 기록. 매월 실사 로그 보존 <span class="ref">— E</span></span></li>
     <li><span class="n">8</span><span>Stock History Events — Type/Status를 배지화, Pending confirm 행 하이라이트 + 필터칩(All/Confirmed/Pending) <span class="ref">— E</span></span></li>
     <li><span class="n">9</span><span>히스토리 페이지네이션 — 실화면 "More data available (pagination not implemented)" 해소 <span class="ref">— E</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·Export Stock Status·Search 드롭다운·Inbound/Outbound 폼·이벤트 컬럼(Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor)은 실화면 그대로. 데이터는 마데카솔 크림(100004819) 예시.</p>
 </div>
 
+<!-- 모달: 실사 차이 확정 요약 -->
+<div class="overlay" id="m-adjust">
+  <div class="modal anno" style="max-width:720px">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>실사 차이 확정 — 2026년 7월 실사 (Auditor: Yongwon)<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p style="margin:0 0 10px">Diff ≠ 0인 항목만 <b>ADJUST 이벤트</b>로 기록됩니다 — Inbound/Outbound가 아닌 <b>장부 보정</b>(물류 이력 오염 방지). Auditor·시간·실사 회차가 함께 남고 Stock History에서 ADJUST 타입으로 필터 가능합니다.</p>
+      <table class="tbl" style="font-size:12.5px">
+        <thead><tr><th>SKU</th><th>제품</th><th>Location</th><th>시스템</th><th>실물</th><th>Diff</th><th>처리</th><th>손실액</th></tr></thead>
+        <tbody>
+          <tr><td class="num">100005104</td><td>포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18</td><td class="num">17</td><td class="num" style="color:var(--red);font-weight:700">−1</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
+          <tr><td class="num">100012534</td><td>시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9</td><td class="num">11</td><td class="num" style="color:var(--green);font-weight:700">+2</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
+          <tr style="background:var(--ss-purple-50)"><td class="num">100048201</td><td>어노브 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[신규]</b></td><td>B-01-02</td><td class="num">0</td><td class="num">3</td><td class="num" style="color:var(--green);font-weight:700">+3</td><td><span class="ty ty-adj">ADJUST(+3)</span> 편입</td><td class="num" style="color:var(--ink-3)">— (신규)</td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px">⚠ <b>Reserved 부족 검증</b> — 실물 수량이 Reserved(주문 배정분)보다 적은 SKU가 있으면 여기에 해당 오더 목록이 표시되고, 확인 전에는 확정이 비활성화됩니다. 이번 실사는 해당 없음.</div>
+      <div class="note">재고 손실 액수 합계: <b style="color:var(--amber)">+₩46,260</b> (목표 0) · 신규 편입 3개는 손실 아님 — 확정 즉시 Current Stocks·Available 반영, 매월 실사 로그 보존.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>확정 — ADJUST 3건 기록</button>
+    </div>
+  </div>
+</div>
+
 <script>
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
 document.querySelectorAll('.wf-tab').forEach(b=>{
   b.addEventListener('click',()=>{
     document.querySelectorAll('.wf-tab').forEach(x=>x.classList.remove('on'));
