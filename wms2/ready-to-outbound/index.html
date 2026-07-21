@@ -65,8 +65,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pbar{flex:1;min-width:260px;height:14px;background:var(--line);border-radius:99px;overflow:hidden}
 .pbar .fill{height:100%;width:60%;background:var(--green);border-radius:99px}
 .pbar-label{font-size:12.5px;color:var(--ink-2);font-weight:600;white-space:nowrap}
-.failnote{background:var(--red-soft);border:1px solid var(--red);border-radius:8px;padding:8px 13px;font-size:12.5px;color:var(--ink-2);margin-bottom:12px;display:flex;gap:10px;align-items:center}
-.failnote b{color:var(--red)}
+.toast{position:absolute;top:54px;right:16px;z-index:80;background:var(--green);color:#fff;border-radius:10px;padding:10px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:13px}
+.toast small{opacity:.85;font-size:11.5px}
 
 /* 테이블 (실화면 구조) */
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
@@ -155,6 +155,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
   </div>
 
+  <div class="toast" id="toast" style="display:none"><b>✓ 송장 일괄 프린트 완료 — 3건</b><small>몇 초 뒤 자동으로 사라집니다</small></div>
+
   <div class="pagepad anno">
     <span class="dot" style="top:6px;left:2px">11</span>
     <div class="ptitle"><h2>WMS - Ready to be Outbonded</h2></div>
@@ -168,22 +170,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="bulkbar anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
       <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" checked> 전체 선택</label>
-      <span class="anno"><button class="btn btn-line btn-sm">🖨 로케이션 프린트 (3개 오더 · 제품 7개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
-      <span class="anno"><button class="btn btn-line btn-sm">🖨 송장 일괄 프린트 (3건)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
-      <span class="anno"><button class="btn btn-green btn-sm">📦 일괄 Outbound (3건)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="로케이션 프린트">🖨 로케이션 프린트 (3개 오더 · 제품 7개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="송장 일괄 프린트">🖨 송장 일괄 프린트 (3건)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
+      <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="일괄 Outbound">📦 일괄 Outbound (3건)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
       <span class="cnt">3개 선택됨</span>
     </div>
 
-    <!-- 프로그래스 + 실패 알림 (신규 D) -->
+    <!-- 프로그래스 (3개 일괄 버튼 공통) + 완료 토스트 (신규 D) -->
     <div class="progressrow anno">
       <span class="dot" style="top:-11px;left:-10px">5</span>
-      <div class="pbar"><div class="fill"></div></div>
-      <span class="pbar-label">송장 일괄 프린트 진행 중 — 3/5 (60%) · 새로고침 없음 · 체크박스 유지</span>
-    </div>
-    <div class="failnote anno">
-      <span class="dot" style="top:-11px;left:-10px">6</span>
-      <span><b>1건 실패</b> — Order 422176 라벨 생성 오류. 나머지는 정상 처리됨.</span>
-      <button class="btn btn-gray btn-sm" style="margin-left:auto">실패 건 재시도</button>
+      <div class="pbar"><div class="fill" id="pfill"></div></div>
+      <span class="pbar-label anno" id="pbarLabel">송장 일괄 프린트 진행 중 — 3/5 (60%) · 새로고침 없음 · 체크박스 유지 · 완료 시 우상단 알림<span class="dot" style="top:-11px;right:-26px">6</span></span>
     </div>
 
     <!-- 테이블 (실화면 구조 + 체크박스·코멘트 칼럼) -->
@@ -299,8 +296,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">2</span><span>로케이션 프린트 — 선택 오더의 피킹 리스트(어느 로케이션에서 어떤 제품 몇 개). <b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번) 출력 <span class="ref">— D</span></span></li>
     <li><span class="n">3</span><span>송장 일괄 프린트 — 선택 오더 송장 한 번에 출력 (갯수 표시) <span class="ref">— D</span></span></li>
     <li><span class="n">4</span><span>일괄 Outbound — 선택 오더 한 번에 아웃바운드. <b>완료 후 새로고침</b> <span class="ref">— D</span></span></li>
-    <li><span class="n">5</span><span>0~100% 프로그래스 바 — 로케이션/송장 프린트는 <b>새로고침 금지 + 체크박스 유지</b>, Outbound만 완료 후 새로고침 <span class="ref">— D</span></span></li>
-    <li><span class="n">6</span><span>수행 실패 오더 별도 알림 — 실패 건 명시 + 재시도 버튼 <span class="ref">— D</span></span></li>
+    <li><span class="n">5</span><span>0~100% 프로그래스 바 — <b>로케이션 프린트·송장 일괄 프린트·일괄 Outbound 3개 버튼 공통</b>. 프린트류는 새로고침 금지+체크박스 유지, Outbound는 완료 후 새로고침 <span class="ref">— D</span></span></li>
+    <li><span class="n">6</span><span>완료 알림 — <b>우상단 토스트</b>로 표시 후 몇 초 뒤 자동 사라짐. 실패 케이스 없음(전 건 성공이 정상 동작). 상단 일괄 버튼을 클릭하면 데모로 동작 <span class="ref">— D</span></span></li>
     <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
     <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b> <span class="ref">— D + G</span></span></li>
     <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
@@ -331,6 +328,24 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 });
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* 일괄 버튼 데모 — 프로그래스 진행 후 우상단 완료 토스트(3초 뒤 소멸) */
+document.querySelectorAll('.bulk-run').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const fill=document.getElementById('pfill'), label=document.getElementById('pbarLabel');
+    const name=btn.dataset.label; let p=0;
+    fill.style.width='0%';
+    const t=setInterval(()=>{
+      p+=20; fill.style.width=Math.min(p,100)+'%';
+      label.childNodes[0].textContent=name+' 진행 중 — '+Math.min(p,100)+'% · 새로고침 없음 · 체크박스 유지 · 완료 시 우상단 알림';
+      if(p>=100){clearInterval(t);
+        const toast=document.getElementById('toast');
+        toast.querySelector('b').textContent='✓ '+name+' 완료 — 3건';
+        toast.style.display='flex';
+        setTimeout(()=>{toast.style.display='none';},3000);
+      }
+    },250);
+  });
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
