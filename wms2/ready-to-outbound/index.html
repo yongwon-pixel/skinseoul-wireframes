@@ -201,7 +201,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox" checked></th>
-        <th>Order ID</th><th>Order Date</th><th>Customer</th><th>Total Items</th><th>Ready Item Details</th>
+        <th>Order ID</th><th>Order Date</th><th>Customer</th><th class="anno">Total Items<span class="dot" style="top:-11px;right:-8px">13</span></th><th>Ready Item Details</th>
         <th class="anno">Pick Locations<span class="dot" style="top:-11px;right:-8px">12</span></th>
         <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Actions</th>
       </tr></thead>
@@ -209,7 +209,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <tr>
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422221</span></td><td>2026. 7. 21.</td><td>Sophia Kim</td>
-          <td><span class="cntbadge cb-total">1</span></td>
+          <td><span class="cntbadge cb-total">5</span></td>
           <td><div class="item-line"><span class="skupill">100039958</span> AtoBarrier365 Body …<span class="qtypill">×5</span></div></td>
           <td><div class="locline"><span class="locpill">A-02-13</span></div></td>
           <td><button class="cmtbtn" data-open="crow1">💬 <span class="badge-n">1</span></button></td>
@@ -275,7 +275,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><input type="checkbox"></td>
           <td><span class="oid">422164</span><span class="jit-badge">JIT 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
           <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
-          <td><span class="cntbadge cb-total">1</span></td>
+          <td><span class="cntbadge cb-total">2</span></td>
           <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
           <td><div class="locline"><span class="locpill">선반 3</span></div></td>
           <td><button class="cmtbtn" data-open="crow4">💬</button></td>
@@ -314,6 +314,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">6</span><span>완료 알림 — <b>우상단 토스트</b>로 표시 후 몇 초 뒤 자동 사라짐. 실패 케이스 없음(전 건 성공이 정상 동작). 상단 일괄 버튼을 클릭하면 데모로 동작 <span class="ref">— D</span></span></li>
     <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b>, <b>항상 목록 맨 아래로 정렬</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
     <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b>, <b>일반 Ready 오더 아래·JIT 완료 위에 모아서 정렬</b> <span class="ref">— D + G</span></span></li>
+    <li><span class="n">13</span><span>Total Items = <b>총 수량 합</b>으로 변경 — 현 어드민은 SKU 종수만 표시해서 ×5 오더도 "1"로 보임 → 실제 집어야 할 갯수(예: 422221은 5)로 표기 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) <span class="ref">— 0. UI 2</span></span></li>
