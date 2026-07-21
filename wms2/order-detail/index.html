@@ -113,7 +113,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 /* line items */
 .liinfo{font-size:12px;color:var(--ink-3);margin:2px 0 10px}
 .litable-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
-.litable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1480px}
+.litable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1680px}
 .litable th{background:var(--ink);color:var(--page);text-align:left;padding:8px 9px;font-weight:600;white-space:nowrap;font-size:11.5px}
 .litable td{border-bottom:1px solid var(--line);padding:8px 9px;vertical-align:middle}
 .litable .num{font-variant-numeric:tabular-nums}
@@ -332,20 +332,20 @@ tr.row-edit td{background:var(--canvas)}
         <table class="litable">
           <thead>
             <tr>
-              <th rowspan="2" style="vertical-align:bottom">Inbound<br>Request</th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
-              <th colspan="5" style="text-align:center;background:#2B2F36">Product Information (WooCommerce)</th>
+              <th rowspan="2" style="vertical-align:bottom;text-align:center"><input type="checkbox" title="전체 선택"></th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
+              <th colspan="6" style="text-align:center;background:#2B2F36">Product Information (WooCommerce)</th>
               <th colspan="7" class="anno" style="text-align:center;background:#2B2F36">Inventory<span class="dot" style="top:-11px;right:-8px">10</span></th>
               <th rowspan="2" style="vertical-align:bottom">Actions</th>
             </tr>
             <tr>
-              <th class="anno">Product Name KR<span class="dot" style="top:-11px;right:-6px">11</span></th><th>Size</th><th>Qty</th><th>Subtotal</th><th>Total</th>
+              <th class="anno">Product Name<span class="dot" style="top:-11px;right:-6px">11</span></th><th>Product Name KR</th><th>Size</th><th>Qty</th><th>Subtotal</th><th>Total</th>
               <th>Inbound<br>Status</th><th>Sourcing<br>Route</th><th>Order Number</th><th>Order Date</th><th>Product<br>Cost 🤖</th><th>Tracking Number</th><th>CP Link</th>
             </tr>
           </thead>
           <tbody>
             <tr class="row-edit">
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005104<br><span class="bot">(100005104*)</span></td><td><div class="thumb">IMG</div></td>
-              <td><b>닥터자르트</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">31.77</td><td class="num">28.6</td>
+              <td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser</td><td><b>닥터자르트</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">31.77</td><td class="num">28.6</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td>
               <td><input class="ed-in" value="12101316464794"></td>
               <td><input class="ed-in" value="2026-06-30" style="min-width:96px"><button class="ed-today">Today</button></td>
@@ -356,19 +356,19 @@ tr.row-edit td{background:var(--canvas)}
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100043697<br><span class="bot">(100043697*)</span></td><td><div class="thumb">IMG</div></td>
-              <td><b>닥터자르트</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">27.06</td><td class="num">24.36</td>
+              <td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam, 150ml</td><td><b>닥터자르트</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">27.06</td><td class="num">24.36</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩17,100</td><td class="num">10323100835456</td><td><a style="color:var(--blue)">coupang…7923</a></td>
               <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005088<br><span class="bot">(100005088*)</span></td><td><div class="thumb">IMG</div></td>
-              <td><b>닥터자르트</b> 바이탈 하이드라 솔루션 워터 크림</td><td>50ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">32.12</td><td class="num">28.9</td>
+              <td><b>Dr.Jart+</b> Vital Hydra Solution Hydro Plump Water Cream, 50ml</td><td><b>닥터자르트</b> 바이탈 하이드라 솔루션 워터 크림</td><td>50ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">32.12</td><td class="num">28.9</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>–</td><td>–</td><td class="num">₩22,425</td><td>–</td><td>–</td>
               <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100012534<br><span class="bot">(100012534*)</span></td><td><div class="thumb">IMG</div></td>
-              <td><b>닥터자르트</b> 시카페어 슬리페어 인텐시브 리페어 마스크</td><td>75ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">40.16</td><td class="num">36.14</td>
+              <td><b>Dr.Jart+</b> Cicapair Sleepair Intensive Soothing Repair Mask, 75ml</td><td><b>닥터자르트</b> 시카페어 슬리페어 인텐시브 리페어 마스크</td><td>75ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">40.16</td><td class="num">36.14</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩30,630</td><td class="num">10323100835261</td><td><a style="color:var(--blue)">coupang…7567</a></td>
               <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
@@ -409,8 +409,8 @@ tr.row-edit td{background:var(--canvas)}
     <li><span class="n">5</span><span>PIC 수정 버튼 명시화 — 기존 연필 아이콘(✎)이 작아 클릭 가능한지 알기 어려움 → 테두리 있는 "✎ 수정" 버튼으로 교체 <span class="ref">— UI 개선</span></span></li>
     <li><span class="n">6</span><span>Fulfillment Tracking·TRACKING HISTORY는 <b>기존 어드민과 동일 — 변경 없음</b>. 와이어프레임에서만 이벤트를 일부 행으로 간소화 표기(실제로는 ORDER_CREATION까지 전체 표시) <span class="ref">— 참고</span></span></li>
     <li><span class="n">12</span><span>라인 수정/삭제 UX(기존과 동일) — ✎ 클릭 시 해당 행의 에이전트 트래킹 필드(Order Number·Order Date+Today·Product Cost·Tracking Number·CP Link)가 입력칸으로 전환되고 Actions가 <b style="color:var(--green)">✓ 저장</b>/<b style="color:var(--red)">✕ 취소</b>로 바뀜 — 1행이 수정 모드 예시. 🗑 클릭 시 삭제 확인 모달(M3) <span class="ref">— 기존 동작 유지</span></span></li>
-    <li><span class="n">10</span><span>Inventory 칼럼 간소화 — <b>Latest Inventory Count · Product Name(EN) · Delivery Company · Comments</b> 4개 칼럼 제거(가로 스크롤 완화). 오더 코멘트는 Operator Comments 섹션으로 일원화 <span class="ref">— 칼럼 정리</span></span></li>
-    <li><span class="n">11</span><span>Product Name KR — <b>맨 앞에 브랜드명 항상 표기</b>(브랜드 누락 제품은 제품명 로직 수정 필요) <span class="ref">— B</span></span></li>
+    <li><span class="n">10</span><span>Inventory 칼럼 간소화 — <b>Latest Inventory Count · Delivery Company · Comments</b> 3개 칼럼 제거(가로 스크롤 완화). 오더 코멘트는 Operator Comments 섹션으로 일원화 <span class="ref">— 칼럼 정리</span></span></li>
+    <li><span class="n">11</span><span>Product Name(EN·KR 모두) — <b>맨 앞에 브랜드명 항상 표기</b>(브랜드 누락 제품은 제품명 로직 수정 필요) <span class="ref">— B</span></span></li>
     <li><span class="n">13</span><span>Print 버튼 라벨 — <b>"(YUN)"/"(DELEO)" 캐리어명을 붙이지 않고 "Print"로만 표기</b>. 캐리어는 옆 배지(YUN)로 이미 표시됨 <span class="ref">— 라벨 정리</span></span></li>
     <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
     <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
