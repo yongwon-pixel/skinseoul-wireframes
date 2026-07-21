@@ -196,8 +196,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </div>
         <div class="card">
           <h4>📍 By Location</h4>
-          <div class="loc-row"><span class="loc-pill">A-02-13</span><span class="num">32</span></div>
-          <div class="loc-row"><span class="loc-pill">B-01-07</span><span class="num">10</span></div>
+          <div class="loc-row anno"><span class="loc-pill">A-02-13</span><span class="num">42</span><span class="dot" style="top:-8px;right:-26px">14</span></div>
+          <p style="font-size:11.5px;color:var(--ink-3);margin:8px 0 0">SKU당 로케이션 1개 원칙 — 로케이션 변경은 Current Stocks 입력칸에서</p>
         </div>
         <div class="card pinfo">
           <h4>🧴 Product Information</h4>
@@ -226,8 +226,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td><span class="ty ty-out">OUTBOUND</span></td><td class="num">−2</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">DL20260630072138</td><td>Deleo</td><td class="loc-pill">A-02-13</td><td class="num">407506</td><td class="num">07-12 18:40</td><td>Dean</td></tr>
             <tr><td><span class="ty ty-res">RESERVE</span></td><td class="num">−8</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">A-02-13</td><td class="num">407812</td><td class="num">07-12 11:05</td><td>System</td></tr>
             <tr><td><span class="ty ty-in">INBOUND</span></td><td class="num">+30</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">10323100835644</td><td>Coupang</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-10 14:22</td><td>Miranti</td></tr>
-            <tr><td><span class="ty ty-adj">ADJUST</span></td><td class="num diff-neg">−1</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">B-01-07</td><td class="num">–</td><td class="num">07-09 16:50</td><td>Yongwon</td></tr>
-            <tr><td><span class="ty ty-in">INBOUND</span></td><td class="num">+12</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">10323100835261</td><td>Coupang</td><td class="loc-pill">B-01-07</td><td class="num">–</td><td class="num">07-08 10:11</td><td>Miranti</td></tr>
+            <tr><td><span class="ty ty-adj">ADJUST</span></td><td class="num diff-neg">−1</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-09 16:50</td><td>Yongwon</td></tr>
+            <tr><td><span class="ty ty-in">INBOUND</span></td><td class="num">+12</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">10323100835261</td><td>Coupang</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-08 10:11</td><td>Miranti</td></tr>
           </tbody>
         </table>
       </div>
@@ -313,6 +313,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>Stock 화면 — 신규 / 변경 주석 (기획 E 반영)</h3>
   <ol>
+    <li><span class="n">14</span><span><b>SKU당 로케이션 단일 원칙</b>(2026-07-22 확정) — By Location은 항상 현재 로케이션 1개, Current Stocks 로케이션 입력칸과 정합. 반품도 검수 후 같은 로케이션으로 편입(RETURN-BIN 개념 폐기) <span class="ref">— E 로케이션</span></span></li>
     <li><span class="n">13</span><span><b>미등록 제품 추가 행</b>(실사 모드 전용) — 실사 중 리스트에 없는 제품 발견 시 SKU/바코드 검색(자동완성)으로 추가 → 로케이션·수량 입력 → ADJUST(+) 이벤트로 재고 편입 <span class="ref">— E 실사</span></span></li>
     <li><span class="n">10</span><span><b>페이지명 "Stock Status" → "Inventory"로 변경</b> — 재고 도메인 전체(현재고·이력·입출고)를 묶는 표준 명칭. 랜딩(기본 탭) = Current Stocks. 기존 "Export Stock Status" 등 참조명은 개발 시 매핑 <span class="ref">— E 네이밍</span></span></li>
     <li><span class="n">12</span><span>Location = <b>전 행 수정 가능 입력칸</b> — 미지정 제품(앰버 "미지정")도 노출해서 바로 지정. 바코드 없는 제품은 Barcode 칼럼에 입력칸(View Orders와 동일 규칙) <span class="ref">— E 로케이션 수동 변경</span></span></li>
