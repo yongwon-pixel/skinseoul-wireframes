@@ -444,7 +444,12 @@ document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
 document.querySelectorAll('[data-open]').forEach(b=>{
-  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.open).classList.toggle('open');});
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
 });
 document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
   b.addEventListener('click',e=>{
