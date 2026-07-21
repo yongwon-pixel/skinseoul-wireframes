@@ -1,4 +1,4 @@
-<title>WMS 2.0 — Stock History / Current Stocks 와이어프레임</title>
+<title>WMS 2.0 — Inventory 와이어프레임</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -133,13 +133,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · Stock History / Current Stocks 와이어프레임</h1>
-  <span class="hint">실제 "WMS - Stock History" 기반 + Current Stocks(E) 신규</span>
+  <h1>WMS 2.0 · Inventory 와이어프레임</h1>
+  <span class="hint">페이지명 Stock Status → Inventory · 기본 랜딩 = Current Stocks · 실제 "WMS - Stock History" 기능 포함</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-pane="p-search">Stock 조회</button>
+    <button class="wf-tab on" data-pane="p-current">Current Stocks (기본)</button>
+    <button class="wf-tab" data-pane="p-search">Stock History 조회</button>
     <button class="wf-tab" data-pane="p-inbound">Inbound 폼</button>
     <button class="wf-tab" data-pane="p-outbound">Outbound 폼</button>
-    <button class="wf-tab" data-pane="p-current">Current Stocks (신규)</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -157,22 +157,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
   <div class="pagepad">
     <div class="ptitle">
-      <h2>WMS — Stock History</h2>
+      <span class="anno" style="display:inline-block"><h2 style="display:inline-block">WMS — Inventory</h2><span class="dot" style="top:-6px;right:-28px">10</span></span>
       <span class="sp"></span>
       <button class="btn btn-gray btn-sm">⬇ Export Stock Status</button>
     </div>
 
     <!-- sub tabs -->
     <div class="subtabs anno">
-      <button class="on" data-sub="s-search">Search History</button>
+      <button class="newtab on" data-sub="s-current">Current Stocks <span style="font-size:10px;color:var(--ss-purple)">● 신규·기본</span></button>
+      <button data-sub="s-search">Stock History</button>
       <button data-sub="s-inbound">Inbound Stock</button>
       <button data-sub="s-outbound">Outbound Stock</button>
       <span class="dot" style="top:-4px;right:120px">5</span>
-      <button class="newtab" data-sub="s-current">Current Stocks <span style="font-size:10px;color:var(--ss-purple)">● 신규</span></button>
     </div>
 
     <!-- ===== Search History ===== -->
-    <div class="pane on" id="p-search">
+    <div class="pane" id="p-search">
       <div class="searchbar">
         <select class="sel"><option>SKU</option><option>Product Name</option><option>Order ID</option><option>Tracking No</option></select>
         <input class="inp" placeholder="Enter SKU (예: 100004819)" value="100004819">
@@ -260,7 +260,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
 
     <!-- ===== Current Stocks (신규 E) ===== -->
-    <div class="pane" id="p-current">
+    <div class="pane on" id="p-current">
       <div class="audit-banner anno">
         <span class="dot" style="top:-10px;left:-8px">7</span>
         <span>📋 재고 실사(Stock-take) 모드 — 창고 담당이 실물 수량을 입력하면 시스템 수량과 차이(Diff)를 자동 계산. 확정 시 ADJUST 이벤트로 히스토리 기록.</span>
@@ -296,7 +296,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>Stock 화면 — 신규 / 변경 주석 (기획 E 반영)</h3>
   <ol>
-    <li><span class="n">5</span><span><b>Current Stocks 탭 신규</b> — 실화면 Stock History는 조회 중심(SKU 검색 후 단건). 전체 현재고 목록 + 로케이션/소싱루트 필터를 별 탭으로 추가 <span class="ref">— E 신설</span></span></li>
+    <li><span class="n">10</span><span><b>페이지명 "Stock Status" → "Inventory"로 변경</b> — 재고 도메인 전체(현재고·이력·입출고)를 묶는 표준 명칭. 랜딩(기본 탭) = Current Stocks. 기존 "Export Stock Status" 등 참조명은 개발 시 매핑 <span class="ref">— E 네이밍</span></span></li>
+    <li><span class="n">5</span><span><b>Current Stocks 탭 신규·<b>기본 랜딩</b></b> — 실화면 Stock History는 조회 중심(SKU 검색 후 단건). 전체 현재고 목록 + 로케이션/소싱루트 필터를 첫 탭으로 <span class="ref">— E 신설</span></span></li>
     <li><span class="n">6</span><span>Reserved Qty 클릭 조회 — 예약 수량이 어떤 오더에 묶였는지 모달로 확인(현재는 숫자만) <span class="ref">— E</span></span></li>
     <li><span class="n">7</span><span>재고 실사(Stock-take) 모드 — 실물 수량 입력 → 시스템 대비 Diff 자동 계산 → 확정 시 ADJUST 이벤트 기록 <span class="ref">— E</span></span></li>
     <li><span class="n">8</span><span>Stock History Events — Type/Status를 배지화, Pending confirm 행 하이라이트 + 필터칩(All/Confirmed/Pending) <span class="ref">— E</span></span></li>
