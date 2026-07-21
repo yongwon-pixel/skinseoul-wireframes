@@ -68,6 +68,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
 .btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
+.statusdd{position:absolute;top:36px;left:0;background:var(--page);border:1px solid var(--line-strong);border-radius:8px;box-shadow:var(--shadow);z-index:50;min-width:190px;padding:4px 0}
+.statusdd div{padding:8px 16px;font-size:13.5px;cursor:pointer;color:var(--ink)}
+.statusdd div:hover{background:var(--canvas)}
+.statusdd div.on{background:var(--blue);color:#fff}
 
 .info3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;margin-top:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
 .info3 h3{font-size:16px;margin:0 0 12px;display:flex;align-items:center;gap:6px}
@@ -123,6 +127,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .act-ic button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line-strong);background:var(--page);font-size:12px}
 .act-ic .del{border-color:var(--red);color:var(--red)}
 .act-ic .edit{border-color:var(--blue);color:var(--blue)}
+.act-ic .ok{border-color:var(--green);background:var(--green);color:#fff}
+.act-ic .no{border-color:var(--red);color:var(--red)}
+tr.row-edit td{background:var(--canvas)}
+.ed-in{width:100%;min-width:90px;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;font-size:12px;background:var(--page);color:var(--ink)}
+.ed-today{border:1px solid var(--line-strong);background:var(--page);border-radius:5px;padding:2px 7px;font-size:10.5px;margin-top:3px}
 .li-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .li-foot .tq{font-weight:700}
 .li-foot .sp{flex:1}
@@ -167,7 +176,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <span class="hint">v1 — 실제 어드민(Order #407847) 기반 · 보라 번호 = 신규/변경 주석</span>
   <div class="wf-tabs">
     <button class="wf-tab" data-modal="m-comment">모달: 코멘트 @태그</button>
-    <button class="wf-tab" data-modal="m-status">모달: 상태 변경</button>
+    <button class="wf-tab" data-modal="m-del">모달: 라인 삭제</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -217,8 +226,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="status st-completed">Completed</span>
       <span class="carrier">YUN</span>
       <button class="btn btn-line btn-sm">View Label</button>
-      <button class="btn btn-line btn-sm">🖨 Print</button>
-      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-status">Change Status ▾</button><span class="dot" style="top:-11px;right:-9px">8</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm">🖨 Print</button><span class="dot" style="top:-11px;right:-9px">13</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm" data-open="statusdd">Change Status ▾</button><span class="dot" style="top:-11px;right:-9px">8</span>
+        <div class="statusdd" id="statusdd" style="display:none">
+          <div>pending</div><div>processing</div><div>on-hold</div><div class="on">completed</div><div>refunded</div><div>failed</div><div>shipped</div><div>prepare-shipment</div>
+        </div>
+      </span>
     </div>
 
     <div class="info3">
@@ -330,29 +343,34 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr class="row-edit">
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005104<br><span class="bot">(100005104*)</span></td><td><div class="thumb">IMG</div></td>
               <td><b>닥터자르트</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">31.77</td><td class="num">28.6</td>
-              <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩15,000</td><td class="num">10323100835644</td><td><a style="color:var(--blue)">coupang…7055</a></td>
-              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+              <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td>
+              <td><input class="ed-in" value="12101316464794"></td>
+              <td><input class="ed-in" value="2026-06-30" style="min-width:96px"><button class="ed-today">Today</button></td>
+              <td><input class="ed-in" value="15000" style="min-width:70px;text-align:right"></td>
+              <td><input class="ed-in" value="10323100835644"></td>
+              <td><input class="ed-in" value="https://www.coupang.com/vp/products/7055479133?itemId=17506867787"></td>
+              <td class="anno"><div class="act-ic"><button class="ok">✓</button><button class="no">✕</button></div><span class="dot" style="top:-11px;right:-8px">12</span></td>
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100043697<br><span class="bot">(100043697*)</span></td><td><div class="thumb">IMG</div></td>
               <td><b>닥터자르트</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">27.06</td><td class="num">24.36</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩17,100</td><td class="num">10323100835456</td><td><a style="color:var(--blue)">coupang…7923</a></td>
-              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100005088<br><span class="bot">(100005088*)</span></td><td><div class="thumb">IMG</div></td>
               <td><b>닥터자르트</b> 바이탈 하이드라 솔루션 워터 크림</td><td>50ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">32.12</td><td class="num">28.9</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>–</td><td>–</td><td class="num">₩22,425</td><td>–</td><td>–</td>
-              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
             <tr>
               <td><input type="checkbox"></td><td class="num" style="color:var(--blue)">100012534<br><span class="bot">(100012534*)</span></td><td><div class="thumb">IMG</div></td>
               <td><b>닥터자르트</b> 시카페어 슬리페어 인텐시브 리페어 마스크</td><td>75ml</td><td>1 <span class="bot">(1*)</span></td><td class="num">40.16</td><td class="num">36.14</td>
               <td><span class="tag tag-inbounded">INBOUNDED</span></td><td><span class="tag tag-jit">JIT</span></td><td class="num" style="color:var(--blue)">12101316464794</td><td class="num">2026-06-30</td><td class="num">₩30,630</td><td class="num">10323100835261</td><td><a style="color:var(--blue)">coupang…7567</a></td>
-              <td><div class="act-ic"><button class="edit">✎</button><button class="del">🗑</button></div></td>
+              <td><div class="act-ic"><button class="edit">✎</button><button class="del" data-modal="m-del">🗑</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -390,11 +408,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">4</span><span>Line Items Sourcing Route를 소싱 루트 4종(SMART BUY/JIT/WHOLESALE/PARTNERSHIP, 색 없이 검정 텍스트)으로 — View Orders·입고요청(I)과 통일. 이 오더의 쿠팡 소싱 3건은 오더 후 주문이라 JIT. Order Number = 상품별 주문번호로 조회 연동 <span class="ref">— I / C</span></span></li>
     <li><span class="n">5</span><span>PIC 수정 버튼 명시화 — 기존 연필 아이콘(✎)이 작아 클릭 가능한지 알기 어려움 → 테두리 있는 "✎ 수정" 버튼으로 교체 <span class="ref">— UI 개선</span></span></li>
     <li><span class="n">6</span><span>Fulfillment Tracking·TRACKING HISTORY는 <b>기존 어드민과 동일 — 변경 없음</b>. 와이어프레임에서만 이벤트를 일부 행으로 간소화 표기(실제로는 ORDER_CREATION까지 전체 표시) <span class="ref">— 참고</span></span></li>
+    <li><span class="n">12</span><span>라인 수정/삭제 UX(기존과 동일) — ✎ 클릭 시 해당 행의 에이전트 트래킹 필드(Order Number·Order Date+Today·Product Cost·Tracking Number·CP Link)가 입력칸으로 전환되고 Actions가 <b style="color:var(--green)">✓ 저장</b>/<b style="color:var(--red)">✕ 취소</b>로 바뀜 — 1행이 수정 모드 예시. 🗑 클릭 시 삭제 확인 모달(M3) <span class="ref">— 기존 동작 유지</span></span></li>
     <li><span class="n">10</span><span>Inventory 칼럼 간소화 — <b>Latest Inventory Count · Product Name(EN) · Delivery Company · Comments</b> 4개 칼럼 제거(가로 스크롤 완화). 오더 코멘트는 Operator Comments 섹션으로 일원화 <span class="ref">— 칼럼 정리</span></span></li>
     <li><span class="n">11</span><span>Product Name KR — <b>맨 앞에 브랜드명 항상 표기</b>(브랜드 누락 제품은 제품명 로직 수정 필요) <span class="ref">— B</span></span></li>
+    <li><span class="n">13</span><span>Print 버튼 라벨 — <b>"(YUN)"/"(DELEO)" 캐리어명을 붙이지 않고 "Print"로만 표기</b>. 캐리어는 옆 배지(YUN)로 이미 표시됨 <span class="ref">— 라벨 정리</span></span></li>
     <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
     <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
-    <li><span class="n">8</span><span>Change Status → 상태 변경 즉시 반영(모달). On Hold도 여기서 전환(CS팀), Hold 시 Outbound 비활성 <span class="ref">— A / F Hold</span></span></li>
+    <li><span class="n">8</span><span>Change Status <b>드롭다운</b>(기존과 동일) — pending / processing / on-hold / completed / refunded / failed / shipped / prepare-shipment 중 선택 즉시 반영(새로고침 없음). <b>on-hold</b> 선택 시 Outbound 비활성(CS 긴급 요청용) <span class="ref">— A / F Hold</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·주소 필드·Operator Comments 위치·Fulfillment Tracking(SHIPMENT DETAILS + TRACKING HISTORY)·Line Items 가로 스크롤은 실제 어드민(2026-07-21 풀캡처)과 동일 — TRACKING HISTORY는 간소화 표기(실제로는 전체 이벤트, 변경 없음). 실 데이터는 Order #407847(Maytal Saltoon) 기준.</p>
 </div>
@@ -415,26 +435,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- 모달: 상태 변경 -->
-<div class="overlay" id="m-status">
-  <div class="modal anno">
-    <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>Change Status — Order 407847<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <div class="opt-row">
-        <label><input type="radio" name="st"> Processing</label>
-        <label><input type="radio" name="st"> Prepare Shipment</label>
-        <label><input type="radio" name="st" checked> Completed</label>
-        <label><input type="radio" name="st"> <b style="color:var(--amber)">On Hold</b> — CS 긴급 요청(취소·배송지 변경) 시 출고 보류</label>
-      </div>
-      <div class="note">상태 변경 즉시 반영(새로고침 없음). <b>On Hold 선택 시</b> 이 오더의 Outbound 버튼이 비활성화되고, View Orders·Ready to be Outbounded에도 Hold로 표시됩니다.</div>
-    </div>
+<!-- 모달: 라인 삭제 확인 (실제 어드민과 동일) -->
+<div class="overlay" id="m-del">
+  <div class="modal anno" style="max-width:420px">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>Are you sure?<button class="x" data-close>✕</button></header>
+    <div class="body">This action cannot be undone. This will permanently delete the line item.</div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>상태 변경</button>
+      <button class="btn btn-sm" style="background:var(--ink-3);color:#fff" data-close>Cancel</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close>Delete</button>
     </div>
   </div>
 </div>
+
 
 <script>
 document.querySelectorAll('[data-modal]').forEach(b=>{
