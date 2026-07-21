@@ -916,8 +916,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>반품된 송장 바코드 스캔 시 "반품 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">2</span><span>선택 제품 창고 입고 처리 버튼 → 입고 확인 모달 오픈 (테이블의 수량·로케이션 칼럼은 제거, 모달로 이동. 버튼 클릭해서 확인) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">3</span><span>입고 확인 모달(M3) — 제품별 입고 여부 체크 + 입고 수량(기본=주문 수량, 부분 반품 시 수정) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">4</span><span>로케이션 미지정 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">3</span><span>입고 확인 모달(M3) — 입고 수량 입력(<b>기본 0</b>, 실제 반품된 수량만 입력·0=입고 제외, 체크박스 없음) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모. 확정 버튼 카운트=수량&gt;0 품목 수 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">4</span><span>입고 수량&gt;0인데 로케이션 미지정인 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">5</span><span>라스트마일(반품) 바코드로도 조회 가능 — 검색창 통합 검색이 반품 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
   </ol>
 </div>
@@ -1107,26 +1107,26 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="dot" style="top:-11px;left:-11px">M3</span>
     <header>창고 입고 처리 — Order 412990<button class="x" data-close>✕</button></header>
     <div class="body">
-      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다.</p>
+      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다. <b>입고 수량 기본값은 0</b> — 실제 반품된 수량만 입력하세요 (0 = 입고 제외).</p>
       <table class="tbl" style="margin-top:0;font-size:12.5px">
-        <thead><tr><th style="width:30px"><input type="checkbox" checked></th><th>Product</th><th>주문 수량</th><th>입고 수량</th><th>로케이션</th></tr></thead>
+        <thead><tr><th>Product</th><th>주문 수량</th><th>입고 수량</th><th>로케이션</th></tr></thead>
         <tbody>
-          <tr><td><input type="checkbox" checked></td><td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="A-03-2"></div></td></tr>
-          <tr><td><input type="checkbox" checked></td><td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="B-01-4"></div></td></tr>
-          <tr><td><input type="checkbox" checked></td><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="로케이션 지정 필요"></div></td></tr>
+          <tr><td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="A-03-2"></div></td></tr>
+          <tr><td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="B-01-4"></div></td></tr>
+          <tr><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="0" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="지정 필요"></div></td></tr>
         </tbody>
       </table>
       <div class="anno" style="margin-top:12px">
-        <span class="dot" style="top:-9px;left:-12px">M3b</span>
+        <span class="dot" style="top:-8px;left:150px">M3b</span>
         <b style="color:var(--ink)">메모 (Optional)</b>
         <textarea class="mtextarea" placeholder="반품 사유·상태(외관 이상 등)·참고사항 — 작성 시 오더 Comments 히스토리 및 입고 로그에 함께 기록됩니다"></textarea>
       </div>
-      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">로케이션 미지정 제품 1개</b> — 지정 전에는 입고 확정이 비활성입니다.</div>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">Anua는 입고 수량 0 → 입고 제외.</b> 수량을 입력하면 로케이션 지정이 필요하며, 수량&gt;0인데 로케이션 미지정이면 확정이 비활성됩니다.</div>
       <div class="note">입고 완료 시 Current Stocks 재고·로케이션에 자동 반영됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-gray btn-sm">3개 입고 확정</button>
+      <button class="btn btn-blue btn-sm" data-close>2개 입고 확정</button>
     </div>
   </div>
 </div>
