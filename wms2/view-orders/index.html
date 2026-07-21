@@ -108,6 +108,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
   align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
 .qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
+.bcin{width:110px;border:1px dashed var(--line-strong);border-radius:6px;padding:4px 8px;font-size:12px;font:inherit;background:var(--page);color:var(--ink)}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
 .tag-pending{background:#FFC107;color:#3D2E00}
 .tag-inbounded{background:var(--green);color:#fff}
@@ -350,7 +351,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td class="num">–</td><td>–</td><td>–</td>
+          <td class="anno"><input class="bcin" placeholder="바코드 입력"><span class="dot" style="top:-11px;right:-6px">20</span></td><td>–</td><td>–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
@@ -416,10 +417,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~5) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
     <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 날짜별 export <span class="ref">— C 로그</span></span></li>
+    <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 화면에는 최대 10~20개만 표시(백엔드 전체 누적), 날짜별 export <span class="ref">— C 로그</span></span></li>
     <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
     <li><span class="n">18</span><span>Product Name 맨 앞에 브랜드명 항상 노출 — 브랜드명 누락 제품은 제품명 로직 수정 필요 <span class="ref">— B</span></span></li>
     <li><span class="n">19</span><span>결과창 Comments 패널 — 각 코멘트 ★로 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
+    <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
 </div>
@@ -485,7 +487,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td class="num">–</td><td class="num">–</td><td class="num">–</td>
+          <td><input class="bcin" placeholder="바코드 입력"></td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
@@ -589,7 +591,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td>미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td class="num">–</td><td class="num">–</td><td class="num">–</td>
+          <td><input class="bcin" placeholder="바코드 입력"></td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
