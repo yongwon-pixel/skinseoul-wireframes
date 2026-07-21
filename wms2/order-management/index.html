@@ -126,7 +126,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab on" data-view="viewA">기본 컬럼</button>
     <button class="wf-tab" data-view="viewB">Columns 전환</button>
     <button class="wf-tab" data-modal="m-import">모달: 마케팅 Import</button>
-    <button class="wf-tab" data-modal="m-sample">모달: 샘플 배정</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -172,7 +171,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
       <span class="sel-info">2건 선택됨</span>
       <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
-      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-sample">🎁 샘플 배정/취소</button><span class="dot" style="top:-11px;left:-9px">3</span></span>
       <span class="anno"><button class="btn btn-sm" style="border:1px solid var(--amber-line);background:var(--page);color:var(--amber)">⏸ Hold Shipment</button><span class="dot" style="top:-11px;left:-9px">4</span></span>
       <span class="sp"></span>
     </div>
@@ -226,11 +224,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>Columns 토글 — 기본 컬럼(Order ID·Date·Country·Status·Provider·Provider Order ID·PIC·Customer·Shipping) ↔ 상품/금액 컬럼(Total Value·Total Items·Product Name KR·SKU+소싱루트+주문번호+트래킹) 전환 <span class="ref">— 실화면</span></span></li>
     <li><span class="n">2</span><span>Import — 마케팅/협찬 오더 대량 업로드 모달(엑셀/CSV). MKT- 오더로 생성 → View Orders 아웃바운드 연동 <span class="ref">— G</span></span></li>
-    <li><span class="n">3</span><span>샘플 배정/취소 — 선택 오더에 사쉐/샘플 세트 배정·회수(누적 1→2→3세트 규칙 반영) <span class="ref">— G 샘플</span></span></li>
     <li><span class="n">4</span><span>Hold Shipment — CS 긴급 요청 시 선택 오더 일괄 출고 보류(Order 상세 On Hold와 동기화) <span class="ref">— F Hold</span></span></li>
     <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일. <b>샘플 배정/취소 버튼(Notion G)은 2026-07-22 결정으로 이 화면에서 제거</b> — 샘플을 이름으로 구분해 피킹하는 방식으로 운영하지 않기로 함.</p>
 </div>
 
 <!-- 모달: 마케팅 Import -->
@@ -246,24 +243,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>취소</button>
       <button class="btn btn-mkt btn-sm" data-close>Import (미리보기)</button>
-    </div>
-  </div>
-</div>
-
-<!-- 모달: 샘플 배정 -->
-<div class="overlay" id="m-sample">
-  <div class="modal anno">
-    <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>샘플 배정 / 취소 — 2건 선택<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <div class="fld"><label>작업</label><select><option>샘플 배정</option><option>샘플 취소(회수)</option></select></div>
-      <div class="fld"><label>샘플 세트</label><select><option>1세트 (신규 고객)</option><option>2세트 (2차 구매)</option><option>3세트 (3차+, 60일 내)</option></select></div>
-      <div class="fld"><label>메모</label><textarea placeholder="예: D60 리텐션 캠페인 사쉐"></textarea></div>
-      <div class="note">누적 세트 규칙(1→2→3세트, 60일 창)에 따라 배정. 배정 시 Line Item에 샘플 행 추가 + 창고 피킹 라벨(B)에 샘플 세트 행 표기.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>적용</button>
     </div>
   </div>
 </div>
