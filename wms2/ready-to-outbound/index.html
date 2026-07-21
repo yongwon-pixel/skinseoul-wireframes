@@ -80,6 +80,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .cb-total{background:var(--ink-3)}
 .cb-ready{background:var(--green)}
 .skupill{display:inline-block;background:var(--canvas);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;margin-right:6px}
+.locpill{display:inline-block;background:var(--page);border:1px solid var(--line-strong);border-radius:6px;padding:2px 9px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.locline{display:flex;align-items:center;padding:2px 0}
 .qtypill{display:inline-block;background:#CFF0FF;color:#0B76A0;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px}
 .item-line{display:flex;align-items:center;padding:2px 0;white-space:nowrap}
 .printbtn{width:40px;height:34px;border:1px solid var(--line-strong);background:var(--page);border-radius:8px;font-size:15px}
@@ -188,15 +190,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox" checked></th>
-        <th>Order ID</th><th>Order Date</th><th>Customer</th><th>Total Items</th><th>Ready Items</th><th>Ready Item Details</th>
+        <th>Order ID</th><th>Order Date</th><th>Customer</th><th>Total Items</th><th>Ready Item Details</th>
+        <th class="anno">Pick Locations<span class="dot" style="top:-11px;right:-8px">12</span></th>
         <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422221</span></td><td>2026. 7. 21.</td><td>Sophia Kim</td>
-          <td><span class="cntbadge cb-total">1</span></td><td><span class="cntbadge cb-ready">1</span></td>
+          <td><span class="cntbadge cb-total">1</span></td>
           <td><div class="item-line"><span class="skupill">100039958</span> AtoBarrier365 Body …<span class="qtypill">×5</span></div></td>
+          <td><div class="locline"><span class="locpill">A-02-13</span></div></td>
           <td><button class="cmtbtn" data-open="crow1">💬 <span class="badge-n">1</span></button></td>
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
         </tr>
@@ -207,8 +211,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <tr class="striped">
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422176</span></td><td>2026. 7. 21.</td><td>Jazmin Harrison</td>
-          <td><span class="cntbadge cb-total">1</span></td><td><span class="cntbadge cb-ready">1</span></td>
+          <td><span class="cntbadge cb-total">1</span></td>
           <td><div class="item-line"><span class="skupill">100035912</span> Ceramide Ato Conce…<span class="qtypill">×1</span></div></td>
+          <td><div class="locline"><span class="locpill">B-01-07</span></div></td>
           <td><button class="cmtbtn" data-open="crow2">💬</button></td>
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
         </tr>
@@ -219,10 +224,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <tr>
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422165</span></td><td>2026. 7. 21.</td><td>Janine Eames</td>
-          <td><span class="cntbadge cb-total">2</span></td><td><span class="cntbadge cb-ready">2</span></td>
+          <td><span class="cntbadge cb-total">2</span></td>
           <td>
             <div class="item-line"><span class="skupill">100039420</span> Madeca Cream Tight …<span class="qtypill">×1</span></div>
             <div class="item-line"><span class="skupill">100013286</span> Madeca Cream Time …<span class="qtypill">×1</span></div>
+          </td>
+          <td>
+            <div class="locline"><span class="locpill">A-03-02</span></div>
+            <div class="locline"><span class="locpill">B-02-11</span></div>
           </td>
           <td><button class="cmtbtn" data-open="crow3">💬 <span class="badge-n">1</span></button></td>
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
@@ -235,8 +244,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><input type="checkbox"></td>
           <td><span class="oid">422164</span><span class="jit-badge">JIT 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
           <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
-          <td><span class="cntbadge cb-total">1</span></td><td><span class="cntbadge cb-ready">1</span></td>
+          <td><span class="cntbadge cb-total">1</span></td>
           <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
+          <td><div class="locline"><span class="locpill">선반 3</span></div></td>
           <td><button class="cmtbtn" data-open="crow4">💬</button></td>
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
         </tr>
@@ -248,10 +258,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><input type="checkbox"></td>
           <td><span class="oid">MKT-40233</span><span class="mkt-badge">MKT</span><span class="dot" style="top:-4px;left:-12px">8</span></td>
           <td>2026. 7. 21.</td><td>인플루언서 @glowwithjade</td>
-          <td><span class="cntbadge cb-total">3</span></td><td><span class="cntbadge cb-ready">3</span></td>
+          <td><span class="cntbadge cb-total">3</span></td>
           <td>
             <div class="item-line"><span class="skupill">100043697</span> Cicapair Gentle Clea…<span class="qtypill">×2</span></div>
             <div class="item-line"><span class="skupill">100012534</span> Cicapair Sleepair Ma…<span class="qtypill">×1</span></div>
+          </td>
+          <td>
+            <div class="locline"><span class="locpill">A-01-04</span></div>
+            <div class="locline"><span class="locpill">C-01-02</span></div>
           </td>
           <td><button class="cmtbtn" data-open="crow5">💬</button></td>
           <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
@@ -289,11 +303,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">6</span><span>수행 실패 오더 별도 알림 — 실패 건 명시 + 재시도 버튼 <span class="ref">— D</span></span></li>
     <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
     <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b> <span class="ref">— D + G</span></span></li>
+    <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">11</span><span>좌우 여백 축소 — 화면 꽉 채우기 (View Orders와 동일 원칙) <span class="ref">— C/D</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼(Order ID/Order Date/Customer/Total Items/Ready Items/Ready Item Details/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기.</p>
 </div>
 
 <script>
