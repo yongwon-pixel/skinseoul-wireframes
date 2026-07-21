@@ -236,11 +236,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <!-- ===== Inbound 폼 ===== -->
     <div class="pane" id="p-inbound">
-      <div class="form-note">특정 오더 없이 창고 입고를 직접 기록 (반품 재입고·수기 입고). 오더 연동 입고는 View Orders / Order 상세의 Request Inbound 사용.</div>
+      <div class="form-note">특정 오더 없이 창고 입고를 직접 기록 (반품 재입고·수기 입고). 로케이션은 SKU에 등록된 단일 로케이션 자동 적용. 오더 연동 입고는 View Orders / Order 상세의 Request Inbound 사용.</div>
       <div class="formgrid">
         <div class="fld"><label>SKU *</label><input placeholder="100004819"></div>
         <div class="fld"><label>Quantity *</label><input type="number" placeholder="0"></div>
-        <div class="fld"><label>Location *</label><input placeholder="A-02-13"></div>
         <div class="fld"><label>Tracking No</label><input placeholder="선택"></div>
         <div class="fld"><label>Carrier</label><select><option>Coupang</option><option>Deleo</option><option>Direct</option></select></div>
         <div class="fld"><label>Order ID (선택)</label><input placeholder="연동 시"></div>
@@ -250,11 +249,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <!-- ===== Outbound 폼 ===== -->
     <div class="pane" id="p-outbound">
-      <div class="form-note">창고 출고를 직접 기록. Available Qty 초과 출고는 차단됩니다.</div>
+      <div class="form-note">창고 출고를 직접 기록. 로케이션은 SKU 등록 로케이션 자동 적용, Available Qty 초과 출고는 차단됩니다.</div>
       <div class="formgrid">
         <div class="fld"><label>SKU *</label><input placeholder="100004819"></div>
         <div class="fld"><label>Quantity *</label><input type="number" placeholder="0"></div>
-        <div class="fld"><label>Location *</label><input placeholder="A-02-13"></div>
         <div class="fld"><label>Tracking No</label><input placeholder="선택"></div>
         <div class="fld"><label>Carrier</label><select><option>Deleo</option><option>YUN</option><option>Coupang</option></select></div>
         <div class="fld"><label>Order ID (선택)</label><input placeholder="연동 시"></div>
