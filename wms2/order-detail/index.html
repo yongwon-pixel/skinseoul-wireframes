@@ -68,6 +68,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
 .btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
+.btn-gray{background:var(--line);color:var(--ink-3)}
 .statusdd{position:absolute;top:36px;left:0;background:var(--page);border:1px solid var(--line-strong);border-radius:8px;box-shadow:var(--shadow);z-index:50;min-width:190px;padding:4px 0}
 .statusdd div{padding:8px 16px;font-size:13.5px;cursor:pointer;color:var(--ink)}
 .statusdd div:hover{background:var(--canvas)}
@@ -176,6 +177,7 @@ tr.row-edit td{background:var(--canvas)}
   <span class="hint">v1 — 실제 어드민(Order #407847) 기반 · 보라 번호 = 신규/변경 주석</span>
   <div class="wf-tabs">
     <button class="wf-tab" data-modal="m-del">모달: 라인 삭제</button>
+    <button class="wf-tab" id="holdToggle">상태 토글: On Hold 보기</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -222,7 +224,7 @@ tr.row-edit td{background:var(--canvas)}
 
     <div class="otitle">
       <h2>Order # 407847</h2>
-      <span class="status st-completed">Completed</span>
+      <span class="status st-completed" id="ordStatus">Completed</span>
       <span class="carrier">YUN</span>
       <button class="btn btn-line btn-sm">View Label</button>
       <span class="anno"><button class="btn btn-line btn-sm">🖨 Print</button><span class="dot" style="top:-11px;right:-9px">13</span></span>
@@ -232,6 +234,7 @@ tr.row-edit td{background:var(--canvas)}
         </div>
       </span>
     </div>
+    <div id="holdBanner" class="anno" style="display:none;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:8px;padding:10px 14px;margin:8px 0 0;color:var(--amber);font-weight:600;font-size:13px">⏸ CS 긴급 요청으로 출고 보류(On Hold) — 인바운드는 가능하나 <b>Outbound 비활성</b>. Hold 해제(Change Status) 후 출고 가능<span class="dot" style="top:-11px;right:-8px">14</span></div>
 
     <div class="info3">
       <div>
@@ -377,7 +380,7 @@ tr.row-edit td{background:var(--canvas)}
       <div class="li-foot">
         <span class="tq">Total Quantity: 4</span>
         <span class="anno"><button class="btn btn-line btn-sm">🚚 Request Inbound</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
-        <span class="anno"><button class="btn btn-green btn-sm">📦 Outbound</button><span class="dot" style="top:-11px;right:-9px">9</span></span>
+        <span class="anno"><button class="btn btn-green btn-sm" id="obBtn">📦 Outbound</button><span class="dot" style="top:-11px;right:-9px">9</span></span>
         <span class="sp"></span>
         <button class="btn btn-line btn-sm">+ Add Line Item</button>
       </div>
@@ -410,6 +413,7 @@ tr.row-edit td{background:var(--canvas)}
     <li><span class="n">12</span><span>라인 수정/삭제 UX(기존과 동일) — ✎ 클릭 시 해당 행의 에이전트 트래킹 필드(Order Number·Order Date+Today·Product Cost·Tracking Number·CP Link)가 입력칸으로 전환되고 Actions가 <b style="color:var(--green)">✓ 저장</b>/<b style="color:var(--red)">✕ 취소</b>로 바뀜 — 1행이 수정 모드 예시. 🗑 클릭 시 삭제 확인 모달(M3) <span class="ref">— 기존 동작 유지</span></span></li>
     <li><span class="n">10</span><span>Inventory 칼럼 간소화 — <b>Latest Inventory Count · Delivery Company · Comments</b> 3개 칼럼 제거(가로 스크롤 완화). 오더 코멘트는 Operator Comments 섹션으로 일원화 <span class="ref">— 칼럼 정리</span></span></li>
     <li><span class="n">11</span><span>Product Name(EN·KR 모두) — <b>맨 앞에 브랜드명 항상 표기</b>(브랜드 누락 제품은 제품명 로직 수정 필요) <span class="ref">— B</span></span></li>
+    <li><span class="n">14</span><span><b>On Hold 상태 뷰</b> — 상단 "상태 토글" 버튼으로 전환 확인. On Hold 시: 상태 배지 앰버, <b>Outbound 비활성</b>(Request Inbound는 가능), Change Status 드롭다운 on-hold 하이라이트, 보류 배너 노출. CS 긴급 요청(취소·배송지 변경) 대응 <span class="ref">— F Hold</span></span></li>
     <li><span class="n">13</span><span>Print 버튼 라벨 — <b>"(YUN)"/"(DELEO)" 캐리어명을 붙이지 않고 "Print"로만 표기</b>. 캐리어는 옆 배지(YUN)로 이미 표시됨 <span class="ref">— 라벨 정리</span></span></li>
     <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
     <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
@@ -472,6 +476,19 @@ document.getElementById('addCmt').addEventListener('click',()=>{
   div.innerHTML='<span class="who">Yongwon</span><span>'+txt.replace(/@(\S+)/g,'<span class="at">@$1</span>')+'</span><time>방금</time><button class="star" title="저장">★</button>';
   div.querySelector('.star').addEventListener('click',e=>{e.stopPropagation();e.target.classList.toggle('on');});
   list.appendChild(div); ta.value='';
+});
+/* On Hold 상태 토글 — F Hold 시연 */
+let _hold=false;
+document.getElementById('holdToggle').addEventListener('click',function(){
+  _hold=!_hold;
+  const st=document.getElementById('ordStatus');
+  st.textContent=_hold?'On Hold':'Completed';
+  st.className='status '+(_hold?'st-hold':'st-completed');
+  const ob=document.getElementById('obBtn');
+  ob.disabled=_hold; ob.className='btn btn-sm '+(_hold?'btn-gray':'btn-green'); ob.style.opacity=_hold?'.55':'1'; ob.style.cursor=_hold?'not-allowed':'pointer';
+  document.getElementById('holdBanner').style.display=_hold?'block':'none';
+  document.querySelectorAll('#statusdd div').forEach(d=>d.classList.toggle('on',_hold?d.textContent==='on-hold':d.textContent==='completed'));
+  this.textContent=_hold?'상태 토글: Completed 보기':'상태 토글: On Hold 보기';
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
