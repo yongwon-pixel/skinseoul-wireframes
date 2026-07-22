@@ -144,7 +144,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-pane="p-search">Stock History 조회</button>
     <button class="wf-tab" data-pane="p-inbound">Inbound 폼</button>
     <button class="wf-tab" data-pane="p-outbound">Outbound 폼</button>
-    <button class="wf-tab" data-pane="p-audit">Audit Log (신규)</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -173,7 +172,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button data-sub="s-search">Stock History</button>
       <button data-sub="s-inbound">Inbound Stock</button>
       <button data-sub="s-outbound">Outbound Stock</button>
-      <button class="newtab" data-sub="s-audit">Audit Log <span style="font-size:10px;color:var(--ss-purple)">● 신규</span></button>
       <span class="dot" style="top:-4px;right:120px">5</span>
     </div>
 
@@ -262,20 +260,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">－ Record Outbound</button>
     </div>
 
-    <!-- ===== Audit Log (신규 E — 월별 실사 회차 로그) ===== -->
-    <div class="pane anno" id="p-audit">
-      <span class="dot" style="top:-4px;left:150px">15</span>
-      <div class="form-note">월 1회 재고 실사의 회차별 기록 — 손실액 합계를 <b>0으로 맞추는 것</b>이 센터 관리자 목표. 각 회차의 개별 조정 내역은 Stock History에서 ADJUST 타입으로 필터해 확인.</div>
-      <table class="tbl">
-        <thead><tr><th>실사일</th><th>Auditor</th><th>점검 SKU</th><th>조정 건수</th><th>신규 편입</th><th>손실액 합계</th><th>상세</th></tr></thead>
-        <tbody>
-          <tr><td class="num">2026-07-22</td><td>Yongwon</td><td class="num">10</td><td class="num">2 (−1 / +2)</td><td class="num">1</td><td class="num" style="color:var(--amber);font-weight:700">+₩46,260</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog">ADJUST 이벤트 보기</a></td></tr>
-          <tr><td class="num">2026-06-30</td><td>Dean</td><td class="num">9</td><td class="num">5 (−4 / +1)</td><td class="num">0</td><td class="num" style="color:var(--red);font-weight:700">−₩128,460</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog6">ADJUST 이벤트 보기</a></td></tr>
-          <tr><td class="num">2026-05-31</td><td>Dean</td><td class="num">9</td><td class="num">0</td><td class="num">0</td><td class="num" style="color:var(--green);font-weight:700">₩0 · 목표 달성</td><td><a style="color:var(--blue);cursor:pointer">—</a></td></tr>
-        </tbody>
-      </table>
-    </div>
-
     <!-- ===== Current Stocks (신규 E) ===== -->
     <div class="pane on" id="p-current">
       <div class="audit-banner anno">
@@ -283,6 +267,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <span>📋 재고 실사(Stock-take) 모드 — 창고 담당이 실물 수량을 입력하면 시스템 수량과 차이(Diff)를 자동 계산. 확정 시 ADJUST 이벤트로 히스토리 기록.</span>
         <span class="sp"></span>
         <button class="btn btn-line btn-sm" id="toggleAudit">실사 모드 켜기</button>
+        <span class="anno" style="position:relative"><button class="btn btn-gray btn-sm" data-modal="m-auditlog">📋 지난 실사 로그</button><span class="dot" style="top:-11px;right:-8px">15</span></span>
       </div>
       <div class="cs-controls">
         <input class="inp" placeholder="SKU / 제품명 검색">
@@ -327,7 +312,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>Stock 화면 — 신규 / 변경 주석 (기획 E 반영)</h3>
   <ol>
-    <li><span class="n">15</span><span><b>Audit Log 탭 신규</b> — 월별 실사 회차 로그(실사일·Auditor·조정 건수·신규 편입·손실액 합계). 손실액 0 = 목표 달성 표시, 상세는 Stock History의 ADJUST 필터로 연결 <span class="ref">— E "매 달 실사는 로그로 남음"</span></span></li>
+    <li><span class="n">15</span><span><b>지난 실사 로그</b> — 실사 모드 버튼 옆(같은 동선)에서 모달로 열람. 월별 회차(실사일·Auditor·조정·신규 편입·손실액 합계, 목표 0 추적) + 회차별 ADJUST 상세 연결 <span class="ref">— E "매 달 실사는 로그로 남음"</span></span></li>
     <li><span class="n">14</span><span><b>SKU당 로케이션 단일 원칙</b>(2026-07-22 확정) — By Location은 항상 현재 로케이션 1개, Current Stocks 로케이션 입력칸과 정합. 반품도 검수 후 같은 로케이션으로 편입(RETURN-BIN 개념 폐기) <span class="ref">— E 로케이션</span></span></li>
     <li><span class="n">13</span><span><b>미등록 제품 추가 행</b>(실사 모드 전용) — 실사 중 리스트에 없는 제품 발견 시 SKU/바코드 검색(자동완성)으로 추가 → 로케이션·수량 입력 → ADJUST(+) 이벤트로 재고 편입 <span class="ref">— E 실사</span></span></li>
     <li><span class="n">10</span><span><b>페이지명 "Stock Status" → "Inventory"로 변경</b> — 재고 도메인 전체(현재고·이력·입출고)를 묶는 표준 명칭. 랜딩(기본 탭) = Current Stocks. 기존 "Export Stock Status" 등 참조명은 개발 시 매핑 <span class="ref">— E 네이밍</span></span></li>
@@ -357,6 +342,25 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </tbody>
       </table>
       <div class="note">각 이벤트는 해당 SKU의 Stock History에도 ADJUST 타입으로 남습니다 — SKU 검색 후 타입 필터로 개별 확인 가능. 손실액 합계 +₩46,260 (신규 편입 제외).</div>
+    </div>
+    <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
+  </div>
+</div>
+
+<!-- 모달: 지난 실사 로그 (회차 목록) -->
+<div class="overlay" id="m-auditlog">
+  <div class="modal" style="max-width:760px">
+    <header>지난 실사 로그 — 월 1회 회차 기록<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <table class="tbl">
+        <thead><tr><th>실사일</th><th>Auditor</th><th>점검 SKU</th><th>조정 건수</th><th>신규 편입</th><th>손실액 합계</th><th>상세</th></tr></thead>
+        <tbody>
+          <tr><td class="num">2026-07-22</td><td>Yongwon</td><td class="num">10</td><td class="num">2 (−1 / +2)</td><td class="num">1</td><td class="num" style="color:var(--amber);font-weight:700">+₩46,260</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog">ADJUST 이벤트 보기</a></td></tr>
+          <tr><td class="num">2026-06-30</td><td>Dean</td><td class="num">9</td><td class="num">5 (−4 / +1)</td><td class="num">0</td><td class="num" style="color:var(--red);font-weight:700">−₩128,460</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog6">ADJUST 이벤트 보기</a></td></tr>
+          <tr><td class="num">2026-05-31</td><td>Dean</td><td class="num">9</td><td class="num">0</td><td class="num">0</td><td class="num" style="color:var(--green);font-weight:700">₩0 · 목표 달성</td><td><a style="color:var(--blue);cursor:pointer">—</a></td></tr>
+        </tbody>
+      </table>
+      <div class="note">손실액 합계를 <b>0으로 맞추는 것</b>이 센터 관리자 목표. "ADJUST 이벤트 보기"로 회차별 조정 상세 확인 — 개별 이벤트는 각 SKU의 Stock History에도 ADJUST 타입으로 기록됩니다.</div>
     </div>
     <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
   </div>
@@ -425,13 +429,13 @@ document.querySelectorAll('.wf-tab').forEach(b=>{
     const pane=b.dataset.pane;
     document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===pane));
     // sync subtabs highlight
-    const map={'p-search':'s-search','p-inbound':'s-inbound','p-outbound':'s-outbound','p-current':'s-current','p-audit':'s-audit'};
+    const map={'p-search':'s-search','p-inbound':'s-inbound','p-outbound':'s-outbound','p-current':'s-current'};
     document.querySelectorAll('.subtabs button').forEach(s=>s.classList.toggle('on',s.dataset.sub===map[pane]));
   });
 });
 document.querySelectorAll('.subtabs button').forEach(b=>{
   b.addEventListener('click',()=>{
-    const map={'s-search':'p-search','s-inbound':'p-inbound','s-outbound':'p-outbound','s-current':'p-current','s-audit':'p-audit'};
+    const map={'s-search':'p-search','s-inbound':'p-inbound','s-outbound':'p-outbound','s-current':'p-current'};
     const paneId=map[b.dataset.sub];
     document.querySelector('.wf-tab[data-pane="'+paneId+'"]').click();
   });
