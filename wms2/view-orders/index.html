@@ -228,6 +228,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
     <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
     <button class="wf-tab" data-modal="m-restock">모달: 반송 입고</button>
+    <button class="wf-tab" data-modal="m-retlabel">모달: 반송 라벨</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -898,6 +899,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-green" data-modal="m-restock">선택 제품 창고 입고 처리 (3개)</button>
       <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션·메모 확정 후 일괄 처리</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
+      <span style="flex:1"></span>
+      <span class="anno"><button class="btn btn-line" data-modal="m-retlabel">🖨 반송 라벨 출력 (3개)</button><span class="dot" style="top:-11px;right:-9px">7</span></span>
     </div>
 
     <div class="logsec anno">
@@ -920,6 +923,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">4</span><span>입고 수량&gt;0인데 로케이션 미지정인 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">5</span><span>라스트마일(반송) 바코드로도 조회 가능 — 검색창 통합 검색이 반송 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">6</span><span><b>반송 오더의 status 명시</b> — 시스템에 "returned" 상태값은 없음(실제 상태 8종: pending/processing/on-hold/completed/refunded/failed/shipped/prepare-shipment). 반송 오더는 보통 <b>refunded</b>(환불 완료 후 회수), 케이스에 따라 <b>failed</b>(배송 실패) 또는 환불 전 반송(수취 거부·통관 반송)이면 <b>completed 상태 그대로</b> 도착 가능 — 반송 여부는 status가 아니라 <b>라스트마일 반송 바코드 스캔으로 판별</b> <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">7</span><span><b>반송 라벨 출력</b>(우하단) — 제품 선택 후 클릭 → 모달(M4)에서 택배사 선택/직접 입력 + 제품별 사이즈·수량(선택 입력) → 출력 시 라벨지에 택배사명·제품명(KR)·사이즈·수량 인쇄 <span class="ref">— C 반품</span></span></li>
   </ol>
 </div>
 </section>
@@ -1098,6 +1102,45 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
       <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 반송 라벨 출력 ══════════════ -->
+<div class="overlay" id="m-retlabel">
+  <div class="modal anno" style="max-width:640px">
+    <span class="dot" style="top:-11px;left:-11px">M4</span>
+    <header>반송 라벨 출력 — 선택 3개 제품<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div class="qrow">
+        <b style="color:var(--ink)">택배사</b>
+        <select id="rlCarrier" style="border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국택배</option><option>로젠택배</option><option>직접 입력</option>
+        </select>
+        <input id="rlCarrierCustom" placeholder="직접 입력 시 택배사명" style="flex:1;border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+      </div>
+      <table class="tbl" style="margin-top:12px;font-size:12.5px">
+        <thead><tr><th>Product Name KR</th><th style="width:110px">사이즈 (선택)</th><th style="width:90px">수량 (선택)</th></tr></thead>
+        <tbody>
+          <tr><td>뷰티오브조선 글로우 세럼</td><td><input class="rl-size" value="30ml" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="1" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+          <tr><td>메디큐브 제로 모공 패드 2.0</td><td><input class="rl-size" placeholder="미입력 시 생략" style="width:100%;border:1px dashed var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="1" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+          <tr><td>어성초 77% 수딩 토너</td><td><input class="rl-size" value="250ml" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" placeholder="—" style="width:100%;border:1px dashed var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink);font-size:12.5px">라벨 미리보기</b>
+        <div style="border:2px solid var(--ink);border-radius:8px;padding:14px 16px;margin-top:6px;background:#fff;color:#000;max-width:360px">
+          <div style="font-size:18px;font-weight:800;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px">CJ대한통운</div>
+          <div style="font-size:13px;padding:2px 0">뷰티오브조선 글로우 세럼 · 30ml · 1개</div>
+          <div style="font-size:13px;padding:2px 0">메디큐브 제로 모공 패드 2.0 · 1개</div>
+          <div style="font-size:13px;padding:2px 0">어성초 77% 수딩 토너 · 250ml</div>
+        </div>
+      </div>
+      <div class="note">출력 시 라벨지에 <b>택배사명 + 제품명(KR) + 사이즈 + 수량</b> 인쇄 — 사이즈·수량은 미입력 시 해당 항목 생략. 반송 회수/택배 발송 시 박스에 부착.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>🖨 출력</button>
     </div>
   </div>
 </div>
