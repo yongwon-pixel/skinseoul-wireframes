@@ -176,6 +176,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal .qrow b{flex:none;white-space:nowrap}
 .modal .qrow .mut{flex:1}
 .modal .qrow input:disabled{background:var(--canvas);color:var(--ink-3);cursor:not-allowed;border-style:dashed}
+.cchip{border:1px solid var(--line-strong);border-radius:99px;padding:6px 14px;background:var(--page);font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.cchip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.carrier-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
 .qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
 .auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
@@ -1117,12 +1120,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="dot" style="top:-11px;left:-11px">M4</span>
     <header>반품 라벨 출력 — 선택 2개 제품 (공급처 반품)<button class="x" data-close>✕</button></header>
     <div class="body">
-      <div class="qrow">
-        <b style="color:var(--ink)">택배사</b>
-        <select id="rlCarrier" style="border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
-          <option>CJ대한통운</option><option>롯데택배</option><option>한진택배</option><option>우체국택배</option><option>로젠택배</option><option>직접 입력</option>
-        </select>
-        <input id="rlCarrierCustom" placeholder="직접 입력 시 택배사명" style="flex:1;border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+      <b style="color:var(--ink)">택배사</b>
+      <div class="carrier-chips">
+        <button class="cchip on">CJ대한통운</button><button class="cchip">롯데택배</button><button class="cchip">한진택배</button><button class="cchip">우체국택배</button><button class="cchip">로젠택배</button><button class="cchip" id="cchipCustom">✎ 직접 입력</button>
+      </div>
+      <div id="rlCustomRow" style="display:none;margin-top:8px">
+        <input id="rlCarrierCustom" placeholder="택배사명 입력" style="width:260px;border:1px solid var(--blue);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
       </div>
       <table class="tbl" style="margin-top:12px;font-size:12.5px">
         <thead><tr><th>Product Name KR</th><th style="width:110px">사이즈 (선택)</th><th style="width:90px">수량 (선택)</th></tr></thead>
@@ -1134,7 +1137,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div style="margin-top:14px">
         <b style="color:var(--ink);font-size:12.5px">라벨 미리보기</b>
         <div style="border:2px solid var(--ink);border-radius:8px;padding:14px 16px;margin-top:6px;background:#fff;color:#000;max-width:360px">
-          <div style="font-size:18px;font-weight:800;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px">CJ대한통운</div>
+          <div id="rlPreviewCarrier" style="font-size:18px;font-weight:800;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px">CJ대한통운</div>
           <div style="font-size:13px;padding:2px 0">닥터자르트 포어레미디 리뉴잉 폼 클렌저 · 150ml · 1개</div>
           <div style="font-size:13px;padding:2px 0">메디큐브 제로 모공 패드 2.0 · 2개</div>
         </div>
@@ -1225,6 +1228,20 @@ const sf=document.getElementById('scanfloat');
 sf.querySelector('header').addEventListener('click',()=>{
   sf.classList.toggle('collapsed');
   sf.querySelector('.x').textContent = sf.classList.contains('collapsed') ? '▾' : '–';
+});
+/* 반품 라벨 — 택배사 칩 선택 (직접 입력 칩 선택 시에만 입력칸 노출, 미리보기 연동) */
+document.querySelectorAll('.cchip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.cchip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    const custom=c.id==='cchipCustom';
+    document.getElementById('rlCustomRow').style.display=custom?'block':'none';
+    document.getElementById('rlPreviewCarrier').textContent=custom?(document.getElementById('rlCarrierCustom').value||'택배사명'):c.textContent;
+    if(custom) document.getElementById('rlCarrierCustom').focus();
+  });
+});
+document.getElementById('rlCarrierCustom').addEventListener('input',e=>{
+  document.getElementById('rlPreviewCarrier').textContent=e.target.value||'택배사명';
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
