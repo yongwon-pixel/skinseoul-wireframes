@@ -282,7 +282,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
-    <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
+    <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
 
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard anno">
@@ -411,7 +411,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">11</span><span>오더 Comments 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
     <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~5) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">14</span><span>페이지 아무 곳 클릭 → 검색창 자동 포커스(전체 선택) <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">14</span><span>페이지 아무 곳 클릭 + Inbound·Outbound(출고) 처리 직후 → 검색창 자동 포커스(전체 선택), 바로 다음 바코드 스캔 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 화면에는 최대 10~20개만 표시(백엔드 전체 누적), 날짜별 export <span class="ref">— C 로그</span></span></li>
     <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
@@ -583,7 +583,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
@@ -709,7 +709,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택)</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
@@ -839,7 +839,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="dot" style="top:-11px;left:-10px">5</span>
     </div>
     <p class="mut" style="margin:6px 0 0">통합 검색 — 반품은 <b>라스트마일(반품) 바코드</b>로도 조회 가능. Tracking / Inbound Order / Product Order No 아무 번호나 입력하면 자동 판별</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="retbanner anno">
       <b>⟲ 반품 오더</b>
@@ -959,7 +959,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
+    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="holdbanner anno">
       <b>⏸ Hold Shipment</b>
