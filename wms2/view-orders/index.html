@@ -303,7 +303,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="dot" style="top:-11px;left:-10px">9</span>
     </div>
 
-    <div class="cpanel anno" id="cpanel1" style="display:none">
+    <div class="cpanel anno" id="cpanel1" style="display:block">
       <span class="dot" style="top:-11px;left:-10px">19</span>
       <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
       <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
@@ -416,7 +416,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 화면에는 최대 10~20개만 표시(백엔드 전체 누적), 날짜별 export <span class="ref">— C 로그</span></span></li>
     <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
     <li><span class="n">18</span><span>Product Name 맨 앞에 브랜드명 항상 노출 — 브랜드명 누락 제품은 제품명 로직 수정 필요 <span class="ref">— B</span></span></li>
-    <li><span class="n">19</span><span>결과창 Comments 패널 — 각 코멘트 ★로 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
+    <li><span class="n">19</span><span>결과창 Comments 패널 — <b>기본 펼침</b>(Comments 버튼으로 접기 가능), 각 코멘트 ★로 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
     <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
@@ -470,7 +470,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-gray btn-sm">Outbound</button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1b">💬 Comments <span class="badge-n">1</span></button>
     </div>
-    <div class="cpanel" id="cpanel1b" style="display:none">
+    <div class="cpanel" id="cpanel1b" style="display:block">
       <div class="c-item"><span class="who">Dean</span><span><span class="at">@Egita</span> 413902 JIT 2건 오늘 입고 예정 맞나요?</span><time>07-09 09:40</time><button class="star" title="저장">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
     </div>
@@ -594,7 +594,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel2">💬 Comments <span class="badge-n">2</span></button>
     </div>
-    <div class="cpanel" id="cpanel2" style="display:none">
+    <div class="cpanel" id="cpanel2" style="display:block">
       <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
       <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
@@ -721,7 +721,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel3">💬 Comments <span class="badge-n">2</span></button>
     </div>
-    <div class="cpanel" id="cpanel3" style="display:none">
+    <div class="cpanel" id="cpanel3" style="display:block">
       <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
       <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
@@ -853,7 +853,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="shelf"><label>선반 위치</label><input value=""></div>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel4">💬 Comments <span class="badge-n">1</span></button>
     </div>
-    <div class="cpanel" id="cpanel4" style="display:none">
+    <div class="cpanel" id="cpanel4" style="display:block">
       <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> 반품 재입고 로케이션 B-01-4로 통일해주세요.</span><time>07-08 16:20</time><button class="star on" title="저장됨">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
     </div>
@@ -975,7 +975,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel5">💬 Comments <span class="badge-n">1</span></button>
     </div>
-    <div class="cpanel" id="cpanel5" style="display:none">
+    <div class="cpanel" id="cpanel5" style="display:block">
       <div class="c-item"><span class="who">Mia (CS)</span><span><span class="at">@Dean</span> 고객 배송지 변경 요청으로 Hold 걸었습니다. 주소 확정되면 해제할게요.</span><time>07-09 09:02</time><button class="star" title="저장">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
     </div>
