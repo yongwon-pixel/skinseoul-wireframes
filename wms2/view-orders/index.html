@@ -223,11 +223,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-state="s1b">1b · 스캔 결과 (일반 — 남은 제품 2개)</button>
     <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
     <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
-    <button class="wf-tab" data-state="s4">4 · 반품 모드</button>
+    <button class="wf-tab" data-state="s4">4 · 반송 모드</button>
     <button class="wf-tab" data-state="s5">5 · Hold 오더</button>
     <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
     <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
-    <button class="wf-tab" data-modal="m-restock">모달: 반품 입고</button>
+    <button class="wf-tab" data-modal="m-restock">모달: 반송 입고</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -257,13 +257,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
         <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
         <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반품 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
         <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
         <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
         <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반품 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
       </div>
     </div>
   </div>
@@ -281,7 +281,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
     <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
 
     <p class="sub" style="margin-top:18px">Search Results</p>
@@ -398,7 +398,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 1 변경사항 — 스캔 결과 (마지막 제품 남은 오더: 4개 중 3개 인바운드 완료, 방금 스캔한 JIT가 마지막)</h3>
   <ol>
-    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 [V1] 프리픽스 자동 제거 후 매칭 <span class="ref">— C 검색 + C 반품</span></span></li>
+    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 [V1] 프리픽스 자동 제거 후 매칭 <span class="ref">— C 검색 + C 반송</span></span></li>
     <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
     <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b> <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
@@ -459,7 +459,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413902</b></span>
@@ -582,7 +582,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
@@ -708,7 +708,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
@@ -802,7 +802,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 </section>
 
-<!-- ══════════════ STATE 4 : 반품 모드 ══════════════ -->
+<!-- ══════════════ STATE 4 : 반송 모드 ══════════════ -->
 <section class="state" id="s4">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -838,23 +838,23 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
       <span class="dot" style="top:-11px;left:-10px">5</span>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — 반품은 <b>라스트마일(반품) 바코드</b>로도 조회 가능. Tracking / Inbound Order / Product Order No 아무 번호나 입력하면 자동 판별</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — 반송은 <b>라스트마일(반송) 바코드</b>로도 조회 가능. Tracking / Inbound Order / Product Order No 아무 번호나 입력하면 자동 판별</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="retbanner anno">
-      <b>⟲ 반품 오더</b>
-      <span>반품된 송장 바코드가 스캔되었습니다 — Order <b>412990</b> · Tracking 10322198837710</span>
+      <b>⟲ 반송 오더</b>
+      <span>반송된 송장 바코드가 스캔되었습니다 — Order <b>412990</b> · Tracking 10322198837710</span>
       <span class="dot" style="top:-11px;left:-11px">1</span>
     </div>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">412990</b></span>
-      <span class="kv">Order Status:</span><span class="status st-prepare">Returned</span>
+      <span class="kv">Order Status:</span><span class="anno" style="display:inline-block"><span class="status" style="background:var(--red-soft);color:var(--red)">refunded</span><span class="dot" style="top:-11px;right:-9px">6</span></span>
       <span class="kv">Total Quantity: <b>4</b></span>
       <div class="shelf"><label>선반 위치</label><input value=""></div>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel4">💬 Comments <span class="badge-n">1</span></button>
     </div>
     <div class="cpanel" id="cpanel4" style="display:block">
-      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> 반품 재입고 로케이션 B-01-4로 통일해주세요.</span><time>07-08 16:20</time><button class="star on" title="저장됨">★</button></div>
+      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> 반송 재입고 로케이션 B-01-4로 통일해주세요.</span><time>07-08 16:20</time><button class="star on" title="저장됨">★</button></div>
       <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
     </div>
 
@@ -904,21 +904,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <h4>인바운드 / 아웃바운드 로그</h4>
       <table class="logtbl">
         <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-09 14:05</td><td class="act-in">반품 입고 (Stock 추가)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">고객 변심 반품 — 외관 이상 없음</span></td></tr>
-        <tr><td class="num">07-09 14:05</td><td class="act-in">반품 입고 (Stock 추가)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">반송 입고 (Stock 추가)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">고객 변심 반송 — 외관 이상 없음</span></td></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">반송 입고 (Stock 추가)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-02 09:12</td><td class="act-out">OUTBOUND</td><td class="num">전체 (3 SKU)</td><td class="num">4</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 4 변경사항 — 반품 제품 입고 프로세스</h3>
+  <h3>State 4 변경사항 — 반송 제품 입고 프로세스</h3>
   <ol>
-    <li><span class="n">1</span><span>반품된 송장 바코드 스캔 시 "반품 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">1</span><span>반송된 송장 바코드 스캔 시 "반송 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">2</span><span>선택 제품 창고 입고 처리 버튼 → 입고 확인 모달 오픈 (테이블의 수량·로케이션 칼럼은 제거, 모달로 이동. 버튼 클릭해서 확인) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">3</span><span>입고 확인 모달(M3) — 입고 수량 입력(<b>기본 0</b>, 실제 반품된 수량만 입력·0=입고 제외, 체크박스 없음) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모. 확정 버튼 카운트=수량&gt;0 품목 수 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">3</span><span>입고 확인 모달(M3) — 입고 수량 입력(<b>기본 0</b>, 실제 반송된 수량만 입력·0=입고 제외, 체크박스 없음) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모. 확정 버튼 카운트=수량&gt;0 품목 수 <span class="ref">— C 반품</span></span></li>
     <li><span class="n">4</span><span>입고 수량&gt;0인데 로케이션 미지정인 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">5</span><span>라스트마일(반품) 바코드로도 조회 가능 — 검색창 통합 검색이 반품 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">5</span><span>라스트마일(반송) 바코드로도 조회 가능 — 검색창 통합 검색이 반송 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">6</span><span><b>반송 오더의 status 명시</b> — 시스템에 "returned" 상태값은 없음(실제 상태 8종: pending/processing/on-hold/completed/refunded/failed/shipped/prepare-shipment). 반송 오더는 보통 <b>refunded</b>(환불 완료 후 회수), 케이스에 따라 <b>failed</b>(배송 실패) 또는 환불 전 반송(수취 거부·통관 반송)이면 <b>completed 상태 그대로</b> 도착 가능 — 반송 여부는 status가 아니라 <b>라스트마일 반송 바코드 스캔으로 판별</b> <span class="ref">— C 반품</span></span></li>
   </ol>
 </div>
 </section>
@@ -958,7 +959,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반품) 바코드 아무 번호나 입력하면 자동 판별</p>
+    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별</p>
     <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="holdbanner anno">
@@ -1101,13 +1102,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 반품 창고 입고 확인 ══════════════ -->
+<!-- ══════════════ MODAL : 반송 창고 입고 확인 ══════════════ -->
 <div class="overlay" id="m-restock">
   <div class="modal anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
     <header>창고 입고 처리 — Order 412990<button class="x" data-close>✕</button></header>
     <div class="body">
-      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다. <b>입고 수량 기본값은 0</b> — 실제 반품된 수량만 입력하세요 (0 = 입고 제외).</p>
+      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다. <b>입고 수량 기본값은 0</b> — 실제 반송된 수량만 입력하세요 (0 = 입고 제외).</p>
       <table class="tbl" style="margin-top:0;font-size:12.5px">
         <thead><tr><th>Product</th><th>주문 수량</th><th>입고 수량</th><th>로케이션</th></tr></thead>
         <tbody>
@@ -1119,7 +1120,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="anno" style="margin-top:12px">
         <span class="dot" style="top:-8px;left:150px">M3b</span>
         <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="반품 사유·상태(외관 이상 등)·참고사항 — 작성 시 오더 Comments 히스토리 및 입고 로그에 함께 기록됩니다"></textarea>
+        <textarea class="mtextarea" placeholder="반송 사유·상태(외관 이상 등)·참고사항 — 작성 시 오더 Comments 히스토리 및 입고 로그에 함께 기록됩니다"></textarea>
       </div>
       <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">Anua는 입고 수량 0 → 입고 제외.</b> 수량을 입력하면 로케이션 지정이 필요하며, 수량&gt;0인데 로케이션 미지정이면 확정이 비활성됩니다.</div>
       <div class="note">입고 완료 시 Current Stocks 재고·로케이션에 자동 반영됩니다.</div>
