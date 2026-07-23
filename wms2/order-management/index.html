@@ -171,7 +171,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
       <span class="sel-info">2건 선택됨</span>
       <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
-      <span class="anno"><button class="btn btn-sm" style="border:1px solid var(--amber-line);background:var(--page);color:var(--amber)">⏸ Hold Shipment</button><span class="dot" style="top:-11px;left:-9px">4</span></span>
+      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">샘플 배정 ON</button><span class="dot" style="top:-11px;left:-9px">3</span></span>
+      <button class="btn btn-gray btn-sm" data-modal="m-sampleoff">배정 취소</button>
       <span class="sp"></span>
     </div>
 
@@ -224,10 +225,61 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>Columns 토글 — 기본 컬럼(Order ID·Date·Country·Status·Provider·Provider Order ID·PIC·Customer·Shipping) ↔ 상품/금액 컬럼(Total Value·Total Items·Product Name KR·SKU+소싱루트+주문번호+트래킹) 전환 <span class="ref">— 실화면</span></span></li>
     <li><span class="n">2</span><span>Import — 마케팅/협찬 오더 대량 업로드 모달(엑셀/CSV). MKT- 오더로 생성 → View Orders 아웃바운드 연동 <span class="ref">— G</span></span></li>
-    <li><span class="n">4</span><span>Hold Shipment — CS 긴급 요청 시 선택 오더 일괄 출고 보류(Order 상세 On Hold와 동기화) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">3</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
+    <li><span class="n">4</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 <span class="ref">— 정리</span></span></li>
     <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일. <b>샘플 배정/취소 버튼(Notion G)은 2026-07-22 결정으로 이 화면에서 제거</b> — 샘플을 이름으로 구분해 피킹하는 방식으로 운영하지 않기로 함.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일. 샘플 배정은 2026-07-23 <b>심플 ON/OFF</b>로 재설계(제품 종류 설정 없음) — 상세는 범례 3.</p>
+</div>
+
+<!-- 모달: 샘플 배정 ON -->
+<div class="overlay" id="m-sampleon">
+  <div class="modal anno" style="max-width:520px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>샘플 배정 ON<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">배정 대상</b>
+      <div style="display:flex;flex-direction:column;gap:6px;margin:8px 0 14px">
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget" checked> 이 기간 내 모든 신규 오더</label>
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget"> 선택한 오더만 (2건)</label>
+      </div>
+      <b style="color:var(--ink)">배정 기간</b>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <input value="2026-07-23" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input value="10:00" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <span style="color:var(--ink-3)">~</span>
+        <input placeholder="종료일" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input placeholder="시각" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked> forever (무기한)</label>
+      </div>
+      <div class="note">샘플 <b>제품 종류는 설정하지 않음</b> — ON이면 대상 오더 맨 아래 제품명에 "(+ sample set)" 자동 추가·송장 최하단 샘플 세트 행 생성(G 정의). 기간은 여러 개 중첩 등록 가능.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>취소</button>
+      <button class="btn btn-green btn-sm" data-close>배정 시작 (ON)</button>
+    </div>
+  </div>
+</div>
+
+<!-- 모달: 샘플 배정 취소 (기간 목록) -->
+<div class="overlay" id="m-sampleoff">
+  <div class="modal anno" style="max-width:600px">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>샘플 배정 취소 — 현재 배정 기간 목록<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <table class="tbl" style="font-size:12.5px">
+        <thead><tr><th style="width:30px"></th><th>배정 기간</th><th>대상</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked></td><td class="num">2026-07-01 09:00 → <b>forever</b></td><td>모든 신규 오더</td><td><span class="st st-processing">활성</span></td></tr>
+          <tr><td><input type="checkbox"></td><td class="num">2026-07-15 00:00 → 2026-07-20 23:59</td><td>선택 오더 34건</td><td><span class="st st-processing">활성</span></td></tr>
+          <tr style="color:var(--ink-3)"><td></td><td class="num">2026-06-01 00:00 → 2026-06-30 23:59</td><td>모든 신규 오더</td><td><span class="st" style="background:var(--line);color:var(--ink-3)">종료됨</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note">배정 기간은 여러 개일 수 있음 — 취소할 기간을 선택 후 확정. 종료된 기간은 기록용(취소 불가). 취소 즉시 해당 기간의 신규 배정이 중단됩니다(이미 배정된 오더는 유지).</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>닫기</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close>선택 기간 배정 취소</button>
+    </div>
+  </div>
 </div>
 
 <!-- 모달: 마케팅 Import -->
