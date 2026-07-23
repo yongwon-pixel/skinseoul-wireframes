@@ -164,6 +164,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .toast.err{background:var(--red)}
 .toast small{opacity:.85;font-weight:400}
 
+.btn[disabled]{opacity:.4;pointer-events:none}
 /* modal */
 .overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
@@ -1102,18 +1103,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <input value="1" style="width:64px">
       </div>
       <div class="qrow" style="margin-top:10px">
-        <b style="color:var(--ink)">주문번호 <span style="font-weight:400;color:var(--ink-3)">(선택 · 쿠팡 발주 주문번호)</span></b>
-        <input placeholder="예: 12101316464794 — 아는 경우 입력, PIC·오더 매칭에 도움" style="flex:1;min-width:220px">
+        <b style="color:var(--ink)">주문번호 <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">(필수 · 쿠팡 발주 주문번호)</span></b>
+        <input id="unrecOrderNo" placeholder="예: 12101316464794 — 미입력 시 전송 불가" style="flex:1;min-width:220px">
       </div>
       <div style="margin-top:10px">
         <b style="color:var(--ink)">메모 (Optional)</b>
         <textarea class="mtextarea" placeholder="예: 박스 라벨 훼손, 1+1 세트로 보임 — 미입력 리스트와 Slack 알림에 함께 표시됩니다"></textarea>
       </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호(입력 시) 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
-      <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+      <button class="btn btn-blue btn-sm" id="unrecSend" data-close disabled>미입력 리스트로 전송</button>
     </div>
   </div>
 </div>
@@ -1194,6 +1195,10 @@ document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
     document.getElementById(t.dataset.state).classList.add('on');
     window.scrollTo({top:0});
   });
+});
+/* 미인식 모달 — 주문번호 필수: 입력 시에만 전송 활성화 */
+document.getElementById('unrecOrderNo').addEventListener('input',e=>{
+  document.getElementById('unrecSend').disabled = !e.target.value.trim();
 });
 document.querySelectorAll('[data-modal]').forEach(b=>{
   b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
