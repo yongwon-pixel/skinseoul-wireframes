@@ -303,7 +303,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="sp"></span>
     <span style="position:relative">
       <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
-      <span class="dot" style="top:3px;left:-30px">8</span>
+      <span class="dot" style="top:3px;left:-30px">7</span>
     </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
@@ -326,16 +326,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 
   <div class="pagepad">
-    <span class="dot" style="margin-left:-6px">10</span>
+    <span class="dot" style="margin-left:-6px">9</span>
     <h2>WMS - 마감 (Closing)</h2>
     <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
     <span class="anno" style="display:block"><div class="pagetabs">
       <button class="on">마감</button>
       <button data-goto="shist">마감 기록</button>
-    </div><span class="dot" style="top:-11px;right:-9px">13</span></span>
+    </div><span class="dot" style="top:-11px;right:-9px">12</span></span>
 
     <div class="clsbanner info anno" style="margin:0 0 12px">
-      <span class="dot" style="top:-11px;left:-10px">12</span>
+      <span class="dot" style="top:-11px;left:-10px">11</span>
       <b>① 오늘 출고 대상 (수동 카운팅)</b>
       <span>포장 완료 실물을 직접 센 수를 <b>먼저 입력하고 마감 시작</b> — 스캔 정상 건수가 이 수와 <b>정확히 일치</b>해야 마감 확정 가능</span>
       <input value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink-3)"> 건
@@ -373,12 +373,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:3.6%"></i></div>
     <p class="proglab">마감 진행 4.8% — 정상 4/84건 (수동 카운팅 대비 80건 부족) · 경고 3건 해소 필요 — <b>정상 84/84 정확 일치 + 경고 0 이어야 마감 확정, 초과 스캔도 불일치</b></p>
 
-    <div class="clsbanner info anno">
-      <span class="dot" style="top:-11px;left:-10px">7</span>
-      <b>↺ 마감 전 재확인</b>
-      <span>마감 확정 직전 <b>Ready to be Outbounded</b>를 한 번 더 확인하세요 — 인바운드는 끝났지만 마지막 Outbound가 안 눌린 건 잔존 여부 점검</span>
-      <button class="btn btn-line btn-sm">Ready to be Outbounded 열기 ↗</button>
-    </div>
 
     <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 정상(초록) / 경고(빨강) 구분, #1부터 순서대로 — 새 스캔은 아래에 추가</span></p>
     <table class="tbl anno">
@@ -422,7 +416,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="mut" style="margin-top:12px">순번(#) = 마감 시작 후 1부터 누적 · 낮은 순번부터 표시 · 백엔드 전체 저장 (마감 리포트 Export 시 전량 포함)</p>
 
     <div class="clsbanner done anno" style="margin-top:20px">
-      <span class="dot" style="top:-11px;left:-10px">9</span>
+      <span class="dot" style="top:-11px;left:-10px">8</span>
       <b>마감 확정</b>
       <span>정상 스캔 수가 <b>수동 입력한 오늘 출고 대상(84)과 정확히 일치</b>하고 경고 0건이 되면 활성화 — 확정 시 마감 기록 저장 + <b>Daily Shipping Status</b> 자동 갱신(스프레드시트 수기 과정 대체)</span>
       <button class="btn btn-gray btn-sm">마감 확정 (80건 남음 · 경고 3건)</button>
@@ -430,7 +424,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="logsec anno">
       <h4>마감 / 입출고 로그</h4>
-      <span class="dot" style="top:-8px;left:118px">11</span>
+      <span class="dot" style="top:-8px;left:118px">10</span>
       <table class="logtbl">
         <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
         <tr><td class="num">18:41:07</td><td class="act-in">마감 스캔 (출고 확인)</td><td class="num">413540</td><td class="num">YT2618100710108810</td><td>Dean</td><td>–</td></tr>
@@ -452,13 +446,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상(<b>수동 입력값</b>)/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
     <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 <b>Prepare Shipment인 건만</b> → 초록 "출고 완료". 그 외 상태(Processing 등)는 전부 경고(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
     <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, <b>맨 왼쪽 # = 스캔 순번(라인 넘버)</b>. 중복 경고 시 <b>몇 번과 몇 번이 중복인지 # 기준으로 표기</b>(예: #3 ↔ #2). 낮은 순번 → 높은 순번 순 표시, 새 스캔은 아래에 추가 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">7</span><span>마감 전 Ready to be Outbounded 재확인 배너(현재 마감 과정 5단계) — 링크로 바로 이동 <span class="ref">— F 마감 / D</span></span></li>
-    <li><span class="n">8</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved], 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">9</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">12</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작(State 0)에서 입력된 값이 잠금 표시됨(수정하려면 마감 재시작). 시스템 수치가 아니라 실물 카운트가 기준(시스템-실물 이중 대조) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">13</span><span><b>상단 메뉴 [마감 | 마감 기록]</b> — 마감 기록은 <b>별도 페이지로 전환</b>(모달 아님): 일별 스냅샷·CSV Export. 상세는 상단 "5 · 마감 기록" 탭 참조 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">10</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
-    <li><span class="n">11</span><span>마감/입출고 행위자 로그 — 누가 언제 무엇을 스캔/경고했는지 기록, 전 상태 하단 공통 <span class="ref">— C 로그(공통)</span></span></li>
+    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved], 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">8</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">9</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
+    <li><span class="n">10</span><span>마감/입출고 행위자 로그 — 누가 언제 무엇을 스캔/경고했는지 기록, 전 상태 하단 공통 <span class="ref">— C 로그(공통)</span></span></li>
+    <li><span class="n">11</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작(State 0)에서 입력된 값이 잠금 표시됨(수정하려면 마감 재시작). 시스템 수치가 아니라 실물 카운트가 기준(시스템-실물 이중 대조) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">12</span><span><b>상단 메뉴 [마감 | 마감 기록]</b> — 마감 기록은 <b>별도 페이지로 전환</b>(모달 아님): 일별 스냅샷·CSV Export. 상세는 상단 "5 · 마감 기록" 탭 참조 <span class="ref">— F 마감</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): <b>마감 시작(수동 카운팅 입력) 전에는 스캔창 비활성.</b> 마감 시작 후에는 페이지 아무 곳 클릭 시 스캔창 자동 포커스(전체 선택)·연속 스캔, 처리 결과는 새로고침 없이 우상단 토스트 — 화면 문구 없이 동작으로만 구현. 스캔한 송장의 오더 상태를 즉시 조회 → <b>Prepare Shipment면 정상</b>(초록·무음), 그 외 상태(Processing 등)거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). <b>마감 확정 조건 = 정상 스캔 수가 수동 입력한 오늘 출고 대상과 정확히 일치 + 경고 0건</b>(초과 스캔도 불일치). Processing 건 처리(M1)의 Outbound는 <b>실제 오더 상태 변경</b>으로 전 화면에 반영. 매칭 오더가 없는 송장은 <b>"없는 주문" 경고(상태 2b)</b> — 마감 카운트 미포함. <b>마감 진행 상태는 서버 저장</b> — 스캔 도중 다른 페이지로 이탈했다 돌아와도, 새로고침해도 카운팅·스캔 리스트·경고가 그대로 유지되며 마감 확정 또는 명시적 재시작 전까지 클리어되지 않음. <b>연속 스캔:</b> 스캐너가 붙여주는 자동 Enter가 제출을 대신하며(스캔 버튼 클릭 불필요), 판정 직후 커서는 스캔창에 전체 선택 상태로 복귀 — 다음 스캔이 이전 값을 덮어써 몇 건이든 끊김 없이 연속 스캔.</p>
 </div>
