@@ -58,13 +58,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pagepad{padding:18px 16px 0}   /* C: 좌우 여백 축소 */
 .pagepad h2{font-size:27px;margin:6px 0 2px}
 .pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
-.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
 .seg{display:flex;border:1px solid var(--ink);border-radius:7px;overflow:hidden}
 .seg button{border:none;background:var(--page);color:var(--ink);padding:8px 14px;font-size:13.5px;border-right:1px solid var(--ink)}
 .seg button:last-child{border-right:none}
 .seg button.on{background:var(--ink);color:var(--page);font-weight:600}
-.search-input{flex:1;min-width:300px;display:flex;border:1px solid var(--line-strong);border-radius:7px}
-.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:8px 12px;font-size:14px;outline:none;border-radius:7px}
 .btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
@@ -203,9 +200,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   border-radius:99px;padding:2px 10px;font-size:12px;font-weight:700}
 .grp-gap{height:8px}
 /* 매칭 후보 하이라이트 (풀 항목 ↔ PIC 오더 연결 힌트) */
-.matchdot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px;vertical-align:1px}
-.mc-a{background:var(--blue)}.mc-b{background:var(--amber)}.mc-c{background:var(--green)}
-.match-note{font-size:10.5px;color:var(--ink-3)}
 </style>
 <div class="wf-bar">
   <h1>WMS 2.0 · 트래킹넘버 미입력 리스트 와이어프레임</h1>
@@ -249,55 +243,51 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="dot" style="margin-left:-6px">0</span>
     <h2>WMS - 트래킹넘버 미입력 리스트</h2>
     <p class="sub">미인식·미입력 현황 <span class="mut" style="font-weight:400">· 쿠팡은 오더넘버는 즉시 생성되나 트래킹넘버가 몇 시간 뒤 생성 → 미인식 건을 여기서 추적</span></p>
-    <div class="searchrow">
-      <div class="search-input anno">
-        <input value="" placeholder="PIC · Order No / Product Order No / Tracking No / 제품명 / 바코드 — 아무 번호나 입력하면 자동 판별">
-        <span class="dot" style="top:-10px;left:-10px">1</span>
-      </div>
-      <button class="btn btn-blue">🔍 Search</button>
-    </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — 번호 유형 자동 판별. 미인식 제품 등록은 View Orders 바코드 인식 실패 팝업 단일 진입점 — 이 페이지는 조회·해결 전용</p>
+    <p class="mut" style="margin:6px 0 0">미인식 제품 등록은 View Orders 바코드 인식 실패 팝업 단일 진입점 — 이 페이지는 조회·해결 전용</p>
     <!-- ── 상단: 미인식 제품 풀 ── -->
     <div class="poolhead anno" style="margin-top:20px">
       <b>⚠ 미인식 제품 풀 · <span id="poolCount">3</span>건</b>
       <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b>는 쿠팡 발주 시 생성되는 주문번호(예: 12101316464794, 내부 Order ID 아님) — 등록 시 센터가 입력한 값(선택, 미입력="–")으로 PIC 매칭을 돕습니다.</span>
-      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
     </div>
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
         <th>주문번호</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">4</span></th><th>Product Name KR</th><th>Size</th>
-        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
+        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">의심 오더 (자동 추정)<span class="dot" style="top:-11px;left:70px">2</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
       </tr></thead>
       <tbody>
         <tr class="row-hit" id="poolrow1">
           <td class="num" style="color:var(--blue);font-weight:700">12101316464794</td>
           <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
           <td class="num">8809416470726</td>
           <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
           <td>Miranti</td><td class="num">07-13 10:12</td>
-          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
+          <td style="font-size:12.5px"><b>Dean</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414230</span><br><span style="font-size:11px;font-weight:700;color:var(--green)">쿠팡 주문번호 일치</span></td>
+          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
         <tr class="row-hit">
           <td class="num" style="color:var(--ink-3)">–</td>
           <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td>
           <td class="num">8809640733458</td>
           <td class="num">1</td><td class="mut">–</td>
           <td>Dean</td><td class="num">07-13 09:48</td>
-          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
+          <td style="font-size:12.5px"><b>Harshit</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414102</span><br><span style="font-size:11px;font-weight:700;color:var(--amber)">제품 일치 (주문번호 미입력)</span></td>
+          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
         <tr class="row-hit">
           <td class="num" style="color:var(--blue);font-weight:700">12101316458821</td>
           <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
+          <td><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
           <td class="num">8809894261234</td>
           <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
-          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
+          <td style="font-size:12.5px"><b>Miranti</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413998</span><br><span style="font-size:11px;font-weight:700;color:var(--green)">쿠팡 주문번호 일치</span></td>
+          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
       </tbody>
     </table></div>
@@ -308,49 +298,57 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>트래킹넘버 미입력 리스트 — 신규 / 변경 주석 (admin 신규 페이지)</h3>
   <ol>
     <li><span class="n">0</span><span>신규 admin 페이지 — 트래킹넘버 없는 주문을 한쪽에 치워두던 수동 프로세스를 대체. 쿠팡은 오더넘버 즉시 생성·트래킹넘버 지연 생성 → 미인식·미입력 건을 모아 추적 <span class="ref">— F 트래킹 자동화</span></span></li>
-    <li><span class="n">1</span><span>통합 검색 — PIC/Order No/Product Order No/Tracking No/제품명/바코드 자동 판별 (View Orders 통합검색 결정 상속) <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">2</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. <b>주문번호 칼럼 = 쿠팡 발주 주문번호</b>(예: 12101316464794), 등록 시 선택 입력 <span class="ref">— F 플로우 5</span></span></li>
-    <li><span class="n">3</span><span><b>"내 오더에 매칭" 버튼 → 매칭 모달(M1)</b> — PIC 입력·검색 → 해당 제품(바코드·쿠팡 주문번호 기준)이 포함된 그 PIC의 오더 후보 표시 → 확인 후 선택·매칭. 확정 시 풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림). 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출, 매칭 후보 색점(●) 힌트 <span class="ref">— F 플로우 2·5</span></span></li>
+    <li><span class="n">1</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. <b>주문번호 칼럼 = 쿠팡 발주 주문번호</b>(예: 12101316464794), 등록 시 선택 입력. 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출 <span class="ref">— F 플로우 5</span></span></li>
+    <li><span class="n">2</span><span><b>의심 오더 (자동 추정)</b> — 시스템이 바코드→제품, 쿠팡 주문번호 대조로 이 제품이 들어있을 오더와 오더 핸들러를 <b>미리 추정해 표시</b>. 근거 강도: <b style="color:var(--green)">쿠팡 주문번호 일치</b>(초록) / <b style="color:var(--amber)">제품만 일치</b>(주황). 등록 시 #unrecognized-tracking 자동 알림에 의심 PIC도 멘션 → 핸들러는 와서 확인만 하면 됨 <span class="ref">— 2026-07-23 UX 역전</span></span></li>
+    <li><span class="n">3</span><span><b>"확인해보기" 버튼 → 모달(M1)</b> — 의심 오더 카드를 보고 맞으면 <b>"맞습니다 — 이 오더에 매칭"</b> 클릭 한 번으로 끝. 아니면 "직접 찾기"로 PIC 검색 폴백(해당 제품 포함 오더 후보 → 선택 매칭). 확정 시 풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림) <span class="ref">— F 플로우 2·5</span></span></li>
     <li><span class="n">4</span><span>Product Name 맨 앞 브랜드명 항상 노출 (View Orders B 결정 상속) <span class="ref">— B</span></span></li>
     <li><span class="n">5</span><span>Comments — 우상단 허브([@ Mentions]+[★ Saved]). @태그 시 Slack 자동 알림, 코멘트 클릭 시 해당 오더 페이지로 이동 <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바(일괄 해결/재알림)·Slack 알림 칼럼·해결 완료 로그·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 인식 실패 팝업 단일 진입점, #unrecognized-tracking 알림은 등록 시 자동 발송이라 별도 표기 불필요.</p>
-  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업 → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수·메모·쿠팡 주문번호(선택) 입력 → (4) #unrecognized-tracking 자동 알림 → (5) 이 페이지 미인식 풀 표시 → (6) 담당 PIC가 "내 오더에 매칭"(M1)으로 자기 오더 확정 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p>
-</div>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바·Slack 알림 칼럼·해결 완료 로그·통합 검색바·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 팝업 단일 진입점, 알림은 자동 발송. <b>매칭 UX 역전:</b> 핸들러가 제품마다 자기 이름을 검색하는 방식(구) → 시스템이 의심 오더·핸들러를 먼저 제시하고 핸들러는 확인만 하는 방식(신), 직접 검색은 추정 불일치 시 폴백.</p>
+  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업 → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수·메모·쿠팡 주문번호(선택) 입력 → (4) #unrecognized-tracking 자동 알림(의심 PIC 멘션) → (5) 이 페이지 미인식 풀에 의심 오더와 함께 표시 → (6) 담당 PIC가 "확인해보기"(M1)로 확인·매칭 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p></div>
 </section>
 
-<!-- 모달: 내 오더에 매칭 -->
+<!-- 모달: 확인해보기 (의심 오더 확인·매칭) -->
 <div class="overlay" id="m-match">
   <div class="modal anno" style="max-width:660px">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>내 오더에 매칭 — 미인식 제품<button class="x" data-close>✕</button></header>
+    <header>확인해보기 — 미인식 제품<button class="x" data-close>✕</button></header>
     <div class="body">
       <div style="display:flex;gap:10px;align-items:center;background:var(--hl);border:1px solid var(--hl-line);border-radius:8px;padding:10px 12px">
         <div class="thumb">IMG</div>
         <div style="font-size:13px"><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br>
           <span class="mut" style="font-size:12px">바코드 8809416470726 · 쿠팡 주문번호 12101316464794 · 1개 · 등록: Miranti (센터) 07-13 10:12 · 메모 "박스 라벨 훼손"</span></div>
       </div>
-      <div class="qrow" style="margin-top:14px">
-        <b style="color:var(--ink)">PIC</b>
-        <input id="matchPic" value="Dean" style="width:140px;text-align:left;font-weight:600">
-        <button class="btn btn-blue btn-sm" id="matchSearch">🔍 검색</button>
-        <span class="mut" style="font-size:12px">이 제품(바코드·쿠팡 주문번호 기준)이 포함된 해당 PIC의 오더 조회</span>
+      <div style="margin-top:14px;border:1.5px solid var(--green);background:var(--green-soft);border-radius:10px;padding:12px 14px">
+        <b style="font-size:13px;color:var(--ink)">의심 오더 (자동 추정)</b>
+        <div style="margin-top:6px;font-size:13px;color:var(--ink)"><b style="color:var(--blue)">Order 414230</b> · PIC <b>Dean</b> · 07-13 07:05 생성 · Processing<br>
+          <span class="mut" style="font-size:12px">근거: 쿠팡 주문번호 <b style="color:var(--green)">12101316464794 일치</b> + 이 오더에 COSRX Snail 96 Essence ×1 포함</span></div>
+        <div style="margin-top:10px"><button class="btn btn-green btn-sm" id="matchConfirm">맞습니다 — 이 오더에 매칭</button></div>
       </div>
-      <div id="matchResults" style="display:none;margin-top:14px">
-        <p class="mut" style="margin:0 0 6px"><b style="color:var(--ink)">Dean</b>님의 오더 중 이 제품이 포함된 오더 <b>2건</b> — 확인 후 선택</p>
-        <table class="tbl" style="min-width:0;font-size:12.5px">
-          <thead><tr><th style="width:30px"></th><th>Order ID</th><th>포함 제품</th><th>쿠팡 주문번호</th><th>Order 생성</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>414230</b></td><td><b>COSRX</b> Snail 96 Essence ×1 외 1종</td><td class="num" style="color:var(--blue);font-weight:700">12101316464794 <span style="color:var(--green);font-weight:700">일치</span></td><td class="num">07-13 07:05</td><td>Processing</td></tr>
-            <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>413902</b></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td class="num">12101316431177</td><td class="num">07-12 18:40</td><td>Processing</td></tr>
-          </tbody>
-        </table>
+      <div style="margin-top:10px"><button class="btn btn-line btn-sm" id="matchManualToggle">의심 오더가 아니에요 — 직접 찾기</button></div>
+      <div id="matchManual" style="display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
+        <div class="qrow" style="margin-top:0">
+          <b style="color:var(--ink)">PIC</b>
+          <input id="matchPic" value="Dean" style="width:140px;text-align:left;font-weight:600">
+          <button class="btn btn-blue btn-sm" id="matchSearch">🔍 검색</button>
+          <span class="mut" style="font-size:12px">이 제품이 포함된 해당 PIC의 오더 조회</span>
+        </div>
+        <div id="matchResults" style="display:none;margin-top:12px">
+          <p class="mut" style="margin:0 0 6px"><b style="color:var(--ink)">Dean</b>님의 오더 중 이 제품이 포함된 오더 <b>2건</b> — 확인 후 선택</p>
+          <table class="tbl" style="min-width:0;font-size:12.5px">
+            <thead><tr><th style="width:30px"></th><th>Order ID</th><th>포함 제품</th><th>쿠팡 주문번호</th><th>Order 생성</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>414230</b></td><td><b>COSRX</b> Snail 96 Essence ×1 외 1종</td><td class="num" style="color:var(--blue);font-weight:700">12101316464794 <span style="color:var(--green);font-weight:700">일치</span></td><td class="num">07-13 07:05</td><td>Processing</td></tr>
+              <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>413902</b></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td class="num">12101316431177</td><td class="num">07-12 18:40</td><td>Processing</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px"><button class="btn btn-blue btn-sm" id="matchConfirm2" disabled>선택한 오더에 매칭</button></div>
+        </div>
       </div>
-      <div class="note">매칭 확정 시 — 이 항목이 미입력 리스트에서 사라지고, 선택한 오더에 코멘트가 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
+      <div class="note">매칭 확정 시 — 이 항목이 미입력 리스트에서 사라지고, 해당 오더에 코멘트가 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" id="matchConfirm" disabled>이 오더에 매칭</button>
     </div>
   </div>
 </div>
@@ -403,19 +401,8 @@ document.querySelectorAll('.trk').forEach(inp=>{
   };
   inp.addEventListener('input',sync);
 });
-/* 내 오더에 매칭 — 검색/선택/확정 데모 */
-document.getElementById('matchSearch').addEventListener('click',()=>{
-  document.getElementById('matchResults').style.display='block';
-});
-document.querySelectorAll('.cand').forEach(tr=>{
-  tr.addEventListener('click',()=>{
-    document.querySelectorAll('.cand').forEach(x=>x.classList.remove('on'));
-    tr.classList.add('on');
-    tr.querySelector('input[type="radio"]').checked=true;
-    document.getElementById('matchConfirm').disabled=false;
-  });
-});
-document.getElementById('matchConfirm').addEventListener('click',()=>{
+/* 확인해보기 — 의심 오더 확인 / 직접 찾기 폴백 데모 */
+function finishMatch(){
   document.getElementById('m-match').classList.remove('open');
   const row=document.getElementById('poolrow1');
   if(row){
@@ -426,7 +413,24 @@ document.getElementById('matchConfirm').addEventListener('click',()=>{
   const t=document.getElementById('matchToast');
   t.style.display='flex';
   setTimeout(()=>{t.style.display='none';},4000);
+}
+document.getElementById('matchConfirm').addEventListener('click',finishMatch);
+document.getElementById('matchManualToggle').addEventListener('click',()=>{
+  const m=document.getElementById('matchManual');
+  m.style.display = m.style.display==='none' ? 'block' : 'none';
 });
+document.getElementById('matchSearch').addEventListener('click',()=>{
+  document.getElementById('matchResults').style.display='block';
+});
+document.querySelectorAll('.cand').forEach(tr=>{
+  tr.addEventListener('click',()=>{
+    document.querySelectorAll('.cand').forEach(x=>x.classList.remove('on'));
+    tr.classList.add('on');
+    tr.querySelector('input[type="radio"]').checked=true;
+    document.getElementById('matchConfirm2').disabled=false;
+  });
+});
+document.getElementById('matchConfirm2').addEventListener('click',finishMatch);
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
