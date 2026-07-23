@@ -157,6 +157,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .note.purple{background:var(--ss-purple-50);border:1px solid var(--ss-purple-100)}
 .submitrow{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
 
+.pagetabs{display:flex;border-bottom:1px solid var(--line-strong);margin:2px 0 14px}
+.pagetabs button{border:1px solid transparent;background:transparent;color:var(--blue);padding:8px 16px;font-size:13.5px;border-radius:7px 7px 0 0;margin-bottom:-1px;cursor:pointer}
+.pagetabs button.on{border-color:var(--line-strong);border-bottom-color:var(--page);background:var(--page);color:var(--ink);font-weight:600}
 /* filter chips (요청 리스트 상태 필터) */
 .filterchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .chip{border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:99px;
@@ -253,6 +256,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="dot" style="margin-left:-6px">15</span>
     <h2>WMS - 입고 요청</h2>
     <p class="sub">Inbound Request — 신규 신청</p>
+    <span class="anno" style="display:block"><div class="pagetabs">
+      <button class="on">신규 신청</button>
+      <button data-state-jump="s3">요청 리스트</button>
+    </div><span class="dot" style="top:-11px;left:150px">16</span></span>
 
     <div class="formcard anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
@@ -367,7 +374,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
     </div>
 
-    <p class="mut" style="margin-top:14px">등록된 요청은 상단 <b>[3 · 요청 리스트]</b> 탭에서 상태별로 조회·관리합니다.</p>
+    <p class="mut" style="margin-top:14px">등록된 요청은 상단 <b>[요청 리스트]</b> 탭에서 상태별로 조회·관리합니다.</p>
   </div>
 </div></div>
 
@@ -385,6 +392,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시. 클릭 시 연동 방식 모달(M2) <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">14</span><span>우상단 Comments 허브 — 요청 건에 태그된 Comments(@Mentions/★Saved). View Orders와 동일 컴포넌트 <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">15</span><span>좌우 여백 축소 — 폼 전체가 스크롤 없이 한 화면 <span class="ref">— C 화면 규약</span></span></li>
+    <li><span class="n">16</span><span><b>상단 페이지 탭 [신규 신청 | 요청 리스트]</b> 신설(2026-07-23) — 실제 어드민 화면 안에서 신청 폼과 요청 리스트를 오가는 전환 탭(와이어프레임의 보라 상태 탭과 별개). 신규 신청 탭에서 루트 선택·신청, 요청 리스트 탭에서 상태별 조회·송장 입력 <span class="ref">— I 입고요청</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스마트바이 루트 = J. Procurement Hub PO 기반(발주 → 입고 요청 등록으로 연결). 홀세일·파트너십은 PH 미경유로 직접 신청. 모든 라벨은 "Comments"로 통일(한글 "코멘트" 금지).</p>
 </div>
@@ -404,6 +412,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - 입고 요청</h2>
     <p class="sub">Inbound Request — 신규 신청</p>
+    <div class="pagetabs">
+      <button class="on">신규 신청</button>
+      <button data-state-jump="s3">요청 리스트</button>
+    </div>
 
     <div class="formcard">
       <div class="fsec" style="margin-top:2px">
@@ -510,6 +522,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - 입고 요청</h2>
     <p class="sub">Inbound Request — 요청 리스트</p>
+    <div class="pagetabs">
+      <button data-state-jump="s1">신규 신청</button>
+      <button class="on">요청 리스트</button>
+    </div>
 
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ 신규 입고 요청</button>
