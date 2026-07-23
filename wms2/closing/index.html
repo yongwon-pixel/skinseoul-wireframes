@@ -220,6 +220,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-state="s3">3 · 경고 · 중복 스캔</button>
     <button class="wf-tab" data-state="s4">4 · 마감 완료</button>
     <button class="wf-tab" data-modal="m-process">모달: Processing 건 처리</button>
+    <button class="wf-tab" data-modal="m-history">모달: 마감 기록</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -263,6 +264,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - 마감 (Closing)</h2>
     <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
 
+    <div class="clsbanner info anno" style="margin:0 0 12px">
+      <span class="dot" style="top:-11px;left:-10px">13</span>
+      <b>① 오늘 출고 대상 (수동 카운팅)</b>
+      <span>포장 완료 실물을 직접 센 수를 <b>먼저 입력하고 마감 시작</b> — 스캔 정상 건수가 이 수와 <b>정확히 일치</b>해야 마감 확정 가능</span>
+      <input value="84" style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)"> 건
+      <button class="btn btn-blue btn-sm">마감 시작</button>
+    </div>
+
     <div class="scanbig anno">
       <input value="10323775316153" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
       <span class="dot" style="top:-11px;left:-10px">1</span>
@@ -289,13 +298,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <!-- 마감 진행 카운트 -->
     <div class="clsstat anno">
       <span class="dot" style="top:-11px;left:-10px">4</span>
-      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
       <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
       <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
       <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:84.5%"></i><i class="p-warn" style="width:3.6%"></i></div>
-    <p class="proglab">마감 진행 84.5% — 71/84건 확인 · 경고 3건은 해소 필요 (전 건 확인 + 경고 0 이어야 마감 확정 가능)</p>
+    <p class="proglab">마감 진행 84.5% — 정상 71/84건 (수동 카운팅 대비 13건 부족) · 경고 3건 해소 필요 — <b>정상 84/84 정확 일치 + 경고 0 이어야 마감 확정, 초과 스캔도 불일치</b></p>
 
     <div class="clsbanner info anno">
       <span class="dot" style="top:-11px;left:-10px">7</span>
@@ -308,32 +317,32 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl anno">
       <span class="dot" style="top:2px;left:-12px">6</span>
       <thead><tr>
-        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
           <td class="num">18:41:07</td><td class="num">10323775316153</td><td class="num" style="color:var(--blue)">413540</td>
-          <td>Box M</td><td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
         </tr>
         <tr class="row-bad">
           <td class="num">18:40:55</td><td class="num">10324880021991</td><td class="num" style="color:var(--blue)">413511</td>
-          <td>Box S</td><td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
           <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
         </tr>
         <tr>
           <td class="num">18:40:31</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
-          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>–</td>
         </tr>
         <tr class="row-bad">
           <td class="num">18:40:18</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
-          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Miranti</td><td class="mut">직전 18:40:31 스캔과 동일 송장 (합포장 확인 필요)</td>
         </tr>
         <tr class="row-ok">
           <td class="num">18:39:52</td><td class="num">10323775099821</td><td class="num" style="color:var(--blue)">413472</td>
-          <td>Box M</td><td class="num">2</td><td><span class="cs-shipped">Shipped</span></td>
+          <td class="num">2</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
         </tr>
       </tbody>
@@ -343,8 +352,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="clsbanner done anno" style="margin-top:20px">
       <span class="dot" style="top:-11px;left:-10px">9</span>
       <b>마감 확정</b>
-      <span>전 건 확인 + 경고 0건이 되면 활성화됩니다 — 확정 시 마감 로그 기록 + <b>Daily Shipping Status</b> 자동 갱신(스프레드시트 수기 과정 대체)</span>
-      <button class="btn btn-gray btn-sm">마감 확정 (경고 3건 해소 후)</button>
+      <span>정상 스캔 수가 <b>수동 입력한 오늘 출고 대상(84)과 정확히 일치</b>하고 경고 0건이 되면 활성화 — 확정 시 마감 기록 저장 + <b>Daily Shipping Status</b> 자동 갱신(스프레드시트 수기 과정 대체)</span>
+      <button class="btn btn-gray btn-sm">마감 확정 (13건 남음 · 경고 3건)</button>
+      <span class="anno" style="position:relative"><button class="btn btn-line btn-sm" data-modal="m-history">📋 마감 기록</button><span class="dot" style="top:-11px;right:-8px">14</span></span>
     </div>
 
     <div class="logsec anno">
@@ -379,17 +389,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">1</span><span>마감 전용 대형 바코드 스캔 입력 — 오늘 포장 건을 바코드만 찍어 확인(스프레드시트 복잡 작업 대체), 스캔 즉시 출고 상태 판정 <span class="ref">— F 마감</span></span></li>
     <li><span class="n">2</span><span>대형 상태 표시 — 멀리서도 보이는 큰 색상 패널. 정상은 초록 "출고 완료 — OK" <span class="ref">— F Dean</span></span></li>
     <li><span class="n">3</span><span>음성 알림 토글(기본 켜짐) — 경고 시 "확인 필요" 자동 재생, 스캐너로 빠르게 찍을 때 화면 안 봐도 인지. 음성 테스트 버튼 제공 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 Prepare Shipment/Shipped(출고처리 완료)인 건 → 초록 "출고 완료"(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, 시각·송장·Order·박스·상태·판정·작업자 기록. 최신 스캔 상단 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상(<b>수동 입력값</b>)/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 <b>Prepare Shipment인 건만</b> → 초록 "출고 완료". 그 외 상태(Processing 등)는 전부 경고(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, 시각·송장·Order·제품 수·상태·판정·작업자 기록. 최신 스캔 상단 <span class="ref">— F 마감</span></span></li>
     <li><span class="n">7</span><span>마감 전 Ready to be Outbounded 재확인 배너(현재 마감 과정 5단계) — 링크로 바로 이동 <span class="ref">— F 마감 / D</span></span></li>
     <li><span class="n">8</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved], 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">9</span><span>마감 확정 버튼 — 전 건 확인 + 경고 0 이어야 활성. 확정 시 로그 기록 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">9</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">13</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작 시 작업자가 포장 완료 실물을 직접 센 수를 입력. 시스템 수치가 아니라 실물 카운트가 기준(시스템-실물 이중 대조) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">14</span><span><b>마감 기록(M2)</b> — 매일의 마감 스냅샷 조회: 날짜·출고 대상(수동)·정상 스캔·경고 발생→해소·일치 여부·마감자·확정 시각·리포트 <span class="ref">— F 마감</span></span></li>
     <li><span class="n">10</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
     <li><span class="n">11</span><span>마감/입출고 행위자 로그 — 누가 언제 무엇을 스캔/경고했는지 기록, 전 상태 하단 공통 <span class="ref">— C 로그(공통)</span></span></li>
     <li><span class="n">12</span><span>좌하단 실시간 바코드 플로팅 패널 — 방금 찍은 바코드·작업자·시간, 기본 접힘, 날짜별 Export <span class="ref">— C 로그(공통)</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스캔한 송장의 오더 상태를 즉시 조회 → Prepare Shipment/Shipped면 정상(초록·무음), Processing(미출고)이거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). 마감 페이지는 상태 변경이 아니라 <b>출고 확인 전용</b>(Processing 건만 모달로 Outbound 처리 가능).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스캔한 송장의 오더 상태를 즉시 조회 → <b>Prepare Shipment면 정상</b>(초록·무음), 그 외 상태(Processing 등)거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). <b>마감 확정 조건 = 정상 스캔 수가 수동 입력한 오늘 출고 대상과 정확히 일치 + 경고 0건</b>(초과 스캔도 불일치). 마감 페이지는 상태 변경이 아니라 <b>출고 확인 전용</b>(Processing 건만 모달로 Outbound 처리 가능).</p>
 </div>
 </section>
 
@@ -407,6 +419,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - 마감 (Closing)</h2>
     <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
     <div class="scanbig">
       <input value="10324880021991" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
       <button class="btn btn-blue">스캔</button>
@@ -434,7 +447,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
       <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
       <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
       <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
@@ -446,17 +459,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl anno">
       <span class="dot" style="top:2px;left:-12px">3</span>
       <thead><tr>
-        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
       </tr></thead>
       <tbody>
         <tr class="row-bad">
           <td class="num">18:40:55</td><td class="num">10324880021991</td><td class="num" style="color:var(--blue)">413511</td>
-          <td>Box S</td><td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
           <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num">18:41:07</td><td class="num">10323775316153</td><td class="num" style="color:var(--blue)">413540</td>
-          <td>Box M</td><td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
         </tr>
       </tbody>
@@ -496,6 +509,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - 마감 (Closing)</h2>
     <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
     <div class="scanbig">
       <input value="10322198837710" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
       <button class="btn btn-blue">스캔</button>
@@ -523,7 +537,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
       <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">71</div></div>
       <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
       <div class="tile"><div class="lab">남은 스캔</div><div class="val">13</div></div>
@@ -534,17 +548,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="sub" style="margin-top:22px">스캔 리스트</p>
     <table class="tbl">
       <thead><tr>
-        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>박스/사이즈</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+        <th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
       </tr></thead>
       <tbody>
         <tr class="row-bad">
           <td class="num">18:41:44</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
-          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Dean</td><td class="mut">최초 18:40:31 (Miranti) 대비 재스캔</td>
         </tr>
         <tr class="row-ok">
           <td class="num">18:40:31</td><td class="num">10322198837710</td><td class="num" style="color:var(--blue)">413498</td>
-          <td>Box L</td><td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
         </tr>
       </tbody>
@@ -584,6 +598,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="pagepad">
     <h2>WMS - 마감 (Closing)</h2>
     <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
     <div class="scanbig">
       <input value="" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
       <button class="btn btn-blue">스캔</button>
@@ -598,19 +613,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="ic">✓</span>
       <div>
         <div class="big">오늘 마감 완료 — 전 건 확인</div>
-        <div class="bmeta">출고 대상 84건 전량 스캔 확인 · 경고 0건 · 2026-07-13 18:52 마감 확정 (Yongwon)</div>
+        <div class="bmeta">수동 카운팅 84건 = 정상 스캔 84건 <b>정확 일치</b> · 경고 0건 · 2026-07-13 18:52 마감 확정 (Yongwon)</div>
       </div>
       <div class="bside">경고<br><b style="color:var(--green)">0</b><br>남은 스캔 0</div>
     </div>
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상</div><div class="val">84</div></div>
+      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
       <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">84</div></div>
       <div class="tile ok"><div class="lab">경고 (해소됨)</div><div class="val">0</div></div>
       <div class="tile"><div class="lab">남은 스캔</div><div class="val">0</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:100%"></i></div>
-    <p class="proglab">마감 진행 100% — 전 건 확인 + 경고 0 → 마감 확정 완료</p>
+    <p class="proglab">마감 진행 100% — 정상 84/84 정확 일치 + 경고 0 → 마감 확정 완료 · 오늘 기록이 마감 기록에 저장됨</p>
 
     <div class="clsbanner done anno">
       <span class="dot" style="top:-11px;left:-10px">2</span>
@@ -618,6 +633,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span>오늘 마감 결과를 Export — 기존 <b>SS Daily Shipping Status</b> 수기 복사/붙여넣기·수식 제거 과정을 대체. 마감 확정 시 자동 스냅샷 저장됨.</span>
       <button class="btn btn-green-line btn-sm">마감 리포트 다운로드 (CSV)</button>
       <button class="btn btn-line btn-sm">Daily Shipping Status 보기 ↗</button>
+      <button class="btn btn-line btn-sm" data-modal="m-history">📋 마감 기록</button>
     </div>
 
     <div class="clsbanner info anno" style="margin-top:12px">
@@ -641,7 +657,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 4 변경사항 — 마감 완료</h3>
   <ol>
-    <li><span class="n">1</span><span>전 건 확인 + 경고 0 → 대형 초록 "마감 완료" 상태, 마감 확정 시각·확정자 기록 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span>정상 스캔 = 수동 카운팅 대상과 <b>정확 일치</b> + 경고 0 → 대형 초록 "마감 완료" 상태, 마감 확정 시각·확정자 기록. 확정 즉시 오늘 스냅샷이 마감 기록(M2)에 저장 <span class="ref">— F 마감</span></span></li>
     <li><span class="n">2</span><span>마감 리포트 Export(CSV) — 기존 SS Daily Shipping Status 수기 복사/붙여넣기·수식 제거 과정을 대체 <span class="ref">— F 마감(현재과정)</span></span></li>
     <li><span class="n">3</span><span>경고 처리 요약 — 오늘 발생한 Processing/중복 경고와 해소 결과 집계 <span class="ref">— F Dean</span></span></li>
     <li><span class="n">4</span><span>마감 확정이 로그에 기록 — 언제/누가 확정, Daily Shipping Status 갱신까지 감사 추적 <span class="ref">— C 로그(공통)</span></span></li>
@@ -656,7 +672,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <header>Processing 건 처리 — Order 413511<button class="x" data-close>✕</button></header>
     <div class="body">
       <b style="color:var(--ink)">이 오더는 아직 출고(Outbound) 처리되지 않았습니다.</b>
-      <p class="mut" style="margin:6px 0 0">Tracking 10324880021991 · Box S · 제품 1 · 상태 <span class="cs-processing">Processing</span></p>
+      <p class="mut" style="margin:6px 0 0">Tracking 10324880021991 · 제품 1 · 상태 <span class="cs-processing">Processing</span></p>
       <div style="margin-top:14px">
         <label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox"> <span><b style="color:var(--ink)">제로패킹에서 이 오더 패킹 상태 확인함</b> — 정상 포장 완료 확인 시 체크 (현재 마감 과정 6단계)</span></label>
       </div>
@@ -669,6 +685,28 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>닫기</button>
       <button class="btn btn-green btn-sm" data-close>Outbound 처리 → 경고 해소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 마감 기록 (매일 스냅샷) ══════════════ -->
+<div class="overlay" id="m-history">
+  <div class="modal anno" style="max-width:760px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>마감 기록 — 일별 스냅샷<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p class="mut" style="margin:0 0 8px">마감 확정 시 자동 저장되는 일별 기록 — 출고 대상(수동 카운팅)·정상 스캔·경고 처리·확정자를 감사 추적</p>
+      <table class="logtbl" style="font-size:12.5px">
+        <tr><th>날짜</th><th>출고 대상 (수동)</th><th>정상 스캔</th><th>경고 (발생→해소)</th><th>일치</th><th>마감자</th><th>확정 시각</th><th></th></tr>
+        <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (오늘)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+        <tr><td class="num">07-12</td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+        <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+        <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      </table>
+      <div class="note">불일치 상태로는 마감 확정이 불가하므로 기록은 항상 "일치"로 저장됩니다 — 불일치 원인(누락 스캔·초과 스캔·미해소 경고)은 확정 전에 해소해야 합니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>닫기</button>
     </div>
   </div>
 </div>
