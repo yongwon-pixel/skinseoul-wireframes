@@ -99,8 +99,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .star.on{color:var(--star)}
 
 /* actor log */
-.logsec{margin-top:26px}
-.logsec h4{font-size:14px;margin:0 0 8px}
 .logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
 .logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
 .logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
@@ -241,42 +239,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button data-goto="shist">마감 기록</button>
     </div>
 
-    <div class="clsbanner info anno" style="margin:0 0 12px">
-      <span class="dot" style="top:-11px;left:-10px">1</span>
-      <b>① 오늘 출고 대상 (수동 카운팅)</b>
-      <span>포장 완료 실물을 <b>직접 센 수를 입력</b>하고 마감 시작 — 이 수와 스캔 정상 건수가 정확히 일치해야 마감 확정</span>
-      <input id="targetIn0" value="" placeholder="직접 센 수" style="width:88px;border:1.5px solid var(--blue);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)"> 건
-      <button class="btn btn-blue btn-sm" id="startBtn0">마감 시작</button>
-    </div>
-
-    <div class="scanbig anno">
-      <input value="" placeholder="① 오늘 출고 대상을 입력하고 [마감 시작]을 누르면 스캔이 활성화됩니다" disabled>
-      <span class="dot" style="top:-11px;left:-10px">2</span>
-      <button class="btn btn-blue" disabled>스캔</button>
-    </div>
-    <div class="voicebar">
-      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "Please check this order" 자동 재생</span>
-      <button class="btn btn-line btn-sm sim-voice">🔊 음성 테스트</button>
-    </div>
-
-    <div style="margin-top:16px;border:1.5px dashed var(--line-strong);border-radius:12px;padding:42px 20px;text-align:center;background:var(--page)">
-      <div style="font-size:32px">🧮</div>
-      <div style="font-size:16px;font-weight:800;margin-top:6px;color:var(--ink)">마감 시작 전</div>
-      <div class="mut" style="margin-top:6px">오늘 아직 스캔 기록이 없습니다 — 포장 완료 실물을 직접 세어 <b>① 출고 대상</b>에 입력한 뒤 마감을 시작하세요</div>
-    </div>
-
-    <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val" style="color:var(--ink-3)">–</div></div>
-      <div class="tile"><div class="lab">확인 완료 (출고됨)</div><div class="val">0</div></div>
-      <div class="tile"><div class="lab">경고 (미출고·중복)</div><div class="val">0</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val" style="color:var(--ink-3)">–</div></div>
-    </div>
-
-    <div class="clsbanner done anno" style="margin-top:16px">
-      <span class="dot" style="top:-11px;left:-10px">3</span>
-      <b>마감 확정</b>
-      <span>마감 시작 전 — 비활성. 어제까지의 기록은 마감 기록에서 조회</span>
-      <button class="btn btn-gray btn-sm">마감 확정</button>
+    <div class="anno" style="display:block;margin-top:26px;border:1.5px solid var(--blue);border-radius:14px;padding:46px 24px;text-align:center;background:var(--blue-soft)">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <div style="font-size:30px">🧮</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px;color:var(--ink)">① 오늘 출고 대상 (수동 카운팅)</div>
+      <div class="mut" style="margin-top:6px">포장 완료 실물을 <b>직접 센 수</b>를 입력하고 마감을 시작하세요 — 이 수와 스캔 정상 건수가 <b>정확히 일치</b>해야 마감 확정됩니다</div>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;align-items:center">
+        <input id="targetIn0" value="" placeholder="직접 센 수" style="width:150px;font-size:20px;border:1.5px solid var(--blue);border-radius:9px;padding:10px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)">
+        <span style="font-weight:700;color:var(--ink)">건</span>
+        <button class="btn btn-blue" id="startBtn0">마감 시작</button>
+      </div>
     </div>
   </div>
 </div></div>
@@ -284,9 +256,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 0 변경사항 — 마감 시작 전 (수동 카운팅 입력)</h3>
   <ol>
-    <li><span class="n">1</span><span><b>수동 카운팅이 첫 단계</b> — 포장 완료 실물을 직접 센 수를 입력하고 [마감 시작]을 눌러야 진행. 입력 없이 시작 불가. 마감 시작을 누르면 진행 중 화면(State 1)으로 전환 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">2</span><span>마감 시작 전에는 <b>바코드 스캔창 비활성</b> — 순서 강제: ① 카운팅 입력 → ② 마감 시작 → ③ 스캔 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">3</span><span>마감 확정도 비활성 — 시작 전에는 상단 메뉴의 <b>마감 기록 페이지</b>(어제까지 일별 스냅샷)만 조회 가능 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span><b>시작 전 화면은 카운팅 입력만 노출</b> — 스캔창·카운트 타일 등 다른 인터페이스를 모두 숨겨 "숫자 입력이 첫 단계"임을 명확히(2026-07-23 단순화). 포장 완료 실물을 직접 센 수를 입력해야 [마감 시작] 가능, 시작하면 진행 화면(State 1)으로 전환. 시작 후에도 State 1 상단에서 <b>숫자 변경·마감 취소</b> 가능. 어제까지 기록은 상단 탭 마감 기록에서 조회 <span class="ref">— F 마감</span></span></li>
   </ol>
 </div>
 </section>
@@ -332,14 +302,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="anno" style="display:block"><div class="pagetabs">
       <button class="on">마감</button>
       <button data-goto="shist">마감 기록</button>
-    </div><span class="dot" style="top:-11px;right:-9px">12</span></span>
+    </div><span class="dot" style="top:-11px;right:-9px">11</span></span>
 
     <div class="clsbanner info anno" style="margin:0 0 12px">
-      <span class="dot" style="top:-11px;left:-10px">11</span>
+      <span class="dot" style="top:-11px;left:-10px">10</span>
       <b>① 오늘 출고 대상 (수동 카운팅)</b>
-      <span>포장 완료 실물을 직접 센 수를 <b>먼저 입력하고 마감 시작</b> — 스캔 정상 건수가 이 수와 <b>정확히 일치</b>해야 마감 확정 가능</span>
-      <input value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink-3)"> 건
-      <button class="btn btn-gray btn-sm">마감 진행 중 · 대상 84건 (18:02 시작)</button>
+      <span>마감 진행 중 (18:02 시작 · Dean) — 스캔 정상 건수가 이 수와 <b>정확히 일치</b>해야 마감 확정</span>
+      <input id="targetIn1" value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink)"> 건
+      <button class="btn btn-line btn-sm" id="targetEdit">↺ 숫자 변경</button>
+      <button class="btn btn-red-line btn-sm" id="closeCancel">✕ 마감 취소</button>
     </div>
 
     <div class="scanbig anno">
@@ -378,7 +349,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl anno">
       <span class="dot" style="top:2px;left:-12px">6</span>
       <thead><tr>
-        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th>
+        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
@@ -386,30 +357,35 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">18:39:52</td><td class="num">YT2618100710077629</td><td class="num" style="color:var(--blue)">413472</td>
           <td class="num">2</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#2</td>
           <td class="num">18:40:18</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#3</td>
           <td class="num">18:40:31</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Miranti</td><td class="mut"><b>#2와 중복</b> — 동일 송장 (합포장 확인 필요)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#4</td>
           <td class="num">18:40:55</td><td class="num">YT2618100710223471</td><td class="num" style="color:var(--blue)">413511</td>
           <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
           <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
@@ -418,20 +394,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="clsbanner done anno" style="margin-top:20px">
       <span class="dot" style="top:-11px;left:-10px">8</span>
       <b>마감 확정</b>
-      <span>정상 스캔 수가 <b>수동 입력한 오늘 출고 대상(84)과 정확히 일치</b>하고 경고 0건이 되면 활성화 — 확정 시 마감 기록 저장 + <b>Daily Shipping Status</b> 자동 갱신(스프레드시트 수기 과정 대체)</span>
+      <span>정상 스캔 수가 <b>수동 입력한 오늘 출고 대상(84)과 정확히 일치</b>하고 경고 0건이 되면 <b>활성화만</b> 됩니다 — <b>자동 확정 없음, 반드시 이 버튼을 눌러야 마감.</b> 일치 도달 후에도 스캔창은 계속 활성(예: 84로 셌는데 85번째 실물이 나오는 경우 대비) — 초과 스캔 발생 시 불일치로 버튼 재비활성 → 숫자 변경(↺) 또는 초과 건 정리 후 확정. 확정 시 마감 기록 저장 + <b>Daily Shipping Status</b> 자동 갱신</span>
       <button class="btn btn-gray btn-sm">마감 확정 (80건 남음 · 경고 3건)</button>
     </div>
 
-    <div class="logsec anno">
-      <h4>마감 / 입출고 로그</h4>
-      <span class="dot" style="top:-8px;left:118px">10</span>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">18:41:07</td><td class="act-in">마감 스캔 (출고 확인)</td><td class="num">413540</td><td class="num">YT2618100710108810</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">18:40:55</td><td class="act-cancel">마감 스캔 경고 (Processing)</td><td class="num">413511</td><td class="num">YT2618100710223471</td><td>Dean</td><td><span style="color:var(--ink-2)">미출고 — 제로패킹 확인 후 Outbound 필요</span></td></tr>
-        <tr><td class="num">18:40:31</td><td class="act-cancel">마감 스캔 경고 (중복 #3↔#2)</td><td class="num">413498</td><td class="num">YT2618100710184356</td><td>Miranti</td><td><span style="color:var(--ink-2)">동일 송장 재스캔 — 합포장 여부 확인</span></td></tr>
-      </table>
-    </div>
   </div>
 
 
@@ -445,15 +411,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">3</span><span>음성 알림 토글(기본 켜짐) — 경고 시 "Please check this order" 자동 재생, 스캐너로 빠르게 찍을 때 화면 안 봐도 인지. 음성 테스트 버튼 제공 <span class="ref">— F Dean</span></span></li>
     <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상(<b>수동 입력값</b>)/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
     <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 <b>Prepare Shipment인 건만</b> → 초록 "출고 완료". 그 외 상태(Processing 등)는 전부 경고(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, <b>맨 왼쪽 # = 스캔 순번(라인 넘버)</b>. 중복 경고 시 <b>몇 번과 몇 번이 중복인지 # 기준으로 표기</b>(예: #3 ↔ #2). 낮은 순번 → 높은 순번 순 표시, 새 스캔은 아래에 추가 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, <b>맨 왼쪽 # = 스캔 순번(라인 넘버)</b>. 중복 경고 시 <b>몇 번과 몇 번이 중복인지 # 기준으로 표기</b>(예: #3 ↔ #2). 낮은 순번 → 높은 순번 순, 새 스캔은 아래에 추가. 각 행 우측 <b style="color:var(--red)">✕</b> = 스캔 기록 삭제(확인 모달 "없애시겠습니까? 예/아니오") — 오스캔·없는 주문 정리, 삭제 시 카운트 제외(M2) <span class="ref">— F 마감</span></span></li>
     <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved], 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">8</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">8</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. <b>활성=자동 확정 아님, 클릭해야 마감</b>(도달 후에도 스캔 계속 가능 — 초과 발견 시 재비활성). 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
     <li><span class="n">9</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
-    <li><span class="n">10</span><span>마감/입출고 행위자 로그 — 누가 언제 무엇을 스캔/경고했는지 기록, 전 상태 하단 공통 <span class="ref">— C 로그(공통)</span></span></li>
-    <li><span class="n">11</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작(State 0)에서 입력된 값이 잠금 표시됨(수정하려면 마감 재시작). 시스템 수치가 아니라 실물 카운트가 기준(시스템-실물 이중 대조) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">12</span><span><b>상단 메뉴 [마감 | 마감 기록]</b> — 마감 기록은 <b>별도 페이지로 전환</b>(모달 아님): 일별 스냅샷·CSV Export. 상세는 상단 "5 · 마감 기록" 탭 참조 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">10</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작(State 0)에서 입력된 값이 잠금 표시. <b>[↺ 숫자 변경]</b>으로 대상 수 수정, <b>[✕ 마감 취소]</b>로 오늘 마감 세션 취소(시작 전 화면으로 복귀, 스캔 기록 폐기 확인 필요). 시스템 수치가 아니라 실물 카운트가 기준 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">11</span><span><b>상단 메뉴 [마감 | 마감 기록]</b> — 마감 기록은 <b>별도 페이지로 전환</b>(모달 아님): 일별 스냅샷·CSV Export. 상세는 상단 "5 · 마감 기록" 탭 참조 <span class="ref">— F 마감</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): <b>마감 시작(수동 카운팅 입력) 전에는 스캔창 비활성.</b> 마감 시작 후에는 페이지 아무 곳 클릭 시 스캔창 자동 포커스(전체 선택)·연속 스캔, 처리 결과는 새로고침 없이 우상단 토스트 — 화면 문구 없이 동작으로만 구현. 스캔한 송장의 오더 상태를 즉시 조회 → <b>Prepare Shipment면 정상</b>(초록·무음), 그 외 상태(Processing 등)거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). <b>마감 확정 조건 = 정상 스캔 수가 수동 입력한 오늘 출고 대상과 정확히 일치 + 경고 0건</b>(초과 스캔도 불일치). Processing 건 처리(M1)의 Outbound는 <b>실제 오더 상태 변경</b>으로 전 화면에 반영. 매칭 오더가 없는 송장은 <b>"없는 주문" 경고(상태 2b)</b> — 마감 카운트 미포함. <b>마감 진행 상태는 서버 저장</b> — 스캔 도중 다른 페이지로 이탈했다 돌아와도, 새로고침해도 카운팅·스캔 리스트·경고가 그대로 유지되며 마감 확정 또는 명시적 재시작 전까지 클리어되지 않음. <b>연속 스캔:</b> 스캐너가 붙여주는 자동 Enter가 제출을 대신하며(스캔 버튼 클릭 불필요), 판정 직후 커서는 스캔창에 전체 선택 상태로 복귀 — 다음 스캔이 이전 값을 덮어써 몇 건이든 끊김 없이 연속 스캔.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): <b>마감 시작(수동 카운팅 입력) 전에는 스캔창 비활성.</b> 마감 시작 후에는 페이지 아무 곳 클릭 시 스캔창 자동 포커스(전체 선택)·연속 스캔, 처리 결과는 새로고침 없이 우상단 토스트 — 화면 문구 없이 동작으로만 구현. 스캔한 송장의 오더 상태를 즉시 조회 → <b>Prepare Shipment면 정상</b>(초록·무음), 그 외 상태(Processing 등)거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). <b>마감 확정 조건 = 정상 스캔 수가 수동 입력한 오늘 출고 대상과 정확히 일치 + 경고 0건</b>(초과 스캔도 불일치). <b>일치 도달 = 확정 버튼 활성화일 뿐 자동 마감 아님</b> — 전부 스캔했는지 확인한 뒤 사람이 [마감 확정]을 눌러야 마감되며, 도달 후에도 스캔창은 유지되어 초과 실물(85번째)이 나오면 불일치 경고로 전환·버튼 재비활성. Processing 건 처리(M1)의 Outbound는 <b>실제 오더 상태 변경</b>으로 전 화면에 반영. 매칭 오더가 없는 송장은 <b>"없는 주문" 경고(상태 2b)</b> — 마감 카운트 미포함. <b>마감 진행 상태는 서버 저장</b> — 스캔 도중 다른 페이지로 이탈했다 돌아와도, 새로고침해도 카운팅·스캔 리스트·경고가 그대로 유지되며 마감 확정 또는 명시적 재시작 전까지 클리어되지 않음. <b>연속 스캔:</b> 스캐너가 붙여주는 자동 Enter가 제출을 대신하며(스캔 버튼 클릭 불필요), 판정 직후 커서는 스캔창에 전체 선택 상태로 복귀 — 다음 스캔이 이전 값을 덮어써 몇 건이든 끊김 없이 연속 스캔.</p>
 </div>
 </section>
 
@@ -485,22 +450,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
     </div>
 
-    <div class="bigstatus bs-warn anno">
-      <span class="dot" style="top:-11px;right:-11px">1</span>
-      <span class="ic">⚠</span>
-      <div>
-        <div class="big">확인 필요 — 미출고 (Processing)</div>
-        <div class="bmeta" style="color:var(--red)">Order 413511 · Tracking YT2618100710223471 · 상태: <b>Processing</b> — 출고(Outbound) 처리 안 됨. 선반에서 빼지 마세요.</div>
-      </div>
-      <div class="bside anno" style="color:var(--red)"><span class="dot" style="top:-11px;right:-11px">2</span>🔊 음성<br><b style="color:var(--red)">"Please check<br>this order"</b><br>자동 재생됨</div>
-    </div>
 
-    <div class="clsbanner warn anno" style="margin-top:14px">
-      <span class="dot" style="top:-11px;left:-10px">4</span>
-      <b>조치</b>
-      <span>제로패킹에서 이 오더의 패킹 상태를 확인 → 정상이면 <b>Outbound 처리</b> 후 다시 마감 스캔. 미완이면 별도 처리 후 재스캔.</span>
-      <button class="btn btn-red-line btn-sm" data-modal="m-process">Processing 건 처리 (제로패킹 확인 → Outbound)</button>
-    </div>
 
     <div class="clsstat">
       <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
@@ -513,9 +463,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 경고 건은 빨강 틴트 강조</span></p>
     <table class="tbl anno">
-      <span class="dot" style="top:2px;left:-12px">3</span>
+      <span class="dot" style="top:2px;left:-12px">1</span>
       <thead><tr>
-        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-bad">
@@ -523,32 +473,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">18:40:55</td><td class="num">YT2618100710223471</td><td class="num" style="color:var(--blue)">413511</td>
           <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
           <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="logsec">
-      <h4>마감 / 입출고 로그</h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">18:40:55</td><td class="act-cancel">마감 스캔 경고 (Processing)</td><td class="num">413511</td><td class="num">YT2618100710223471</td><td>Dean</td><td><span style="color:var(--ink-2)">미출고 — 제로패킹 확인 후 Outbound 필요</span></td></tr>
-      </table>
-    </div>
   </div>
 </div></div>
 <div class="legend">
   <h3>State 2 변경사항 — 경고 · Processing (미출고)</h3>
   <ol>
-    <li><span class="n">1</span><span>바코드 스캔한 오더가 <b>Processing(미출고)</b> 상태면 대형 빨간 경고 패널 + 펄스. 멀리서도 즉시 인지 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">2</span><span>동시에 음성 "Please check this order" 자동 재생(음성 켜짐 시) — 스캐너 연속 작업 중 화면 안 봐도 감지. (탭 진입 시 실제 재생) <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">3</span><span>경고 행은 빨강 틴트로 강조 — "상자 크기마다 찍으면서 빨간 거 뜨는지 확인"의 디지털화 <span class="ref">— F 마감(현재과정 4)</span></span></li>
-    <li><span class="n">4</span><span>조치 배너 — Processing 건은 제로패킹 확인 후 Outbound 처리 버튼(모달)으로 바로 해소(현재 마감 과정 6단계). 이 처리는 <b>실제 오더 상태 변경</b>(Processing → Prepare Shipment)으로 전 화면에 반영 <span class="ref">— F 마감(현재과정 6)</span></span></li>
+    <li><span class="n">1</span><span>Processing(미출고) 스캔 = <b>리스트 행 빨강 틴트 + "⚠ 미출고" 판정 + 음성 "Please check this order" 자동 재생</b>. 처리도 리스트에서 — 행의 <b>[이 오더 처리]</b> 버튼(M1: 제로패킹 확인 → Outbound, <b>실제 오더 상태 변경</b> Processing → Prepare Shipment 전 화면 반영). 대형 경고 패널·조치 배너는 2026-07-23 제거(리스트에서 확인·처리로 충분) <span class="ref">— F 마감</span></span></li>
   </ol>
 </div>
 </section>
@@ -581,21 +523,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
     </div>
 
-    <div class="bigstatus bs-warn anno">
-      <span class="dot" style="top:-11px;right:-11px">1</span>
-      <span class="ic">⚠</span>
-      <div>
-        <div class="big">확인 필요 — 없는 주문</div>
-        <div class="bmeta" style="color:var(--red)">Tracking YT2618100719984412 (스캔 #7) — <b>매칭되는 오더가 없습니다.</b> 송장 오입력 또는 우리 시스템 주문이 아닐 가능성. 실물 라벨을 확인하세요.</div>
-      </div>
-      <div class="bside anno" style="color:var(--red)"><span class="dot" style="top:-11px;right:-11px">2</span>🔊 음성<br><b style="color:var(--red)">"Please check<br>this order"</b><br>자동 재생됨</div>
-    </div>
 
-    <div class="clsbanner warn anno" style="margin-top:14px">
-      <span class="dot" style="top:-11px;left:-10px">3</span>
-      <b>조치</b>
-      <span>없는 주문은 <b>마감 카운트에 포함되지 않습니다.</b> 실물 라벨 재확인 후 재스캔 → 계속 없는 주문이면 어느 시스템의 물량인지 관리자 확인 (송장 자체가 시스템에 없는 케이스 — View Orders 미인식 플로우와 별개)</span>
-    </div>
 
     <div class="clsstat">
       <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
@@ -607,9 +535,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="proglab">마감 진행 4.8% — 없는 주문은 카운트 미포함, 경고 해소 후 마감 확정 가능</p>
 
     <p class="sub" style="margin-top:22px">스캔 리스트</p>
-    <table class="tbl">
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">1</span>
       <thead><tr>
-        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
@@ -617,31 +546,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#7</td>
           <td class="num">18:42:05</td><td class="num">YT2618100719984412</td><td class="num" style="color:var(--ink-3)">–</td>
           <td class="num" style="color:var(--ink-3)">–</td><td class="num" style="color:var(--ink-3)">–</td>
           <td><span class="cs-dup">⚠ 없는 주문</span></td><td>Dean</td><td class="mut">송장 오입력 또는 타 시스템 주문 — 실물 라벨 확인</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="logsec">
-      <h4>마감 / 입출고 로그</h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">18:42:05</td><td class="act-cancel">마감 스캔 경고 (없는 주문 #7)</td><td class="num">–</td><td class="num">YT2618100719984412</td><td>Dean</td><td><span style="color:var(--ink-2)">매칭 오더 없음 — 실물 라벨 확인</span></td></tr>
-      </table>
-    </div>
   </div>
 </div></div>
 <div class="legend">
   <h3>State 2b 변경사항 — 경고 · 없는 주문</h3>
   <ol>
-    <li><span class="n">1</span><span>스캔한 송장이 <b>어떤 오더와도 매칭되지 않으면</b> 대형 빨간 "없는 주문" 경고 — 송장 오입력·타 시스템 물량 즉시 인지 <span class="ref">— 2026-07-23 추가</span></span></li>
-    <li><span class="n">2</span><span>음성 "Please check this order" 자동 재생(음성 켜짐 시) — Processing·중복과 동일한 경고 채널 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">3</span><span>없는 주문은 <b>마감 카운트 미포함</b> — 재확인·재스캔 후에도 없으면 관리자 확인. View Orders 미인식(제품 바코드) 플로우와 별개로, 송장 자체가 시스템에 없는 케이스 <span class="ref">— 2026-07-23 추가</span></span></li>
+    <li><span class="n">1</span><span>매칭 오더 없는 송장 = <b>리스트 행 빨강 틴트 + "⚠ 없는 주문" 판정</b>(Order·상태 "–") + 음성 자동 재생. <b>마감 카운트 미포함</b> — 실물 라벨 재확인·재스캔, 계속 없으면 관리자 확인. View Orders 미인식(제품 바코드) 플로우와 별개로 송장 자체가 시스템에 없는 케이스 <span class="ref">— 2026-07-23 추가</span></span></li>
   </ol>
 </div>
 </section>
@@ -674,22 +596,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
     </div>
 
-    <div class="bigstatus bs-warn anno">
-      <span class="dot" style="top:-11px;right:-11px">1</span>
-      <span class="ic">⚠</span>
-      <div>
-        <div class="big">확인 필요 — 중복 스캔</div>
-        <div class="bmeta" style="color:var(--red)">Tracking YT2618100710184356 · Order 413498 — <b>#2(18:40:18)에서 이미 스캔된 송장</b>입니다 (이번 스캔 #6 · 최초 작업자 Miranti). 합포장 건인지 확인하세요.</div>
-      </div>
-      <div class="bside anno" style="color:var(--red)"><span class="dot" style="top:-11px;right:-11px">2</span>🔊 음성<br><b style="color:var(--red)">"Please check<br>this order"</b><br>자동 재생됨</div>
-    </div>
 
-    <div class="clsbanner warn anno" style="margin-top:14px">
-      <span class="dot" style="top:-11px;left:-10px">3</span>
-      <b>중복 원본</b>
-      <span>최초 스캔: <b>#2 · 18:40:18 · Miranti · Order 413498</b> (이번 스캔 #6). 여러 박스 합포장이면 정상(코멘트로 사유 기록), 실수 재스캔이면 무시 — 어느 쪽이든 마감 카운트는 1건으로만 집계.</span>
-      <button class="btn btn-line btn-sm">💬 합포장 사유 Comment</button>
-    </div>
 
     <div class="clsstat">
       <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
@@ -701,9 +608,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="proglab">마감 진행 4.8% — 중복은 카운트 중복 집계 안 됨</p>
 
     <p class="sub" style="margin-top:22px">스캔 리스트</p>
-    <table class="tbl">
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">1</span>
       <thead><tr>
-        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th>
+        <th>#</th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
@@ -711,31 +619,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">18:40:18</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#6</td>
           <td class="num">18:41:44</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
           <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Dean</td><td class="mut"><b>#2와 중복</b> — 최초 18:40:18 (Miranti)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="logsec">
-      <h4>마감 / 입출고 로그</h4>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">18:41:44</td><td class="act-cancel">마감 스캔 경고 (중복)</td><td class="num">413498</td><td class="num">YT2618100710184356</td><td>Dean</td><td><span style="color:var(--ink-2)">동일 송장 재스캔 — 합포장 여부 확인</span></td></tr>
-      </table>
-    </div>
   </div>
 </div></div>
 <div class="legend">
   <h3>State 3 변경사항 — 경고 · 중복 스캔</h3>
   <ol>
-    <li><span class="n">1</span><span>오늘 이미 스캔된 송장을 다시 스캔하면 대형 빨간 "중복 스캔" 경고 — 엑셀 A열 중복값 기능의 디지털 대체 <span class="ref">— F Dean / 현재과정 1</span></span></li>
-    <li><span class="n">2</span><span>음성 "Please check this order" 자동 재생(음성 켜짐 시) — Processing과 동일한 경고 채널 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">3</span><span>중복 원본 표시 — <b>라인 번호로 어느 스캔끼리 중복인지 명시</b>(#6 ↔ #2) + 최초 스캔 시각·작업자·오더 노출, 합포장 여부 판단 지원. 중복은 마감 카운트에 이중 집계 안 함 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">1</span><span>오늘 이미 스캔된 송장 재스캔 = <b>리스트 행 빨강 틴트 + "⚠ 중복 스캔" 판정</b> + 음성 자동 재생 — 엑셀 A열 중복값 기능의 디지털 대체. 비고에 <b>라인 번호로 어느 스캔끼리 중복인지 명시</b>(#6 ↔ #2, 최초 스캔·작업자 포함, 합포장 여부 판단). 중복은 마감 카운트 이중 집계 안 함, 합포장 사유는 오더 Comments로 기록 <span class="ref">— F Dean / 현재과정 1</span></span></li>
   </ol>
 </div>
 </section>
@@ -802,25 +703,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span>오늘 경고 총 3건 — Processing 1건(413511, Outbound 처리 후 해소) · 중복 2건(합포장 확인, 코멘트 기록). 상세는 로그·Comments 참조.</span>
     </div>
 
-    <div class="logsec anno">
-      <h4>마감 / 입출고 로그</h4>
-      <span class="dot" style="top:-8px;left:118px">4</span>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">18:52:10</td><td class="act-out">마감 확정 (Daily Shipping Status 갱신)</td><td class="num">전체 (84건)</td><td class="num">–</td><td>Yongwon</td><td><span style="color:var(--ink-2)">경고 0 확인 후 확정 · 리포트 스냅샷 저장</span></td></tr>
-        <tr><td class="num">18:48:33</td><td class="act-out">OUTBOUND (경고 해소)</td><td class="num">413511</td><td class="num">YT2618100710223471</td><td>Dean</td><td><span style="color:var(--ink-2)">제로패킹 확인 완료 → 출고 처리</span></td></tr>
-        <tr><td class="num">18:41:07</td><td class="act-in">마감 스캔 (출고 확인)</td><td class="num">413540</td><td class="num">YT2618100710108810</td><td>Dean</td><td>–</td></tr>
-      </table>
-    </div>
   </div>
 </div></div>
 <div class="legend">
   <h3>State 4 변경사항 — 마감 완료</h3>
   <ol>
-    <li><span class="n">1</span><span>정상 스캔 = 수동 카운팅 대상과 <b>정확 일치</b> + 경고 0 → 대형 초록 "마감 완료" 상태, 마감 확정 시각·확정자 기록. 확정 즉시 오늘 스냅샷이 마감 기록(M2)에 저장 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span>정상 스캔 = 수동 카운팅 대상과 <b>정확 일치</b> + 경고 0 상태에서 <b>[마감 확정] 버튼을 눌러야</b> 이 화면 — 자동 마감 없음(일치 후에도 초과 실물 확인 여지). 마감 확정 시각·확정자 기록. 확정 즉시 오늘 스냅샷이 마감 기록(M2)에 저장 <span class="ref">— F 마감</span></span></li>
     <li><span class="n">2</span><span>마감 리포트 Export(CSV) — 기존 SS Daily Shipping Status 수기 복사/붙여넣기·수식 제거 과정을 대체 <span class="ref">— F 마감(현재과정)</span></span></li>
     <li><span class="n">3</span><span>경고 처리 요약 — 오늘 발생한 Processing/중복 경고와 해소 결과 집계 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">4</span><span>마감 확정이 로그에 기록 — 언제/누가 확정, Daily Shipping Status 갱신까지 감사 추적 <span class="ref">— C 로그(공통)</span></span></li>
   </ol>
 </div>
 </section>
@@ -853,17 +743,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
       <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
     </table>
-    <div style="margin-top:12px;display:flex;gap:8px">
-      <button class="btn btn-green-line btn-sm">기간 전체 Export (CSV)</button>
-      <button class="btn btn-line btn-sm">Daily Shipping Status 보기 ↗</button>
-    </div>
     <p class="mut" style="margin-top:10px">불일치 상태로는 마감 확정이 불가하므로 기록은 항상 "일치"로 저장됩니다 — 불일치 원인(누락·초과 스캔·미해소 경고)은 확정 전에 해소해야 합니다.</p>
   </div>
 </div></div>
 <div class="legend">
   <h3>마감 기록 — 신규 주석</h3>
   <ol>
-    <li><span class="n">1</span><span><b>마감 기록은 별도 페이지</b> — 상단 탭 [마감 | 마감 기록]으로 전환(모달 아님, 2026-07-23 전환). 일별 스냅샷: 날짜·출고 대상(수동)·정상 스캔·경고 발생→해소·일치 여부·마감자·확정 시각 + 일별/기간 CSV Export. "마감" 탭을 누르면 보던 마감 화면으로 복귀 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span><b>마감 기록은 별도 페이지</b> — 상단 탭 [마감 | 마감 기록]으로 전환(모달 아님, 2026-07-23 전환). 일별 스냅샷: 날짜·출고 대상(수동)·정상 스캔·경고 발생→해소·일치 여부·마감자·확정 시각. <b>각 마감 일자의 행 우측 CSV 버튼으로 그 날의 마감 리포트(스캔 전체 목록 포함)를 개별 다운로드</b>. "마감" 탭을 누르면 보던 마감 화면으로 복귀 <span class="ref">— F 마감</span></span></li>
   </ol>
 </div>
 </section>
@@ -888,6 +774,23 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>닫기</button>
       <button class="btn btn-green btn-sm" data-close>Outbound 처리 → 경고 해소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 스캔 기록 삭제 확인 ══════════════ -->
+<div class="overlay" id="m-scandel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>스캔 기록 삭제<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">이 스캔 기록을 없애시겠습니까?</b>
+      <p class="mut" id="scandelInfo" style="margin:8px 0 0">#7 · YT2618100719984412</p>
+      <div class="note">삭제 시 리스트와 마감 카운트에서 제외됩니다 — 오스캔·없는 주문 등 정리 용도. 삭제 이력은 백엔드에 보관됩니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>아니오</button>
+      <button class="btn btn-sm" id="scandelYes" style="background:var(--red);color:#fff">예 — 없애기</button>
     </div>
   </div>
 </div>
@@ -972,6 +875,26 @@ document.getElementById('startBtn0').addEventListener('click',()=>{
   if(!document.getElementById('targetIn0').value.trim()) return;
   document.querySelector('.wf-tab[data-state="s1"]').click();
 });
+/* 스캔 행 ✕ — 확인 모달 후 삭제 */
+let delRow=null;
+document.querySelectorAll('.scandel').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  delRow=b.closest('tr');
+  const c=delRow.cells;
+  document.getElementById('scandelInfo').textContent=c[0].textContent.trim()+' · '+c[2].textContent.trim();
+  document.getElementById('m-scandel').classList.add('open');
+}));
+document.getElementById('scandelYes').addEventListener('click',()=>{
+  if(delRow){delRow.remove();delRow=null;}
+  document.getElementById('m-scandel').classList.remove('open');
+});
+/* 숫자 변경 / 마감 취소 (State 1 배너) */
+document.getElementById('targetEdit').addEventListener('click',()=>{
+  const i=document.getElementById('targetIn1'), b=document.getElementById('targetEdit');
+  if(i.disabled){i.disabled=false;i.focus();i.select();b.textContent='저장';}
+  else{i.disabled=true;b.textContent='↺ 숫자 변경';}
+});
+document.getElementById('closeCancel').addEventListener('click',()=>{showState('s0');});
 /* 마감 기록 페이지 전환 — 상단 탭 */
 let lastState='s0';
 function showState(id){
