@@ -342,7 +342,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">✓ 8809571501234</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
           <td><span class="tag tag-pending">PENDING</span></td>
-          <td><span class="tag tag-jit">JIT</span></td><td class="num">–</td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
           <td><button class="btn btn-green btn-sm anno">Inbound + Outbound<span class="dot" style="top:-12px;right:-10px">8</span></button></td>
         </tr>
         <tr class="row-exist">
@@ -409,7 +409,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b> <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
     <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">6</span><span>Sourcing Route 칼럼 = 소싱 루트 <b>4종</b>(색 없이 검정 텍스트로만 구분) — <b>SMART BUY</b>(재고보충 구매·PO 기반) / <b>JIT</b>(오더 핸들러가 주문한 건, 미인바운드 상태일 수 있음) / <b>WHOLESALE</b>(홀세일) / <b>PARTNERSHIP</b>(브랜드 파트너십). Smart Buy·Wholesale·Partnership은 인바운드 완료, JIT만 PENDING 가능. 입고 요청(I)에서 지정된 루트가 송장번호로 매칭 <span class="ref">— I 입고요청 + C 검색</span></span></li>
+    <li><span class="n">6</span><span>Sourcing Route 칼럼 = 소싱 루트 <b>4종</b>(색 없이 검정 텍스트로만 구분) — <b>SMART BUY</b>(재고보충 구매·PO 기반) / <b>JIT</b>(오더 핸들러가 주문한 건, 미인바운드 상태일 수 있음) / <b>WHOLESALE</b>(홀세일) / <b>PARTNERSHIP</b>(브랜드 파트너십). Smart Buy·Wholesale·Partnership은 인바운드 완료, JIT만 PENDING 가능. JIT는 오더 핸들러가 주문 시 선택한 <b>구매 채널을 괄호 병기</b> — JIT (Coupang) / JIT (Naver) / JIT (Other retail). 실제 어드민 드롭다운(Coupang/Naver/Other retail/Existing inventory) 값 그대로이며, Existing inventory 선택 건은 창고 재고 차감이라 JIT가 아니라 해당 재고의 소싱 루트로 표시. 입고 요청(I)에서 지정된 루트가 송장번호로 매칭 <span class="ref">— I 입고요청 + C 검색</span></span></li>
     <li><span class="n">7</span><span>Quantity ≠ 1 → 옅은 주황 강조 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">8</span><span>마지막 제품 인바운드 조건 → Inbound + Outbound 동시 처리 버튼 <span class="ref">— C 동작</span></span></li>
     <li><span class="n">9</span><span>일괄 처리 버튼은 테이블 상단 배치 — 선택 항목 일괄 Inbound / 남은 제품 전체 일괄 Inbound + Outbound (전체 인바운드 = 오더 완결이므로 자동 아웃바운드까지, 단 Hold Shipment 오더는 Inbound까지만) <span class="ref">— C 동작 + F Hold</span></span></li>
@@ -514,7 +514,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">✓ 8809571501234</td>
           <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775317888</td>
           <td><span class="tag tag-pending">PENDING</span></td>
-          <td><span class="tag tag-jit">JIT</span></td><td class="num">–</td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
           <td class="anno"><button class="btn btn-green btn-sm">Inbound</button><span class="dot" style="top:-11px;right:-10px">21</span></td>
         </tr>
         <tr class="row-exist">
@@ -537,7 +537,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">–</td>
           <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775317888</td>
           <td><span class="tag tag-pending">PENDING</span></td>
-          <td><span class="tag tag-jit">JIT</span></td><td class="num">–</td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
           <td><button class="btn btn-green btn-sm">Inbound</button></td>
         </tr>
       </tbody>
