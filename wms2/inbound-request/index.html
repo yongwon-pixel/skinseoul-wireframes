@@ -127,7 +127,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .routecard.on.rc-partnership{border-color:var(--amber);background:var(--amber-soft)}
 .routecard .rc-badge{position:absolute;top:11px;right:12px}
 
-/* Procurement Hub PO 매칭 패널 */
+/* Inbound No. 자동 발번 패널 */
 .pomatch{margin-top:10px;border:1px solid var(--blue);background:var(--blue-soft);border-radius:10px;padding:13px 15px}
 .pomatch .po-head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--blue)}
 .pomatch select{margin-top:9px;width:100%;max-width:520px;border:1px solid var(--blue);border-radius:7px;
@@ -242,12 +242,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div class="tabpane" data-pane="mentions">
         <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>REQ-2026-0331</b> · Dean: "@Yongwon 이 홀세일 건 송장번호 언제 나와요?"<br><time>11:20</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>REQ-2026-0327</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it unread"><div class="body"><b>202607130002</b> · Dean: "@Yongwon 이 홀세일 건 송장번호 언제 나와요?"<br><time>11:20</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장됨">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
         <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>REQ-2026-0327</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="it"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
       </div>
     </div>
   </div>
@@ -281,49 +281,49 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </div>
       </div>
 
-      <!-- Procurement Hub PO 매칭 (스마트바이 전용) -->
-      <div class="fsec anno" id="poSec">
+      <!-- Inbound No. 자동 발번 -->
+      <div class="fsec anno">
         <span class="dot" style="top:16px;left:-14px">3</span>
-        <span class="flabel">Procurement Hub PO 매칭 <span class="mut" style="font-weight:400">— 스마트바이 루트 전용 (발주 → 입고 요청 연결)</span></span>
+        <span class="flabel">Inbound No. <span class="mut" style="font-weight:400">— 자동 발번 (전 루트 공통 · 수정 불가)</span></span>
         <div class="pomatch">
-          <div class="po-head">🔗 발주된 PO를 선택하면 제품·수량이 자동으로 채워집니다</div>
-          <select>
-            <option>PO-2026-0142 · COSRX 외 3종 · 4 SKU / 620개 · 발주 07-10 (Harshit)</option>
-            <option>PO-2026-0139 · Anua 외 1종 · 2 SKU / 180개 · 발주 07-08 (Harshit)</option>
-            <option>PO 없이 수동 입력</option>
-          </select>
-          <div class="po-note">선택됨: <a class="po-link">PO-2026-0142</a> — Buy Alert 발주 건. 입고 완료 시 PH의 GRN(입고 확인)에 자동 반영됩니다.</div>
+          <div class="po-head">이번 등록에 부여될 번호: <b style="font-size:15px;letter-spacing:.5px">202607230003</b> <span class="mut">(자동)</span></div>
+          <div class="po-note">형식 <b>YYYYMMDDNNNN</b> — 등록 순서대로 그날 <b>0001부터 9999까지</b> 자동 증가. 발주가 아닌 입고(파트너십 등)에도 맞도록 "PO No." 대신 <b>Inbound No.</b>로 통일 — Procurement Hub 시트 A열과 동일 체계.</div>
         </div>
       </div>
 
       <!-- 제품 입력 -->
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">4</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 브랜드·제품·SKU·수량 (제품명/SKU 자동완성)</span></span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— SKU No. / Product Name으로 검색해 클릭 선택 · Qty만 입력</span></span>
         <table class="prodtbl">
           <thead><tr>
-            <th style="width:150px">브랜드</th><th>제품명 · SKU (자동완성)</th><th style="width:90px">사이즈</th><th style="width:90px">수량</th><th style="width:40px"></th>
+            <th>제품 검색 · 선택 <span style="font-weight:400;opacity:.7">(SKU No. / Product Name)</span></th><th style="width:96px">SKU No.</th><th style="width:120px">Brand</th><th style="width:70px">Qty</th><th style="width:140px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:52px">FOC</th><th style="width:130px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
           </tr></thead>
           <tbody>
             <tr class="prefill">
+              <td><input value="Advanced Snail 96 Mucin Power Essence, 100ml" readonly></td>
+              <td><input value="100040311" readonly></td>
               <td><input value="COSRX" readonly></td>
-              <td><input value="Advanced Snail 96 Mucin Power Essence · 100040311" readonly></td>
-              <td><input value="100ml" readonly></td>
               <td><input value="200" class="num"></td>
+              <td><input value="15,000" class="num"></td>
+              <td style="text-align:center"><input type="checkbox" class="foc"></td>
+              <td><input value="17,000" class="num" placeholder="옵션"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
             <tr class="prefill">
+              <td><input value="Relief Sun : Rice + Probiotics, 50ml" readonly></td>
+              <td><input value="100031820" readonly></td>
               <td><input value="Beauty of Joseon" readonly></td>
-              <td><input value="Relief Sun : Rice + Probiotics · 100031820" readonly></td>
-              <td><input value="50ml" readonly></td>
               <td><input value="300" class="num"></td>
+              <td><input value="9,700" class="num"></td>
+              <td style="text-align:center"><input type="checkbox" class="foc"></td>
+              <td><input value="15,200" class="num" placeholder="옵션"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
             <tr class="anno">
-              <td><input value="Anua" placeholder="브랜드"></td>
               <td>
                 <div class="auto">
-                  <input value="heartleaf 77" placeholder="영어 제품명 입력 → 자동완성에서 선택">
+                  <input value="100045210" placeholder="SKU No. 또는 영어 제품명 → 자동완성에서 클릭 선택">
                   <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
                   <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
                   <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
@@ -331,7 +331,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
                 <span class="dot" style="top:-11px;right:-8px">5</span>
               </td>
               <td><input value="" placeholder="자동"></td>
+              <td><input value="" placeholder="자동"></td>
               <td><input value="120" class="num"></td>
+              <td><input value="" class="num" placeholder="필수"></td>
+              <td style="text-align:center"><input type="checkbox" class="foc"></td>
+              <td><input value="" class="num" placeholder="옵션"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
           </tbody>
@@ -345,6 +349,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <!-- 송장번호 + 예상 입고일 + 메모 -->
       <div class="fsec">
         <div class="frow">
+          <div class="fld anno" style="min-width:200px">
+            <label>Supplier <span style="color:var(--red)">*</span></label>
+            <input value="Coupang" placeholder="공급처 (필수)">
+            <span class="dot" style="top:14px;right:-8px">12</span>
+          </div>
           <div class="fld opt fld-inv anno" style="flex:1;min-width:280px">
             <label>송장번호 (Tracking No)</label>
             <input value="" placeholder="발송 후 입력 — 비워두고 신청 가능 (나중에 입력)">
@@ -383,9 +392,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>입고 요청 화면 신설 — 창고로 들어오는 <b>모든 물량의 공통 신청 관문</b>. 스마트바이 재고보충뿐 아니라 홀세일·브랜드 파트너십 입고도 여기서 신청 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">2</span><span>소싱 루트 지정 — 라디오 카드 3종(스마트바이 / 홀세일 / 브랜드 파트너십), 선택 루트에 따라 아래 폼이 바뀜. 배지 색은 View Orders 소싱루트 배지와 동일 규약 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">3</span><span>Procurement Hub PO 매칭 (스마트바이 전용) — 발주된 PO 선택 시 제품·수량 자동 채움, 입고 완료 시 PH의 GRN에 자동 반영 (구매–입고 연결). 홀세일·파트너십은 이 패널 미노출 <span class="ref">— I + J Procurement Hub</span></span></li>
-    <li><span class="n">4</span><span>입고 제품 입력 — 브랜드·제품·SKU·사이즈·수량. PO 매칭 시 상단 행 자동 프리필(파란 틴트), 추가 제품은 수동 입력 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">5</span><span>제품명/SKU 자동완성 — 영어 입력 시 카탈로그에서 제품 검색(View Orders 미인식 모달과 동일 문법), 선택 시 브랜드·사이즈·SKU 자동 채움 <span class="ref">— I + F 자동완성</span></span></li>
+    <li><span class="n">3</span><span><b>Inbound No. 자동 발번</b> — 등록 순서대로 <b>YYYYMMDDNNNN</b>(NNNN은 그날 0001~9999) 자동 지정, 수정 불가. 발주가 아닌 입고(파트너십)에도 맞도록 "PO No." 대신 <b>Inbound No.</b>로 통일 — Procurement Hub 시트 A열(12자리)과 동일 체계. PO 매칭 패널은 폐기(2026-07-23) <span class="ref">— I + J</span></span></li>
+    <li><span class="n">4</span><span>입고 제품 입력 재설계(2026-07-23) — <b>SKU No. 또는 Product Name으로 검색해 클릭 선택</b>(선택 시 제품명·SKU·Brand 자동 확정), <b>Size 제거·Qty만 입력</b> <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">5</span><span>검색 자동완성 — <b>SKU No.·영어 제품명 어느 쪽으로도</b> 카탈로그 검색(View Orders 미인식 모달과 동일 문법), 클릭 선택 시 확정 <span class="ref">— I + F 자동완성</span></span></li>
+    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — <b>FOC(Free of charge) 체크 시 0원 잠금</b>(협찬·무상 증정분) <span class="ref">— 시트 Unit Cost 열</span></span></li>
+    <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 스마트바이·홀세일만 입력(파트너십 선택 시 칼럼 미노출) <span class="ref">— 시트 JIT Price 열</span></span></li>
+    <li><span class="n">12</span><span><b>Supplier 필수</b> — 공급처 기록(시트 Supplier 열 대응) <span class="ref">— 시트 연동</span></span></li>
     <li><span class="n">6</span><span>제품 행 추가 버튼 — 한 요청에 여러 SKU 신청 가능 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">7</span><span>송장번호 입력란 — <b>신청 시점엔 미입력 가능</b>(대시 테두리로 선택 필드 표시), 물량 발송 후 나중에 입력 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
@@ -394,7 +406,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">15</span><span>좌우 여백 축소 — 폼 전체가 스크롤 없이 한 화면 <span class="ref">— C 화면 규약</span></span></li>
     <li><span class="n">16</span><span><b>상단 페이지 탭 [신규 신청 | 요청 리스트]</b> 신설(2026-07-23) — 실제 어드민 화면 안에서 신청 폼과 요청 리스트를 오가는 전환 탭(와이어프레임의 보라 상태 탭과 별개). 신규 신청 탭에서 루트 선택·신청, 요청 리스트 탭에서 상태별 조회·송장 입력 <span class="ref">— I 입고요청</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 스마트바이 루트 = J. Procurement Hub PO 기반(발주 → 입고 요청 등록으로 연결). 홀세일·파트너십은 PH 미경유로 직접 신청. 모든 라벨은 "Comments"로 통일(한글 "코멘트" 금지).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): Received Date·Carrier는 입고 시 자동 기록되어 <b>요청 리스트에서 표시</b>(폼 입력 아님), 송장번호는 어드민에서 나중 입력. <b>요청 리스트 데이터는 추후 구글시트(Procurement Hub)가 그대로 긁어가는 구조</b> — 시트 연동 설계는 마지막 단계에서 별도 진행(2026-07-23 합의). 모든 라벨은 "Comments"로 통일(한글 "코멘트" 금지).</p>
 </div>
 </section>
 
@@ -433,44 +445,56 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </div>
       </div>
 
-      <!-- 홀세일/파트너십: PO 미경유 안내 -->
+      <!-- Inbound No. 자동 발번 -->
       <div class="fsec anno">
         <span class="dot" style="top:16px;left:-14px">1</span>
-        <span class="flabel">Procurement Hub PO 매칭</span>
-        <div class="directnote">
-          <b style="color:var(--ss-purple)">홀세일 · 브랜드 파트너십 = PH 미경유 직접 신청</b> — Procurement Hub PO 없이 이 화면에서 바로 등록합니다. (PO 매칭은 스마트바이 루트 전용)
+        <span class="flabel">Inbound No. <span class="mut" style="font-weight:400">— 자동 발번 (전 루트 공통 · 수정 불가)</span></span>
+        <div class="pomatch">
+          <div class="po-head">이번 등록에 부여될 번호: <b style="font-size:15px;letter-spacing:.5px">202607230004</b> <span class="mut">(자동)</span></div>
+          <div class="po-note">직접 신청 루트(홀세일·파트너십)도 동일 체계 — <b>YYYYMMDDNNNN</b> 등록 순서 자동 증가.</div>
         </div>
       </div>
 
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">2</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 전량 수동 입력 (자동완성 지원)</span></span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— SKU No. / Product Name으로 검색해 클릭 선택 · Qty만 입력</span></span>
         <table class="prodtbl">
           <thead><tr>
-            <th style="width:150px">브랜드</th><th>제품명 · SKU (자동완성)</th><th style="width:90px">사이즈</th><th style="width:90px">수량</th><th style="width:40px"></th>
+            <th>제품 검색 · 선택 <span style="font-weight:400;opacity:.7">(SKU No. / Product Name)</span></th><th style="width:96px">SKU No.</th><th style="width:120px">Brand</th><th style="width:70px">Qty</th><th style="width:140px">Unit Cost (KRW) *</th><th style="width:52px">FOC</th><th style="width:130px">JIT Price (KRW)</th><th style="width:40px"></th>
           </tr></thead>
           <tbody>
             <tr>
+              <td><input value="1025 Dokdo Toner, 200ml" readonly></td>
+              <td><input value="100052117" readonly></td>
               <td><input value="Round Lab" readonly></td>
-              <td><input value="1025 Dokdo Toner · 100052117" readonly></td>
-              <td><input value="200ml" readonly></td>
               <td><input value="500" class="num"></td>
+              <td><input value="8,900" class="num"></td>
+              <td style="text-align:center"><input type="checkbox" class="foc"></td>
+              <td><input value="12,000" class="num" placeholder="옵션"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
             <tr>
+              <td><input value="1025 Dokdo Cleanser, 150ml" readonly></td>
+              <td><input value="100052124" readonly></td>
               <td><input value="Round Lab" readonly></td>
-              <td><input value="1025 Dokdo Cleanser · 100052124" readonly></td>
-              <td><input value="150ml" readonly></td>
               <td><input value="300" class="num"></td>
+              <td><input value="0" class="num" disabled style="background:var(--canvas);color:var(--ink-3)"></td>
+              <td style="text-align:center"><input type="checkbox" class="foc" checked></td>
+              <td><input value="" class="num" placeholder="옵션"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
           </tbody>
         </table>
+        <p class="mut" style="margin:6px 0 0">2행 = 프로모션 무상 증정분 — <b>FOC(Free of charge) 체크 시 Unit Cost 0원 잠금</b>. JIT Price는 스마트바이·홀세일만 옵션 입력(파트너십 선택 시 칼럼 미노출)</p>
         <div style="margin-top:8px"><button class="btn btn-line btn-sm">＋ 제품 행 추가</button></div>
       </div>
 
       <div class="fsec">
         <div class="frow">
+          <div class="fld" style="min-width:200px">
+            <label>Supplier <span style="color:var(--red)">*</span></label>
+            <input value="비엠유통" placeholder="공급처 (필수)">
+          </div>
           <div class="fld opt fld-inv" style="flex:1;min-width:280px">
             <label>송장번호 (Tracking No)</label>
             <input value="10325661220417" placeholder="발송 후 입력 — 비워두고 신청 가능">
@@ -500,8 +524,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 2 신규/변경 — 홀세일 / 브랜드 파트너십 (직접 신청)</h3>
   <ol>
-    <li><span class="n">1</span><span>홀세일·파트너십은 <b>PH 미경유 직접 신청</b> — Procurement Hub PO 매칭 패널 대신 안내 문구. PO 매칭은 스마트바이 루트에서만 노출 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>제품 전량 수동 입력(자동완성 지원) — PO 프리필 없음 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">1</span><span>직접 신청 루트(홀세일·파트너십)도 <b>Inbound No. 동일 자동 발번</b>(YYYYMMDDNNNN) — 데모 202607230004 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>제품 입력 동일 규격 — 검색 선택·Qty·Unit Cost 필수. <b>2행 FOC 데모</b>: 무상 증정분 체크 시 Unit Cost 0원 잠금. JIT Price는 홀세일 옵션(파트너십 미노출) <span class="ref">— I 입고요청</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">신청 시 송장번호를 이미 아는 경우(예: 벤더 직송 송장 확보) 바로 입력하면 등록과 동시에 "발송" 상태로 설정되고 View Orders 매칭이 즉시 활성화됩니다. 미입력이면 "신청" 상태.</p>
 </div>
@@ -510,7 +534,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <!-- ══════════════ STATE 3 : 요청 리스트 (상태별) ══════════════ -->
 <section class="state" id="s3">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast"><span>✓ 입고 요청 등록됨 — REQ-2026-0334</span><small>새로고침 없음 · 리스트 상단에 추가</small></div>
+  <div class="toast"><span>✓ 입고 요청 등록됨 — 202607130003</span><small>새로고침 없음 · 리스트 상단에 추가</small></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -548,35 +572,35 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>요청 ID</th><th class="anno">소싱 루트<span class="dot" style="top:-11px;left:80px">3</span></th><th>브랜드 · 제품</th><th>SKU</th><th>수량</th>
-        <th class="anno">PO 매칭<span class="dot" style="top:-11px;left:64px">4</span></th><th class="anno">송장번호<span class="dot" style="top:-11px;left:70px">5</span></th><th>예상 입고일</th><th>신청자</th><th class="anno">상태<span class="dot" style="top:-11px;right:-8px">6</span></th><th>Actions</th>
+        <th>Inbound No.</th><th class="anno">소싱 루트<span class="dot" style="top:-11px;left:80px">3</span></th><th>브랜드 · 제품</th><th>SKU</th><th>수량</th>
+        <th class="anno">송장번호<span class="dot" style="top:-11px;left:70px">4</span></th><th>예상 입고일</th><th class="anno">Received Date<span class="dot" style="top:-11px;left:90px">10</span></th><th>신청자</th><th class="anno">상태<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Actions</th>
       </tr></thead>
       <tbody>
         <!-- 신청 (송장 미입력) -->
         <tr>
           <td><input type="checkbox" checked></td>
-          <td class="num">REQ-2026-0334</td>
+          <td class="num">202607130003</td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
           <td><b>COSRX</b> Advanced Snail 96 Mucin Essence, 100ml 외 2종</td>
           <td class="num">100040311 +2</td>
           <td class="num">620</td>
-          <td><a class="po-link">PO-2026-0142</a></td>
-          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button><span class="dot" style="top:-12px;right:-8px">7</span></td>
+          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button><span class="dot" style="top:-12px;right:-8px">6</span></td>
           <td class="num">07-16</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
           <td><span class="tag tag-requested">신청</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td>
-          <td class="num">REQ-2026-0331</td>
+          <td class="num">202607130002</td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td>
           <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml 외 1종</td>
           <td class="num">100052117 +1</td>
           <td class="num">800</td>
-          <td class="num">–</td>
           <td><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button></td>
           <td class="num">07-18</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td>Dean</td>
           <td><span class="tag tag-requested">신청</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button></td>
@@ -584,28 +608,28 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <!-- 발송 (송장 입력됨, View Orders 매칭 활성) -->
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num">REQ-2026-0327</td>
+          <td class="num">202607120004</td>
           <td><span class="tag tag-partnership">PARTNERSHIP</span></td>
           <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (협찬)</td>
           <td class="num">100038120</td>
           <td class="num">300</td>
-          <td class="num">–</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417</span> <span class="route-note">✓ View Orders 매칭됨</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417</span> <span class="route-note">✓ View Orders 매칭됨</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
           <td class="num">07-15</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td>Miranti</td>
           <td><span class="tag tag-shipped">발송</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button></td>
         </tr>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num">REQ-2026-0322</td>
+          <td class="num">202607120001</td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
           <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td class="num">100045210</td>
           <td class="num">180</td>
-          <td><a class="po-link">PO-2026-0139</a></td>
           <td class="num" style="color:var(--blue)">10324880021991</td>
           <td class="num">07-14</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
           <td><span class="tag tag-shipped">발송</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
@@ -613,28 +637,28 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <!-- 입고완료 (View Orders 스캔으로 자동 전환) -->
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num">REQ-2026-0318</td>
+          <td class="num">202607100005</td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td>
           <td><b>Beauty of Joseon</b> Relief Sun, 50ml 외 1종</td>
           <td class="num">100031820 +1</td>
           <td class="num">1,000</td>
-          <td class="num">–</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note"><a class="vo-link" data-modal="m-vo">View Orders에서 스캔 완료 →</a></span><span class="dot" style="top:-12px;right:-8px">9</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note"><a class="vo-link" data-modal="m-vo">View Orders에서 스캔 완료 →</a></span><span class="dot" style="top:-12px;right:-8px">8</span></td>
           <td class="num">07-11</td>
+          <td class="num">07-11 14:22</td>
           <td>Dean</td>
           <td><span class="tag tag-inbounded">입고완료</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num">REQ-2026-0311</td>
+          <td class="num">202607090002</td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
           <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
           <td class="num">100040311</td>
           <td class="num">240</td>
-          <td><a class="po-link">PO-2026-0128</a></td>
           <td class="num" style="color:var(--blue)">10322198837710</td>
           <td class="num">07-09</td>
+          <td class="num">07-09 10:05</td>
           <td>Yongwon</td>
           <td><span class="tag tag-inbounded">입고완료</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
@@ -644,7 +668,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 4 · 발송 5 · 입고완료 3</p>
 
     <div class="note purple anno" style="max-width:none">
-      <span class="dot" style="top:-11px;left:-10px">10</span>
+      <span class="dot" style="top:-11px;left:-10px">9</span>
       <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
     </div>
   </div>
@@ -655,13 +679,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">1</span><span>상태 필터 칩 — 전체 / 신청 / 발송 / 입고완료. 3개 상태로 요청 라이프사이클 관리 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력 / 일괄 발송 처리. 입고완료 전환은 View Orders 스캔에서 자동 <span class="ref">— I + C 일괄바 규약</span></span></li>
     <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지(View Orders와 동일 색) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">4</span><span>PO 매칭 칼럼 — 스마트바이 건만 Procurement Hub PO 번호 링크 표시, 홀세일·파트너십은 "–" <span class="ref">— I + J Procurement Hub</span></span></li>
-    <li><span class="n">5</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">6</span><span>상태 칼럼 — <b>신청</b>(송장 미입력/발송 전) → <b>발송</b>(송장 입력·발송) → <b>입고완료</b>(센터 스캔 입고) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">7</span><span>신청 상태 = 송장 미입력 → 발송 후 "미입력 → 입력"으로 나중에 송장번호 등록 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">8</span><span>발송 상태 = 송장 입력됨 → <b>View Orders 매칭 활성</b> 표시. 아직 물량 미도착 <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">9</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">10</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b>(송장 미입력/발송 전) → <b>발송</b>(송장 입력·발송) → <b>입고완료</b>(센터 스캔 입고) <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">6</span><span>신청 상태 = 송장 미입력 → 발송 후 "미입력 → 입력"으로 나중에 송장번호 등록 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">7</span><span>발송 상태 = 송장 입력됨 → <b>View Orders 매칭 활성</b> 표시. 아직 물량 미도착 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">9</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">10</span><span><b>Received Date 칼럼</b> — 입고완료 시 View Orders 스캔 시각 자동 기록(시트 Received Date 열 대응), 미입고 건은 "–". Carrier도 동일하게 자동 기록 <span class="ref">— 시트 연동</span></span></li>
   </ol>
 </div>
 </section>
@@ -670,7 +694,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="overlay" id="m-invoice">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>송장번호 입력 — REQ-2026-0334<button class="x" data-close>✕</button></header>
+    <header>송장번호 입력 — 202607130003<button class="x" data-close>✕</button></header>
     <div class="body">
       <b style="color:var(--ink)">물량 발송 후 송장번호(Tracking No)를 입력하세요.</b>
       <p class="mut" style="margin:8px 0 0">신청 시점에 미입력했던 건 — 발송이 완료되면 이 번호로 View Orders와 매칭됩니다.</p>
@@ -680,7 +704,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="qrow" style="margin-top:14px">
         <label style="font-size:13px;color:var(--ink)"><input type="checkbox" checked> 입력과 동시에 상태를 <span class="tag tag-shipped" style="margin:0 3px">발송</span>으로 변경</label>
       </div>
-      <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 스마트바이 건은 <a class="po-link">PO-2026-0142</a>와 연결됩니다.</div>
+      <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 이 Inbound No.(202607130003) 건과 연결됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
@@ -781,6 +805,12 @@ document.querySelectorAll('.filterchips .chip').forEach(c=>{
     c.classList.add('on');
   });
 });
+/* FOC(Free of charge) — 체크 시 Unit Cost 0원 잠금 */
+document.querySelectorAll('.foc').forEach(c=>c.addEventListener('change',()=>{
+  const cost=c.closest('tr').cells[4].querySelector('input');
+  if(c.checked){cost.value='0';cost.disabled=true;cost.style.background='var(--canvas)';cost.style.color='var(--ink-3)';}
+  else{cost.disabled=false;cost.value='';cost.style.background='';cost.style.color='';}
+}));
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';

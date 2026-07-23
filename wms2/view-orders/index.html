@@ -286,32 +286,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="mut" style="margin-top:6px">송장·제품 바코드를 스캔하거나 번호를 입력하면 <b>즉시 해당 오더 화면으로 전환</b>됩니다</div>
     </div>
 
-    <div class="anno" style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-      <span class="dot" style="top:-10px;left:-10px">2</span>
-      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">오늘 스캔 오더</div><div style="font-size:22px;font-weight:800;color:var(--ink)">42</div></div>
-      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">Inbound</div><div style="font-size:22px;font-weight:800;color:var(--green)">38</div></div>
-      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">Outbound</div><div style="font-size:22px;font-weight:800;color:var(--blue)">31</div></div>
-      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">미인식 (미입력 리스트)</div><div style="font-size:22px;font-weight:800;color:var(--red)">3</div></div>
-    </div>
-
-    <p class="sub anno" style="margin-top:22px">최근 처리 오더<span class="dot" style="top:-6px;left:-14px">3</span></p>
-    <table class="tbl" style="margin-top:6px">
-      <thead><tr><th>시각</th><th>Order</th><th>최근 액션</th><th>작업자</th></tr></thead>
-      <tbody>
-        <tr><td class="num">10:58</td><td class="num" style="color:var(--blue)"><b>413865</b></td><td>Inbound (포어레미디 폼)</td><td>Dean</td></tr>
-        <tr><td class="num">10:51</td><td class="num" style="color:var(--blue)"><b>413902</b></td><td>Outbound — prepare shipment 전환</td><td>Miranti</td></tr>
-        <tr><td class="num">10:44</td><td class="num" style="color:var(--blue)"><b>413712</b></td><td>Inbound (시카페어 세트)</td><td>Dean</td></tr>
-      </tbody>
-    </table>
   </div>
 </div></div>
 
 <div class="legend">
   <h3>State 0 변경사항 — 대기 (스캔 전 첫 화면)</h3>
   <ol>
-    <li><span class="n">1</span><span>첫 진입 화면 = <b>빈 통합 검색창 자동 포커스</b> — 바코드 스캔/번호 입력 즉시 해당 오더 화면(상태 1~5)으로 전환. 자동 판별·쿠팡 QR [V1] 프리픽스 제거·포커스 복귀 규칙은 State 1 범례 1·12·14 참조 — <b>규칙 문구는 화면에 노출하지 않음</b> <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">2</span><span>오늘 처리 현황 타일 — 스캔 오더/Inbound/Outbound/미인식 카운트. 미인식 클릭 시 트래킹넘버 미입력 리스트로 이동 <span class="ref">— 신규 제안</span></span></li>
-    <li><span class="n">3</span><span>최근 처리 오더 — 방금 처리한 오더 재진입 링크(Order 클릭 시 해당 상태 화면) <span class="ref">— 신규 제안</span></span></li>
+    <li><span class="n">1</span><span>첫 진입 화면 = <b>빈 통합 검색창 자동 포커스</b> — 바코드 스캔/번호 입력 즉시 해당 오더 화면(상태 1~5)으로 전환. 자동 판별·쿠팡 QR "[V1]바코드" 인식([V1] 뒤 바코드 매칭)·포커스 복귀 규칙은 State 1 범례 1·12·14 참조 — <b>규칙 문구는 화면에 노출하지 않음</b> <span class="ref">— C 검색</span></span></li>
   </ol>
 </div>
 </section>
@@ -483,7 +464,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 1 변경사항 — 스캔 결과 (마지막 제품 남은 오더: 4개 중 3개 인바운드 완료, 방금 스캔한 JIT가 마지막)</h3>
   <ol>
-    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 [V1] 프리픽스 자동 제거 후 매칭. <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
+    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 <b>[V1] 뒤의 바코드도 인식되도록 변경 필요</b>(프리픽스가 붙은 입력도 매칭). <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
     <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
     <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b> <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
