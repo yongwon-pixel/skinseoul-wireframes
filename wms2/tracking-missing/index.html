@@ -247,7 +247,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <!-- ── 상단: 미인식 제품 풀 ── -->
     <div class="poolhead anno" style="margin-top:20px">
       <b>⚠ 미인식 제품 풀 · <span id="poolCount">3</span>건</b>
-      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b>는 쿠팡 발주 시 생성되는 주문번호(예: 12101316464794, 내부 Order ID 아님) — 등록 시 센터가 <b>필수 입력</b>, 자동 추정의 1차 근거입니다.</span>
+      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b>는 쿠팡 발주 시 생성되는 주문번호(예: 12101316464794, 내부 Order ID 아님) — 등록 1단계에서 조회를 시도한 값(주문번호 없음 선택 시 "–"), 자동 추정의 1차 근거입니다. <b>조회 매칭에 성공한 건은 그 자리에서 트래킹이 등록되어 이 리스트에 오지 않습니다.</b></span>
       <span class="dot" style="top:-11px;left:-11px">1</span>
     </div>
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
@@ -264,7 +264,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">8809416470726</td>
           <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
           <td>Miranti</td><td class="num">07-13 10:12</td>
-          <td style="font-size:12.5px"><b>Dean</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414230</span><br><span style="font-size:11px;font-weight:700;color:var(--green)">쿠팡 주문번호 일치</span></td>
+          <td style="font-size:12.5px"><b>Dean</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414230</span><br><span style="font-size:11px;font-weight:700;color:var(--green)">쿠팡 주문번호 일치 (사후 재대조)</span></td>
           <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
         <tr class="row-hit">
@@ -279,14 +279,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
         <tr class="row-hit">
-          <td class="num" style="color:var(--blue);font-weight:700">12101316458821</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td><div class="thumb">IMG</div></td>
           <td><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
           <td class="num">8809894261234</td>
           <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
-          <td style="font-size:12.5px"><b>Miranti</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413998</span><br><span style="font-size:11px;font-weight:700;color:var(--green)">쿠팡 주문번호 일치</span></td>
+          <td style="font-size:12.5px"><b>Miranti</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413998</span><br><span style="font-size:11px;font-weight:700;color:var(--amber)">제품 일치 (주문번호 없음)</span></td>
           <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
         </tr>
       </tbody>
@@ -298,14 +298,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>트래킹넘버 미입력 리스트 — 신규 / 변경 주석 (admin 신규 페이지)</h3>
   <ol>
     <li><span class="n">0</span><span>신규 admin 페이지 — 트래킹넘버 없는 주문을 한쪽에 치워두던 수동 프로세스를 대체. 쿠팡은 오더넘버 즉시 생성·트래킹넘버 지연 생성 → 미인식·미입력 건을 모아 추적 <span class="ref">— F 트래킹 자동화</span></span></li>
-    <li><span class="n">1</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. <b>주문번호 칼럼 = 쿠팡 발주 주문번호</b>(예: 12101316464794), 등록 시 <b>필수 입력</b>(2026-07-23 — 자동 추정 1차 근거). 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출 <span class="ref">— F 플로우 5</span></span></li>
+    <li><span class="n">1</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. <b>주문번호 칼럼 = 쿠팡 발주 주문번호</b>(예: 12101316464794), 등록 1단계 조회 시도값(없음 선택 시 "–") — 자동 추정 1차 근거. <b>조회 매칭 성공 건은 즉석 트래킹 등록되어 풀에 안 옴</b>(일치 표기는 사후 재대조 케이스). 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출 <span class="ref">— F 플로우 5</span></span></li>
     <li><span class="n">2</span><span><b>의심 오더 (자동 추정)</b> — 시스템이 바코드→제품, 쿠팡 주문번호 대조로 이 제품이 들어있을 오더와 오더 핸들러를 <b>미리 추정해 표시</b>. 근거 강도: <b style="color:var(--green)">쿠팡 주문번호 일치</b>(초록) / <b style="color:var(--amber)">제품만 일치</b>(주황). 등록 시 #unrecognized-tracking 자동 알림에 의심 PIC도 멘션 → 핸들러는 와서 확인만 하면 됨 <span class="ref">— 2026-07-23 UX 역전</span></span></li>
     <li><span class="n">3</span><span><b>"확인해보기" 버튼 → 모달(M1)</b> — 의심 오더 카드를 보고 맞으면 <b>"맞습니다 — 이 오더에 매칭"</b> 클릭 한 번으로 끝. 아니면 "직접 찾기"로 PIC 검색 폴백(해당 제품 포함 오더 후보 → 선택 매칭). 확정 시 풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림) <span class="ref">— F 플로우 2·5</span></span></li>
     <li><span class="n">4</span><span>Product Name 맨 앞 브랜드명 항상 노출 (View Orders B 결정 상속) <span class="ref">— B</span></span></li>
     <li><span class="n">5</span><span>Comments — 우상단 허브([@ Mentions]+[★ Saved]). @태그 시 Slack 자동 알림, 코멘트 클릭 시 해당 오더 페이지로 이동 <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바·Slack 알림 칼럼·해결 완료 로그·통합 검색바·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 팝업 단일 진입점, 알림은 자동 발송. <b>매칭 UX 역전:</b> 핸들러가 제품마다 자기 이름을 검색하는 방식(구) → 시스템이 의심 오더·핸들러를 먼저 제시하고 핸들러는 확인만 하는 방식(신), 직접 검색은 추정 불일치 시 폴백.</p>
-  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업 → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수(필수)·쿠팡 주문번호(필수)·메모 입력 → (4) #unrecognized-tracking 자동 알림(의심 PIC 멘션) → (5) 이 페이지 미인식 풀에 의심 오더와 함께 표시 → (6) 담당 PIC가 "확인해보기"(M1)로 확인·매칭 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p></div>
+  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → <b>주문번호 조회 팝업</b> → (2a) 매칭 성공 → 그 자리에서 트래킹번호 매칭 등록(이 리스트에 안 옴, 재스캔 시 정상 인식) / (2b) 주문번호 없음·매칭 실패 → 미입력 전송 모달(제품명 영어 자동완성·갯수·메모) → (3) #unrecognized-tracking 자동 알림(의심 PIC 멘션) → (4) 이 페이지 미인식 풀에 의심 오더와 함께 표시 → (5) 담당 PIC가 "확인해보기"(M1)로 확인·매칭 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p></div>
 </section>
 
 <!-- 모달: 확인해보기 (의심 오더 확인·매칭) -->

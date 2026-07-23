@@ -427,7 +427,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">22</span><span><b>반품 라벨 출력</b>(우하단, 작업 상태 1·1b·2·3 공통) — 스캔 중 오배송·파손 발견 시 제품 선택 → 모달(M4): 택배사 선택/직접 입력 + 사이즈·수량(선택 입력) → 라벨지에 택배사명·제품명(KR)·사이즈·수량 인쇄해 공급처 반품 박스에 부착. 반송 모드(State 4, 고객→우리)와 별개 개념 <span class="ref">— C</span></span></li>
     <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 "미입력 리스트로 보내시겠습니까?" 팝업 (F — 상단 모달 탭 참조).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조).</p>
 </div>
 </section>
 
@@ -1084,13 +1084,51 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 미인식 바코드 ══════════════ -->
+<!-- ══════════════ MODAL : 미인식 바코드 — 1단계 주문번호 조회 ══════════════ -->
 <div class="overlay" id="m-unrec">
-  <div class="modal anno">
+  <div class="modal anno" style="max-width:640px">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
     <header>바코드 인식 실패<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">스캔한 바코드 <span class="num">8809110223344</span>와 일치하는 오더가 없습니다.<br>미입력 리스트로 보내시겠습니까?</b>
+      <b style="color:var(--ink)">스캔한 바코드 <span class="num">8809110223344</span>와 일치하는 오더가 없습니다.</b>
+      <p class="mut" style="margin:8px 0 0">쿠팡 발주 <b>주문번호</b>를 입력하면 매칭되는 제품을 찾아 트래킹번호를 바로 등록할 수 있습니다.</p>
+      <div class="qrow" style="margin-top:12px">
+        <b style="color:var(--ink)">주문번호</b>
+        <input id="unrecNo" value="12101316464794" style="flex:1;min-width:220px;text-align:left;font-weight:600">
+        <button class="btn btn-blue btn-sm" id="unrecSearch">🔍 조회</button>
+      </div>
+      <p class="mut" style="margin:6px 0 0;font-size:11.5px">데모: 이 값 그대로 조회 = 매칭 성공 경로 · 값을 바꿔 조회 = 매칭 실패 경로</p>
+      <div id="unrecFound" style="display:none;margin-top:12px">
+        <p class="mut" style="margin:0 0 6px">주문번호 <b class="num" style="color:var(--blue)">12101316464794</b>에 매칭되는 제품 <b>2건</b> — 스캔한 제품 우측의 매칭 버튼을 누르세요</p>
+        <table class="tbl" style="min-width:0;font-size:12.5px;margin-top:0">
+          <thead><tr><th>Image</th><th>Product Name</th><th>Order</th><th>Qty</th><th>Tracking No</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml<br><span class="mut">닥터자르트 — 포어레미디 리뉴잉 폼 클렌저</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835644</td><td><button class="btn btn-green btn-sm trkmatch">트래킹번호 매칭</button></td></tr>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam, 150ml<br><span class="mut">닥터자르트 — 시카페어 젠틀 클렌징 폼</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835456</td><td><button class="btn btn-green btn-sm trkmatch">트래킹번호 매칭</button></td></tr>
+          </tbody>
+        </table>
+        <div class="note">매칭 버튼 클릭 시 해당 라인에 트래킹번호가 등록되고 창이 닫힙니다 — <b>이후 같은 바코드를 다시 스캔하면 정상 인식됩니다.</b></div>
+      </div>
+      <div id="unrecNone" style="display:none;margin-top:12px">
+        <div class="note" style="background:var(--red-soft)">입력한 주문번호에 <b>매칭되는 제품이 없습니다</b> (오입력 또는 타 채널 번호 가능성). 미입력 리스트로 보내주세요.</div>
+        <div style="margin-top:8px"><button class="btn btn-blue btn-sm" id="unrecToSend">미입력 리스트로 보내기</button></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" id="unrecNoNum">주문번호가 없습니다</button>
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 미입력 리스트 전송 — 2단계 (주문번호 없음/매칭 실패 시) ══════════════ -->
+<div class="overlay" id="m-unrec2">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2b</span>
+    <header>미입력 리스트로 전송<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">바코드 <span class="num">8809110223344</span> — 미입력 리스트로 보내시겠습니까?</b>
+      <p class="mut" id="unrecCarried" style="display:none;margin:8px 0 0">조회했던 주문번호 <b class="num" id="unrecCarriedNo"></b> (매칭 실패)도 함께 기록됩니다.</p>
       <p class="mut" style="margin:10px 0 4px">제품명 입력 (영어 — 자동완성 · 한글 제품명 병기)</p>
       <div class="auto">
         <input value="glow ser">
@@ -1102,21 +1140,21 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <b style="color:var(--ink)">갯수</b>
         <input value="1" style="width:64px">
       </div>
-      <div class="qrow" style="margin-top:10px">
-        <b style="color:var(--ink)">주문번호 <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">(필수 · 쿠팡 발주 주문번호)</span></b>
-        <input id="unrecOrderNo" placeholder="예: 12101316464794 — 미입력 시 전송 불가" style="flex:1;min-width:220px">
-      </div>
       <div style="margin-top:10px">
         <b style="color:var(--ink)">메모 (Optional)</b>
         <textarea class="mtextarea" placeholder="예: 박스 라벨 훼손, 1+1 세트로 보임 — 미입력 리스트와 Slack 알림에 함께 표시됩니다"></textarea>
       </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단에 표시됩니다.</div>
+      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호(조회 실패분) 포함) → 트래킹넘버 미입력 리스트 페이지의 미인식 풀에 표시됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>아니오</button>
-      <button class="btn btn-blue btn-sm" id="unrecSend" data-close disabled>미입력 리스트로 전송</button>
+      <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
     </div>
   </div>
+</div>
+
+<div class="toast" id="unrecToast" style="display:none;position:fixed;top:18px;right:18px;z-index:99">
+  <span>✓ 트래킹번호 10323100835644 매칭 등록</span><small>Order 414230 · 포어레미디 폼 — 같은 바코드 재스캔 시 정상 인식</small>
 </div>
 
 <!-- ══════════════ MODAL : 반품 라벨 출력 (공급처 반품) ══════════════ -->
@@ -1196,10 +1234,26 @@ document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
     window.scrollTo({top:0});
   });
 });
-/* 미인식 모달 — 주문번호 필수: 입력 시에만 전송 활성화 */
-document.getElementById('unrecOrderNo').addEventListener('input',e=>{
-  document.getElementById('unrecSend').disabled = !e.target.value.trim();
+/* 미인식 바코드 — 1단계 주문번호 조회 → 매칭 성공/실패/없음 분기 데모 */
+document.getElementById('unrecSearch').addEventListener('click',()=>{
+  const hit=document.getElementById('unrecNo').value.trim()==='12101316464794';
+  document.getElementById('unrecFound').style.display=hit?'block':'none';
+  document.getElementById('unrecNone').style.display=hit?'none':'block';
 });
+function unrecOpenSend(carriedNo){
+  document.getElementById('m-unrec').classList.remove('open');
+  const c=document.getElementById('unrecCarried');
+  if(carriedNo){document.getElementById('unrecCarriedNo').textContent=carriedNo;c.style.display='block';}
+  else c.style.display='none';
+  document.getElementById('m-unrec2').classList.add('open');
+}
+document.getElementById('unrecNoNum').addEventListener('click',()=>unrecOpenSend(null));
+document.getElementById('unrecToSend').addEventListener('click',()=>unrecOpenSend(document.getElementById('unrecNo').value.trim()));
+document.querySelectorAll('.trkmatch').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById('m-unrec').classList.remove('open');
+  const t=document.getElementById('unrecToast');
+  t.style.display='flex';setTimeout(()=>{t.style.display='none';},4000);
+}));
 document.querySelectorAll('[data-modal]').forEach(b=>{
   b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
 });
