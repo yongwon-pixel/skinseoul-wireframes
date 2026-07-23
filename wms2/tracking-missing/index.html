@@ -267,7 +267,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <div><b>Dean</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414230</span> · <span class="mut">JIT (Naver) · Processing</span></div>
             <div><b>Egita</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413871</span> · <span class="mut">JIT (공식몰) · Processing</span></div>
           </td>
-          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button> <button class="btn btn-line btn-sm xdel" title="리스트에서 제거" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
         </tr>
         <tr class="row-hit">
           <td class="num">10323100838455</td>
@@ -279,7 +279,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">1</td><td class="mut">–</td>
           <td>Dean</td><td class="num">07-13 09:48</td>
           <td style="font-size:12px;line-height:1.5"><div><b>Harshit</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414102</span> · <span class="mut">JIT (Naver) · Processing</span></div></td>
-          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button> <button class="btn btn-line btn-sm xdel" title="리스트에서 제거" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
         </tr>
         <tr class="row-hit">
           <td class="num">10323100836690</td>
@@ -291,7 +291,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
           <td style="font-size:12px;line-height:1.5"><div><b>Miranti</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413998</span> · <span class="mut">JIT (공식몰) · Processing</span></div></td>
-          <td><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button></td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">확인해보기</button> <button class="btn btn-line btn-sm xdel" title="리스트에서 제거" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
         </tr>
       </tbody>
     </table></div>
@@ -304,11 +304,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">0</span><span>신규 admin 페이지 — 트래킹넘버 없는 주문을 한쪽에 치워두던 수동 프로세스를 대체. 쿠팡은 오더넘버 즉시 생성·트래킹넘버 지연 생성 → 미인식·미입력 건을 모아 추적 <span class="ref">— F 트래킹 자동화</span></span></li>
     <li><span class="n">1</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. 스캔 시 수집된 <b>라스트마일 트래킹넘버를 주문번호 좌측에 표시</b>. 주문번호(쿠팡 발주)는 대부분 "–" — 조회 매칭 성공 건은 등록 단계에서 해결되어 풀에 안 옴. 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출 <span class="ref">— F 플로우 5</span></span></li>
     <li><span class="n">2</span><span><b>의심 오더 (자동 추정)</b> — 바코드→제품 대조로 <b>이 제품이 포함된 오더가 존재하고 그 오더가 Processing 단계인 경우만</b> 후보로 표시, <b>복수 가능</b>. 대부분 Naver·공식몰 등 비쿠팡 채널의 JIT 주문(쿠팡 건은 주문번호 조회에서 걸러짐). 등록 시 #unrecognized-tracking 자동 알림에 의심 PIC도 멘션 → 핸들러는 와서 확인만 하면 됨 <span class="ref">— 2026-07-23 UX 역전</span></span></li>
-    <li><span class="n">3</span><span><b>"확인해보기" 버튼 → 매칭 모달(M1)</b> — 후보 <b>제품 라인</b>을 클릭해 매칭(오더 단위 아님). 추정이 틀리면 "직접 찾기": <b>PIC 드롭다운</b>(목록에 없으면 "직접 입력…" 선택 시 입력칸) → 검색 → 해당 PIC Processing 오더의 제품 라인 → 클릭 매칭. 확정 시 <b>트래킹넘버가 그 제품 라인에 등록</b>·풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림) <span class="ref">— F 플로우 2·5</span></span></li>
+    <li><span class="n">3</span><span><b>"확인해보기" 버튼 → 매칭 모달(M1)</b> — 후보 <b>제품 라인</b>을 클릭해 매칭(오더 단위 아님). 후보 목록이 "제품 포함 + Processing" 오더 전부라 <b>별도 PIC 검색 없음</b>(여기 없으면 데이터 이상 — 2026-07-23 수동 검색 폴백 제거). 확정 시 <b>트래킹넘버가 그 제품 라인에 등록</b>·풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림). 행 우측 <b style="color:var(--red)">✕</b> = 리스트에서 제거(오등록·대응 불필요 건 정리) <span class="ref">— F 플로우 2·5</span></span></li>
     <li><span class="n">4</span><span>Product Name 맨 앞 브랜드명 항상 노출 (View Orders B 결정 상속) <span class="ref">— B</span></span></li>
     <li><span class="n">5</span><span>Comments — 우상단 허브([@ Mentions]+[★ Saved]). @태그 시 Slack 자동 알림, 코멘트 클릭 시 해당 오더 페이지로 이동 <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바·Slack 알림 칼럼·해결 완료 로그·통합 검색바·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 팝업 단일 진입점, 알림은 자동 발송. <b>매칭 UX 역전:</b> 핸들러가 제품마다 자기 이름을 검색하는 방식(구) → 시스템이 의심 오더·핸들러를 먼저 제시하고 핸들러는 확인만 하는 방식(신), 직접 검색은 추정 불일치 시 폴백.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바·Slack 알림 칼럼·해결 완료 로그·통합 검색바·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 팝업 단일 진입점, 알림은 자동 발송. <b>매칭 UX 역전:</b> 핸들러가 제품마다 자기 이름을 검색하는 방식(구) → 시스템이 의심 오더·핸들러를 먼저 제시하고 핸들러는 확인만 하는 방식(신). 후보가 "제품 포함+Processing" 전수라 수동 검색 폴백도 제거(2026-07-23).</p>
   <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → <b>주문번호 조회 팝업</b> → (2a) 매칭 성공 → 그 자리에서 트래킹번호 매칭 등록(이 리스트에 안 옴, 재스캔 시 정상 인식) / (2b) 주문번호 없음·매칭 실패 → 미입력 전송 모달(제품명 영어 자동완성·갯수·메모) → (3) #unrecognized-tracking 자동 알림(의심 PIC 멘션) → (4) 이 페이지 미인식 풀에 트래킹넘버·의심 오더(제품 포함+Processing 조건, 복수 가능)와 함께 표시 → (5) 담당 PIC가 "확인해보기"(M1)로 확인·매칭 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p></div>
 </section>
 
@@ -332,28 +332,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td class="num" style="color:var(--blue)"><b>413871</b></td><td>Egita</td><td><span class="tag tag-jit">JIT (공식몰)</span></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td><button class="btn btn-green btn-sm pmatch">이 제품에 매칭</button></td></tr>
           </tbody>
         </table>
-      </div>
-      <div style="margin-top:10px"><button class="btn btn-line btn-sm" id="matchManualToggle">의심 오더가 아니에요 — 직접 찾기</button></div>
-      <div id="matchManual" style="display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
-        <div class="qrow" style="margin-top:0">
-          <b style="color:var(--ink)">PIC</b>
-          <select id="matchPicSel" style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
-            <option>Dean</option><option>Harshit</option><option>Miranti</option><option>Egita</option><option value="custom">직접 입력…</option>
-          </select>
-          <input id="matchPicCustom" placeholder="PIC 이름 직접 입력" style="display:none;width:150px;text-align:left;font-weight:600">
-          <button class="btn btn-blue btn-sm" id="matchSearch">🔍 검색</button>
-          <span class="mut" style="font-size:12px">해당 PIC의 Processing 오더 중 이 제품이 포함된 제품 라인 조회</span>
-        </div>
-        <div id="matchResults" style="display:none;margin-top:12px">
-          <p class="mut" style="margin:0 0 6px"><b style="color:var(--ink)">Dean</b>님의 Processing 오더 중 이 제품이 포함된 제품 라인 <b>2건</b> — 제품을 클릭해 매칭</p>
-          <table class="tbl" style="min-width:0;font-size:12.5px">
-            <thead><tr><th>Order</th><th>채널</th><th>포함 제품</th><th>Order 생성</th><th></th></tr></thead>
-            <tbody>
-              <tr><td class="num" style="color:var(--blue)"><b>414230</b></td><td><span class="tag tag-jit">JIT (Naver)</span></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td class="num">07-13 07:05</td><td><button class="btn btn-green btn-sm pmatch">이 제품에 매칭</button></td></tr>
-              <tr><td class="num" style="color:var(--blue)"><b>413902</b></td><td><span class="tag tag-jit">JIT (공식몰)</span></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td class="num">07-12 18:40</td><td><button class="btn btn-green btn-sm pmatch">이 제품에 매칭</button></td></tr>
-            </tbody>
-          </table>
-        </div>
       </div>
       <div class="note">매칭 확정 시 — 트래킹넘버 <b>10323100841207</b>가 선택한 제품 라인에 등록되고 이 항목이 풀에서 사라지며, 해당 오더에 코멘트가 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
     </div>
@@ -411,31 +389,26 @@ document.querySelectorAll('.trk').forEach(inp=>{
   };
   inp.addEventListener('input',sync);
 });
-/* 확인해보기 — 의심 제품 라인 매칭 / 직접 찾기(PIC 드롭다운) 데모 */
+/* 확인해보기 — 의심 제품 라인 매칭 데모 + 행 ✕ 제거 */
+function poolDec(){
+  const n=Math.max(0,parseInt(document.getElementById('poolCount').textContent)-1);
+  document.getElementById('poolCount').textContent=n;
+  document.getElementById('poolCountBottom').textContent=n;
+}
 function finishMatch(){
   document.getElementById('m-match').classList.remove('open');
   const row=document.getElementById('poolrow1');
-  if(row){
-    row.remove();
-    document.getElementById('poolCount').textContent='2';
-    document.getElementById('poolCountBottom').textContent='2';
-  }
+  if(row){row.remove();poolDec();}
   const t=document.getElementById('matchToast');
   t.style.display='flex';
   setTimeout(()=>{t.style.display='none';},4000);
 }
+document.querySelectorAll('.xdel').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  b.closest('tr').remove();
+  poolDec();
+}));
 document.querySelectorAll('.pmatch').forEach(b=>b.addEventListener('click',finishMatch));
-document.getElementById('matchManualToggle').addEventListener('click',()=>{
-  const m=document.getElementById('matchManual');
-  m.style.display = m.style.display==='none' ? 'block' : 'none';
-});
-document.getElementById('matchPicSel').addEventListener('change',e=>{
-  document.getElementById('matchPicCustom').style.display = e.target.value==='custom' ? 'inline-block' : 'none';
-  if(e.target.value==='custom') document.getElementById('matchPicCustom').focus();
-});
-document.getElementById('matchSearch').addEventListener('click',()=>{
-  document.getElementById('matchResults').style.display='block';
-});
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
