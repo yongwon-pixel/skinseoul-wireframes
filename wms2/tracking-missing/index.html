@@ -13,12 +13,10 @@
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
 /* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
-
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
   font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
 button{font:inherit;cursor:pointer}
-
 /* ── wireframe chrome ─────────────────────────── */
 .wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
   padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -29,7 +27,6 @@ button{font:inherit;cursor:pointer}
   border-radius:99px;padding:5px 14px;font-size:12.5px}
 .wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
 .wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
-
 /* ── annotations ──────────────────────────────── */
 .anno{position:relative}
 .dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
@@ -44,7 +41,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
   font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
-
 /* ── admin mock ───────────────────────────────── */
 .mockwrap{overflow-x:auto}
 .mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
@@ -59,11 +55,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
   font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
 .logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
-
 .pagepad{padding:18px 16px 0}   /* C: 좌우 여백 축소 */
 .pagepad h2{font-size:27px;margin:6px 0 2px}
 .pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
-
 .searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
 .seg{display:flex;border:1px solid var(--ink);border-radius:7px;overflow:hidden}
 .seg button{border:none;background:var(--page);color:var(--ink);padding:8px 14px;font-size:13.5px;border-right:1px solid var(--ink)}
@@ -84,7 +78,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .shelf label{font-size:12.5px;font-weight:700;color:var(--ink-2)}
 .shelf input{width:74px;border:1px solid var(--line-strong);border-radius:5px;padding:5px 8px;font-size:14px;
   background:var(--page);color:var(--ink);text-align:center;font-weight:700}
-
 /* order header card */
 .ordercard{margin-top:16px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:14px 18px;
   display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--line)}
@@ -96,7 +89,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .st-missing{background:var(--red-soft);color:var(--red);border:1px solid var(--red)}
 .chip-return{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
 .comment-btn{position:relative;margin-left:auto}
-
 /* table */
 .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
 .tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
@@ -122,7 +114,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
 .mut{color:var(--ink-3);font-size:12.5px}
 .bar-under{text-decoration:underline;text-underline-offset:2px;font-weight:800}
-
 /* comment panel — Order 페이지 Operator Comments와 동일 문법 */
 .cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
 .cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
@@ -132,11 +123,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
 .cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
 .cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
-
 /* ★ 저장(북마크) 토글 — Mentions/Saved 공통 */
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
-
 /* actor log */
 .logsec{margin-top:26px}
 .logsec h4{font-size:14px;margin:0 0 8px}
@@ -144,13 +133,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
 .logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
 .act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
-
+.btn[disabled]{opacity:.4;pointer-events:none}
+.cand{cursor:pointer}
+.cand.on td{background:var(--blue-soft)}
 /* toast */
 .toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
   padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
 .toast.err{background:var(--red)}
 .toast small{opacity:.85;font-weight:400}
-
 /* modal */
 .overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
@@ -168,7 +158,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .auto .opt.sel{background:var(--blue-soft);font-weight:600}
 .auto .opt small{color:var(--ink-3)}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
-
 /* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
 .inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
@@ -184,10 +173,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
 .inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
-
 .state{display:none}
 .state.on{display:block}
-
 /* ── tracking-missing 전용 (최소 신규 클래스) ───── */
 /* 상단 미인식 제품 풀 헤더 — 주의 환기용 하이라이트 */
 .poolhead{margin-top:16px;background:var(--hl);border:1.5px solid var(--hl-line);border-radius:8px;
@@ -220,29 +207,23 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .mc-a{background:var(--blue)}.mc-b{background:var(--amber)}.mc-c{background:var(--green)}
 .match-note{font-size:10.5px;color:var(--ink-3)}
 </style>
-
 <div class="wf-bar">
-  <h1>WMS 2.0 · PIC별 트래킹넘버 미입력 리스트 와이어프레임</h1>
-  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 신규/변경 주석</span>
+  <h1>WMS 2.0 · 트래킹넘버 미입력 리스트 와이어프레임</h1>
+  <span class="hint">v2 — 미인식 제품 풀 중심 단순화 · 보라색 번호 = 신규/변경 주석</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · 미입력 리스트 (PIC별)</button>
-    <button class="wf-tab" data-state="s2">2 · 해결 완료 처리 후</button>
-    <button class="wf-tab" data-modal="m-unrec">모달: 미인식 전송 팝업 (View Orders 진입점)</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
-
-<!-- ══════════════ STATE 1 : 미입력 리스트 (PIC별) ══════════════ -->
+<!-- ══════════════ 미인식 제품 풀 + 해결 로그 ══════════════ -->
 <section class="state on" id="s1">
 <div class="mockwrap"><div class="mock anno">
-
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
     <span class="sp"></span>
     <span style="position:relative">
       <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
-      <span class="dot" style="top:3px;left:-30px">12</span>
+      <span class="dot" style="top:3px;left:-30px">5</span>
     </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
@@ -264,44 +245,39 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
     </div>
   </div>
-
   <div class="pagepad">
     <span class="dot" style="margin-left:-6px">0</span>
     <h2>WMS - 트래킹넘버 미입력 리스트</h2>
-    <p class="sub">PIC별 미입력 현황 <span class="mut" style="font-weight:400">· 쿠팡은 오더넘버는 즉시 생성되나 트래킹넘버가 몇 시간 뒤 생성 → 미입력 건을 여기서 일괄 추적</span></p>
-
+    <p class="sub">미인식·미입력 현황 <span class="mut" style="font-weight:400">· 쿠팡은 오더넘버는 즉시 생성되나 트래킹넘버가 몇 시간 뒤 생성 → 미인식 건을 여기서 추적</span></p>
     <div class="searchrow">
       <div class="search-input anno">
         <input value="" placeholder="PIC · Order No / Product Order No / Tracking No / 제품명 / 바코드 — 아무 번호나 입력하면 자동 판별">
         <span class="dot" style="top:-10px;left:-10px">1</span>
       </div>
       <button class="btn btn-blue">🔍 Search</button>
-      <button class="btn btn-line anno" data-modal="m-unrec">＋ 미인식 제품 등록<span class="dot" style="top:-11px;right:-8px">5</span></button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — 번호 유형 자동 판별. "＋ 미인식 제품 등록"은 센터에서 View Orders 바코드 인식 실패 시 뜨는 팝업과 동일 (수동 등록도 가능)</p>
-
+    <p class="mut" style="margin:6px 0 0">통합 검색 — 번호 유형 자동 판별. 미인식 제품 등록은 View Orders 바코드 인식 실패 팝업 단일 진입점 — 이 페이지는 조회·해결 전용</p>
     <!-- ── 상단: 미인식 제품 풀 ── -->
     <div class="poolhead anno" style="margin-top:20px">
-      <b>⚠ 미인식 제품 풀 · 3건</b>
-      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b> 칼럼은 등록 시 센터가 입력한 값(선택, 미입력="–")으로 PIC 매칭을 돕습니다. 담당 PIC가 아래 자기 오더와 대조해 트래킹넘버를 입력하세요.</span>
+      <b>⚠ 미인식 제품 풀 · <span id="poolCount">3</span>건</b>
+      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b>는 쿠팡 발주 시 생성되는 주문번호(예: 12101316464794, 내부 Order ID 아님) — 등록 시 센터가 입력한 값(선택, 미입력="–")으로 PIC 매칭을 돕습니다.</span>
       <span class="dot" style="top:-11px;left:-11px">2</span>
     </div>
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
-        <th>주문번호</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">8</span></th><th>Product Name KR</th><th>Size</th>
-        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Slack 알림<span class="dot" style="top:-11px;right:-8px">4</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
+        <th>주문번호</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">4</span></th><th>Product Name KR</th><th>Size</th>
+        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
       </tr></thead>
       <tbody>
-        <tr class="row-hit">
-          <td class="num" style="color:var(--blue);font-weight:700">414230</td>
+        <tr class="row-hit" id="poolrow1">
+          <td class="num" style="color:var(--blue);font-weight:700">12101316464794</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
           <td class="num">8809416470726</td>
           <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
           <td>Miranti</td><td class="num">07-13 10:12</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
+          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
           <td class="num" style="color:var(--ink-3)">–</td>
@@ -311,461 +287,79 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">8809640733458</td>
           <td class="num">1</td><td class="mut">–</td>
           <td>Dean</td><td class="num">07-13 09:48</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
+          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
-          <td class="num" style="color:var(--blue);font-weight:700">413998</td>
+          <td class="num" style="color:var(--blue);font-weight:700">12101316458821</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
           <td class="num">8809894261234</td>
           <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
           <td>Dean</td><td class="num">07-13 09:30</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
+          <td><button class="btn btn-line btn-sm" data-modal="m-match">내 오더에 매칭</button></td>
         </tr>
       </tbody>
     </table></div>
-
-    <!-- ── 일괄 처리 바 (상단 고정, 상태 무관 노출) ── -->
-    <div class="bulkbar anno" style="margin-top:16px">
-      <button class="btn btn-green-line btn-sm">선택 오더 일괄 해결 완료</button>
-      <button class="btn btn-line btn-sm">선택 오더 #unrecognized-tracking 재알림</button>
-      <span class="cnt">0개 선택됨 · PIC 그룹 간 교차 선택 가능 (처리 불가 시 비활성)</span>
-      <span class="dot" style="top:-11px;left:-10px">11</span>
-    </div>
-
-    <!-- ── PIC별 그룹 ── -->
-    <p class="sub anno" style="margin-top:22px">PIC별 트래킹넘버 미입력 오더<span class="dot" style="top:-6px;left:-14px">6</span></p>
-
-    <!-- PIC: Dean -->
-    <div class="ordercard anno">
-      <span class="picava">D</span><span class="picname">Dean</span>
-      <span class="cntchip">미입력 2건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b>3.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel-dean">💬 Comments <span class="badge-n">1</span></button>
-      <span class="dot" style="top:-11px;right:-8px">12</span>
-    </div>
-    <div class="cpanel anno" id="cpanel-dean" style="display:none">
-      <span class="dot" style="top:-11px;left:-10px">13</span>
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Order 414190은 어제 밤 쿠팡 결제인데 12시간째 트래킹넘버가 안 뜹니다. 계정 이슈인지 재확인 부탁드려요.</span><time>07-13 10:05</time><button class="star" title="저장">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th class="anno">대기<span class="dot" style="top:-11px;right:-8px">7</span></th>
-        <th class="anno">Tracking No 입력<span class="dot" style="top:-11px;left:60px">9</span></th><th class="anno">Actions<span class="dot" style="top:-11px;right:-8px">10</span></th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414230</b></td><td class="num" style="color:var(--blue);font-weight:700">414230</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
-          <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809416470726</td><td class="num">P-8841207</td><td class="num">07-13 07:05</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">3.0h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414255</b></td><td><div class="thumb">IMG</div></td>
-          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml</td>
-          <td>1025 독도 토너</td><td>200ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809556351025</td><td class="num">P-8841559</td><td class="num">07-13 08:20</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait">1.7h</span></td>
-          <td><input class="trk filled num" value="10324880021991"></td>
-          <td><button class="btn btn-green btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <div class="grp-gap"></div>
-
-    <!-- PIC: Harshit -->
-    <div class="ordercard">
-      <span class="picava">H</span><span class="picname">Harshit</span>
-      <span class="cntchip">미입력 2건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b style="color:var(--red)">12.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
-        <th>Tracking No 입력</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414102</b></td><td class="num" style="color:var(--ink-3)">–</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
-          <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809640733458</td><td class="num">P-8839114</td><td class="num">07-13 06:40</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">3.5h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414190</b></td><td><div class="thumb">IMG</div></td>
-          <td><b>Beauty of Joseon</b> Glow Serum : Propolis + Niacinamide, 30ml</td>
-          <td>글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809738317481</td><td class="num">P-8836620</td><td class="num">07-12 22:10</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait over">12.0h ⚠</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <div class="grp-gap"></div>
-
-    <!-- PIC: Miranti -->
-    <div class="ordercard">
-      <span class="picava">M</span><span class="picname">Miranti</span>
-      <span class="cntchip">미입력 1건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b>5.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments</button>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
-        <th>Tracking No 입력</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>413998</b></td><td class="num" style="color:var(--blue);font-weight:700">413998</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
-          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
-          <td class="num">8809894261234</td><td class="num">P-8834902</td><td class="num">07-13 05:15</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">5.0h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <p class="mut" style="margin-top:16px">3 PIC · 미입력 오더 5건 · 미인식 풀 3건</p>
-
-    <!-- 해결 로그 -->
-    <div class="logsec anno">
-      <h4>해결 완료 로그</h4>
-      <span class="dot" style="top:-8px;left:130px">14</span>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking No</th><th>PIC</th><th>메모</th></tr>
-        <tr><td class="num">07-13 09:50</td><td class="act-in">해결 완료 (트래킹 입력)</td><td class="num">414015</td><td class="num">10324879110022</td><td>Harshit</td><td><span style="color:var(--ink-2)">쿠팡 트래킹 확인 후 입력</span></td></tr>
-        <tr><td class="num">07-13 08:33</td><td class="act-in">미인식 제품 등록</td><td class="num">–</td><td class="num">(바코드 8809110223344)</td><td>Dean (센터)</td><td><span style="color:var(--ink-2)">#unrecognized-tracking 알림 전송</span></td></tr>
-        <tr><td class="num">07-13 07:41</td><td class="act-in">해결 완료 (트래킹 입력)</td><td class="num">413975</td><td class="num">10324102338890</td><td>Miranti</td><td>–</td></tr>
-      </table>
-    </div>
+    <p class="mut" style="margin-top:16px">미인식 풀 <span id="poolCountBottom">3</span>건</p>
   </div>
-
 </div></div>
-
 <div class="legend">
-  <h3>State 1 신규/변경사항 — PIC별 트래킹넘버 미입력 리스트 (admin 신규 페이지)</h3>
+  <h3>트래킹넘버 미입력 리스트 — 신규 / 변경 주석 (admin 신규 페이지)</h3>
   <ol>
-    <li><span class="n">0</span><span>신규 admin 페이지 — 트래킹넘버 없는 주문을 한쪽에 치워두던 수동 프로세스를 대체. 쿠팡은 오더넘버 즉시 생성·트래킹넘버 지연 생성 → 미입력 건을 PIC별로 모아 추적 <span class="ref">— F 트래킹 자동화</span></span></li>
+    <li><span class="n">0</span><span>신규 admin 페이지 — 트래킹넘버 없는 주문을 한쪽에 치워두던 수동 프로세스를 대체. 쿠팡은 오더넘버 즉시 생성·트래킹넘버 지연 생성 → 미인식·미입력 건을 모아 추적 <span class="ref">— F 트래킹 자동화</span></span></li>
     <li><span class="n">1</span><span>통합 검색 — PIC/Order No/Product Order No/Tracking No/제품명/바코드 자동 판별 (View Orders 통합검색 결정 상속) <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">2</span><span>최상단 <b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업(플로우 5의 "미입력된 트래킹넘버·제품")을 통해 전송된 물리 제품 집계, 노란 하이라이트로 최상단 강조 <span class="ref">— F 플로우 5</span></span></li>
-    <li><span class="n">3</span><span>풀 각 항목: <b>브랜드·제품명·사이즈·바코드</b> 노출 (자동완성 매칭 결과 또는 수동입력) — PIC가 대조할 수 있도록 <span class="ref">— F 플로우 2</span></span></li>
-    <li><span class="n">4</span><span>풀 항목별 <b>#unrecognized-tracking 알림 전송됨</b> 표기 — 등록 시 채널에 "미인식 제품이 추가되었습니다" 자동 알림 <span class="ref">— F 플로우 4</span></span></li>
-    <li><span class="n">5</span><span>"＋ 미인식 제품 등록" — View Orders 바코드 인식 실패 시 뜨는 팝업(M1)과 동일 진입점. 수동 등록도 가능 <span class="ref">— F 플로우 1~3</span></span></li>
-    <li><span class="n">6</span><span><b>PIC별 그룹핑</b> — 담당자별로 트래킹넘버 미입력 오더를 묶어 표시(그룹 헤더=PIC 아바타·이름·미입력 건수·최장 대기) <span class="ref">— F 플로우 5</span></span></li>
-    <li><span class="n">7</span><span>대기 시간 chip — 오더 생성 후 트래킹넘버 미입력 경과. 초록(정상)/주황(3h+)/빨강(12h+ 지연 경고)으로 방치 건 부각 <span class="ref">— F 트래킹 자동화</span></span></li>
-    <li><span class="n">8</span><span>Product Name 맨 앞 브랜드명 항상 노출 (View Orders B 결정 상속) <span class="ref">— B</span></span></li>
-    <li><span class="n">9</span><span><b>트래킹넘버 인라인 입력란</b> — 각 PIC가 자기 오더 행에 직접 스캔/입력. 매칭 후보 색점(●)으로 풀 항목↔오더 대조 힌트 <span class="ref">— F 플로우 5</span></span></li>
-    <li><span class="n">10</span><span><b>"해결 완료" 버튼</b> — 트래킹넘버 입력 시 활성(초록). 클릭하면 리스트에서 사라지고 Slack 알림 "@PIC가 트래킹넘버 '123'을 해결완료 했습니다" <span class="ref">— F 플로우 6</span></span></li>
-    <li><span class="n">11</span><span>일괄 처리 바 — 테이블 상단 고정, 상태 무관 노출. 선택 오더 일괄 해결 완료 / #unrecognized-tracking 재알림 (View Orders 일괄바 결정 상속) <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">12</span><span>Comments — 우상단 허브([@ Mentions]+[★ Saved])와 PIC 그룹별 Comments 버튼. @태그 시 Slack 자동 알림, 워딩 "Comments"로 통일 <span class="ref">— 0. UI 1+2</span></span></li>
-    <li><span class="n">13</span><span>Comments 패널 — 펼침형, 각 코멘트 ★로 저장 → 우상단 Saved 탭 집계 <span class="ref">— 0. UI 1+2</span></span></li>
-    <li><span class="n">14</span><span>해결 완료 로그 — 시간·행위(미인식 등록/해결 완료)·Order·Tracking·PIC·메모 누적 기록 <span class="ref">— F 책임 추적</span></span></li>
+    <li><span class="n">2</span><span><b>미인식 제품 풀</b> — View Orders 바코드 인식 실패 팝업을 통해 전송된 물리 제품 집계, 노란 하이라이트 강조. <b>주문번호 칼럼 = 쿠팡 발주 주문번호</b>(예: 12101316464794), 등록 시 선택 입력 <span class="ref">— F 플로우 5</span></span></li>
+    <li><span class="n">3</span><span><b>"내 오더에 매칭" 버튼 → 매칭 모달(M1)</b> — PIC 입력·검색 → 해당 제품(바코드·쿠팡 주문번호 기준)이 포함된 그 PIC의 오더 후보 표시 → 확인 후 선택·매칭. 확정 시 풀에서 제거 + 해당 오더에 코멘트 자동 등록(미인식 <b>등록자를 @태그</b> "오더 매칭했습니다" → Slack 알림). 각 항목은 브랜드·제품명·사이즈·바코드·갯수·메모 노출, 매칭 후보 색점(●) 힌트 <span class="ref">— F 플로우 2·5</span></span></li>
+    <li><span class="n">4</span><span>Product Name 맨 앞 브랜드명 항상 노출 (View Orders B 결정 상속) <span class="ref">— B</span></span></li>
+    <li><span class="n">5</span><span>Comments — 우상단 허브([@ Mentions]+[★ Saved]). @태그 시 Slack 자동 알림, 코멘트 클릭 시 해당 오더 페이지로 이동 <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업(M1) → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수·메모 입력 → (4) #unrecognized-tracking 알림 → (5) 이 페이지 최상단 미인식 풀 표시 + PIC별 자기 오더에 트래킹넘버 입력 → (6) "해결 완료" → 리스트에서 제거 + Slack 알림. 모달 탭(M1)에서 (1)~(4) 확인.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 단순화 결정:</b> PIC별 그룹 테이블·일괄 처리 바(일괄 해결/재알림)·Slack 알림 칼럼·해결 완료 로그·페이지 내 등록 버튼과 모달을 모두 제거. 등록은 View Orders 인식 실패 팝업 단일 진입점, #unrecognized-tracking 알림은 등록 시 자동 발송이라 별도 표기 불필요.</p>
+  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">플로우 요약: (1) View Orders 바코드 인식 실패 → "미입력 리스트로 보내시겠습니까?" 팝업 → (2) Yes → 제품명 영어 자동완성(없으면 수동입력) → (3) 갯수·메모·쿠팡 주문번호(선택) 입력 → (4) #unrecognized-tracking 자동 알림 → (5) 이 페이지 미인식 풀 표시 → (6) 담당 PIC가 "내 오더에 매칭"(M1)으로 자기 오더 확정 → 풀에서 제거 + 오더 코멘트로 등록자 @태그 알림. 등록 팝업 목업은 View Orders 와이어프레임에서 확인.</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 2 : 해결 완료 처리 후 ══════════════ -->
-<section class="state" id="s2">
-<div class="mockwrap"><div class="mock anno">
-
-  <div class="toast"><span>✓ @Dean가 트래킹넘버 '10324880021991'를 해결완료 했습니다</span><small>Slack #fulfillment 알림 전송 · 리스트에서 제거됨 (새로고침 없음)</small><span class="dot" style="position:static;display:inline-flex;flex:none">1</span></div>
-
-  <div class="nav">
-    <span class="brand">SkinSeoul</span>
-    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
-    <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
-    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
-    <button class="logout">Logout</button>
-  </div>
-
-  <div class="pagepad">
-    <h2>WMS - 트래킹넘버 미입력 리스트</h2>
-    <p class="sub">PIC별 미입력 현황 <span class="mut" style="font-weight:400">· Dean · Order 414255 해결 처리 후</span></p>
-
-    <div class="searchrow">
-      <div class="search-input"><input value="" placeholder="PIC · Order No / Product Order No / Tracking No / 제품명 / 바코드 — 아무 번호나 입력하면 자동 판별"></div>
-      <button class="btn btn-blue">🔍 Search</button>
-      <button class="btn btn-line" data-modal="m-unrec">＋ 미인식 제품 등록</button>
-    </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — 번호 유형 자동 판별. "＋ 미인식 제품 등록"은 센터 View Orders 바코드 인식 실패 팝업과 동일</p>
-
-    <div class="poolhead" style="margin-top:20px">
-      <b>⚠ 미인식 제품 풀 · 3건</b>
-      <span class="cnt">해결된 오더의 매칭 풀 항목은 함께 제거됨 (Dean · Snail Essence 건은 매칭 대상이 아니어서 잔존)</span>
-    </div>
-    <div class="mockwrap"><table class="tbl" style="margin-top:8px">
-      <thead><tr>
-        <th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th>
-        <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th>Slack 알림</th><th>Action</th>
-      </tr></thead>
-      <tbody>
-        <tr class="row-hit">
-          <td class="num" style="color:var(--blue);font-weight:700">414230</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
-          <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
-          <td class="num">8809416470726</td>
-          <td class="num">1</td><td class="mut">박스 라벨 훼손</td>
-          <td>Miranti</td><td class="num">07-13 10:12</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
-        </tr>
-        <tr class="row-hit">
-          <td class="num" style="color:var(--ink-3)">–</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
-          <td>어성초 77% 수딩 토너</td><td>250ml</td>
-          <td class="num">8809640733458</td>
-          <td class="num">1</td><td class="mut">–</td>
-          <td>Dean</td><td class="num">07-13 09:48</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
-        </tr>
-        <tr class="row-hit">
-          <td class="num" style="color:var(--blue);font-weight:700">413998</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
-          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
-          <td class="num">8809894261234</td>
-          <td class="num">2</td><td class="mut">1+1 세트로 보임</td>
-          <td>Dean</td><td class="num">07-13 09:30</td>
-          <td><span class="slack-pill done">✓ 알림 전송됨</span></td>
-          <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <div class="bulkbar" style="margin-top:16px">
-      <button class="btn btn-green-line btn-sm">선택 오더 일괄 해결 완료</button>
-      <button class="btn btn-line btn-sm">선택 오더 #unrecognized-tracking 재알림</button>
-      <span class="cnt">0개 선택됨 · PIC 그룹 간 교차 선택 가능</span>
-    </div>
-
-    <p class="sub" style="margin-top:22px">PIC별 트래킹넘버 미입력 오더</p>
-
-    <!-- PIC: Dean — 1건 감소 (414255 제거) -->
-    <div class="ordercard anno">
-      <span class="picava">D</span><span class="picname">Dean</span>
-      <span class="cntchip">미입력 1건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b>3.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
-      <span class="dot" style="top:-11px;left:120px">2</span>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
-        <th>Tracking No 입력</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414230</b></td><td class="num" style="color:var(--blue);font-weight:700">414230</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
-          <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809416470726</td><td class="num">P-8841207</td><td class="num">07-13 07:05</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">3.0h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <div class="grp-gap"></div>
-
-    <!-- PIC: Harshit — 변화 없음 -->
-    <div class="ordercard">
-      <span class="picava">H</span><span class="picname">Harshit</span>
-      <span class="cntchip">미입력 2건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b style="color:var(--red)">12.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n">1</span></button>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
-        <th>Tracking No 입력</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414102</b></td><td class="num" style="color:var(--ink-3)">–</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
-          <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809640733458</td><td class="num">P-8839114</td><td class="num">07-13 06:40</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">3.5h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414190</b></td><td><div class="thumb">IMG</div></td>
-          <td><b>Beauty of Joseon</b> Glow Serum : Propolis + Niacinamide, 30ml</td>
-          <td>글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
-          <td class="num">8809738317481</td><td class="num">P-8836620</td><td class="num">07-12 22:10</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait over">12.0h ⚠</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <div class="grp-gap"></div>
-
-    <!-- PIC: Miranti — 변화 없음 -->
-    <div class="ordercard">
-      <span class="picava">M</span><span class="picname">Miranti</span>
-      <span class="cntchip">미입력 1건</span>
-      <span class="kv" style="margin-left:6px">가장 오래된 대기: <b>5.0h</b></span>
-      <button class="btn btn-line btn-sm comment-btn">💬 Comments</button>
-    </div>
-    <div class="mockwrap"><table class="tbl">
-      <thead><tr>
-        <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
-        <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
-        <th>Tracking No 입력</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>413998</b></td><td class="num" style="color:var(--blue);font-weight:700">413998</td>
-          <td><div class="thumb">IMG</div></td>
-          <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
-          <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
-          <td class="num">8809894261234</td><td class="num">P-8834902</td><td class="num">07-13 05:15</td>
-          <td><span class="tag tag-smartbuy">SMART BUY</span><span class="route-note">Coupang JIT 소싱</span></td>
-          <td><span class="wait warn">5.0h</span></td>
-          <td><input class="trk" placeholder="트래킹넘버 스캔/입력"></td>
-          <td><button class="btn btn-gray btn-sm">해결 완료</button></td>
-        </tr>
-      </tbody>
-    </table></div>
-
-    <p class="mut" style="margin-top:16px">3 PIC · 미입력 오더 4건 (직전 5건) · 미인식 풀 3건</p>
-
-    <div class="logsec anno">
-      <h4>해결 완료 로그</h4>
-      <span class="dot" style="top:-8px;left:130px">3</span>
-      <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>Order</th><th>Tracking No</th><th>PIC</th><th>메모</th></tr>
-        <tr><td class="num">07-13 10:18</td><td class="act-in">해결 완료 (트래킹 입력)</td><td class="num">414255</td><td class="num">10324880021991</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-13 09:50</td><td class="act-in">해결 완료 (트래킹 입력)</td><td class="num">414015</td><td class="num">10324879110022</td><td>Harshit</td><td><span style="color:var(--ink-2)">쿠팡 트래킹 확인 후 입력</span></td></tr>
-        <tr><td class="num">07-13 08:33</td><td class="act-in">미인식 제품 등록</td><td class="num">–</td><td class="num">(바코드 8809110223344)</td><td>Dean (센터)</td><td><span style="color:var(--ink-2)">#unrecognized-tracking 알림 전송</span></td></tr>
-      </table>
-    </div>
-  </div>
-
-</div></div>
-<div class="legend">
-  <h3>State 2 변경사항 — 해결 완료 처리 후</h3>
-  <ol>
-    <li><span class="n">1</span><span>"해결 완료" 클릭 → 새로고침 없이 성공 토스트 + Slack 알림 "@PIC가 트래킹넘버 '123'을 해결완료 했습니다" <span class="ref">— F 플로우 6</span></span></li>
-    <li><span class="n">2</span><span>해결된 오더 행은 리스트에서 즉시 제거, PIC 그룹 미입력 건수 자동 감소(Dean 2→1건). 하단 카운트도 5→4건 반영 <span class="ref">— F 플로우 6</span></span></li>
-    <li><span class="n">3</span><span>해결 완료 로그에 신규 항목 append (시간·Order·Tracking·PIC) — 책임 추적 <span class="ref">— F 책임 추적</span></span></li>
-  </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">매칭 규칙(화면 밖): 해결된 오더에 입력된 트래킹넘버가 미인식 풀 항목의 바코드/제품과 매칭되면 풀 항목도 함께 제거. 이 예시(Dean·414255 Round Lab)는 풀에 대응 항목이 없어 풀 3건은 유지됨.</p>
-</div>
-</section>
-
-<!-- ══════════════ MODAL : 미인식 바코드 전송 팝업 (View Orders 진입점) ══════════════ -->
-<div class="overlay" id="m-unrec">
-  <div class="modal anno">
+<!-- 모달: 내 오더에 매칭 -->
+<div class="overlay" id="m-match">
+  <div class="modal anno" style="max-width:660px">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>바코드 인식 실패<button class="x" data-close>✕</button></header>
+    <header>내 오더에 매칭 — 미인식 제품<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">스캔한 바코드 <span class="num">8809110223344</span>와 일치하는 오더가 없습니다.<br>미입력 리스트로 보내시겠습니까?</b>
-      <div class="anno">
-        <span class="dot" style="top:20px;left:-12px">M1b</span>
-        <p class="mut" style="margin:12px 0 4px">제품명 입력 (영어 — 자동완성, 서비스 검색창과 동일. 결과 없으면 수동 입력)</p>
-        <div class="auto">
-          <input value="advanced snail">
-          <div class="opt sel">COSRX — <b>Advanced Snail 96 Mucin Power Essence, 100ml</b> <small>100040311 · 8809416470726</small></div>
-          <div class="opt">COSRX — Advanced Snail Peptide Eye Cream, 25ml <small>100041882 · 8809598452213</small></div>
-          <div class="opt">COSRX — Advanced Snail Hydrogel Eye Patch, 60ea <small>100043771 · 8809598451118</small></div>
-          <div class="opt" style="color:var(--blue);font-weight:700">＋ 검색 결과에 없음 — 브랜드·제품명·사이즈·바코드 수동 입력</div>
-        </div>
-        <p class="mut" style="margin:8px 0 0">선택 시 <b>브랜드 · 제품명 · 사이즈 · 바코드</b>가 자동 채워짐 (수동 입력도 동일 4개 필드)</p>
+      <div style="display:flex;gap:10px;align-items:center;background:var(--hl);border:1px solid var(--hl-line);border-radius:8px;padding:10px 12px">
+        <div class="thumb">IMG</div>
+        <div style="font-size:13px"><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br>
+          <span class="mut" style="font-size:12px">바코드 8809416470726 · 쿠팡 주문번호 12101316464794 · 1개 · 등록: Miranti (센터) 07-13 10:12 · 메모 "박스 라벨 훼손"</span></div>
       </div>
-      <div class="anno">
-        <span class="dot" style="top:0px;left:-12px">M1c</span>
-      <div class="qrow" style="margin-top:12px">
-        <b style="color:var(--ink)">갯수</b>
-        <input value="1" style="width:64px">
+      <div class="qrow" style="margin-top:14px">
+        <b style="color:var(--ink)">PIC</b>
+        <input id="matchPic" value="Dean" style="width:140px;text-align:left;font-weight:600">
+        <button class="btn btn-blue btn-sm" id="matchSearch">🔍 검색</button>
+        <span class="mut" style="font-size:12px">이 제품(바코드·쿠팡 주문번호 기준)이 포함된 해당 PIC의 오더 조회</span>
       </div>
-      <div class="qrow" style="margin-top:10px">
-        <b style="color:var(--ink)">주문번호 <span style="font-weight:400;color:var(--ink-3)">(선택)</span></b>
-        <input placeholder="아는 경우 입력 — PIC·오더 매칭에 도움" style="flex:1;min-width:220px">
+      <div id="matchResults" style="display:none;margin-top:14px">
+        <p class="mut" style="margin:0 0 6px"><b style="color:var(--ink)">Dean</b>님의 오더 중 이 제품이 포함된 오더 <b>2건</b> — 확인 후 선택</p>
+        <table class="tbl" style="min-width:0;font-size:12.5px">
+          <thead><tr><th style="width:30px"></th><th>Order ID</th><th>포함 제품</th><th>쿠팡 주문번호</th><th>Order 생성</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>414230</b></td><td><b>COSRX</b> Snail 96 Essence ×1 외 1종</td><td class="num" style="color:var(--blue);font-weight:700">12101316464794 <span style="color:var(--green);font-weight:700">일치</span></td><td class="num">07-13 07:05</td><td>Processing</td></tr>
+            <tr class="cand"><td><input type="radio" name="matchsel"></td><td class="num" style="color:var(--blue)"><b>413902</b></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td class="num">12101316431177</td><td class="num">07-12 18:40</td><td>Processing</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div style="margin-top:10px">
-        <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="예: 박스 라벨 훼손, 1+1 세트로 보임 — 미입력 리스트와 Slack 알림에 함께 표시됩니다"></textarea>
-      </div>
-      </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호(입력 시) 포함) → PIC별 트래킹넘버 미입력 리스트 페이지 최상단 <b>미인식 제품 풀</b>에 표시됩니다.</div>
+      <div class="note">매칭 확정 시 — 이 항목이 미입력 리스트에서 사라지고, 선택한 오더에 코멘트가 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>아니오</button>
-      <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" id="matchConfirm" disabled>이 오더에 매칭</button>
     </div>
   </div>
+</div>
+
+<div class="toast" id="matchToast" style="display:none;position:fixed;top:18px;right:18px">
+  <span>✓ Order 414230에 매칭 완료</span><small>풀에서 제거 · 오더 코멘트 등록 · @Miranti Slack 알림</small>
 </div>
 
 <script>
-document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
-    document.getElementById(t.dataset.state).classList.add('on');
-    window.scrollTo({top:0});
-  });
-});
 document.querySelectorAll('[data-modal]').forEach(b=>{
   b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
 });
@@ -808,6 +402,30 @@ document.querySelectorAll('.trk').forEach(inp=>{
     else{inp.classList.remove('filled');btn.classList.remove('btn-green');btn.classList.add('btn-gray');}
   };
   inp.addEventListener('input',sync);
+});
+/* 내 오더에 매칭 — 검색/선택/확정 데모 */
+document.getElementById('matchSearch').addEventListener('click',()=>{
+  document.getElementById('matchResults').style.display='block';
+});
+document.querySelectorAll('.cand').forEach(tr=>{
+  tr.addEventListener('click',()=>{
+    document.querySelectorAll('.cand').forEach(x=>x.classList.remove('on'));
+    tr.classList.add('on');
+    tr.querySelector('input[type="radio"]').checked=true;
+    document.getElementById('matchConfirm').disabled=false;
+  });
+});
+document.getElementById('matchConfirm').addEventListener('click',()=>{
+  document.getElementById('m-match').classList.remove('open');
+  const row=document.getElementById('poolrow1');
+  if(row){
+    row.remove();
+    document.getElementById('poolCount').textContent='2';
+    document.getElementById('poolCountBottom').textContent='2';
+  }
+  const t=document.getElementById('matchToast');
+  t.style.display='flex';
+  setTimeout(()=>{t.style.display='none';},4000);
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');

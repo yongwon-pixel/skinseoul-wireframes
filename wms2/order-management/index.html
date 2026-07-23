@@ -125,10 +125,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <div class="wf-bar">
   <h1>WMS 2.0 · Order Management Dashboard 와이어프레임</h1>
-  <span class="hint">실제 대시보드 기반 · 기본/Columns 뷰 전환 · 보라 번호 = 신규 주석</span>
+  <span class="hint">실제 대시보드 기반 · 오더 목록 표는 기존과 동일(생략) · 보라 번호 = 신규 주석</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-view="viewA">기본 컬럼</button>
-    <button class="wf-tab" data-view="viewB">Columns 전환</button>
     <button class="wf-tab" data-modal="m-import">모달: 마케팅 Import</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
@@ -164,10 +162,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <select class="sel"><option>Country: AU</option><option>All</option><option>NZ</option><option>US</option></select>
       <select class="sel"><option>15</option><option>30</option><option>50</option></select>
       <span class="sp"></span>
-      <span class="anno"><button class="btn btn-gray btn-sm">▦ Columns</button><span class="dot" style="top:-11px;right:-8px">1</span></span>
+      <button class="btn btn-gray btn-sm">▦ Columns</button>
       <button class="btn btn-gray btn-sm">⬇ Export</button>
       <button class="btn btn-gray btn-sm">⬇ Yun Export</button>
-      <span class="anno"><button class="btn btn-mkt btn-sm" data-modal="m-import">⬆ Import</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
+      <span class="anno"><button class="btn btn-mkt btn-sm" data-modal="m-import">⬆ Import</button><span class="dot" style="top:-11px;right:-8px">1</span></span>
     </div>
 
     <!-- action row -->
@@ -175,51 +173,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
       <span class="sel-info">2건 선택됨</span>
       <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
-      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">샘플 배정 ON</button><span class="dot" style="top:-11px;left:-9px">3</span></span>
-      <button class="btn btn-gray btn-sm" data-modal="m-sampleoff">배정 취소</button>
+      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">샘플 배정 ON</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+      <button class="btn btn-gray btn-sm" data-modal="m-sampleoff">샘플 배정 취소</button>
       <span class="sp"></span>
     </div>
 
-    <!-- ===== VIEW A: 기본 컬럼 ===== -->
-    <div class="tblwrap" id="viewA">
-      <table class="tbl">
-        <thead><tr>
-          <th style="width:28px"></th><th>Order ID</th><th>Order Date</th><th>Country</th><th>Status</th><th>Provider</th><th>Provider Order ID</th><th>PIC</th><th>Customer</th><th>Shipping Address</th><th></th>
-        </tr></thead>
-        <tbody>
-          <tr><td><input type="checkbox" checked></td><td><span class="oid">407847</span></td><td class="num">2026-06-30</td><td>AU</td><td><span class="st st-completed">Completed</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100709331860</td><td>Egita</td><td>Maytal Saltoon</td><td>25 Warren Road, Bellevue Hill, NSW 2023</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox" checked></td><td><span class="oid">407812</span></td><td class="num">2026-06-30</td><td>AU</td><td><span class="st st-processing">Processing</span></td><td><span class="prov prov-deleo">Deleo</span></td><td class="num">DL20260630072138</td><td>Dean</td><td>Sarah Kim</td><td>12 George St, Sydney, NSW 2000</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr class="mkt"><td><input type="checkbox"></td><td><span class="oid">MKT-40129</span><span class="mkt-badge">MKT</span></td><td class="num">2026-06-29</td><td>KR</td><td><span class="st st-prepare">Prepare</span></td><td>–</td><td class="num">–</td><td>Harshit</td><td>인플루언서 배송 (@glowwithjade)</td><td>서울 강남구 …</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407790</span></td><td class="num">2026-06-29</td><td>NZ</td><td><span class="st st-hold">On Hold</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100707828990</td><td>Egita</td><td>Hardeep Kaur</td><td>61 Wellesley Rd, Napier 4110, NZ</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407506</span></td><td class="num">2026-06-28</td><td>FR</td><td><span class="st st-completed">Completed</span></td><td><span class="prov prov-deleo">Deleo</span></td><td class="num">DL20260630072138</td><td>Dean</td><td>Claire Dubois</td><td>18 Rue de Rivoli, Paris 75001, FR</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr class="mkt"><td><input type="checkbox"></td><td><span class="oid">MKT-40088</span><span class="mkt-badge">MKT</span></td><td class="num">2026-06-27</td><td>KR</td><td><span class="st st-completed">Completed</span></td><td>–</td><td class="num">–</td><td>Harshit</td><td>브랜드 협찬 (Dr.Jart+)</td><td>경기 성남시 …</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407455</span></td><td class="num">2026-06-27</td><td>AU</td><td><span class="st st-processing">Processing</span></td><td><span class="prov prov-yun">YUN</span></td><td class="num">YT2618100707331240</td><td>Egita</td><td>Tom Nguyen</td><td>7 Chapel St, Melbourne, VIC 3000</td><td><button class="rowmenu">⋮</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- ===== VIEW B: Columns 전환 ===== -->
-    <div class="tblwrap anno" id="viewB" style="display:none">
-      <span class="dot" style="top:-9px;left:180px">5</span>
-      <table class="tbl">
-        <thead><tr>
-          <th style="width:28px"></th><th>Order ID</th><th>Customer</th><th>Total Value</th><th>Total Items</th><th>Product Name KR</th><th>SKU (Sourcing / Order# / Tracking)</th><th>Tracking No</th><th></th>
-        </tr></thead>
-        <tbody>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407847</span></td><td>Maytal Saltoon</td><td class="num">AUD 129.80</td><td class="num">4</td><td>포어레미디 폼 외 3종</td><td class="num">100005104 <span class="tag tag-jit">JIT</span> · 12101316464794 · 10323100835644</td><td class="num">YT2618100709331860</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td><span class="oid">407812</span></td><td>Sarah Kim</td><td class="num">AUD 88.40</td><td class="num">2</td><td>마데카솔 크림 외 1종</td><td class="num">100004819 <span class="tag tag-smartbuy">SB</span> · 12101316461102 · DL20260630072138</td><td class="num">DL20260630072138</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr class="mkt"><td><input type="checkbox"></td><td>인플루언서 @glowwithjade</td><td class="num">–</td><td class="num">3</td><td>시카페어 세트</td><td class="num">100043697 <span class="tag tag-partnership">PT</span> · MKT-40129 · –</td><td class="num">–</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td>Hardeep Kaur</td><td class="num">NZD 142.00</td><td class="num">2</td><td>데일리 웨트 힐크림 외</td><td class="num">100005088 <span class="tag tag-wholesale">WS</span> · – · YT2618100707828990</td><td class="num">YT2618100707828990</td><td><button class="rowmenu">⋮</button></td></tr>
-          <tr><td><input type="checkbox"></td><td>Claire Dubois</td><td class="num">EUR 76.50</td><td class="num">1</td><td>데일리 웨트 힐크림</td><td class="num">100012534 <span class="tag tag-smartbuy">SB</span> · O20260630105170 · DL20260630072138</td><td class="num">DL20260630072138</td><td><button class="rowmenu">⋮</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pager">
-      <span style="color:var(--ink-3)">1–15 of 2,818</span>
-      <button>‹ Prev</button>
-      <button class="on">1</button><button>2</button><button>3</button><button>…</button><button>188</button>
-      <button>Next ›</button>
+    <!-- ===== 오더 목록 표: 기존과 동일 — 생략 ===== -->
+    <div class="anno" style="display:block;border:1.5px dashed var(--line-strong);border-radius:10px;padding:36px 20px;text-align:center;background:var(--page)">
+      <div style="font-size:14px;font-weight:700;color:var(--ink)"><span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">4</span>오더 목록 표 — 기존 어드민과 동일 (생략)</div>
+      <div style="margin-top:7px;font-size:12.5px;color:var(--ink-3)">기본 컬럼 ↔ Columns 전환 뷰, 2,818 total·페이지네이션 포함 전부 변경 없음.<br>단, Import된 <b style="color:var(--mkt)">MKT- 마케팅 오더</b>는 이 목록에 보라 틴트 + MKT 배지 + 담당자로 노출됩니다.</div>
     </div>
   </div>
 </div></div>
@@ -227,13 +189,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>Order Management Dashboard — 신규 / 변경 주석 (기획 G + F 반영)</h3>
   <ol>
-    <li><span class="n">1</span><span>Columns 토글 — 기본 컬럼(Order ID·Date·Country·Status·Provider·Provider Order ID·PIC·Customer·Shipping) ↔ 상품/금액 컬럼(Total Value·Total Items·Product Name KR·SKU+소싱루트+주문번호+트래킹) 전환 <span class="ref">— 실화면</span></span></li>
-    <li><span class="n">2</span><span><b>마케팅 오더 수동 Import</b>(M1, 2026-07-23 확정) — 개발팀 표준 <b>템플릿 다운로드</b> → 입력 → 업로드 → <b>미리보기</b> → 오더 유형(인플루언서 시딩 프리셋 + 직접 입력)·담당자 지정(기본=로그인 본인) → 확정. <b>재고 검증 없음</b>(import 먼저·입고 나중 가능, Notion G의 재고 에러 항목 폐기 — UI 문구로는 미노출) · 확정 즉시 재고 무관 RTO Marketing 뷰 노출 <span class="ref">— G</span></span></li>
-    <li><span class="n">3</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
-    <li><span class="n">4</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 <span class="ref">— 정리</span></span></li>
-    <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
+    <li><span class="n">1</span><span><b>마케팅 오더 수동 Import</b>(M1, 2026-07-23 확정) — 개발팀 표준 <b>템플릿 다운로드</b> → 입력 → 업로드 → <b>미리보기</b> → 오더 유형(인플루언서 시딩 프리셋 + 직접 입력)·담당자 지정(기본=로그인 본인) → 확정. <b>재고 검증 없음</b>(import 먼저·입고 나중 가능, Notion G의 재고 에러 항목 폐기 — UI 문구로는 미노출) · 확정 즉시 재고 무관 RTO Marketing 뷰 노출 <span class="ref">— G</span></span></li>
+    <li><span class="n">2</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>샘플 배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
+    <li><span class="n">3</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 <span class="ref">— 정리</span></span></li>
+    <li><span class="n">4</span><span>오더 목록 표는 <b>기존 어드민과 동일</b>이라 와이어프레임에서 생략(기본 컬럼 ↔ Columns 전환 포함 변경 없음). 단, Import된 MKT- 마케팅 오더 행은 보라 틴트 + MKT 배지 + 담당자 표시로 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일. 샘플 배정은 2026-07-23 <b>심플 ON/OFF</b>로 재설계(제품 종류 설정 없음) — 상세는 범례 3.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트)는 View Orders·Order 상세와 통일. 샘플 배정은 2026-07-23 <b>심플 ON/OFF</b>로 재설계(제품 종류 설정 없음) — 상세는 범례 2.</p>
 </div>
 
 <!-- 모달: 샘플 배정 ON -->
@@ -334,14 +295,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 
 <script>
-document.querySelectorAll('.wf-tab[data-view]').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.wf-tab[data-view]').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    document.getElementById('viewA').style.display=b.dataset.view==='viewA'?'block':'none';
-    document.getElementById('viewB').style.display=b.dataset.view==='viewB'?'block':'none';
-  });
-});
 /* Import 오더 유형 칩 — 인플루언서 시딩(기본) / 직접 입력 */
 document.querySelectorAll('#otChipSeed,#otChipCustom').forEach(c=>{
   c.addEventListener('click',()=>{
