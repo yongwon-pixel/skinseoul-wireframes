@@ -223,7 +223,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h1>WMS 2.0 · View Orders 와이어프레임</h1>
   <span class="hint">v20 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · 스캔 결과 (마지막 제품 남은 오더)</button>
+    <button class="wf-tab on" data-state="s0">0 · 대기 (스캔 전)</button>
+    <button class="wf-tab" data-state="s1">1 · 스캔 결과 (마지막 제품 남은 오더)</button>
     <button class="wf-tab" data-state="s1b">1b · 스캔 결과 (일반 — 남은 제품 2개)</button>
     <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
     <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
@@ -237,8 +238,86 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
+<!-- ══════════════ STATE 0 : 대기 (스캔 전 첫 화면) ══════════════ -->
+<section class="state on" id="s0">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox0">💬 Comments<span class="badge-n">3</span></button>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox0">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="anno" style="display:block;margin-top:16px;border:1.5px dashed var(--line-strong);border-radius:12px;padding:44px 20px;text-align:center;background:var(--page)">
+      <div style="font-size:32px">📡</div>
+      <div style="font-size:16px;font-weight:800;margin-top:6px;color:var(--ink)">스캔 대기 중</div>
+      <div class="mut" style="margin-top:6px">송장·제품 바코드를 스캔하거나 번호를 입력하면 <b>즉시 해당 오더 화면으로 전환</b>됩니다</div>
+    </div>
+
+    <div class="anno" style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <span class="dot" style="top:-10px;left:-10px">2</span>
+      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">오늘 스캔 오더</div><div style="font-size:22px;font-weight:800;color:var(--ink)">42</div></div>
+      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">Inbound</div><div style="font-size:22px;font-weight:800;color:var(--green)">38</div></div>
+      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">Outbound</div><div style="font-size:22px;font-weight:800;color:var(--blue)">31</div></div>
+      <div style="flex:1;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)"><div class="mut">미인식 (미입력 리스트)</div><div style="font-size:22px;font-weight:800;color:var(--red)">3</div></div>
+    </div>
+
+    <p class="sub anno" style="margin-top:22px">최근 처리 오더<span class="dot" style="top:-6px;left:-14px">3</span></p>
+    <table class="tbl" style="margin-top:6px">
+      <thead><tr><th>시각</th><th>Order</th><th>최근 액션</th><th>작업자</th></tr></thead>
+      <tbody>
+        <tr><td class="num">10:58</td><td class="num" style="color:var(--blue)"><b>413865</b></td><td>Inbound (포어레미디 폼)</td><td>Dean</td></tr>
+        <tr><td class="num">10:51</td><td class="num" style="color:var(--blue)"><b>413902</b></td><td>Outbound — prepare shipment 전환</td><td>Miranti</td></tr>
+        <tr><td class="num">10:44</td><td class="num" style="color:var(--blue)"><b>413712</b></td><td>Inbound (시카페어 세트)</td><td>Dean</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 0 변경사항 — 대기 (스캔 전 첫 화면)</h3>
+  <ol>
+    <li><span class="n">1</span><span>첫 진입 화면 = <b>빈 통합 검색창 자동 포커스</b> — 바코드 스캔/번호 입력 즉시 해당 오더 화면(상태 1~5)으로 전환. 자동 판별·쿠팡 QR [V1] 프리픽스 제거·포커스 복귀 규칙은 State 1 범례 1·12·14 참조 — <b>규칙 문구는 화면에 노출하지 않음</b> <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">2</span><span>오늘 처리 현황 타일 — 스캔 오더/Inbound/Outbound/미인식 카운트. 미인식 클릭 시 트래킹넘버 미입력 리스트로 이동 <span class="ref">— 신규 제안</span></span></li>
+    <li><span class="n">3</span><span>최근 처리 오더 — 방금 처리한 오더 재진입 링크(Order 클릭 시 해당 상태 화면) <span class="ref">— 신규 제안</span></span></li>
+  </ol>
+</div>
+</section>
+
 <!-- ══════════════ STATE 1 : 스캔 결과 — 마지막 1개 남음 ══════════════ -->
-<section class="state on" id="s1">
+<section class="state" id="s1">
 <div class="mockwrap"><div class="mock anno">
 
   <div class="toast"><span>✓ 인바운드 완료 — 100040311</span><small>새로고침 없음 · 바로 다음 스캔 가능</small><span class="dot" style="position:static;display:inline-flex;flex:none">15</span></div>
@@ -283,11 +362,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
         <span class="dot" style="top:-10px;left:-10px">1</span>
         <span class="dot" style="top:-10px;right:8px">12</span>
+        <span class="dot" style="top:-10px;right:34px">14</span>
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
-    <p class="mut anno" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원<span class="dot" style="position:static;display:inline-flex;margin-left:8px;vertical-align:-4px">14</span></p>
 
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard anno">
@@ -405,7 +483,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 1 변경사항 — 스캔 결과 (마지막 제품 남은 오더: 4개 중 3개 인바운드 완료, 방금 스캔한 JIT가 마지막)</h3>
   <ol>
-    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 [V1] 프리픽스 자동 제거 후 매칭 <span class="ref">— C 검색 + C 반송</span></span></li>
+    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 [V1] 프리픽스 자동 제거 후 매칭. <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
     <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
     <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b> <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
@@ -418,7 +496,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">11</span><span>오더 Comments 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
     <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~5) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">14</span><span>페이지 아무 곳 클릭 + Inbound·Outbound(출고) 처리 직후 → 검색창 자동 포커스(전체 선택), 바로 다음 바코드 스캔 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">14</span><span>페이지 아무 곳 클릭 + Inbound·Outbound(출고) 처리 직후 → 검색창 자동 포커스(전체 선택), 바로 다음 바코드 스캔. <b>화면 문구 없이 동작으로만 구현</b> <span class="ref">— C 검색</span></span></li>
     <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 화면에는 최대 10~20개만 표시(백엔드 전체 누적), 날짜별 export <span class="ref">— C 로그</span></span></li>
     <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
@@ -467,7 +545,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413902</b></span>
@@ -591,8 +668,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
@@ -719,8 +794,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택) · 쿠팡 소형 QR코드도 인식 — 스캔 시 "[V1]바코드" 형식으로 찍히므로 [V1] 프리픽스 자동 제거 후 매칭</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
@@ -851,8 +924,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">🔍 Search</button>
       <span class="dot" style="top:-11px;left:-10px">5</span>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — 반송은 <b>라스트마일(반송) 바코드</b>로도 조회 가능. Tracking / Inbound Order / Product Order No 아무 번호나 입력하면 자동 판별</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="retbanner anno">
       <b>⟲ 반송 오더</b>
@@ -972,8 +1043,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
-    <p class="mut" style="margin:6px 0 0">통합 검색 — Tracking No / Inbound Order No / Product Order No / 라스트마일(반송) 바코드 아무 번호나 입력하면 자동 판별</p>
-    <p class="mut" style="margin:3px 0 0">페이지 아무 곳이나 클릭해도, Inbound·Outbound(출고) 처리 직후에도 커서는 검색창으로 복귀(전체 선택) — 연속 스캔 지원</p>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="holdbanner anno">
       <b>⏸ Hold Shipment</b>
