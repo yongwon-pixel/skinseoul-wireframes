@@ -224,7 +224,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>Order Management Dashboard — 신규 / 변경 주석 (기획 G + F 반영)</h3>
   <ol>
     <li><span class="n">1</span><span>Columns 토글 — 기본 컬럼(Order ID·Date·Country·Status·Provider·Provider Order ID·PIC·Customer·Shipping) ↔ 상품/금액 컬럼(Total Value·Total Items·Product Name KR·SKU+소싱루트+주문번호+트래킹) 전환 <span class="ref">— 실화면</span></span></li>
-    <li><span class="n">2</span><span>Import — 마케팅/협찬 오더 대량 업로드 모달(엑셀/CSV). MKT- 오더로 생성 → View Orders 아웃바운드 연동 <span class="ref">— G</span></span></li>
+    <li><span class="n">2</span><span><b>마케팅 오더 수동 Import</b>(M1, 2026-07-23 확정) — 개발팀 표준 <b>템플릿 다운로드</b> → 입력 → 업로드 → <b>미리보기</b> → 담당자(PIC) 지정 → 확정. <b>재고 검증 없음</b>(import 먼저·입고 나중 가능, Notion G의 재고 에러 항목 폐기) · 확정 즉시 재고 무관 RTO Marketing 뷰 노출 <span class="ref">— G</span></span></li>
     <li><span class="n">3</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
     <li><span class="n">4</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 <span class="ref">— 정리</span></span></li>
     <li><span class="n">5</span><span>MKT- 마케팅 오더 행 보라 틴트 + MKT 배지 — 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
@@ -282,19 +282,43 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- 모달: 마케팅 Import -->
+<!-- 모달: 마케팅 오더 수동 Import -->
 <div class="overlay" id="m-import">
-  <div class="modal wide anno">
+  <div class="modal wide anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
     <header>마케팅 오더 Import<button class="x" data-close>✕</button></header>
     <div class="body">
-      <div class="fld"><label>오더 유형</label><select><option>인플루언서 협찬</option><option>브랜드 파트너십 샘플</option><option>내부 마케팅 물량</option></select></div>
-      <div class="dropzone">📄 엑셀/CSV 파일을 드래그하거나 클릭해서 업로드<br><span style="font-size:11.5px">컬럼: 수취인 · 주소 · SKU · 수량 · 소싱루트</span></div>
-      <div class="note mkt">업로드된 행은 <b>MKT- 오더</b>로 생성되어 물동량·정산에서 일반 판매와 분리됩니다. 생성 후 View Orders에서 스캔·아웃바운드 처리 가능. 소싱루트가 Brand Partnership이면 입고 요청(I)과 매칭됩니다.</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <b style="color:var(--ink)">1. 템플릿</b>
+        <button class="btn btn-line btn-sm">⬇ Import 템플릿 다운로드 (.xlsx)</button>
+        <span style="font-size:11.5px;color:var(--ink-3)">개발팀 제공 표준 양식 — 수취인·연락처·주소·국가·SKU·수량·캠페인명</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+        <b style="color:var(--ink)">2. 담당자 (PIC)</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>Harshit</option><option>EuJin</option><option>Adinda</option><option>Yongwon</option>
+        </select>
+        <span style="font-size:11.5px;color:var(--ink-3)">이 import 건 전체의 담당자로 기록 — 오더 목록·RTO에 표시</span>
+      </div>
+      <b style="color:var(--ink)">3. 업로드</b>
+      <div class="dropzone" style="margin-top:6px">📄 작성한 템플릿을 드래그하거나 클릭해서 업로드</div>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink);font-size:13px">미리보기 — mkt_seeding_batch3.xlsx · 12행 파싱됨 · 오류 0</b>
+        <table class="tbl" style="margin-top:6px;font-size:12px">
+          <thead><tr><th>수취인</th><th>국가</th><th>SKU</th><th>제품명</th><th>수량</th><th>캠페인</th></tr></thead>
+          <tbody>
+            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td>Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>7월 시딩</td></tr>
+            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td>Cicapair Sleepair Mask</td><td class="num">1</td><td>7월 시딩</td></tr>
+            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td>Green Tea Seed Serum</td><td class="num">1</td><td>7월 시딩</td></tr>
+            <tr><td colspan="6" style="text-align:center;color:var(--ink-3)">⋯ 외 9행</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note mkt"><b>재고 확인은 하지 않습니다</b> — import가 먼저고 입고가 나중일 수 있음. 확정 시 MKT- 오더로 생성되어 <b>재고·인바운드 여부와 무관하게 Ready to be Outbonded(Marketing 뷰)에 즉시 노출</b>됩니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-mkt btn-sm" data-close>Import (미리보기)</button>
+      <button class="btn btn-mkt btn-sm" data-close>12건 Import 확정</button>
     </div>
   </div>
 </div>
