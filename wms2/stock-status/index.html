@@ -90,6 +90,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .thumb{width:32px;height:32px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-3)}
 .loc-in{width:92px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 7px;font:inherit;font-size:12px;text-align:center;font-weight:600;background:var(--page);color:var(--ink)}
 .loc-in::placeholder{color:var(--amber);font-weight:700}
+.ausel{position:relative;display:inline-block}
+.audrop{position:absolute;top:34px;left:0;min-width:320px;background:var(--page);border:1px solid var(--line-strong);border-radius:8px;box-shadow:var(--shadow);z-index:60;display:none}
+.audrop div{padding:8px 12px;font-size:12.5px;cursor:pointer;border-bottom:1px solid var(--line)}
+.audrop div:last-child{border-bottom:none}
+.audrop div:hover{background:var(--blue-soft)}
+.audrop .sz{color:var(--ink-3);font-size:11.5px}
 .bcin{width:104px;border:1px dashed var(--line-strong);border-radius:6px;padding:4px 7px;font:inherit;font-size:11.5px;background:var(--page);color:var(--ink)}
 
 /* events table */
@@ -292,11 +298,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td>메디큐브 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td>Partnership</td><td><input class="loc-in" value="" placeholder="미지정"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr class="audrow" style="display:none"><td colspan="14" style="background:var(--ss-purple-50);padding:10px 12px">
               <span style="font-weight:700;color:var(--ss-purple)">＋ 실사 중 발견한 미등록 제품</span>
-              <input class="bcin" style="width:170px;margin-left:10px" placeholder="SKU / 바코드 검색 (자동완성)">
-              <input class="loc-in" placeholder="로케이션">
-              <input class="qty-in" placeholder="수량">
-              <button class="btn btn-line btn-sm">추가</button>
-              <span style="font-size:11.5px;color:var(--ink-3);margin-left:8px">추가 시 ADJUST(+) 이벤트로 재고 편입 · Stock History 기록</span>
+              <span class="ausel"><input id="auSearch" class="bcin" style="width:230px;margin-left:10px" placeholder="제품명 검색 (자동완성 — 바코드 없어도 가능)" autocomplete="off"><div class="audrop" id="auDrop"></div></span>
+              <input id="auLoc" class="loc-in" placeholder="로케이션">
+              <input id="auQty" class="qty-in" placeholder="수량">
+              <button class="btn btn-line btn-sm" id="auAdd">추가</button>
+              <span style="font-size:11.5px;color:var(--ink-3);margin-left:8px">제품명으로 검색해 용량까지 확인 후 선택 → 추가 시 목록 맨 위에 신규 행(Diff=+수량) → 확정 시 ADJUST(+) 편입</span>
             </td></tr>
           </tbody>
         </table>
@@ -314,7 +320,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">15</span><span><b>지난 실사 로그</b> — 실사 모드 버튼 옆(같은 동선)에서 모달로 열람. 월별 회차(실사일·Auditor·조정·신규 편입·손실액 합계, 목표 0 추적) + 회차별 ADJUST 상세 연결 <span class="ref">— E "매 달 실사는 로그로 남음"</span></span></li>
     <li><span class="n">14</span><span><b>SKU당 로케이션 단일 원칙</b>(2026-07-22 확정) — By Location은 항상 현재 로케이션 1개, Current Stocks 로케이션 입력칸과 정합. 반품도 검수 후 같은 로케이션으로 편입(RETURN-BIN 개념 폐기) <span class="ref">— E 로케이션</span></span></li>
-    <li><span class="n">13</span><span><b>미등록 제품 추가 행</b>(실사 모드 전용) — 실사 중 리스트에 없는 제품 발견 시 SKU/바코드 검색(자동완성)으로 추가 → 로케이션·수량 입력 → ADJUST(+) 이벤트로 재고 편입 <span class="ref">— E 실사</span></span></li>
+    <li><span class="n">13</span><span><b>미등록 제품 추가</b>(실사 모드 전용) — <b>제품명 검색 → 자동완성</b>(제품명·용량·SKU 표시, 바코드 없어도 가능) → 클릭 선택 → 로케이션·수량 입력 → 추가 시 <b>목록 맨 위에 신규 행</b>(시스템 0 → Diff +수량) → 확정 시 ADJUST(+) 편입. 카탈로그에도 없으면 미인식 플로우(F)로 수동 등록 <span class="ref">— E 실사</span></span></li>
     <li><span class="n">10</span><span><b>페이지명 "Stock Status" → "Inventory"로 변경</b> — 재고 도메인 전체(현재고·이력·입출고)를 묶는 표준 명칭. 랜딩(기본 탭) = Current Stocks. 기존 "Export Stock Status" 등 참조명은 개발 시 매핑 <span class="ref">— E 네이밍</span></span></li>
     <li><span class="n">12</span><span>Location = <b>전 행 수정 가능 입력칸</b> — 미지정 제품(앰버 "미지정")도 노출해서 바로 지정. 바코드 없는 제품은 Barcode 칼럼에 입력칸(View Orders와 동일 규칙) <span class="ref">— E 로케이션 수동 변경</span></span></li>
     <li><span class="n">11</span><span>기본 정렬 = <b>Available 내림차순</b> — 팔 수 있는 재고가 많은 순. 헤더 클릭으로 재정렬 가능 <span class="ref">— E</span></span></li>
@@ -413,6 +419,42 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 
 <script>
+/* 실사 미등록 제품 — 제품명 자동완성 검색 + 목록 맨 위 행 삽입 */
+const AU_CATALOG=[
+  {sku:'100048201',kr:'어노브 딥 대미지 트리트먼트',size:'320ml'},
+  {sku:'100051200',kr:'어노브 실크 헤어 오일',size:'150ml'},
+  {sku:'100032911',kr:'라운드랩 자작나무 수분 크림',size:'80ml'},
+  {sku:'100027733',kr:'토리든 다이브인 저분자 세럼',size:'50ml'},
+  {sku:'100044120',kr:'어뮤즈 듀 틴트',size:'4g'}
+];
+let auPick=null;
+const auS=document.getElementById('auSearch'), auD=document.getElementById('auDrop');
+auS.addEventListener('input',()=>{
+  auPick=null;
+  const q=auS.value.trim();
+  if(!q){auD.style.display='none';return;}
+  const hits=AU_CATALOG.filter(c=>c.kr.includes(q));
+  auD.innerHTML=hits.length?hits.map(c=>`<div data-sku="${c.sku}"><b>${c.kr}</b> <span class="sz">· ${c.size} · ${c.sku}</span></div>`).join(''):'<div style="color:var(--ink-3)">검색 결과 없음 — 미인식 플로우(F)로 수동 등록</div>';
+  auD.style.display='block';
+  auD.querySelectorAll('div[data-sku]').forEach(d=>{
+    d.addEventListener('click',()=>{
+      auPick=AU_CATALOG.find(c=>c.sku===d.dataset.sku);
+      auS.value=auPick.kr+' · '+auPick.size;
+      auD.style.display='none';
+    });
+  });
+});
+document.getElementById('auAdd').addEventListener('click',()=>{
+  if(!auPick){auS.focus();return;}
+  const qty=document.getElementById('auQty').value||'1';
+  const loc=document.getElementById('auLoc').value||'미지정';
+  const tb=document.querySelector('#p-current tbody');
+  const tr=document.createElement('tr');
+  tr.style.background='var(--ss-purple-50)';
+  tr.innerHTML=`<td class="num">${auPick.sku}</td><td><div class="thumb">IMG</div></td><td>—</td><td><b>${auPick.kr}</b> <span style="color:var(--ss-purple);font-weight:700;font-size:10.5px">[신규]</span></td><td>${auPick.size}</td><td>–</td><td>—</td><td><input class="loc-in" value="${loc}"></td><td class="num">0</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">0</td><td class="audcol" style="display:table-cell"><input class="qty-in" value="${qty}"></td><td class="audcol num" style="display:table-cell"><span class="diff-pos">+${qty}</span></td><td class="audcol num" style="display:table-cell;color:var(--ink-3)">— (신규)</td>`;
+  tb.insertBefore(tr, tb.firstElementChild);
+  auS.value=''; document.getElementById('auQty').value=''; document.getElementById('auLoc').value=''; auPick=null;
+});
 document.querySelectorAll('[data-modal]').forEach(b=>{
   b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
 });
