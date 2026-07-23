@@ -58,6 +58,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .btn-gray{background:var(--page);border:1px solid var(--line-strong);color:var(--ink-2)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
 
+/* 뷰 탭 (All/Inventory/Marketing/JIT) */
+.viewtabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.vtab{border:1px solid var(--line-strong);border-radius:8px;padding:6px 14px;background:var(--page);font-weight:700;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.vtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
 /* 일괄 처리 바 + 프로그래스 */
 .bulkbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px}
 .bulkbar .cnt{font-size:12.5px;color:var(--ss-purple);font-weight:700}
@@ -180,6 +185,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">Refresh</button>
     </div>
 
+    <!-- 뷰 탭 (신규) -->
+    <div class="viewtabs anno">
+      <span class="dot" style="top:-11px;left:-10px">14</span>
+      <button class="vtab on" data-view="all">All <span style="font-weight:400">(5)</span></button>
+      <button class="vtab" data-view="inv">Inventory <span style="font-weight:400">(3)</span></button>
+      <button class="vtab" data-view="mkt">Marketing <span style="font-weight:400">(1)</span></button>
+      <button class="vtab" data-view="jit">JIT <span style="font-weight:400">(1)</span></button>
+    </div>
+
     <!-- 일괄 처리 바 (신규 D) -->
     <div class="bulkbar anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
@@ -203,36 +217,36 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <th style="width:34px"><input type="checkbox" checked></th>
         <th>Order ID</th><th>Order Date</th><th>Customer</th><th class="anno">Total Items<span class="dot" style="top:-11px;right:-8px">13</span></th><th>Ready Item Details</th>
         <th class="anno">Pick Locations<span class="dot" style="top:-11px;right:-8px">12</span></th>
-        <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Actions</th>
+        <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Print</th>
       </tr></thead>
       <tbody>
-        <tr>
+        <tr data-view="inv">
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422221</span></td><td>2026. 7. 21.</td><td>Sophia Kim</td>
           <td><span class="cntbadge cb-total">5</span></td>
           <td><div class="item-line"><span class="skupill">100039958</span> AtoBarrier365 Body …<span class="qtypill">×5</span></div></td>
           <td><div class="locline"><span class="locpill">A-02-13</span></div></td>
           <td><button class="cmtbtn" data-open="crow1">💬 <span class="badge-n">1</span></button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+          <td><button class="printbtn">🖨</button></td>
         </tr>
-        <tr class="crow" id="crow1" style="display:none"><td colspan="9">
+        <tr class="crow" id="crow1" data-view="inv" style="display:none"><td colspan="9">
           <div class="c-item"><span class="who">Egita</span><span><span class="at">@Yongwon</span> ×5 수량 맞는지 확인 부탁드립니다.</span><time>07-21 09:40</time><button class="star on" title="저장됨">★</button></div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
-        <tr class="striped">
+        <tr data-view="inv" class="striped">
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422176</span></td><td>2026. 7. 21.</td><td>Jazmin Harrison</td>
           <td><span class="cntbadge cb-total">1</span></td>
           <td><div class="item-line"><span class="skupill">100035912</span> Ceramide Ato Conce…<span class="qtypill">×1</span></div></td>
           <td><div class="locline"><span class="locpill">B-01-07</span></div></td>
           <td><button class="cmtbtn" data-open="crow2">💬</button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+          <td><button class="printbtn">🖨</button></td>
         </tr>
-        <tr class="crow" id="crow2" style="display:none"><td colspan="9">
+        <tr class="crow" id="crow2" data-view="inv" style="display:none"><td colspan="9">
           <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
-        <tr>
+        <tr data-view="inv">
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422165</span></td><td>2026. 7. 21.</td><td>Janine Eames</td>
           <td><span class="cntbadge cb-total">2</span></td>
@@ -245,13 +259,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <div class="locline"><span class="locpill">B-02-11</span></div>
           </td>
           <td><button class="cmtbtn" data-open="crow3">💬 <span class="badge-n">1</span></button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+          <td><button class="printbtn">🖨</button></td>
         </tr>
-        <tr class="crow" id="crow3" style="display:none"><td colspan="9">
+        <tr class="crow" id="crow3" data-view="inv" style="display:none"><td colspan="9">
           <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 포장 각별히 신경써주세요. VIP 고객입니다.</span><time>07-21 10:12</time><button class="star" title="저장">★</button></div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
-        <tr class="row-mkt anno">
+        <tr class="row-mkt anno" data-view="mkt">
           <td><input type="checkbox"></td>
           <td><span class="oid">MKT-40233</span><span class="mkt-badge">MKT</span><span class="dot" style="top:-4px;left:-12px">8</span></td>
           <td>2026. 7. 21.</td><td>인플루언서 @glowwithjade</td>
@@ -265,13 +279,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <div class="locline"><span class="locpill">C-01-02</span></div>
           </td>
           <td><button class="cmtbtn" data-open="crow5">💬</button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+          <td><button class="printbtn">🖨</button></td>
         </tr>
-        <tr class="crow" id="crow5" style="display:none"><td colspan="9">
+        <tr class="crow" id="crow5" data-view="mkt" style="display:none"><td colspan="9">
           <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
-        <tr class="row-jit anno">
+        <tr class="row-jit anno" data-view="jit">
           <td><input type="checkbox"></td>
           <td><span class="oid">422164</span><span class="jit-badge">JIT 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
           <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
@@ -279,23 +293,23 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
           <td><div class="locline"><span class="locpill">선반 3</span></div></td>
           <td><button class="cmtbtn" data-open="crow4">💬</button></td>
-          <td><button class="printbtn">🖨</button> <button class="btn btn-blue btn-sm">View Order</button></td>
+          <td><button class="printbtn">🖨</button></td>
         </tr>
-        <tr class="crow" id="crow4" style="display:none"><td colspan="9">
+        <tr class="crow" id="crow4" data-view="jit" style="display:none"><td colspan="9">
           <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
       </tbody>
     </table>
 
-    <p class="foundtxt">Found 5 order(s) with items ready for outbound</p>
+    <p class="foundtxt" id="foundTxt">Found 5 order(s) with items ready for outbound</p>
 
     <div class="howto">
       <b>How to use:</b>
       <ul>
         <li>Click "Refresh" to load the latest orders ready for outbound</li>
         <li>Orders shown here have at least one line item with "INBOUNDED" status</li>
-        <li>Click "View Order" to see the full order details and process outbound</li>
+        <li>Click the Order ID link to see full order details and process outbound</li>
         <li>Only items marked as INBOUNDED are ready for outbound processing</li>
         <li>This page uses the dedicated readyToBeOutbonded API for optimized results</li>
       </ul>
@@ -314,13 +328,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">6</span><span>완료 알림 — <b>우상단 토스트</b>로 표시 후 몇 초 뒤 자동 사라짐. 실패 케이스 없음(전 건 성공이 정상 동작). 상단 일괄 버튼을 클릭하면 데모로 동작 <span class="ref">— D</span></span></li>
     <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT 완료 배지</b>, <b>항상 목록 맨 아래로 정렬</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
     <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b>, <b>일반 Ready 오더 아래·JIT 완료 위에 모아서 정렬</b> <span class="ref">— D + G</span></span></li>
+    <li><span class="n">14</span><span><b>뷰 탭</b> — All(기본) / Inventory(창고 재고 Ready) / Marketing(수동 import 마케팅) / JIT(전 품목 인바운드됐으나 Outbound 미클릭) — 오더 유형별 필터, Found 카운트 연동 <span class="ref">— D</span></span></li>
     <li><span class="n">13</span><span>Total Items = <b>총 수량 합</b>으로 변경 — 현 어드민은 SKU 종수만 표시해서 ×5 오더도 "1"로 보임 → 실제 집어야 할 갯수(예: 422221은 5)로 표기 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
     <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">11</span><span>좌우 여백 축소 — 화면 꽉 채우기 (View Orders와 동일 원칙) <span class="ref">— C/D</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순. Actions 칼럼은 Print로 단순화(2026-07-22) — View Order 버튼 제거, 상세 진입은 Order ID 링크.</p>
 </div>
 
 <!-- 모달: 로케이션 프린트 — 피킹 리스트 (로케이션 오름차순) -->
@@ -393,6 +408,20 @@ document.querySelectorAll('.bulk-run').forEach(btn=>{
         setTimeout(()=>{toast.style.display='none';},3000);
       }
     },250);
+  });
+});
+/* 뷰 탭 필터 — All/Inventory/Marketing/JIT */
+document.querySelectorAll('.vtab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.vtab').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    const v=t.dataset.view; let n=0;
+    document.querySelectorAll('tbody tr[data-view]').forEach(r=>{
+      const match=(v==='all'||r.dataset.view===v);
+      if(r.classList.contains('crow')){ r.style.display='none'; }
+      else { r.style.display=match?'':'none'; if(match) n++; }
+    });
+    document.getElementById('foundTxt').textContent='Found '+n+' order(s) with items ready for outbound';
   });
 });
 document.getElementById('annoToggle').addEventListener('click',function(){

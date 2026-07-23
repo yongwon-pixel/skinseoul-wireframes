@@ -283,16 +283,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <!-- ── 상단: 미인식 제품 풀 ── -->
     <div class="poolhead anno" style="margin-top:20px">
       <b>⚠ 미인식 제품 풀 · 3건</b>
-      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품 — 아직 어느 오더에도 매칭되지 않음. 담당 PIC가 아래 자기 오더와 대조해 트래킹넘버를 입력하세요.</span>
+      <span class="cnt">View Orders에서 바코드 인식 실패로 전송된 물리 제품. <b>주문번호</b> 칼럼은 등록 시 센터가 입력한 값(선택, 미입력="–")으로 PIC 매칭을 돕습니다. 담당 PIC가 아래 자기 오더와 대조해 트래킹넘버를 입력하세요.</span>
       <span class="dot" style="top:-11px;left:-11px">2</span>
     </div>
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
-        <th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">8</span></th><th>Product Name KR</th><th>Size</th>
+        <th>주문번호</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">8</span></th><th>Product Name KR</th><th>Size</th>
         <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th class="anno">Slack 알림<span class="dot" style="top:-11px;right:-8px">4</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
+          <td class="num" style="color:var(--blue);font-weight:700">414230</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
@@ -303,6 +304,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td>
@@ -313,6 +315,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
+          <td class="num" style="color:var(--blue);font-weight:700">413998</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
@@ -352,14 +355,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th class="anno">대기<span class="dot" style="top:-11px;right:-8px">7</span></th>
         <th class="anno">Tracking No 입력<span class="dot" style="top:-11px;left:60px">9</span></th><th class="anno">Actions<span class="dot" style="top:-11px;right:-8px">10</span></th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414230</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>414230</b></td><td class="num" style="color:var(--blue);font-weight:700">414230</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td><td><span class="qty">1</span></td>
           <td class="num">8809416470726</td><td class="num">P-8841207</td><td class="num">07-13 07:05</td>
@@ -394,14 +398,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
         <th>Tracking No 입력</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414102</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>414102</b></td><td class="num" style="color:var(--ink-3)">–</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
           <td class="num">8809640733458</td><td class="num">P-8839114</td><td class="num">07-13 06:40</td>
@@ -436,14 +441,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
         <th>Tracking No 입력</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>413998</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>413998</b></td><td class="num" style="color:var(--blue);font-weight:700">413998</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
           <td class="num">8809894261234</td><td class="num">P-8834902</td><td class="num">07-13 05:15</td>
@@ -527,11 +533,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
     <div class="mockwrap"><table class="tbl" style="margin-top:8px">
       <thead><tr>
-        <th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th>
+        <th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th>
         <th>Barcode</th><th>갯수</th><th>메모</th><th>등록자 (센터)</th><th>등록 시각</th><th>Slack 알림</th><th>Action</th>
       </tr></thead>
       <tbody>
         <tr class="row-hit">
+          <td class="num" style="color:var(--blue);font-weight:700">414230</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br><span class="match-note">↳ 매칭 후보: Dean · Order 414230</span></td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
@@ -542,6 +549,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
+          <td class="num" style="color:var(--ink-3)">–</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml<br><span class="match-note">↳ 매칭 후보: Harshit · Order 414102</span></td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td>
@@ -552,6 +560,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="btn btn-line btn-sm">내 오더에 매칭</button></td>
         </tr>
         <tr class="row-hit">
+          <td class="num" style="color:var(--blue);font-weight:700">413998</td>
           <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1<br><span class="match-note">↳ 매칭 후보: Miranti · Order 413998</span></td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
@@ -583,14 +592,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
         <th>Tracking No 입력</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414230</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>414230</b></td><td class="num" style="color:var(--blue);font-weight:700">414230</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-a"></span><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
           <td>어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td><td><span class="qty">1</span></td>
           <td class="num">8809416470726</td><td class="num">P-8841207</td><td class="num">07-13 07:05</td>
@@ -614,14 +624,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
         <th>Tracking No 입력</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>414102</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>414102</b></td><td class="num" style="color:var(--ink-3)">–</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-b"></span><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td>어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
           <td class="num">8809640733458</td><td class="num">P-8839114</td><td class="num">07-13 06:40</td>
@@ -656,14 +667,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="mockwrap"><table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Order ID</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Order ID</th><th>주문번호</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
         <th>Barcode</th><th>Product Order No</th><th>Order 생성</th><th>Sourcing Route</th><th>대기</th>
         <th>Tracking No 입력</th><th>Actions</th>
       </tr></thead>
       <tbody>
         <tr>
           <td><input type="checkbox"></td>
-          <td class="num" style="color:var(--blue)"><b>413998</b></td><td><div class="thumb">IMG</div></td>
+          <td class="num" style="color:var(--blue)"><b>413998</b></td><td class="num" style="color:var(--blue);font-weight:700">413998</td>
+          <td><div class="thumb">IMG</div></td>
           <td><span class="matchdot mc-c"></span><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
           <td>제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
           <td class="num">8809894261234</td><td class="num">P-8834902</td><td class="num">07-13 05:15</td>
