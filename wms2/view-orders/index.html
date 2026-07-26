@@ -486,7 +486,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">22</span><span><b>반품 라벨 출력</b>(우하단, 작업 상태 1·1b·2·3 공통) — 스캔 중 오배송·파손 발견 시 제품 선택 → 모달(M4): 택배사 선택/직접 입력 + 사이즈·수량(선택 입력) → 라벨지에 택배사명·제품명(KR)·사이즈·수량 인쇄해 공급처 반품 박스에 부착. 반송 모드(State 4, 고객→우리)와 별개 개념 <span class="ref">— C</span></span></li>
     <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조). <b>입고 요청(I) 건의 송장을 스캔하면 고객 오더 화면이 아니라 내부 입고 전용 화면으로 전환</b> — 재고 편입 플로우(Outbound 없음), 별도 와이어프레임 <a href="../inbound-receiving/" style="color:var(--ss-purple);font-weight:700">inbound-receiving</a> 참조.</p>
 </div>
 </section>
 

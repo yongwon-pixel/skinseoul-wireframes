@@ -1,0 +1,365 @@
+<title>WMS 2.0 — 내부 입고 스캔 (Inbound Receiving) 와이어프레임</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+/* ── wireframe chrome ── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+/* ── annotations ── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+/* ── admin mock ── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px;position:relative}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.mut{color:var(--ink-3);font-size:12.5px}
+/* 검색창 (View Orders 동일) */
+.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.search-input{flex:1;min-width:300px;display:flex;border:1.5px solid var(--ink);border-radius:7px}
+.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:9px 12px;font-size:15px;font-weight:700;outline:none;border-radius:7px;font-variant-numeric:tabular-nums}
+/* 내부 입고 구분 배너 */
+.intbanner{margin-top:14px;background:color-mix(in srgb,var(--ss-purple-50) 70%,var(--page));
+  border:2px solid var(--ss-purple);border-radius:12px;padding:16px 20px}
+.intbanner .big{font-size:21px;font-weight:800;color:var(--ss-purple)}
+.intbanner .warnline{margin-top:3px;font-size:13.5px;font-weight:700;color:var(--ink)}
+.intbanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.intbanner .kv b{color:var(--ink)}
+.donebanner{margin-top:14px;background:var(--green-soft);border:2px solid var(--green);border-radius:12px;padding:16px 20px}
+.donebanner .big{font-size:21px;font-weight:800;color:var(--green)}
+.donebanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--ink-2)}
+.donebanner .kv b{color:var(--ink)}
+/* 진행 타일 */
+.tiles{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.tile{flex:1;min-width:160px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)}
+.tile .lab{font-size:12px;color:var(--ink-3)}
+.tile .val{font-size:24px;font-weight:800;color:var(--ink)}
+.tile.ok .val{color:var(--green)}
+.tile.warn .val{color:var(--amber)}
+/* 제품 스캔 안내 */
+.scannote{margin-top:14px;background:var(--blue-soft);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--ink-2)}
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.row-done td{background:color-mix(in srgb,var(--green-soft) 45%,var(--page))}
+.row-part td{background:var(--amber-soft)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.tag-done{background:var(--green);color:#fff}
+.tag-part{background:#FFC107;color:#3D2E00}
+.tag-wholesale{background:var(--ss-purple);color:#fff}
+.qtyin{width:80px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 9px;font-size:14px;font-weight:700;
+  text-align:center;background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.locin{width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:13px;
+  background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast small{opacity:.85;font-weight:400}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:520px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.modal select{border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+.state{display:none}
+.state.on{display:block}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · 내부 입고 스캔 (Inbound Receiving) 와이어프레임</h1>
+  <span class="hint">View Orders에서 입고 요청 송장 스캔 시 뜨는 화면 — 고객 오더 뷰와 분리 · 보라 번호 = 신규 주석</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · 입고 진행 중</button>
+    <button class="wf-tab" data-state="s2">2 · 전량 입고 완료</button>
+    <button class="wf-tab" data-modal="m-partial">모달: 부분 입고 저장</button>
+    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : 입고 진행 중 ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow anno">
+      <div class="search-input">
+        <input value="10325661220417" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+    </div>
+
+    <!-- 내부 입고 구분 배너 -->
+    <div class="intbanner anno">
+      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <div class="big">📦 내부 입고 건 — Inbound Request</div>
+      <div class="warnline">고객 오더가 아닙니다 · 재고(Inventory) 입고 대상 · 출고(Outbound) 단계 없음</div>
+      <div class="kv">
+        <span>Inbound No. <b>202607120001</b></span>
+        <span>채널 <span class="tag tag-wholesale">WHOLESALE</span></span>
+        <span>Supplier <b>비엠유통</b></span>
+        <span>신청 <b>Dean</b> · 07-12</span>
+        <span>예상 입고일 <b>07-18</b></span>
+        <span><a style="color:var(--blue);cursor:pointer">요청 리스트에서 보기 →</a></span>
+      </div>
+    </div>
+
+    <!-- 진행 타일 -->
+    <div class="tiles anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <div class="tile"><div class="lab">요청 수량 (전체)</div><div class="val">800</div></div>
+      <div class="tile ok"><div class="lab">입고 확인 (스캔)</div><div class="val">620</div></div>
+      <div class="tile warn"><div class="lab">남은 수량</div><div class="val">180</div></div>
+      <div class="tile"><div class="lab">SKU</div><div class="val">2종 <span style="font-size:13px;font-weight:600;color:var(--green)">(1종 완료)</span></div></div>
+    </div>
+
+    <div class="scannote anno">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      이제 <b>제품 바코드를 스캔</b>하세요 — 스캔할 때마다 해당 제품의 입고 수량이 <b>+1</b> 됩니다 (연속 스캔 · 커서 자동 복귀 · 요청에 없는 제품 스캔 시 경고음)
+    </div>
+
+    <!-- 제품 대조 테이블 -->
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">5</span>
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th>
+        <th class="anno">입고 Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
+        <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>상태</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500</td>
+          <td><input class="qtyin" value="500" readonly style="border-color:var(--green)"></td>
+          <td><input class="locin" value="A-05-11"></td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+        <tr class="row-part">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300</td>
+          <td><input class="qtyin" value="120"></td>
+          <td><input class="locin" value="B-02-07"></td>
+          <td><span class="tag tag-part">진행 중 · 남은 180</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 하단 액션 -->
+    <div class="anno" style="display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap">
+      <span class="dot" style="top:-11px;left:-10px">8</span>
+      <button class="btn btn-gray">전량 입고 확정 (남은 180)</button>
+      <button class="btn btn-line" data-modal="m-partial">부분 입고 저장</button>
+      <span class="mut">확정 시: Inventory(Current Stocks) 반영 · 요청 리스트 <b>입고완료</b> 전환 · Received Date/Carrier 자동 기록</span>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1 신규 주석 — 내부 입고 스캔 (입고 진행 중)</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>송장 스캔 자동 분기</b> — View Orders 검색창에 스캔된 송장이 <b>입고 요청(I) 건이면 고객 오더 화면이 아니라 이 화면</b>으로 전환. 고객 오더(입고→즉시 출고)와 내부 입고(재고 편입)를 뷰 차원에서 분리 <span class="ref">— I + C 검색</span></span></li>
+    <li><span class="n">2</span><span><b>내부 입고 구분 배너</b> — 보라 테두리 대형 배너로 "고객 오더 아님·출고 없음"을 즉시 인지. Inbound No.·채널 배지·Supplier·신청자·예상 입고일 + 요청 리스트 바로가기 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">3</span><span>진행 타일 — 요청 수량 vs 입고 확인(스캔 누적) vs 남은 수량, SKU 단위 완료 카운트 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">4</span><span><b>제품 바코드 연속 스캔</b> — 스캔마다 해당 SKU 입고 Qty +1, 커서 자동 복귀. 요청에 없는 제품 스캔 시 경고음(오배송 감지) <span class="ref">— C 스캔 규약</span></span></li>
+    <li><span class="n">5</span><span>요청 vs 입고 대조 테이블 — SKU No./Brand/Product Name은 입고 요청 신청값 그대로(시트 열 정합) <span class="ref">— I</span></span></li>
+    <li><span class="n">6</span><span>입고 Qty = 스캔 누적 + <b>직접 보정 가능</b>(박스 단위 대량 입고 시 수기 입력) <span class="ref">— 신규</span></span></li>
+    <li><span class="n">7</span><span>Location = <b>Inventory 편입 위치</b> — 기존 재고 SKU면 현 로케이션 자동 제안(SKU당 1개 원칙), 신규 SKU는 지정 입력 <span class="ref">— E 로케이션 규약</span></span></li>
+    <li><span class="n">8</span><span><b>전량 입고 확정</b> — 요청 수량과 입고 수량이 <b>전 SKU 정확히 일치</b>해야 활성(마감 페이지와 동일한 일치 게이팅). 불일치 상태에서는 <b>부분 입고 저장(M1)</b>으로 사유를 남기고 이어서 처리. 초과 스캔은 경고 <span class="ref">— 신규</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 확정 시 ① Inventory(Current Stocks)에 로케이션과 함께 반영 ② 입고 요청 리스트 상태 <b>발송 → 입고완료</b> 자동 전환 ③ <b>Received Date·Carrier 자동 기록</b>(시트 연동 대비) ④ 검색창 포커스 복귀로 다음 송장 스캔. 고객 오더 화면(Inbound/Outbound 버튼)과 달리 이 화면에는 <b>Outbound가 존재하지 않음</b>.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : 전량 입고 완료 ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ 입고 완료 — Inbound No. 202607120001</span><small>Inventory 반영 · 요청 리스트 입고완료 · 다음 송장 스캔 가능</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input">
+        <input value="" placeholder="송장 바코드를 스캔하세요 — 다음 건 연속 스캔">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="donebanner anno">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <div class="big">✓ 전량 입고 완료 — Inbound No. 202607120001</div>
+      <div class="kv">
+        <span>입고 <b>800 / 800</b> (SKU 2종)</span>
+        <span>Inventory <b>반영됨</b> (A-05-11 · B-02-07)</span>
+        <span>요청 리스트 <b>입고완료</b> 전환</span>
+        <span>Received Date <b>07-26 14:02</b> · Carrier 자동 기록</span>
+      </div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th><th>입고 Qty</th><th>Location</th><th>상태</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500</td><td class="num"><b>500</b></td><td class="num">A-05-11</td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+        <tr class="row-done">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300</td><td class="num"><b>300</b></td><td class="num">B-02-07</td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note anno">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      완료 즉시 <b>검색창으로 커서 복귀</b> — 새로고침 없이 다음 송장을 바로 스캔합니다. 이 건의 재고는 Inventory(Current Stocks)에서 로케이션과 함께 확인할 수 있습니다.
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 2 신규 주석 — 전량 입고 완료</h3>
+  <ol>
+    <li><span class="n">1</span><span>완료 배너 — 요청 = 입고 <b>정확 일치(800/800)</b> 확정 결과. Inventory 반영 로케이션·요청 리스트 입고완료·Received Date/Carrier 자동 기록을 한눈에 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">2</span><span>완료 즉시 검색창 포커스 복귀 — 새로고침 없이 다음 송장 연속 스캔 <span class="ref">— C 스캔 규약</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : 부분 입고 저장 ══════════════ -->
+<div class="overlay" id="m-partial">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>부분 입고 저장 — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">요청 800개 중 620개만 입고 확인되었습니다 (남은 180).</b>
+      <p class="mut" style="margin:8px 0 0">1025 Dokdo Cleanser, 150ml — 요청 300 / 입고 120 / 남은 180</p>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">사유</b>
+        <select>
+          <option>분할 배송 — 잔여 물량 도착 예정</option>
+          <option>수량 부족 도착 (공급처 확인 필요)</option>
+          <option>일부 파손 — 반품 처리 예정</option>
+        </select>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="예: 잔여 180개 금요일 도착 예정 — 요청 건 Comments에 함께 기록됩니다"></textarea>
+      </div>
+      <div class="note">저장 시 — 입고된 620개는 <b>Inventory에 즉시 반영</b>되고, 요청 리스트 상태는 <b>발송 유지 + "부분 입고 620/800" 표기</b>. 잔여 물량 도착 시 같은 송장을 다시 스캔하면 이 화면에서 이어서 처리합니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>부분 입고 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    document.getElementById(t.dataset.state).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+</script>
