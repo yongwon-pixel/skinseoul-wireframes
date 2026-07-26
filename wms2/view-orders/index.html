@@ -205,6 +205,32 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
 .inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
 
+/* ── 내부 입고 (State 6) ── */
+.intbanner{margin-top:14px;background:color-mix(in srgb,var(--ss-purple-50) 70%,var(--page));
+  border:2px solid var(--ss-purple);border-radius:12px;padding:16px 20px}
+.intbanner .big{font-size:21px;font-weight:800;color:var(--ss-purple)}
+.intbanner .warnline{margin-top:3px;font-size:13.5px;font-weight:700;color:var(--ink)}
+.intbanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.intbanner .kv b{color:var(--ink)}
+.donebanner{margin-top:14px;background:var(--green-soft);border:2px solid var(--green);border-radius:12px;padding:16px 20px}
+.donebanner .big{font-size:21px;font-weight:800;color:var(--green)}
+.donebanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--ink-2)}
+.donebanner .kv b{color:var(--ink)}
+.tiles{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.tile{flex:1;min-width:160px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)}
+.tile .lab{font-size:12px;color:var(--ink-3)}
+.tile .val{font-size:24px;font-weight:800;color:var(--ink)}
+.tile.ok .val{color:var(--green)}
+.tile.warn .val{color:var(--amber)}
+.scannote{margin-top:14px;background:var(--blue-soft);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--ink-2)}
+.row-done td{background:color-mix(in srgb,var(--green-soft) 45%,var(--page))}
+.row-part td{background:var(--amber-soft)}
+.tag-done{background:var(--green);color:#fff}
+.tag-part{background:#FFC107;color:#3D2E00}
+.qtyin{width:80px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 9px;font-size:14px;font-weight:700;
+  text-align:center;background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.locin{width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:13px;
+  background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
 .state{display:none}
 .state.on{display:block}
 .retbanner{margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:8px;
@@ -230,10 +256,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
     <button class="wf-tab" data-state="s4">4 · 반송 모드</button>
     <button class="wf-tab" data-state="s5">5 · Hold 오더</button>
+    <button class="wf-tab" data-state="s6">6 · 내부 입고 (입고 요청 건)</button>
+    <button class="wf-tab" data-state="s6b">6b · 내부 입고 완료</button>
     <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
     <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
     <button class="wf-tab" data-modal="m-restock">모달: 반송 입고</button>
     <button class="wf-tab" data-modal="m-retlabel">모달: 반품 라벨</button>
+    <button class="wf-tab" data-modal="m-partial">모달: 부분 입고 저장</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -486,7 +515,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">22</span><span><b>반품 라벨 출력</b>(우하단, 작업 상태 1·1b·2·3 공통) — 스캔 중 오배송·파손 발견 시 제품 선택 → 모달(M4): 택배사 선택/직접 입력 + 사이즈·수량(선택 입력) → 라벨지에 택배사명·제품명(KR)·사이즈·수량 인쇄해 공급처 반품 박스에 부착. 반송 모드(State 4, 고객→우리)와 별개 개념 <span class="ref">— C</span></span></li>
     <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조). <b>입고 요청(I) 건의 송장을 스캔하면 고객 오더 화면이 아니라 내부 입고 전용 화면으로 전환</b> — 재고 편입 플로우(Outbound 없음), 별도 와이어프레임 <a href="../inbound-receiving/" style="color:var(--ss-purple);font-weight:700">inbound-receiving</a> 참조.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조). <b>입고 요청(I) 건의 송장을 스캔하면 고객 오더 화면이 아니라 내부 입고 전용 화면으로 전환</b> — 재고 편입 플로우(Outbound 없음), 상단 <b>[6 · 내부 입고]</b> 탭 참조.</p>
 </div>
 </section>
 
@@ -1106,6 +1135,191 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 </section>
 
+<!-- ══════════════ STATE 6 : 내부 입고 — 입고 요청 건 스캔 (진행 중) ══════════════ -->
+<section class="state" id="s6">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox6">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox6">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 건으로 이동 <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon 어제 입고분 로케이션 B열로 통일했어요"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="10325661220417" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="intbanner anno">
+      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <div class="big">📦 내부 입고 건 — Inbound Request</div>
+      <div class="warnline">고객 오더가 아닙니다 · 재고(Inventory) 입고 대상 · 출고(Outbound) 단계 없음</div>
+      <div class="kv">
+        <span>Inbound No. <b>202607120001</b></span>
+        <span>채널 <span class="tag tag-wholesale">WHOLESALE</span></span>
+        <span>Supplier <b>비엠유통</b></span>
+        <span>신청 <b>Dean</b> · 07-12</span>
+        <span>예상 입고일 <b>07-18</b></span>
+        <span><a style="color:var(--blue);cursor:pointer">입고 요청 리스트에서 보기 →</a></span>
+      </div>
+    </div>
+
+    <div class="tiles anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <div class="tile"><div class="lab">요청 수량 (전체)</div><div class="val">800</div></div>
+      <div class="tile ok"><div class="lab">입고 확인 (스캔)</div><div class="val">620</div></div>
+      <div class="tile warn"><div class="lab">남은 수량</div><div class="val">180</div></div>
+      <div class="tile"><div class="lab">SKU</div><div class="val">2종 <span style="font-size:13px;font-weight:600;color:var(--green)">(1종 완료)</span></div></div>
+    </div>
+
+    <div class="scannote anno">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      이제 <b>제품 바코드를 스캔</b>하세요 — 스캔할 때마다 해당 제품의 입고 수량이 <b>+1</b> 됩니다 (연속 스캔 · 커서 자동 복귀 · 요청에 없는 제품 스캔 시 경고음)
+    </div>
+
+    <table class="tbl anno">
+      <span class="dot" style="top:2px;left:-12px">5</span>
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th>
+        <th class="anno">입고 Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
+        <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>상태</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500</td>
+          <td><input class="qtyin" value="500" readonly style="border-color:var(--green)"></td>
+          <td><input class="locin" value="A-05-11"></td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+        <tr class="row-part">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300</td>
+          <td><input class="qtyin" value="120"></td>
+          <td><input class="locin" value="B-02-07"></td>
+          <td><span class="tag tag-part">진행 중 · 남은 180</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="anno" style="display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap">
+      <span class="dot" style="top:-11px;left:-10px">8</span>
+      <button class="btn btn-gray">전량 입고 확정 (남은 180)</button>
+      <button class="btn btn-line" data-modal="m-partial">부분 입고 저장</button>
+      <span class="mut">확정 시: Inventory(Current Stocks) 반영 · 입고 요청 리스트 <b>입고완료</b> 전환 · Received Date/Carrier 자동 기록</span>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 6 변경사항 — 내부 입고 (입고 요청 건 스캔)</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>송장 스캔 자동 분기</b> — 스캔된 송장이 <b>입고 요청(I) 건이면 고객 오더 상태(1~5)가 아니라 이 화면</b>으로 전환. 고객 오더(입고→즉시 출고)와 내부 입고(재고 편입)를 뷰 차원에서 분리 <span class="ref">— I + C 검색</span></span></li>
+    <li><span class="n">2</span><span><b>내부 입고 구분 배너</b> — 보라 테두리 대형 배너로 "고객 오더 아님·출고 없음"을 즉시 인지. Inbound No.·채널 배지·Supplier·신청자·예상 입고일 + 입고 요청 리스트 바로가기 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">3</span><span>진행 타일 — 요청 수량 vs 입고 확인(스캔 누적) vs 남은 수량, SKU 단위 완료 카운트 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">4</span><span><b>제품 바코드 연속 스캔</b> — 스캔마다 해당 SKU 입고 Qty +1, 커서 자동 복귀(1~5 상태와 동일 스캔 규약). 요청에 없는 제품 스캔 시 경고음(오배송 감지) <span class="ref">— C 스캔 규약</span></span></li>
+    <li><span class="n">5</span><span>요청 vs 입고 대조 테이블 — SKU No./Brand/Product Name은 입고 요청 신청값 그대로(시트 열 정합) <span class="ref">— I</span></span></li>
+    <li><span class="n">6</span><span>입고 Qty = 스캔 누적 + <b>직접 보정 가능</b>(박스 단위 대량 입고 시 수기 입력) <span class="ref">— 신규</span></span></li>
+    <li><span class="n">7</span><span>Location = <b>Inventory 편입 위치</b> — 기존 재고 SKU면 현 로케이션 자동 제안(SKU당 1개 원칙), 신규 SKU는 지정 입력 <span class="ref">— E 로케이션 규약</span></span></li>
+    <li><span class="n">8</span><span><b>전량 입고 확정</b> — 요청 수량과 입고 수량이 <b>전 SKU 정확히 일치</b>해야 활성(마감과 동일한 일치 게이팅). 불일치 상태에서는 <b>부분 입고 저장(M5)</b>으로 사유를 남기고 이어서 처리. 초과 스캔은 경고 <span class="ref">— 신규</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 확정 시 ① Inventory(Current Stocks)에 로케이션과 함께 반영 ② 입고 요청 리스트 상태 <b>발송 → 입고완료</b> 자동 전환 ③ <b>Received Date·Carrier 자동 기록</b>(시트 연동 대비) ④ 검색창 포커스 복귀로 다음 송장 스캔. 고객 오더 상태(1~5)와 달리 이 화면에는 <b>Outbound가 존재하지 않음</b>.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 6b : 내부 입고 — 전량 입고 완료 ══════════════ -->
+<section class="state" id="s6b">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ 입고 완료 — Inbound No. 202607120001</span><small>Inventory 반영 · 입고 요청 리스트 입고완료 · 다음 송장 스캔 가능</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input">
+        <input value="" placeholder="송장 바코드를 스캔하세요 — 다음 건 연속 스캔">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="donebanner anno">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <div class="big">✓ 전량 입고 완료 — Inbound No. 202607120001</div>
+      <div class="kv">
+        <span>입고 <b>800 / 800</b> (SKU 2종)</span>
+        <span>Inventory <b>반영됨</b> (A-05-11 · B-02-07)</span>
+        <span>입고 요청 리스트 <b>입고완료</b> 전환</span>
+        <span>Received Date <b>07-26 14:02</b> · Carrier 자동 기록</span>
+      </div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th><th>입고 Qty</th><th>Location</th><th>상태</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500</td><td class="num"><b>500</b></td><td class="num">A-05-11</td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+        <tr class="row-done">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300</td><td class="num"><b>300</b></td><td class="num">B-02-07</td>
+          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note anno" style="max-width:none">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      완료 즉시 <b>검색창으로 커서 복귀</b> — 새로고침 없이 다음 송장을 바로 스캔합니다. 이 건의 재고는 Inventory(Current Stocks)에서 로케이션과 함께 확인할 수 있습니다.
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 6b 변경사항 — 내부 입고 전량 완료</h3>
+  <ol>
+    <li><span class="n">1</span><span>완료 배너 — 요청 = 입고 <b>정확 일치(800/800)</b> 확정 결과. Inventory 반영 로케이션·입고 요청 리스트 입고완료·Received Date/Carrier 자동 기록을 한눈에 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">2</span><span>완료 즉시 검색창 포커스 복귀 — 새로고침 없이 다음 송장 연속 스캔(전 상태 공통 규약) <span class="ref">— C 스캔 규약</span></span></li>
+  </ol>
+</div>
+</section>
+
 <!-- ══════════════ MODAL : 인바운드 취소 재고 복구 ══════════════ -->
 <div class="overlay" id="m-cancel">
   <div class="modal anno">
@@ -1270,6 +1484,35 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
       <button class="btn btn-blue btn-sm" data-close>2개 입고 확정</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 부분 입고 저장 (내부 입고 State 6) ══════════════ -->
+<div class="overlay" id="m-partial">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M5</span>
+    <header>부분 입고 저장 — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">요청 800개 중 620개만 입고 확인되었습니다 (남은 180).</b>
+      <p class="mut" style="margin:8px 0 0">1025 Dokdo Cleanser, 150ml — 요청 300 / 입고 120 / 남은 180</p>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">사유</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>분할 배송 — 잔여 물량 도착 예정</option>
+          <option>수량 부족 도착 (공급처 확인 필요)</option>
+          <option>일부 파손 — 반품 처리 예정</option>
+        </select>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="예: 잔여 180개 금요일 도착 예정 — 요청 건 Comments에 함께 기록됩니다"></textarea>
+      </div>
+      <div class="note">저장 시 — 입고된 620개는 <b>Inventory에 즉시 반영</b>되고, 입고 요청 리스트 상태는 <b>발송 유지 + "부분 입고 620/800" 표기</b>. 잔여 물량 도착 시 같은 송장을 다시 스캔하면 State 6에서 이어서 처리합니다.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>부분 입고 저장</button>
     </div>
   </div>
 </div>

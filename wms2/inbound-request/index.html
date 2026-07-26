@@ -286,68 +286,64 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
 
 
-      <!-- 제품 입력 -->
+      <!-- 제품 입력 — 단일 통합 검색창으로 행 추가 -->
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">4</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— SKU No. · 브랜드 · 제품명 통합 검색으로 선택 · Order Qty 입력</span></span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 검색창 하나면 됩니다: SKU No. · 브랜드 · 제품명 중 아는 것 아무거나 입력 → 선택하면 행이 자동으로 채워집니다</span></span>
+        <div class="auto anno" style="max-width:720px;margin-top:8px">
+          <input value="100045210" placeholder="SKU No. · 브랜드 · 제품명 아무거나 입력 → 자동완성에서 클릭하면 아래에 행이 추가됩니다">
+          <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
+          <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
+          <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
+          <span class="dot" style="top:-11px;right:-8px">5</span>
+        </div>
         <table class="prodtbl">
           <thead><tr>
-            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name <span style="font-weight:400;opacity:.7">— 통합 검색 (SKU No. · 브랜드 · 제품명)</span></th><th style="width:84px">Order Qty</th><th style="width:140px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:130px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
+            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:140px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
           </tr></thead>
           <tbody>
-            <tr class="prefill">
+            <tr>
               <td><input value="100040311" readonly></td>
               <td><input value="COSRX" readonly></td>
               <td><input value="Advanced Snail 96 Mucin Power Essence, 100ml" readonly></td>
               <td><input value="200" class="num"></td>
               <td><input value="15,000" class="num"></td>
-              <td><input value="17,000" class="num" placeholder="옵션"></td>
+              <td><input value="17,000" class="num" placeholder="모르면 비움"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
-            <tr class="prefill">
+            <tr>
               <td><input value="100031820" readonly></td>
               <td><input value="Beauty of Joseon" readonly></td>
               <td><input value="Relief Sun : Rice + Probiotics, 50ml" readonly></td>
               <td><input value="300" class="num"></td>
               <td><input value="9,700" class="num"></td>
-              <td><input value="15,200" class="num" placeholder="옵션"></td>
+              <td><input value="15,200" class="num" placeholder="모르면 비움"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
-            <tr class="anno">
-              <td><input value="" placeholder="자동"></td>
-              <td><input value="" placeholder="자동"></td>
-              <td>
-                <div class="auto">
-                  <input value="100045210" placeholder="SKU No. · 브랜드 · 제품명 아무거나 입력 → 자동완성에서 클릭 선택">
-                  <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
-                  <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
-                  <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
-                </div>
-                <span class="dot" style="top:-11px;right:-8px">5</span>
-              </td>
-              <td><input value="120" class="num"></td>
-              <td><input value="" class="num" placeholder="필수 · 0 가능"></td>
-              <td><input value="" class="num" placeholder="옵션"></td>
+            <tr class="prefill anno">
+              <td><input value="100045210" readonly></td>
+              <td><input value="Anua" readonly></td>
+              <td><input value="Heartleaf 77% Soothing Toner, 250ml" readonly></td>
+              <td><input value="" class="num" placeholder="수량"></td>
+              <td><input value="" class="num" placeholder="개당 구매가 ₩ (무상 0)"></td>
+              <td><input value="" class="num" placeholder="모르면 비움"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
+              <span class="dot" style="top:14px;left:-12px">6</span>
             </tr>
           </tbody>
         </table>
-        <div class="anno" style="margin-top:8px">
-          <button class="btn btn-line btn-sm">＋ 제품 행 추가</button>
-          <span class="dot" style="top:-11px;right:-8px">6</span>
-        </div>
+        <p class="mut" style="margin:8px 0 0"><b>Unit Cost (KRW)</b> = 공급처에서 실제 구매한 <b>개당 단가</b> — 무상(증정)이면 <b>0</b> 입력 (필수) · <b>JIT Price (KRW)</b> = 이 제품을 쿠팡 JIT로 구매할 때의 개당 가격 — <b>모르면 비워두세요</b> (옵션) · 여러 SKU는 위 검색창에서 계속 선택하면 행이 추가됩니다 (행 삭제 = ✕)</p>
       </div>
 
-      <!-- 송장번호 + 예상 입고일 + 메모 -->
       <div class="fsec">
         <div class="frow">
           <div class="fld anno" style="min-width:200px">
-            <label>Supplier <span style="color:var(--red)">*</span></label>
-            <input value="Coupang" placeholder="공급처 (필수)">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— 물건을 보내는 공급처</span></label>
+            <input value="Coupang" placeholder="예: 비엠유통, Coupang">
             <span class="dot" style="top:14px;right:-8px">12</span>
           </div>
           <div class="fld opt fld-inv anno" style="flex:1;min-width:280px">
-            <label>송장번호 (Tracking No)</label>
+            <label>송장번호 (Tracking No) <span style="font-weight:400;color:var(--ink-3)">— 선택 · 발송 후 나중 입력 가능</span></label>
             <input value="" placeholder="발송 후 입력 — 비워두고 신청 가능 (나중에 입력)">
             <span class="dot" style="top:14px;right:-8px">7</span>
           </div>
@@ -370,8 +366,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
       <div class="submitrow">
         <button class="btn btn-blue">입고 요청 등록</button>
-        <button class="btn btn-line">송장번호 없이 등록 (나중에 입력)</button>
-        <span class="mut anno" style="position:relative">등록 시 상태 = <span class="tag tag-requested">신청</span> · <b>Inbound No.(YYYYMMDDNNNN) 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">3</span></span>
+        <span class="mut anno" style="position:relative">송장번호를 입력했으면 <span class="tag tag-shipped">발송</span>, 비워두면 <span class="tag tag-requested">신청</span> 상태로 등록 · <b>Inbound No.(YYYYMMDDNNNN) 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">3</span></span>
       </div>
     </div>
 
@@ -386,12 +381,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">2</span><span>채널(소싱 루트) 지정 — 라디오 카드 <b>4종</b>(스마트바이 / 홀세일 / 브랜드 파트너십 / <b>기타 — 선택 시 채널명 직접 입력</b>). 배지 색은 View Orders 소싱루트 배지와 동일 규약 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">3</span><span><b>Inbound No. 자동 발번 — 신청 화면에 입력칸·미리보기 없음</b>(2026-07-26 패널 제거). 등록 시 <b>YYYYMMDDNNNN</b>(NNNN 그날 0001~9999) 자동 부여되어 <b>요청 리스트에서만 노출</b>. 시트 A열 "PO No. (=Order ID)" 대응 — 발주 없는 입고에도 맞도록 명칭은 Inbound No. <span class="ref">— I + J</span></span></li>
     <li><span class="n">4</span><span>필드 구성 = <b>PH 시트 열 순서 정합</b>: Inbound No.(자동) → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost(KRW) → JIT Price(KRW) → Supplier. SKU·Brand·Product Name은 통합 검색 선택으로 자동 확정, Size 없음 <span class="ref">— PH 시트</span></span></li>
-    <li><span class="n">5</span><span>통합 검색 자동완성 — <b>SKU No.·브랜드·영어 제품명 어느 쪽으로도</b> 카탈로그 검색, 클릭 선택 시 SKU No.·Brand·Product Name 자동 확정 <span class="ref">— I + F 자동완성</span></span></li>
-    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — 구매 단가, <b>0 입력 가능</b>(협찬·무상 증정분 등. FOC 체크박스는 폐기하고 0 직접 입력으로 단순화 2026-07-26) <span class="ref">— 시트 Unit Cost 열</span></span></li>
-    <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 이 제품을 JIT로 구매할 경우 들어가는 비용 <span class="ref">— 시트 JIT Price 열</span></span></li>
-    <li><span class="n">12</span><span><b>Supplier 필수</b> — 공급처 기록(시트 Supplier 열 대응) <span class="ref">— 시트 연동</span></span></li>
-    <li><span class="n">6</span><span>제품 행 추가 버튼 — 한 요청에 여러 SKU 신청 가능 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">7</span><span>송장번호 입력란 — <b>신청 시점엔 미입력 가능</b>(대시 테두리로 선택 필드 표시), 물량 발송 후 나중에 입력 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">5</span><span><b>단일 통합 검색창</b>(2026-07-27 UX 개선 — 행마다 검색이 아니라 테이블 위 검색창 하나) — SKU No.·브랜드·영어 제품명 중 <b>아는 것 하나만</b> 입력하면 자동완성, 클릭하면 아래 테이블에 행이 추가되며 SKU·Brand·Product Name이 전부 자동으로 채워짐 <span class="ref">— I + F 자동완성</span></span></li>
+    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — "공급처에서 실제 구매한 개당 단가"임을 placeholder·테이블 하단 도움말로 명시(무엇을 넣는지 모르는 문제 해소). <b>0 입력 가능</b>(무상 증정분) — FIFO 원가·시트 정합의 기반이라 필수 유지 <span class="ref">— 시트 Unit Cost 열</span></span></li>
+    <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 쿠팡 JIT로 구매할 때의 개당 가격. <b>"모르면 비워두세요"를 placeholder로 명시</b> — 입력 부담 없음 <span class="ref">— 시트 JIT Price 열</span></span></li>
+    <li><span class="n">12</span><span><b>Supplier 필수</b> — "물건을 보내는 공급처"임을 라벨·placeholder(예: 비엠유통, Coupang)로 안내. 정산·입고 추적의 기준이라 필수 유지 <span class="ref">— 시트 연동</span></span></li>
+    <li><span class="n">6</span><span>방금 선택한 제품은 <b>파란 틴트 행으로 추가</b>되고 Order Qty·Unit Cost만 채우면 됨. 여러 SKU = 검색창에서 계속 선택(별도 "행 추가" 버튼 폐기), 잘못 추가한 행은 ✕ 삭제 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">7</span><span>송장번호 입력란 — <b>선택 필드</b>(대시 테두리), 발송 후 나중 입력 가능. <b>등록 버튼은 하나</b>(2026-07-27 단일화) — 송장번호 유무에 따라 발송/신청 상태가 자동 결정 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시. 클릭 시 연동 방식 모달(M2) <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">14</span><span>우상단 Comments 허브 — 요청 건에 태그된 Comments(@Mentions/★Saved). View Orders와 동일 컴포넌트 <span class="ref">— 0. UI 2</span></span></li>
@@ -444,10 +439,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">2</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— SKU No. · 브랜드 · 제품명 통합 검색으로 선택 · Order Qty 입력</span></span>
+        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 검색창 하나면 됩니다: SKU No. · 브랜드 · 제품명 중 아는 것 아무거나 입력 → 선택하면 행이 자동으로 채워집니다</span></span>
+        <div class="auto" style="max-width:720px;margin-top:8px">
+          <input value="" placeholder="SKU No. · 브랜드 · 제품명 아무거나 입력 → 자동완성에서 클릭하면 아래에 행이 추가됩니다">
+        </div>
         <table class="prodtbl">
           <thead><tr>
-            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name <span style="font-weight:400;opacity:.7">— 통합 검색 (SKU No. · 브랜드 · 제품명)</span></th><th style="width:84px">Order Qty</th><th style="width:140px">Unit Cost (KRW) *</th><th style="width:130px">JIT Price (KRW)</th><th style="width:40px"></th>
+            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px">Unit Cost (KRW) *</th><th style="width:140px">JIT Price (KRW)</th><th style="width:40px"></th>
           </tr></thead>
           <tbody>
             <tr>
@@ -456,7 +454,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="1025 Dokdo Toner, 200ml" readonly></td>
               <td><input value="500" class="num"></td>
               <td><input value="8,900" class="num"></td>
-              <td><input value="12,000" class="num" placeholder="옵션"></td>
+              <td><input value="12,000" class="num" placeholder="모르면 비움"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
             <tr>
@@ -465,23 +463,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="1025 Dokdo Cleanser, 150ml" readonly></td>
               <td><input value="300" class="num"></td>
               <td><input value="0" class="num"></td>
-              <td><input value="" class="num" placeholder="옵션"></td>
+              <td><input value="" class="num" placeholder="모르면 비움"></td>
               <td><button class="rm" title="행 삭제">✕</button></td>
             </tr>
           </tbody>
         </table>
-        <p class="mut" style="margin:6px 0 0">2행 = 프로모션 무상 증정분 — Unit Cost에 <b>0 직접 입력</b>(0 허용). JIT Price는 <b>JIT로 구매할 경우 들어가는 비용</b>(옵셔널)</p>
-        <div style="margin-top:8px"><button class="btn btn-line btn-sm">＋ 제품 행 추가</button></div>
+        <p class="mut" style="margin:8px 0 0">2행 = 프로모션 무상 증정분 — Unit Cost에 <b>0 직접 입력</b>(0 허용). <b>JIT Price</b> = 쿠팡 JIT 구매 시 개당 가격, 모르면 비움(옵션)</p>
       </div>
 
       <div class="fsec">
         <div class="frow">
           <div class="fld" style="min-width:200px">
-            <label>Supplier <span style="color:var(--red)">*</span></label>
-            <input value="비엠유통" placeholder="공급처 (필수)">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— 물건을 보내는 공급처</span></label>
+            <input value="비엠유통" placeholder="예: 비엠유통, Coupang">
           </div>
           <div class="fld opt fld-inv" style="flex:1;min-width:280px">
-            <label>송장번호 (Tracking No)</label>
+            <label>송장번호 (Tracking No) <span style="font-weight:400;color:var(--ink-3)">— 선택 · 발송 후 나중 입력 가능</span></label>
             <input value="10325661220417" placeholder="발송 후 입력 — 비워두고 신청 가능">
           </div>
           <div class="fld" style="min-width:180px">
@@ -510,7 +507,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>State 2 신규/변경 — 홀세일 / 브랜드 파트너십 (직접 신청)</h3>
   <ol>
     <li><span class="n">1</span><span>직접 신청 루트(홀세일·파트너십·기타)도 <b>Inbound No. 동일 자동 발번</b> — 신청 화면 노출 없음, 등록 시 부여되어 요청 리스트에서 확인 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>제품 입력 동일 규격 — 통합 검색 선택·Order Qty·Unit Cost 필수(<b>2행 = 무상 증정분 0 입력 데모</b>)·JIT Price 옵셔널 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>제품 입력 동일 규격 — 테이블 위 <b>단일 검색창</b>으로 행 추가, Order Qty·Unit Cost 필수(<b>2행 = 무상 증정분 0 입력 데모</b>)·JIT Price 옵셔널 <span class="ref">— I 입고요청</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">신청 시 송장번호를 이미 아는 경우(예: 벤더 직송 송장 확보) 바로 입력하면 등록과 동시에 "발송" 상태로 설정되고 View Orders 매칭이 즉시 활성화됩니다. 미입력이면 "신청" 상태.</p>
 </div>
