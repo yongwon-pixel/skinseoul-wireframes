@@ -138,6 +138,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 /* 제품 입력 행 (자동완성) */
 .prodtbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+/* 검색 선택으로 확정된 셀(SKU·Brand·Product Name) — 편집 불가, 평문처럼 표시 */
+.prodtbl input[readonly]{border-color:transparent;background:transparent;pointer-events:none;user-select:text;font-weight:600;color:var(--ink)}
 .prodtbl th{background:var(--ink);color:var(--page);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;font-size:12px}
 .prodtbl td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:middle}
 .prodtbl input{border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font:inherit;font-size:13px;
@@ -385,7 +387,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — "공급처에서 실제 구매한 개당 단가"임을 placeholder·테이블 하단 도움말로 명시(무엇을 넣는지 모르는 문제 해소). <b>0 입력 가능</b>(무상 증정분) — FIFO 원가·시트 정합의 기반이라 필수 유지 <span class="ref">— 시트 Unit Cost 열</span></span></li>
     <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 쿠팡 JIT로 구매할 때의 개당 가격. <b>"모르면 비워두세요"를 placeholder로 명시</b> — 입력 부담 없음 <span class="ref">— 시트 JIT Price 열</span></span></li>
     <li><span class="n">12</span><span><b>Supplier 필수</b> — "물건을 보내는 공급처"임을 라벨·placeholder(예: 비엠유통, Coupang)로 안내. 정산·입고 추적의 기준이라 필수 유지 <span class="ref">— 시트 연동</span></span></li>
-    <li><span class="n">6</span><span>방금 선택한 제품은 <b>파란 틴트 행으로 추가</b>되고 Order Qty·Unit Cost만 채우면 됨. 여러 SKU = 검색창에서 계속 선택(별도 "행 추가" 버튼 폐기), 잘못 추가한 행은 ✕ 삭제 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">6</span><span>방금 선택한 제품은 <b>파란 틴트 행으로 추가</b>되고 Order Qty·Unit Cost만 채우면 됨. <b>SKU No.·Brand·Product Name은 검색에서 선택된 값이라 편집 불가</b>(테두리 없는 평문 표시) — 바꾸려면 행을 ✕로 지우고 다시 검색. 여러 SKU = 검색창에서 계속 선택(별도 "행 추가" 버튼 폐기), 잘못 추가한 행은 ✕ 삭제 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">7</span><span>송장번호 입력란 — <b>선택 필드</b>(대시 테두리), 발송 후 나중 입력 가능. <b>등록 버튼은 하나</b>(2026-07-27 단일화) — 송장번호 유무에 따라 발송/신청 상태가 자동 결정 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시. 클릭 시 연동 방식 모달(M2) <span class="ref">— I + C View Orders</span></span></li>
