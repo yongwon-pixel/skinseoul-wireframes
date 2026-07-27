@@ -89,7 +89,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-smartbuy{background:var(--blue);color:#fff}
 .tag-wholesale{background:var(--ss-purple);color:#fff}
 .tag-partnership{background:var(--amber);color:#fff}
-/* 요청 상태 배지 3종 — 신청 / 발송 / 입고완료 */
+/* 요청 상태 배지 2종 — 신청 / 입고완료 (발송 상태 폐기 2026-07-27) */
 .tag-requested{background:#FFC107;color:#3D2E00}
 .tag-shipped{background:var(--blue-soft);color:var(--blue);border:1px solid var(--blue)}
 .tag-inbounded{background:var(--green);color:#fff}
@@ -216,7 +216,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s1">1 · 신규 요청 (스마트바이 · PO 매칭)</button>
     <button class="wf-tab" data-state="s2">2 · 신규 요청 (홀세일 / 파트너십)</button>
-    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/발송/입고완료)</button>
+    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/입고완료)</button>
     <button class="wf-tab" data-modal="m-invoice">모달: 송장번호 입력</button>
     <button class="wf-tab" data-modal="m-vo">모달: View Orders 연동</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
@@ -368,7 +368,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
       <div class="submitrow">
         <button class="btn btn-blue">입고 요청 등록</button>
-        <span class="mut anno" style="position:relative">송장번호를 입력했으면 <span class="tag tag-shipped">발송</span>, 비워두면 <span class="tag tag-requested">신청</span> 상태로 등록 · <b>Inbound No.(YYYYMMDDNNNN) 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">3</span></span>
+        <span class="mut anno" style="position:relative">등록 시 상태 = <span class="tag tag-requested">신청</span> (송장번호는 있으면 함께 저장, 없으면 나중 입력) · <b>Inbound No.(YYYYMMDDNNNN) 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">3</span></span>
       </div>
     </div>
 
@@ -500,7 +500,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
       <div class="submitrow">
         <button class="btn btn-blue">입고 요청 등록</button>
-        <span class="mut anno" style="position:relative">송장번호가 있어 등록 시 상태 = <span class="tag tag-shipped">발송</span> · <b>Inbound No. 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">1</span></span>
+        <span class="mut anno" style="position:relative">등록 시 상태 = <span class="tag tag-requested">신청</span> (송장번호 입력됨 → View Orders 매칭 즉시 활성) · <b>Inbound No. 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">1</span></span>
       </div>
     </div>
   </div>
@@ -511,7 +511,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">1</span><span>직접 신청 루트(홀세일·파트너십·기타)도 <b>Inbound No. 동일 자동 발번</b> — 신청 화면 노출 없음, 등록 시 부여되어 요청 리스트에서 확인 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">2</span><span>제품 입력 동일 규격 — 테이블 위 <b>단일 검색창</b>으로 행 추가, Order Qty·Unit Cost 필수(<b>2행 = 무상 증정분 0 입력 데모</b>)·JIT Price 옵셔널 <span class="ref">— I 입고요청</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">신청 시 송장번호를 이미 아는 경우(예: 벤더 직송 송장 확보) 바로 입력하면 등록과 동시에 "발송" 상태로 설정되고 View Orders 매칭이 즉시 활성화됩니다. 미입력이면 "신청" 상태.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">상태는 <b>신청 → 입고완료</b> 2단계뿐(발송 상태 폐기, 2026-07-27). 송장번호를 이미 아는 경우 바로 입력하면 View Orders 매칭이 즉시 활성화되고, 모르면 비워뒀다가 요청 리스트에서 나중에 입력합니다.</p>
 </div>
 </section>
 
@@ -540,15 +540,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="filterchips anno" style="margin-top:0">
         <span class="dot" style="top:-11px;left:-10px">1</span>
         <button class="chip on">전체 12</button>
-        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 4</button>
-        <button class="chip"><span class="tag tag-shipped" style="margin-right:5px">발송</span> 5</button>
+        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 9</button>
         <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">입고완료</span> 3</button>
       </div>
     </div>
 
     <div class="bulkbar anno" style="margin-top:12px">
       <button class="btn btn-purple-line btn-sm">선택 항목 일괄 송장번호 입력</button>
-      <button class="btn btn-green-line btn-sm">선택 항목 발송 처리</button>
       <span class="cnt">2개 선택됨 · 입고 처리(입고완료 전환)는 View Orders 스캔에서 자동 반영</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
     </div>
@@ -589,7 +587,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="tag tag-requested">신청</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button></td>
         </tr>
-        <!-- 발송 (송장 입력됨, View Orders 매칭 활성) -->
+        <!-- 신청 + 송장 입력됨 (View Orders 매칭 활성) -->
         <tr>
           <td><input type="checkbox"></td>
           <td class="num">202607120004</td>
@@ -601,7 +599,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">07-15</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Miranti</td>
-          <td><span class="tag tag-shipped">발송</span></td>
+          <td><span class="tag tag-requested">신청</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button></td>
         </tr>
         <tr>
@@ -615,7 +613,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">07-14</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
-          <td><span class="tag tag-shipped">발송</span></td>
+          <td><span class="tag tag-requested">신청</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
         <!-- 입고완료 (View Orders 스캔으로 자동 전환) -->
@@ -649,24 +647,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </tr>
       </tbody>
     </table>
-    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 4 · 발송 5 · 입고완료 3</p>
+    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 9 · 입고완료 3</p>
 
     <div class="note purple anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">9</span>
-      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
+      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <b>송장번호 미입력 건은 매일 아침 자동 점검되어 Slack 알림</b>(WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr). <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
     </div>
   </div>
 </div></div>
 <div class="legend">
   <h3>State 3 신규/변경 — 요청 리스트 (신청 / 발송 / 입고완료)</h3>
   <ol>
-    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / 신청 / 발송 / 입고완료. 3개 상태로 요청 라이프사이클 관리 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력 / 일괄 발송 처리. 입고완료 전환은 View Orders 스캔에서 자동 <span class="ref">— I + C 일괄바 규약</span></span></li>
+    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / <b>신청 / 입고완료 2개 상태만</b>(발송 상태 폐기, 2026-07-27 단순화). 송장 입력 여부는 상태가 아니라 송장번호 칼럼에서 확인 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력. 입고완료 전환은 View Orders 스캔에서 자동(발송 처리 버튼 폐기) <span class="ref">— I + C 일괄바 규약</span></span></li>
     <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지(View Orders와 동일 색) <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b>(송장 미입력/발송 전) → <b>발송</b>(송장 입력·발송) → <b>입고완료</b>(센터 스캔 입고) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">6</span><span>신청 상태 = 송장 미입력 → 발송 후 "미입력 → 입력"으로 나중에 송장번호 등록 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">7</span><span>발송 상태 = 송장 입력됨 → <b>View Orders 매칭 활성</b> 표시. 아직 물량 미도착 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b>(입고 전 전부) → <b>입고완료</b>(센터 View Orders 스캔 입고) 2단계 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">6</span><span>신청 + 송장 미입력 건 = "미입력 → 입력" 버튼(M1)으로 나중에 등록. <b>매일 아침 1회 자동 체크 — 신청 상태인데 송장번호가 아직 없는 건을 Slack으로 알림</b>: WHOLESALE·SMART BUY 건 → <b>#wholesale-ops</b>, PARTNERSHIP 건 → <b>#partnership-kr</b> (기타 채널의 알림 채널은 개발 시 확정) <span class="ref">— 2026-07-27 알림 스펙</span></span></li>
+    <li><span class="n">7</span><span>신청 + 송장 입력됨 건 = 번호 아래 <b>View Orders 매칭 활성</b> 표시(아직 물량 미도착) — 상태 배지는 그대로 신청 <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">9</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">10</span><span><b>Received Date 칼럼</b> — 입고완료 시 View Orders 스캔 시각 자동 기록(시트 Received Date 열 대응), 미입고 건은 "–". Carrier도 동일하게 자동 기록 <span class="ref">— 시트 연동</span></span></li>
@@ -681,12 +679,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <header>송장번호 입력 — 202607130003<button class="x" data-close>✕</button></header>
     <div class="body">
       <b style="color:var(--ink)">물량 발송 후 송장번호(Tracking No)를 입력하세요.</b>
-      <p class="mut" style="margin:8px 0 0">신청 시점에 미입력했던 건 — 발송이 완료되면 이 번호로 View Orders와 매칭됩니다.</p>
+      <p class="mut" style="margin:8px 0 0">신청 시점에 미입력했던 건 — 물량 발송이 시작되면 이 번호로 View Orders와 매칭됩니다.</p>
       <div class="qrow">
         <input value="" placeholder="예: 10325661220417 — 라스트마일/쿠팡 송장번호">
       </div>
       <div class="qrow" style="margin-top:14px">
-        <label style="font-size:13px;color:var(--ink)"><input type="checkbox" checked> 입력과 동시에 상태를 <span class="tag tag-shipped" style="margin:0 3px">발송</span>으로 변경</label>
+        <span class="mut">입력 즉시 <b>View Orders 매칭이 활성화</b>됩니다 — 상태는 신청 그대로, 센터 스캔 입고 시 입고완료로 전환</span>
       </div>
       <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 이 Inbound No.(202607130003) 건과 연결됩니다.</div>
     </div>
