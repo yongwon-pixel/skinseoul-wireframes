@@ -204,6 +204,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
 .inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
 
 /* ── 내부 입고 (State 6) ── */
 .intbanner{margin-top:14px;background:color-mix(in srgb,var(--ss-purple-50) 70%,var(--page));
@@ -280,6 +284,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox0">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -343,6 +348,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -495,7 +501,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 <b>[V1] 뒤의 바코드도 인식되도록 변경 필요</b>(프리픽스가 붙은 입력도 매칭). <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
     <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
-    <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b> <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b>. <b>허브 상단 검색창(신설)</b> — <b>전체 오더의 모든 코멘트</b>(멘션·저장 여부 무관) 대상, 오더번호·작성자·내용 매칭, 결과는 <b>시간 역순(최신순)</b>. 입력 지우면 탭 복귀 <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
     <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
     <li><span class="n">6</span><span>Sourcing Route 칼럼 = 소싱 루트 <b>4종</b>(색 없이 검정 텍스트로만 구분) — <b>SMART BUY</b>(재고보충 구매·PO 기반) / <b>JIT</b>(오더 핸들러가 주문한 건, 미인바운드 상태일 수 있음) / <b>WHOLESALE</b>(홀세일) / <b>PARTNERSHIP</b>(브랜드 파트너십). Smart Buy·Wholesale·Partnership은 인바운드 완료, JIT만 PENDING 가능. JIT는 오더 핸들러가 주문 시 선택한 <b>구매 채널을 괄호 병기</b> — JIT (Coupang) / JIT (Naver) / JIT (Other retail). 실제 어드민 드롭다운(Coupang/Naver/Other retail/Existing inventory) 값 그대로이며, Existing inventory 선택 건은 창고 재고 차감이라 JIT가 아니라 해당 재고의 소싱 루트로 표시. 입고 요청(I)에서 지정된 루트가 송장번호로 매칭 <span class="ref">— I 입고요청 + C 검색</span></span></li>
@@ -530,6 +536,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1b">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -654,6 +661,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox2">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -780,6 +788,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox3">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -909,6 +918,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox4">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -1029,6 +1039,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox5">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -1146,6 +1157,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox6">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -1613,4 +1625,29 @@ document.querySelectorAll('input[name="restock"]').forEach(r=>{
     else{rq.disabled=false;rq.value=rq.dataset.prev||'2';}
   });
 });
+
+/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
+const CSEARCH_DATA=[{o:'413865',a:'Dean',t:'오늘 10:42',ts:8,x:'@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁'},{o:'413712',a:'Miranti',t:'오늘 09:15',ts:7,x:'@Yongwon 이 오더는 각별히 포장 신경써주세요'},{o:'413650',a:'Aldo',t:'오늘 08:50',ts:6,x:'선반 B-12로 이동했습니다'},{o:'413501',a:'Dean',t:'어제 17:30',ts:5,x:'해결 완료했습니다'},{o:'413390',a:'Miranti',t:'어제 11:02',ts:4,x:'고객 요청으로 사쉐 3종 동봉'},{o:'413118',a:'Dean',t:'7/26 15:44',ts:3,x:'박스 파손 — 포장 교체 후 출고했습니다'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+  pane.style.display='block';
+}
 </script>

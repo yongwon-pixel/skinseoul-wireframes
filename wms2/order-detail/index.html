@@ -164,6 +164,11 @@ tr.row-edit td{background:var(--canvas)}
 .inboxdd .it .body{flex:1}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
 
 /* modal */
 .overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
@@ -203,6 +208,7 @@ tr.row-edit td{background:var(--canvas)}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -423,6 +429,7 @@ tr.row-edit td{background:var(--canvas)}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1H">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -646,7 +653,7 @@ tr.row-edit td{background:var(--canvas)}
     <li><span class="n">14</span><span><b>On Hold 상태 뷰</b> — 상단 상태 탭(1 · Processing / 2 · On Hold)으로 페이지 복제 전환. On Hold 시: 상태 배지 앰버, <b>Outbound 비활성</b>(행별 Inbound는 가능), Change Status 드롭다운 on-hold 하이라이트, 보류 배너 노출. CS 긴급 요청(취소·배송지 변경) 대응 <span class="ref">— F Hold</span></span></li>
     <li><span class="n">13</span><span>Print 버튼 라벨 — <b>"(YUN)"/"(DELEO)" 캐리어명을 붙이지 않고 "Print"로만 표기</b>. 캐리어는 옆 배지(YUN)로 이미 표시됨 <span class="ref">— 라벨 정리</span></span></li>
     <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
-    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
+    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트 + <b>상단 검색창(신설, 전체 오더의 모든 코멘트 대상·시간 역순)</b>, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
     <li><span class="n">8</span><span>Change Status <b>드롭다운</b>(기존과 동일) — pending / processing / on-hold / completed / refunded / failed / shipped / prepare-shipment 중 선택 즉시 반영(새로고침 없음). <b>on-hold</b> 선택 시 Outbound 비활성(CS 긴급 요청용) <span class="ref">— A / F Hold</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·주소 필드·Operator Comments 위치·Fulfillment Tracking(SHIPMENT DETAILS + TRACKING HISTORY)·Line Items 가로 스크롤은 실제 어드민(2026-07-21 풀캡처)과 동일 — TRACKING HISTORY는 간소화 표기(실제로는 전체 이벤트, 변경 없음). 실 데이터는 Order #407847(Maytal Saltoon) 기준.</p>
@@ -724,4 +731,29 @@ document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
 });
+
+/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
+const CSEARCH_DATA=[{o:'407847',a:'Dean',t:'오늘 10:42',ts:8,x:'@Yongwon 이 오더 각별 포장 요청'},{o:'407812',a:'Miranti',t:'오늘 09:15',ts:7,x:'@Yongwon JIT 1개 미입고'},{o:'407790',a:'Kai',t:'어제 16:20',ts:6,x:'해결 완료'},{o:'407688',a:'Aldo',t:'어제 09:40',ts:5,x:'고객 메모 확인 — 사쉐 동봉'},{o:'407301',a:'Dean',t:'7/26 14:10',ts:4,x:'포장 교체 후 출고 완료'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+  pane.style.display='block';
+}
 </script>
