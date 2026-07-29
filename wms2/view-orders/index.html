@@ -235,6 +235,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   text-align:center;background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
 .locin{width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:13px;
   background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.flsave{display:inline-flex;align-items:center;margin-left:6px;border:none;border-radius:6px;padding:5px 10px;
+  font-size:12px;font-weight:700;background:var(--ss-purple);color:#fff;cursor:pointer;box-shadow:var(--shadow);
+  animation:flpop .15s ease;white-space:nowrap}
+.flsave.ok{background:var(--green)}
+@keyframes flpop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .state{display:none}
 .state.on{display:block}
 .retbanner{margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:8px;
@@ -500,7 +505,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>State 1 변경사항 — 스캔 결과 (마지막 제품 남은 오더: 4개 중 3개 인바운드 완료, 방금 스캔한 JIT가 마지막)</h3>
   <ol>
     <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 <b>[V1] 뒤의 바코드도 인식되도록 변경 필요</b>(프리픽스가 붙은 입력도 매칭). <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
-    <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 숫자+엔터 즉시 저장, 수정 가능 <span class="ref">— C / H 임시</span></span></li>
+    <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 수정 가능. <b>값을 입력하면 [저장] 버튼이 플로팅으로 나타나고, 클릭 또는 엔터로 즉시 저장(새로고침 없음)</b> → ✓ 저장됨 표시 후 사라짐. State 6 내부입고 테이블의 로케이션 입력칸도 동일 패턴 <span class="ref">— C / H 임시</span></span></li>
     <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b>. <b>허브 상단 검색창(신설)</b> — <b>전체 오더의 모든 코멘트</b>(멘션·저장 여부 무관) 대상, 오더번호·작성자·내용 매칭, 결과는 <b>시간 역순(최신순)</b>. 입력 지우면 탭 복귀 <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
     <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
@@ -1650,4 +1655,23 @@ function cSearch(inp){
       :'<div class="empty">일치하는 코멘트가 없습니다</div>');
   pane.style.display='block';
 }
+
+/* 선반/로케이션 입력 — 플로팅 저장 버튼 (입력 시 표시, 클릭·엔터 즉시 저장·새로고침 없음) */
+document.querySelectorAll('.shelf input, .locin').forEach(inp=>{
+  const btn=document.createElement('button');
+  btn.className='flsave'; btn.textContent='저장'; btn.style.display='none'; btn.type='button';
+  inp.insertAdjacentElement('afterend',btn);
+  inp.dataset.saved=inp.value;
+  const save=()=>{
+    inp.dataset.saved=inp.value;
+    btn.textContent='✓ 저장됨'; btn.classList.add('ok');
+    setTimeout(()=>{btn.style.display='none';btn.classList.remove('ok');btn.textContent='저장';},900);
+  };
+  inp.addEventListener('input',()=>{
+    if(inp.value!==inp.dataset.saved){btn.style.display='inline-flex';btn.classList.remove('ok');btn.textContent='저장';}
+    else btn.style.display='none';
+  });
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&btn.style.display!=='none'){e.preventDefault();save();}});
+  btn.addEventListener('click',e=>{e.stopPropagation();save();});
+});
 </script>
