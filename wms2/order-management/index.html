@@ -1,4 +1,4 @@
-<title>WMS 2.0 — Order Management Dashboard 와이어프레임</title>
+<title>WMS 2.0 — Order Management Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -94,7 +94,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .prov-yun{border-color:var(--green);color:var(--green)}
 .prov-deleo{border-color:var(--blue);color:var(--blue)}
 .tag{display:inline-block;border-radius:4px;padding:1.5px 6px;font-size:9.5px;font-weight:800;letter-spacing:.2px}
-/* 소싱 루트 4종 — 색 없이 검정 볼드 텍스트로만 구분 */
+/* 4 sourcing routes — no color, bold black text only */
 .tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0}
 .rowmenu{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;width:28px;height:26px;font-size:13px}
 
@@ -103,7 +103,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pager button{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;padding:4px 10px}
 .pager button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
 
-/* 오더 유형 칩 */
+/* Order Type chips */
 .cchip{border:1px solid var(--line-strong);border-radius:99px;padding:6px 14px;background:var(--page);font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
 .cchip.on{background:var(--mkt);color:#fff;border-color:var(--mkt)}
 
@@ -123,7 +123,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-size:13px;background:var(--page);color:var(--ink)}
 .dropzone{border:2px dashed var(--line-strong);border-radius:10px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px}
 
-/* Comments 허브 (View Orders/RTO와 동일 패턴) */
+/* Comments hub (same pattern as View Orders/RTO) */
 .inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
 .inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
@@ -143,14 +143,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · Order Management Dashboard 와이어프레임</h1>
-  <span class="hint">실제 대시보드 기반 · 오더 목록 표는 기존과 동일(생략) · 보라 번호 = 신규 주석</span>
+  <h1>WMS 2.0 · Order Management Dashboard Wireframe</h1>
+  <span class="hint">Based on the live dashboard · Order list table unchanged (omitted) · Purple numbers = new annotations</span>
   <div class="wf-tabs">
-    <button class="wf-tab" data-modal="m-import">모달: 마케팅 Import</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab" data-modal="m-import">Modal: Marketing Import</button>
+    <button class="wf-tab" data-modal="m-sampleon">Modal: Sample Assignment ON</button>
+    <button class="wf-tab" data-modal="m-sampleoff">Modal: Cancel Sample Assignment</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
@@ -167,20 +172,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order MKT-40233</b> · Harshit: "@Yongwon 시딩 오더 12건 오늘 중 출고 가능한지 확인 부탁드립니다"<br><time>10:05</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁"<br><time>09:22</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 421771</b> · Adinda: "@Yongwon 샘플 배정 종료일이 맞는지 확인 부탁드립니다"<br><time>08:40</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40233</b> · Harshit: "@Yongwon Can you check if the 12 seeding orders can ship today?"<br><time>10:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check"<br><time>09:22</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 421771</b> · Adinda: "@Yongwon Please confirm the sample assignment end date is correct"<br><time>08:40</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁"<br><time>09:22</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check"<br><time>09:22</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -198,7 +203,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <input class="date" type="text" value="2026-07-14" title="End Date">
       <span class="sep"></span>
       <input class="inp" placeholder="Search (order / product)">
-      <input class="inp" placeholder="PIC 검색" style="min-width:120px">
+      <input class="inp" placeholder="Search PIC" style="min-width:120px">
       <select class="sel"><option>All Status</option><option>Processing</option><option>Prepare Shipment</option><option>Completed</option><option>On Hold</option></select>
       <div class="chkgrp"><label><input type="checkbox" checked> Order #</label><label><input type="checkbox"> Tracking #</label></div>
       <select class="sel"><option>Country: AU</option><option>All</option><option>NZ</option><option>US</option></select>
@@ -212,133 +217,136 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <!-- action row -->
     <div class="actionrow">
-      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
-      <span class="sel-info">2건 선택됨</span>
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> Select all</label>
+      <span class="sel-info">2 selected</span>
       <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
-      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">샘플 배정 ON</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
-      <button class="btn btn-gray btn-sm" data-modal="m-sampleoff">샘플 배정 취소</button>
+      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">Sample Assignment ON</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+      <span class="anno"><button class="btn btn-gray btn-sm" data-modal="m-sampleoff">Cancel Sample Assignment</button><span class="dot" style="top:-11px;right:-9px">2</span></span>
       <span class="sp"></span>
     </div>
 
-    <!-- ===== 오더 목록 표: 기존과 동일 — 생략 ===== -->
+    <!-- ===== Order list table: unchanged — omitted ===== -->
     <div class="anno" style="display:block;border:1.5px dashed var(--line-strong);border-radius:10px;padding:36px 20px;text-align:center;background:var(--page)">
-      <div style="font-size:14px;font-weight:700;color:var(--ink)"><span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">4</span>오더 목록 표 — 기존 어드민과 동일 (생략)</div>
-      <div style="margin-top:7px;font-size:12.5px;color:var(--ink-3)">기본 컬럼 ↔ Columns 전환 뷰, 2,818 total·페이지네이션 포함 전부 변경 없음.<br>단, Import된 <b style="color:var(--mkt)">MKT- 마케팅 오더</b>는 이 목록에 보라 틴트 + MKT 배지 + 담당자로 노출됩니다.</div>
+      <div style="font-size:14px;font-weight:700;color:var(--ink)"><span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">4</span>Order list table — same as the current admin (omitted)</div>
+      <div style="margin-top:7px;font-size:12.5px;color:var(--ink-3)">Default columns ↔ Columns toggle view, 2,818 total, and pagination — all unchanged.<br>However, imported <b style="color:var(--mkt)">MKT- marketing orders</b> appear in this list with a purple tint + MKT badge + PIC.</div>
     </div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>Order Management Dashboard — 신규 / 변경 주석 (기획 G + F 반영)</h3>
+  <h3>Order Management Dashboard — Changes (spec G + F)</h3>
   <ol>
-    <li><span class="n">1</span><span><b>마케팅 오더 수동 Import</b>(M1, 2026-07-23 확정) — 개발팀 표준 <b>템플릿 다운로드</b> → 입력 → 업로드 → <b>미리보기</b> → 오더 유형(인플루언서 시딩 프리셋 + 직접 입력)·담당자 지정(기본=로그인 본인) → 확정. <b>재고 검증 없음</b>(import 먼저·입고 나중 가능, Notion G의 재고 에러 항목 폐기 — UI 문구로는 미노출) · 확정 즉시 재고 무관 RTO Marketing 뷰 노출 <span class="ref">— G</span></span></li>
-    <li><span class="n">2</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>샘플 배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
-    <li><span class="n">3</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 (제거 항목 — 화면 dot 없음) <span class="ref">— 정리</span></span></li>
-    <li><span class="n">4</span><span>오더 목록 표는 <b>기존 어드민과 동일</b>이라 와이어프레임에서 생략(기본 컬럼 ↔ Columns 전환 포함 변경 없음). 단, Import된 MKT- 마케팅 오더 행은 보라 틴트 + MKT 배지 + 담당자 표시로 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
-    <li><span class="n">5</span><span>우상단 Comments 허브 — <b>전 화면 공통</b>, 전체 코멘트 검색 포함 <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">1</span><span><b>Manual Marketing Order Import</b> (M1, confirmed 2026-07-23) — dev team's standard <b>Download Template (.xlsx)</b> → fill in → upload → <b>Preview</b> → set Order Type (Influencer Seeding preset + custom input) and PIC (default = logged-in user, <b>✎ Custom input allowed</b> — 2026-08-03) → confirm. <b>On confirm (confirmed 2026-08-03)</b>: ① each row's country gets its <b>connected carrier auto-assigned</b> (M1b column); countries with no connected carrier show <b>"Not connected — contact the Fulfillment Center"</b> ② if no issues, a <b>green toast "Confirmed"</b> appears top-right. <b>No stock validation</b> (import can come before inbound; Notion G's stock-error item dropped — not surfaced in UI copy) · Once confirmed, orders appear immediately in the RTO Marketing view regardless of stock <span class="ref">— G</span></span></li>
+    <li><span class="n">2</span><span><b>Sample Assignment ON/OFF</b> (redesigned 2026-07-23) — ON modal (M2): target = 2 options, "All new orders in this period" / "Selected orders only" + start datetime (Y/M/D/h) and end or forever; no sample-type selection. <b>Cancel Sample Assignment (M3)</b>: select and cancel from the list of current/past assignment periods (overlaps allowed). Even with overlapping periods, <b>exactly 1 sample set per order</b> (no duplicate assignment, confirmed 2026-08-03). <b>Dual-view (confirmed 2026-08-03)</b>: during an assignment period, <b>carrier-facing data</b> only appends "(+ sample set)" to the last product name (avoids tax issues), while the <b>internal invoice &amp; picking label</b> mark the sample included and show <b>which sample and how many</b> — internal and carrier see different information <span class="ref">— G</span></span></li>
+    <li><span class="n">3</span><span>Bulk Hold Shipment button removed — Hold is handled via Change Status (on-hold) on the order detail page (F); the OMS dashboard stays as the live screen (removed item — no on-screen dot) <span class="ref">— cleanup</span></span></li>
+    <li><span class="n">4</span><span>The order list table is <b>identical to the current admin</b>, so it is omitted from the wireframe (no changes, including default columns ↔ Columns toggle). However, imported MKT- marketing order rows get a purple tint + MKT badge + PIC display to visually separate them from regular sales (settlement &amp; volume separation) <span class="ref">— G</span></span></li>
+    <li><span class="n">5</span><span>Top-right Comments hub — <b>shared across all screens</b>, includes full comment search <span class="ref">— 0. UI 2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 샘플 배정은 2026-07-23 <b>심플 ON/OFF</b>로 재설계(제품 종류 설정 없음) — 상세는 범례 2.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · filter bar (dates · Search · PIC · Status · Order#/Tracking# checkboxes · Country · page size) · Merge Orders · Export/Yun Export · 2,818 total · pagination all stay as in the live screen. Sample assignment was redesigned 2026-07-23 as a <b>simple ON/OFF</b> (no product-type selection) — see legend item 2.</p>
 </div>
 
-<!-- 모달: 샘플 배정 ON -->
+<!-- Modal: Sample Assignment ON -->
 <div class="overlay" id="m-sampleon">
   <div class="modal anno" style="max-width:520px">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>샘플 배정 ON<button class="x" data-close>✕</button></header>
+    <header>Sample Assignment ON<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">배정 대상</b>
+      <b style="color:var(--ink)">Assignment Target</b>
       <div style="display:flex;flex-direction:column;gap:6px;margin:8px 0 14px">
-        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget" checked> 이 기간 내 모든 신규 오더</label>
-        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget"> 선택한 오더만 (2건)</label>
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget" checked> All new orders in this period</label>
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget"> Selected orders only (2)</label>
       </div>
-      <b style="color:var(--ink)">배정 기간</b>
+      <b style="color:var(--ink)">Assignment Period</b>
       <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
         <input value="2026-07-23" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input value="10:00" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
         <span style="color:var(--ink-3)">~</span>
-        <input placeholder="종료일" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input placeholder="시각" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
-        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked> forever (무기한)</label>
+        <input placeholder="End date" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input placeholder="Time" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked> forever (no end date)</label>
       </div>
-      <div class="note">샘플 <b>제품 종류는 설정하지 않음</b> — ON이면 대상 오더 맨 아래 제품명에 "(+ sample set)" 자동 추가·송장 최하단 샘플 세트 행 생성(G 정의). 기간은 여러 개 중첩 등록 가능.</div>
+      <div class="note">Sample <b>product type is not selected</b> — when ON, "(+ sample set)" is auto-appended to the last product name of target orders and a sample-set row is added at the bottom of the invoice (defined in G). Multiple overlapping periods can be registered — but even with overlapping periods, <b>exactly 1 sample set per order</b> (no duplicate assignment).</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-green btn-sm" data-close>배정 시작 (ON)</button>
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-green btn-sm" data-close>Start Assignment (ON)</button>
     </div>
   </div>
 </div>
 
-<!-- 모달: 샘플 배정 취소 (기간 목록) -->
+<!-- Modal: Cancel Sample Assignment (period list) -->
 <div class="overlay" id="m-sampleoff">
   <div class="modal anno" style="max-width:600px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
-    <header>샘플 배정 취소 — 현재 배정 기간 목록<button class="x" data-close>✕</button></header>
+    <header>Cancel Sample Assignment — Current Assignment Periods<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
-        <thead><tr><th style="width:30px"></th><th>배정 기간</th><th>대상</th><th>상태</th></tr></thead>
+        <thead><tr><th style="width:30px"></th><th>Assignment Period</th><th>Target</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td><input type="checkbox" checked></td><td class="num">2026-07-01 09:00 → <b>forever</b></td><td>모든 신규 오더</td><td><span class="st st-processing">활성</span></td></tr>
-          <tr><td><input type="checkbox"></td><td class="num">2026-07-15 00:00 → 2026-07-20 23:59</td><td>선택 오더 34건</td><td><span class="st st-processing">활성</span></td></tr>
-          <tr style="color:var(--ink-3)"><td></td><td class="num">2026-06-01 00:00 → 2026-06-30 23:59</td><td>모든 신규 오더</td><td><span class="st" style="background:var(--line);color:var(--ink-3)">종료됨</span></td></tr>
+          <tr><td><input type="checkbox" checked></td><td class="num">2026-07-01 09:00 → <b>forever</b></td><td>All new orders</td><td><span class="st st-processing">Active</span></td></tr>
+          <tr><td><input type="checkbox"></td><td class="num">2026-07-15 00:00 → 2026-07-20 23:59</td><td>34 selected orders</td><td><span class="st st-processing">Active</span></td></tr>
+          <tr style="color:var(--ink-3)"><td></td><td class="num">2026-06-01 00:00 → 2026-06-30 23:59</td><td>All new orders</td><td><span class="st" style="background:var(--line);color:var(--ink-3)">Ended</span></td></tr>
         </tbody>
       </table>
-      <div class="note">배정 기간은 여러 개일 수 있음 — 취소할 기간을 선택 후 확정. 종료된 기간은 기록용(취소 불가). 취소 즉시 해당 기간의 신규 배정이 중단됩니다(이미 배정된 오더는 유지).</div>
+      <div class="note">Multiple assignment periods may exist — select the period(s) to cancel, then confirm. Ended periods are for record only (cannot be cancelled). Cancellation immediately stops new assignments for that period (already-assigned orders are kept).</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>닫기</button>
-      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close>선택 기간 배정 취소</button>
+      <button class="btn btn-gray btn-sm" data-close>Close</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close>Cancel Selected Periods</button>
     </div>
   </div>
 </div>
 
-<!-- 모달: 마케팅 오더 수동 Import -->
+<!-- Modal: Manual Marketing Order Import -->
 <div class="overlay" id="m-import">
   <div class="modal wide anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>마케팅 오더 Import<button class="x" data-close>✕</button></header>
+    <header>Marketing Order Import<button class="x" data-close>✕</button></header>
     <div class="body">
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-        <b style="color:var(--ink)">1. 템플릿</b>
-        <button class="btn btn-line btn-sm">⬇ Import 템플릿 다운로드 (.xlsx)</button>
-        <span style="font-size:11.5px;color:var(--ink-3)">개발팀 제공 표준 양식 — 수취인·연락처·주소·국가·SKU·수량·캠페인명</span>
+        <b style="color:var(--ink)">1. Template</b>
+        <button class="btn btn-line btn-sm">⬇ Download Template (.xlsx)</button>
+        <span style="font-size:11.5px;color:var(--ink-3)">Standard form from the dev team — Recipient · Contact · Address · Country · SKU · Qty · Campaign name</span>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-        <b style="color:var(--ink)">2. 오더 유형</b>
-        <button class="cchip on" id="otChipSeed">인플루언서 시딩</button>
-        <button class="cchip" id="otChipCustom">✎ 직접 입력</button>
-        <input id="otCustom" placeholder="유형 입력 (예: 팝업 행사 증정)" style="display:none;width:220px;border:1px solid var(--mkt);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+        <b style="color:var(--ink)">2. Order Type</b>
+        <button class="cchip on" id="otChipSeed">Influencer Seeding</button>
+        <button class="cchip" id="otChipCustom">✎ Custom</button>
+        <input id="otCustom" placeholder="Enter type (e.g. Pop-up event giveaway)" style="display:none;width:220px;border:1px solid var(--mkt);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
       </div>
       <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
-        <b style="color:var(--ink)">3. 담당자</b>
+        <b style="color:var(--ink)">3. PIC</b>
         <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
-          <option selected>Yongwon Ryu (본인)</option><option>Harshit</option><option>EuJin</option><option>Adinda</option>
+          <option selected>Yongwon Ryu (me)</option><option>Harshit</option><option>EuJin</option><option>Adinda</option>
         </select>
-        <span style="font-size:11.5px;color:var(--ink-3)">기본값 = 로그인한 본인 · 이 import 건 전체의 담당자로 기록 — 오더 목록·RTO에 표시</span>
+        <button class="btn btn-line btn-sm" id="picCustomBtn" type="button">✎ Custom</button>
+        <input id="picCustomIn" style="display:none;border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink);width:170px" placeholder="Enter PIC name">
+        <span style="font-size:11.5px;color:var(--ink-3)">Default = logged-in user · Recorded as the PIC for this entire import — shown in the order list &amp; RTO</span>
       </div>
-      <b style="color:var(--ink)">4. 업로드</b>
-      <div class="dropzone" style="margin-top:6px">📄 작성한 템플릿을 드래그하거나 클릭해서 업로드</div>
+      <b style="color:var(--ink)">4. Upload</b>
+      <div class="dropzone" style="margin-top:6px">📄 Drag the completed template here or click to upload</div>
       <div style="margin-top:14px">
-        <b style="color:var(--ink);font-size:13px">미리보기 — mkt_seeding_batch3.xlsx · 12행 파싱됨 · 오류 0</b>
+        <b style="color:var(--ink);font-size:13px">Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors</b>
         <table class="tbl" style="margin-top:6px;font-size:12px">
-          <thead><tr><th>수취인</th><th>국가</th><th>SKU</th><th>제품명</th><th>수량</th><th>캠페인</th></tr></thead>
+          <thead><tr><th>Recipient</th><th>Country</th><th>SKU</th><th>Product Name</th><th>Qty</th><th>Campaign</th><th class="anno">Carrier (auto)<span class="dot" style="top:-11px;right:-8px">M1b</span></th></tr></thead>
           <tbody>
-            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>7월 시딩</td></tr>
-            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>7월 시딩</td></tr>
-            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>7월 시딩</td></tr>
-            <tr><td colspan="6" style="text-align:center;color:var(--ink-3)">⋯ 외 9행</td></tr>
+            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td colspan="6" style="text-align:center;color:var(--ink-3)">⋯ +8 more rows</td></tr>
+          <tr><td>Lucia Ramos</td><td>PE</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--amber);font-weight:700">Not connected — contact the Fulfillment Center</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="note mkt">확정 시 MKT- 오더로 생성되어 <b>재고·인바운드 여부와 무관하게 Ready to be Outbonded(Marketing 뷰)에 즉시 노출</b>됩니다.</div>
+      <div class="note mkt">On confirm, orders are created as MKT- orders and <b>appear immediately in Ready to be Outbonded (Marketing view) regardless of stock or inbound status</b>.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-mkt btn-sm" data-close>12건 Import 확정</button>
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-mkt btn-sm" data-close id="mktConfirm">Confirm Import (12 orders)</button>
     </div>
   </div>
 </div>
 
 <script>
-/* Import 오더 유형 칩 — 인플루언서 시딩(기본) / 직접 입력 */
+/* Import Order Type chips — Influencer Seeding (default) / Custom */
 document.querySelectorAll('#otChipSeed,#otChipCustom').forEach(c=>{
   c.addEventListener('click',()=>{
     document.querySelectorAll('#otChipSeed,#otChipCustom').forEach(x=>x.classList.remove('on'));
@@ -359,9 +367,9 @@ document.querySelectorAll('.overlay').forEach(o=>{
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
 });
-/* Comments 허브 — 열기/탭 전환/★ 저장/전체 검색 (View Orders/RTO와 동일 패턴) */
+/* Comments hub — open / tab switch / ★ save / full search (same pattern as View Orders/RTO) */
 document.querySelectorAll('[data-open]').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
@@ -380,7 +388,7 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-const CSEARCH_DATA=[{o:'MKT-40233',a:'Harshit',t:'오늘 10:05',ts:8,x:'@Yongwon 시딩 오더 12건 오늘 중 출고 가능한지 확인 부탁드립니다'},{o:'MKT-40218',a:'EuJin',t:'오늘 09:22',ts:7,x:'@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁'},{o:'421771',a:'Adinda',t:'오늘 08:40',ts:6,x:'@Yongwon 샘플 배정 종료일이 맞는지 확인 부탁드립니다'},{o:'MKT-40191',a:'Harshit',t:'어제 17:10',ts:5,x:'캠페인명 7월 시딩으로 통일했습니다'},{o:'421502',a:'EuJin',t:'07-12 11:30',ts:4,x:'인플루언서 반송분 재발송 완료'}];
+const CSEARCH_DATA=[{o:'MKT-40233',a:'Harshit',t:'Today 10:05',ts:8,x:'@Yongwon Can you check if the 12 seeding orders can ship today?'},{o:'MKT-40218',a:'EuJin',t:'Today 09:22',ts:7,x:'@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check'},{o:'421771',a:'Adinda',t:'Today 08:40',ts:6,x:'@Yongwon Please confirm the sample assignment end date is correct'},{o:'MKT-40191',a:'Harshit',t:'Yesterday 17:10',ts:5,x:'Standardized the campaign name to July Seeding'},{o:'421502',a:'EuJin',t:'07-12 11:30',ts:4,x:'Re-shipped the returned influencer packages'}];
 function cSearch(inp){
   const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
   const tabs=dd.querySelector('.tabs');
@@ -398,9 +406,21 @@ function cSearch(inp){
   const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
   const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
-  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+      :'<div class="empty">No matching comments</div>');
   pane.style.display='block';
 }
+
+/* M1 PIC custom-input toggle + Import confirm toast (2026-08-03) */
+const pcb=document.getElementById('picCustomBtn');
+if(pcb){pcb.addEventListener('click',()=>{const x=document.getElementById('picCustomIn');
+  const show=x.style.display==='none'; x.style.display=show?'inline-block':'none'; if(show)x.focus();});}
+const mc=document.getElementById('mktConfirm');
+if(mc){mc.addEventListener('click',()=>{
+  let t=document.getElementById('gtoast');
+  if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
+    t.innerHTML='✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center</small>';
+    document.body.appendChild(t);}
+  t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
 </script>

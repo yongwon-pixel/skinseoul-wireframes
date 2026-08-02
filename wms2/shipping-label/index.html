@@ -311,7 +311,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span>DELEO 피킹 라벨 <b>가로 출력</b> 전환 — SKU·브랜드·사이즈·Location 컬럼 추가로 피커가 라벨만 보고 집품 <span class="ref">— B</span></span></li>
     <li><span class="n">2</span><span>수량 <u>밑줄+대형 폰트</u> 강조 — 다품목 오집 방지 <span class="ref">— B</span></span></li>
-    <li><span class="n">3</span><span>샘플 세트 행 별도 표기(앰버 틴트 + SAMPLE 배지) — 판매 상품과 구분, Order Management 샘플 배정과 연동 <span class="ref">— B / G</span></span></li>
+    <li><span class="n">3</span><span>샘플 세트 행 별도 표기(앰버 틴트 + SAMPLE 배지 + 종류·수량) — 판매 상품과 구분, Order Management 샘플 배정과 연동. <b>정보 이원화(2026-08-03 확정)</b>: 이 샘플 행(어떤 샘플·몇 개)은 <b>센터 내부용</b> 표기 — <b>운송사 전달 데이터</b>에는 맨 마지막 제품명의 "(+ sample set)" 문구만 포함 <span class="ref">— B / G</span></span></li>
     <li><span class="n">4</span><span>YUN 캐리어 라벨(현행)은 배송사 규격 재현 — 목적지코드(NZ)·라우팅(R·KRTHZXR)·트래킹(YT…)·SKINSEOUL_오더번호 그대로. 개선안은 [YUN 가로 출력 (B)] 탭 <span class="ref">— 실화면</span></span></li>
     <li><span class="n">5</span><span>제품 표 좌측 <b>BC 란 신설</b> — 제품(88) 바코드의 <b>뒤 4자리</b>. 피킹·패킹 시 실물 바코드 끝자리와 육안 대조로 오집 방지. DELEO·YUN 제품 표 공통, 샘플 세트 등 88바코드 없는 행은 "—" <span class="ref">— B</span></span></li>
     <li><span class="n">6</span><span>YUN <b>세로 → 가로 출력 전환</b> — 실물 <b>100×150mm</b> 라벨을 가로 방향(150×100mm)으로 사용, 제품명 전체 노출. 캐리어 규격 요소(라우팅·목적지·트래킹 바코드·SHIP TO·Tel·2차 바코드·참조번호·*2)는 <b>전부 유지</b>, 제품 표는 DELEO 개선안과 공통 규칙(BC·SKU·Location·브랜드·수량 밑줄). 구현 방식(회전 출력 vs 동반 페이지)은 개발단 확인 <span class="ref">— B</span></span></li>

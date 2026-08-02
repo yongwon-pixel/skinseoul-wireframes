@@ -196,6 +196,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 .state{display:none}
 .state.on{display:block}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+.cpanel-ir{background:var(--ss-purple-50);border-top:2px solid var(--ss-purple)}
+.cpanel-ir .c-item{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:flex-start}
+.cpanel-ir .c-item:last-of-type{border-bottom:none}
+.cpanel-ir .who{font-weight:700;white-space:nowrap}
+.cpanel-ir .at{color:var(--blue);font-weight:700}
+.cpanel-ir time{color:var(--ink-3);font-size:11px;margin-left:auto;white-space:nowrap}
+.cpanel-ir .cwrite{display:flex;gap:8px;margin-top:8px}
+.cpanel-ir .cwrite input{flex:1;border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;font-size:12.5px;background:var(--page);color:var(--ink)}
 </style>
 
 <div class="wf-bar">
@@ -206,7 +217,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-state="s2">2 · 신규 요청 (홀세일 / 파트너십)</button>
     <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/부분 입고/입고완료)</button>
     <button class="wf-tab" data-modal="m-invoice">모달: 송장번호 입력</button>
-    <button class="wf-tab" data-modal="m-vo">모달: View Orders 연동</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -287,6 +297,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
           <span class="dot" style="top:-11px;right:-8px">5</span>
         </div>
+        <p class="mut" style="margin:10px 0 6px;text-align:right;font-size:12px"><b>Unit Cost (KRW)</b> = 공급처에서 실제 구매한 <b>개당 단가</b> — 무상(증정)이면 <b>0</b> 입력 (필수) · <b>JIT Price (KRW)</b> = 이 제품을 쿠팡 JIT로 구매할 때의 개당 가격 — <b>모르면 비워두세요</b> (옵션) · 여러 SKU는 위 검색창에서 계속 선택하면 행이 추가됩니다 (행 삭제 = ✕)</p>
         <table class="prodtbl">
           <thead><tr>
             <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:140px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
@@ -321,7 +332,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             </tr>
           </tbody>
         </table>
-        <p class="mut" style="margin:8px 0 0"><b>Unit Cost (KRW)</b> = 공급처에서 실제 구매한 <b>개당 단가</b> — 무상(증정)이면 <b>0</b> 입력 (필수) · <b>JIT Price (KRW)</b> = 이 제품을 쿠팡 JIT로 구매할 때의 개당 가격 — <b>모르면 비워두세요</b> (옵션) · 여러 SKU는 위 검색창에서 계속 선택하면 행이 추가됩니다 (행 삭제 = ✕)</p>
+        
       </div>
 
       <div class="fsec">
@@ -350,7 +361,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
       <div class="note purple anno">
         <span class="dot" style="top:-11px;left:-10px">9</span>
-        송장번호를 입력하면 <b>View Orders와 자동 매칭</b>됩니다 — 센터에서 해당 송장 바코드를 스캔하면 이 요청의 <b>소싱 루트가 배지로 표시</b>(SMART BUY / WHOLESALE / PARTNERSHIP)됩니다. <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
+        송장번호를 입력하면 <b>View Orders와 자동 매칭</b>됩니다 — 센터에서 해당 송장 바코드를 스캔하면 이 요청의 <b>소싱 루트가 배지로 표시</b>(SMART BUY / WHOLESALE / PARTNERSHIP)됩니다.
       </div>
 
       <div class="submitrow">
@@ -371,13 +382,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">3</span><span><b>Inbound No. 자동 발번 — 신청 화면에 입력칸·미리보기 없음</b>(2026-07-26 패널 제거). 등록 시 <b>YYYYMMDDNNNN</b>(NNNN 그날 0001~9999) 자동 부여되어 <b>요청 리스트에서만 노출</b>. 시트 A열 "PO No. (=Order ID)" 대응 — 발주 없는 입고에도 맞도록 명칭은 Inbound No. <span class="ref">— I + J</span></span></li>
     <li><span class="n">4</span><span>필드 구성 = <b>PH 시트 열 순서 정합</b>: Inbound No.(자동) → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost(KRW) → JIT Price(KRW) → Supplier. SKU·Brand·Product Name은 통합 검색 선택으로 자동 확정, Size 없음 <span class="ref">— PH 시트</span></span></li>
     <li><span class="n">5</span><span><b>단일 통합 검색창</b>(2026-07-27 UX 개선 — 행마다 검색이 아니라 테이블 위 검색창 하나) — SKU No.·브랜드·영어 제품명 중 <b>아는 것 하나만</b> 입력하면 자동완성, 클릭하면 아래 테이블에 행이 추가되며 SKU·Brand·Product Name이 전부 자동으로 채워짐 <span class="ref">— I + F 자동완성</span></span></li>
-    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — "공급처에서 실제 구매한 개당 단가"임을 placeholder·테이블 하단 도움말로 명시(무엇을 넣는지 모르는 문제 해소). <b>0 입력 가능</b>(무상 증정분) — FIFO 원가·시트 정합의 기반이라 필수 유지 <span class="ref">— 시트 Unit Cost 열</span></span></li>
+    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — "공급처에서 실제 구매한 개당 단가"임을 placeholder·테이블 우상단 디스클레이머로 명시(2026-08-03 위치 이동)(무엇을 넣는지 모르는 문제 해소). <b>0 입력 가능</b>(무상 증정분) — FIFO 원가·시트 정합의 기반이라 필수 유지 <span class="ref">— 시트 Unit Cost 열</span></span></li>
     <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 쿠팡 JIT로 구매할 때의 개당 가격. <b>"모르면 비워두세요"를 placeholder로 명시</b> — 입력 부담 없음 <span class="ref">— 시트 JIT Price 열</span></span></li>
     <li><span class="n">12</span><span><b>Supplier 필수</b> — "물건을 보내는 공급처"임을 라벨·placeholder(예: 비엠유통, Coupang)로 안내. 정산·입고 추적의 기준이라 필수 유지 <span class="ref">— 시트 연동</span></span></li>
     <li><span class="n">6</span><span>방금 선택한 제품은 <b>파란 틴트 행으로 추가</b>되고 Order Qty·Unit Cost만 채우면 됨. <b>SKU No.·Brand·Product Name은 검색에서 선택된 값이라 편집 불가</b>(테두리 없는 평문 표시) — 바꾸려면 행을 ✕로 지우고 다시 검색. 여러 SKU = 검색창에서 계속 선택(별도 "행 추가" 버튼 폐기), 잘못 추가한 행은 ✕ 삭제 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">7</span><span>송장번호 입력란 — <b>선택 필드</b>(대시 테두리), 발송 후 나중 입력 가능. <b>등록 버튼은 하나</b>(2026-07-27 단일화) — 송장번호 유무와 무관하게 상태는 신청으로 등록, 송장이 있으면 View Orders 매칭 즉시 활성 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시. 클릭 시 연동 방식 모달(M2) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시(연동 안내 모달은 2026-08-03 제거) <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">14</span><span>우상단 Comments 허브 — 요청 건에 태그된 Comments(@Mentions/★Saved). View Orders와 동일 컴포넌트 + 전체 코멘트 검색(시간 역순) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">15</span><span>좌우 여백 축소 — 폼 전체가 스크롤 없이 한 화면 <span class="ref">— C 화면 규약</span></span></li>
     <li><span class="n">16</span><span><b>상단 페이지 탭 [신규 신청 | 요청 리스트]</b> 신설(2026-07-23) — 실제 어드민 화면 안에서 신청 폼과 요청 리스트를 오가는 전환 탭(와이어프레임의 보라 상태 탭과 별개). 신규 신청 탭에서 루트 선택·신청, 요청 리스트 탭에서 상태별 조회·송장 입력 <span class="ref">— I 입고요청</span></span></li>
@@ -583,7 +594,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (협찬)</td>
           <td class="num">100038120</td>
           <td class="num">300</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417</span> <span class="route-note">✓ View Orders 매칭됨</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417<br>10325661220418</span> <span class="route-note">송장 2건 — 모두 매칭 활성</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
           <td class="num">07-15</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Miranti</td>
@@ -612,7 +623,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>Beauty of Joseon</b> Relief Sun, 50ml 외 1종</td>
           <td class="num">100031820 +1</td>
           <td class="num">1,000</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note"><a class="vo-link" data-modal="m-vo">View Orders에서 스캔 완료 →</a></span><span class="dot" style="top:-12px;right:-8px">8</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note">View Orders 스캔 입고로 전환됨</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
           <td class="num">07-11</td>
           <td class="num">07-11 14:22</td>
           <td>Dean</td>
@@ -639,7 +650,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="note purple anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">9</span>
-      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <b>송장번호 미입력 건은 매일 아침 자동 점검되어 Slack 알림</b>(WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr). <a class="vo-link" data-modal="m-vo">연동 방식 보기 →</a>
+      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <b>송장번호 미입력 건은 매일 아침 자동 점검되어 Slack 알림</b>(WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr).
     </div>
   </div>
 </div></div>
@@ -649,11 +660,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">1</span><span>상태 필터 칩 — 전체 / <b>신청 / 부분 입고 / 입고완료 3개 상태</b>(발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02). 송장 입력 여부는 상태가 아니라 송장번호 칼럼에서 확인 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력. 입고완료 전환은 View Orders 스캔에서 자동(발송 처리 버튼 폐기) <span class="ref">— I + C 일괄바 규약</span></span></li>
     <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지 — 표기는 View Orders와 동일(무색 검정 볼드) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호 목록(복수 가능)+매칭 상태 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b> → <b>부분 입고</b>(View Orders 부분 입고 저장 시 자동 전환 · 잔량 n/m 표기) → <b>입고완료</b> 3단계(2026-08-02 확정). 같은 송장 재스캔 시 잔량부터 이어서 대조. <b>받을 수량 수정</b>(View Orders M6) 시 수량 셀에 수정 이력(300→180 등) 표기 + 신청자 Slack 알림 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">6</span><span>신청 + 송장 미입력 건 = "미입력 → 입력" 버튼(M1)으로 나중에 등록. <b>매일 아침 1회 자동 체크 — 신청 상태인데 송장번호가 아직 없는 건을 Slack으로 알림</b>: WHOLESALE·SMART BUY 건 → <b>#wholesale-ops</b>, PARTNERSHIP 건 → <b>#partnership-kr</b> (기타 채널의 알림 채널은 개발 시 확정) <span class="ref">— 2026-07-27 알림 스펙</span></span></li>
-    <li><span class="n">7</span><span>신청 + 송장 입력됨 건 = 번호 아래 <b>View Orders 매칭 활성</b> 표시(아직 물량 미도착) — 상태 배지는 그대로 신청 <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">7</span><span>신청 + 송장 입력됨 건 — <b>송장번호는 복수 등록 가능(분할 발송, 2026-08-03 확정)</b>이며 등록된 모든 번호가 View Orders 매칭·스캔 대상. 상태 배지는 그대로 신청 <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건 (별도 연동 모달·결과 링크는 2026-08-03 제거 — 상태 표기로 충분) <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">9</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">10</span><span><b>Received Date 칼럼</b> — 입고완료 시 View Orders 스캔 시각 자동 기록(시트 Received Date 열 대응), 미입고 건은 "–". Carrier 자동 기록은 미지원 — Carrier 칼럼 없음(2026-08-03 확정) <span class="ref">— 시트 연동</span></span></li>
   </ol>
@@ -667,12 +678,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <header>송장번호 입력 — 202607130003<button class="x" data-close>✕</button></header>
     <div class="body">
       <b style="color:var(--ink)">물량 발송 후 송장번호(Tracking No)를 입력하세요.</b>
-      <p class="mut" style="margin:8px 0 0">신청 시점에 미입력했던 건 — 물량 발송이 시작되면 이 번호로 View Orders와 매칭됩니다.</p>
-      <div class="qrow">
-        <input value="" placeholder="예: 10325661220417 — 라스트마일/쿠팡 송장번호">
+      <p class="mut" style="margin:8px 0 0"><b>한 입고 요청에 송장번호를 여러 개 등록할 수 있습니다</b>(분할 발송 대비) — 등록된 <b>모든 송장번호가 View Orders 매칭·스캔 대상</b>이 됩니다.</p>
+      <div id="tnList">
+        <div class="qrow" style="display:flex;gap:6px;align-items:center">
+          <input value="" placeholder="예: 10325661220417 — 라스트마일/쿠팡 송장번호" style="flex:1">
+          <button type="button" class="btn btn-line btn-sm tn-del" title="이 송장번호 제거">✕</button>
+        </div>
       </div>
+      <button type="button" class="btn btn-line btn-sm" id="tnAdd" style="margin-top:8px">＋ 송장번호 추가</button>
       <div class="qrow" style="margin-top:14px">
-        <span class="mut">입력 즉시 <b>View Orders 매칭이 활성화</b>됩니다 — 상태는 신청 그대로, 센터 스캔 입고 시 입고완료로 전환</span>
+        <span class="mut">입력 즉시 <b>모든 번호의 View Orders 매칭이 활성화</b>됩니다 — 상태는 신청 그대로, 어느 송장이든 센터 스캔 입고 시 처리(전량 입고 시 입고완료 전환)</span>
       </div>
       <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 이 Inbound No.(202607130003) 건과 연결됩니다.</div>
     </div>
@@ -684,30 +699,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 
 <!-- ══════════════ MODAL : View Orders 연동 안내 ══════════════ -->
-<div class="overlay" id="m-vo">
-  <div class="modal anno" style="max-width:560px">
-    <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>View Orders 연동 — 송장 스캔 시 소싱 루트 배지<button class="x" data-close>✕</button></header>
-    <div class="body">
-      <p style="margin:0 0 6px">입고 요청에 입력된 <b>송장번호</b>가 View Orders와 매칭됩니다. 센터에서 도착 물량의 송장 바코드를 스캔하면:</p>
-      <ol style="margin:8px 0 0;padding-left:18px;color:var(--ink-2);font-size:13px">
-        <li>해당 입고 요청 건이 자동 조회되고,</li>
-        <li>스캔 결과에 이 요청의 <b>소싱 루트 배지</b>가 표시되며,</li>
-        <li>Inbound 처리 시 요청 상태가 <span class="tag tag-inbounded">입고완료</span>로 전환됩니다.</li>
-      </ol>
-      <div class="vomock">
-        <div class="vh">View Orders — 스캔 결과 (미리보기)</div>
-        <div class="vr"><span class="thumb">IMG</span><span><b>COSRX</b> Advanced Snail 96 Mucin Essence</span><span class="tag tag-smartbuy" style="margin-left:auto">SMART BUY</span><span class="route-note" style="margin:0">Coupang JIT · PO-0142</span></div>
-        <div class="vr"><span class="thumb">IMG</span><span><b>Round Lab</b> 1025 Dokdo Toner</span><span class="tag tag-wholesale" style="margin-left:auto">WHOLESALE</span><span class="route-note" style="margin:0">홀세일 직접</span></div>
-        <div class="vr"><span class="thumb">IMG</span><span><b>Medicube</b> Zero Pore Pad 2.0</span><span class="tag tag-partnership" style="margin-left:auto">PARTNERSHIP</span><span class="route-note" style="margin:0">브랜드 협찬</span></div>
-      </div>
-      <div class="note">스마트바이 건은 배지 옆에 <b>PO 번호</b>가 함께 표기되어 구매–입고 연결이 한눈에 확인됩니다(J. Procurement Hub). 홀세일·파트너십은 PO 없이 소싱 루트만 표시됩니다.</div>
-    </div>
-    <div class="foot">
-      <button class="btn btn-blue btn-sm" data-close>확인</button>
-    </div>
-  </div>
-</div>
+
 
 <script>
 document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
@@ -788,5 +780,62 @@ document.querySelectorAll('input[name="route"],input[name="route2"]').forEach(r=
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+});
+
+/* deep-link: #reqlist(또는 #s3)로 열면 요청 리스트 탭 활성화 — View Orders 상태 6 배너 링크 연동 */
+if(location.hash==='#reqlist'||location.hash==='#s3'){
+  document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+  const t=document.querySelector('.wf-tab[data-state="s3"]'); if(t)t.classList.add('on');
+  document.querySelectorAll('.state').forEach(x=>x.classList.remove('on'));
+  const s3=document.getElementById('s3'); if(s3)s3.classList.add('on');
+}
+
+/* 2026-08-03 추가: 등록 토스트 · M1 복수 송장 · 요청 리스트 Comments 패널 */
+document.querySelectorAll('button').forEach(b=>{
+  if(b.textContent.trim()==='입고 요청 등록'){
+    b.addEventListener('click',()=>{
+      let t=document.getElementById('gtoast');
+      if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
+        t.innerHTML='✓ 입고 요청 등록됨<small>Inbound No. 자동 발번 · 요청 리스트 상단에 추가 · 새로고침 없음</small>';
+        document.body.appendChild(t);}
+      t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);
+    });
+  }
+});
+const tnAdd=document.getElementById('tnAdd');
+if(tnAdd){
+  const list=document.getElementById('tnList');
+  tnAdd.addEventListener('click',()=>{
+    const row=document.createElement('div');
+    row.className='qrow'; row.style.cssText='display:flex;gap:6px;align-items:center;margin-top:6px';
+    row.innerHTML='<input value="" placeholder="추가 송장번호" style="flex:1"><button type="button" class="btn btn-line btn-sm tn-del" title="이 송장번호 제거">✕</button>';
+    list.appendChild(row); row.querySelector('input').focus();
+  });
+  list.addEventListener('click',e=>{
+    if(e.target.classList.contains('tn-del')){
+      if(list.querySelectorAll('.qrow').length>1) e.target.closest('.qrow').remove();
+      else e.target.closest('.qrow').querySelector('input').value='';
+    }
+  });
+}
+const IR_COMMENTS={
+ '202607130003':[['Dean','@Yongwon 송장번호 오늘 중 입력 예정입니다','10:20']],
+ '202607130002':[['Dean','홀세일 발주 확정 — 입고 예정일 07-18','09:12'],['Yongwon','@Dean 확인했습니다. 로케이션 B열 비워둘게요','09:30']],
+ '202607120004':[['Miranti','협찬분 300개 — 캠페인 연동 확인했습니다','어제'],['EuJin','@Miranti 캠페인명은 7월 시딩으로 통일해주세요','어제'],['Miranti','수정 완료','어제']]
+};
+document.querySelectorAll('.comment-btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const tr=btn.closest('tr'); if(!tr) return;
+    const next=tr.nextElementSibling;
+    if(next&&next.classList.contains('cpanel-ir')){next.remove();return;}
+    const no=(tr.querySelector('td:nth-child(2)')||{}).textContent||'';
+    const cs=IR_COMMENTS[no.trim()]||[];
+    const cols=tr.children.length;
+    const panel=document.createElement('tr'); panel.className='cpanel-ir';
+    const inner=cs.length?cs.map(c=>'<div class="c-item"><span class="who">'+c[0]+'</span><span>'+c[1].replace(/@(\w+)/g,'<span class="at">@$1</span>')+'</span><time>'+c[2]+'</time></div>').join(''):'<div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>';
+    panel.innerHTML='<td colspan="'+cols+'" style="padding:10px 14px">'+inner+'<div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div></td>';
+    tr.after(panel);
+  });
 });
 </script>

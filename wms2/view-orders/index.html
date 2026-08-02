@@ -1,4 +1,4 @@
-<title>WMS 2.0 — View Orders 와이어프레임</title>
+<title>WMS 2.0 — View Orders Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -12,7 +12,7 @@
   --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+/* Existing admin is a single light theme — fixed light, no dark mode */
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
@@ -60,7 +60,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
 .logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
 
-.pagepad{padding:18px 16px 0}   /* C: 좌우 여백 축소 */
+.pagepad{padding:18px 16px 0}   /* C: reduced side padding */
 .pagepad h2{font-size:27px;margin:6px 0 2px}
 .pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
 
@@ -113,14 +113,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-pending{background:#FFC107;color:#3D2E00}
 .tag-requested{background:#FFC107;color:#3D2E00}
 .tag-inbounded{background:var(--green);color:#fff}
-/* 소싱 루트 4종 — 색 없이 검정 볼드 텍스트로만 구분 (Smart Buy / JIT / Wholesale / Partnership) */
+/* 4 sourcing routes — black bold text only, no colors (Smart Buy / JIT / Wholesale / Partnership) */
 .tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
 .bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
 .bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
 .mut{color:var(--ink-3);font-size:12.5px}
 .bar-under{text-decoration:underline;text-underline-offset:2px;font-weight:800}
 
-/* comment panel — Order 페이지 Operator Comments와 동일 문법 */
+/* comment panel — same grammar as the Order page Operator Comments */
 .cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
 .cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
 .cpanel .c-item:last-of-type{border-bottom:none}
@@ -130,7 +130,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
 .cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
 
-/* ★ 저장(북마크) 토글 — Mentions/Saved 공통 */
+/* ★ save (bookmark) toggle — shared by Mentions/Saved */
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
 
@@ -142,7 +142,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
 .act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
 
-/* floating scan panel — 기본 접힘, 클릭 시 펼침 */
+/* floating scan panel — collapsed by default, click to expand */
 .scanfloat{position:fixed;left:16px;bottom:16px;width:330px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:30}
 .scanfloat header{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--page);padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0}
@@ -189,7 +189,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .auto .opt small{color:var(--ink-3)}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 
-/* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
+/* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
 .inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
@@ -209,7 +209,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .csearch input:focus{border-color:var(--ss-purple)}
 .inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
 
-/* ── 내부 입고 (State 6) ── */
+/* ── Internal Inbound (State 6) ── */
 .intbanner{margin-top:14px;background:color-mix(in srgb,var(--ss-purple-50) 70%,var(--page));
   border:2px solid var(--ss-purple);border-radius:12px;padding:16px 20px}
 .intbanner .big{font-size:21px;font-weight:800;color:var(--ss-purple)}
@@ -256,29 +256,29 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · View Orders 와이어프레임</h1>
-  <span class="hint">v20 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
+  <h1>WMS 2.0 · View Orders Wireframe</h1>
+  <span class="hint">v20 — Switch states with the tabs · Purple numbers = change annotations</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s0">0 · 대기 (스캔 전)</button>
-    <button class="wf-tab" data-state="s1">1 · 스캔 결과 (마지막 제품 남은 오더)</button>
-    <button class="wf-tab" data-state="s1b">1b · 스캔 결과 (일반 — 남은 제품 2개)</button>
-    <button class="wf-tab" data-state="s2">2 · 전체 인바운드 완료</button>
-    <button class="wf-tab" data-state="s3">3 · 아웃바운드 완료</button>
-    <button class="wf-tab" data-state="s4">4 · 반송 모드</button>
-    <button class="wf-tab" data-state="s5">5 · Hold 오더</button>
-    <button class="wf-tab" data-state="s6">6 · 내부 입고 (입고 요청 건)</button>
-    <button class="wf-tab" data-state="s6b">6b · 내부 입고 완료</button>
-    <button class="wf-tab" data-modal="m-cancel">모달: 인바운드 취소</button>
-    <button class="wf-tab" data-modal="m-unrec">모달: 미인식 바코드</button>
-    <button class="wf-tab" data-modal="m-restock">모달: 반송 입고</button>
-    <button class="wf-tab" data-modal="m-retlabel">모달: 반품 라벨</button>
-    <button class="wf-tab" data-modal="m-partial">모달: 부분 입고 저장</button>
-    <button class="wf-tab" data-modal="m-qtyedit">모달: 받을 수량 수정</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab on" data-state="s0">0 · Waiting (Before Scan)</button>
+    <button class="wf-tab" data-state="s1">1 · Scan Result (Last Item Remaining)</button>
+    <button class="wf-tab" data-state="s1b">1b · Scan Result (Normal — 2 Remaining)</button>
+    <button class="wf-tab" data-state="s2">2 · All Inbounded</button>
+    <button class="wf-tab" data-state="s3">3 · Outbound Complete</button>
+    <button class="wf-tab" data-state="s4">4 · Customer Return Mode</button>
+    <button class="wf-tab" data-state="s5">5 · Hold Order</button>
+    <button class="wf-tab" data-state="s6">6 · Internal Inbound (Inbound Request)</button>
+    <button class="wf-tab" data-state="s6b">6b · Internal Inbound Complete</button>
+    <button class="wf-tab" data-modal="m-cancel">Modal: Cancel Inbound</button>
+    <button class="wf-tab" data-modal="m-unrec">Modal: Unrecognized Barcode</button>
+    <button class="wf-tab" data-modal="m-restock">Modal: Customer Return Restock</button>
+    <button class="wf-tab" data-modal="m-retlabel">Modal: Return Label</button>
+    <button class="wf-tab" data-modal="m-partial">Modal: Save Partial Inbound</button>
+    <button class="wf-tab" data-modal="m-qtyedit">Modal: Edit Expected Qty</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 0 : 대기 (스캔 전 첫 화면) ══════════════ -->
+<!-- ══════════════ STATE 0 : Waiting (initial screen before scan) ══════════════ -->
 <section class="state on" id="s0">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -291,22 +291,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox0">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -317,7 +317,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="searchrow">
       <div class="search-input anno">
-        <input value="" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <input value="" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
         <span class="dot" style="top:-10px;left:-10px">1</span>
       </div>
       <button class="btn btn-blue">🔍 Search</button>
@@ -325,40 +325,40 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="anno" style="display:block;margin-top:16px;border:1.5px dashed var(--line-strong);border-radius:12px;padding:44px 20px;text-align:center;background:var(--page)">
       <div style="font-size:32px">📡</div>
-      <div style="font-size:16px;font-weight:800;margin-top:6px;color:var(--ink)">스캔 대기 중</div>
-      <div class="mut" style="margin-top:6px">송장·제품 바코드를 스캔하거나 번호를 입력하면 <b>즉시 해당 오더 화면으로 전환</b>됩니다</div>
+      <div style="font-size:16px;font-weight:800;margin-top:6px;color:var(--ink)">Waiting for scan</div>
+      <div class="mut" style="margin-top:6px">Scan a tracking/product barcode or type a number to <b>switch to that order's screen instantly</b></div>
     </div>
 
     <div class="anno" style="position:relative;margin-top:14px">
       <span class="dot" style="top:-11px;left:-10px">2</span>
-      <button class="btn btn-line btn-sm" id="inexpToggle">▸ 입고 예정 4건 — 송장 입력 2 · 부분 입고 1</button>
+      <button class="btn btn-line btn-sm" id="inexpToggle">▸ Expected Inbound 4 — 2 with tracking · 1 Partial Inbound</button>
       <div id="inexpTable" style="display:none;margin-top:10px">
         <table class="tbl">
-          <thead><tr><th>Inbound No.</th><th>소싱 루트</th><th>Supplier</th><th>품목</th><th>송장번호</th><th>상태</th></tr></thead>
+          <thead><tr><th>Inbound No.</th><th>Sourcing Route</th><th>Supplier</th><th>Items</th><th>Tracking No</th><th>Status</th></tr></thead>
           <tbody>
             <tr>
               <td class="num">202608020001</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td>(주)뷰티서플라이</td>
-              <td><b>COSRX</b> Advanced Snail 96 외 2종 · 620개</td><td class="num" style="color:var(--blue)">10325998120044</td>
-              <td><span class="tag tag-requested">신청</span></td>
+              <td><b>COSRX</b> Advanced Snail 96 +2 more · 620 units</td><td class="num" style="color:var(--blue)">10325998120044</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
             </tr>
             <tr class="row-part" style="cursor:pointer" onclick="document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));document.getElementById('s6').classList.add('on');window.scrollTo({top:0})">
               <td class="num">202607120001</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>비엠유통</td>
-              <td><b>Round Lab</b> 1025 Dokdo 외 1종 · 800개</td><td class="num" style="color:var(--blue)">10325661220417</td>
-              <td><span class="tag tag-part">부분 입고 620/800</span></td>
+              <td><b>Round Lab</b> 1025 Dokdo +1 more · 800 units</td><td class="num" style="color:var(--blue)">10325661220417</td>
+              <td><span class="tag tag-part">PARTIAL 620/800</span></td>
             </tr>
             <tr>
-              <td class="num">202608020002</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td>Medicube (협찬)</td>
-              <td><b>Medicube</b> Zero Pore Pad 2.0 · 300개</td><td class="num" style="color:var(--ink-3)">—</td>
-              <td><span class="tag tag-requested">신청</span></td>
+              <td class="num">202608020002</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td>Medicube (Partnership)</td>
+              <td><b>Medicube</b> Zero Pore Pad 2.0 · 300 units</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
             </tr>
             <tr>
               <td class="num">202608010004</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>(주)뷰티링크</td>
-              <td><b>Beauty of Joseon</b> Relief Sun 외 1종 · 1,000개</td><td class="num" style="color:var(--ink-3)">—</td>
-              <td><span class="tag tag-requested">신청</span></td>
+              <td><b>Beauty of Joseon</b> Relief Sun +1 more · 1,000 units</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
             </tr>
           </tbody>
         </table>
-        <p class="mut" style="margin-top:8px">송장 입력 건 상단 정렬 · <b>행 클릭 = 스캔 없이 해당 건 대조 화면(상태 6) 진입</b>(라벨 훼손 벌크 대비) · 전체 목록은 입고 요청 → 요청 리스트</p>
+        <p class="mut" style="margin-top:8px">Rows with tracking sorted to top · <b>Click a row = open its reconciliation screen (State 6) without scanning</b> (for bulk boxes with damaged labels) · Full list: Inbound Request → Request List</p>
       </div>
     </div>
 
@@ -366,19 +366,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div></div>
 
 <div class="legend">
-  <h3>State 0 변경사항 — 대기 (스캔 전 첫 화면)</h3>
+  <h3>State 0 — Changes: Waiting (Initial Screen Before Scan)</h3>
   <ol>
-    <li><span class="n">1</span><span>첫 진입 화면 = <b>빈 통합 검색창 자동 포커스</b> — 바코드 스캔/번호 입력 즉시 해당 오더 화면(상태 1~5)으로 전환. 자동 판별·쿠팡 QR "[V1]바코드" 인식([V1] 뒤 바코드 매칭)·포커스 복귀 규칙은 State 1 범례 1·12·14 참조 — <b>규칙 문구는 화면에 노출하지 않음</b> <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">2</span><span><b>입고 예정 요약 배지(신설, 2026-08-02 결정)</b> — 미완료 입고 요청 요약 한 줄, 클릭 시 테이블 인라인 펼침(송장 입력 건 상단 정렬 · 소싱루트 배지 · 부분 입고 잔량 표기). <b>행 클릭 = 스캔 없이 해당 건 대조 화면(상태 6) 진입</b>(송장 라벨 훼손 벌크 대비). 기본 접힘 — 스캔 허브라는 화면 성격 유지 <span class="ref">— I + C</span></span></li>
+    <li><span class="n">1</span><span>Initial screen = <b>empty unified search box with auto-focus</b> — scanning a barcode / typing a number switches instantly to that order's screen (States 1–5). Auto-detection, Coupang QR "[V1]barcode" recognition (matches the barcode after [V1]), and focus-return rules: see State 1 legend 1·12·14 — <b>these rule texts are not shown on screen</b> <span class="ref">— C Search</span></span></li>
+    <li><span class="n">2</span><span><b>Expected Inbound summary badge (new, decided 2026-08-02)</b> — one-line summary of unfinished Inbound Requests; click to expand an inline table (rows with tracking sorted to top · Sourcing Route badges · Partial Inbound remaining shown). <b>Click a row = open its reconciliation screen (State 6) without scanning</b> (for bulk boxes with damaged tracking labels). Collapsed by default — keeps this screen a scan hub <span class="ref">— I + C</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 1 : 스캔 결과 — 마지막 1개 남음 ══════════════ -->
+<!-- ══════════════ STATE 1 : Scan result — last item remaining ══════════════ -->
 <section class="state" id="s1">
 <div class="mockwrap"><div class="mock anno">
 
-  <div class="toast"><span>✓ 인바운드 완료 — 100040311</span><small>새로고침 없음 · 바로 다음 스캔 가능</small><span class="dot" style="position:static;display:inline-flex;flex:none">15</span></div>
+  <div class="toast"><span>✓ Inbound complete — 100040311</span><small>No refresh · ready for the next scan</small><span class="dot" style="position:static;display:inline-flex;flex:none">15</span></div>
 
   <div class="nav">
     <span class="brand">SkinSeoul</span>
@@ -391,22 +391,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -418,7 +418,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="searchrow">
       <div class="search-input anno">
-        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
         <span class="dot" style="top:-10px;left:-10px">1</span>
         <span class="dot" style="top:-10px;right:8px">12</span>
         <span class="dot" style="top:-10px;right:34px">14</span>
@@ -432,24 +432,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
       <span class="kv">Total Quantity: <b>5</b></span>
       <button class="btn btn-line btn-sm">🖨 Print</button>
-      <div class="shelf anno"><label>선반 위치</label><input value="3"><span class="dot" style="top:-11px;right:-11px">2</span></div>
+      <div class="shelf anno"><label>Shelf</label><input value="3"><span class="dot" style="top:-11px;right:-11px">2</span></div>
       <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">10</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1">💬 Comments <span class="badge-n">2</span></button>
       <span class="dot" style="top:-11px;right:-8px">11</span>
     </div>
 
     <div class="bulkbar anno" style="margin-top:10px">
-      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-green btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <span class="cnt">1개 선택됨 · 전체 처리 시 자동 Outbound (Hold 오더는 Inbound까지만)</span>
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-green btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">1 selected · Processing all triggers auto Outbound (Hold orders: Inbound only)</span>
       <span class="dot" style="top:-11px;left:-10px">9</span>
     </div>
 
     <div class="cpanel anno" id="cpanel1" style="display:block">
       <span class="dot" style="top:-11px;left:-10px">19</span>
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
-      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
 
     <table class="tbl">
@@ -489,7 +489,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td class="anno"><input class="bcin" placeholder="바코드 입력"><span class="dot" style="top:-11px;right:-6px">20</span></td><td>–</td><td>–</td>
+          <td class="anno"><input class="bcin" placeholder="Enter barcode"><span class="dot" style="top:-11px;right:-6px">20</span></td><td>–</td><td>–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
@@ -511,22 +511,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
 
-        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><span class="anno"><button class="btn btn-line" data-modal="m-retlabel">🖨 반품 라벨 출력 (2개)</button><span class="dot" style="top:-11px;right:-9px">22</span></span></div>
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><span class="anno"><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button><span class="dot" style="top:-11px;right:-9px">22</span></span></div>
 
     <div class="logsec anno">
-      <h4>인바운드 / 아웃바운드 로그</h4>
+      <h4>Inbound / Outbound Log</h4>
       <span class="dot" style="top:-8px;left:190px">13</span>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
         <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
         <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 
   <div class="scanfloat anno collapsed" id="scanfloat">
-    <header>📡 실시간 바코드 기록 <span style="background:var(--blue);border-radius:99px;padding:1px 8px;font-size:11px">4</span><button class="x">▾</button></header>
+    <header>📡 Live Barcode Feed <span style="background:var(--blue);border-radius:99px;padding:1px 8px;font-size:11px">4</span><button class="x">▾</button></header>
     <span class="dot" style="top:-11px;right:-11px">16</span>
     <ul>
       <li><b>Dean</b><span class="num">8801051283860</span><time>11:32:04</time></li>
@@ -534,41 +534,41 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <li><b>Miranti</b><span class="num">10323775316153</span><time>11:30:02</time></li>
       <li><b>Miranti</b><span class="num">8806182573156</span><time>11:29:41</time></li>
     </ul>
-    <footer><span>화면 최대 20건 · 백엔드 전체 누적</span><button>날짜별 Export</button></footer>
+    <footer><span>Max 20 on screen · full history in backend</span><button>Export by date</button></footer>
   </div>
 
 </div></div>
 
 <div class="legend">
-  <h3>State 1 변경사항 — 스캔 결과 (마지막 제품 남은 오더: 4개 중 3개 인바운드 완료, 방금 스캔한 JIT가 마지막)</h3>
+  <h3>State 1 — Changes: Scan Result (order down to its last item: 3 of 4 inbounded, the just-scanned JIT is last)</h3>
   <ol>
-    <li><span class="n">1</span><span>통합 검색 — 토글 제거, Tracking/Inbound Order/Product Order/라스트마일 바코드 아무거나 입력하면 자동 판별 (복수 매칭 시 모두 표시 후 선택). <b>쿠팡 소형 QR코드도 인식</b> — 스캔 시 "[V1]바코드" 형식으로 입력되므로 <b>[V1] 뒤의 바코드도 인식되도록 변경 필요</b>(프리픽스가 붙은 입력도 매칭). <b>이 규칙 문구는 화면에 노출하지 않음</b>(동작으로만 구현, 2026-07-23 스펙 노트 정리) <span class="ref">— C 검색 + C 반송</span></span></li>
-    <li><span class="n">2</span><span>선반 위치 입력란 — Outbound 버튼 왼쪽 배치, 수정 가능. <b>값을 입력하면 [저장] 버튼이 플로팅으로 나타나고, 클릭 또는 엔터로 즉시 저장(새로고침 없음)</b> → ✓ 저장됨 표시 후 사라짐. State 6 내부입고 테이블의 로케이션 입력칸도 동일 패턴 <span class="ref">— C / H 임시</span></span></li>
-    <li><span class="n">3</span><span>우상단 Comments 허브 — [@ Mentions] 내가 태그된 코멘트 + [★ Saved] 내가 저장한 코멘트, 각 코멘트 ★로 저장/해제(해제 시 Saved에서 사라짐). <b>목록의 코멘트 클릭 시 해당 오더 페이지로 이동</b>. <b>허브 상단 검색창(신설)</b> — <b>전체 오더의 모든 코멘트</b>(멘션·저장 여부 무관) 대상, 오더번호·작성자·내용 매칭, 결과는 <b>시간 역순(최신순)</b>. 입력 지우면 탭 복귀 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">4</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+버튼 한 화면 노출 <span class="ref">— C 화면</span></span></li>
-    <li><span class="n">5</span><span>스캔 일치 제품 하이라이트 + 최상단 정렬 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">6</span><span>Sourcing Route 칼럼 = 소싱 루트 <b>4종</b>(색 없이 검정 텍스트로만 구분) — <b>SMART BUY</b>(재고보충 구매·PO 기반) / <b>JIT</b>(오더 핸들러가 주문한 건, 미인바운드 상태일 수 있음) / <b>WHOLESALE</b>(홀세일) / <b>PARTNERSHIP</b>(브랜드 파트너십). Smart Buy·Wholesale·Partnership은 인바운드 완료, JIT만 PENDING 가능. JIT는 오더 핸들러가 주문 시 선택한 <b>구매 채널을 괄호 병기</b> — JIT (Coupang) / JIT (Naver) / JIT (Other retail). 실제 어드민 드롭다운(Coupang/Naver/Other retail/Existing inventory) 값 그대로이며, Existing inventory 선택 건은 창고 재고 차감이라 JIT가 아니라 해당 재고의 소싱 루트로 표시. 입고 요청(I)에서 지정된 루트가 송장번호로 매칭 <span class="ref">— I 입고요청 + C 검색</span></span></li>
-    <li><span class="n">7</span><span>Quantity ≠ 1 → 옅은 주황 강조 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">8</span><span>마지막 제품 인바운드 조건 → Inbound + Outbound 동시 처리 버튼 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">9</span><span>일괄 처리 버튼은 테이블 상단 배치 — 선택 항목 일괄 Inbound / 남은 제품 전체 일괄 Inbound + Outbound (전체 인바운드 = 오더 완결이므로 자동 아웃바운드까지, 단 Hold Shipment 오더는 Inbound까지만) <span class="ref">— C 동작 + F Hold</span></span></li>
-    <li><span class="n">10</span><span>"Outbound to Deleo Baroship" → "Outbound"로 라벨 변경 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">11</span><span>오더 Comments 버튼 — 클릭 시 펼침, @태그 → Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
-    <li><span class="n">12</span><span>인바운드 후에도 바코드 입력값 유지 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">13</span><span>행위자 로그 — 시간·행위·SKU·수량·작업자·메모(취소 모달 등에서 작성 시) 기록, 전 상태(1~5) 하단 공통 노출 <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">14</span><span>페이지 아무 곳 클릭 + Inbound·Outbound(출고) 처리 직후 → 검색창 자동 포커스(전체 선택), 바로 다음 바코드 스캔. <b>화면 문구 없이 동작으로만 구현</b> <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">15</span><span>처리 후 새로고침 금지 — 우상단 성공/실패 토스트만. <b>전 상태 공통 규약</b>(토스트는 일부 상태에만 예시로 표기). 아웃바운드 계열 버튼(Outbound·Inbound + Outbound·일괄) 클릭 시 <b>전송 사운드</b> 재생(2026-08-03 신설) — 연속 스캔 중 화면을 안 보고도 처리 접수를 귀로 확인 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">16</span><span>좌하단 플로팅 패널 — 실시간 바코드 기록, 기본 접힘 상태(클릭 시 펼침), 화면에는 최대 10~20개만 표시(백엔드 전체 누적), 날짜별 export <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">17</span><span>Location 칼럼 — Sourcing Route 오른쪽, 창고 보관(Existing Inventory) 제품의 현재 로케이션 표시. 전 상태(1~5) 공통 <span class="ref">— B/E 연계</span></span></li>
-    <li><span class="n">18</span><span>Product Name 맨 앞에 브랜드명 항상 노출 — 브랜드명 누락 제품은 제품명 로직 수정 필요 <span class="ref">— B</span></span></li>
-    <li><span class="n">19</span><span>결과창 Comments 패널 — <b>기본 펼침</b>(Comments 버튼으로 접기 가능), 각 코멘트 ★로 저장 → 우상단 Comments 허브의 Saved 탭에 집계 <span class="ref">— 0. UI 1+2</span></span></li>
-    <li><span class="n">22</span><span><b>반품 라벨 출력</b>(우하단, 작업 상태 1·1b·2·3 공통) — 스캔 중 오배송·파손 발견 시 제품 선택 → 모달(M4): 택배사 선택/직접 입력 + 사이즈·수량(선택 입력) → 라벨지에 택배사명·제품명(KR)·사이즈·수량 인쇄해 공급처 반품 박스에 부착. 반송 모드(State 4, 고객→우리)와 별개 개념 <span class="ref">— C</span></span></li>
-    <li><span class="n">20</span><span>바코드 값이 없는 제품은 Barcode 칼럼에 <b>입력 칸 상시 노출</b>(전 상태 공통) — 값 입력 시 제품 마스터에 저장되어 다음 스캔부터 인식. 예: 미감수 브라이트 클렌징 티슈 <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">1</span><span>Unified search — toggle removed; enter any of Tracking / Inbound Order / Product Order / Last-mile barcode and it auto-detects (multiple matches are all shown for selection). <b>Coupang small QR codes are also recognized</b> — scans arrive as "[V1]barcode", so <b>the barcode after [V1] must also be recognized</b> (prefixed input still matches). <b>This rule text is not shown on screen</b> (behavior only; spec note tidied 2026-07-23) <span class="ref">— C Search + C Customer Return</span></span></li>
+    <li><span class="n">2</span><span>Shelf input — placed left of the Outbound button, editable. <b>Typing a value shows a floating [Save] button; click or Enter saves instantly (no refresh)</b> → shows ✓ Saved, then disappears. The Location inputs in the State 6 Internal Inbound table use the same pattern <span class="ref">— C / H temp</span></span></li>
+    <li><span class="n">3</span><span>Top-right Comments hub — [@ Mentions] comments where I'm tagged + [★ Saved] comments I saved; each comment's ★ saves/unsaves (unsaving removes it from Saved). <b>Clicking a comment in the list opens that order's page</b>. <b>Hub search box (new)</b> — searches <b>every comment on every order</b> (regardless of mention/saved), matching order no · author · text; results in <b>reverse-chronological order (newest first)</b>. Clearing the input returns to the tabs <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">4</span><span>Reduced side padding — every column + button fits on one screen without scrolling <span class="ref">— C Screen</span></span></li>
+    <li><span class="n">5</span><span>Scanned product highlighted + sorted to the top <span class="ref">— C Search</span></span></li>
+    <li><span class="n">6</span><span>Sourcing Route column = <b>4 routes</b> (black text only, no colors) — <b>SMART BUY</b> (restock purchasing, PO-based) / <b>JIT</b> (ordered by the order handler; may be not yet inbounded) / <b>WHOLESALE</b> / <b>PARTNERSHIP</b> (brand partnership). Smart Buy · Wholesale · Partnership arrive already inbounded; only JIT can be PENDING. JIT shows the <b>purchase channel in parentheses</b> chosen by the order handler — JIT (Coupang) / JIT (Naver) / JIT (Other retail). Values come straight from the actual admin dropdown (Coupang/Naver/Other retail/Existing inventory); an Existing inventory pick deducts warehouse stock, so it shows not as JIT but as that stock's own sourcing route. The route assigned in the Inbound Request (I) is matched by tracking number <span class="ref">— I Inbound Request + C Search</span></span></li>
+    <li><span class="n">7</span><span>Quantity ≠ 1 → light amber highlight <span class="ref">— C Search</span></span></li>
+    <li><span class="n">8</span><span>When the last remaining item is inbounded → combined Inbound + Outbound button <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">9</span><span>Bulk buttons sit above the table — Bulk Inbound (Selected) / Inbound + Outbound All Remaining (inbounding everything completes the order, so it auto-outbounds too; Hold Shipment orders stop at Inbound) <span class="ref">— C Behavior + F Hold</span></span></li>
+    <li><span class="n">10</span><span>Label changed from "Outbound to Deleo Baroship" to "Outbound" <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">11</span><span>Order Comments button — click to expand; @tag → automatic Slack alert <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">12</span><span>Barcode input value persists after inbound <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">13</span><span>Actor Log — records time · action · SKU · qty · worker · memo (when written in e.g. the cancel modal); shown at the bottom across States 1–5 <span class="ref">— C Log</span></span></li>
+    <li><span class="n">14</span><span>Clicking anywhere on the page + right after an Inbound/Outbound action → search box auto-focuses (select-all), ready for the next barcode. <b>Behavior only, no on-screen text</b> <span class="ref">— C Search</span></span></li>
+    <li><span class="n">15</span><span>No refresh after processing — only a top-right success/failure toast. <b>Protocol common to all states</b> (the toast is illustrated in only some states). Outbound-family buttons (Outbound · Inbound + Outbound · bulk) play a <b>send sound</b> on click (added 2026-08-03) — lets workers confirm acceptance by ear during continuous scanning without watching the screen <span class="ref">— C Search</span></span></li>
+    <li><span class="n">16</span><span>Bottom-left floating panel — live barcode feed, collapsed by default (click to expand), shows at most 10–20 on screen (full history kept in backend), export by date <span class="ref">— C Log</span></span></li>
+    <li><span class="n">17</span><span>Location column — right of Sourcing Route; shows the current location of warehouse-stored (Existing Inventory) products. Common to States 1–5 <span class="ref">— B/E linkage</span></span></li>
+    <li><span class="n">18</span><span>Brand name always shown at the front of Product Name — products missing the brand need the product-name logic fixed <span class="ref">— B</span></span></li>
+    <li><span class="n">19</span><span>Results-area Comments panel — <b>expanded by default</b> (collapsible via the Comments button); each comment's ★ saves it → aggregated in the top-right Comments hub's Saved tab <span class="ref">— 0. UI 1+2</span></span></li>
+    <li><span class="n">22</span><span><b>Print Return Labels</b> (bottom right; work states 1·1b·2·3) — when wrong/damaged items are found during scanning, select products → modal (M4): pick or type a carrier + optional size·qty → prints carrier name · product name (KR) · size · qty on label stock, attached to the supplier-return box. A separate concept from Customer Return mode (State 4, customer→us) <span class="ref">— C</span></span></li>
+    <li><span class="n">20</span><span>Products without a barcode show an <b>always-visible input in the Barcode column</b> (all states) — an entered value is saved to the product master and recognized from the next scan. e.g. 미감수 브라이트 클렌징 티슈 <span class="ref">— C Search</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 제품 1개짜리 오더는 바코드 스캔 즉시 라벨 자동 출력 — 인바운드 이력 없는 오더 한정, Existing Inventory 재고는 인바운드 이력으로 안 봄 (B). 미인식 바코드 스캔 시 <b>주문번호 조회 팝업(M2)</b> — 주문번호 매칭 성공이면 그 자리에서 트래킹번호 매칭 등록(재스캔 시 정상 인식), 주문번호 없음/매칭 실패면 미입력 리스트 전송(M2b) (F — 상단 모달 탭 참조). <b>입고 요청(I) 건의 송장을 스캔하면 고객 오더 화면이 아니라 내부 입고 전용 화면으로 전환</b> — 재고 편입 플로우(Outbound 없음), 상단 <b>[6 · 내부 입고]</b> 탭 참조.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): single-item orders auto-print the label the moment the barcode is scanned — only for orders with no inbound history; Existing Inventory stock does not count as inbound history (B). Scanning an unrecognized barcode opens the <b>order-number lookup popup (M2)</b> — on a successful order-number match the tracking number is registered on the spot (rescan is then recognized); with no order number / failed match, send to the Missing Tracking List (M2b) (F — see the modal tabs above). <b>Scanning the tracking number of an Inbound Request (I) switches to the dedicated Internal Inbound screen, not a customer-order screen</b> — stock-intake flow (no Outbound); see the <b>[6 · Internal Inbound]</b> tab above.</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 1b : 스캔 결과 — 일반 (미인바운드 2개 남음) ══════════════ -->
+<!-- ══════════════ STATE 1b : Scan result — normal (2 not yet inbounded) ══════════════ -->
 <section class="state" id="s1b">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -579,22 +579,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1b">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -603,7 +603,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="sub">Search Orders</p>
     <div class="searchrow">
       <div class="search-input">
-        <input value="10323775317888" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <input value="10323775317888" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
@@ -613,18 +613,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
       <span class="kv">Total Quantity: <b>5</b></span>
       <button class="btn btn-line btn-sm">🖨 Print</button>
-      <div class="shelf"><label>선반 위치</label><input value=""></div>
+      <div class="shelf"><label>Shelf</label><input value=""></div>
       <button class="btn btn-gray btn-sm">Outbound</button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1b">💬 Comments <span class="badge-n">1</span></button>
     </div>
     <div class="cpanel" id="cpanel1b" style="display:block">
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Egita</span> 413902 JIT 2건 오늘 입고 예정 맞나요?</span><time>07-09 09:40</time><button class="star" title="저장">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Egita</span> 413902 — are both JIT items arriving today?</span><time>07-09 09:40</time><button class="star" title="Save">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
     <div class="bulkbar" style="margin-top:10px">
-      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-green btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <span class="cnt">미인바운드 2개 남음 — 전체 처리 시 자동 Outbound (Hold 오더는 Inbound까지만)</span>
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-green btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">2 not yet inbounded — processing all triggers auto Outbound (Hold orders: Inbound only)</span>
     </div>
     <table class="tbl">
       <thead><tr>
@@ -663,7 +663,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td><input class="bcin" placeholder="바코드 입력"></td><td>–</td><td>–</td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td>–</td><td>–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
@@ -683,20 +683,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </tbody>
     </table>
     <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
-    <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 반품 라벨 출력 (2개)</button></div>
+    <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>State 1b — 스캔 결과 (일반: 미인바운드 제품이 2개 남음)</h3>
+  <h3>State 1b — Changes: Scan Result (normal: 2 items not yet inbounded)</h3>
   <ol>
-    <li><span class="n">21</span><span>마지막 제품 조건이 <b>아니면</b> 스캔된 행 버튼은 그냥 <b>Inbound</b> — 이 오더는 JIT 2개(스캔된 포어레미디 + 미도착 메디큐브)가 남아서 동시처리 아님. 남은 미인바운드가 1개가 되는 순간 State 1처럼 <b>Inbound + Outbound</b>로 바뀜. Outbound 버튼도 전 품목 인바운드 전까지 비활성 <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">21</span><span>When the last-item condition is <b>not</b> met, the scanned row's button is just <b>Inbound</b> — this order still has 2 JIT items (the scanned Pore Remedy + the not-yet-arrived Medicube), so no combined action. The moment only 1 uninbounded item remains it becomes <b>Inbound + Outbound</b> as in State 1. The Outbound button also stays disabled until every item is inbounded <span class="ref">— C Behavior</span></span></li>
   </ol>
 </div>
 </section>
 
 
-<!-- ══════════════ STATE 2 : 전체 인바운드 완료 ══════════════ -->
+<!-- ══════════════ STATE 2 : All inbounded ══════════════ -->
 <section class="state" id="s2">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -707,22 +707,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox2">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
 
@@ -731,7 +731,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow">
-      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="sub" style="margin-top:18px">Search Results</p>
@@ -740,20 +740,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
       <span class="kv">Total Quantity: <b>5</b></span>
       <button class="btn btn-line btn-sm">🖨 Print</button>
-      <div class="shelf"><label>선반 위치</label><input value="3"></div>
+      <div class="shelf"><label>Shelf</label><input value="3"></div>
       <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel2">💬 Comments <span class="badge-n">2</span></button>
     </div>
     <div class="cpanel" id="cpanel2" style="display:block">
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
-      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
 
     <div class="bulkbar" style="margin-top:10px">
-      <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <span class="cnt">일괄 처리할 남은 제품 없음 — 전 품목 인바운드 완료</span>
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Nothing left to bulk-process — all items inbounded</span>
     </div>
     <table class="tbl">
       <thead><tr>
@@ -792,7 +792,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td><input class="bcin" placeholder="바코드 입력"></td><td class="num">–</td><td class="num">–</td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
@@ -813,33 +813,33 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </table>
     <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
 
-        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 반품 라벨 출력 (2개)</button></div>
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
 
     <div class="logsec anno">
-      <h4>인바운드 / 아웃바운드 로그</h4>
+      <h4>Inbound / Outbound Log</h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
         <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
         <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 2 변경사항 — 전체 인바운드 완료</h3>
+  <h3>State 2 — Changes: All Inbounded</h3>
   <ol>
-    <li><span class="n">1</span><span>전 품목 인바운드 완료 시 Outbound 버튼 활성화(초록) — 라벨은 "Outbound" <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">2</span><span>Cancel Inbound 클릭 → 재고 복구 팝업 (버튼 눌러서 확인) <span class="ref">— C 동작</span></span></li>
+    <li><span class="n">1</span><span>Outbound button activates (green) once every item is inbounded — label is "Outbound" <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">2</span><span>Clicking Cancel Inbound → restock popup (confirm via button) <span class="ref">— C Behavior</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 3 : 아웃바운드 완료 ══════════════ -->
+<!-- ══════════════ STATE 3 : Outbound complete ══════════════ -->
 <section class="state" id="s3">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast anno"><span>✓ Outbound 완료 — Order 413865</span><small>상태: prepare shipment</small><span class="dot" style="top:-11px;left:-11px">3</span></div>
+  <div class="toast anno"><span>✓ Outbound complete — Order 413865</span><small>Status: prepare shipment</small><span class="dot" style="top:-11px;left:-11px">3</span></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -848,22 +848,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox3">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
 
@@ -872,7 +872,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow">
-      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="sub" style="margin-top:18px">Search Results</p>
@@ -881,21 +881,21 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-prepare">Prepare Shipment</span>
       <span class="kv">Total Quantity: <b>5</b></span>
       <button class="btn btn-line btn-sm">🖨 Print</button>
-      <div class="shelf"><label>선반 위치</label><input value="3"></div>
+      <div class="shelf"><label>Shelf</label><input value="3"></div>
       <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;right:-11px">1</span></button>
-      <button class="btn btn-red-line btn-sm anno" onclick="alert('상태 롤백: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
+      <button class="btn btn-red-line btn-sm anno" onclick="alert('Status rollback: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel3">💬 Comments <span class="badge-n">2</span></button>
     </div>
     <div class="cpanel" id="cpanel3" style="display:block">
-      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> JIT 2개 중 1개만 입고됐습니다. 나머지 1개 오늘 도착 예정인지 확인 부탁드려요.</span><time>07-09 10:42</time><button class="star" title="저장">★</button></div>
-      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 쿠팡 조회하니 오늘 오후 도착입니다. 도착 시 이 오더 우선 처리해주세요.</span><time>07-09 11:03</time><button class="star on" title="저장됨">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
 
     <div class="bulkbar" style="margin-top:10px">
-      <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <span class="cnt">일괄 처리할 남은 제품 없음 — 전 품목 인바운드 완료</span>
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Nothing left to bulk-process — all items inbounded</span>
     </div>
     <table class="tbl">
       <thead><tr>
@@ -934,7 +934,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
           <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
           <td><span class="qty">1</span></td>
-          <td><input class="bcin" placeholder="바코드 입력"></td><td class="num">–</td><td class="num">–</td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
           <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
@@ -955,33 +955,33 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </table>
     <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
 
-        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 반품 라벨 출력 (2개)</button></div>
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
 
     <div class="logsec anno">
-      <h4>인바운드 / 아웃바운드 로그</h4>
+      <h4>Inbound / Outbound Log</h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-09 11:47</td><td class="act-out">OUTBOUND</td><td class="num">전체 (4 SKU)</td><td class="num">5</td><td>Dean</td><td>–</td></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 11:47</td><td class="act-out">OUTBOUND</td><td class="num">All (4 SKU)</td><td class="num">5</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">박스 파손 1개 — 재고 복구 후 검수 필요</span></td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
         <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 3 변경사항 — 아웃바운드 완료</h3>
+  <h3>State 3 — Changes: Outbound Complete</h3>
   <ol>
-    <li><span class="n">1</span><span>아웃바운드 후 버튼이 "✓ Outbounded"로 바뀌고 클릭 불가 (회색 비활성) <span class="ref">— 유저 요청</span></span></li>
-    <li><span class="n">2</span><span>Cancel Outbound 버튼 — 취소 시 오더 상태 prepare shipment → processing 롤백 <span class="ref">— C 동작</span></span></li>
-    <li><span class="n">3</span><span>완료 후 새로고침 없이 토스트 알림 → 바로 다음 바코드 스캔 <span class="ref">— C 검색</span></span></li>
-    <li><span class="n">4</span><span>아웃바운드 완료 후 개별 Cancel Inbound 비활성 — 되돌리려면 Cancel Outbound 먼저 (순서 꼬임 방지) <span class="ref">— 제안</span></span></li>
+    <li><span class="n">1</span><span>After outbound the button becomes "✓ Outbounded" and is unclickable (gray, disabled) <span class="ref">— user request</span></span></li>
+    <li><span class="n">2</span><span>Cancel Outbound button — cancelling rolls the order status back from prepare shipment → processing <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">3</span><span>Toast after completion with no refresh → scan the next barcode right away <span class="ref">— C Search</span></span></li>
+    <li><span class="n">4</span><span>Individual Cancel Inbound disabled after outbound — to revert, Cancel Outbound first (prevents out-of-order state) <span class="ref">— proposal</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 4 : 반송 모드 ══════════════ -->
+<!-- ══════════════ STATE 4 : Customer return mode ══════════════ -->
 <section class="state" id="s4">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -992,22 +992,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox4">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
 
@@ -1016,33 +1016,33 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow anno">
-      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
       <button class="btn btn-blue">🔍 Search</button>
       <span class="dot" style="top:-11px;left:-10px">5</span>
     </div>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="retbanner anno">
-      <b>⟲ 반송 오더</b>
-      <span>반송된 송장 바코드가 스캔되었습니다 — Order <b>412990</b> · Tracking 10322198837710</span>
+      <b>⟲ Customer Return Order</b>
+      <span>A returned tracking barcode was scanned — Order <b>412990</b> · Tracking 10322198837710</span>
       <span class="dot" style="top:-11px;left:-11px">1</span>
     </div>
     <div class="ordercard">
       <span class="kv">Order ID: <b style="color:var(--blue)">412990</b></span>
       <span class="kv">Order Status:</span><span class="anno" style="display:inline-block"><span class="status" style="background:var(--red-soft);color:var(--red)">refunded</span><span class="dot" style="top:-11px;right:-9px">6</span></span>
       <span class="kv">Total Quantity: <b>4</b></span>
-      <div class="shelf"><label>선반 위치</label><input value=""></div>
+      <div class="shelf"><label>Shelf</label><input value=""></div>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel4">💬 Comments <span class="badge-n">1</span></button>
     </div>
     <div class="cpanel" id="cpanel4" style="display:block">
-      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> 반송 재입고 로케이션 B-01-4로 통일해주세요.</span><time>07-08 16:20</time><button class="star on" title="저장됨">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> Please use B-01-4 for all return restocks.</span><time>07-08 16:20</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
 
     <div class="bulkbar anno" style="margin-top:10px">
-      <button class="btn btn-gray btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <button class="btn btn-green" data-modal="m-restock">선택 제품 창고 입고 처리 (3개)</button>
-      <span class="cnt">클릭 시 입고 확인 모달 — 제품별 수량·로케이션·메모 확정 후 일괄 처리</span>
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <button class="btn btn-green" data-modal="m-restock">Restock Selected to Warehouse (3)</button>
+      <span class="cnt">Opens the restock confirmation modal — confirm qty · location · memo per item, then process in bulk</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
     </div>
     <table class="tbl">
@@ -1059,7 +1059,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">✓ 8809738317481</td><td class="num">–</td><td class="num">–</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">A-03-2</td>
-          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td><td class="num">100038120</td><td><div class="thumb">IMG</div></td>
@@ -1068,7 +1068,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">✓ 8809894261234</td><td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10322198837710</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-partnership">PARTNERSHIP</span></td><td class="num">–</td>
-          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td><td class="num">100045210</td><td><div class="thumb">IMG</div></td>
@@ -1077,37 +1077,37 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">✓ 8809640733458</td><td class="num">24101467999310</td><td class="num" style="color:var(--blue)">10322198837710</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
-          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Inbound 취소 → Stock 추가</button></td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
         </tr>
       </tbody>
     </table>
     <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
 
     <div class="logsec anno">
-      <h4>인바운드 / 아웃바운드 로그</h4>
+      <h4>Inbound / Outbound Log</h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-09 14:05</td><td class="act-in">반송 입고 (Stock 추가)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">고객 변심 반송 — 외관 이상 없음</span></td></tr>
-        <tr><td class="num">07-09 14:05</td><td class="act-in">반송 입고 (Stock 추가)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
-        <tr><td class="num">07-02 09:12</td><td class="act-out">OUTBOUND</td><td class="num">전체 (3 SKU)</td><td class="num">4</td><td>Miranti</td><td>–</td></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">Return Restock (Stock added)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">Customer change-of-mind return — no visible damage</span></td></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">Return Restock (Stock added)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-02 09:12</td><td class="act-out">OUTBOUND</td><td class="num">All (3 SKU)</td><td class="num">4</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 4 변경사항 — 반송 제품 입고 프로세스</h3>
+  <h3>State 4 — Changes: Customer Return Restock Process</h3>
   <ol>
-    <li><span class="n">1</span><span>반송된 송장 바코드 스캔 시 "반송 오더" 배너로 구분 표시 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">2</span><span>선택 제품 창고 입고 처리 버튼 → 입고 확인 모달 오픈 (테이블의 수량·로케이션 칼럼은 제거, 모달로 이동. 버튼 클릭해서 확인) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">3</span><span>입고 확인 모달(M3) — 입고 수량 입력(<b>기본 0</b>, 실제 반송된 수량만 입력·0=입고 제외, 체크박스 없음) + 로케이션(기존 재고는 자동 채움, JIT 전용 SKU는 지정 필요) + 메모. 확정 버튼 카운트=수량&gt;0 품목 수 (M3 모달 참조 — 화면 dot 없음) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">4</span><span>입고 수량&gt;0인데 로케이션 미지정인 제품이 있으면 입고 확정 버튼 비활성 — 지정 후 활성화 (M3 모달 참조 — 화면 dot 없음) <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">5</span><span>라스트마일(반송) 바코드로도 조회 가능 — 검색창 통합 검색이 반송 바코드 자동 판별 <span class="ref">— C 반품</span></span></li>
-    <li><span class="n">6</span><span><b>반송 오더의 status 명시</b> — 시스템에 "returned" 상태값은 없음(실제 상태 8종: pending/processing/on-hold/completed/refunded/failed/shipped/prepare-shipment). 반송 오더는 보통 <b>refunded</b>(환불 완료 후 회수), 케이스에 따라 <b>failed</b>(배송 실패) 또는 환불 전 반송(수취 거부·통관 반송)이면 <b>completed 상태 그대로</b> 도착 가능 — 반송 여부는 status가 아니라 <b>라스트마일 반송 바코드 스캔으로 판별</b> <span class="ref">— C 반품</span></span></li>
+    <li><span class="n">1</span><span>Scanning a returned tracking barcode shows a distinct "Customer Return Order" banner <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">2</span><span>Restock Selected to Warehouse button → opens the restock confirmation modal (qty·location columns removed from the table, moved into the modal; confirm via button) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">3</span><span>Restock confirmation modal (M3) — restock qty input (<b>default 0</b>; enter only the qty actually returned, 0 = excluded; no checkboxes) + location (auto-filled for existing stock, JIT-only SKUs need assignment) + memo. Confirm button count = items with qty &gt; 0 (see modal M3 — no on-screen dot) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">4</span><span>If any item has restock qty &gt; 0 but no location, the confirm button is disabled — assign a location to enable (see modal M3 — no on-screen dot) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">5</span><span>Searchable by last-mile (return) barcode too — the unified search auto-detects return barcodes <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">6</span><span><b>Explicit status for customer-return orders</b> — the system has no "returned" status (the 8 real statuses: pending/processing/on-hold/completed/refunded/failed/shipped/prepare-shipment). Return orders are usually <b>refunded</b> (collected after refund), sometimes <b>failed</b> (delivery failure), and returns before refund (refused delivery · customs return) can arrive <b>still in completed</b> — returns are detected by <b>scanning the last-mile return barcode</b>, not by status <span class="ref">— C Returns</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 5 : Hold 오더 ══════════════ -->
+<!-- ══════════════ STATE 5 : Hold order ══════════════ -->
 <section class="state" id="s5">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -1118,22 +1118,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox5">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon 반송 재입고 로케이션 어디로?"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
-        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "해결 완료했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the order page <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon 이 오더는 각별히 포장 신경써주세요"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
-        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "반송 재입고 로케이션 B-01-4로 통일"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved · Click to open the order page <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
 
@@ -1142,13 +1142,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <h2>WMS - View Orders</h2>
     <p class="sub">Search Orders</p>
     <div class="searchrow">
-      <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔"></div>
+      <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
     <p class="sub" style="margin-top:18px">Search Results</p>
     <div class="holdbanner anno">
       <b>⏸ Hold Shipment</b>
-      <span>CS팀이 고객 요청(배송지 변경)으로 이 오더를 Hold 처리했습니다 — Order <b>414102</b> · 요청자 Sara(CS) 07-13 09:20</span>
+      <span>CS team put this order on Hold per customer request (address change) — Order <b>414102</b> · Requested by Sara(CS) 07-13 09:20</span>
       <span class="dot" style="top:-11px;left:-11px">1</span>
     </div>
     <div class="ordercard anno">
@@ -1156,19 +1156,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="kv">Order Status:</span><span class="status st-hold">On Hold</span>
       <span class="kv">Total Quantity: <b>2</b></span>
       <button class="btn btn-line btn-sm">🖨 Print</button>
-      <div class="shelf"><label>선반 위치</label><input value="7"></div>
+      <div class="shelf"><label>Shelf</label><input value="7"></div>
       <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
       <button class="btn btn-line btn-sm comment-btn" data-open="cpanel5">💬 Comments <span class="badge-n">1</span></button>
     </div>
     <div class="cpanel" id="cpanel5" style="display:block">
-      <div class="c-item"><span class="who">Mia (CS)</span><span><span class="at">@Dean</span> 고객 배송지 변경 요청으로 Hold 걸었습니다. 주소 확정되면 해제할게요.</span><time>07-09 09:02</time><button class="star" title="저장">★</button></div>
-      <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+      <div class="c-item"><span class="who">Mia (CS)</span><span><span class="at">@Dean</span> Put on Hold — customer requested an address change. Will release once the address is confirmed.</span><time>07-09 09:02</time><button class="star" title="Save">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
     </div>
 
     <div class="bulkbar anno" style="margin-top:10px">
-      <button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button>
-      <button class="btn btn-gray btn-sm">남은 제품 전체 일괄 Inbound + Outbound</button>
-      <span class="cnt">Hold 오더 — Inbound는 가능하나 Outbound는 차단됨 (Hold 해제 후 출고)</span>
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Hold order — Inbound allowed, Outbound blocked (ship after Hold release)</span>
       <span class="dot" style="top:-11px;left:-10px">3</span>
     </div>
     <table class="tbl">
@@ -1207,27 +1207,27 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <p class="mut" style="margin-top:14px">Found 2 item(s) in this order · Found 1 order(s)</p>
 
     <div class="logsec anno">
-      <h4>인바운드 / 아웃바운드 로그</h4>
+      <h4>Inbound / Outbound Log</h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-13 09:20</td><td class="act-cancel">HOLD 처리</td><td class="num">전체</td><td class="num">–</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">고객 배송지 변경 요청 — 출고 보류</span></td></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-13 09:20</td><td class="act-cancel">HOLD Applied</td><td class="num">All</td><td class="num">–</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">Customer address change request — shipment held</span></td></tr>
         <tr><td class="num">07-13 08:55</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
       </table>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 5 변경사항 — Hold 오더 (출고 보류)</h3>
+  <h3>State 5 — Changes: Hold Order (Shipment Held)</h3>
   <ol>
-    <li><span class="n">1</span><span>Hold 배너 — CS팀이 OMS/Order 상세에서 Hold 처리한 오더는 스캔 시 배너로 즉시 구분 (요청자·사유·시간 표시) <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">2</span><span>Hold 상태 오더는 <b>Outbound 버튼 비활성</b> — Hold 해제 전에는 출고 불가 <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">3</span><span>일괄 처리 — Inbound는 계속 가능(입고는 막지 않음), "전체 Inbound + Outbound"만 차단 <span class="ref">— F Hold + C 동작</span></span></li>
+    <li><span class="n">1</span><span>Hold banner — orders put on Hold by the CS team in OMS/Order detail are flagged instantly on scan (requester · reason · time) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">2</span><span>Hold orders have the <b>Outbound button disabled</b> — no shipping until the Hold is released <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">3</span><span>Bulk actions — Inbound stays available (intake is not blocked); only "Inbound + Outbound All Remaining" is blocked <span class="ref">— F Hold + C Behavior</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Hold 전환 자체는 OMS/Order 상세 또는 Order Management의 "Hold Shipment" 버튼에서 수행 (CS팀). View Orders는 그 결과 상태를 보여주고 출고를 차단하는 역할.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">The Hold itself is applied via the "Hold Shipment" button in OMS/Order detail or Order Management (CS team). View Orders only displays the resulting status and blocks outbound.</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 6 : 내부 입고 — 입고 요청 건 스캔 (진행 중) ══════════════ -->
+<!-- ══════════════ STATE 6 : Internal inbound — Inbound Request scan (in progress) ══════════════ -->
 <section class="state" id="s6">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -1238,19 +1238,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox6">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 건으로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon 어제 입고분 로케이션 B열로 통일했어요"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the item <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon Moved yesterday's inbound to row B locations"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -1261,7 +1261,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="searchrow">
       <div class="search-input anno">
-        <input value="10325661220417" placeholder="Tracking No / Inbound Order No / Product Order No / 라스트마일 바코드 — 아무 번호나 스캔">
+        <input value="10325661220417" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
         <span class="dot" style="top:-10px;left:-10px">1</span>
       </div>
       <button class="btn btn-blue">🔍 Search</button>
@@ -1269,53 +1269,53 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="intbanner anno">
       <span class="dot" style="top:-11px;left:-11px">2</span>
-      <div class="big">📦 내부 입고 건 — Inbound Request</div>
-      <div class="warnline">고객 오더가 아닙니다 · 재고(Inventory) 입고 대상 · 출고(Outbound) 단계 없음</div>
+      <div class="big">📦 Internal Inbound — Inbound Request</div>
+      <div class="warnline">Not a customer order · Goes into Inventory · No Outbound step</div>
       <div class="kv">
         <span>Inbound No. <b>202607120001</b></span>
-        <span>채널 <span class="tag tag-wholesale">WHOLESALE</span></span>
+        <span>Channel <span class="tag tag-wholesale">WHOLESALE</span></span>
         <span>Supplier <b>비엠유통</b></span>
-        <span>신청 <b>Dean</b> · 07-12</span>
-        <span>예상 입고일 <b>07-18</b></span>
-        <span><a style="color:var(--blue);cursor:pointer">입고 요청 리스트에서 보기 →</a></span>
+        <span>Requested by <b>Dean</b> · 07-12</span>
+        <span>Expected arrival <b>07-18</b></span>
+        <span><a style="color:var(--blue);cursor:pointer" href="../inbound-request/index.html#reqlist">View in Inbound Request List →</a></span>
       </div>
     </div>
 
     <div class="tiles anno">
       <span class="dot" style="top:-11px;left:-10px">3</span>
-      <div class="tile"><div class="lab">요청 수량 (전체)</div><div class="val">800</div></div>
-      <div class="tile ok"><div class="lab">입고 확인 (스캔)</div><div class="val">620</div></div>
-      <div class="tile warn"><div class="lab">남은 수량</div><div class="val">180</div></div>
-      <div class="tile"><div class="lab">SKU</div><div class="val">2종 <span style="font-size:13px;font-weight:600;color:var(--green)">(1종 완료)</span></div></div>
+      <div class="tile"><div class="lab">Expected Qty (Total)</div><div class="val">800</div></div>
+      <div class="tile ok"><div class="lab">Received (scanned)</div><div class="val">620</div></div>
+      <div class="tile warn"><div class="lab">Remaining</div><div class="val">180</div></div>
+      <div class="tile"><div class="lab">SKU</div><div class="val">2 SKUs <span style="font-size:13px;font-weight:600;color:var(--green)">(1 done)</span></div></div>
     </div>
 
     <div class="scannote anno">
       <span class="dot" style="top:-11px;left:-10px">4</span>
-      이제 <b>제품 바코드를 스캔</b>하세요 — 스캔할 때마다 해당 제품의 입고 수량이 <b>+1</b> 됩니다 (연속 스캔 · 커서 자동 복귀 · 요청에 없는 제품 스캔 시 경고음)
+      Now <b>scan product barcodes</b> — each scan adds <b>+1</b> to that product's received qty (continuous scanning · cursor auto-return · warning sound for products not in the request)
     </div>
 
     <div class="anno" style="position:relative">
     <span class="dot" style="top:2px;left:-12px">5</span>
     <table class="tbl">
       <thead><tr>
-        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th class="anno">요청 Qty<span class="dot" style="top:-11px;right:-8px">9</span></th>
-        <th class="anno">입고 Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
-        <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>상태</th>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th class="anno">Expected Qty<span class="dot" style="top:-11px;right:-8px">9</span></th>
+        <th class="anno">Received Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
+        <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>Status</th>
       </tr></thead>
       <tbody>
         <tr class="row-done">
           <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
-          <td class="num">500 <button class="qedit" data-modal="m-qtyedit" title="받을 수량 수정">✎</button></td>
+          <td class="num">500 <button class="qedit" data-modal="m-qtyedit" title="Edit Expected Qty">✎</button></td>
           <td><input class="qtyin" value="500" readonly style="border-color:var(--green)"></td>
           <td><input class="locin" value="A-05-11"></td>
-          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
         </tr>
         <tr class="row-part">
           <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
-          <td class="num">300 <button class="qedit" data-modal="m-qtyedit" title="받을 수량 수정">✎</button></td>
+          <td class="num">300 <button class="qedit" data-modal="m-qtyedit" title="Edit Expected Qty">✎</button></td>
           <td><input class="qtyin" value="120"></td>
           <td><input class="locin" value="B-02-07"></td>
-          <td><span class="tag tag-part">진행 중 · 남은 180</span></td>
+          <td><span class="tag tag-part">In progress · 180 remaining</span></td>
         </tr>
       </tbody>
     </table>
@@ -1323,34 +1323,34 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="anno" style="display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap">
       <span class="dot" style="top:-11px;left:-10px">8</span>
-      <button class="btn btn-gray">전량 입고 확정 (남은 180)</button>
-      <button class="btn btn-line" data-modal="m-partial">부분 입고 저장</button>
-      <span class="mut">확정 시: Inventory(Current Stocks) 반영 · 입고 요청 리스트 <b>입고완료</b> 전환 · Received Date/Carrier 자동 기록</span>
+      <button class="btn btn-gray">Confirm Full Inbound (180 remaining)</button>
+      <button class="btn btn-line" data-modal="m-partial">Save Partial Inbound</button>
+      <span class="mut">On confirm: reflected in Inventory (Current Stocks) · Inbound Request List switches to <b>INBOUNDED</b> · Received Date recorded automatically</span>
     </div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>State 6 변경사항 — 내부 입고 (입고 요청 건 스캔)</h3>
+  <h3>State 6 — Changes: Internal Inbound (Inbound Request Scan)</h3>
   <ol>
-    <li><span class="n">1</span><span><b>송장 스캔 자동 분기</b> — 스캔된 송장이 <b>입고 요청(I) 건이면 고객 오더 상태(1~5)가 아니라 이 화면</b>으로 전환. 고객 오더(입고→즉시 출고)와 내부 입고(재고 편입)를 뷰 차원에서 분리 <span class="ref">— I + C 검색</span></span></li>
-    <li><span class="n">2</span><span><b>내부 입고 구분 배너</b> — 보라 테두리 대형 배너로 "고객 오더 아님·출고 없음"을 즉시 인지. Inbound No.·채널 배지·Supplier·신청자·예상 입고일 + 입고 요청 리스트 바로가기 <span class="ref">— 신규</span></span></li>
-    <li><span class="n">3</span><span>진행 타일 — 요청 수량 vs 입고 확인(스캔 누적) vs 남은 수량, SKU 단위 완료 카운트 <span class="ref">— 신규</span></span></li>
-    <li><span class="n">4</span><span><b>제품 바코드 연속 스캔</b> — 스캔마다 해당 SKU 입고 Qty +1, 커서 자동 복귀(1~5 상태와 동일 스캔 규약). 요청에 없는 제품 스캔 시 경고음(오배송 감지) <span class="ref">— C 스캔 규약</span></span></li>
-    <li><span class="n">5</span><span>요청 vs 입고 대조 테이블 — SKU No./Brand/Product Name은 입고 요청 신청값 그대로(시트 열 정합) <span class="ref">— I</span></span></li>
-    <li><span class="n">6</span><span>입고 Qty = 스캔 누적 + <b>직접 보정 가능</b>(박스 단위 대량 입고 시 수기 입력) <span class="ref">— 신규</span></span></li>
-    <li><span class="n">7</span><span>Location = <b>Inventory 편입 위치</b> — 기존 재고 SKU면 현 로케이션 자동 제안(SKU당 1개 원칙), 신규 SKU는 지정 입력 <span class="ref">— E 로케이션 규약</span></span></li>
-    <li><span class="n">8</span><span><b>전량 입고 확정</b> — 요청 수량과 입고 수량이 <b>전 SKU 정확히 일치</b>해야 활성(마감과 동일한 일치 게이팅). 불일치 상태에서는 <b>부분 입고 저장(M5)</b>으로 사유를 남기고 이어서 처리. 초과 스캔은 경고 <span class="ref">— 신규</span></span></li>
-    <li><span class="n">9</span><span><b>받을 수량 수정(신설, 2026-08-02 결정)</b> — 요청 Qty ✎ 클릭 → 새 수량 + 사유(공급처 수량 변경/파손·불량/기타) 필수 입력(M6). 저장 시 잔량·전량 확정 게이팅 재계산 — 예: 파손으로 300→120이면 입고 120 = 120/120이 되어 전량 확정 가능. 수정 이력은 해당 입고 요청에 코멘트 자동 등록 + <b>@신청자 Slack 알림</b> <span class="ref">— 신규</span></span></li>
+    <li><span class="n">1</span><span><b>Automatic branch on tracking scan</b> — if the scanned tracking number belongs to an <b>Inbound Request (I), this screen opens instead of customer-order states (1–5)</b>. Separates customer orders (inbound → immediate outbound) from internal inbound (stock intake) at the view level <span class="ref">— I + C Search</span></span></li>
+    <li><span class="n">2</span><span><b>Internal Inbound banner</b> — a large purple-bordered banner makes "not a customer order · no outbound" instantly clear. Inbound No. · channel badge · Supplier · requester · expected arrival + shortcut to the Inbound Request List <span class="ref">— new</span></span></li>
+    <li><span class="n">3</span><span>Progress tiles — Expected Qty vs Received (scan cumulative) vs Remaining, plus a per-SKU completion count <span class="ref">— new</span></span></li>
+    <li><span class="n">4</span><span><b>Continuous product-barcode scanning</b> — each scan adds +1 to that SKU's Received Qty, cursor auto-returns (same scan protocol as states 1–5). Warning sound when scanning a product not in the request (wrong-delivery detection) <span class="ref">— C Scan Protocol</span></span></li>
+    <li><span class="n">5</span><span>Request-vs-received reconciliation table — SKU No. / Brand / Product Name come straight from the Inbound Request (matches the sheet columns) <span class="ref">— I</span></span></li>
+    <li><span class="n">6</span><span>Received Qty = scan cumulative + <b>directly editable</b> (manual entry for box-level bulk inbound) <span class="ref">— new</span></span></li>
+    <li><span class="n">7</span><span>Location = <b>Inventory intake position</b> — existing-stock SKUs auto-suggest their current location (one location per SKU rule); new SKUs need manual assignment <span class="ref">— E Location Protocol</span></span></li>
+    <li><span class="n">8</span><span><b>Confirm Full Inbound</b> — enabled only when received qty <b>exactly matches Expected Qty for every SKU</b> (same match gating as closing). While mismatched, use <b>Save Partial Inbound (M5)</b> to record a reason and continue later. Over-scanning warns <span class="ref">— new</span></span></li>
+    <li><span class="n">9</span><span><b>Edit Expected Qty (new, decided 2026-08-02)</b> — click ✎ on Expected Qty → new qty + required reason (supplier qty change / damage·defect / other) (M6). Saving recalculates the remaining and full-confirm gating — e.g. damage 300→120 makes received 120 = 120/120, enabling full confirm. The edit history is auto-posted as a comment on the Inbound Request + <b>Slack alert to @requester</b> <span class="ref">— new</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 확정 시 ① Inventory(Current Stocks)에 로케이션과 함께 반영 ② 입고 요청 리스트 상태 <b>신청/부분 입고 → 입고완료</b> 자동 전환 ③ <b>Received Date·Carrier 자동 기록</b>(시트 연동 대비) ④ 검색창 포커스 복귀로 다음 송장 스캔. 고객 오더 상태(1~5)와 달리 이 화면에는 <b>Outbound가 존재하지 않음</b>.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): on confirm ① reflected in Inventory (Current Stocks) with locations ② Inbound Request List status auto-switches <b>REQUESTED / PARTIAL → INBOUNDED</b> ③ <b>Received Date recorded automatically</b> (for sheet sync — automatic Carrier recording is not supported, confirmed 2026-08-03) ④ focus returns to the search box for the next tracking scan. Unlike customer-order states (1–5), this screen has <b>no Outbound</b>.</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 6b : 내부 입고 — 전량 입고 완료 ══════════════ -->
+<!-- ══════════════ STATE 6b : Internal inbound — fully received ══════════════ -->
 <section class="state" id="s6b">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast"><span>✓ 입고 완료 — Inbound No. 202607120001</span><small>Inventory 반영 · 입고 요청 리스트 입고완료 · 다음 송장 스캔 가능</small></div>
+  <div class="toast"><span>✓ Inbound complete — Inbound No. 202607120001</span><small>Inventory updated · Request list INBOUNDED · ready for the next tracking scan</small></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -1359,19 +1359,19 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox6b">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all Comments — order no · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 건으로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon 어제 입고분 로케이션 B열로 통일했어요"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged · Click to open the item <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon Moved yesterday's inbound to row B locations"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 잔여 180개 금요일 도착 예정입니다"<br><time>11:05</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -1382,130 +1382,130 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <div class="searchrow">
       <div class="search-input">
-        <input value="" placeholder="송장 바코드를 스캔하세요 — 다음 건 연속 스캔">
+        <input value="" placeholder="Scan a tracking barcode — continue with the next one">
       </div>
       <button class="btn btn-blue">🔍 Search</button>
     </div>
 
     <div class="donebanner anno">
       <span class="dot" style="top:-11px;left:-11px">1</span>
-      <div class="big">✓ 전량 입고 완료 — Inbound No. 202607120001</div>
+      <div class="big">✓ Full Inbound Complete — Inbound No. 202607120001</div>
       <div class="kv">
-        <span>입고 <b>800 / 800</b> (SKU 2종)</span>
-        <span>Inventory <b>반영됨</b> (A-05-11 · B-02-07)</span>
-        <span>입고 요청 리스트 <b>입고완료</b> 전환</span>
-        <span>Received Date <b>07-26 14:02</b> · Carrier 자동 기록</span>
+        <span>Received <b>800 / 800</b> (2 SKUs)</span>
+        <span>Inventory <b>updated</b> (A-05-11 · B-02-07)</span>
+        <span>Inbound Request List switched to <b>INBOUNDED</b></span>
+        <span>Received Date <b>07-26 14:02</b> · Carrier recorded automatically</span>
       </div>
     </div>
 
     <table class="tbl">
       <thead><tr>
-        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th><th>입고 Qty</th><th>Location</th><th>상태</th>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>Expected Qty</th><th>Received Qty</th><th>Location</th><th>Status</th>
       </tr></thead>
       <tbody>
         <tr class="row-done">
           <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
           <td class="num">500</td><td class="num"><b>500</b></td><td class="num">A-05-11</td>
-          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
         </tr>
         <tr class="row-done">
           <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
           <td class="num">300</td><td class="num"><b>300</b></td><td class="num">B-02-07</td>
-          <td><span class="tag tag-done">✓ 입고 완료</span></td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
         </tr>
       </tbody>
     </table>
 
     <div class="note anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">2</span>
-      완료 즉시 <b>검색창으로 커서 복귀</b> — 새로고침 없이 다음 송장을 바로 스캔합니다. 이 건의 재고는 Inventory(Current Stocks)에서 로케이션과 함께 확인할 수 있습니다.
+      Cursor returns to <b>the search box immediately on completion</b> — scan the next tracking number with no refresh. This stock is visible in Inventory (Current Stocks) with its locations.
     </div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>State 6b 변경사항 — 내부 입고 전량 완료</h3>
+  <h3>State 6b — Changes: Internal Inbound Fully Complete</h3>
   <ol>
-    <li><span class="n">1</span><span>완료 배너 — 요청 = 입고 <b>정확 일치(800/800)</b> 확정 결과. Inventory 반영 로케이션·입고 요청 리스트 입고완료·Received Date/Carrier 자동 기록을 한눈에 <span class="ref">— 신규</span></span></li>
-    <li><span class="n">2</span><span>완료 즉시 검색창 포커스 복귀 — 새로고침 없이 다음 송장 연속 스캔(전 상태 공통 규약) <span class="ref">— C 스캔 규약</span></span></li>
+    <li><span class="n">1</span><span>Completion banner — the result of an <b>exact match (800/800)</b> confirm. Inventory locations · Request List INBOUNDED · automatic Received Date, all at a glance <span class="ref">— new</span></span></li>
+    <li><span class="n">2</span><span>Focus returns to the search box immediately on completion — continuous scanning of the next tracking number with no refresh (protocol common to all states) <span class="ref">— C Scan Protocol</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ MODAL : 인바운드 취소 재고 복구 ══════════════ -->
+<!-- ══════════════ MODAL : Cancel Inbound — restock confirm ══════════════ -->
 <div class="overlay" id="m-cancel">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>인바운드 취소 — 100038120<button class="x" data-close>✕</button></header>
+    <header>Cancel Inbound — 100038120<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">1. 재고를 복구하시겠습니까?</b>
+      <b style="color:var(--ink)">1. Restock this inventory?</b>
       <div class="qrow">
-        <label><input type="radio" name="restock" value="yes" checked> 예 — 재고로 복구</label>
-        <label><input type="radio" name="restock" value="no"> 아니오</label>
+        <label><input type="radio" name="restock" value="yes" checked> Yes — restock</label>
+        <label><input type="radio" name="restock" value="no"> No</label>
       </div>
       <div class="qrow">
-        <b style="color:var(--ink)">2. 복구 수량</b>
-        <input value="2" id="restockQty"> <span class="mut">기본값 = 인바운드됐던 개수 (수정 가능) · "아니오" 선택 시 비활성</span>
+        <b style="color:var(--ink)">2. Restock Qty</b>
+        <input value="2" id="restockQty"> <span class="mut">Default = qty that was inbounded (editable) · disabled when "No" is selected</span>
       </div>
       <div style="margin-top:14px">
-        <b style="color:var(--ink)">3. 메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="취소 사유나 참고사항 — 작성 시 오더 Comments 히스토리에 함께 기록됩니다"></textarea>
+        <b style="color:var(--ink)">3. Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Cancellation reason or notes — also recorded in the order's Comments history"></textarea>
       </div>
-      <div class="note">해당 SKU의 <b>Reserved Quantity → Available</b>로 자동 반영됩니다.<br>용도: 오더 중간 취소, 창고 재고가 있는데 실수로 JIT 주문한 경우.</div>
+      <div class="note">The SKU's <b>Reserved Quantity → Available</b> updates automatically.<br>Use cases: mid-order cancellation, or a JIT order placed by mistake when warehouse stock exists.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>닫기</button>
-      <button class="btn btn-blue btn-sm" data-close>확인</button>
+      <button class="btn btn-line btn-sm" data-close>Close</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 미인식 바코드 — 1단계 주문번호 조회 ══════════════ -->
+<!-- ══════════════ MODAL : Unrecognized barcode — step 1 order-number lookup ══════════════ -->
 <div class="overlay" id="m-unrec">
   <div class="modal anno" style="max-width:640px">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>바코드 인식 실패<button class="x" data-close>✕</button></header>
+    <header>Barcode Not Recognized<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">스캔한 바코드 <span class="num">8809110223344</span>와 일치하는 오더가 없습니다.</b>
-      <p class="mut" style="margin:8px 0 0">쿠팡 발주 <b>주문번호</b>를 입력하면 매칭되는 제품을 찾아 트래킹번호를 바로 등록할 수 있습니다.</p>
+      <b style="color:var(--ink)">No order matches the scanned barcode <span class="num">8809110223344</span>.</b>
+      <p class="mut" style="margin:8px 0 0">Enter the Coupang purchase <b>order number</b> to find matching products and register the tracking number on the spot.</p>
       <div class="qrow" style="margin-top:12px">
-        <b style="color:var(--ink)">주문번호</b>
+        <b style="color:var(--ink)">Order No</b>
         <input id="unrecNo" value="12101316464794" style="flex:1;min-width:220px;text-align:left;font-weight:600">
-        <button class="btn btn-blue btn-sm" id="unrecSearch">🔍 조회</button>
+        <button class="btn btn-blue btn-sm" id="unrecSearch">🔍 Look up</button>
       </div>
-      <p class="mut" style="margin:6px 0 0;font-size:11.5px">데모: 이 값 그대로 조회 = 매칭 성공 경로 · 값을 바꿔 조회 = 매칭 실패 경로</p>
+      <p class="mut" style="margin:6px 0 0;font-size:11.5px">Demo: look up with this value = match-found path · change the value = no-match path</p>
       <div id="unrecFound" style="display:none;margin-top:12px">
-        <p class="mut" style="margin:0 0 6px">주문번호 <b class="num" style="color:var(--blue)">12101316464794</b>에 매칭되는 제품 <b>2건</b> — 스캔한 제품 우측의 매칭 버튼을 누르세요</p>
+        <p class="mut" style="margin:0 0 6px">Order number <b class="num" style="color:var(--blue)">12101316464794</b> matched <b>2</b> products — click the match button on the scanned product's row</p>
         <table class="tbl" style="min-width:0;font-size:12.5px;margin-top:0">
           <thead><tr><th>Image</th><th>Product Name</th><th>Order</th><th>Qty</th><th>Tracking No</th><th></th></tr></thead>
           <tbody>
-            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 포어레미디 리뉴잉 폼 클렌저</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835644</td><td><button class="btn btn-green btn-sm trkmatch">트래킹번호 매칭</button></td></tr>
-            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 시카페어 젠틀 클렌징 폼</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835456</td><td><button class="btn btn-green btn-sm trkmatch">트래킹번호 매칭</button></td></tr>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 포어레미디 리뉴잉 폼 클렌저</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835644</td><td><button class="btn btn-green btn-sm trkmatch">Match Tracking No</button></td></tr>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 시카페어 젠틀 클렌징 폼</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835456</td><td><button class="btn btn-green btn-sm trkmatch">Match Tracking No</button></td></tr>
           </tbody>
         </table>
-        <div class="note">매칭 버튼 클릭 시 해당 라인에 트래킹번호가 등록되고 창이 닫힙니다 — <b>이후 같은 바코드를 다시 스캔하면 정상 인식됩니다.</b></div>
+        <div class="note">Clicking match registers the tracking number on that line and closes this window — <b>rescanning the same barcode is then recognized normally.</b></div>
       </div>
       <div id="unrecNone" style="display:none;margin-top:12px">
-        <div class="note" style="background:var(--red-soft)">입력한 주문번호에 <b>매칭되는 제품이 없습니다</b> (오입력 또는 타 채널 번호 가능성). 미입력 리스트로 보내주세요.</div>
-        <div style="margin-top:8px"><button class="btn btn-blue btn-sm" id="unrecToSend">미입력 리스트로 보내기</button></div>
+        <div class="note" style="background:var(--red-soft)"><b>No products match</b> the entered order number (possible typo or a number from another channel). Send it to the Missing Tracking List.</div>
+        <div style="margin-top:8px"><button class="btn btn-blue btn-sm" id="unrecToSend">Send to Missing Tracking List</button></div>
       </div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" id="unrecNoNum">주문번호가 없습니다</button>
-      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-line btn-sm" id="unrecNoNum">No order number</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 미입력 리스트 전송 — 2단계 (주문번호 없음/매칭 실패 시) ══════════════ -->
+<!-- ══════════════ MODAL : Send to Missing Tracking List — step 2 (no order number / match failed) ══════════════ -->
 <div class="overlay" id="m-unrec2">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M2b</span>
-    <header>미입력 리스트로 전송<button class="x" data-close>✕</button></header>
+    <header>Send to Missing Tracking List<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">바코드 <span class="num">8809110223344</span> — 미입력 리스트로 보내시겠습니까?</b>
-      <p class="mut" id="unrecCarried" style="display:none;margin:8px 0 0">조회했던 주문번호 <b class="num" id="unrecCarriedNo"></b> (매칭 실패)도 함께 기록됩니다.</p>
-      <p class="mut" style="margin:10px 0 4px">제품명 입력 (영어 — 자동완성 · 한글 제품명 병기)</p>
+      <b style="color:var(--ink)">Barcode <span class="num">8809110223344</span> — send it to the Missing Tracking List?</b>
+      <p class="mut" id="unrecCarried" style="display:none;margin:8px 0 0">The looked-up order number <b class="num" id="unrecCarriedNo"></b> (match failed) is recorded together.</p>
+      <p class="mut" style="margin:10px 0 4px">Enter the product name (English — autocomplete · Korean name shown alongside)</p>
       <div class="auto">
         <input value="glow ser">
         <div class="opt sel">Beauty of Joseon — <b>Glow Serum : Propolis + Niacinamide, 30ml</b> <small><b>Beauty of Joseon</b> — 프로폴리스 나이아신아마이드 글로우 세럼</small></div>
@@ -1513,151 +1513,151 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <div class="opt">COSRX — The Vitamin C 23 Glow Serum, 20ml <small><b>COSRX</b> — 더 비타민C 23 세럼</small></div>
       </div>
       <div class="qrow" style="margin-top:12px">
-        <b style="color:var(--ink)">갯수</b>
+        <b style="color:var(--ink)">Qty</b>
         <input value="1" style="width:64px">
       </div>
       <div style="margin-top:10px">
-        <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="예: 박스 라벨 훼손, 1+1 세트로 보임 — 미입력 리스트와 Slack 알림에 함께 표시됩니다"></textarea>
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="e.g. Box label damaged, looks like a 1+1 set — shown in the Missing Tracking List and the Slack alert"></textarea>
       </div>
-      <div class="note">전송 시 <b>#unrecognized-tracking</b> 채널에 "미인식 제품이 추가되었습니다" 알림 (제품명·바코드·갯수·메모·주문번호(조회 실패분) 포함) → 트래킹넘버 미입력 리스트 페이지의 미인식 풀에 표시됩니다.</div>
+      <div class="note">On send, the <b>#unrecognized-tracking</b> channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) → shown in the unrecognized pool on the Missing Tracking List page.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>아니오</button>
-      <button class="btn btn-blue btn-sm" data-close>미입력 리스트로 전송</button>
+      <button class="btn btn-line btn-sm" data-close>No</button>
+      <button class="btn btn-blue btn-sm" data-close>Send to Missing Tracking List</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="unrecToast" style="display:none;position:fixed;top:18px;right:18px;z-index:99">
-  <span>✓ 트래킹번호 10323100835644 매칭 등록</span><small>Order 414230 · <b>Dr.Jart+</b> 포어레미디 폼 — 같은 바코드 재스캔 시 정상 인식</small>
+  <span>✓ Tracking No 10323100835644 matched and registered</span><small>Order 414230 · <b>Dr.Jart+</b> 포어레미디 폼 — rescanning the same barcode is now recognized</small>
 </div>
 
-<!-- ══════════════ MODAL : 반품 라벨 출력 (공급처 반품) ══════════════ -->
+<!-- ══════════════ MODAL : Print return labels (supplier return) ══════════════ -->
 <div class="overlay" id="m-retlabel">
   <div class="modal anno" style="max-width:640px">
     <span class="dot" style="top:-11px;left:-11px">M4</span>
-    <header>반품 라벨 출력 — 선택 2개 제품 (공급처 반품)<button class="x" data-close>✕</button></header>
+    <header>Print Return Labels — 2 Selected Products (Supplier Return)<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">택배사</b>
+      <b style="color:var(--ink)">Carrier</b>
       <div class="carrier-chips">
-        <button class="cchip on">CJ대한통운</button><button class="cchip">롯데택배</button><button class="cchip">한진택배</button><button class="cchip">우체국택배</button><button class="cchip">로젠택배</button><button class="cchip" id="cchipCustom">✎ 직접 입력</button>
+        <button class="cchip on">CJ대한통운</button><button class="cchip">롯데택배</button><button class="cchip">한진택배</button><button class="cchip">우체국택배</button><button class="cchip">로젠택배</button><button class="cchip" id="cchipCustom">✎ Custom</button>
       </div>
       <div id="rlCustomRow" style="display:none;margin-top:8px">
-        <input id="rlCarrierCustom" placeholder="택배사명 입력" style="width:260px;border:1px solid var(--blue);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+        <input id="rlCarrierCustom" placeholder="Enter carrier name" style="width:260px;border:1px solid var(--blue);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
       </div>
       <table class="tbl" style="margin-top:12px;font-size:12.5px">
-        <thead><tr><th>Product Name KR</th><th style="width:110px">사이즈 (선택)</th><th style="width:90px">수량 (선택)</th></tr></thead>
+        <thead><tr><th>Product Name KR</th><th style="width:110px">Size (optional)</th><th style="width:90px">Qty (optional)</th></tr></thead>
         <tbody>
           <tr><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td><input class="rl-size" value="150ml" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="1" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
-          <tr><td><b>Medicube</b> 제로 모공 패드 2.0</td><td><input class="rl-size" placeholder="미입력 시 생략" style="width:100%;border:1px dashed var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="2" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+          <tr><td><b>Medicube</b> 제로 모공 패드 2.0</td><td><input class="rl-size" placeholder="omitted if empty" style="width:100%;border:1px dashed var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="2" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
         </tbody>
       </table>
       <div style="margin-top:14px">
-        <b style="color:var(--ink);font-size:12.5px">라벨 미리보기</b>
+        <b style="color:var(--ink);font-size:12.5px">Label Preview</b>
         <div style="border:2px solid var(--ink);border-radius:8px;padding:14px 16px;margin-top:6px;background:#fff;color:#000;max-width:360px">
           <div id="rlPreviewCarrier" style="font-size:18px;font-weight:800;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px">CJ대한통운</div>
           <div style="font-size:13px;padding:2px 0"><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저 · 150ml · 1개</div>
           <div style="font-size:13px;padding:2px 0"><b>Medicube</b> 제로 모공 패드 2.0 · 2개</div>
         </div>
       </div>
-      <div class="note">용도: 입고 스캔 중 <b>오배송·파손 등 발견 시 공급처(쿠팡 판매자 등)로 반품</b>. 출력 시 라벨지에 <b>택배사명 + 제품명(KR) + 사이즈 + 수량</b> 인쇄 — 사이즈·수량은 미입력 시 생략, 반품 박스에 부착.</div>
+      <div class="note">Use case: during inbound scanning, <b>return items to the supplier (e.g. Coupang seller) when wrong/damaged items are found</b>. Printing puts <b>carrier name + product name (KR) + size + qty</b> on the label — size/qty omitted if empty; attach it to the return box.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>🖨 출력</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>🖨 Print</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 반송 창고 입고 확인 ══════════════ -->
+<!-- ══════════════ MODAL : Customer return restock confirmation ══════════════ -->
 <div class="overlay" id="m-restock">
   <div class="modal anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
-    <header>창고 입고 처리 — Order 412990<button class="x" data-close>✕</button></header>
+    <header>Warehouse Restock — Order 412990<button class="x" data-close>✕</button></header>
     <div class="body">
-      <p style="margin:0 0 10px">입고할 제품·수량·로케이션을 확인하세요. 기존 재고 제품은 현재 로케이션이 자동 입력됩니다. <b>입고 수량 기본값은 0</b> — 실제 반송된 수량만 입력하세요 (0 = 입고 제외).</p>
+      <p style="margin:0 0 10px">Confirm the products, quantities, and locations to restock. Products with existing stock get their current location auto-filled. <b>Restock qty defaults to 0</b> — enter only the qty actually returned (0 = excluded).</p>
       <table class="tbl" style="margin-top:0;font-size:12.5px">
-        <thead><tr><th>Product</th><th>주문 수량</th><th>입고 수량</th><th>로케이션</th></tr></thead>
+        <thead><tr><th>Product</th><th>Ordered Qty</th><th>Restock Qty</th><th>Location</th></tr></thead>
         <tbody>
           <tr><td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="A-03-2"></div></td></tr>
           <tr><td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="B-01-4"></div></td></tr>
-          <tr><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="0" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="지정 필요"></div></td></tr>
+          <tr><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="0" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="required"></div></td></tr>
         </tbody>
       </table>
       <div class="anno" style="margin-top:12px">
         <span class="dot" style="top:-8px;left:150px">M3b</span>
-        <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="반송 사유·상태(외관 이상 등)·참고사항 — 작성 시 오더 Comments 히스토리 및 입고 로그에 함께 기록됩니다"></textarea>
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Return reason · condition (visible damage etc.) · notes — also recorded in the order's Comments history and the inbound log"></textarea>
       </div>
-      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">Anua는 입고 수량 0 → 입고 제외.</b> 수량을 입력하면 로케이션 지정이 필요하며, 수량&gt;0인데 로케이션 미지정이면 확정이 비활성됩니다.</div>
-      <div class="note">입고 완료 시 Current Stocks 재고·로케이션에 자동 반영됩니다.</div>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">Anua has restock qty 0 → excluded.</b> Entering a qty requires a location; if qty &gt; 0 with no location, confirm stays disabled.</div>
+      <div class="note">On completion, Current Stocks quantities and locations update automatically.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>2개 입고 확정</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm Restock (2)</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 부분 입고 저장 (내부 입고 State 6) ══════════════ -->
+<!-- ══════════════ MODAL : Save Partial Inbound (Internal Inbound State 6) ══════════════ -->
 <div class="overlay" id="m-partial">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M5</span>
-    <header>부분 입고 저장 — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
+    <header>Save Partial Inbound — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">요청 800개 중 620개만 입고 확인되었습니다 (남은 180).</b>
-      <p class="mut" style="margin:8px 0 0">1025 Dokdo Cleanser, 150ml — 요청 300 / 입고 120 / 남은 180</p>
+      <b style="color:var(--ink)">Only 620 of the 800 expected units have been received (180 remaining).</b>
+      <p class="mut" style="margin:8px 0 0">1025 Dokdo Cleanser, 150ml — expected 300 / received 120 / remaining 180</p>
       <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
-        <b style="color:var(--ink)">사유</b>
+        <b style="color:var(--ink)">Reason</b>
         <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
-          <option>분할 배송 — 잔여 물량 도착 예정</option>
-          <option>수량 부족 도착 (공급처 확인 필요)</option>
-          <option>일부 파손 — 반품 처리 예정</option>
+          <option>Split shipment — remainder arriving later</option>
+          <option>Short delivery (needs supplier confirmation)</option>
+          <option>Partially damaged — will be returned to supplier</option>
         </select>
       </div>
       <div style="margin-top:12px">
-        <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="예: 잔여 180개 금요일 도착 예정 — 요청 건 Comments에 함께 기록됩니다"></textarea>
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="e.g. Remaining 180 units arriving Friday — also recorded in the request's Comments"></textarea>
       </div>
-      <div class="note">저장 시 — 입고된 620개는 <b>Inventory에 즉시 반영</b>되고, 입고 요청 리스트 상태는 <b>부분 입고(620/800)로 전환</b>(신청 → 부분 입고 → 입고완료 3단계). 잔여 물량 도착 시 같은 송장을 다시 스캔하면 State 6에서 이어서 처리합니다.</div>
+      <div class="note">On save — the 620 received units are <b>added to Inventory immediately</b>, and the Inbound Request List switches to <b>Partial Inbound (620/800)</b> (3 stages: REQUESTED → PARTIAL → INBOUNDED). When the remainder arrives, rescan the same tracking number to continue in State 6.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>부분 입고 저장</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save Partial Inbound</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 받을 수량 수정 (내부 입고 State 6) ══════════════ -->
+<!-- ══════════════ MODAL : Edit Expected Qty (Internal Inbound State 6) ══════════════ -->
 <div class="overlay" id="m-qtyedit">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M6</span>
-    <header>받을 수량 수정 — Inbound No. 202607120002<button class="x" data-close>✕</button></header>
+    <header>Edit Expected Qty — Inbound No. 202607120002<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">1025 Dokdo Cleanser, 150ml — 현재 요청 수량 300</b>
+      <b style="color:var(--ink)">1025 Dokdo Cleanser, 150ml — current Expected Qty 300</b>
       <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
-        <b style="color:var(--ink)">새 요청 수량</b>
+        <b style="color:var(--ink)">New Expected Qty</b>
         <input class="qtyin" value="120">
         <span class="mut">300 → 120 (−180)</span>
       </div>
       <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
-        <b style="color:var(--ink)">사유 (필수)</b>
+        <b style="color:var(--ink)">Reason (required)</b>
         <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
-          <option>파손·불량 — 수령 불가</option>
-          <option>공급처 수량 변경</option>
-          <option>기타</option>
+          <option>Damaged/defective — cannot accept</option>
+          <option>Supplier qty change</option>
+          <option>Other</option>
         </select>
       </div>
       <div style="margin-top:12px">
-        <b style="color:var(--ink)">메모</b>
-        <textarea class="mtextarea" placeholder="예: 상자 1개 파손 — 180개 수령 불가, 공급처 반송">상자 1개 파손 — 180개 수령 불가, 공급처 반송 처리</textarea>
+        <b style="color:var(--ink)">Memo</b>
+        <textarea class="mtextarea" placeholder="e.g. 1 box damaged — 180 units rejected, returned to supplier">1 box damaged — 180 units rejected, returned to supplier</textarea>
       </div>
-      <div class="note">저장 시 — 요청 수량 300 → <b>120</b> 갱신, 잔량·전량 확정 게이팅 재계산(현재 입고 120 = <b>120/120 → 전량 확정 가능</b>). 수정 이력은 이 입고 요청의 Comments에 자동 등록되고 <b>@신청자(Dean)</b>에게 Slack 알림. 요청 리스트 수량 셀에 수정 이력(300→120) 표기.</div>
+      <div class="note">On save — Expected Qty updates 300 → <b>120</b>, and the remaining / full-confirm gating recalculates (current received 120 = <b>120/120 → Confirm Full Inbound enabled</b>). The edit is auto-posted as a Comment on this Inbound Request and the <b>requester (@Dean)</b> gets a Slack alert. The request list qty cell shows the edit history (300→120).</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>수량 수정 저장</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save Qty Edit</button>
     </div>
   </div>
 </div>
@@ -1672,7 +1672,7 @@ document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
     window.scrollTo({top:0});
   });
 });
-/* 미인식 바코드 — 1단계 주문번호 조회 → 매칭 성공/실패/없음 분기 데모 */
+/* Unrecognized barcode — step 1 order-number lookup → match found/failed/none demo */
 document.getElementById('unrecSearch').addEventListener('click',()=>{
   const hit=document.getElementById('unrecNo').value.trim()==='12101316464794';
   document.getElementById('unrecFound').style.display=hit?'block':'none';
@@ -1709,7 +1709,7 @@ document.querySelectorAll('[data-open]').forEach(b=>{
     else el.style.display = el.style.display==='none' ? 'block' : 'none';
   });
 });
-/* Comments 허브 탭 전환 (Mentions / Saved) */
+/* Comments hub tab switching (Mentions / Saved) */
 document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
@@ -1721,7 +1721,7 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
     });
   });
 });
-/* ★ 저장 토글 */
+/* ★ save toggle */
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
@@ -1730,26 +1730,26 @@ sf.querySelector('header').addEventListener('click',()=>{
   sf.classList.toggle('collapsed');
   sf.querySelector('.x').textContent = sf.classList.contains('collapsed') ? '▾' : '–';
 });
-/* 반품 라벨 — 택배사 칩 선택 (직접 입력 칩 선택 시에만 입력칸 노출, 미리보기 연동) */
+/* Return label — carrier chip select (custom input shown only for the Custom chip, synced to preview) */
 document.querySelectorAll('.cchip').forEach(c=>{
   c.addEventListener('click',()=>{
     document.querySelectorAll('.cchip').forEach(x=>x.classList.remove('on'));
     c.classList.add('on');
     const custom=c.id==='cchipCustom';
     document.getElementById('rlCustomRow').style.display=custom?'block':'none';
-    document.getElementById('rlPreviewCarrier').textContent=custom?(document.getElementById('rlCarrierCustom').value||'택배사명'):c.textContent;
+    document.getElementById('rlPreviewCarrier').textContent=custom?(document.getElementById('rlCarrierCustom').value||'Carrier name'):c.textContent;
     if(custom) document.getElementById('rlCarrierCustom').focus();
   });
 });
 document.getElementById('rlCarrierCustom').addEventListener('input',e=>{
-  document.getElementById('rlPreviewCarrier').textContent=e.target.value||'택배사명';
+  document.getElementById('rlPreviewCarrier').textContent=e.target.value||'Carrier name';
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
 });
 
-/* 인바운드 취소 모달 — "아니오" 선택 시 복구 수량 비활성화 + 값 제거 */
+/* Cancel Inbound modal — selecting "No" disables restock qty + clears the value */
 const rq=document.getElementById('restockQty');
 document.querySelectorAll('input[name="restock"]').forEach(r=>{
   r.addEventListener('change',()=>{
@@ -1759,8 +1759,8 @@ document.querySelectorAll('input[name="restock"]').forEach(r=>{
   });
 });
 
-/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
-const CSEARCH_DATA=[{o:'413865',a:'Dean',t:'오늘 10:42',ts:8,x:'@Yongwon JIT 2개 중 1개만 입고됐어요. 확인 부탁'},{o:'413712',a:'Miranti',t:'오늘 09:15',ts:7,x:'@Yongwon 이 오더는 각별히 포장 신경써주세요'},{o:'413650',a:'Aldo',t:'오늘 08:50',ts:6,x:'선반 B-12로 이동했습니다'},{o:'413650',a:'Kai',t:'어제 18:10',ts:5.5,x:'@Yongwon 반송 재입고 로케이션 어디로?'},{o:'413501',a:'Dean',t:'어제 17:30',ts:5,x:'해결 완료했습니다'},{o:'412990',a:'Kai',t:'어제 16:20',ts:4.5,x:'반송 재입고 로케이션 B-01-4로 통일'},{o:'413390',a:'Miranti',t:'어제 11:02',ts:4,x:'고객 요청으로 사쉐 3종 동봉'},{o:'413118',a:'Dean',t:'7/26 15:44',ts:3,x:'박스 파손 — 포장 교체 후 출고했습니다'}];
+/* Comments hub — search all comments (reverse-chronological) */
+const CSEARCH_DATA=[{o:'413865',a:'Dean',t:'Today 10:42',ts:8,x:'@Yongwon Only 1 of 2 JIT items has arrived. Please check'},{o:'413712',a:'Miranti',t:'Today 09:15',ts:7,x:'@Yongwon Please take extra care packing this order'},{o:'413650',a:'Aldo',t:'Today 08:50',ts:6,x:'Moved to shelf B-12'},{o:'413650',a:'Kai',t:'Yesterday 18:10',ts:5.5,x:'@Yongwon Where should the return restock location be?'},{o:'413501',a:'Dean',t:'Yesterday 17:30',ts:5,x:'Resolved'},{o:'412990',a:'Kai',t:'Yesterday 16:20',ts:4.5,x:'Use B-01-4 for all return restocks'},{o:'413390',a:'Miranti',t:'Yesterday 11:02',ts:4,x:'Included 3 sachets per customer request'},{o:'413118',a:'Dean',t:'7/26 15:44',ts:3,x:'Box damaged — repacked and shipped'}];
 function cSearch(inp){
   const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
   const tabs=dd.querySelector('.tabs');
@@ -1778,41 +1778,41 @@ function cSearch(inp){
   const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
   const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
-  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order page</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 Comments가 없습니다</div>');
+      :'<div class="empty">No matching Comments</div>');
   pane.style.display='block';
 }
 
-/* 선반/로케이션 입력 — 플로팅 저장 버튼 (입력 시 표시, 클릭·엔터 즉시 저장·새로고침 없음) */
+/* Shelf/location inputs — floating save button (shown on input; click/Enter saves instantly, no refresh) */
 document.querySelectorAll('.shelf input, .locin').forEach(inp=>{
   const btn=document.createElement('button');
-  btn.className='flsave'; btn.textContent='저장'; btn.style.display='none'; btn.type='button';
+  btn.className='flsave'; btn.textContent='Save'; btn.style.display='none'; btn.type='button';
   inp.insertAdjacentElement('afterend',btn);
   inp.dataset.saved=inp.value;
   const save=()=>{
     inp.dataset.saved=inp.value;
-    btn.textContent='✓ 저장됨'; btn.classList.add('ok');
-    setTimeout(()=>{btn.style.display='none';btn.classList.remove('ok');btn.textContent='저장';},900);
+    btn.textContent='✓ Saved'; btn.classList.add('ok');
+    setTimeout(()=>{btn.style.display='none';btn.classList.remove('ok');btn.textContent='Save';},900);
   };
   inp.addEventListener('input',()=>{
-    if(inp.value!==inp.dataset.saved){btn.style.display='inline-flex';btn.classList.remove('ok');btn.textContent='저장';}
+    if(inp.value!==inp.dataset.saved){btn.style.display='inline-flex';btn.classList.remove('ok');btn.textContent='Save';}
     else btn.style.display='none';
   });
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&btn.style.display!=='none'){e.preventDefault();save();}});
   btn.addEventListener('click',e=>{e.stopPropagation();save();});
 });
 
-/* State 0 — 입고 예정 요약 배지 토글 */
+/* State 0 — Expected Inbound summary badge toggle */
 const it=document.getElementById('inexpToggle');
 if(it){it.addEventListener('click',()=>{
   const t=document.getElementById('inexpTable');
   const open=t.style.display==='none';
   t.style.display=open?'block':'none';
-  it.textContent=(open?'▾':'▸')+' 입고 예정 4건 — 송장 입력 2 · 부분 입고 1';
+  it.textContent=(open?'▾':'▸')+' Expected Inbound 4 — 2 with tracking · 1 Partial Inbound';
 });}
 
-/* Outbound 전송 사운드 — 처리 접수 청각 피드백 (2026-08-03) */
+/* Outbound send sound — audible confirmation that processing was accepted (2026-08-03) */
 function sndOutbound(){
   try{
     const ac = sndOutbound.ac || (sndOutbound.ac = new (window.AudioContext||window.webkitAudioContext)());

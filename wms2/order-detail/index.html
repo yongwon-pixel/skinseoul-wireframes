@@ -1,4 +1,4 @@
-<title>WMS 2.0 — Order 상세 와이어프레임</title>
+<title>WMS 2.0 — Order Detail Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -127,10 +127,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:10.5px;font-weight:800;letter-spacing:.3px}
 .tag-inbounded{background:var(--green);color:#fff}
 .tag-pending{background:#FFC107;color:#3D2E00}
-/* 소싱 루트 4종 — 색 없이 검정 볼드 텍스트로만 구분 */
+/* 4 sourcing routes — plain bold black text, no color coding */
 .tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0}
 .bot{color:var(--ink-3);font-size:10px}
-.act-ic{display:inline-flex;gap:5px}
+.act-ic{display:inline-flex;gap:5px;flex-wrap:nowrap;white-space:nowrap}
 .act-ic button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line-strong);background:var(--page);font-size:12px}
 .act-ic .del{border-color:var(--red);color:var(--red)}
 .act-ic .edit{border-color:var(--blue);color:var(--blue)}
@@ -181,22 +181,24 @@ tr.row-edit td{background:var(--canvas)}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
 .opt-row{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .opt-row label{border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px;font-size:13px}
+.act-ic .btn{width:auto;min-width:0;white-space:nowrap;flex:none}
+.tbl td:last-child,.tbl th:last-child{white-space:nowrap}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · Order 상세 와이어프레임</h1>
-  <span class="hint">v1 — 실제 어드민(Order #407847) 기반 · 보라 번호 = 신규/변경 주석</span>
+  <h1>WMS 2.0 · Order Detail Wireframe</h1>
+  <span class="hint">v1 — Based on the live admin (Order #407847) · Purple numbers = new/changed annotations</span>
   <div class="wf-tabs">
-    <button class="wf-tab" data-modal="m-del">모달: 라인 삭제</button>
-    <button class="wf-tab on" data-ostate="st-normal">1 · Processing (기본)</button>
+    <button class="wf-tab" data-modal="m-del">Modal: Delete Line</button>
+    <button class="wf-tab on" data-ostate="st-normal">1 · Processing (default)</button>
     <button class="wf-tab" data-ostate="st-hold">2 · On Hold</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
 <section class="ostate on" id="st-normal">
 <div class="mockwrap"><div class="mock anno">
-  <!-- 글로벌 nav (실제 어드민 표준) -->
+  <!-- Global nav (live admin standard) -->
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>Customer Management ▾</span><span>SkinSeoul WP Admin</span>
@@ -208,20 +210,20 @@ tr.row-edit td{background:var(--canvas)}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 407847</b> · Dean: "@Yongwon 이 오더 각별 포장 요청"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it"><div class="body"><b>Order 407790</b> · Kai: "해결 완료"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 407847</b> · Dean: "@Yongwon please pack this order with extra care"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon 1 JIT item not yet inbounded"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it"><div class="body"><b>Order 407790</b> · Kai: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 제거</small></div>
-        <div class="it"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove</small></div>
+        <div class="it"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon 1 JIT item not yet inbounded"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -257,7 +259,7 @@ tr.row-edit td{background:var(--canvas)}
         <div class="kv"><div class="k">Total Items</div><div class="v">4</div></div>
         <div class="kv"><div class="k">Total Discount</div><div class="v">AUD 13.11</div></div>
         <div class="kv"><div class="k">Total Amount</div><div class="v">AUD 129.8</div></div>
-        <div class="kv anno"><div class="k">PIC</div><div class="v" style="display:flex;align-items:center;gap:8px">Egita <button class="btn btn-line btn-sm" style="padding:2px 10px;font-size:11.5px">✎ 수정</button><span class="dot" style="position:static;flex:none">5</span></div></div>
+        <div class="kv anno"><div class="k">PIC</div><div class="v" style="display:flex;align-items:center;gap:8px">Egita <button class="btn btn-line btn-sm" style="padding:2px 10px;font-size:11.5px">✎ Edit</button><span class="dot" style="position:static;flex:none">5</span></div></div>
       </div>
       <div>
         <h3>👤 Billing Address <span class="edit">✎</span></h3>
@@ -292,11 +294,11 @@ tr.row-edit td{background:var(--canvas)}
       <h3>💬 Operator Comments <button class="btn btn-line btn-sm" style="margin-left:6px">Hide Comments</button></h3>
       <div class="cmt-wrap">
         <div class="cmt-list">
-          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 각별히 신경 써서 포장 부탁드립니다. 재구매 VIP 고객이에요.</span><time>07-13 10:42</time><button class="star" title="저장">★</button></div>
-          <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 확인했습니다. 에어캡 추가 처리할게요.</span><time>07-13 10:55</time><button class="star on" title="저장됨">★</button></div>
+          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Please pack this order with extra care — repeat-purchase VIP customer.</span><time>07-13 10:42</time><button class="star" title="Save">★</button></div>
+          <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Got it. I'll add extra bubble wrap.</span><time>07-13 10:55</time><button class="star on" title="Saved">★</button></div>
         </div>
         <div class="cmt-new">
-          <textarea placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림(오더넘버·내용·시간·작성자·태그대상). 오더별 히스토리가 여기에 집적됩니다."></textarea>
+          <textarea placeholder="Write a comment — @name to notify via Slack (order no. · text · time · author included). Per-order history accumulates here."></textarea>
           <button class="btn btn-blue btn-sm" style="margin-top:8px" id="addCmt">Add Comment</button>
         </div>
       </div>
@@ -342,14 +344,14 @@ tr.row-edit td{background:var(--canvas)}
     <div class="sec anno">
       <span class="dot" style="top:24px;left:-10px">4</span>
       <h3>🧾 Line Items</h3>
-      <p class="liinfo">Edit 버튼으로 라인 수정. 체크박스로 일괄 Inbound 대상 선택. * = Variation packs 재계산 전 WooCommerce 원본 · 🤖 = Agent 자동 기입 · 가로로 스크롤하면 Inventory 필드가 이어집니다.</p>
+      <p class="liinfo">Edit a line via the Edit button. Use checkboxes to select items for bulk Inbound. * = WooCommerce original before variation-pack recalculation · 🤖 = auto-filled by Agent · Scroll right to see the Inventory fields.</p>
       <div class="litable-wrap">
         <table class="litable">
           <thead>
             <tr>
-              <th rowspan="2" style="vertical-align:bottom;text-align:center"><input type="checkbox" title="전체 선택"></th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
+              <th rowspan="2" style="vertical-align:bottom;text-align:center"><input type="checkbox" title="Select all"></th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
               <th colspan="6" style="text-align:center;background:#2B2F36">Product Information (WooCommerce)</th>
-              <th colspan="8" class="anno" style="text-align:center;background:#2B2F36">Inventory<span class="dot" style="top:-11px;right:-8px">10</span></th>
+              <th colspan="8" class="anno" style="text-align:center;background:#2B2F36">Inventory<span class="dot" style="top:6px;right:8px">10</span></th>
               <th rowspan="2" style="vertical-align:bottom">Actions</th>
             </tr>
             <tr>
@@ -392,23 +394,23 @@ tr.row-edit td{background:var(--canvas)}
       </div>
       <div class="li-foot">
         <span class="tq">Total Quantity: 4</span>
-        <span class="anno"><button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+        <span class="anno"><button class="btn btn-green-line btn-sm">Bulk Inbound Selected Items</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
         <span class="anno"><button class="btn btn-green btn-sm" id="obBtn">📦 Outbound</button><span class="dot" style="top:-11px;right:-9px">9</span></span>
         <span class="sp"></span>
         <button class="btn btn-line btn-sm">+ Add Line Item</button>
       </div>
     </div>
 
-    <!-- 행위자 로그 (신규) -->
+    <!-- Actor Log (new) -->
     <div class="logsec anno">
       <span class="dot" style="top:-6px;left:170px">3</span>
-      <h4>인바운드 / 아웃바운드 행위자 로그 <span style="font-weight:400;color:var(--ink-3);font-size:12px">— 신규</span></h4>
+      <h4>Inbound / Outbound Actor Log <span style="font-weight:400;color:var(--ink-3);font-size:12px">— New</span></h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-01 09:32</td><td class="act-out">OUTBOUND</td><td class="num">전체 (4 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Operator</th><th>Note</th></tr>
+        <tr><td class="num">07-01 09:32</td><td class="act-out">OUTBOUND</td><td class="num">All (4 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-01 09:10</td><td class="act-in">INBOUND</td><td class="num">100012534</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
         <tr><td class="num">07-01 08:58</td><td class="act-in">INBOUND</td><td class="num">100043697</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
-        <tr><td class="num">06-30 20:15</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100005104</td><td class="num">1</td><td>Dean</td><td>중복 입고 정정</td></tr>
+        <tr><td class="num">06-30 20:15</td><td class="act-cancel">CANCEL INBOUND (Restock)</td><td class="num">100005104</td><td class="num">1</td><td>Dean</td><td>Corrected duplicate inbound</td></tr>
       </table>
     </div>
   </div>
@@ -417,7 +419,7 @@ tr.row-edit td{background:var(--canvas)}
 
 <section class="ostate" id="st-hold">
 <div class="mockwrap"><div class="mock anno">
-  <!-- 글로벌 nav (실제 어드민 표준) -->
+  <!-- Global nav (live admin standard) -->
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>Customer Management ▾</span><span>SkinSeoul WP Admin</span>
@@ -429,20 +431,20 @@ tr.row-edit td{background:var(--canvas)}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1H">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 407847</b> · Dean: "@Yongwon 이 오더 각별 포장 요청"<br><time>10:42</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it"><div class="body"><b>Order 407790</b> · Kai: "해결 완료"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 407847</b> · Dean: "@Yongwon please pack this order with extra care"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon 1 JIT item not yet inbounded"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it"><div class="body"><b>Order 407790</b> · Kai: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 제거</small></div>
-        <div class="it"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon JIT 1개 미입고"<br><time>09:15</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove</small></div>
+        <div class="it"><div class="body"><b>Order 407812</b> · Miranti: "@Yongwon 1 JIT item not yet inbounded"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -469,7 +471,7 @@ tr.row-edit td{background:var(--canvas)}
         </div>
       </span>
     </div>
-    <div id="holdBannerH" class="anno" style="display:block;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:8px;padding:10px 14px;margin:8px 0 0;color:var(--amber);font-weight:600;font-size:13px">⏸ CS 긴급 요청으로 출고 보류(On Hold) — 인바운드는 가능하나 <b>Outbound 비활성</b>. Hold 해제(Change Status) 후 출고 가능<span class="dot" style="top:-11px;right:-8px">14</span></div>
+    <div id="holdBannerH" class="anno" style="display:block;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:8px;padding:10px 14px;margin:8px 0 0;color:var(--amber);font-weight:600;font-size:13px">⏸ On Hold by urgent CS request — inbound still allowed, but <b>Outbound disabled</b>. Release the hold (Change Status) to ship<span class="dot" style="top:-11px;right:-8px">14</span></div>
 
     <div class="info3">
       <div>
@@ -479,7 +481,7 @@ tr.row-edit td{background:var(--canvas)}
         <div class="kv"><div class="k">Total Items</div><div class="v">4</div></div>
         <div class="kv"><div class="k">Total Discount</div><div class="v">AUD 13.11</div></div>
         <div class="kv"><div class="k">Total Amount</div><div class="v">AUD 129.8</div></div>
-        <div class="kv anno"><div class="k">PIC</div><div class="v" style="display:flex;align-items:center;gap:8px">Egita <button class="btn btn-line btn-sm" style="padding:2px 10px;font-size:11.5px">✎ 수정</button><span class="dot" style="position:static;flex:none">5</span></div></div>
+        <div class="kv anno"><div class="k">PIC</div><div class="v" style="display:flex;align-items:center;gap:8px">Egita <button class="btn btn-line btn-sm" style="padding:2px 10px;font-size:11.5px">✎ Edit</button><span class="dot" style="position:static;flex:none">5</span></div></div>
       </div>
       <div>
         <h3>👤 Billing Address <span class="edit">✎</span></h3>
@@ -514,11 +516,11 @@ tr.row-edit td{background:var(--canvas)}
       <h3>💬 Operator Comments <button class="btn btn-line btn-sm" style="margin-left:6px">Hide Comments</button></h3>
       <div class="cmt-wrap">
         <div class="cmt-list">
-          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 각별히 신경 써서 포장 부탁드립니다. 재구매 VIP 고객이에요.</span><time>07-13 10:42</time><button class="star" title="저장">★</button></div>
-          <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> 확인했습니다. 에어캡 추가 처리할게요.</span><time>07-13 10:55</time><button class="star on" title="저장됨">★</button></div>
+          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Please pack this order with extra care — repeat-purchase VIP customer.</span><time>07-13 10:42</time><button class="star" title="Save">★</button></div>
+          <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Got it. I'll add extra bubble wrap.</span><time>07-13 10:55</time><button class="star on" title="Saved">★</button></div>
         </div>
         <div class="cmt-new">
-          <textarea placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림(오더넘버·내용·시간·작성자·태그대상). 오더별 히스토리가 여기에 집적됩니다."></textarea>
+          <textarea placeholder="Write a comment — @name to notify via Slack (order no. · text · time · author included). Per-order history accumulates here."></textarea>
           <button class="btn btn-blue btn-sm" style="margin-top:8px" id="addCmtH">Add Comment</button>
         </div>
       </div>
@@ -564,14 +566,14 @@ tr.row-edit td{background:var(--canvas)}
     <div class="sec anno">
       <span class="dot" style="top:24px;left:-10px">4</span>
       <h3>🧾 Line Items</h3>
-      <p class="liinfo">Edit 버튼으로 라인 수정. 체크박스로 일괄 Inbound 대상 선택. * = Variation packs 재계산 전 WooCommerce 원본 · 🤖 = Agent 자동 기입 · 가로로 스크롤하면 Inventory 필드가 이어집니다.</p>
+      <p class="liinfo">Edit a line via the Edit button. Use checkboxes to select items for bulk Inbound. * = WooCommerce original before variation-pack recalculation · 🤖 = auto-filled by Agent · Scroll right to see the Inventory fields.</p>
       <div class="litable-wrap">
         <table class="litable">
           <thead>
             <tr>
-              <th rowspan="2" style="vertical-align:bottom;text-align:center"><input type="checkbox" title="전체 선택"></th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
+              <th rowspan="2" style="vertical-align:bottom;text-align:center"><input type="checkbox" title="Select all"></th><th rowspan="2" style="vertical-align:bottom">SKU</th><th rowspan="2" style="vertical-align:bottom">Image</th>
               <th colspan="6" style="text-align:center;background:#2B2F36">Product Information (WooCommerce)</th>
-              <th colspan="8" class="anno" style="text-align:center;background:#2B2F36">Inventory<span class="dot" style="top:-11px;right:-8px">10</span></th>
+              <th colspan="8" class="anno" style="text-align:center;background:#2B2F36">Inventory<span class="dot" style="top:6px;right:8px">10</span></th>
               <th rowspan="2" style="vertical-align:bottom">Actions</th>
             </tr>
             <tr>
@@ -614,23 +616,23 @@ tr.row-edit td{background:var(--canvas)}
       </div>
       <div class="li-foot">
         <span class="tq">Total Quantity: 4</span>
-        <span class="anno"><button class="btn btn-green-line btn-sm">선택 항목 일괄 Inbound</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+        <span class="anno"><button class="btn btn-green-line btn-sm">Bulk Inbound Selected Items</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
         <span class="anno"><button class="btn btn-gray btn-sm" disabled style="opacity:.55;cursor:not-allowed">📦 Outbound</button><span class="dot" style="top:-11px;right:-9px">9</span></span>
         <span class="sp"></span>
         <button class="btn btn-line btn-sm">+ Add Line Item</button>
       </div>
     </div>
 
-    <!-- 행위자 로그 (신규) -->
+    <!-- Actor Log (new) -->
     <div class="logsec anno">
       <span class="dot" style="top:-6px;left:170px">3</span>
-      <h4>인바운드 / 아웃바운드 행위자 로그 <span style="font-weight:400;color:var(--ink-3);font-size:12px">— 신규</span></h4>
+      <h4>Inbound / Outbound Actor Log <span style="font-weight:400;color:var(--ink-3);font-size:12px">— New</span></h4>
       <table class="logtbl">
-        <tr><th>시간</th><th>행위</th><th>SKU</th><th>수량</th><th>작업자</th><th>메모</th></tr>
-        <tr><td class="num">07-01 09:32</td><td class="act-out">OUTBOUND</td><td class="num">전체 (4 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Operator</th><th>Note</th></tr>
+        <tr><td class="num">07-01 09:32</td><td class="act-out">OUTBOUND</td><td class="num">All (4 SKU)</td><td class="num">4</td><td>Dean</td><td>–</td></tr>
         <tr><td class="num">07-01 09:10</td><td class="act-in">INBOUND</td><td class="num">100012534</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
         <tr><td class="num">07-01 08:58</td><td class="act-in">INBOUND</td><td class="num">100043697</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
-        <tr><td class="num">06-30 20:15</td><td class="act-cancel">INBOUND 취소 (재고복구)</td><td class="num">100005104</td><td class="num">1</td><td>Dean</td><td>중복 입고 정정</td></tr>
+        <tr><td class="num">06-30 20:15</td><td class="act-cancel">CANCEL INBOUND (Restock)</td><td class="num">100005104</td><td class="num">1</td><td>Dean</td><td>Corrected duplicate inbound</td></tr>
       </table>
     </div>
   </div>
@@ -639,28 +641,28 @@ tr.row-edit td{background:var(--canvas)}
 </section>
 
 <div class="legend">
-  <h3>Order 상세 — 신규 / 변경 주석 (기획 0 · A · C 반영)</h3>
+  <h3>Order Detail — Changes (specs 0 · A · C applied)</h3>
   <ol>
-    <li><span class="n">1</span><span>Operator Comments 강화 — @이름 태그 시 Slack 자동 알림(오더넘버·내용·시간·작성자·태그대상), 오더별 히스토리 집적. 각 코멘트 ★로 우상단 Comments 허브 Saved에 저장. 현 실화면은 "No comments yet"만 <span class="ref">— 0. General</span></span></li>
-    <li><span class="n">2</span><span>인바운드 버튼 개편 — <b>행별 Inbound / Cancel Inbound</b>(View Orders와 동일 문법, 제품 단위) + 하단 <b>선택 항목 일괄 Inbound</b>(체크박스 연동). "Request Inbound" 명칭 폐기, 클릭 안 되던 버그 수정. Outbound는 오더 단위라 하단 유지 <span class="ref">— A 버그 + C</span></span></li>
-    <li><span class="n">3</span><span>인바운드/아웃바운드 행위자 로그 <b>신규</b> — 누가 언제 인/아웃바운드·취소했는지 오더 하단에 기록(현 실화면엔 없음). View Orders 로그와 동일 문법 <span class="ref">— C 로그</span></span></li>
-    <li><span class="n">4</span><span>Line Items Sourcing Route를 소싱 루트 4종(SMART BUY/JIT/WHOLESALE/PARTNERSHIP, 색 없이 검정 텍스트)으로 — View Orders·입고요청(I)과 통일. 이 오더의 쿠팡 소싱 3건은 오더 후 주문이라 JIT — 구매 채널 괄호 병기로 <b>JIT (Coupang)</b> (Naver/Other retail 채널이면 해당 채널 병기, 핸들러가 주문 시 선택한 드롭다운 값). Order Number = 상품별 주문번호로 조회 연동 <span class="ref">— I / C</span></span></li>
-    <li><span class="n">5</span><span>PIC 수정 버튼 명시화 — 기존 연필 아이콘(✎)이 작아 클릭 가능한지 알기 어려움 → 테두리 있는 "✎ 수정" 버튼으로 교체 <span class="ref">— UI 개선</span></span></li>
-    <li><span class="n">6</span><span>Fulfillment Tracking·TRACKING HISTORY는 <b>기존 어드민과 동일 — 변경 없음</b>. 와이어프레임에서만 이벤트를 일부 행으로 간소화 표기(실제로는 ORDER_CREATION까지 전체 표시) <span class="ref">— 참고</span></span></li>
-    <li><span class="n">12</span><span>라인 수정/삭제 UX(기존과 동일) — ✎ 클릭 시 해당 행의 에이전트 트래킹 필드(Order Number·Order Date+Today·Product Cost·Tracking Number·CP Link)가 입력칸으로 전환되고 Actions가 <b style="color:var(--green)">✓ 저장</b>/<b style="color:var(--red)">✕ 취소</b>로 바뀜 — 1행이 수정 모드 예시. 🗑 클릭 시 삭제 확인 모달(M3) <span class="ref">— 기존 동작 유지</span></span></li>
-    <li><span class="n">10</span><span>Inventory 칼럼 정리 — <b>Delivery Company · Comments</b> 2개 칼럼 제거(오더 코멘트는 Operator Comments 섹션으로 일원화). <b>Latest Inventory Count는 유지</b>(2026-07-23 복원, 실화면 위치 그대로 Inventory 그룹 첫 칼럼 — JIT는 창고 재고 없어 0, 창고 보관 루트는 현재고 표시) <span class="ref">— 칼럼 정리</span></span></li>
-    <li><span class="n">11</span><span>Product Name(EN·KR 모두) — <b>맨 앞에 브랜드명 항상 표기</b>(브랜드 누락 제품은 제품명 로직 수정 필요) <span class="ref">— B</span></span></li>
-    <li><span class="n">14</span><span><b>On Hold 상태 뷰</b> — 상단 상태 탭(1 · Processing / 2 · On Hold)으로 페이지 복제 전환. On Hold 시: 상태 배지 앰버, <b>Outbound 비활성</b>(행별 Inbound는 가능), Change Status 드롭다운 on-hold 하이라이트, 보류 배너 노출. CS 긴급 요청(취소·배송지 변경) 대응. 이 데모는 <b>Hold + 인바운드 미완료(3/4)가 겹친 케이스</b> — Outbound 비활성 사유가 복합일 수 있음을 표현(Hold 해제만으로는 활성화되지 않고 전 품목 인바운드도 필요) <span class="ref">— F Hold</span></span></li>
-    <li><span class="n">13</span><span>Print 버튼 라벨 — <b>"(YUN)"/"(DELEO)" 캐리어명을 붙이지 않고 "Print"로만 표기</b>. 캐리어는 옆 배지(YUN)로 이미 표시됨 <span class="ref">— 라벨 정리</span></span></li>
-    <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → <b>"Outbound"</b>로 라벨 변경(Deleo가 아닌 경우가 더 많음). <b>전 품목 INBOUNDED일 때만 활성</b> — 이 오더는 4/4 인바운드 완료라 활성(초록). 미완료·On Hold 시 비활성 <span class="ref">— C 동작 + F Hold</span></span></li>
-    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] 저장한 코멘트 + <b>상단 검색창(신설, 전체 오더의 모든 코멘트 대상·시간 역순)</b>, 전 화면 공통 <span class="ref">— 0. UI</span></span></li>
-    <li><span class="n">8</span><span>Change Status <b>드롭다운</b>(기존과 동일) — pending / processing / on-hold / completed / refunded / failed / shipped / prepare-shipment 중 선택 즉시 반영(새로고침 없음). <b>on-hold</b> 선택 시 Outbound 비활성(CS 긴급 요청용) <span class="ref">— A / F Hold</span></span></li>
+    <li><span class="n">1</span><span>Operator Comments upgraded — @name to notify via Slack (order no. · text · time · author included); per-order history accumulates. Star (★) any comment to save it to the top-right Comments hub Saved tab. Current live screen shows "No comments yet" only <span class="ref">— 0. General</span></span></li>
+    <li><span class="n">2</span><span>Inbound buttons reworked — per-row <b>Inbound / Cancel Inbound</b> (same grammar as View Orders, per product) + bottom <b>Bulk Inbound Selected Items</b> (checkbox-linked). "Request Inbound" name retired; unclickable-button bug fixed. Outbound stays at the bottom since it is order-level <span class="ref">— A bug + C</span></span></li>
+    <li><span class="n">3</span><span>Inbound/Outbound Actor Log <b>new</b> — records who inbounded/outbounded/canceled and when, at the bottom of the order (absent from the current live screen). Same grammar as the View Orders log <span class="ref">— C Log</span></span></li>
+    <li><span class="n">4</span><span>Line Items Sourcing Route now uses the 4 sourcing routes (SMART BUY/JIT/WHOLESALE/PARTNERSHIP, plain black text, no color) — unified with View Orders and Inbound Request (I). The 3 Coupang-sourced lines on this order were purchased after the order, hence JIT — purchase channel noted in parentheses as <b>JIT (Coupang)</b> (Naver/Other retail channels noted likewise; the dropdown value the handler picked when ordering). Order Number = per-product purchase order number, linked for lookup <span class="ref">— I / C</span></span></li>
+    <li><span class="n">5</span><span>PIC edit button made explicit — the old pencil icon (✎) was too small to read as clickable → replaced with a bordered "✎ Edit" button <span class="ref">— UI improvement</span></span></li>
+    <li><span class="n">6</span><span>Fulfillment Tracking · TRACKING HISTORY are <b>identical to the current admin — no changes</b>. Events are abbreviated to a few rows in this wireframe only (the real screen lists everything down to ORDER_CREATION) <span class="ref">— Note</span></span></li>
+    <li><span class="n">12</span><span>Line edit/delete UX (same as today) — clicking ✎ turns the row's agent tracking fields (Order Number · Order Date+Today · Product Cost · Tracking Number · CP Link) into inputs, and Actions switches to <b style="color:var(--green)">✓ Save</b>/<b style="color:var(--red)">✕ Cancel</b> — row 1 shows edit mode as an example. Clicking 🗑 opens the delete confirmation modal (M3) <span class="ref">— existing behavior kept</span></span></li>
+    <li><span class="n">10</span><span>Inventory columns cleaned up — <b>Delivery Company · Comments</b> columns removed (order comments consolidated into the Operator Comments section). <b>Latest Inventory Count kept</b> (restored 2026-07-23, same spot as the live screen — first column of the Inventory group; JIT shows 0 since it holds no warehouse stock, warehouse-kept routes show current stock) <span class="ref">— Column cleanup</span></span></li>
+    <li><span class="n">11</span><span>Product Name (both EN · KR) — <b>brand name always shown first</b> (products missing a brand need a product-name logic fix) <span class="ref">— B</span></span></li>
+    <li><span class="n">14</span><span><b>On Hold state view</b> — page duplicated and switched via the top state tabs (1 · Processing / 2 · On Hold). While On Hold: amber status badge, <b>Outbound disabled</b> (per-row Inbound still allowed), Change Status dropdown highlights on-hold, Hold banner shown. For urgent CS requests (cancellation · address change). This demo is a <b>combined case of Hold + incomplete inbound (3/4)</b> — showing Outbound can be disabled for multiple reasons (releasing the hold alone does not enable it; every item must also be inbounded) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">13</span><span>Print button label — <b>just "Print", without the "(YUN)"/"(DELEO)" carrier suffix</b>. The carrier is already shown by the badge (YUN) next to it <span class="ref">— Label cleanup</span></span></li>
+    <li><span class="n">9</span><span>"Outbound to Deleo BaroShip" → relabeled to <b>"Outbound"</b> (non-Deleo cases are the majority). <b>Enabled only when every item is INBOUNDED</b> — this order is 4/4 inbounded, so enabled (green). Disabled when incomplete or On Hold <span class="ref">— C Behavior + F Hold</span></span></li>
+    <li><span class="n">7</span><span>Top-right Comments hub — [@ Mentions] comments tagging me + [★ Saved] saved comments + <b>search box on top (new; covers all comments across all orders, newest first)</b>, shared across every screen <span class="ref">— 0. UI</span></span></li>
+    <li><span class="n">8</span><span>Change Status <b>dropdown</b> (same as today) — pick pending / processing / on-hold / completed / refunded / failed / shipped / prepare-shipment; applied instantly (no refresh). Selecting <b>on-hold</b> disables Outbound (for urgent CS requests) <span class="ref">— A / F Hold</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·주소 필드·Operator Comments 위치·Fulfillment Tracking(SHIPMENT DETAILS + TRACKING HISTORY)·Line Items 가로 스크롤은 실제 어드민(2026-07-21 풀캡처)과 동일 — TRACKING HISTORY는 간소화 표기(실제로는 전체 이벤트, 변경 없음). 실 데이터는 Order #407847(Maytal Saltoon) 기준.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · address fields · Operator Comments position · Fulfillment Tracking (SHIPMENT DETAILS + TRACKING HISTORY) · Line Items horizontal scroll are identical to the live admin (full capture 2026-07-21) — TRACKING HISTORY abbreviated here (the real screen shows all events, unchanged). Live data from Order #407847 (Maytal Saltoon).</p>
 </div>
 
 
-<!-- 모달: 라인 삭제 확인 (실제 어드민과 동일) -->
+<!-- Modal: line delete confirmation (same as live admin) -->
 <div class="overlay" id="m-del">
   <div class="modal anno" style="max-width:420px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
@@ -704,7 +706,7 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-/* Add Comment — 모달 없이 왼쪽 목록에 즉시 추가 (양 상태 공통) */
+/* Add Comment — added instantly to the left list, no modal (shared by both states) */
 document.querySelectorAll('#addCmt, #addCmtH').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const wrap=btn.closest('.cmt-wrap');
@@ -712,12 +714,12 @@ document.querySelectorAll('#addCmt, #addCmtH').forEach(btn=>{
     const txt=(ta.value||'').trim(); if(!txt) return;
     const list=wrap.querySelector('.cmt-list');
     const div=document.createElement('div'); div.className='c-item';
-    div.innerHTML='<span class="who">Yongwon</span><span>'+txt.replace(/@(\S+)/g,'<span class="at">@$1</span>')+'</span><time>방금</time><button class="star" title="저장">★</button>';
+    div.innerHTML='<span class="who">Yongwon</span><span>'+txt.replace(/@(\S+)/g,'<span class="at">@$1</span>')+'</span><time>Just now</time><button class="star" title="Save">★</button>';
     div.querySelector('.star').addEventListener('click',e=>{e.stopPropagation();e.target.classList.toggle('on');});
     list.appendChild(div); ta.value='';
   });
 });
-/* 상태 탭 전환 (Processing / On Hold) */
+/* State tab switching (Processing / On Hold) */
 document.querySelectorAll('.wf-tab[data-ostate]').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.wf-tab[data-ostate]').forEach(x=>x.classList.remove('on'));
@@ -729,11 +731,11 @@ document.querySelectorAll('.wf-tab[data-ostate]').forEach(t=>{
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
 });
 
-/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
-const CSEARCH_DATA=[{o:'407847',a:'Dean',t:'오늘 10:42',ts:8,x:'@Yongwon 이 오더 각별 포장 요청'},{o:'407812',a:'Miranti',t:'오늘 09:15',ts:7,x:'@Yongwon JIT 1개 미입고'},{o:'407790',a:'Kai',t:'어제 16:20',ts:6,x:'해결 완료'},{o:'407688',a:'Aldo',t:'어제 09:40',ts:5,x:'고객 메모 확인 — 사쉐 동봉'},{o:'407301',a:'Dean',t:'7/26 14:10',ts:4,x:'포장 교체 후 출고 완료'}];
+/* Comments hub — search all comments (newest first) */
+const CSEARCH_DATA=[{o:'407847',a:'Dean',t:'Today 10:42',ts:8,x:'@Yongwon please pack this order with extra care'},{o:'407812',a:'Miranti',t:'Today 09:15',ts:7,x:'@Yongwon 1 JIT item not yet inbounded'},{o:'407790',a:'Kai',t:'Yesterday 16:20',ts:6,x:'Resolved'},{o:'407688',a:'Aldo',t:'Yesterday 09:40',ts:5,x:'Customer note checked — sachet included'},{o:'407301',a:'Dean',t:'7/26 14:10',ts:4,x:'Repacked and shipped'}];
 function cSearch(inp){
   const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
   const tabs=dd.querySelector('.tabs');
@@ -751,9 +753,9 @@ function cSearch(inp){
   const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
   const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
-  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 Comments가 없습니다</div>');
+      :'<div class="empty">No matching comments</div>');
   pane.style.display='block';
 }
 </script>

@@ -1,4 +1,4 @@
-<title>WMS 2.0 — Inventory 와이어프레임</title>
+<title>WMS 2.0 — Inventory Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -143,7 +143,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
 .note{margin-top:10px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px}
 
-/* Comments 허브 (View Orders/RTO와 동일 패턴) */
+/* Comments hub (same pattern as View Orders/RTO) */
 .inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
 .inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
@@ -163,21 +163,21 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
-/* 소싱 루트 태그 — View Orders와 동일 (색 없이 검정 볼드) */
+/* Sourcing route tags — same as View Orders (black bold, no color) */
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
 .tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · Inventory 와이어프레임</h1>
-  <span class="hint">페이지명 Stock Status → Inventory · 기본 랜딩 = Current Stocks · 실제 "WMS - Stock History" 기능 포함</span>
+  <h1>WMS 2.0 · Inventory Wireframe</h1>
+  <span class="hint">Page renamed Stock Status → Inventory · Default landing = Current Stocks · Includes the live "WMS - Stock History" features</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-pane="p-current">Current Stocks (기본)</button>
-    <button class="wf-tab" data-pane="p-search">Stock History 조회</button>
-    <button class="wf-tab" data-pane="p-inbound">Inbound 폼</button>
-    <button class="wf-tab" data-pane="p-outbound">Outbound 폼</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab on" data-pane="p-current">Current Stocks (default)</button>
+    <button class="wf-tab" data-pane="p-search">Stock History Search</button>
+    <button class="wf-tab" data-pane="p-inbound">Inbound Form</button>
+    <button class="wf-tab" data-pane="p-outbound">Outbound Form</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
@@ -194,20 +194,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 409112</b> · Dean: "@Yongwon cancelled 오더에 예약 3개 잔존 — 허수 의심, 인바운드 취소 확인 부탁드립니다"<br><time>10:30</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다"<br><time>09:12</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 407506</b> · Aldo: "@Yongwon 실사 때 A-02-20 수량 +2 나왔어요. ADJUST 내역 확인 부탁"<br><time>어제 18:40</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 409112</b> · Dean: "@Yongwon 3 reserved units remain on a cancelled order — suspected phantom. Please check Cancel Inbound"<br><time>10:30</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon Coupang inbound +6 is PENDING. Please confirm"<br><time>09:12</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407506</b> · Aldo: "@Yongwon the stock audit found +2 at A-02-20. Please review the ADJUST log"<br><time>Yesterday 18:40</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다"<br><time>09:12</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from this list</small></div>
+        <div class="it"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon Coupang inbound +6 is PENDING. Please confirm"<br><time>09:12</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
@@ -221,7 +221,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <!-- sub tabs -->
     <div class="subtabs anno">
-      <button class="newtab on" data-sub="s-current">Current Stocks <span style="font-size:10px;color:var(--ss-purple)">● 신규·기본</span></button>
+      <button class="newtab on" data-sub="s-current">Current Stocks <span style="font-size:10px;color:var(--ss-purple)">● new · default</span></button>
       <button data-sub="s-search">Stock History</button>
       <button data-sub="s-inbound">Inbound Stock</button>
       <button data-sub="s-outbound">Outbound Stock</button>
@@ -232,7 +232,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="pane" id="p-search">
       <div class="searchbar">
         <select class="sel"><option>SKU</option><option>Product Name</option><option>Order ID</option><option>Tracking No</option></select>
-        <input class="inp" placeholder="Enter SKU (예: 100004819)" value="100004819">
+        <input class="inp" placeholder="Enter SKU (e.g. 100004819)" value="100004819">
         <button class="btn btn-blue btn-sm">🔍 Search</button>
       </div>
 
@@ -245,12 +245,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <div class="anno bignum"><div class="n res"><span class="reslink" data-modal="m-reserved">8</span></div><div class="l">Reserved Qty</div><span class="dot" style="top:-10px;right:-6px">6</span></div>
             <div class="bignum"><div class="n av">34</div><div class="l">Available Qty</div></div>
           </div>
-          <p style="font-size:11.5px;color:var(--ink-3);margin:12px 0 0">Reserved 클릭 → 예약 중인 오더 목록 모달(허수 오더 해제·재고 복구 포함)</p>
+          <p style="font-size:11.5px;color:var(--ink-3);margin:12px 0 0">Click Reserved → allocated orders modal (incl. releasing phantom orders · restock)</p>
         </div>
         <div class="card">
           <h4>📍 By Location</h4>
           <div class="loc-row anno"><span class="loc-pill">A-02-13</span><span class="num">42</span><span class="dot" style="top:-8px;right:-26px">14</span></div>
-          <p style="font-size:11.5px;color:var(--ink-3);margin:8px 0 0">SKU당 로케이션 1개 원칙 — 로케이션 변경은 Current Stocks 입력칸에서</p>
+          <p style="font-size:11.5px;color:var(--ink-3);margin:8px 0 0">One location per SKU — change locations via the Current Stocks input field</p>
         </div>
         <div class="card pinfo">
           <h4>🧴 Product Information</h4>
@@ -284,57 +284,57 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           </tbody>
         </table>
       </div>
-      <div class="anno" style="display:inline-block"><p class="morewarn">⚠ More data available (실화면: pagination 미구현) → <b>페이지네이션 추가</b></p><span class="dot" style="top:-2px;right:-24px">9</span></div>
+      <div class="anno" style="display:inline-block"><p class="morewarn">⚠ More data available (live screen: pagination not implemented) → <b>add pagination</b></p><span class="dot" style="top:-2px;right:-24px">9</span></div>
     </div>
 
-    <!-- ===== Inbound 폼 ===== -->
+    <!-- ===== Inbound Form ===== -->
     <div class="pane" id="p-inbound">
-      <div class="form-note">특정 오더 없이 창고 입고를 직접 기록 (반품 재입고·수기 입고). 로케이션은 SKU에 등록된 단일 로케이션 자동 적용. 오더 연동 입고는 View Orders / Order 상세의 Request Inbound 사용.</div>
+      <div class="form-note">Record a warehouse inbound directly, without a specific order (return restock · manual inbound). Location auto-applies the SKU's single registered location. For order-linked inbound, use Request Inbound on View Orders / the order detail.</div>
       <div class="formgrid">
         <div class="fld"><label>SKU *</label><input placeholder="100004819"></div>
         <div class="fld"><label>Quantity *</label><input type="number" placeholder="0"></div>
-        <div class="fld"><label>Tracking No</label><input placeholder="선택"></div>
+        <div class="fld"><label>Tracking No</label><input placeholder="Optional"></div>
         <div class="fld"><label>Carrier</label><select><option>Coupang</option><option>Deleo</option><option>Direct</option></select></div>
-        <div class="fld"><label>Order ID (선택)</label><input placeholder="연동 시"></div>
+        <div class="fld"><label>Order ID (optional)</label><input placeholder="If linked"></div>
       </div>
       <button class="btn btn-green">＋ Record Inbound</button>
     </div>
 
-    <!-- ===== Outbound 폼 ===== -->
+    <!-- ===== Outbound Form ===== -->
     <div class="pane" id="p-outbound">
-      <div class="form-note">창고 출고를 직접 기록. 로케이션은 SKU 등록 로케이션 자동 적용, Available Qty 초과 출고는 차단됩니다.</div>
+      <div class="form-note">Record a warehouse outbound directly. Location auto-applies the SKU's registered location; outbound exceeding Available Qty is blocked.</div>
       <div class="formgrid">
         <div class="fld"><label>SKU *</label><input placeholder="100004819"></div>
         <div class="fld"><label>Quantity *</label><input type="number" placeholder="0"></div>
-        <div class="fld"><label>Tracking No</label><input placeholder="선택"></div>
+        <div class="fld"><label>Tracking No</label><input placeholder="Optional"></div>
         <div class="fld"><label>Carrier</label><select><option>Deleo</option><option>YUN</option><option>Coupang</option></select></div>
-        <div class="fld"><label>Order ID (선택)</label><input placeholder="연동 시"></div>
+        <div class="fld"><label>Order ID (optional)</label><input placeholder="If linked"></div>
       </div>
       <button class="btn btn-blue">－ Record Outbound</button>
     </div>
 
-    <!-- ===== Current Stocks (신규 E) ===== -->
+    <!-- ===== Current Stocks (new, E) ===== -->
     <div class="pane on" id="p-current">
       <div class="audit-banner anno">
         <span class="dot" style="top:-10px;left:-8px">7</span>
-        <span>📋 재고 실사(Stock-take) 모드 — 창고 담당이 실물 수량을 입력하면 시스템 수량과 차이(Diff)를 자동 계산. 확정 시 ADJUST 이벤트로 히스토리 기록.</span>
+        <span>📋 Stock Audit (stock-take) mode — warehouse staff enter physical counts and the system auto-calculates the Diff vs system qty. On confirm, recorded to history as ADJUST events.</span>
         <span class="sp"></span>
-        <button class="btn btn-line btn-sm" id="toggleAudit">실사 모드 켜기</button>
-        <span class="anno" style="position:relative"><button class="btn btn-gray btn-sm" data-modal="m-auditlog">📋 지난 실사 로그</button><span class="dot" style="top:-11px;right:-8px">15</span></span>
+        <button class="btn btn-line btn-sm" id="toggleAudit">Start Stock Audit</button>
+        <span class="anno" style="position:relative"><button class="btn btn-gray btn-sm" data-modal="m-auditlog">📋 Past Audit Logs</button><span class="dot" style="top:-11px;right:-8px">15</span></span>
       </div>
       <div class="cs-controls">
-        <input class="inp" placeholder="SKU / 제품명 검색">
-        <select class="sel"><option>전체 로케이션</option><option>A-02-13</option><option>B-01-07</option></select>
-        <select class="sel"><option>전체 소싱루트</option><option>SMART BUY</option><option>JIT</option><option>WHOLESALE</option><option>PARTNERSHIP</option></select>
+        <input class="inp" placeholder="Search SKU / product name">
+        <select class="sel"><option>All Locations</option><option>A-02-13</option><option>B-01-07</option></select>
+        <select class="sel"><option>All Sourcing Routes</option><option>SMART BUY</option><option>JIT</option><option>WHOLESALE</option><option>PARTNERSHIP</option></select>
         <span class="sp" style="flex:1"></span>
         <button class="btn btn-gray btn-sm">⬇ Export</button>
       </div>
       <div style="border:1px solid var(--line);border-radius:8px;overflow:auto">
         <table class="tbl">
-          <thead><tr><th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Barcode</th><th>Sourcing Route</th><th>Location <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">12</span></th><th>Total</th><th>Reserved</th><th>Available <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">11</span></th><th class="audcol" style="display:none">실사 수량</th><th class="audcol" style="display:none">Diff</th><th class="audcol" style="display:none">손실액(₩)</th></tr></thead>
+          <thead><tr><th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Barcode</th><th>Sourcing Route</th><th>Location <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">12</span></th><th>Total</th><th>Reserved</th><th>Available <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">11</span></th><th class="audcol" style="display:none">Counted Qty</th><th class="audcol" style="display:none">Diff</th><th class="audcol" style="display:none">Loss (₩)</th></tr></thead>
           <tbody>
             <tr><td class="num">100031877</td><td><div class="thumb">IMG</div></td><td><b>Beauty of Joseon</b> Glow Serum</td><td><b>Beauty of Joseon</b> 글로우 세럼</td><td>30ml</td><td class="num">8809738317481</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-02-03"></td><td class="num">88</td><td class="num" style="color:var(--amber)">6</td><td class="num" style="color:var(--green)">82</td><td class="audcol" style="display:none"><input class="qty-in" value="88"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td><b>The Face Shop</b> 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="바코드 입력"></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="A-03-02"></td><td class="num">61</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td><b>The Face Shop</b> 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="Enter barcode"></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="A-03-02"></td><td class="num">61</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr><td class="num">100005088</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Vital Hydra Solution Water Cream</td><td><b>Dr.Jart+</b> 바이탈 하이드라 워터크림</td><td>50ml</td><td class="num">8809535800120</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-01-07"></td><td class="num">55</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">55</td><td class="audcol" style="display:none"><input class="qty-in" value="55"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr><td class="num">100004819</td><td><div class="thumb">IMG</div></td><td><b>Dongkook</b> Madecassol Cream</td><td><b>Dongkook</b> 마데카솔 크림</td><td>50ml</td><td class="num">8806404003224</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-13"></td><td class="num">42</td><td class="num" style="color:var(--amber)">8</td><td class="num" style="color:var(--green)">34</td><td class="audcol" style="display:none"><input class="qty-in" value="42"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr><td class="num">100039958</td><td><div class="thumb">IMG</div></td><td><b>AtoBarrier365</b> Body Lotion</td><td><b>AtoBarrier365</b> 바디로션</td><td>350ml</td><td class="num">8809740506332</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="C-01-05"></td><td class="num">27</td><td class="num" style="color:var(--amber)">4</td><td class="num" style="color:var(--green)">23</td><td class="audcol" style="display:none"><input class="qty-in" value="27"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
@@ -342,143 +342,143 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td class="num">100040311</td><td><div class="thumb">IMG</div></td><td><b>COSRX</b> Pomegranate &amp; Collagen Lifting Cream</td><td><b>COSRX</b> 석류 콜라겐 탄력 크림</td><td>100ml</td><td class="num">8801051283860</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-05"></td><td class="num">12</td><td class="num" style="color:var(--amber)">1</td><td class="num" style="color:var(--green)">11</td><td class="audcol" style="display:none"><input class="qty-in" value="12"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr><td class="num">100012534</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>75ml</td><td class="num">8809642713823</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-20"></td><td class="num">9</td><td class="num" style="color:var(--amber)">3</td><td class="num" style="color:var(--green)">6</td><td class="audcol" style="display:none"><input class="qty-in" value="11"></td><td class="audcol num" style="display:none"><span class="diff-pos">+2</span></td><td class="audcol num" style="display:none;color:var(--green);font-weight:700">+₩61,260</td></tr>
             <tr><td class="num">100043697</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td><b>Dr.Jart+</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td class="num">8809642714233</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="C-02-01"></td><td class="num">4</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">4</td><td class="audcol" style="display:none"><input class="qty-in" value="4"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td><b>Medicube</b> 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="" placeholder="미지정"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td><b>Medicube</b> 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="" placeholder="Unassigned"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr><td class="num">100045210</td><td><div class="thumb">IMG</div></td><td><b>Anua</b> Heartleaf 77% Soothing Toner</td><td><b>Anua</b> 하트리프 77% 수딩 토너</td><td>250ml</td><td class="num">8809640732124</td><td><span class="tag tag-jit">JIT (Coupang)</span></td><td><input class="loc-in" value="B-03-02"></td><td class="num">1</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">1</td><td class="audcol" style="display:none"><input class="qty-in" value="1"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr class="audrow" style="display:none"><td colspan="14" style="background:var(--ss-purple-50);padding:10px 12px">
-              <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">13</span><span style="font-weight:700;color:var(--ss-purple)">＋ 실사 중 발견한 미등록 제품</span>
-              <span class="ausel"><input id="auSearch" class="bcin" style="width:230px;margin-left:10px" placeholder="제품명 검색 (자동완성 — 바코드 없어도 가능)" autocomplete="off"><div class="audrop" id="auDrop"></div></span>
-              <input id="auLoc" class="loc-in" placeholder="로케이션">
-              <input id="auQty" class="qty-in" placeholder="수량">
-              <button class="btn btn-line btn-sm" id="auAdd">추가</button>
-              <span style="font-size:11.5px;color:var(--ink-3);margin-left:8px">제품명으로 검색해 용량까지 확인 후 선택 → 추가 시 목록 맨 위에 신규 행(Diff=+수량) → 확정 시 ADJUST(+) 편입</span>
+              <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">13</span><span style="font-weight:700;color:var(--ss-purple)">＋ Unregistered product found during audit</span>
+              <span class="ausel"><input id="auSearch" class="bcin" style="width:230px;margin-left:10px" placeholder="Search product name (autocomplete — barcode not required)" autocomplete="off"><div class="audrop" id="auDrop"></div></span>
+              <input id="auLoc" class="loc-in" placeholder="Location">
+              <input id="auQty" class="qty-in" placeholder="Qty">
+              <button class="btn btn-line btn-sm" id="auAdd">Add</button>
+              <span style="font-size:11.5px;color:var(--ink-3);margin-left:8px">Search by product name, verify the size, then select → Add inserts a new row at the top (Diff = +qty) → merged as ADJUST(+) on confirm</span>
             </td></tr>
           </tbody>
         </table>
       </div>
       <div style="margin-top:12px;display:flex;gap:14px;align-items:center" class="audcol" hidden>
-        <span style="font-size:13px">재고 손실 액수(차이 × product cost 합계): <b style="color:var(--amber)">+₩46,260</b> <span style="color:var(--ink-3)">— 목표 0</span></span>
-        <button class="btn btn-blue" data-modal="m-adjust">실사 차이 확정 (ADJUST 기록)</button>
+        <span style="font-size:13px">Total stock loss (sum of diff × product cost): <b style="color:var(--amber)">+₩46,260</b> <span style="color:var(--ink-3)">— target 0</span></span>
+        <button class="btn btn-blue" data-modal="m-adjust">Confirm Audit Differences (ADJUST log)</button>
       </div>
     </div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>Stock 화면 — 신규 / 변경 주석 (기획 E 반영)</h3>
+  <h3>Inventory — Changes</h3>
   <ol>
-    <li><span class="n">15</span><span><b>지난 실사 로그</b> — 실사 모드 버튼 옆(같은 동선)에서 모달로 열람. 월별 회차(실사일·Auditor·조정·신규 편입·손실액 합계, 목표 0 추적) + 회차별 ADJUST 상세 연결 <span class="ref">— E "매 달 실사는 로그로 남음"</span></span></li>
-    <li><span class="n">14</span><span><b>SKU당 로케이션 단일 원칙</b>(2026-07-22 확정) — By Location은 항상 현재 로케이션 1개, Current Stocks 로케이션 입력칸과 정합. 반품도 검수 후 같은 로케이션으로 편입(RETURN-BIN 개념 폐기) <span class="ref">— E 로케이션</span></span></li>
-    <li><span class="n">13</span><span><b>미등록 제품 추가</b>(실사 모드 전용) — <b>제품명 검색 → 자동완성</b>(제품명·용량·SKU 표시, 바코드 없어도 가능) → 클릭 선택 → 로케이션·수량 입력 → 추가 시 <b>목록 맨 위에 신규 행</b>(시스템 0 → Diff +수량) → 확정 시 ADJUST(+) 편입. 카탈로그에도 없으면 미인식 플로우(F)로 수동 등록 <span class="ref">— E 실사</span></span></li>
-    <li><span class="n">10</span><span><b>페이지명 "Stock Status" → "Inventory"로 변경</b> — 재고 도메인 전체(현재고·이력·입출고)를 묶는 표준 명칭. 랜딩(기본 탭) = Current Stocks. 기존 "Export Stock Status" 등 참조명은 개발 시 매핑 <span class="ref">— E 네이밍</span></span></li>
-    <li><span class="n">12</span><span>Location = <b>전 행 수정 가능 입력칸</b> — 미지정 제품(앰버 "미지정")도 노출해서 바로 지정. 바코드 없는 제품은 Barcode 칼럼에 입력칸(View Orders와 동일 규칙) <span class="ref">— E 로케이션 수동 변경</span></span></li>
-    <li><span class="n">11</span><span>기본 정렬 = <b>Available 내림차순</b> — 팔 수 있는 재고가 많은 순. 헤더 클릭으로 재정렬 가능 <span class="ref">— E</span></span></li>
-    <li><span class="n">5</span><span><b>Current Stocks 탭 신규·<b>기본 랜딩</b></b> — 실화면 Stock History는 조회 중심(SKU 검색 후 단건). 전체 현재고 목록 + 로케이션/소싱루트 필터를 첫 탭으로. 소싱루트 필터에 <b>JIT 포함</b>(2026-08-03 확정) — 주문 취소·오배송 반입 등으로 JIT 물량이 재고로 남는 경우가 있어 JIT 잔여 재고도 목록·필터 대상 <span class="ref">— E 신설</span></span></li>
-    <li><span class="n">6</span><span>Reserved Qty 클릭 → <b>예약 오더 목록 모달(M3)</b> — Order ID·Status·예약 수량·시점, cancelled/refunded인데 예약 잔존 시 <b>허수 의심</b> 표시. 행별 <b>인바운드 취소(M4)</b>: 해제 확인 + <b>재고 복구 예/아니오</b>(예=Available 복구, 아니오=ADJUST 손실 기록) <span class="ref">— E</span></span></li>
-    <li><span class="n">7</span><span>재고 실사(Stock-take) 모드 — 켜면 <b>로케이션 오름차순 재정렬</b>(동선대로 실사, Notion E "로케이션 순서대로 표시"), 끄면 Available 내림차순 복귀. 실물 수량 입력 → Diff 자동 계산 + <b>손실액 칼럼(차이×product cost)</b> → 하단 <b>합계=재고 손실 액수(목표 0)</b> → 확정 클릭 시 <b>요약 모달(M1)</b>: ADJUST 목록·신규 편입·Reserved 부족 검증·손실액 합계 확인 후 기록. 매월 실사 로그 보존 <span class="ref">— E</span></span></li>
-    <li><span class="n">8</span><span>Stock History Events — Type/Status를 배지화, Pending confirm 행 하이라이트 + 필터칩(All/Confirmed/Pending) <span class="ref">— E</span></span></li>
-    <li><span class="n">9</span><span>히스토리 페이지네이션 — 실화면 "More data available (pagination not implemented)" 해소 <span class="ref">— E</span></span></li>
-    <li><span class="n">16</span><span>우상단 Comments 허브 — <b>전 화면 공통</b>, 전체 코멘트 검색 포함 <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">15</span><span><b>Past Audit Logs</b> — opened as a modal next to the Stock Audit button (same flow). Monthly sessions (audit date · Auditor · adjustments · new additions · total loss, tracking toward target 0) + link to each session's ADJUST detail <span class="ref">— E "monthly audits are logged"</span></span></li>
+    <li><span class="n">14</span><span><b>Single location per SKU</b> (confirmed 2026-07-22) — By Location always shows the one current location, consistent with the Current Stocks location input. Returns are also merged into the same location after inspection (RETURN-BIN concept dropped) <span class="ref">— E location</span></span></li>
+    <li><span class="n">13</span><span><b>Add unregistered product</b> (Stock Audit mode only) — <b>search product name → autocomplete</b> (shows name · size · SKU, barcode not required) → click to select → enter Location · Qty → Add inserts a <b>new row at the top of the list</b> (system 0 → Diff +qty) → merged as ADJUST(+) on confirm. If it is not in the catalog either, register manually via the Unrecognized flow (F) <span class="ref">— E stock audit</span></span></li>
+    <li><span class="n">10</span><span><b>Page renamed "Stock Status" → "Inventory"</b> — the standard name covering the whole inventory domain (current stock · history · in/outbound). Landing (default tab) = Current Stocks. Legacy references such as "Export Stock Status" are mapped during development <span class="ref">— E naming</span></span></li>
+    <li><span class="n">12</span><span>Location = <b>editable input on every row</b> — unassigned products (amber "Unassigned") are also listed so they can be assigned on the spot. Products without a barcode get an input in the Barcode column (same rule as View Orders) <span class="ref">— E manual location change</span></span></li>
+    <li><span class="n">11</span><span>Default sort = <b>Available descending</b> — most sellable stock first. Re-sortable by clicking column headers <span class="ref">— E</span></span></li>
+    <li><span class="n">5</span><span><b>New Current Stocks tab · <b>default landing</b></b> — the live Stock History screen is lookup-centric (single SKU search). The full current-stock list + Location/Sourcing Route filters become the first tab. The Sourcing Route filter <b>includes JIT</b> (confirmed 2026-08-03) — order cancellations · mis-delivery returns can leave JIT stock behind, so JIT residual stock is also listed and filterable <span class="ref">— E new</span></span></li>
+    <li><span class="n">6</span><span>Click Reserved Qty → <b>allocated orders modal (M3)</b> — Order ID · Status · reserved qty · timestamp; marks <b>suspected phantom</b> when the order is cancelled/refunded but the reservation remains. Per-row <b>Cancel Inbound (M4)</b>: release confirmation + <b>Restock yes/no</b> (yes = restore Available, no = record the loss as ADJUST) <span class="ref">— E</span></span></li>
+    <li><span class="n">7</span><span>Stock Audit (stock-take) mode — starting it <b>re-sorts by location ascending</b> (audit along the walking path, Notion E "display in location order"); exiting restores Available descending. Enter physical counts → Diff auto-calculated + <b>Loss column (diff × product cost)</b> → bottom <b>total = total stock loss (target 0)</b> → clicking confirm opens the <b>summary modal (M1)</b>: review the ADJUST list · new additions · Reserved shortage check · total loss, then record. Monthly audit logs retained <span class="ref">— E</span></span></li>
+    <li><span class="n">8</span><span>Stock History Events — Type/Status rendered as badges, Pending confirm rows highlighted + filter chips (All/Confirmed/Pending) <span class="ref">— E</span></span></li>
+    <li><span class="n">9</span><span>History pagination — resolves the live screen's "More data available (pagination not implemented)" <span class="ref">— E</span></span></li>
+    <li><span class="n">16</span><span>Top-right Comments hub — <b>shared across all screens</b>, includes all-comments search <span class="ref">— 0. UI 2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·Export Stock Status·Search 드롭다운·Inbound/Outbound 폼·이벤트 컬럼(Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor)은 실화면 그대로. 데이터는 마데카솔 크림(100004819) 예시.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · Export Stock Status · Search dropdown · Inbound/Outbound forms · event columns (Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor) stay as on the live screen. Data uses the Madecassol Cream (100004819) example.</p>
 </div>
 
-<!-- 모달: 실사 회차 상세 — ADJUST 이벤트 목록 -->
+<!-- Modal: audit session detail — ADJUST event list -->
 <div class="overlay" id="m-adjlog">
   <div class="modal anno" style="max-width:760px">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>2026-07-22 실사 — ADJUST 이벤트 3건 (Auditor: Yongwon, 14:20 확정)<button class="x" data-close>✕</button></header>
+    <header>2026-07-22 Stock Audit — 3 ADJUST events (Auditor: Yongwon, confirmed 14:20)<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
-        <thead><tr><th>시간</th><th>SKU</th><th>제품</th><th>Location</th><th>시스템→실물</th><th>조정</th><th>손실액</th></tr></thead>
+        <thead><tr><th>Time</th><th>SKU</th><th>Product</th><th>Location</th><th>System → Counted</th><th>Adjustment</th><th>Loss</th></tr></thead>
         <tbody>
           <tr><td class="num">14:20:11</td><td class="num">100005104</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18 → 17</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
           <tr><td class="num">14:20:11</td><td class="num">100012534</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9 → 11</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
-          <tr style="background:var(--ss-purple-50)"><td class="num">14:20:11</td><td class="num">100048201</td><td><b>UNOVE</b> 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[신규 편입]</b></td><td>B-01-02</td><td class="num">0 → 3</td><td><span class="ty ty-adj">ADJUST(+3)</span></td><td class="num" style="color:var(--ink-3)">—</td></tr>
+          <tr style="background:var(--ss-purple-50)"><td class="num">14:20:11</td><td class="num">100048201</td><td><b>UNOVE</b> 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[NEW ADDITION]</b></td><td>B-01-02</td><td class="num">0 → 3</td><td><span class="ty ty-adj">ADJUST(+3)</span></td><td class="num" style="color:var(--ink-3)">—</td></tr>
         </tbody>
       </table>
-      <div class="note">각 이벤트는 해당 SKU의 Stock History에도 ADJUST 타입으로 남습니다 — SKU 검색 후 타입 필터로 개별 확인 가능. 손실액 합계 +₩46,260 (신규 편입 제외).</div>
+      <div class="note">Each event is also recorded as ADJUST type in that SKU's Stock History — search the SKU and filter by type to inspect individually. Total loss +₩46,260 (new additions excluded).</div>
     </div>
-    <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
+    <div class="foot"><button class="btn btn-gray btn-sm" data-close>Close</button></div>
   </div>
 </div>
 
-<!-- 모달: Reserved Quantity 상세 — 예약 오더 목록 -->
+<!-- Modal: Reserved Quantity detail — allocated orders list -->
 <div class="overlay" id="m-reserved">
   <div class="modal anno" style="max-width:780px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
-    <header>Reserved Quantity — <b>Dongkook</b> 마데카솔 크림 50ml (100004819) · 예약 8개<button class="x" data-close>✕</button></header>
+    <header>Reserved Quantity — <b>Dongkook</b> 마데카솔 크림 50ml (100004819) · 8 reserved<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
-        <thead><tr><th>Order ID</th><th>Order Date</th><th>Customer</th><th>Status</th><th>예약 수량</th><th>예약 시점</th><th>Action</th></tr></thead>
+        <thead><tr><th>Order ID</th><th>Order Date</th><th>Customer</th><th>Status</th><th>Reserved Qty</th><th>Reserved At</th><th>Action</th></tr></thead>
         <tbody>
-          <tr><td class="num" style="color:var(--blue);font-weight:700">407812</td><td class="num">2026-06-30</td><td>Sarah Kim</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>2</b></td><td class="num">07-12 11:05</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">인바운드 취소</button></td></tr>
-          <tr><td class="num" style="color:var(--blue);font-weight:700">413650</td><td class="num">2026-07-08</td><td>Emma Park</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>3</b></td><td class="num">07-08 14:22</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">인바운드 취소</button></td></tr>
-          <tr style="background:var(--amber-soft)"><td class="num" style="color:var(--blue);font-weight:700">409112</td><td class="num">2026-07-02</td><td>Liam Chen</td><td><span class="stt" style="background:var(--red-soft);color:var(--red)">cancelled</span> <span style="background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800">허수 의심</span></td><td class="num"><b>3</b></td><td class="num">07-02 09:10</td><td><button class="btn btn-sm" style="border:1px solid var(--red);color:var(--red);background:var(--page)" data-modal="m-resrelease">인바운드 취소</button></td></tr>
+          <tr><td class="num" style="color:var(--blue);font-weight:700">407812</td><td class="num">2026-06-30</td><td>Sarah Kim</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>2</b></td><td class="num">07-12 11:05</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">Cancel Inbound</button></td></tr>
+          <tr><td class="num" style="color:var(--blue);font-weight:700">413650</td><td class="num">2026-07-08</td><td>Emma Park</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>3</b></td><td class="num">07-08 14:22</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">Cancel Inbound</button></td></tr>
+          <tr style="background:var(--amber-soft)"><td class="num" style="color:var(--blue);font-weight:700">409112</td><td class="num">2026-07-02</td><td>Liam Chen</td><td><span class="stt" style="background:var(--red-soft);color:var(--red)">cancelled</span> <span style="background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800">SUSPECTED PHANTOM</span></td><td class="num"><b>3</b></td><td class="num">07-02 09:10</td><td><button class="btn btn-sm" style="border:1px solid var(--red);color:var(--red);background:var(--page)" data-modal="m-resrelease">Cancel Inbound</button></td></tr>
         </tbody>
       </table>
-      <div class="note">합계 8 = 2+3+3 · <b>허수 의심</b> = 오더가 cancelled/refunded인데 예약이 안 풀린 건 — 해제 대상. 예약-실주문 불일치가 계속되면 Stock History의 <b>Pending confirm 필터</b>로 미확정 이벤트를 조사하세요(Dean 리포트 연계).</div>
+      <div class="note">Total 8 = 2+3+3 · <b>Suspected phantom</b> = the order is cancelled/refunded but the reservation was never released — release target. If reservation-order mismatches persist, investigate unconfirmed events with the <b>Pending confirm filter</b> in Stock History (linked to Dean's report).</div>
     </div>
-    <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
+    <div class="foot"><button class="btn btn-gray btn-sm" data-close>Close</button></div>
   </div>
 </div>
 
-<!-- 모달: 인바운드 취소 확인 — 재고 복구 여부 -->
+<!-- Modal: Cancel Inbound confirmation — restock decision -->
 <div class="overlay" id="m-resrelease">
   <div class="modal anno" style="max-width:460px">
     <span class="dot" style="top:-11px;left:-11px">M4</span>
-    <header>인바운드 취소 — Order 409112 · <b>Dongkook</b> 마데카솔 크림 3개<button class="x" data-close>✕</button></header>
+    <header>Cancel Inbound — Order 409112 · <b>Dongkook</b> 마데카솔 크림 × 3<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">1. 이 오더의 예약(Reserved)을 해제하시겠습니까?</b>
-      <p style="margin:6px 0 12px;color:var(--ink-3);font-size:12.5px">cancelled 오더에 남은 허수 예약 — 해제 시 이 오더와의 연결이 끊어집니다.</p>
-      <b style="color:var(--ink)">2. 재고를 돌려놓으시겠습니까?</b>
+      <b style="color:var(--ink)">1. Release the reservation (Reserved) on this order?</b>
+      <p style="margin:6px 0 12px;color:var(--ink-3);font-size:12.5px">A phantom reservation left on a cancelled order — releasing it unlinks this order.</p>
+      <b style="color:var(--ink)">2. Restock the units?</b>
       <div class="qrow" style="display:flex;flex-direction:column;align-items:stretch;gap:6px;margin-top:8px">
-        <label><input type="radio" name="resback" checked> 예 — Available +3 (재고로 복구)</label>
-        <label><input type="radio" name="resback"> 아니오 — 재고 제외 (파손·분실 등, ADJUST(−3) 손실 기록)</label>
+        <label><input type="radio" name="resback" checked> Yes — Available +3 (restock)</label>
+        <label><input type="radio" name="resback"> No — exclude from stock (damaged · lost etc., record the loss as ADJUST(−3))</label>
       </div>
       <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
-        <b style="color:var(--ink)">3. 복구 수량</b>
+        <b style="color:var(--ink)">3. Restock Qty</b>
         <input value="3" style="width:70px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font:inherit;text-align:center;background:var(--page);color:var(--ink)">
-        <span style="color:var(--ink-3);font-size:12px">기본값 = 인바운드됐던 개수 (수정 가능)</span>
+        <span style="color:var(--ink-3);font-size:12px">Default = qty originally inbounded (editable)</span>
       </div>
       <div style="margin-top:12px">
-        <b style="color:var(--ink)">4. 메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="취소 사유나 참고사항 — 작성 시 오더 Comments 히스토리에 함께 기록됩니다"></textarea>
+        <b style="color:var(--ink)">4. Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Cancellation reason or notes — if written, also recorded in the order's Comments history"></textarea>
       </div>
-      <div class="note">해제 즉시 Reserved 8 → 5, "예" 선택 시 Available 34 → 37. 처리 내역은 Stock History에 RESERVE 해제 이벤트로 기록됩니다.</div>
+      <div class="note">On release, Reserved 8 → 5; choosing "Yes" brings Available 34 → 37. The action is recorded in Stock History as a RESERVE release event.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>확인</button>
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm</button>
     </div>
   </div>
 </div>
 
-<!-- 모달: 지난 실사 로그 (회차 목록) -->
+<!-- Modal: Past Audit Logs (session list) -->
 <div class="overlay" id="m-auditlog">
   <div class="modal" style="max-width:760px">
-    <header>지난 실사 로그 — 월 1회 회차 기록<button class="x" data-close>✕</button></header>
+    <header>Past Audit Logs — monthly session records<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl">
-        <thead><tr><th>실사일</th><th>Auditor</th><th>점검 SKU</th><th>조정 건수</th><th>신규 편입</th><th>손실액 합계</th><th>상세</th></tr></thead>
+        <thead><tr><th>Audit Date</th><th>Auditor</th><th>SKUs Checked</th><th>Adjustments</th><th>New Additions</th><th>Total Loss</th><th>Detail</th></tr></thead>
         <tbody>
-          <tr><td class="num">2026-07-22</td><td>Yongwon</td><td class="num">10</td><td class="num">2 (−1 / +2)</td><td class="num">1</td><td class="num" style="color:var(--amber);font-weight:700">+₩46,260</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog">ADJUST 이벤트 보기</a></td></tr>
-          <tr><td class="num">2026-06-30</td><td>Dean</td><td class="num">9</td><td class="num">5 (−4 / +1)</td><td class="num">0</td><td class="num" style="color:var(--red);font-weight:700">−₩128,460</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog6">ADJUST 이벤트 보기</a></td></tr>
-          <tr><td class="num">2026-05-31</td><td>Dean</td><td class="num">9</td><td class="num">0</td><td class="num">0</td><td class="num" style="color:var(--green);font-weight:700">₩0 · 목표 달성</td><td><a style="color:var(--blue);cursor:pointer">—</a></td></tr>
+          <tr><td class="num">2026-07-22</td><td>Yongwon</td><td class="num">10</td><td class="num">2 (−1 / +2)</td><td class="num">1</td><td class="num" style="color:var(--amber);font-weight:700">+₩46,260</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog">View ADJUST events</a></td></tr>
+          <tr><td class="num">2026-06-30</td><td>Dean</td><td class="num">9</td><td class="num">5 (−4 / +1)</td><td class="num">0</td><td class="num" style="color:var(--red);font-weight:700">−₩128,460</td><td><a style="color:var(--blue);cursor:pointer" data-modal="m-adjlog6">View ADJUST events</a></td></tr>
+          <tr><td class="num">2026-05-31</td><td>Dean</td><td class="num">9</td><td class="num">0</td><td class="num">0</td><td class="num" style="color:var(--green);font-weight:700">₩0 · target met</td><td><a style="color:var(--blue);cursor:pointer">—</a></td></tr>
         </tbody>
       </table>
-      <div class="note">손실액 합계를 <b>0으로 맞추는 것</b>이 센터 관리자 목표. "ADJUST 이벤트 보기"로 회차별 조정 상세 확인 — 개별 이벤트는 각 SKU의 Stock History에도 ADJUST 타입으로 기록됩니다.</div>
+      <div class="note">The center manager's goal is to <b>bring the total loss to 0</b>. Use "View ADJUST events" for each session's adjustment detail — individual events are also recorded as ADJUST type in each SKU's Stock History.</div>
     </div>
-    <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
+    <div class="foot"><button class="btn btn-gray btn-sm" data-close>Close</button></div>
   </div>
 </div>
 
-<!-- 모달: 실사 회차 상세 (2026-06) -->
+<!-- Modal: audit session detail (2026-06) -->
 <div class="overlay" id="m-adjlog6">
   <div class="modal" style="max-width:760px">
-    <header>2026-06-30 실사 — ADJUST 이벤트 5건 (Auditor: Dean, 17:05 확정)<button class="x" data-close>✕</button></header>
+    <header>2026-06-30 Stock Audit — 5 ADJUST events (Auditor: Dean, confirmed 17:05)<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
-        <thead><tr><th>시간</th><th>SKU</th><th>제품</th><th>Location</th><th>시스템→실물</th><th>조정</th><th>손실액</th></tr></thead>
+        <thead><tr><th>Time</th><th>SKU</th><th>Product</th><th>Location</th><th>System → Counted</th><th>Adjustment</th><th>Loss</th></tr></thead>
         <tbody>
           <tr><td class="num">17:05:42</td><td class="num">100031877</td><td><b>Beauty of Joseon</b> 글로우 세럼</td><td>B-02-03</td><td class="num">91 → 88</td><td><span class="ty ty-adj">ADJUST(−3)</span></td><td class="num" style="color:var(--red)">−₩36,000</td></tr>
           <tr><td class="num">17:05:42</td><td class="num">100012534</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">11 → 9</td><td><span class="ty ty-adj">ADJUST(−2)</span></td><td class="num" style="color:var(--red)">−₩61,260</td></tr>
@@ -487,39 +487,39 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <tr><td class="num">17:05:42</td><td class="num">100005104</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">17 → 18</td><td><span class="ty ty-adj">ADJUST(+1)</span></td><td class="num" style="color:var(--green)">+₩15,000</td></tr>
         </tbody>
       </table>
-      <div class="note">손실액 합계 <b style="color:var(--red)">−₩128,460</b> — 6월은 손실 초과로 원인 조사 진행(피킹 오출고 추정).</div>
+      <div class="note">Total loss <b style="color:var(--red)">−₩128,460</b> — June exceeded the loss target; root-cause investigation in progress (suspected picking mis-outbound).</div>
     </div>
-    <div class="foot"><button class="btn btn-gray btn-sm" data-close>닫기</button></div>
+    <div class="foot"><button class="btn btn-gray btn-sm" data-close>Close</button></div>
   </div>
 </div>
 
-<!-- 모달: 실사 차이 확정 요약 -->
+<!-- Modal: Confirm Audit Differences summary -->
 <div class="overlay" id="m-adjust">
   <div class="modal anno" style="max-width:720px">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>실사 차이 확정 — 2026년 7월 실사 (Auditor: Yongwon)<button class="x" data-close>✕</button></header>
+    <header>Confirm Audit Differences — July 2026 Stock Audit (Auditor: Yongwon)<button class="x" data-close>✕</button></header>
     <div class="body">
-      <p style="margin:0 0 10px">Diff ≠ 0인 항목만 <b>ADJUST 이벤트</b>로 기록됩니다 — Inbound/Outbound가 아닌 <b>장부 보정</b>(물류 이력 오염 방지). Auditor·시간·실사 회차가 함께 남고 Stock History에서 ADJUST 타입으로 필터 가능합니다.</p>
+      <p style="margin:0 0 10px">Only items with Diff ≠ 0 are recorded as <b>ADJUST events</b> — a <b>book correction</b>, not Inbound/Outbound (keeps logistics history clean). Auditor · time · audit session are recorded together, and Stock History can filter by ADJUST type.</p>
       <table class="tbl" style="font-size:12.5px">
-        <thead><tr><th>SKU</th><th>제품</th><th>Location</th><th>시스템</th><th>실물</th><th>Diff</th><th>처리</th><th>손실액</th></tr></thead>
+        <thead><tr><th>SKU</th><th>Product</th><th>Location</th><th>System</th><th>Counted</th><th>Diff</th><th>Action</th><th>Loss</th></tr></thead>
         <tbody>
           <tr><td class="num">100005104</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18</td><td class="num">17</td><td class="num" style="color:var(--red);font-weight:700">−1</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
           <tr><td class="num">100012534</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9</td><td class="num">11</td><td class="num" style="color:var(--green);font-weight:700">+2</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
-          <tr style="background:var(--ss-purple-50)"><td class="num">100048201</td><td><b>UNOVE</b> 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[신규]</b></td><td>B-01-02</td><td class="num">0</td><td class="num">3</td><td class="num" style="color:var(--green);font-weight:700">+3</td><td><span class="ty ty-adj">ADJUST(+3)</span> 편입</td><td class="num" style="color:var(--ink-3)">— (신규)</td></tr>
+          <tr style="background:var(--ss-purple-50)"><td class="num">100048201</td><td><b>UNOVE</b> 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[NEW]</b></td><td>B-01-02</td><td class="num">0</td><td class="num">3</td><td class="num" style="color:var(--green);font-weight:700">+3</td><td><span class="ty ty-adj">ADJUST(+3)</span> added</td><td class="num" style="color:var(--ink-3)">— (신규)</td></tr>
         </tbody>
       </table>
-      <div class="note" style="background:var(--amber-soft);margin-top:10px">⚠ <b>Reserved 부족 검증</b> — 실물 수량이 Reserved(주문 배정분)보다 적은 SKU가 있으면 여기에 해당 오더 목록이 표시되고, 확인 전에는 확정이 비활성화됩니다. 이번 실사는 해당 없음.</div>
-      <div class="note">재고 손실 액수 합계: <b style="color:var(--amber)">+₩46,260</b> (목표 0) · 신규 편입 3개는 손실 아님 — 확정 즉시 Current Stocks·Available 반영, 매월 실사 로그 보존.</div>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px">⚠ <b>Reserved shortage check</b> — if any SKU's counted qty is below Reserved (allocated orders), the affected order list appears here and confirmation is disabled until reviewed. None in this audit.</div>
+      <div class="note">Total stock loss: <b style="color:var(--amber)">+₩46,260</b> (target 0) · the 3 new additions are not losses — on confirm, Current Stocks · Available update immediately; monthly audit logs retained.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>확정 — ADJUST 3건 기록</button>
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm — record 3 ADJUST events</button>
     </div>
   </div>
 </div>
 
 <script>
-/* 실사 미등록 제품 — 제품명 자동완성 검색 + 목록 맨 위 행 삽입 */
+/* Stock Audit unregistered product — product-name autocomplete + insert row at top */
 const AU_CATALOG=[
   {sku:'100048201',kr:'UNOVE 딥 대미지 트리트먼트',size:'320ml'},
   {sku:'100051200',kr:'UNOVE 실크 헤어 오일',size:'150ml'},
@@ -533,8 +533,11 @@ auS.addEventListener('input',()=>{
   auPick=null;
   const q=auS.value.trim();
   if(!q){auD.style.display='none';return;}
-  const hits=AU_CATALOG.filter(c=>c.kr.includes(q));
-  auD.innerHTML=hits.length?hits.map(c=>`<div data-sku="${c.sku}"><b>${c.kr}</b> <span class="sz">· ${c.size} · ${c.sku}</span></div>`).join(''):'<div style="color:var(--ink-3)">검색 결과 없음 — 미인식 플로우(F)로 수동 등록</div>';
+  const ql=q.toLowerCase();
+  const hits=AU_CATALOG.filter(c=>(c.kr+' '+c.sku).toLowerCase().includes(ql));
+  auD.innerHTML=hits.length?hits.map(c=>`<div data-sku="${c.sku}"><b>${c.kr}</b> <span class="sz">· ${c.size} · ${c.sku}</span></div>`).join(''):'<div style="color:var(--ink-3)">No match — register manually via Unrecognized flow (F)</div>';
+  const auR=auS.getBoundingClientRect();
+  auD.style.position='fixed';auD.style.top=(auR.bottom+4)+'px';auD.style.left=auR.x+'px';
   auD.style.display='block';
   auD.querySelectorAll('div[data-sku]').forEach(d=>{
     d.addEventListener('click',()=>{
@@ -547,11 +550,11 @@ auS.addEventListener('input',()=>{
 document.getElementById('auAdd').addEventListener('click',()=>{
   if(!auPick){auS.focus();return;}
   const qty=document.getElementById('auQty').value||'1';
-  const loc=document.getElementById('auLoc').value||'미지정';
+  const loc=document.getElementById('auLoc').value||'Unassigned';
   const tb=document.querySelector('#p-current tbody');
   const tr=document.createElement('tr');
   tr.style.background='var(--ss-purple-50)';
-  tr.innerHTML=`<td class="num">${auPick.sku}</td><td><div class="thumb">IMG</div></td><td>—</td><td><b>${auPick.kr}</b> <span style="color:var(--ss-purple);font-weight:700;font-size:10.5px">[신규]</span></td><td>${auPick.size}</td><td>–</td><td>—</td><td><input class="loc-in" value="${loc}"></td><td class="num">0</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">0</td><td class="audcol" style="display:table-cell"><input class="qty-in" value="${qty}"></td><td class="audcol num" style="display:table-cell"><span class="diff-pos">+${qty}</span></td><td class="audcol num" style="display:table-cell;color:var(--ink-3)">— (신규)</td>`;
+  tr.innerHTML=`<td class="num">${auPick.sku}</td><td><div class="thumb">IMG</div></td><td>—</td><td><b>${auPick.kr}</b> <span style="color:var(--ss-purple);font-weight:700;font-size:10.5px">[NEW]</span></td><td>${auPick.size}</td><td>–</td><td>—</td><td><input class="loc-in" value="${loc}"></td><td class="num">0</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">0</td><td class="audcol" style="display:table-cell"><input class="qty-in" value="${qty}"></td><td class="audcol num" style="display:table-cell"><span class="diff-pos">+${qty}</span></td><td class="audcol num" style="display:table-cell;color:var(--ink-3)">— (신규)</td>`;
   tb.insertBefore(tr, tb.firstElementChild);
   auS.value=''; document.getElementById('auQty').value=''; document.getElementById('auLoc').value=''; auPick=null;
 });
@@ -592,16 +595,16 @@ document.getElementById('toggleAudit').addEventListener('click',function(){
   const ar=document.querySelector('#p-current .audrow');
   ar.style.display=on?'table-row':'none';
   const rows=on
-    ? [...csOrig].sort((a,b)=>((a.querySelector('.loc-in')?.value||'힣').localeCompare(b.querySelector('.loc-in')?.value||'힣')))
+    ? [...csOrig].sort((a,b)=>((a.querySelector('.loc-in')?.value||'\uD7A3').localeCompare(b.querySelector('.loc-in')?.value||'\uD7A3')))
     : csOrig;
   rows.forEach(r=>csBody.insertBefore(r,ar));
-  this.textContent=on?'실사 모드 끄기':'실사 모드 켜기';
+  this.textContent=on?'Exit Stock Audit':'Start Stock Audit';
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
 });
-/* Comments 허브 — 열기/탭 전환/★ 저장/전체 검색 (View Orders/RTO와 동일 패턴) */
+/* Comments hub — open / tab switch / star-save / global search (same pattern as View Orders/RTO) */
 document.querySelectorAll('[data-open]').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
@@ -620,7 +623,7 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-const CSEARCH_DATA=[{o:'409112',a:'Dean',t:'오늘 10:30',ts:8,x:'@Yongwon cancelled 오더에 예약 3개 잔존 — 허수 의심, 인바운드 취소 확인 부탁드립니다'},{o:'407847',a:'Miranti',t:'오늘 09:12',ts:7,x:'@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다'},{o:'407506',a:'Aldo',t:'어제 18:40',ts:6,x:'@Yongwon 실사 때 A-02-20 수량 +2 나왔어요. ADJUST 내역 확인 부탁'},{o:'407812',a:'Dean',t:'어제 11:05',ts:5,x:'마데카솔 Reserved 8개 정합 확인했습니다'},{o:'406990',a:'Miranti',t:'07-09 16:50',ts:4,x:'B-01-02 로케이션 라벨 교체했습니다'}];
+const CSEARCH_DATA=[{o:'409112',a:'Dean',t:'Today 10:30',ts:8,x:'@Yongwon 3 reserved units remain on a cancelled order — suspected phantom. Please check Cancel Inbound'},{o:'407847',a:'Miranti',t:'Today 09:12',ts:7,x:'@Yongwon Coupang inbound +6 is PENDING. Please confirm'},{o:'407506',a:'Aldo',t:'Yesterday 18:40',ts:6,x:'@Yongwon the stock audit found +2 at A-02-20. Please review the ADJUST log'},{o:'407812',a:'Dean',t:'Yesterday 11:05',ts:5,x:'Verified the 8 reserved on Madecassol match the orders'},{o:'406990',a:'Miranti',t:'07-09 16:50',ts:4,x:'Replaced the location label at B-01-02'}];
 function cSearch(inp){
   const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
   const tabs=dd.querySelector('.tabs');
@@ -638,9 +641,9 @@ function cSearch(inp){
   const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
   const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
-  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+      :'<div class="empty">No matching comments</div>');
   pane.style.display='block';
 }
 </script>

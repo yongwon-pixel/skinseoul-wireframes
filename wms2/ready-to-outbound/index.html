@@ -1,4 +1,4 @@
-<title>WMS 2.0 — Ready to be Outbonded 와이어프레임</title>
+<title>WMS 2.0 — Ready to be Outbounded Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -45,7 +45,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
 .logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
 
-/* 좌우 여백 축소 (D) */
+/* Reduced side padding (D) */
 .pagepad{padding:16px 14px 0}
 .ptitle h2{font-size:26px;margin:0 0 2px}
 .psub{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
@@ -58,12 +58,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .btn-gray{background:var(--page);border:1px solid var(--line-strong);color:var(--ink-2)}
 .btn-sm{padding:5px 11px;font-size:12.5px}
 
-/* 뷰 탭 (All/Inventory/Marketing/JIT) */
+/* View tabs (All/Inventory/Marketing/JIT) */
 .viewtabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .vtab{border:1px solid var(--line-strong);border-radius:8px;padding:6px 14px;background:var(--page);font-weight:700;font-size:12.5px;color:var(--ink-2);cursor:pointer}
 .vtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-/* 일괄 처리 바 + 프로그래스 */
+/* Bulk action bar + progress */
 .bulkbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px}
 .bulkbar .cnt{font-size:12.5px;color:var(--ss-purple);font-weight:700}
 .progressrow{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
@@ -73,7 +73,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .toast{position:absolute;top:54px;right:16px;z-index:80;background:var(--green);color:#fff;border-radius:10px;padding:10px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:13px}
 .toast small{opacity:.85;font-size:11.5px}
 
-/* 테이블 (실화면 구조) */
+/* Table (actual admin structure) */
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
 .tbl th{background:var(--ink);color:var(--page);text-align:left;padding:10px 12px;font-weight:600;white-space:nowrap}
 .tbl td{border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:middle}
@@ -94,7 +94,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .mkt-badge{display:inline-block;background:var(--mkt);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;margin-left:6px;vertical-align:middle}
 .jit-badge{display:inline-block;background:var(--amber);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;margin-left:6px;vertical-align:middle}
 
-/* 행별 코멘트 펼침 */
+/* Inline comment panel per row */
 .crow td{background:var(--blue-soft);padding:12px 16px}
 .crow .c-item{display:flex;gap:10px;padding:6px 0;font-size:13px;align-items:flex-start}
 .crow .who{font-weight:700;white-space:nowrap}
@@ -111,7 +111,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .howto ul{margin:0;padding-left:22px}
 .howto li{margin-bottom:3px}
 
-/* 모달 */
+/* Modal */
 .overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
 .modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:640px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
@@ -124,7 +124,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .picktbl td{border-bottom:1px solid var(--line);padding:7px 10px}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
 
-/* Comments 허브 */
+/* Comments hub */
 .inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
 .inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
@@ -145,10 +145,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · Ready to be Outbonded 와이어프레임</h1>
-  <span class="hint">실제 어드민(2026-07-21 캡처) 기반 · 5개 오더 예시 · 보라 번호 = 신규 주석</span>
-  <button class="wf-toggle" data-modal="m-pick" style="background:rgba(255,255,255,.28)">모달: 로케이션 프린트(피킹 리스트)</button>
-  <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+  <h1>WMS 2.0 · Ready to be Outbounded Wireframe</h1>
+  <span class="hint">Based on the actual admin (captured 2026-07-21) · 5 sample orders · purple numbers = new annotations</span>
+  <button class="wf-toggle" data-modal="m-pick" style="background:rgba(255,255,255,.28)">Modal: Print Pick Locations (Picking List)</button>
+  <button class="wf-toggle" id="annoToggle">Hide annotations</button>
 </div>
 
 <div class="mockwrap"><div class="mock anno">
@@ -163,24 +163,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
-      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 422165</b> · Dean: "@Yongwon 이 오더 포장 각별히 신경써주세요"<br><time>10:12</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon ×5 수량 맞는지 확인 부탁"<br><time>09:40</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 422165</b> · Dean: "@Yongwon Please take extra care packing this order"<br><time>10:12</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon Please double-check the ×5 quantity"<br><time>09:40</time></div><button class="star on" title="Saved">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon ×5 수량 맞는지 확인 부탁"<br><time>09:40</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon Please double-check the ×5 quantity"<br><time>09:40</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast" style="display:none"><b>✓ 송장 일괄 프린트 완료 — 3건</b><small>몇 초 뒤 자동으로 사라집니다</small></div>
+  <div class="toast" id="toast" style="display:none"><b>✓ Bulk Print Labels complete — 3 orders</b><small>Disappears automatically after a few seconds</small></div>
 
   <div class="pagepad anno">
     <span class="dot" style="top:6px;left:2px">11</span>
@@ -191,7 +191,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue">Refresh</button>
     </div>
 
-    <!-- 뷰 탭 (신규) -->
+    <!-- View tabs (new) -->
     <div class="viewtabs anno">
       <span class="dot" style="top:-11px;left:-10px">14</span>
       <button class="vtab on" data-view="all">All <span style="font-weight:400">(5)</span></button>
@@ -200,24 +200,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="vtab" data-view="jit">JIT <span style="font-weight:400">(1)</span></button>
     </div>
 
-    <!-- 일괄 처리 바 (신규 D) -->
+    <!-- Bulk action bar (new, D) -->
     <div class="bulkbar anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
-      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
-      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-pick">🖨 로케이션 프린트 (3개 오더 · 제품 8개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
-      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="송장 일괄 프린트">🖨 송장 일괄 프린트 (3건)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
-      <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="일괄 Outbound">📦 일괄 Outbound (3건)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
-      <span class="cnt">3개 선택됨</span>
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> Select all</label>
+      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-pick">🖨 Print Pick Locations (3 orders · 8 items)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="Bulk Print Labels">🖨 Bulk Print Labels (3 orders)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
+      <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="Bulk Outbound">📦 Bulk Outbound (3 orders)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
+      <span class="cnt">3 selected</span>
     </div>
 
-    <!-- 프로그래스 (3개 일괄 버튼 공통) + 완료 토스트 (신규 D) -->
+    <!-- Progress (shared by the 3 bulk buttons) + completion toast (new, D) -->
     <div class="progressrow anno">
       <span class="dot" style="top:-11px;left:-10px">5</span>
       <div class="pbar"><div class="fill" id="pfill"></div></div>
-      <span class="pbar-label anno" id="pbarLabel">송장 일괄 프린트 진행 중 — 3/5 (60%) · 새로고침 없음 · 체크박스 유지 · 완료 시 우상단 알림<span class="dot" style="top:-11px;right:-26px">6</span></span>
+      <span class="pbar-label anno" id="pbarLabel">Bulk Print Labels in progress — 3/5 (60%) · No refresh · selection kept · toast on completion<span class="dot" style="top:-11px;right:-26px">6</span></span>
     </div>
 
-    <!-- 테이블 (실화면 구조 + 체크박스·코멘트 칼럼) -->
+    <!-- Table (actual admin structure + checkbox & comment columns) -->
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
@@ -236,8 +236,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow1" data-view="inv" style="display:none"><td colspan="9">
-          <div class="c-item"><span class="who">Egita</span><span><span class="at">@Yongwon</span> ×5 수량 맞는지 확인 부탁드립니다.</span><time>07-21 09:40</time><button class="star on" title="저장됨">★</button></div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림 (오더넘버·내용·시간·작성자 포함)"><button class="btn btn-blue btn-sm">등록</button></div>
+          <div class="c-item"><span class="who">Egita</span><span><span class="at">@Yongwon</span> Please double-check the ×5 quantity.</span><time>07-21 09:40</time><button class="star on" title="Saved">★</button></div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification (order no. · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
         </td></tr>
         <tr data-view="inv" class="striped">
           <td><input type="checkbox" checked></td>
@@ -249,8 +249,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow2" data-view="inv" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
         </td></tr>
         <tr data-view="inv">
           <td><input type="checkbox" checked></td>
@@ -268,13 +268,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow3" data-view="inv" style="display:none"><td colspan="9">
-          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> 이 오더 포장 각별히 신경써주세요. VIP 고객입니다.</span><time>07-21 10:12</time><button class="star" title="저장">★</button></div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
+          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Please take extra care packing this order. This is a VIP customer.</span><time>07-21 10:12</time><button class="star" title="Save">★</button></div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
         </td></tr>
         <tr class="row-mkt anno" data-view="mkt">
           <td><input type="checkbox"></td>
           <td><span class="oid">MKT-40233</span><span class="mkt-badge">MKT</span><span class="dot" style="top:-4px;left:-12px">8</span></td>
-          <td>2026. 7. 21.</td><td>인플루언서 @glowwithjade<div style="font-size:11px;color:var(--ink-3)">담당: Harshit</div></td>
+          <td>2026. 7. 21.</td><td>Influencer @glowwithjade<div style="font-size:11px;color:var(--ink-3)">PIC: Harshit</div></td>
           <td><span class="cntbadge cb-total">3</span></td>
           <td>
             <div class="item-line"><span class="skupill">100043697</span> <b>Dr.Jart+</b> Cicapair Gentle Clea…<span class="qtypill">×2</span></div>
@@ -282,28 +282,28 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           </td>
           <td>
             <div class="locline"><span class="locpill">A-01-04</span></div>
-            <div class="locline"><span class="locpill" style="border-color:var(--amber-line);background:var(--amber-soft);color:var(--amber)">미입고</span></div>
+            <div class="locline"><span class="locpill" style="border-color:var(--amber-line);background:var(--amber-soft);color:var(--amber)">Not inbounded</span></div>
           </td>
           <td><button class="cmtbtn" data-open="crow5">💬</button></td>
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow5" data-view="mkt" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
         </td></tr>
         <tr class="row-jit anno" data-view="jit">
           <td><input type="checkbox"></td>
-          <td><span class="oid">422164</span><span class="jit-badge">JIT (Coupang) 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
+          <td><span class="oid">422164</span><span class="jit-badge">Fully Inbounded</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
           <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
           <td><span class="cntbadge cb-total">2</span></td>
           <td><div class="item-line"><span class="skupill">100005611</span> <b>innisfree</b> Green Tea Seed Hyaluronic Serum<span class="qtypill">×2</span></div></td>
-          <td><div class="locline"><span class="locpill">선반 3</span></div></td>
+          <td><div class="locline"><span class="locpill">Shelf 3</span></div></td>
           <td><button class="cmtbtn" data-open="crow4">💬</button></td>
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow4" data-view="jit" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
-          <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
         </td></tr>
       </tbody>
     </table>
@@ -324,31 +324,31 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div></div>
 
 <div class="legend">
-  <h3>Ready to be Outbonded — 신규 / 변경 주석 (기획 D + 0 반영)</h3>
+  <h3>Ready to be Outbounded — Changes</h3>
   <ol>
-    <li><span class="n">1</span><span>행별 체크박스 + 전체 선택 — 아래 일괄 버튼 3종의 대상 선택. 버튼에 <b>선택된 오더·제품 총 갯수 표시</b> <span class="ref">— D</span></span></li>
-    <li><span class="n">2</span><span>로케이션 프린트 — 클릭 시 <b>피킹 리스트 모달(M1)</b>: 선택 오더의 어느 로케이션에서 어떤 제품 몇 개, <b>로케이션 오름차순 정렬</b>(A-02-13 → B-01-07 → 선반 3). 프린트 → 프로그래스 → 완료 토스트 <span class="ref">— D</span></span></li>
-    <li><span class="n">3</span><span>송장 일괄 프린트 — 선택 오더 송장 한 번에 출력 (갯수 표시) <span class="ref">— D</span></span></li>
-    <li><span class="n">4</span><span>일괄 Outbound — 선택 오더 한 번에 아웃바운드. <b>완료 후 새로고침 · 실행 시 전송 사운드 재생(2026-08-03)</b> <span class="ref">— D</span></span></li>
-    <li><span class="n">5</span><span>0~100% 프로그래스 바 — <b>로케이션 프린트·송장 일괄 프린트·일괄 Outbound 3개 버튼 공통</b>. 프린트류는 새로고침 금지+체크박스 유지, Outbound는 완료 후 새로고침 <span class="ref">— D</span></span></li>
-    <li><span class="n">6</span><span>완료 알림 — <b>우상단 토스트</b>로 표시 후 몇 초 뒤 자동 사라짐. 실패 케이스 없음(전 건 성공이 정상 동작). 상단 일괄 버튼을 클릭하면 데모로 동작 <span class="ref">— D</span></span></li>
-    <li><span class="n">7</span><span>JIT인데 전 품목 인바운드 완료된 오더(담당자가 마지막 Outbound 안 누름) = <b>행 노란 틴트 + JIT (채널) 완료 배지</b>(구매 채널 괄호 병기 — Coupang/Naver/Other retail), <b>항상 목록 맨 아래로 정렬</b> — 창고 재고 오더와 구분 <span class="ref">— D</span></span></li>
-    <li><span class="n">8</span><span>수동 import 마케팅 오더 = <b>행 보라 틴트 + MKT 배지</b>, 일반 Ready 아래·JIT 완료 위 정렬. <b>재고·인바운드 여부와 무관하게 import 즉시 항상 노출</b>(미입고 아이템은 로케이션 대신 앰버 "미입고") · 담당자(PIC) 표시 <span class="ref">— D + G</span></span></li>
-    <li><span class="n">14</span><span><b>뷰 탭</b> — All(기본) / Inventory(창고 재고 Ready) / Marketing(수동 import 마케팅) / JIT(전 품목 인바운드됐으나 Outbound 미클릭) — 오더 유형별 필터, Found 카운트 연동 <span class="ref">— D</span></span></li>
-    <li><span class="n">13</span><span>Total Items = <b>총 수량 합</b>으로 변경 — 현 어드민은 SKU 종수만 표시해서 ×5 오더도 "1"로 보임 → 실제 집어야 할 갯수(예: 422221은 5)로 표기 <span class="ref">— D 피킹</span></span></li>
-    <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
-    <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
-    <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) · <b>상단 검색창</b>으로 전체 Comments 검색(오더번호·작성자·내용 매칭, 최신순) <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">11</span><span>좌우 여백 축소 — 화면 꽉 채우기 (View Orders와 동일 원칙) <span class="ref">— C/D</span></span></li>
+    <li><span class="n">1</span><span>Per-row checkboxes + select all — target selection for the 3 bulk buttons below. Buttons show the <b>total count of selected orders and items</b> <span class="ref">— D</span></span></li>
+    <li><span class="n">2</span><span>Print Pick Locations — opens the <b>Picking List modal (M1)</b>: which products and how many to pick from which locations for the selected orders, <b>sorted by location (ascending)</b> (A-02-13 → B-01-07 → Shelf 3). Print → progress → completion toast <span class="ref">— D</span></span></li>
+    <li><span class="n">3</span><span>Bulk Print Labels — prints shipping labels for the selected orders in one go (count shown) <span class="ref">— D</span></span></li>
+    <li><span class="n">4</span><span>Bulk Outbound — outbounds the selected orders in one go. <b>Refreshes after completion · plays a send sound on execution (2026-08-03)</b> <span class="ref">— D</span></span></li>
+    <li><span class="n">5</span><span>0–100% progress bar — <b>shared by the 3 buttons: Print Pick Locations · Bulk Print Labels · Bulk Outbound</b>. Print actions: no refresh + selection kept; Outbound refreshes after completion <span class="ref">— D</span></span></li>
+    <li><span class="n">6</span><span>Completion notice — shown as a <b>top-right toast</b>, auto-dismisses after a few seconds. No failure case (all-success is the normal behavior). Click a bulk button above to see the demo <span class="ref">— D</span></span></li>
+    <li><span class="n">7</span><span>JIT order with every item inbounded (staff has not clicked the final Outbound) = <b>yellow row tint + "Fully Inbounded" badge</b> (wording changed from "JIT (channel) completed" on 2026-08-03 to avoid confusion with the colorless Sourcing Route labels), <b>always sorted to the bottom of the list</b> — keeps them apart from warehouse-stock orders <span class="ref">— D</span></span></li>
+    <li><span class="n">8</span><span>Manually imported Marketing Order = <b>purple row tint + MKT badge</b>, sorted below regular Ready and above completed JIT. <b>Always shown immediately on import regardless of stock or inbound status</b> (items not yet inbounded show an amber "Not inbounded" instead of a location) · shows the person in charge (PIC) <span class="ref">— D + G</span></span></li>
+    <li><span class="n">14</span><span><b>View tabs</b> — All (default) / Inventory (warehouse-stock Ready) / Marketing (manually imported marketing) / JIT (all items inbounded but Outbound not clicked) — filter by order type, linked to the Found count <span class="ref">— D</span></span></li>
+    <li><span class="n">13</span><span>Total Items = changed to the <b>total quantity sum</b> — the current admin shows only the number of SKUs, so even a ×5 order reads "1" → now shows the actual units to pick (e.g. 5 for 422221) <span class="ref">— D picking</span></span></li>
+    <li><span class="n">12</span><span><b>New Pick Locations column</b> — per-item locations listed vertically at the same eye level as Ready Item Details (warehouse stock = location, fully inbounded JIT = shelf number). The Ready Items column was removed as a duplicate of Total Items <span class="ref">— D picking</span></span></li>
+    <li><span class="n">9</span><span>Per-row Comments button — expands an inline comment panel under the order row (no need to open the order page), @mention sends an automatic Slack notification <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">10</span><span>Top-right Comments hub — @ Mentions / ★ Saved, click to open the order (shared across all screens) · <b>search box at the top</b> searches all comments (matches order no. · author · text, newest first) <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">11</span><span>Reduced side padding — fills the full screen width (same principle as View Orders) <span class="ref">— C/D</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Print)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순. Actions 칼럼은 Print로 단순화(2026-07-22) — View Order 버튼 제거, 상세 진입은 Order ID 링크.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Base structure (including the "Ready to be Outbonded" spelling in the page title) and columns follow the actual screen, minus Ready Items and plus the new Pick Locations (checkbox/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Print); Refresh, Found N order(s), and How to use are exactly as in the actual admin (captured 2026-07-21). One row per order, with SKU · product name · ×quantity in Ready Item Details. Sort order: regular Ready orders → Marketing (MKT) → completed JIT. Actions column simplified to Print (2026-07-22) — View Order button removed; details open via the Order ID link.</p>
 </div>
 
-<!-- 모달: 로케이션 프린트 — 피킹 리스트 (로케이션 오름차순) -->
+<!-- Modal: Print Pick Locations — Picking List (locations ascending) -->
 <div class="overlay" id="m-pick">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>로케이션 프린트 — 피킹 리스트 (선택 3개 오더 · 제품 4종 · 총 수량 8개)<button class="x" data-close>✕</button></header>
+    <header>Print Pick Locations — Picking List (3 orders selected · 4 SKUs · 8 units total)<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="picktbl">
         <thead><tr><th>Location</th><th>SKU</th><th>Product</th><th>Qty</th><th>Order</th></tr></thead>
@@ -359,11 +359,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <tr><td><b>B-02-11</b></td><td class="num">100013286</td><td>Madeca Cream Time …</td><td>1</td><td>422165</td></tr>
         </tbody>
       </table>
-      <div class="note"><b>로케이션 오름차순 정렬</b>(A-02-13 → B-01-07 → 선반 3) — 동선대로 한 번에 피킹. 프린트 시 새로고침 없음·체크박스 유지, 프로그래스 바 표시 후 우상단 완료 알림.</div>
+      <div class="note"><b>Sorted by location (ascending)</b> (A-02-13 → B-01-07 → Shelf 3) — pick everything in one pass along the route. Printing: no refresh · selection kept; progress bar, then a top-right completion toast.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-gray btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm bulk-run" data-label="로케이션 프린트" data-close>🖨 프린트</button>
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm bulk-run" data-label="Print Pick Locations" data-close>🖨 Print</button>
     </div>
   </div>
 </div>
@@ -398,7 +398,7 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-/* 일괄 버튼 데모 — 프로그래스 진행 후 우상단 완료 토스트(3초 뒤 소멸) */
+/* Bulk button demo — progress runs, then a top-right completion toast (auto-dismisses after 3s) */
 document.querySelectorAll('.bulk-run').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const fill=document.getElementById('pfill'), label=document.getElementById('pbarLabel');
@@ -406,18 +406,18 @@ document.querySelectorAll('.bulk-run').forEach(btn=>{
     fill.style.width='0%';
     const t=setInterval(()=>{
       p+=20; fill.style.width=Math.min(p,100)+'%';
-      const mode=(name==='일괄 Outbound')?'완료 후 새로고침':'새로고침 없음 · 체크박스 유지';
-      label.childNodes[0].textContent=name+' 진행 중 — '+Math.min(p,100)+'% · '+mode+' · 완료 시 우상단 알림';
+      const mode=(name==='Bulk Outbound')?'refreshes after completion':'No refresh · selection kept';
+      label.childNodes[0].textContent=name+' in progress — '+Math.min(p,100)+'% · '+mode+' · toast on completion';
       if(p>=100){clearInterval(t);
         const toast=document.getElementById('toast');
-        toast.querySelector('b').textContent='✓ '+name+' 완료 — 3건';
+        toast.querySelector('b').textContent='✓ '+name+' complete — 3 orders';
         toast.style.display='flex';
         setTimeout(()=>{toast.style.display='none';},3000);
       }
     },250);
   });
 });
-/* 뷰 탭 필터 — All/Inventory/Marketing/JIT */
+/* View tab filter — All/Inventory/Marketing/JIT */
 document.querySelectorAll('.vtab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.vtab').forEach(x=>x.classList.remove('on'));
@@ -433,13 +433,13 @@ document.querySelectorAll('.vtab').forEach(t=>{
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
 });
-/* Comments 허브 — 바깥 클릭 시 닫힘 (허브 내부 클릭은 유지) */
+/* Comments hub — closes on outside click (clicks inside the hub keep it open) */
 document.addEventListener('click',()=>{document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));});
 document.querySelectorAll('.inboxdd').forEach(d=>d.addEventListener('click',e=>e.stopPropagation()));
-/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
-const CSEARCH_DATA=[{o:'422165',a:'Dean',t:'오늘 10:12',ts:8,x:'@Yongwon 이 오더 포장 각별히 신경써주세요. VIP 고객입니다.'},{o:'422221',a:'Egita',t:'오늘 09:40',ts:7,x:'@Yongwon ×5 수량 맞는지 확인 부탁'},{o:'422176',a:'Miranti',t:'오늘 08:52',ts:6,x:'송장 라벨 재출력했습니다'},{o:'422108',a:'Dean',t:'어제 16:45',ts:5,x:'고객 요청으로 사쉐 2종 동봉'},{o:'421990',a:'Aldo',t:'07-20 15:31',ts:4,x:'박스 파손 — 포장 교체 후 출고했습니다'}];
+/* Comments hub — search all comments (newest first) */
+const CSEARCH_DATA=[{o:'422165',a:'Dean',t:'Today 10:12',ts:8,x:'@Yongwon Please take extra care packing this order. This is a VIP customer.'},{o:'422221',a:'Egita',t:'Today 09:40',ts:7,x:'@Yongwon Please double-check the ×5 quantity'},{o:'422176',a:'Miranti',t:'Today 08:52',ts:6,x:'Reprinted the shipping label'},{o:'422108',a:'Dean',t:'Yesterday 16:45',ts:5,x:'Enclosed 2 sachet samples per customer request'},{o:'421990',a:'Aldo',t:'07-20 15:31',ts:4,x:'Box damaged — repacked and shipped'}];
 function cSearch(inp){
   const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
   const tabs=dd.querySelector('.tabs');
@@ -457,13 +457,13 @@ function cSearch(inp){
   const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
   const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
-  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+      :'<div class="empty">No matching comments</div>');
   pane.style.display='block';
 }
 
-/* Outbound 전송 사운드 — 처리 접수 청각 피드백 (2026-08-03) */
+/* Outbound send sound — audible feedback that the action was received (2026-08-03) */
 function sndOutbound(){
   try{
     const ac = sndOutbound.ac || (sndOutbound.ac = new (window.AudioContext||window.webkitAudioContext)());
