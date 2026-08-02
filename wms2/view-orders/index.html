@@ -233,6 +233,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-part{background:#FFC107;color:#3D2E00}
 .qtyin{width:80px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 9px;font-size:14px;font-weight:700;
   text-align:center;background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.qedit{border:none;background:none;color:var(--blue);cursor:pointer;font-size:12.5px;padding:0 3px}
 .locin{width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:13px;
   background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
 .flsave{display:inline-flex;align-items:center;margin-left:6px;border:none;border-radius:6px;padding:5px 10px;
@@ -272,6 +273,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-modal="m-restock">모달: 반송 입고</button>
     <button class="wf-tab" data-modal="m-retlabel">모달: 반품 라벨</button>
     <button class="wf-tab" data-modal="m-partial">모달: 부분 입고 저장</button>
+    <button class="wf-tab" data-modal="m-qtyedit">모달: 받을 수량 수정</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
   </div>
 </div>
@@ -325,6 +327,39 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="mut" style="margin-top:6px">송장·제품 바코드를 스캔하거나 번호를 입력하면 <b>즉시 해당 오더 화면으로 전환</b>됩니다</div>
     </div>
 
+    <div class="anno" style="position:relative;margin-top:14px">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      <button class="btn btn-line btn-sm" id="inexpToggle">▸ 입고 예정 4건 — 송장 입력 2 · 부분 입고 1</button>
+      <div id="inexpTable" style="display:none;margin-top:10px">
+        <table class="tbl">
+          <thead><tr><th>Inbound No.</th><th>소싱 루트</th><th>Supplier</th><th>품목</th><th>송장번호</th><th>상태</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">202608020001</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td>(주)뷰티서플라이</td>
+              <td><b>COSRX</b> Advanced Snail 96 외 2종 · 620개</td><td class="num" style="color:var(--blue)">10325998120044</td>
+              <td><span class="tag tag-requested" style="background:#FFC107;color:#3D2E00">신청</span></td>
+            </tr>
+            <tr class="row-part" style="cursor:pointer" onclick="document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));document.getElementById('s6').classList.add('on');window.scrollTo({top:0})">
+              <td class="num">202607120001</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>비엠유통</td>
+              <td><b>Round Lab</b> 1025 Dokdo 외 1종 · 800개</td><td class="num" style="color:var(--blue)">10325661220417</td>
+              <td><span class="tag tag-part">부분 입고 620/800</span></td>
+            </tr>
+            <tr>
+              <td class="num">202608020002</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td>Medicube (협찬)</td>
+              <td><b>Medicube</b> Zero Pore Pad 2.0 · 300개</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested" style="background:#FFC107;color:#3D2E00">신청</span></td>
+            </tr>
+            <tr>
+              <td class="num">202608010004</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>코스알엑스</td>
+              <td><b>Beauty of Joseon</b> Relief Sun 외 1종 · 1,000개</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested" style="background:#FFC107;color:#3D2E00">신청</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mut" style="margin-top:8px">송장 입력 건 상단 정렬 · <b>행 클릭 = 스캔 없이 해당 건 대조 화면(상태 6) 진입</b>(라벨 훼손 벌크 대비) · 전체 목록은 입고 요청 → 요청 리스트</p>
+      </div>
+    </div>
+
   </div>
 </div></div>
 
@@ -332,6 +367,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>State 0 변경사항 — 대기 (스캔 전 첫 화면)</h3>
   <ol>
     <li><span class="n">1</span><span>첫 진입 화면 = <b>빈 통합 검색창 자동 포커스</b> — 바코드 스캔/번호 입력 즉시 해당 오더 화면(상태 1~5)으로 전환. 자동 판별·쿠팡 QR "[V1]바코드" 인식([V1] 뒤 바코드 매칭)·포커스 복귀 규칙은 State 1 범례 1·12·14 참조 — <b>규칙 문구는 화면에 노출하지 않음</b> <span class="ref">— C 검색</span></span></li>
+    <li><span class="n">2</span><span><b>입고 예정 요약 배지(신설, 2026-08-02 결정)</b> — 미완료 입고 요청 요약 한 줄, 클릭 시 테이블 인라인 펼침(송장 입력 건 상단 정렬 · 소싱루트 배지 · 부분 입고 잔량 표기). <b>행 클릭 = 스캔 없이 해당 건 대조 화면(상태 6) 진입</b>(송장 라벨 훼손 벌크 대비). 기본 접힘 — 스캔 허브라는 화면 성격 유지 <span class="ref">— I + C</span></span></li>
   </ol>
 </div>
 </section>
@@ -1221,21 +1257,21 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <table class="tbl anno">
       <span class="dot" style="top:2px;left:-12px">5</span>
       <thead><tr>
-        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>요청 Qty</th>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th class="anno">요청 Qty<span class="dot" style="top:-11px;right:-8px">9</span></th>
         <th class="anno">입고 Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
         <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>상태</th>
       </tr></thead>
       <tbody>
         <tr class="row-done">
           <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
-          <td class="num">500</td>
+          <td class="num">500 <button class="qedit" data-modal="m-qtyedit" title="받을 수량 수정">✎</button></td>
           <td><input class="qtyin" value="500" readonly style="border-color:var(--green)"></td>
           <td><input class="locin" value="A-05-11"></td>
           <td><span class="tag tag-done">✓ 입고 완료</span></td>
         </tr>
         <tr class="row-part">
           <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
-          <td class="num">300</td>
+          <td class="num">300 <button class="qedit" data-modal="m-qtyedit" title="받을 수량 수정">✎</button></td>
           <td><input class="qtyin" value="120"></td>
           <td><input class="locin" value="B-02-07"></td>
           <td><span class="tag tag-part">진행 중 · 남은 180</span></td>
@@ -1263,8 +1299,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">6</span><span>입고 Qty = 스캔 누적 + <b>직접 보정 가능</b>(박스 단위 대량 입고 시 수기 입력) <span class="ref">— 신규</span></span></li>
     <li><span class="n">7</span><span>Location = <b>Inventory 편입 위치</b> — 기존 재고 SKU면 현 로케이션 자동 제안(SKU당 1개 원칙), 신규 SKU는 지정 입력 <span class="ref">— E 로케이션 규약</span></span></li>
     <li><span class="n">8</span><span><b>전량 입고 확정</b> — 요청 수량과 입고 수량이 <b>전 SKU 정확히 일치</b>해야 활성(마감과 동일한 일치 게이팅). 불일치 상태에서는 <b>부분 입고 저장(M5)</b>으로 사유를 남기고 이어서 처리. 초과 스캔은 경고 <span class="ref">— 신규</span></span></li>
+    <li><span class="n">9</span><span><b>받을 수량 수정(신설, 2026-08-02 결정)</b> — 요청 Qty ✎ 클릭 → 새 수량 + 사유(공급처 수량 변경/파손·불량/기타) 필수 입력(M6). 저장 시 잔량·전량 확정 게이팅 재계산 — 예: 파손으로 300→120이면 입고 120 = 120/120이 되어 전량 확정 가능. 수정 이력은 해당 입고 요청에 코멘트 자동 등록 + <b>@신청자 Slack 알림</b> <span class="ref">— 신규</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 확정 시 ① Inventory(Current Stocks)에 로케이션과 함께 반영 ② 입고 요청 리스트 상태 <b>발송 → 입고완료</b> 자동 전환 ③ <b>Received Date·Carrier 자동 기록</b>(시트 연동 대비) ④ 검색창 포커스 복귀로 다음 송장 스캔. 고객 오더 상태(1~5)와 달리 이 화면에는 <b>Outbound가 존재하지 않음</b>.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): 확정 시 ① Inventory(Current Stocks)에 로케이션과 함께 반영 ② 입고 요청 리스트 상태 <b>신청/부분 입고 → 입고완료</b> 자동 전환 ③ <b>Received Date·Carrier 자동 기록</b>(시트 연동 대비) ④ 검색창 포커스 복귀로 다음 송장 스캔. 고객 오더 상태(1~5)와 달리 이 화면에는 <b>Outbound가 존재하지 않음</b>.</p>
 </div>
 </section>
 
@@ -1525,11 +1562,44 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <b style="color:var(--ink)">메모 (Optional)</b>
         <textarea class="mtextarea" placeholder="예: 잔여 180개 금요일 도착 예정 — 요청 건 Comments에 함께 기록됩니다"></textarea>
       </div>
-      <div class="note">저장 시 — 입고된 620개는 <b>Inventory에 즉시 반영</b>되고, 입고 요청 리스트 상태는 <b>발송 유지 + "부분 입고 620/800" 표기</b>. 잔여 물량 도착 시 같은 송장을 다시 스캔하면 State 6에서 이어서 처리합니다.</div>
+      <div class="note">저장 시 — 입고된 620개는 <b>Inventory에 즉시 반영</b>되고, 입고 요청 리스트 상태는 <b>부분 입고(620/800)로 전환</b>(신청 → 부분 입고 → 입고완료 3단계). 잔여 물량 도착 시 같은 송장을 다시 스캔하면 State 6에서 이어서 처리합니다.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>
       <button class="btn btn-blue btn-sm" data-close>부분 입고 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : 받을 수량 수정 (내부 입고 State 6) ══════════════ -->
+<div class="overlay" id="m-qtyedit">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M6</span>
+    <header>받을 수량 수정 — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">1025 Dokdo Cleanser, 150ml — 현재 요청 수량 300</b>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">새 요청 수량</b>
+        <input class="qtyin" value="120">
+        <span class="mut">300 → 120 (−180)</span>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">사유 (필수)</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>파손·불량 — 수령 불가</option>
+          <option>공급처 수량 변경</option>
+          <option>기타</option>
+        </select>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">메모</b>
+        <textarea class="mtextarea" placeholder="예: 상자 1개 파손 — 180개 수령 불가, 공급처 반송">상자 1개 파손 — 180개 수령 불가, 공급처 반송 처리</textarea>
+      </div>
+      <div class="note">저장 시 — 요청 수량 300 → <b>120</b> 갱신, 잔량·전량 확정 게이팅 재계산(현재 입고 120 = <b>120/120 → 전량 확정 가능</b>). 수정 이력은 이 입고 요청의 Comments에 자동 등록되고 <b>@신청자(Dean)</b>에게 Slack 알림. 요청 리스트 수량 셀에 수정 이력(300→120) 표기.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>취소</button>
+      <button class="btn btn-blue btn-sm" data-close>수량 수정 저장</button>
     </div>
   </div>
 </div>
@@ -1674,4 +1744,13 @@ document.querySelectorAll('.shelf input, .locin').forEach(inp=>{
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&btn.style.display!=='none'){e.preventDefault();save();}});
   btn.addEventListener('click',e=>{e.stopPropagation();save();});
 });
+
+/* State 0 — 입고 예정 요약 배지 토글 */
+const it=document.getElementById('inexpToggle');
+if(it){it.addEventListener('click',()=>{
+  const t=document.getElementById('inexpTable');
+  const open=t.style.display==='none';
+  t.style.display=open?'block':'none';
+  it.textContent=(open?'▾':'▸')+' 입고 예정 4건 — 송장 입력 2 · 부분 입고 1';
+});}
 </script>

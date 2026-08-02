@@ -89,8 +89,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-smartbuy{background:var(--blue);color:#fff}
 .tag-wholesale{background:var(--ss-purple);color:#fff}
 .tag-partnership{background:var(--amber);color:#fff}
-/* 요청 상태 배지 2종 — 신청 / 입고완료 (발송 상태 폐기 2026-07-27) */
+/* 요청 상태 배지 3종 — 신청 / 부분 입고 / 입고완료 (발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02) */
 .tag-requested{background:#FFC107;color:#3D2E00}
+.tag-partial{background:#F76707;color:#fff}
 .tag-shipped{background:var(--blue-soft);color:var(--blue);border:1px solid var(--blue)}
 .tag-inbounded{background:var(--green);color:#fff}
 .route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
@@ -216,7 +217,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s1">1 · 신규 요청 (스마트바이 · PO 매칭)</button>
     <button class="wf-tab" data-state="s2">2 · 신규 요청 (홀세일 / 파트너십)</button>
-    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/입고완료)</button>
+    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/부분 입고/입고완료)</button>
     <button class="wf-tab" data-modal="m-invoice">모달: 송장번호 입력</button>
     <button class="wf-tab" data-modal="m-vo">모달: View Orders 연동</button>
     <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
@@ -540,7 +541,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="filterchips anno" style="margin-top:0">
         <span class="dot" style="top:-11px;left:-10px">1</span>
         <button class="chip on">전체 12</button>
-        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 9</button>
+        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 8</button>
+        <button class="chip"><span class="tag tag-partial" style="margin-right:5px">부분 입고</span> 1</button>
         <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">입고완료</span> 3</button>
       </div>
     </div>
@@ -608,12 +610,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
           <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td class="num">100045210</td>
-          <td class="num">180</td>
+          <td class="num">180 <span class="route-note" title="받을 수량 수정 이력">✎ 300→180 (파손)</span></td>
           <td class="num" style="color:var(--blue)">10324880021991</td>
           <td class="num">07-14</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
-          <td><span class="tag tag-requested">신청</span></td>
+          <td><span class="tag tag-partial">부분 입고 120/180</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
         <!-- 입고완료 (View Orders 스캔으로 자동 전환) -->
@@ -647,7 +649,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </tr>
       </tbody>
     </table>
-    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 9 · 입고완료 3</p>
+    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 8 · 부분 입고 1 · 입고완료 3</p>
 
     <div class="note purple anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">9</span>
@@ -656,13 +658,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 3 신규/변경 — 요청 리스트 (신청 / 발송 / 입고완료)</h3>
+  <h3>State 3 신규/변경 — 요청 리스트 (신청 / 부분 입고 / 입고완료)</h3>
   <ol>
-    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / <b>신청 / 입고완료 2개 상태만</b>(발송 상태 폐기, 2026-07-27 단순화). 송장 입력 여부는 상태가 아니라 송장번호 칼럼에서 확인 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / <b>신청 / 부분 입고 / 입고완료 3개 상태</b>(발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02). 송장 입력 여부는 상태가 아니라 송장번호 칼럼에서 확인 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력. 입고완료 전환은 View Orders 스캔에서 자동(발송 처리 버튼 폐기) <span class="ref">— I + C 일괄바 규약</span></span></li>
     <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지(View Orders와 동일 색) <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호+View Orders 매칭 상태 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b>(입고 전 전부) → <b>입고완료</b>(센터 View Orders 스캔 입고) 2단계 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b> → <b>부분 입고</b>(View Orders 부분 입고 저장 시 자동 전환 · 잔량 n/m 표기) → <b>입고완료</b> 3단계(2026-08-02 확정). 같은 송장 재스캔 시 잔량부터 이어서 대조. <b>받을 수량 수정</b>(View Orders M6) 시 수량 셀에 수정 이력(300→180 등) 표기 + 신청자 Slack 알림 <span class="ref">— I 입고요청</span></span></li>
     <li><span class="n">6</span><span>신청 + 송장 미입력 건 = "미입력 → 입력" 버튼(M1)으로 나중에 등록. <b>매일 아침 1회 자동 체크 — 신청 상태인데 송장번호가 아직 없는 건을 Slack으로 알림</b>: WHOLESALE·SMART BUY 건 → <b>#wholesale-ops</b>, PARTNERSHIP 건 → <b>#partnership-kr</b> (기타 채널의 알림 채널은 개발 시 확정) <span class="ref">— 2026-07-27 알림 스펙</span></span></li>
     <li><span class="n">7</span><span>신청 + 송장 입력됨 건 = 번호 아래 <b>View Orders 매칭 활성</b> 표시(아직 물량 미도착) — 상태 배지는 그대로 신청 <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건. 스캔 링크로 View Orders 결과 확인 <span class="ref">— I + C View Orders</span></span></li>
