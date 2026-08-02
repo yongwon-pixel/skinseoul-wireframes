@@ -10,6 +10,7 @@
   --red:#DC3545; --red-soft:#F8D7DA;
   --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
   --mkt:#7C3AED; --mkt-soft:#F3EEFF;
+  --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
 *{box-sizing:border-box}
@@ -121,6 +122,27 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .fld label{display:block;font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:4px}
 .fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-size:13px;background:var(--page);color:var(--ink)}
 .dropzone{border:2px dashed var(--line-strong);border-radius:10px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px}
+
+/* Comments 허브 (View Orders/RTO와 동일 패턴) */
+.inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
 </style>
 
 <div class="wf-bar">
@@ -138,9 +160,29 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
     <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:2px;left:-26px">5</span>
+    </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40233</b> · Harshit: "@Yongwon 시딩 오더 12건 오늘 중 출고 가능한지 확인 부탁드립니다"<br><time>10:05</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁"<br><time>09:22</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 421771</b> · Adinda: "@Yongwon 샘플 배정 종료일이 맞는지 확인 부탁드립니다"<br><time>08:40</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁"<br><time>09:22</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="pagepad">
@@ -191,8 +233,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <ol>
     <li><span class="n">1</span><span><b>마케팅 오더 수동 Import</b>(M1, 2026-07-23 확정) — 개발팀 표준 <b>템플릿 다운로드</b> → 입력 → 업로드 → <b>미리보기</b> → 오더 유형(인플루언서 시딩 프리셋 + 직접 입력)·담당자 지정(기본=로그인 본인) → 확정. <b>재고 검증 없음</b>(import 먼저·입고 나중 가능, Notion G의 재고 에러 항목 폐기 — UI 문구로는 미노출) · 확정 즉시 재고 무관 RTO Marketing 뷰 노출 <span class="ref">— G</span></span></li>
     <li><span class="n">2</span><span><b>샘플 배정 ON/OFF</b>(2026-07-23 재설계) — ON 모달(M2): 대상=이 기간 내 모든 신규 오더 / 선택한 오더만 2옵션 + 시작 일시(년/월/일/시)·종료 또는 forever, 샘플 종류 설정 없음. <b>샘플 배정 취소(M3)</b>: 현재/과거 배정 기간 목록(중첩 가능)에서 선택 취소 <span class="ref">— G</span></span></li>
-    <li><span class="n">3</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 <span class="ref">— 정리</span></span></li>
+    <li><span class="n">3</span><span>일괄 Hold Shipment 버튼 제거 — Hold는 오더 상세의 Change Status(on-hold)로 처리(F), OMS 대시보드는 실화면 유지 (제거 항목 — 화면 dot 없음) <span class="ref">— 정리</span></span></li>
     <li><span class="n">4</span><span>오더 목록 표는 <b>기존 어드민과 동일</b>이라 와이어프레임에서 생략(기본 컬럼 ↔ Columns 전환 포함 변경 없음). 단, Import된 MKT- 마케팅 오더 행은 보라 틴트 + MKT 배지 + 담당자 표시로 일반 판매와 시각 구분(정산·물동량 분리) <span class="ref">— G</span></span></li>
+    <li><span class="n">5</span><span>우상단 Comments 허브 — <b>전 화면 공통</b>, 전체 코멘트 검색 포함 <span class="ref">— 0. UI 2</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·필터바(날짜·Search·PIC·Status·Order#/Tracking# 체크·Country·페이지 크기)·Merge Orders·Export/Yun Export·2,818 total·페이지네이션은 실화면 그대로. 소싱루트 배지(SB/JIT/WS/PT, 색 없이 검정 텍스트, JIT는 구매 채널 괄호 병기 — Coupang/Naver/Other retail)는 View Orders·Order 상세와 통일. 샘플 배정은 2026-07-23 <b>심플 ON/OFF</b>로 재설계(제품 종류 설정 없음) — 상세는 범례 2.</p>
 </div>
@@ -278,9 +321,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <table class="tbl" style="margin-top:6px;font-size:12px">
           <thead><tr><th>수취인</th><th>국가</th><th>SKU</th><th>제품명</th><th>수량</th><th>캠페인</th></tr></thead>
           <tbody>
-            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td>Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>7월 시딩</td></tr>
-            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td>Cicapair Sleepair Mask</td><td class="num">1</td><td>7월 시딩</td></tr>
-            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td>Green Tea Seed Serum</td><td class="num">1</td><td>7월 시딩</td></tr>
+            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>7월 시딩</td></tr>
+            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>7월 시딩</td></tr>
+            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>7월 시딩</td></tr>
             <tr><td colspan="6" style="text-align:center;color:var(--ink-3)">⋯ 외 9행</td></tr>
           </tbody>
         </table>
@@ -318,4 +361,46 @@ document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
 });
+/* Comments 허브 — 열기/탭 전환/★ 저장/전체 검색 (View Orders/RTO와 동일 패턴) */
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    document.getElementById(b.dataset.open).classList.toggle('open');
+  });
+});
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{p.style.display=p.dataset.pane===b.dataset.tab?'block':'none';});
+  });
+});
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+const CSEARCH_DATA=[{o:'MKT-40233',a:'Harshit',t:'오늘 10:05',ts:8,x:'@Yongwon 시딩 오더 12건 오늘 중 출고 가능한지 확인 부탁드립니다'},{o:'MKT-40218',a:'EuJin',t:'오늘 09:22',ts:7,x:'@Yongwon 팝업 행사 증정분 수취인 주소 수정했습니다. 재확인 부탁'},{o:'421771',a:'Adinda',t:'오늘 08:40',ts:6,x:'@Yongwon 샘플 배정 종료일이 맞는지 확인 부탁드립니다'},{o:'MKT-40191',a:'Harshit',t:'어제 17:10',ts:5,x:'캠페인명 7월 시딩으로 통일했습니다'},{o:'421502',a:'EuJin',t:'07-12 11:30',ts:4,x:'인플루언서 반송분 재발송 완료'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+  pane.style.display='block';
+}
 </script>

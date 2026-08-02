@@ -137,6 +137,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it .body{flex:1}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
 </style>
 
 <div class="wf-bar">
@@ -158,6 +163,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
     <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
         <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
@@ -197,7 +203,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <!-- 일괄 처리 바 (신규 D) -->
     <div class="bulkbar anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
-      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" checked> 전체 선택</label>
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> 전체 선택</label>
       <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-pick">🖨 로케이션 프린트 (3개 오더 · 제품 8개)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
       <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="송장 일괄 프린트">🖨 송장 일괄 프린트 (3건)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
       <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="일괄 Outbound">📦 일괄 Outbound (3건)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
@@ -214,7 +220,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <!-- 테이블 (실화면 구조 + 체크박스·코멘트 칼럼) -->
     <table class="tbl">
       <thead><tr>
-        <th style="width:34px"><input type="checkbox" checked></th>
+        <th style="width:34px"><input type="checkbox"></th>
         <th>Order ID</th><th>Order Date</th><th>Customer</th><th class="anno">Total Items<span class="dot" style="top:-11px;right:-8px">13</span></th><th>Ready Item Details</th>
         <th class="anno">Pick Locations<span class="dot" style="top:-11px;right:-8px">12</span></th>
         <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Print</th>
@@ -224,7 +230,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422221</span></td><td>2026. 7. 21.</td><td>Sophia Kim</td>
           <td><span class="cntbadge cb-total">5</span></td>
-          <td><div class="item-line"><span class="skupill">100039958</span> AtoBarrier365 Body …<span class="qtypill">×5</span></div></td>
+          <td><div class="item-line"><span class="skupill">100039958</span> <b>AtoBarrier365</b> Body …<span class="qtypill">×5</span></div></td>
           <td><div class="locline"><span class="locpill">A-02-13</span></div></td>
           <td><button class="cmtbtn" data-open="crow1">💬 <span class="badge-n">1</span></button></td>
           <td><button class="printbtn">🖨</button></td>
@@ -237,13 +243,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><input type="checkbox" checked></td>
           <td><span class="oid">422176</span></td><td>2026. 7. 21.</td><td>Jazmin Harrison</td>
           <td><span class="cntbadge cb-total">1</span></td>
-          <td><div class="item-line"><span class="skupill">100035912</span> Ceramide Ato Conce…<span class="qtypill">×1</span></div></td>
+          <td><div class="item-line"><span class="skupill">100035912</span> <b>Illiyoon</b> Ceramide Ato Conce…<span class="qtypill">×1</span></div></td>
           <td><div class="locline"><span class="locpill">B-01-07</span></div></td>
           <td><button class="cmtbtn" data-open="crow2">💬</button></td>
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow2" data-view="inv" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
+          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
         <tr data-view="inv">
@@ -251,8 +257,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="oid">422165</span></td><td>2026. 7. 21.</td><td>Janine Eames</td>
           <td><span class="cntbadge cb-total">2</span></td>
           <td>
-            <div class="item-line"><span class="skupill">100039420</span> Madeca Cream Tight …<span class="qtypill">×1</span></div>
-            <div class="item-line"><span class="skupill">100013286</span> Madeca Cream Time …<span class="qtypill">×1</span></div>
+            <div class="item-line"><span class="skupill">100039420</span> <b>Centellian24</b> Madeca Cream Tight …<span class="qtypill">×1</span></div>
+            <div class="item-line"><span class="skupill">100013286</span> <b>Centellian24</b> Madeca Cream Time …<span class="qtypill">×1</span></div>
           </td>
           <td>
             <div class="locline"><span class="locpill">A-03-02</span></div>
@@ -271,8 +277,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td>2026. 7. 21.</td><td>인플루언서 @glowwithjade<div style="font-size:11px;color:var(--ink-3)">담당: Harshit</div></td>
           <td><span class="cntbadge cb-total">3</span></td>
           <td>
-            <div class="item-line"><span class="skupill">100043697</span> Cicapair Gentle Clea…<span class="qtypill">×2</span></div>
-            <div class="item-line"><span class="skupill">100012534</span> Cicapair Sleepair Ma…<span class="qtypill">×1</span></div>
+            <div class="item-line"><span class="skupill">100043697</span> <b>Dr.Jart+</b> Cicapair Gentle Clea…<span class="qtypill">×2</span></div>
+            <div class="item-line"><span class="skupill">100012534</span> <b>Dr.Jart+</b> Cicapair Sleepair Ma…<span class="qtypill">×1</span></div>
           </td>
           <td>
             <div class="locline"><span class="locpill">A-01-04</span></div>
@@ -282,7 +288,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow5" data-view="mkt" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
+          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
         <tr class="row-jit anno" data-view="jit">
@@ -290,13 +296,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="oid">422164</span><span class="jit-badge">JIT (Coupang) 완료</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
           <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
           <td><span class="cntbadge cb-total">2</span></td>
-          <td><div class="item-line"><span class="skupill">100005611</span> Green Tea Seed Hyal…<span class="qtypill">×2</span></div></td>
+          <td><div class="item-line"><span class="skupill">100005611</span> <b>innisfree</b> Green Tea Seed Hyaluronic Serum<span class="qtypill">×2</span></div></td>
           <td><div class="locline"><span class="locpill">선반 3</span></div></td>
           <td><button class="cmtbtn" data-open="crow4">💬</button></td>
           <td><button class="printbtn">🖨</button></td>
         </tr>
         <tr class="crow" id="crow4" data-view="jit" style="display:none"><td colspan="9">
-          <div class="c-item" style="color:var(--ink-3)">아직 코멘트 없음</div>
+          <div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>
           <div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div>
         </td></tr>
       </tbody>
@@ -321,7 +327,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>Ready to be Outbonded — 신규 / 변경 주석 (기획 D + 0 반영)</h3>
   <ol>
     <li><span class="n">1</span><span>행별 체크박스 + 전체 선택 — 아래 일괄 버튼 3종의 대상 선택. 버튼에 <b>선택된 오더·제품 총 갯수 표시</b> <span class="ref">— D</span></span></li>
-    <li><span class="n">2</span><span>로케이션 프린트 — 클릭 시 <b>피킹 리스트 모달(M1)</b>: 선택 오더의 어느 로케이션에서 어떤 제품 몇 개, <b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번). 프린트 → 프로그래스 → 완료 토스트 <span class="ref">— D</span></span></li>
+    <li><span class="n">2</span><span>로케이션 프린트 — 클릭 시 <b>피킹 리스트 모달(M1)</b>: 선택 오더의 어느 로케이션에서 어떤 제품 몇 개, <b>로케이션 오름차순 정렬</b>(A-02-13 → B-01-07 → 선반 3). 프린트 → 프로그래스 → 완료 토스트 <span class="ref">— D</span></span></li>
     <li><span class="n">3</span><span>송장 일괄 프린트 — 선택 오더 송장 한 번에 출력 (갯수 표시) <span class="ref">— D</span></span></li>
     <li><span class="n">4</span><span>일괄 Outbound — 선택 오더 한 번에 아웃바운드. <b>완료 후 새로고침</b> <span class="ref">— D</span></span></li>
     <li><span class="n">5</span><span>0~100% 프로그래스 바 — <b>로케이션 프린트·송장 일괄 프린트·일괄 Outbound 3개 버튼 공통</b>. 프린트류는 새로고침 금지+체크박스 유지, Outbound는 완료 후 새로고침 <span class="ref">— D</span></span></li>
@@ -332,10 +338,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">13</span><span>Total Items = <b>총 수량 합</b>으로 변경 — 현 어드민은 SKU 종수만 표시해서 ×5 오더도 "1"로 보임 → 실제 집어야 할 갯수(예: 422221은 5)로 표기 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">12</span><span><b>Pick Locations 칼럼 신설</b> — Ready Item Details와 같은 눈높이로 아이템별 로케이션 세로 표기(창고 재고=로케이션, JIT 완료=선반 번호). Ready Items 칼럼은 Total Items와 중복이라 제거 <span class="ref">— D 피킹</span></span></li>
     <li><span class="n">9</span><span>행별 Comments 버튼 — 클릭 시 해당 오더 행 아래로 코멘트 펼침(오더 페이지 진입 불필요), @태그 시 Slack 자동 알림 <span class="ref">— 0. UI 1</span></span></li>
-    <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">10</span><span>우상단 Comments 허브 — @ Mentions / ★ Saved, 클릭 시 해당 오더 페이지로 이동 (전 화면 공통) · <b>상단 검색창</b>으로 전체 Comments 검색(오더번호·작성자·내용 매칭, 최신순) <span class="ref">— 0. UI 2</span></span></li>
     <li><span class="n">11</span><span>좌우 여백 축소 — 화면 꽉 채우기 (View Orders와 동일 원칙) <span class="ref">— C/D</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Actions)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순. Actions 칼럼은 Print로 단순화(2026-07-22) — View Order 버튼 제거, 상세 진입은 Order ID 링크.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">기본 구조(제목 "Ready to be Outbonded" 표기 포함)·칼럼은 실화면 기준에서 Ready Items 제거·Pick Locations 신설(체크박스/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Print)·Refresh·Found N order(s)·How to use는 실제 어드민(2026-07-21 캡처) 그대로. 오더 단위 행 + Ready Item Details에 SKU·제품명·×수량 병기. 정렬: 일반 Ready 오더 → 마케팅(MKT) → JIT 완료 순. Actions 칼럼은 Print로 단순화(2026-07-22) — View Order 버튼 제거, 상세 진입은 Order ID 링크.</p>
 </div>
 
 <!-- 모달: 로케이션 프린트 — 피킹 리스트 (로케이션 오름차순) -->
@@ -353,7 +359,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <tr><td><b>B-02-11</b></td><td class="num">100013286</td><td>Madeca Cream Time …</td><td>1</td><td>422165</td></tr>
         </tbody>
       </table>
-      <div class="note"><b>로케이션 오름차순 정렬</b>(1번 선반→2번→3번) — 동선대로 한 번에 피킹. 프린트 시 새로고침 없음·체크박스 유지, 프로그래스 바 표시 후 우상단 완료 알림.</div>
+      <div class="note"><b>로케이션 오름차순 정렬</b>(A-02-13 → B-01-07 → 선반 3) — 동선대로 한 번에 피킹. 프린트 시 새로고침 없음·체크박스 유지, 프로그래스 바 표시 후 우상단 완료 알림.</div>
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>취소</button>
@@ -400,7 +406,8 @@ document.querySelectorAll('.bulk-run').forEach(btn=>{
     fill.style.width='0%';
     const t=setInterval(()=>{
       p+=20; fill.style.width=Math.min(p,100)+'%';
-      label.childNodes[0].textContent=name+' 진행 중 — '+Math.min(p,100)+'% · 새로고침 없음 · 체크박스 유지 · 완료 시 우상단 알림';
+      const mode=(name==='일괄 Outbound')?'완료 후 새로고침':'새로고침 없음 · 체크박스 유지';
+      label.childNodes[0].textContent=name+' 진행 중 — '+Math.min(p,100)+'% · '+mode+' · 완료 시 우상단 알림';
       if(p>=100){clearInterval(t);
         const toast=document.getElementById('toast');
         toast.querySelector('b').textContent='✓ '+name+' 완료 — 3건';
@@ -428,4 +435,31 @@ document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
 });
+/* Comments 허브 — 바깥 클릭 시 닫힘 (허브 내부 클릭은 유지) */
+document.addEventListener('click',()=>{document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));});
+document.querySelectorAll('.inboxdd').forEach(d=>d.addEventListener('click',e=>e.stopPropagation()));
+/* Comments 허브 — 전체 코멘트 검색 (시간 역순) */
+const CSEARCH_DATA=[{o:'422165',a:'Dean',t:'오늘 10:12',ts:8,x:'@Yongwon 이 오더 포장 각별히 신경써주세요. VIP 고객입니다.'},{o:'422221',a:'Egita',t:'오늘 09:40',ts:7,x:'@Yongwon ×5 수량 맞는지 확인 부탁'},{o:'422176',a:'Miranti',t:'오늘 08:52',ts:6,x:'송장 라벨 재출력했습니다'},{o:'422108',a:'Dean',t:'어제 16:45',ts:5,x:'고객 요청으로 사쉐 2종 동봉'},{o:'421990',a:'Aldo',t:'07-20 15:31',ts:4,x:'박스 파손 — 포장 교체 후 출고했습니다'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+  pane.style.display='block';
+}
 </script>

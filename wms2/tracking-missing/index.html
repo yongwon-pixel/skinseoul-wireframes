@@ -102,10 +102,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag-pending{background:#FFC107;color:#3D2E00}
 .tag-inbounded{background:var(--green);color:#fff}
 .tag-exist{background:var(--blue);color:#fff}
-/* 소싱 루트 배지 3종 (입고 요청 I에서 지정된 루트가 송장번호로 매칭되어 표시) */
-.tag-smartbuy{background:var(--blue);color:#fff}
-.tag-wholesale{background:var(--ss-purple);color:#fff}
-.tag-partnership{background:var(--amber);color:#fff}
+/* 소싱 루트 배지 4종 — 색 없이 검정 볼드 텍스트로만 구분 (입고 요청 I에서 지정된 루트가 송장번호로 매칭되어 표시 · View Orders와 동일 표기 규약) */
+.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
 .route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
 .bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
 .bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
@@ -332,7 +330,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           </tbody>
         </table>
       </div>
-      <div class="note">매칭 확정 시 — 트래킹넘버 <b>10323100841207</b>가 선택한 제품 라인에 등록되고 이 항목이 풀에서 사라지며, 해당 오더에 코멘트가 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
+      <div class="note">매칭 확정 시 — 트래킹넘버 <b>10323100841207</b>가 선택한 제품 라인에 등록되고 이 항목이 풀에서 사라지며, 해당 오더 Comments에 자동 등록됩니다: <b>"@Miranti(미인식 등록자) 미인식 제품(COSRX Snail 96 에센스)을 이 오더에 매칭했습니다"</b> → 등록자에게 Slack 알림.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>취소</button>

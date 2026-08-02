@@ -142,6 +142,31 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
 .modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
 .note{margin-top:10px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px}
+
+/* Comments 허브 (View Orders/RTO와 동일 패턴) */
+.inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+/* 소싱 루트 태그 — View Orders와 동일 (색 없이 검정 볼드) */
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 </style>
 
 <div class="wf-bar">
@@ -162,9 +187,29 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
     <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
     <span class="sp"></span>
-    <button class="icon-btn">💬 Comments<span class="badge-n">3</span></button>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:2px;left:-26px">16</span>
+    </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
     <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">내가 태그된 Comments · 클릭 시 해당 오더 페이지로 이동 <small>모두 읽음 처리</small></div>
+        <div class="it unread"><div class="body"><b>Order 409112</b> · Dean: "@Yongwon cancelled 오더에 예약 3개 잔존 — 허수 의심, 인바운드 취소 확인 부탁드립니다"<br><time>10:30</time></div><button class="star" title="저장">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다"<br><time>09:12</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 407506</b> · Aldo: "@Yongwon 실사 때 A-02-20 수량 +2 나왔어요. ADJUST 내역 확인 부탁"<br><time>어제 18:40</time></div><button class="star" title="저장">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">내가 저장한 Comments · 클릭 시 해당 오더 페이지로 이동 <small>★ 해제 시 목록에서 제거</small></div>
+        <div class="it"><div class="body"><b>Order 407847</b> · Miranti: "@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다"<br><time>09:12</time></div><button class="star on" title="저장 해제">★</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="pagepad">
@@ -213,7 +258,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <div class="kv"><span class="k">Name</span><span>Madecassol Cream 50ml</span></div>
           <div class="kv"><span class="k">Name KR</span><span>마데카솔 크림</span></div>
           <div class="kv"><span class="k">Brand</span><span>Dongkook</span></div>
-          <div class="kv"><span class="k">Sourcing Route</span><span>Smart Buy</span></div>
+          <div class="kv"><span class="k">Sourcing Route</span><span class="tag tag-smartbuy">SMART BUY</span></div>
         </div>
       </div>
 
@@ -280,7 +325,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="cs-controls">
         <input class="inp" placeholder="SKU / 제품명 검색">
         <select class="sel"><option>전체 로케이션</option><option>A-02-13</option><option>B-01-07</option></select>
-        <select class="sel"><option>전체 소싱루트</option><option>Smart Buy</option><option>Wholesale</option><option>Partnership</option></select>
+        <select class="sel"><option>전체 소싱루트</option><option>SMART BUY</option><option>WHOLESALE</option><option>PARTNERSHIP</option></select>
         <span class="sp" style="flex:1"></span>
         <button class="btn btn-gray btn-sm">⬇ Export</button>
       </div>
@@ -288,18 +333,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <table class="tbl">
           <thead><tr><th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Barcode</th><th>Sourcing Route</th><th>Location <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">12</span></th><th>Total</th><th>Reserved</th><th>Available <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">11</span></th><th class="audcol" style="display:none">실사 수량</th><th class="audcol" style="display:none">Diff</th><th class="audcol" style="display:none">손실액(₩)</th></tr></thead>
           <tbody>
-            <tr><td class="num">100031877</td><td><div class="thumb">IMG</div></td><td><b>Beauty of Joseon</b> Glow Serum</td><td>뷰티오브조선 글로우 세럼</td><td>30ml</td><td class="num">8809738317481</td><td>Wholesale</td><td><input class="loc-in" value="B-02-03"></td><td class="num">88</td><td class="num" style="color:var(--amber)">6</td><td class="num" style="color:var(--green)">82</td><td class="audcol" style="display:none"><input class="qty-in" value="88"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td>더페이스샵 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="바코드 입력"></td><td>Wholesale</td><td><input class="loc-in" value="A-03-02"></td><td class="num">61</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100005088</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Vital Hydra Solution Water Cream</td><td>닥터자르트 바이탈 하이드라 워터크림</td><td>50ml</td><td class="num">8809535800120</td><td>Wholesale</td><td><input class="loc-in" value="B-01-07"></td><td class="num">55</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">55</td><td class="audcol" style="display:none"><input class="qty-in" value="55"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100004819</td><td><div class="thumb">IMG</div></td><td><b>Dongkook</b> Madecassol Cream</td><td>동국 마데카솔 크림</td><td>50ml</td><td class="num">8806404003224</td><td>Smart Buy</td><td><input class="loc-in" value="A-02-13"></td><td class="num">42</td><td class="num" style="color:var(--amber)">8</td><td class="num" style="color:var(--green)">34</td><td class="audcol" style="display:none"><input class="qty-in" value="42"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100039958</td><td><div class="thumb">IMG</div></td><td><b>AtoBarrier365</b> Body Lotion</td><td>아토배리어365 바디로션</td><td>350ml</td><td class="num">8809740506332</td><td>Smart Buy</td><td><input class="loc-in" value="C-01-05"></td><td class="num">27</td><td class="num" style="color:var(--amber)">4</td><td class="num" style="color:var(--green)">23</td><td class="audcol" style="display:none"><input class="qty-in" value="27"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100005104</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser</td><td>닥터자르트 포어레미디 리뉴잉 폼</td><td>150ml</td><td class="num">8809571501234</td><td>Smart Buy</td><td><input class="loc-in" value="A-01-04"></td><td class="num">18</td><td class="num" style="color:var(--amber)">2</td><td class="num" style="color:var(--green)">16</td><td class="audcol" style="display:none"><input class="qty-in" value="17"></td><td class="audcol num" style="display:none"><span class="diff-neg">−1</span></td><td class="audcol num" style="display:none;color:var(--red);font-weight:700">−₩15,000</td></tr>
-            <tr><td class="num">100040311</td><td><div class="thumb">IMG</div></td><td><b>COSRX</b> Pomegranate &amp; Collagen Lifting Cream</td><td>코스알엑스 석류 콜라겐 탄력 크림</td><td>100ml</td><td class="num">8801051283860</td><td>Smart Buy</td><td><input class="loc-in" value="A-01-05"></td><td class="num">12</td><td class="num" style="color:var(--amber)">1</td><td class="num" style="color:var(--green)">11</td><td class="audcol" style="display:none"><input class="qty-in" value="12"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100012534</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td>닥터자르트 시카페어 슬리페어 마스크</td><td>75ml</td><td class="num">8809642713823</td><td>Smart Buy</td><td><input class="loc-in" value="A-02-20"></td><td class="num">9</td><td class="num" style="color:var(--amber)">3</td><td class="num" style="color:var(--green)">6</td><td class="audcol" style="display:none"><input class="qty-in" value="11"></td><td class="audcol num" style="display:none"><span class="diff-pos">+2</span></td><td class="audcol num" style="display:none;color:var(--green);font-weight:700">+₩61,260</td></tr>
-            <tr><td class="num">100043697</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td>닥터자르트 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td class="num">8809642714233</td><td>Partnership</td><td><input class="loc-in" value="C-02-01"></td><td class="num">4</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">4</td><td class="audcol" style="display:none"><input class="qty-in" value="4"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
-            <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td>메디큐브 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td>Partnership</td><td><input class="loc-in" value="" placeholder="미지정"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100031877</td><td><div class="thumb">IMG</div></td><td><b>Beauty of Joseon</b> Glow Serum</td><td>뷰티오브조선 글로우 세럼</td><td>30ml</td><td class="num">8809738317481</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-02-03"></td><td class="num">88</td><td class="num" style="color:var(--amber)">6</td><td class="num" style="color:var(--green)">82</td><td class="audcol" style="display:none"><input class="qty-in" value="88"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td>더페이스샵 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="바코드 입력"></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="A-03-02"></td><td class="num">61</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100005088</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Vital Hydra Solution Water Cream</td><td>닥터자르트 바이탈 하이드라 워터크림</td><td>50ml</td><td class="num">8809535800120</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-01-07"></td><td class="num">55</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">55</td><td class="audcol" style="display:none"><input class="qty-in" value="55"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100004819</td><td><div class="thumb">IMG</div></td><td><b>Dongkook</b> Madecassol Cream</td><td>동국 마데카솔 크림</td><td>50ml</td><td class="num">8806404003224</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-13"></td><td class="num">42</td><td class="num" style="color:var(--amber)">8</td><td class="num" style="color:var(--green)">34</td><td class="audcol" style="display:none"><input class="qty-in" value="42"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100039958</td><td><div class="thumb">IMG</div></td><td><b>AtoBarrier365</b> Body Lotion</td><td>아토배리어365 바디로션</td><td>350ml</td><td class="num">8809740506332</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="C-01-05"></td><td class="num">27</td><td class="num" style="color:var(--amber)">4</td><td class="num" style="color:var(--green)">23</td><td class="audcol" style="display:none"><input class="qty-in" value="27"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100005104</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser</td><td>닥터자르트 포어레미디 리뉴잉 폼</td><td>150ml</td><td class="num">8809571501234</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-04"></td><td class="num">18</td><td class="num" style="color:var(--amber)">2</td><td class="num" style="color:var(--green)">16</td><td class="audcol" style="display:none"><input class="qty-in" value="17"></td><td class="audcol num" style="display:none"><span class="diff-neg">−1</span></td><td class="audcol num" style="display:none;color:var(--red);font-weight:700">−₩15,000</td></tr>
+            <tr><td class="num">100040311</td><td><div class="thumb">IMG</div></td><td><b>COSRX</b> Pomegranate &amp; Collagen Lifting Cream</td><td>코스알엑스 석류 콜라겐 탄력 크림</td><td>100ml</td><td class="num">8801051283860</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-05"></td><td class="num">12</td><td class="num" style="color:var(--amber)">1</td><td class="num" style="color:var(--green)">11</td><td class="audcol" style="display:none"><input class="qty-in" value="12"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100012534</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td>닥터자르트 시카페어 슬리페어 마스크</td><td>75ml</td><td class="num">8809642713823</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-20"></td><td class="num">9</td><td class="num" style="color:var(--amber)">3</td><td class="num" style="color:var(--green)">6</td><td class="audcol" style="display:none"><input class="qty-in" value="11"></td><td class="audcol num" style="display:none"><span class="diff-pos">+2</span></td><td class="audcol num" style="display:none;color:var(--green);font-weight:700">+₩61,260</td></tr>
+            <tr><td class="num">100043697</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td>닥터자르트 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td class="num">8809642714233</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="C-02-01"></td><td class="num">4</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">4</td><td class="audcol" style="display:none"><input class="qty-in" value="4"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
+            <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td>메디큐브 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="" placeholder="미지정"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td><td class="audcol num" style="display:none;color:var(--ink-3)">₩0</td></tr>
             <tr class="audrow" style="display:none"><td colspan="14" style="background:var(--ss-purple-50);padding:10px 12px">
-              <span style="font-weight:700;color:var(--ss-purple)">＋ 실사 중 발견한 미등록 제품</span>
+              <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">13</span><span style="font-weight:700;color:var(--ss-purple)">＋ 실사 중 발견한 미등록 제품</span>
               <span class="ausel"><input id="auSearch" class="bcin" style="width:230px;margin-left:10px" placeholder="제품명 검색 (자동완성 — 바코드 없어도 가능)" autocomplete="off"><div class="audrop" id="auDrop"></div></span>
               <input id="auLoc" class="loc-in" placeholder="로케이션">
               <input id="auQty" class="qty-in" placeholder="수량">
@@ -327,10 +372,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">12</span><span>Location = <b>전 행 수정 가능 입력칸</b> — 미지정 제품(앰버 "미지정")도 노출해서 바로 지정. 바코드 없는 제품은 Barcode 칼럼에 입력칸(View Orders와 동일 규칙) <span class="ref">— E 로케이션 수동 변경</span></span></li>
     <li><span class="n">11</span><span>기본 정렬 = <b>Available 내림차순</b> — 팔 수 있는 재고가 많은 순. 헤더 클릭으로 재정렬 가능 <span class="ref">— E</span></span></li>
     <li><span class="n">5</span><span><b>Current Stocks 탭 신규·<b>기본 랜딩</b></b> — 실화면 Stock History는 조회 중심(SKU 검색 후 단건). 전체 현재고 목록 + 로케이션/소싱루트 필터를 첫 탭으로 <span class="ref">— E 신설</span></span></li>
-    <li><span class="n">6</span><span>Reserved Qty 클릭 → <b>예약 오더 목록 모달(M3)</b> — Order ID·Status·예약 수량·시점, cancelled/refunded인데 예약 잔존 시 <b>허수 의심</b> 표시. 행별 <b>Inbound 해제(M4)</b>: 해제 확인 + <b>재고 복구 예/아니오</b>(예=Available 복구, 아니오=ADJUST 손실 기록) <span class="ref">— E</span></span></li>
+    <li><span class="n">6</span><span>Reserved Qty 클릭 → <b>예약 오더 목록 모달(M3)</b> — Order ID·Status·예약 수량·시점, cancelled/refunded인데 예약 잔존 시 <b>허수 의심</b> 표시. 행별 <b>인바운드 취소(M4)</b>: 해제 확인 + <b>재고 복구 예/아니오</b>(예=Available 복구, 아니오=ADJUST 손실 기록) <span class="ref">— E</span></span></li>
     <li><span class="n">7</span><span>재고 실사(Stock-take) 모드 — 켜면 <b>로케이션 오름차순 재정렬</b>(동선대로 실사, Notion E "로케이션 순서대로 표시"), 끄면 Available 내림차순 복귀. 실물 수량 입력 → Diff 자동 계산 + <b>손실액 칼럼(차이×product cost)</b> → 하단 <b>합계=재고 손실 액수(목표 0)</b> → 확정 클릭 시 <b>요약 모달(M1)</b>: ADJUST 목록·신규 편입·Reserved 부족 검증·손실액 합계 확인 후 기록. 매월 실사 로그 보존 <span class="ref">— E</span></span></li>
     <li><span class="n">8</span><span>Stock History Events — Type/Status를 배지화, Pending confirm 행 하이라이트 + 필터칩(All/Confirmed/Pending) <span class="ref">— E</span></span></li>
     <li><span class="n">9</span><span>히스토리 페이지네이션 — 실화면 "More data available (pagination not implemented)" 해소 <span class="ref">— E</span></span></li>
+    <li><span class="n">16</span><span>우상단 Comments 허브 — <b>전 화면 공통</b>, 전체 코멘트 검색 포함 <span class="ref">— 0. UI 2</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">글로벌 nav·Export Stock Status·Search 드롭다운·Inbound/Outbound 폼·이벤트 컬럼(Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor)은 실화면 그대로. 데이터는 마데카솔 크림(100004819) 예시.</p>
 </div>
@@ -344,8 +390,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <table class="tbl" style="font-size:12.5px">
         <thead><tr><th>시간</th><th>SKU</th><th>제품</th><th>Location</th><th>시스템→실물</th><th>조정</th><th>손실액</th></tr></thead>
         <tbody>
-          <tr><td class="num">14:20:11</td><td class="num">100005104</td><td>포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18 → 17</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
-          <tr><td class="num">14:20:11</td><td class="num">100012534</td><td>시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9 → 11</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
+          <tr><td class="num">14:20:11</td><td class="num">100005104</td><td>닥터자르트 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18 → 17</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
+          <tr><td class="num">14:20:11</td><td class="num">100012534</td><td>닥터자르트 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9 → 11</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
           <tr style="background:var(--ss-purple-50)"><td class="num">14:20:11</td><td class="num">100048201</td><td>어노브 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[신규 편입]</b></td><td>B-01-02</td><td class="num">0 → 3</td><td><span class="ty ty-adj">ADJUST(+3)</span></td><td class="num" style="color:var(--ink-3)">—</td></tr>
         </tbody>
       </table>
@@ -359,14 +405,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="overlay" id="m-reserved">
   <div class="modal anno" style="max-width:780px">
     <span class="dot" style="top:-11px;left:-11px">M3</span>
-    <header>Reserved Quantity — 마데카솔 크림 50ml (100004819) · 예약 8개<button class="x" data-close>✕</button></header>
+    <header>Reserved Quantity — 동국 마데카솔 크림 50ml (100004819) · 예약 8개<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
         <thead><tr><th>Order ID</th><th>Order Date</th><th>Customer</th><th>Status</th><th>예약 수량</th><th>예약 시점</th><th>Action</th></tr></thead>
         <tbody>
-          <tr><td class="num" style="color:var(--blue);font-weight:700">407812</td><td class="num">2026-06-30</td><td>Sarah Kim</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>2</b></td><td class="num">07-12 11:05</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">Inbound 해제</button></td></tr>
-          <tr><td class="num" style="color:var(--blue);font-weight:700">413650</td><td class="num">2026-07-08</td><td>Emma Park</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>3</b></td><td class="num">07-08 14:22</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">Inbound 해제</button></td></tr>
-          <tr style="background:var(--amber-soft)"><td class="num" style="color:var(--blue);font-weight:700">409112</td><td class="num">2026-07-02</td><td>Liam Chen</td><td><span class="stt" style="background:var(--red-soft);color:var(--red)">cancelled</span> <span style="background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800">허수 의심</span></td><td class="num"><b>3</b></td><td class="num">07-02 09:10</td><td><button class="btn btn-sm" style="border:1px solid var(--red);color:var(--red);background:var(--page)" data-modal="m-resrelease">Inbound 해제</button></td></tr>
+          <tr><td class="num" style="color:var(--blue);font-weight:700">407812</td><td class="num">2026-06-30</td><td>Sarah Kim</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>2</b></td><td class="num">07-12 11:05</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">인바운드 취소</button></td></tr>
+          <tr><td class="num" style="color:var(--blue);font-weight:700">413650</td><td class="num">2026-07-08</td><td>Emma Park</td><td><span class="stt" style="background:var(--green-soft);color:var(--green)">processing</span></td><td class="num"><b>3</b></td><td class="num">07-08 14:22</td><td><button class="btn btn-gray btn-sm" data-modal="m-resrelease">인바운드 취소</button></td></tr>
+          <tr style="background:var(--amber-soft)"><td class="num" style="color:var(--blue);font-weight:700">409112</td><td class="num">2026-07-02</td><td>Liam Chen</td><td><span class="stt" style="background:var(--red-soft);color:var(--red)">cancelled</span> <span style="background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800">허수 의심</span></td><td class="num"><b>3</b></td><td class="num">07-02 09:10</td><td><button class="btn btn-sm" style="border:1px solid var(--red);color:var(--red);background:var(--page)" data-modal="m-resrelease">인바운드 취소</button></td></tr>
         </tbody>
       </table>
       <div class="note">합계 8 = 2+3+3 · <b>허수 의심</b> = 오더가 cancelled/refunded인데 예약이 안 풀린 건 — 해제 대상. 예약-실주문 불일치가 계속되면 Stock History의 <b>Pending confirm 필터</b>로 미확정 이벤트를 조사하세요(Dean 리포트 연계).</div>
@@ -375,11 +421,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- 모달: Inbound 해제 확인 — 재고 복구 여부 -->
+<!-- 모달: 인바운드 취소 확인 — 재고 복구 여부 -->
 <div class="overlay" id="m-resrelease">
   <div class="modal anno" style="max-width:460px">
     <span class="dot" style="top:-11px;left:-11px">M4</span>
-    <header>Inbound 해제 — Order 409112 · 마데카솔 크림 3개<button class="x" data-close>✕</button></header>
+    <header>인바운드 취소 — Order 409112 · 마데카솔 크림 3개<button class="x" data-close>✕</button></header>
     <div class="body">
       <b style="color:var(--ink)">1. 이 오더의 예약(Reserved)을 해제하시겠습니까?</b>
       <p style="margin:6px 0 12px;color:var(--ink-3);font-size:12.5px">cancelled 오더에 남은 허수 예약 — 해제 시 이 오더와의 연결이 끊어집니다.</p>
@@ -387,6 +433,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <div class="qrow" style="display:flex;flex-direction:column;align-items:stretch;gap:6px;margin-top:8px">
         <label><input type="radio" name="resback" checked> 예 — Available +3 (재고로 복구)</label>
         <label><input type="radio" name="resback"> 아니오 — 재고 제외 (파손·분실 등, ADJUST(−3) 손실 기록)</label>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+        <b style="color:var(--ink)">3. 복구 수량</b>
+        <input value="3" style="width:70px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font:inherit;text-align:center;background:var(--page);color:var(--ink)">
+        <span style="color:var(--ink-3);font-size:12px">기본값 = 인바운드됐던 개수 (수정 가능)</span>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">4. 메모 (Optional)</b>
+        <textarea class="mtextarea" placeholder="취소 사유나 참고사항 — 작성 시 오더 Comments 히스토리에 함께 기록됩니다"></textarea>
       </div>
       <div class="note">해제 즉시 Reserved 8 → 5, "예" 선택 시 Available 34 → 37. 처리 내역은 Stock History에 RESERVE 해제 이벤트로 기록됩니다.</div>
     </div>
@@ -425,10 +480,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <thead><tr><th>시간</th><th>SKU</th><th>제품</th><th>Location</th><th>시스템→실물</th><th>조정</th><th>손실액</th></tr></thead>
         <tbody>
           <tr><td class="num">17:05:42</td><td class="num">100031877</td><td>뷰티오브조선 글로우 세럼</td><td>B-02-03</td><td class="num">91 → 88</td><td><span class="ty ty-adj">ADJUST(−3)</span></td><td class="num" style="color:var(--red)">−₩36,000</td></tr>
-          <tr><td class="num">17:05:42</td><td class="num">100012534</td><td>시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">11 → 9</td><td><span class="ty ty-adj">ADJUST(−2)</span></td><td class="num" style="color:var(--red)">−₩61,260</td></tr>
+          <tr><td class="num">17:05:42</td><td class="num">100012534</td><td>닥터자르트 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">11 → 9</td><td><span class="ty ty-adj">ADJUST(−2)</span></td><td class="num" style="color:var(--red)">−₩61,260</td></tr>
           <tr><td class="num">17:05:42</td><td class="num">100004819</td><td>동국 마데카솔 크림</td><td>A-02-13</td><td class="num">44 → 42</td><td><span class="ty ty-adj">ADJUST(−2)</span></td><td class="num" style="color:var(--red)">−₩17,800</td></tr>
           <tr><td class="num">17:05:42</td><td class="num">100039958</td><td>아토배리어365 바디로션</td><td>C-01-05</td><td class="num">29 → 27</td><td><span class="ty ty-adj">ADJUST(−2)</span></td><td class="num" style="color:var(--red)">−₩28,400</td></tr>
-          <tr><td class="num">17:05:42</td><td class="num">100005104</td><td>포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">17 → 18</td><td><span class="ty ty-adj">ADJUST(+1)</span></td><td class="num" style="color:var(--green)">+₩15,000</td></tr>
+          <tr><td class="num">17:05:42</td><td class="num">100005104</td><td>닥터자르트 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">17 → 18</td><td><span class="ty ty-adj">ADJUST(+1)</span></td><td class="num" style="color:var(--green)">+₩15,000</td></tr>
         </tbody>
       </table>
       <div class="note">손실액 합계 <b style="color:var(--red)">−₩128,460</b> — 6월은 손실 초과로 원인 조사 진행(피킹 오출고 추정).</div>
@@ -447,8 +502,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <table class="tbl" style="font-size:12.5px">
         <thead><tr><th>SKU</th><th>제품</th><th>Location</th><th>시스템</th><th>실물</th><th>Diff</th><th>처리</th><th>손실액</th></tr></thead>
         <tbody>
-          <tr><td class="num">100005104</td><td>포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18</td><td class="num">17</td><td class="num" style="color:var(--red);font-weight:700">−1</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
-          <tr><td class="num">100012534</td><td>시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9</td><td class="num">11</td><td class="num" style="color:var(--green);font-weight:700">+2</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
+          <tr><td class="num">100005104</td><td>닥터자르트 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18</td><td class="num">17</td><td class="num" style="color:var(--red);font-weight:700">−1</td><td><span class="ty ty-adj">ADJUST(−1)</span></td><td class="num" style="color:var(--red)">−₩15,000</td></tr>
+          <tr><td class="num">100012534</td><td>닥터자르트 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9</td><td class="num">11</td><td class="num" style="color:var(--green);font-weight:700">+2</td><td><span class="ty ty-adj">ADJUST(+2)</span></td><td class="num" style="color:var(--green)">+₩61,260</td></tr>
           <tr style="background:var(--ss-purple-50)"><td class="num">100048201</td><td>어노브 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[신규]</b></td><td>B-01-02</td><td class="num">0</td><td class="num">3</td><td class="num" style="color:var(--green);font-weight:700">+3</td><td><span class="ty ty-adj">ADJUST(+3)</span> 편입</td><td class="num" style="color:var(--ink-3)">— (신규)</td></tr>
         </tbody>
       </table>
@@ -545,4 +600,46 @@ document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
 });
+/* Comments 허브 — 열기/탭 전환/★ 저장/전체 검색 (View Orders/RTO와 동일 패턴) */
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    document.getElementById(b.dataset.open).classList.toggle('open');
+  });
+});
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{p.style.display=p.dataset.pane===b.dataset.tab?'block':'none';});
+  });
+});
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+const CSEARCH_DATA=[{o:'409112',a:'Dean',t:'오늘 10:30',ts:8,x:'@Yongwon cancelled 오더에 예약 3개 잔존 — 허수 의심, 인바운드 취소 확인 부탁드립니다'},{o:'407847',a:'Miranti',t:'오늘 09:12',ts:7,x:'@Yongwon 쿠팡 입고 +6 PENDING 상태입니다. 확정 부탁드립니다'},{o:'407506',a:'Aldo',t:'어제 18:40',ts:6,x:'@Yongwon 실사 때 A-02-20 수량 +2 나왔어요. ADJUST 내역 확인 부탁'},{o:'407812',a:'Dean',t:'어제 11:05',ts:5,x:'마데카솔 Reserved 8개 정합 확인했습니다'},{o:'406990',a:'Miranti',t:'07-09 16:50',ts:4,x:'B-01-02 로케이션 라벨 교체했습니다'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+  pane.style.display='block';
+}
 </script>

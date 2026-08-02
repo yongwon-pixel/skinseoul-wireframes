@@ -202,7 +202,7 @@ tr.row-edit td{background:var(--canvas)}
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>Customer Management ▾</span><span>SkinSeoul WP Admin</span>
     <span class="sp"></span>
     <span style="position:relative">
-      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
       <span class="dot" style="top:2px;left:-26px">7</span>
     </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
@@ -210,7 +210,7 @@ tr.row-edit td{background:var(--canvas)}
     <div class="inboxdd" id="inbox1">
       <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
-        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
@@ -423,7 +423,7 @@ tr.row-edit td{background:var(--canvas)}
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>Customer Management ▾</span><span>SkinSeoul WP Admin</span>
     <span class="sp"></span>
     <span style="position:relative">
-      <button class="icon-btn" data-open="inbox1H">💬 Comments<span class="badge-n">3</span></button>
+      <button class="icon-btn" data-open="inbox1H">💬 Comments<span class="badge-n">2</span></button>
       <span class="dot" style="top:2px;left:-26px">7</span>
     </span>
     <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
@@ -431,7 +431,7 @@ tr.row-edit td{background:var(--canvas)}
     <div class="inboxdd" id="inbox1H">
       <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 전체 Comments 검색 — 오더번호·작성자·내용" oninput="cSearch(this)"></div>
       <div class="tabs">
-        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
@@ -717,7 +717,7 @@ document.querySelectorAll('#addCmt, #addCmtH').forEach(btn=>{
     list.appendChild(div); ta.value='';
   });
 });
-/* 상태 탭 전환 (Completed / On Hold) */
+/* 상태 탭 전환 (Processing / On Hold) */
 document.querySelectorAll('.wf-tab[data-ostate]').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.wf-tab[data-ostate]').forEach(x=>x.classList.remove('on'));
@@ -753,7 +753,7 @@ function cSearch(inp){
     return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
   pane.innerHTML='<div class="paneheader">검색 결과 '+hits.length+'건 · 최신순 · 클릭 시 해당 오더 페이지로 이동</div>'
     +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
-      :'<div class="empty">일치하는 코멘트가 없습니다</div>');
+      :'<div class="empty">일치하는 Comments가 없습니다</div>');
   pane.style.display='block';
 }
 </script>
