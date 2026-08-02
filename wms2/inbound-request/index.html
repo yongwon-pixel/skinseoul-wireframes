@@ -1,4 +1,4 @@
-<title>WMS 2.0 — 입고 요청 (Inbound Request) 와이어프레임</title>
+<title>WMS 2.0 — Inbound Request Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -12,7 +12,7 @@
   --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+/* the existing admin is light-only, so no dark mode */
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
@@ -85,9 +85,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
 .qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
-/* 소싱 루트 배지 — 색 없이 검정 볼드 텍스트로만 구분 (View Orders와 동일 표기 규약) */
+/* sourcing route badges — black bold text only, no colors (same convention as View Orders) */
 .tag-smartbuy,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
-/* 요청 상태 배지 3종 — 신청 / 부분 입고 / 입고완료 (발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02) */
+/* 3 request status badges — REQUESTED / PARTIAL / INBOUNDED (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02) */
 .tag-requested{background:#FFC107;color:#3D2E00}
 .tag-partial{background:#F76707;color:#fff}
 .tag-inbounded{background:var(--green);color:#fff}
@@ -98,7 +98,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
 .bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
 
-/* ── 입고 요청 폼 (신규) ─────────────────────── */
+/* ── inbound request form (new) ──────────────── */
 .formcard{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:var(--page);
   padding:18px 20px;box-shadow:var(--shadow)}
 .formcard .flabel{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:7px}
@@ -112,7 +112,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .fld.opt input::placeholder{color:var(--ink-3)}
 .fld-inv input{border:1.5px dashed var(--line-strong);background:color-mix(in srgb,var(--canvas) 40%,var(--page))}
 
-/* 소싱 루트 라디오 카드 */
+/* sourcing route radio cards */
 .routecards{display:flex;gap:12px;flex-wrap:wrap}
 .routecard{flex:1;min-width:210px;border:1.5px solid var(--line-strong);border-radius:10px;
   padding:13px 15px;cursor:pointer;background:var(--page);display:flex;gap:11px;align-items:flex-start;position:relative}
@@ -124,9 +124,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .routecard.on.rc-partnership{border-color:var(--amber);background:var(--amber-soft)}
 .routecard .rc-badge{position:absolute;top:11px;right:12px}
 
-/* 제품 입력 행 (자동완성) */
+/* product entry rows (autocomplete) */
 .prodtbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
-/* 검색 선택으로 확정된 셀(SKU·Brand·Product Name) — 편집 불가, 평문처럼 표시 */
+/* cells locked in by search selection (SKU·Brand·Product Name) — not editable, shown as plain text */
 .prodtbl input[readonly]{border-color:transparent;background:transparent;pointer-events:none;user-select:text;font-weight:600;color:var(--ink)}
 .prodtbl th{background:var(--ink);color:var(--page);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;font-size:12px}
 .prodtbl td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:middle}
@@ -135,7 +135,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .prodtbl .rm{border:none;background:none;color:var(--red);font-size:15px;cursor:pointer;line-height:1}
 .prefill td{background:color-mix(in srgb,var(--blue-soft) 45%,var(--page))}
 
-/* 자동완성 드롭다운 (View Orders 미인식 모달과 동일 문법) */
+/* autocomplete dropdown (same grammar as the View Orders unrecognized modal) */
 .auto{border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;background:var(--page);position:relative;z-index:5}
 .auto input{width:100%;border:none;padding:8px 11px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
 .auto .opt{padding:8px 11px;border-top:1px solid var(--line);font-size:13px;cursor:pointer}
@@ -150,7 +150,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pagetabs{display:flex;border-bottom:1px solid var(--line-strong);margin:2px 0 14px}
 .pagetabs button{border:1px solid transparent;background:transparent;color:var(--blue);padding:8px 16px;font-size:13.5px;border-radius:7px 7px 0 0;margin-bottom:-1px;cursor:pointer}
 .pagetabs button.on{border-color:var(--line-strong);border-bottom-color:var(--page);background:var(--page);color:var(--ink);font-weight:600}
-/* filter chips (요청 리스트 상태 필터) */
+/* filter chips (Request List status filter) */
 .filterchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .chip{border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:99px;
   padding:5px 13px;font-size:12.5px;font-weight:600}
@@ -161,7 +161,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
 .toast small{opacity:.85;font-weight:400}
 
-/* comment inbox dropdown — View Orders와 동일 */
+/* comment inbox dropdown — same as View Orders */
 .inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
@@ -189,7 +189,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
 .modal .qrow input{flex:1;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 11px;background:var(--page);color:var(--ink)}
 
-/* View Orders 연동 미니 목업 (M2) */
+/* View Orders link mini mockup (M2) */
 .vomock{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .vomock .vh{background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;font-weight:600}
 .vomock .vr{display:flex;align-items:center;gap:10px;padding:9px 10px;font-size:12.5px;border-top:1px solid var(--line)}
@@ -210,18 +210,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · 입고 요청 (Inbound Request) 와이어프레임</h1>
-  <span class="hint">v1 — 보라색 번호 = 신규/변경 주석 · 섹션 I</span>
+  <h1>WMS 2.0 · Inbound Request Wireframe</h1>
+  <span class="hint">v1 — purple numbers = new/changed annotations · Section I</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s1">1 · 신규 요청 (스마트바이)</button>
-    <button class="wf-tab" data-state="s2">2 · 신규 요청 (홀세일 / 파트너십)</button>
-    <button class="wf-tab" data-state="s3">3 · 요청 리스트 (신청/부분 입고/입고완료)</button>
-    <button class="wf-tab" data-modal="m-invoice">모달: 송장번호 입력</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab on" data-state="s1">1 · New Request (Smart Buy)</button>
+    <button class="wf-tab" data-state="s2">2 · New Request (Wholesale / Partnership)</button>
+    <button class="wf-tab" data-state="s3">3 · Request List (Requested/Partial/Inbounded)</button>
+    <button class="wf-tab" data-modal="m-invoice">Modal: Add Tracking No</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 1 : 신규 요청 — 스마트바이 ══════════════ -->
+<!-- ══════════════ STATE 1 : New Request — Smart Buy ══════════════ -->
 <section class="state on" id="s1">
 <div class="mockwrap"><div class="mock anno">
 
@@ -241,63 +241,63 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>202607130002</b> · Dean: "@Yongwon 이 홀세일 건 송장번호 언제 나와요?"<br><time>11:20</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장됨">★</button></div>
+        <div class="paneheader">Comments where I'm tagged <small>Mark all as read</small></div>
+        <div class="it unread"><div class="body"><b>202607130002</b> · Dean: "@Yongwon when is the tracking number for this wholesale one coming?"<br><time>11:20</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"<br><time>Yesterday</time></div><button class="star on" title="Saved">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon 파트너십 물량 예상 입고일 하루 밀렸어요"<br><time>어제</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved <small>Unstar to remove from list</small></div>
+        <div class="it"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
 
   <div class="pagepad">
     <span class="dot" style="margin-left:-6px">15</span>
-    <h2>WMS - 입고 요청</h2>
-    <p class="sub">Inbound Request — 신규 신청</p>
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — New Request</p>
     <div class="anno"><div class="pagetabs">
-      <button class="on">신규 신청</button>
-      <button data-state-jump="s3">요청 리스트</button>
+      <button class="on">New Request</button>
+      <button data-state-jump="s3">Request List</button>
     </div><span class="dot" style="top:-11px;left:150px">16</span></div>
 
     <div class="formcard anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
 
-      <!-- 소싱 루트 -->
+      <!-- Sourcing Route -->
       <div class="fsec anno" style="margin-top:2px">
         <span class="dot" style="top:-2px;left:-14px">2</span>
-        <span class="flabel">소싱 루트 <span class="mut" style="font-weight:400">— 창고로 들어오는 모든 물량의 공통 신청 관문</span></span>
+        <span class="flabel">Sourcing Route <span class="mut" style="font-weight:400">— the single intake gateway for everything entering the warehouse</span></span>
         <div class="routecards">
           <label class="routecard on"><input type="radio" name="route" checked>
-            <span><b>스마트바이</b><small>재고 보충 · Coupang JIT 소싱 (PH 경유)</small></span>
+            <span><b>Smart Buy</b><small>Stock replenishment · Coupang JIT sourcing (via PH)</small></span>
             <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
           <label class="routecard rc-wholesale"><input type="radio" name="route">
-            <span><b>홀세일</b><small>도매 대량 입고 (직접 신청)</small></span>
+            <span><b>Wholesale</b><small>Bulk wholesale inbound (direct request)</small></span>
             <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
           <label class="routecard rc-partnership"><input type="radio" name="route">
-            <span><b>브랜드 파트너십</b><small>브랜드 협찬·마케팅 물량 (직접 신청)</small></span>
+            <span><b>Brand Partnership</b><small>Brand sponsorship · marketing stock (direct request)</small></span>
             <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
           <label class="routecard"><input type="radio" name="route">
-            <span><b>기타</b><small>그 외 채널 — 직접 입력</small>
-            <input class="etc-in" placeholder="채널명 직접 입력" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
-            <span class="tag rc-badge" style="background:var(--ink);color:#fff">기타</span></label>
+            <span><b>Other</b><small>Any other channel — type it in</small>
+            <input class="etc-in" placeholder="Enter channel name" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
+            <span class="tag rc-badge" style="background:var(--ink);color:#fff">OTHER</span></label>
         </div>
       </div>
 
 
-      <!-- 제품 입력 — 단일 통합 검색창으로 행 추가 -->
+      <!-- Product entry — rows added via a single unified search box -->
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">4</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 검색창 하나면 됩니다: SKU No. · 브랜드 · 제품명 중 아는 것 아무거나 입력 → 선택하면 행이 자동으로 채워집니다</span></span>
+        <span class="flabel">Inbound Products <span class="mut" style="font-weight:400">— one search box is all you need: type any of SKU No. · brand · product name you know → pick a result and the row fills in automatically</span></span>
         <div class="auto anno" style="max-width:720px;margin-top:8px">
-          <input value="100045210" placeholder="SKU No. · 브랜드 · 제품명 아무거나 입력 → 자동완성에서 클릭하면 아래에 행이 추가됩니다">
+          <input value="100045210" placeholder="Type any SKU No. · brand · product name → click a suggestion to add a row below">
           <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
           <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
           <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
           <span class="dot" style="top:-11px;right:-8px">5</span>
         </div>
-        <p class="mut" style="margin:10px 0 6px;text-align:right;font-size:12px"><b>Unit Cost (KRW)</b> = 공급처에서 실제 구매한 <b>개당 단가</b> — 무상(증정)이면 <b>0</b> 입력 (필수) · <b>JIT Price (KRW)</b> = 이 제품을 쿠팡 JIT로 구매할 때의 개당 가격 — <b>모르면 비워두세요</b> (옵션) · 여러 SKU는 위 검색창에서 계속 선택하면 행이 추가됩니다 (행 삭제 = ✕)</p>
+        <p class="mut" style="margin:10px 0 6px;text-align:right;font-size:12px"><b>Unit Cost (KRW)</b> = actual <b>per-unit purchase price</b> from the supplier — enter <b>0</b> if free of charge (required) · <b>JIT Price (KRW)</b> = per-unit price when buying this product via Coupang JIT — <b>leave blank if unknown</b> (optional) · keep selecting in the search box above to add more SKU rows (delete a row = ✕)</p>
         <table class="prodtbl">
           <thead><tr>
             <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:140px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
@@ -309,8 +309,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="Advanced Snail 96 Mucin Power Essence, 100ml" readonly></td>
               <td><input value="200" class="num"></td>
               <td><input value="15,000" class="num"></td>
-              <td><input value="17,000" class="num" placeholder="모르면 비움"></td>
-              <td><button class="rm" title="행 삭제">✕</button></td>
+              <td><input value="17,000" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
             </tr>
             <tr>
               <td><input value="100031820" readonly></td>
@@ -318,86 +318,86 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="Relief Sun : Rice + Probiotics, 50ml" readonly></td>
               <td><input value="300" class="num"></td>
               <td><input value="9,700" class="num"></td>
-              <td><input value="15,200" class="num" placeholder="모르면 비움"></td>
-              <td><button class="rm" title="행 삭제">✕</button></td>
+              <td><input value="15,200" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
             </tr>
             <tr class="prefill anno">
               <td><input value="100045210" readonly><span class="dot" style="top:14px;left:-12px">6</span></td>
               <td><input value="Anua" readonly></td>
               <td><input value="Heartleaf 77% Soothing Toner, 250ml" readonly></td>
-              <td><input value="" class="num" placeholder="수량"></td>
-              <td><input value="" class="num" placeholder="개당 구매가 ₩ (무상 0)"></td>
-              <td><input value="" class="num" placeholder="모르면 비움"></td>
-              <td><button class="rm" title="행 삭제">✕</button></td>
+              <td><input value="" class="num" placeholder="Qty"></td>
+              <td><input value="" class="num" placeholder="Per-unit price ₩ (0 if free)"></td>
+              <td><input value="" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
             </tr>
           </tbody>
         </table>
-        
+
       </div>
 
       <div class="fsec">
         <div class="frow">
           <div class="fld anno" style="min-width:200px">
-            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— 물건을 보내는 공급처</span></label>
-            <input value="Coupang" placeholder="예: 비엠유통, Coupang">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— who is shipping the goods</span></label>
+            <input value="Coupang" placeholder="e.g. 비엠유통, Coupang">
             <span class="dot" style="top:14px;right:-8px">12</span>
           </div>
           <div class="fld opt fld-inv anno" style="flex:1;min-width:280px">
-            <label>송장번호 (Tracking No) <span style="font-weight:400;color:var(--ink-3)">— 선택 · 발송 후 나중 입력 가능</span></label>
-            <input value="" placeholder="발송 후 입력 — 비워두고 신청 가능 (나중에 입력)">
+            <label>Tracking No <span style="font-weight:400;color:var(--ink-3)">— optional · can be added later after dispatch</span></label>
+            <input value="" placeholder="Add after dispatch — you can submit without it (add later)">
             <span class="dot" style="top:14px;right:-8px">7</span>
           </div>
           <div class="fld anno" style="min-width:180px">
-            <label>예상 입고일</label>
+            <label>Expected arrival</label>
             <input type="date" value="2026-07-16">
             <span class="dot" style="top:14px;right:-8px">8</span>
           </div>
         </div>
         <div class="fld" style="margin-top:14px">
-          <label>메모 (Optional)</label>
-          <textarea class="mtextarea" placeholder="입고 관련 참고사항 — 작성 시 요청 건 Comments 히스토리에 함께 기록됩니다"></textarea>
+          <label>Memo (Optional)</label>
+          <textarea class="mtextarea" placeholder="Notes about this inbound — anything written here is also logged to the request's Comments history"></textarea>
         </div>
       </div>
 
       <div class="note purple anno">
         <span class="dot" style="top:-11px;left:-10px">9</span>
-        송장번호를 입력하면 <b>View Orders와 자동 매칭</b>됩니다 — 센터에서 해당 송장 바코드를 스캔하면 이 요청의 <b>소싱 루트가 배지로 표시</b>(SMART BUY / WHOLESALE / PARTNERSHIP)됩니다.
+        Entering a tracking number <b>auto-matches it to View Orders</b> — when the center scans that tracking barcode, this request's <b>sourcing route shows as a badge</b> (SMART BUY / WHOLESALE / PARTNERSHIP).
       </div>
 
       <div class="submitrow">
-        <button class="btn btn-blue">입고 요청 등록</button>
-        <span class="mut anno" style="position:relative">등록 시 상태 = <span class="tag tag-requested">신청</span> (송장번호는 있으면 함께 저장, 없으면 나중 입력) · <b>Inbound No.(YYYYMMDDNNNN) 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">3</span></span>
+        <button class="btn btn-blue">Register Inbound Request</button>
+        <span class="mut anno" style="position:relative">On registration, status = <span class="tag tag-requested">REQUESTED</span> (tracking number saved if provided, added later if not) · <b>Inbound No. (YYYYMMDDNNNN) auto-assigned</b> — shown in the Request List<span class="dot" style="top:-13px;right:-10px">3</span></span>
       </div>
     </div>
 
-    <p class="mut" style="margin-top:14px">등록된 요청은 상단 <b>[요청 리스트]</b> 탭에서 상태별로 조회·관리합니다.</p>
+    <p class="mut" style="margin-top:14px">Registered requests are viewed and managed by status in the <b>[Request List]</b> tab above.</p>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>State 1 신규/변경 — 신규 입고 요청 (스마트바이)</h3>
+  <h3>State 1 Changes — New Inbound Request (Smart Buy)</h3>
   <ol>
-    <li><span class="n">1</span><span>입고 요청 화면 신설 — 창고로 들어오는 <b>모든 물량의 공통 신청 관문</b>. 스마트바이 재고보충뿐 아니라 홀세일·브랜드 파트너십 입고도 여기서 신청 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>채널(소싱 루트) 지정 — 라디오 카드 <b>4종</b>(스마트바이 / 홀세일 / 브랜드 파트너십 / <b>기타 — 선택 시 채널명 직접 입력</b>). 배지 표기는 View Orders와 동일(무색 검정 볼드) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">3</span><span><b>Inbound No. 자동 발번 — 신청 화면에 입력칸·미리보기 없음</b>(2026-07-26 패널 제거). 등록 시 <b>YYYYMMDDNNNN</b>(NNNN 그날 0001~9999) 자동 부여되어 <b>요청 리스트에서만 노출</b>. 시트 A열 "PO No. (=Order ID)" 대응 — 발주 없는 입고에도 맞도록 명칭은 Inbound No. <span class="ref">— I + J</span></span></li>
-    <li><span class="n">4</span><span>필드 구성 = <b>PH 시트 열 순서 정합</b>: Inbound No.(자동) → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost(KRW) → JIT Price(KRW) → Supplier. SKU·Brand·Product Name은 통합 검색 선택으로 자동 확정, Size 없음 <span class="ref">— PH 시트</span></span></li>
-    <li><span class="n">5</span><span><b>단일 통합 검색창</b>(2026-07-27 UX 개선 — 행마다 검색이 아니라 테이블 위 검색창 하나) — SKU No.·브랜드·영어 제품명 중 <b>아는 것 하나만</b> 입력하면 자동완성, 클릭하면 아래 테이블에 행이 추가되며 SKU·Brand·Product Name이 전부 자동으로 채워짐 <span class="ref">— I + F 자동완성</span></span></li>
-    <li><span class="n">10</span><span><b>Unit Cost (KRW) 필수</b> — "공급처에서 실제 구매한 개당 단가"임을 placeholder·테이블 우상단 디스클레이머로 명시(2026-08-03 위치 이동)(무엇을 넣는지 모르는 문제 해소). <b>0 입력 가능</b>(무상 증정분) — FIFO 원가·시트 정합의 기반이라 필수 유지 <span class="ref">— 시트 Unit Cost 열</span></span></li>
-    <li><span class="n">11</span><span><b>JIT Price (KRW) 옵셔널</b> — 쿠팡 JIT로 구매할 때의 개당 가격. <b>"모르면 비워두세요"를 placeholder로 명시</b> — 입력 부담 없음 <span class="ref">— 시트 JIT Price 열</span></span></li>
-    <li><span class="n">12</span><span><b>Supplier 필수</b> — "물건을 보내는 공급처"임을 라벨·placeholder(예: 비엠유통, Coupang)로 안내. 정산·입고 추적의 기준이라 필수 유지 <span class="ref">— 시트 연동</span></span></li>
-    <li><span class="n">6</span><span>방금 선택한 제품은 <b>파란 틴트 행으로 추가</b>되고 Order Qty·Unit Cost만 채우면 됨. <b>SKU No.·Brand·Product Name은 검색에서 선택된 값이라 편집 불가</b>(테두리 없는 평문 표시) — 바꾸려면 행을 ✕로 지우고 다시 검색. 여러 SKU = 검색창에서 계속 선택(별도 "행 추가" 버튼 폐기), 잘못 추가한 행은 ✕ 삭제 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">7</span><span>송장번호 입력란 — <b>선택 필드</b>(대시 테두리), 발송 후 나중 입력 가능. <b>등록 버튼은 하나</b>(2026-07-27 단일화) — 송장번호 유무와 무관하게 상태는 신청으로 등록, 송장이 있으면 View Orders 매칭 즉시 활성 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">8</span><span>예상 입고일 — 센터가 입고 스케줄을 미리 파악 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">9</span><span>View Orders 연동 안내 — 송장번호 입력 시 View Orders와 매칭 → 스캔 시 소싱루트 배지 표시(연동 안내 모달은 2026-08-03 제거) <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">14</span><span>우상단 Comments 허브 — 요청 건에 태그된 Comments(@Mentions/★Saved). View Orders와 동일 컴포넌트 + 전체 코멘트 검색(시간 역순) <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">15</span><span>좌우 여백 축소 — 폼 전체가 스크롤 없이 한 화면 <span class="ref">— C 화면 규약</span></span></li>
-    <li><span class="n">16</span><span><b>상단 페이지 탭 [신규 신청 | 요청 리스트]</b> 신설(2026-07-23) — 실제 어드민 화면 안에서 신청 폼과 요청 리스트를 오가는 전환 탭(와이어프레임의 보라 상태 탭과 별개). 신규 신청 탭에서 루트 선택·신청, 요청 리스트 탭에서 상태별 조회·송장 입력 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">1</span><span>New Inbound Request screen — the <b>single intake gateway for everything entering the warehouse</b>. Not just Smart Buy restocks: Wholesale and Brand Partnership inbounds are requested here too <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Channel (sourcing route) selection — <b>4</b> radio cards (Smart Buy / Wholesale / Brand Partnership / <b>Other — type the channel name when selected</b>). Badge styling matches View Orders (black bold, no colors) <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">3</span><span><b>Inbound No. auto-assigned — no input field or preview on the request form</b> (panel removed 2026-07-26). On registration, <b>YYYYMMDDNNNN</b> (NNNN 0001–9999 per day) is assigned automatically and <b>shown only in the Request List</b>. Maps to sheet column A "PO No. (=Order ID)" — named Inbound No. so it also fits inbounds without a PO <span class="ref">— I + J</span></span></li>
+    <li><span class="n">4</span><span>Field set = <b>aligned to the PH sheet column order</b>: Inbound No. (auto) → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost (KRW) → JIT Price (KRW) → Supplier. SKU·Brand·Product Name are locked in via the unified search; no Size <span class="ref">— PH sheet</span></span></li>
+    <li><span class="n">5</span><span><b>Single unified search box</b> (2026-07-27 UX improvement — one box above the table instead of per-row search) — type <b>whichever one you know</b> of SKU No. · brand · English product name for autocomplete; clicking a result adds a row to the table below with SKU·Brand·Product Name all auto-filled <span class="ref">— I + F autocomplete</span></span></li>
+    <li><span class="n">10</span><span><b>Unit Cost (KRW) required</b> — the placeholder and the disclaimer at the table's top right (position moved 2026-08-03) state it is the "actual per-unit purchase price from the supplier" (fixes the what-goes-here confusion). <b>0 is allowed</b> (free-of-charge stock) — kept required as the basis of FIFO costing and sheet consistency <span class="ref">— sheet Unit Cost column</span></span></li>
+    <li><span class="n">11</span><span><b>JIT Price (KRW) optional</b> — per-unit price when buying via Coupang JIT. <b>The placeholder says "leave blank if unknown"</b> — zero input burden <span class="ref">— sheet JIT Price column</span></span></li>
+    <li><span class="n">12</span><span><b>Supplier required</b> — the label and placeholder (e.g. 비엠유통, Coupang) clarify it means "who is shipping the goods". Kept required as the basis for settlement and inbound tracking <span class="ref">— sheet integration</span></span></li>
+    <li><span class="n">6</span><span>The product you just picked is <b>added as a blue-tinted row</b> — only Order Qty and Unit Cost are left to fill. <b>SKU No.·Brand·Product Name come from the search selection and can't be edited</b> (borderless plain-text display) — to change them, delete the row with ✕ and search again. Multiple SKUs = keep selecting in the search box (the separate "add row" button is retired); remove mistaken rows with ✕ <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">7</span><span>Tracking No field — <b>optional</b> (dashed border), can be added later after dispatch. <b>Single register button</b> (unified 2026-07-27) — with or without a tracking number, the request registers as REQUESTED; if one is provided, View Orders matching activates immediately <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">8</span><span>Expected arrival — lets the center see the inbound schedule ahead of time <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">9</span><span>View Orders link note — entering a tracking number matches the request to View Orders → scans show the sourcing route badge (the link info modal was removed 2026-08-03) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">14</span><span>Top-right Comments hub — Comments tagged on requests (@Mentions/★Saved). Same component as View Orders + full comment search (newest first) <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">15</span><span>Reduced side margins — the whole form fits on one screen without scrolling <span class="ref">— C screen conventions</span></span></li>
+    <li><span class="n">16</span><span><b>New page tabs [New Request | Request List]</b> (added 2026-07-23) — in-admin tabs switching between the request form and the request list (separate from the wireframe's purple state tabs). Pick a route and submit in New Request; view by status and add tracking numbers in Request List <span class="ref">— I Inbound Request</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): Received Date·Carrier는 입고 시 자동 기록되어 <b>요청 리스트에서 표시</b>(폼 입력 아님), 송장번호는 어드민에서 나중 입력. <b>요청 리스트 데이터는 추후 구글시트(Procurement Hub)가 그대로 긁어가는 구조</b> — 시트 연동 설계는 마지막 단계에서 별도 진행(2026-07-23 합의). 모든 라벨은 "Comments"로 통일(한글 "코멘트" 금지).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): Received Date and Carrier are recorded automatically at inbound and <b>shown in the Request List</b> (not form inputs); tracking numbers are added later in the admin. <b>The Request List is the data the Google Sheet (Procurement Hub) will later scrape as-is</b> — sheet integration design happens separately as the last step (agreed 2026-07-23). All labels standardized to "Comments" (never a localized label).</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 2 : 신규 요청 — 홀세일 / 파트너십 (직접) ══════════════ -->
+<!-- ══════════════ STATE 2 : New Request — Wholesale / Partnership (direct) ══════════════ -->
 <section class="state" id="s2">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -409,39 +409,39 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 입고 요청</h2>
-    <p class="sub">Inbound Request — 신규 신청</p>
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — New Request</p>
     <div class="pagetabs">
-      <button class="on">신규 신청</button>
-      <button data-state-jump="s3">요청 리스트</button>
+      <button class="on">New Request</button>
+      <button data-state-jump="s3">Request List</button>
     </div>
 
     <div class="formcard">
       <div class="fsec" style="margin-top:2px">
-        <span class="flabel">소싱 루트 <span class="mut" style="font-weight:400">— 창고로 들어오는 모든 물량의 공통 신청 관문</span></span>
+        <span class="flabel">Sourcing Route <span class="mut" style="font-weight:400">— the single intake gateway for everything entering the warehouse</span></span>
         <div class="routecards">
           <label class="routecard"><input type="radio" name="route2">
-            <span><b>스마트바이</b><small>재고 보충 · Coupang JIT 소싱 (PH 경유)</small></span>
+            <span><b>Smart Buy</b><small>Stock replenishment · Coupang JIT sourcing (via PH)</small></span>
             <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
           <label class="routecard on rc-wholesale"><input type="radio" name="route2" checked>
-            <span><b>홀세일</b><small>도매 대량 입고 (직접 신청)</small></span>
+            <span><b>Wholesale</b><small>Bulk wholesale inbound (direct request)</small></span>
             <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
           <label class="routecard rc-partnership"><input type="radio" name="route2">
-            <span><b>브랜드 파트너십</b><small>브랜드 협찬·마케팅 물량 (직접 신청)</small></span>
+            <span><b>Brand Partnership</b><small>Brand sponsorship · marketing stock (direct request)</small></span>
             <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
           <label class="routecard"><input type="radio" name="route2">
-            <span><b>기타</b><small>그 외 채널 — 직접 입력</small>
-            <input class="etc-in" placeholder="채널명 직접 입력" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
-            <span class="tag rc-badge" style="background:var(--ink);color:#fff">기타</span></label>
+            <span><b>Other</b><small>Any other channel — type it in</small>
+            <input class="etc-in" placeholder="Enter channel name" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
+            <span class="tag rc-badge" style="background:var(--ink);color:#fff">OTHER</span></label>
         </div>
       </div>
 
 
       <div class="fsec anno">
         <span class="dot" style="top:-2px;left:-14px">2</span>
-        <span class="flabel">입고 제품 <span class="mut" style="font-weight:400">— 검색창 하나면 됩니다: SKU No. · 브랜드 · 제품명 중 아는 것 아무거나 입력 → 선택하면 행이 자동으로 채워집니다</span></span>
+        <span class="flabel">Inbound Products <span class="mut" style="font-weight:400">— one search box is all you need: type any of SKU No. · brand · product name you know → pick a result and the row fills in automatically</span></span>
         <div class="auto" style="max-width:720px;margin-top:8px">
-          <input value="" placeholder="SKU No. · 브랜드 · 제품명 아무거나 입력 → 자동완성에서 클릭하면 아래에 행이 추가됩니다">
+          <input value="" placeholder="Type any SKU No. · brand · product name → click a suggestion to add a row below">
         </div>
         <table class="prodtbl">
           <thead><tr>
@@ -454,8 +454,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="1025 Dokdo Toner, 200ml" readonly></td>
               <td><input value="500" class="num"></td>
               <td><input value="8,900" class="num"></td>
-              <td><input value="12,000" class="num" placeholder="모르면 비움"></td>
-              <td><button class="rm" title="행 삭제">✕</button></td>
+              <td><input value="12,000" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
             </tr>
             <tr>
               <td><input value="100052124" readonly></td>
@@ -463,60 +463,60 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
               <td><input value="1025 Dokdo Cleanser, 150ml" readonly></td>
               <td><input value="300" class="num"></td>
               <td><input value="0" class="num"></td>
-              <td><input value="" class="num" placeholder="모르면 비움"></td>
-              <td><button class="rm" title="행 삭제">✕</button></td>
+              <td><input value="" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
             </tr>
           </tbody>
         </table>
-        <p class="mut" style="margin:8px 0 0">2행 = 프로모션 무상 증정분 — Unit Cost에 <b>0 직접 입력</b>(0 허용). <b>JIT Price</b> = 쿠팡 JIT 구매 시 개당 가격, 모르면 비움(옵션)</p>
+        <p class="mut" style="margin:8px 0 0">Row 2 = free promotional stock — <b>0 entered directly</b> in Unit Cost (0 allowed). <b>JIT Price</b> = per-unit price when buying via Coupang JIT, blank if unknown (optional)</p>
       </div>
 
       <div class="fsec">
         <div class="frow">
           <div class="fld" style="min-width:200px">
-            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— 물건을 보내는 공급처</span></label>
-            <input value="비엠유통" placeholder="예: 비엠유통, Coupang">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— who is shipping the goods</span></label>
+            <input value="비엠유통" placeholder="e.g. 비엠유통, Coupang">
           </div>
           <div class="fld opt fld-inv" style="flex:1;min-width:280px">
-            <label>송장번호 (Tracking No) <span style="font-weight:400;color:var(--ink-3)">— 선택 · 발송 후 나중 입력 가능</span></label>
-            <input value="10325661220417" placeholder="발송 후 입력 — 비워두고 신청 가능">
+            <label>Tracking No <span style="font-weight:400;color:var(--ink-3)">— optional · can be added later after dispatch</span></label>
+            <input value="10325661220417" placeholder="Add after dispatch — you can submit without it">
           </div>
           <div class="fld" style="min-width:180px">
-            <label>예상 입고일</label>
+            <label>Expected arrival</label>
             <input type="date" value="2026-07-18">
           </div>
         </div>
         <div class="fld" style="margin-top:14px">
-          <label>메모 (Optional)</label>
-          <textarea class="mtextarea" placeholder="입고 관련 참고사항">홀세일 벤더 직송 — 파레트 2개, 지게차 필요</textarea>
+          <label>Memo (Optional)</label>
+          <textarea class="mtextarea" placeholder="Notes about this inbound">Wholesale vendor direct ship — 2 pallets, forklift needed</textarea>
         </div>
       </div>
 
       <div class="note purple">
-        송장번호가 입력되어 있으므로 등록 즉시 <b>View Orders와 매칭</b>됩니다 — 스캔 시 <span class="tag tag-wholesale">WHOLESALE</span> 배지로 표시됩니다.
+        A tracking number is already entered, so the request <b>matches to View Orders</b> the moment it registers — scans show the <span class="tag tag-wholesale">WHOLESALE</span> badge.
       </div>
 
       <div class="submitrow">
-        <button class="btn btn-blue">입고 요청 등록</button>
-        <span class="mut anno" style="position:relative">등록 시 상태 = <span class="tag tag-requested">신청</span> (송장번호 입력됨 → View Orders 매칭 즉시 활성) · <b>Inbound No. 자동 부여</b> — 요청 리스트에서 확인<span class="dot" style="top:-13px;right:-10px">1</span></span>
+        <button class="btn btn-blue">Register Inbound Request</button>
+        <span class="mut anno" style="position:relative">On registration, status = <span class="tag tag-requested">REQUESTED</span> (tracking number entered → View Orders matching active immediately) · <b>Inbound No. auto-assigned</b> — shown in the Request List<span class="dot" style="top:-13px;right:-10px">1</span></span>
       </div>
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 2 신규/변경 — 홀세일 / 브랜드 파트너십 (직접 신청)</h3>
+  <h3>State 2 Changes — Wholesale / Brand Partnership (Direct Request)</h3>
   <ol>
-    <li><span class="n">1</span><span>직접 신청 루트(홀세일·파트너십·기타)도 <b>Inbound No. 동일 자동 발번</b> — 신청 화면 노출 없음, 등록 시 부여되어 요청 리스트에서 확인 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>제품 입력 동일 규격 — 테이블 위 <b>단일 검색창</b>으로 행 추가, Order Qty·Unit Cost 필수(<b>2행 = 무상 증정분 0 입력 데모</b>)·JIT Price 옵셔널 <span class="ref">— I 입고요청</span></span></li>
+    <li><span class="n">1</span><span>Direct request routes (Wholesale·Partnership·Other) get the <b>same automatic Inbound No.</b> — not shown on the form; assigned at registration and visible in the Request List <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Same product-entry spec — rows added via the <b>single search box</b> above the table; Order Qty·Unit Cost required (<b>row 2 = free-of-charge stock entered as 0</b>), JIT Price optional <span class="ref">— I Inbound Request</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">상태는 <b>신청 → 부분 입고 → 입고완료</b> 3단계(발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02). 송장번호를 이미 아는 경우 바로 입력하면 View Orders 매칭이 즉시 활성화되고, 모르면 비워뒀다가 요청 리스트에서 나중에 입력합니다.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Status has 3 stages: <b>REQUESTED → PARTIAL → INBOUNDED</b> (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02). If you already know the tracking number, enter it right away and View Orders matching activates immediately; otherwise leave it blank and add it later from the Request List.</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 3 : 요청 리스트 (상태별) ══════════════ -->
+<!-- ══════════════ STATE 3 : Request List (by status) ══════════════ -->
 <section class="state" id="s3">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast"><span>✓ 입고 요청 등록됨 — 202607130003</span><small>새로고침 없음 · 리스트 상단에 추가</small></div>
+  <div class="toast"><span>✓ Inbound request registered — 202607130003</span><small>No refresh · added to top of the list</small></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -526,79 +526,79 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 입고 요청</h2>
-    <p class="sub">Inbound Request — 요청 리스트</p>
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — Request List</p>
     <div class="pagetabs">
-      <button data-state-jump="s1">신규 신청</button>
-      <button class="on">요청 리스트</button>
+      <button data-state-jump="s1">New Request</button>
+      <button class="on">Request List</button>
     </div>
 
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ 신규 입고 요청</button>
+      <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ New Inbound Request</button>
       <div class="filterchips anno" style="margin-top:0">
         <span class="dot" style="top:-11px;left:-10px">1</span>
-        <button class="chip on">전체 12</button>
-        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">신청</span> 8</button>
-        <button class="chip"><span class="tag tag-partial" style="margin-right:5px">부분 입고</span> 1</button>
-        <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">입고완료</span> 3</button>
+        <button class="chip on">All 12</button>
+        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">REQUESTED</span> 8</button>
+        <button class="chip"><span class="tag tag-partial" style="margin-right:5px">PARTIAL</span> 1</button>
+        <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">INBOUNDED</span> 3</button>
       </div>
     </div>
 
     <div class="bulkbar anno" style="margin-top:12px">
-      <button class="btn btn-purple-line btn-sm">선택 항목 일괄 송장번호 입력</button>
-      <span class="cnt">2개 선택됨 · 입고 처리(입고완료 전환)는 View Orders 스캔에서 자동 반영</span>
+      <button class="btn btn-purple-line btn-sm">Bulk add tracking numbers</button>
+      <span class="cnt">2 selected · Inbound processing (INBOUNDED transition) is applied automatically by View Orders scans</span>
       <span class="dot" style="top:-11px;left:-10px">2</span>
     </div>
 
     <table class="tbl">
       <thead><tr>
         <th style="width:34px"><input type="checkbox"></th>
-        <th>Inbound No.</th><th class="anno">소싱 루트<span class="dot" style="top:-11px;left:80px">3</span></th><th>브랜드 · 제품</th><th>SKU</th><th>수량</th>
-        <th class="anno">송장번호<span class="dot" style="top:-11px;left:70px">4</span></th><th>예상 입고일</th><th class="anno">Received Date<span class="dot" style="top:-11px;left:90px">10</span></th><th>신청자</th><th class="anno">상태<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Actions</th>
+        <th>Inbound No.</th><th class="anno">Sourcing Route<span class="dot" style="top:-11px;left:80px">3</span></th><th>Brand · Product</th><th>SKU</th><th>Qty</th>
+        <th class="anno">Tracking No<span class="dot" style="top:-11px;left:70px">4</span></th><th>Expected arrival</th><th class="anno">Received Date<span class="dot" style="top:-11px;left:90px">10</span></th><th>Requested by</th><th class="anno">Status<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Actions</th>
       </tr></thead>
       <tbody>
-        <!-- 신청 (송장 미입력) -->
+        <!-- REQUESTED (no tracking yet) -->
         <tr>
           <td><input type="checkbox" checked></td>
           <td class="num">202607130003</td>
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
-          <td><b>COSRX</b> Advanced Snail 96 Mucin Essence, 100ml 외 2종</td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Essence, 100ml +2 more</td>
           <td class="num">100040311 +2</td>
           <td class="num">620</td>
-          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button><span class="dot" style="top:-12px;right:-8px">6</span></td>
+          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">Add tracking</button><span class="dot" style="top:-12px;right:-8px">6</span></td>
           <td class="num">07-16</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
-          <td><span class="tag tag-requested">신청</span></td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td>
           <td class="num">202607130002</td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td>
-          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml 외 1종</td>
+          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml +1 more</td>
           <td class="num">100052117 +1</td>
           <td class="num">800</td>
-          <td><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">미입력 → 입력</button></td>
+          <td><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">Add tracking</button></td>
           <td class="num">07-18</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Dean</td>
-          <td><span class="tag tag-requested">신청</span></td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button></td>
         </tr>
-        <!-- 신청 + 송장 입력됨 (View Orders 매칭 활성) -->
+        <!-- REQUESTED + tracking entered (View Orders matching active) -->
         <tr>
           <td><input type="checkbox"></td>
           <td class="num">202607120004</td>
           <td><span class="tag tag-partnership">PARTNERSHIP</span></td>
-          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (협찬)</td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (sponsored)</td>
           <td class="num">100038120</td>
           <td class="num">300</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417<br>10325661220418</span> <span class="route-note">송장 2건 — 모두 매칭 활성</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417<br>10325661220418</span> <span class="route-note">2 tracking numbers — all matching active</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
           <td class="num">07-15</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Miranti</td>
-          <td><span class="tag tag-requested">신청</span></td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button></td>
         </tr>
         <tr>
@@ -607,27 +607,27 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td><span class="tag tag-smartbuy">SMART BUY</span></td>
           <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
           <td class="num">100045210</td>
-          <td class="num">180 <span class="route-note" title="받을 수량 수정 이력">✎ 300→180 (파손)</span></td>
+          <td class="num">180 <span class="route-note" title="Expected qty edit history">✎ 300→180 (damaged)</span></td>
           <td class="num" style="color:var(--blue)">10324880021991</td>
           <td class="num">07-14</td>
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
-          <td><span class="tag tag-partial">부분 입고 120/180</span></td>
+          <td><span class="tag tag-partial">PARTIAL 120/180</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
-        <!-- 입고완료 (View Orders 스캔으로 자동 전환) -->
+        <!-- INBOUNDED (auto-switched by View Orders scan) -->
         <tr>
           <td><input type="checkbox"></td>
           <td class="num">202607100005</td>
           <td><span class="tag tag-wholesale">WHOLESALE</span></td>
-          <td><b>Beauty of Joseon</b> Relief Sun, 50ml 외 1종</td>
+          <td><b>Beauty of Joseon</b> Relief Sun, 50ml +1 more</td>
           <td class="num">100031820 +1</td>
           <td class="num">1,000</td>
-          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note">View Orders 스캔 입고로 전환됨</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note">Switched by View Orders scan inbound</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
           <td class="num">07-11</td>
           <td class="num">07-11 14:22</td>
           <td>Dean</td>
-          <td><span class="tag tag-inbounded">입고완료</span></td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
         <tr>
@@ -641,64 +641,64 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">07-09</td>
           <td class="num">07-09 10:05</td>
           <td>Yongwon</td>
-          <td><span class="tag tag-inbounded">입고완료</span></td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
           <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
         </tr>
       </tbody>
     </table>
-    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · 상태: 신청 8 · 부분 입고 1 · 입고완료 3</p>
+    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3</p>
 
     <div class="note purple anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">9</span>
-      <b>입고 처리(입고완료 전환)는 이 화면에서 수동으로 하지 않습니다</b> — 물량 도착 후 센터에서 <b>View Orders</b>에 송장 바코드를 스캔 → Inbound 처리하면 해당 요청 건이 자동으로 <span class="tag tag-inbounded">입고완료</span>로 전환되고, 스캔 화면에는 이 요청의 <b>소싱 루트 배지</b>가 표시됩니다. <b>송장번호 미입력 건은 매일 아침 자동 점검되어 Slack 알림</b>(WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr).
+      <b>Inbound processing (the INBOUNDED transition) is not done manually on this screen</b> — when the goods arrive, the center scans the tracking barcode in <b>View Orders</b> → processing the inbound automatically switches the request to <span class="tag tag-inbounded">INBOUNDED</span>, and the scan screen shows this request's <b>sourcing route badge</b>. <b>Requests missing a tracking number are checked automatically every morning with a Slack alert</b> (WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr).
     </div>
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 3 신규/변경 — 요청 리스트 (신청 / 부분 입고 / 입고완료)</h3>
+  <h3>State 3 Changes — Request List (Requested / Partial / Inbounded)</h3>
   <ol>
-    <li><span class="n">1</span><span>상태 필터 칩 — 전체 / <b>신청 / 부분 입고 / 입고완료 3개 상태</b>(발송 폐기 2026-07-27 · 부분 입고 추가 2026-08-02). 송장 입력 여부는 상태가 아니라 송장번호 칼럼에서 확인 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">2</span><span>일괄 처리 바(테이블 상단 고정) — 선택 항목 일괄 송장번호 입력. 입고완료 전환은 View Orders 스캔에서 자동(발송 처리 버튼 폐기) <span class="ref">— I + C 일괄바 규약</span></span></li>
-    <li><span class="n">3</span><span>소싱 루트 칼럼 — SMART BUY / WHOLESALE / PARTNERSHIP 배지 — 표기는 View Orders와 동일(무색 검정 볼드) <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">4</span><span>송장번호 칼럼 — 미입력 시 "미입력 → 입력" 버튼(M1 모달), 입력됨이면 번호 목록(복수 가능)+매칭 상태 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">5</span><span>상태 칼럼 — <b>신청</b> → <b>부분 입고</b>(View Orders 부분 입고 저장 시 자동 전환 · 잔량 n/m 표기) → <b>입고완료</b> 3단계(2026-08-02 확정). 같은 송장 재스캔 시 잔량부터 이어서 대조. <b>받을 수량 수정</b>(View Orders M6) 시 수량 셀에 수정 이력(300→180 등) 표기 + 신청자 Slack 알림 <span class="ref">— I 입고요청</span></span></li>
-    <li><span class="n">6</span><span>신청 + 송장 미입력 건 = "미입력 → 입력" 버튼(M1)으로 나중에 등록. <b>매일 아침 1회 자동 체크 — 신청 상태인데 송장번호가 아직 없는 건을 Slack으로 알림</b>: WHOLESALE·SMART BUY 건 → <b>#wholesale-ops</b>, PARTNERSHIP 건 → <b>#partnership-kr</b> (기타 채널의 알림 채널은 개발 시 확정) <span class="ref">— 2026-07-27 알림 스펙</span></span></li>
-    <li><span class="n">7</span><span>신청 + 송장 입력됨 건 — <b>송장번호는 복수 등록 가능(분할 발송, 2026-08-03 확정)</b>이며 등록된 모든 번호가 View Orders 매칭·스캔 대상. 상태 배지는 그대로 신청 <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">8</span><span>입고완료 = View Orders 스캔 입고로 자동 전환된 건 (별도 연동 모달·결과 링크는 2026-08-03 제거 — 상태 표기로 충분) <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">9</span><span>입고 처리 자동화 안내 — 입고완료 전환은 이 화면이 아니라 View Orders 스캔에서 발생, 스캔 시 소싱루트 배지 노출 <span class="ref">— I + C View Orders</span></span></li>
-    <li><span class="n">10</span><span><b>Received Date 칼럼</b> — 입고완료 시 View Orders 스캔 시각 자동 기록(시트 Received Date 열 대응), 미입고 건은 "–". Carrier 자동 기록은 미지원 — Carrier 칼럼 없음(2026-08-03 확정) <span class="ref">— 시트 연동</span></span></li>
+    <li><span class="n">1</span><span>Status filter chips — All / <b>REQUESTED / PARTIAL / INBOUNDED, 3 statuses</b> (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02). Whether tracking is entered is read from the Tracking No column, not the status <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Bulk bar (pinned above the table) — bulk add tracking numbers for selected rows. INBOUNDED transitions happen automatically via View Orders scans (the mark-shipped button is retired) <span class="ref">— I + C bulk-bar conventions</span></span></li>
+    <li><span class="n">3</span><span>Sourcing Route column — SMART BUY / WHOLESALE / PARTNERSHIP badges — styled like View Orders (black bold, no colors) <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">4</span><span>Tracking No column — an "Add tracking" button (M1 modal) when empty; when filled, the number list (multiple allowed) + matching status <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">5</span><span>Status column — <b>REQUESTED</b> → <b>PARTIAL</b> (auto-switch when View Orders saves a partial inbound · remaining n/m shown) → <b>INBOUNDED</b>, 3 stages (confirmed 2026-08-02). Rescanning the same tracking number resumes reconciliation from the remainder. <b>Expected qty edits</b> (View Orders M6) show an edit history in the Qty cell (e.g. 300→180) + a Slack alert to the requester <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">6</span><span>REQUESTED + no tracking = add it later via the "Add tracking" button (M1). <b>Automatic once-a-morning check — requests still in REQUESTED without a tracking number are flagged on Slack</b>: WHOLESALE·SMART BUY → <b>#wholesale-ops</b>, PARTNERSHIP → <b>#partnership-kr</b> (the channel for Other routes will be decided during development) <span class="ref">— 2026-07-27 alert spec</span></span></li>
+    <li><span class="n">7</span><span>REQUESTED + tracking entered — <b>multiple tracking numbers can be registered per request (split shipments, confirmed 2026-08-03)</b> and every registered number is a View Orders match/scan target. The status badge stays REQUESTED <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">8</span><span>INBOUNDED = auto-switched by a View Orders scan inbound (the separate link modal and result link were removed 2026-08-03 — the status badge is enough) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">9</span><span>Inbound automation note — INBOUNDED transitions happen from View Orders scans, not from this screen; scans surface the sourcing route badge <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">10</span><span><b>Received Date column</b> — the View Orders scan time is recorded automatically on INBOUNDED (maps to the sheet's Received Date column); not-yet-inbounded rows show "–". Automatic Carrier recording is not supported — no Carrier column (confirmed 2026-08-03) <span class="ref">— sheet integration</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ MODAL : 송장번호 입력 (발송 후) ══════════════ -->
+<!-- ══════════════ MODAL : Add Tracking No (after dispatch) ══════════════ -->
 <div class="overlay" id="m-invoice">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>송장번호 입력 — 202607130003<button class="x" data-close>✕</button></header>
+    <header>Add Tracking No — 202607130003<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">물량 발송 후 송장번호(Tracking No)를 입력하세요.</b>
-      <p class="mut" style="margin:8px 0 0"><b>한 입고 요청에 송장번호를 여러 개 등록할 수 있습니다</b>(분할 발송 대비) — 등록된 <b>모든 송장번호가 View Orders 매칭·스캔 대상</b>이 됩니다.</p>
+      <b style="color:var(--ink)">Enter the tracking number(s) once the goods have shipped.</b>
+      <p class="mut" style="margin:8px 0 0"><b>One inbound request can hold multiple tracking numbers</b> (for split shipments) — <b>every registered number becomes a View Orders match/scan target</b>.</p>
       <div id="tnList">
         <div class="qrow" style="display:flex;gap:6px;align-items:center">
-          <input value="" placeholder="예: 10325661220417 — 라스트마일/쿠팡 송장번호" style="flex:1">
-          <button type="button" class="btn btn-line btn-sm tn-del" title="이 송장번호 제거">✕</button>
+          <input value="" placeholder="e.g. 10325661220417 — last-mile / Coupang tracking number" style="flex:1">
+          <button type="button" class="btn btn-line btn-sm tn-del" title="Remove this tracking number">✕</button>
         </div>
       </div>
-      <button type="button" class="btn btn-line btn-sm" id="tnAdd" style="margin-top:8px">＋ 송장번호 추가</button>
+      <button type="button" class="btn btn-line btn-sm" id="tnAdd" style="margin-top:8px">＋ Add tracking number</button>
       <div class="qrow" style="margin-top:14px">
-        <span class="mut">입력 즉시 <b>모든 번호의 View Orders 매칭이 활성화</b>됩니다 — 상태는 신청 그대로, 어느 송장이든 센터 스캔 입고 시 처리(전량 입고 시 입고완료 전환)</span>
+        <span class="mut">Saving activates <b>View Orders matching for every number</b> immediately — status stays REQUESTED; any tracking number can be scanned in at the center (full receipt switches the request to INBOUNDED)</span>
       </div>
-      <div class="note purple">입력 시 <b>View Orders와 자동 매칭</b> — 센터에서 이 송장 바코드를 스캔하면 <span class="tag tag-smartbuy">SMART BUY</span> 소싱 루트 배지가 표시되고, 이 Inbound No.(202607130003) 건과 연결됩니다.</div>
+      <div class="note purple">Saved numbers <b>auto-match to View Orders</b> — when the center scans one of these tracking barcodes, the <span class="tag tag-smartbuy">SMART BUY</span> sourcing route badge is shown and the scan is linked to this Inbound No. (202607130003).</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>취소</button>
-      <button class="btn btn-blue btn-sm" data-close>송장번호 저장</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save tracking numbers</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : View Orders 연동 안내 ══════════════ -->
+<!-- ══════════════ MODAL : View Orders link info (removed) ══════════════ -->
 
 
 <script>
@@ -711,7 +711,7 @@ document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
     window.scrollTo({top:0});
   });
 });
-/* 리스트의 "신규 입고 요청" → State 1 점프 */
+/* "New Inbound Request" in the list → jump to State 1 */
 document.querySelectorAll('[data-state-jump]').forEach(b=>{
   b.addEventListener('click',()=>{
     const tab=document.querySelector('.wf-tab[data-state="'+b.dataset.stateJump+'"]');
@@ -735,7 +735,7 @@ document.querySelectorAll('[data-open]').forEach(b=>{
     else el.style.display = el.style.display==='none' ? 'block' : 'none';
   });
 });
-/* Comments 허브 탭 전환 (Mentions / Saved) */
+/* Comments hub tab switch (Mentions / Saved) */
 document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
@@ -747,11 +747,11 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
     });
   });
 });
-/* ★ 저장 토글 */
+/* ★ save toggle */
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-/* 소싱 루트 라디오 카드 선택 (폼 내 시각 전환) */
+/* sourcing route radio card selection (visual switch inside the form) */
 document.querySelectorAll('.routecards').forEach(group=>{
   group.querySelectorAll('.routecard').forEach(card=>{
     card.addEventListener('click',()=>{
@@ -760,14 +760,14 @@ document.querySelectorAll('.routecards').forEach(group=>{
     });
   });
 });
-/* 필터 칩 토글 */
+/* filter chip toggle */
 document.querySelectorAll('.filterchips .chip').forEach(c=>{
   c.addEventListener('click',()=>{
     c.closest('.filterchips').querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
     c.classList.add('on');
   });
 });
-/* 채널 "기타" — 선택 시 직접 입력칸 활성화 */
+/* "Other" channel — enable the free-text input when selected */
 document.querySelectorAll('input[name="route"],input[name="route2"]').forEach(r=>r.addEventListener('change',()=>{
   const grp=document.getElementsByName(r.name);
   [...grp].forEach(x=>{
@@ -779,10 +779,10 @@ document.querySelectorAll('input[name="route"],input[name="route2"]').forEach(r=
 }));
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
 });
 
-/* deep-link: #reqlist(또는 #s3)로 열면 요청 리스트 탭 활성화 — View Orders 상태 6 배너 링크 연동 */
+/* deep-link: opening with #reqlist (or #s3) activates the Request List tab — linked from the View Orders state 6 banner */
 if(location.hash==='#reqlist'||location.hash==='#s3'){
   document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
   const t=document.querySelector('.wf-tab[data-state="s3"]'); if(t)t.classList.add('on');
@@ -790,17 +790,26 @@ if(location.hash==='#reqlist'||location.hash==='#s3'){
   const s3=document.getElementById('s3'); if(s3)s3.classList.add('on');
 }
 
-/* 2026-08-03 추가: 등록 토스트 · M1 복수 송장 · 요청 리스트 Comments 패널 */
+/* 2026-08-03 additions: registration toast · M1 multiple tracking numbers · M1 save toast · Request List Comments panel */
+function gtoastShow(html){
+  let t=document.getElementById('gtoast');
+  if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';document.body.appendChild(t);}
+  t.innerHTML=html;
+  t.style.display='block';
+  clearTimeout(t._h); t._h=setTimeout(()=>{t.style.display='none';},2600);
+}
 document.querySelectorAll('button').forEach(b=>{
-  if(b.textContent.trim()==='입고 요청 등록'){
+  if(b.textContent.trim()==='Register Inbound Request'){
     b.addEventListener('click',()=>{
-      let t=document.getElementById('gtoast');
-      if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
-        t.innerHTML='✓ 입고 요청 등록됨<small>Inbound No. 자동 발번 · 요청 리스트 상단에 추가 · 새로고침 없음</small>';
-        document.body.appendChild(t);}
-      t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);
+      gtoastShow('✓ Inbound request registered<small>Inbound No. auto-assigned · added to the Request List · No refresh</small>');
     });
   }
+});
+/* M1 save/confirm → top-right confirmation toast (global rule: confirm-type buttons always toast) */
+document.querySelectorAll('#m-invoice .foot .btn-blue').forEach(b=>{
+  b.addEventListener('click',()=>{
+    gtoastShow('✓ Tracking number(s) saved<small>Every registered number is now matched to View Orders · No refresh</small>');
+  });
 });
 const tnAdd=document.getElementById('tnAdd');
 if(tnAdd){
@@ -808,7 +817,7 @@ if(tnAdd){
   tnAdd.addEventListener('click',()=>{
     const row=document.createElement('div');
     row.className='qrow'; row.style.cssText='display:flex;gap:6px;align-items:center;margin-top:6px';
-    row.innerHTML='<input value="" placeholder="추가 송장번호" style="flex:1"><button type="button" class="btn btn-line btn-sm tn-del" title="이 송장번호 제거">✕</button>';
+    row.innerHTML='<input value="" placeholder="Additional tracking number" style="flex:1"><button type="button" class="btn btn-line btn-sm tn-del" title="Remove this tracking number">✕</button>';
     list.appendChild(row); row.querySelector('input').focus();
   });
   list.addEventListener('click',e=>{
@@ -819,9 +828,9 @@ if(tnAdd){
   });
 }
 const IR_COMMENTS={
- '202607130003':[['Dean','@Yongwon 송장번호 오늘 중 입력 예정입니다','10:20']],
- '202607130002':[['Dean','홀세일 발주 확정 — 입고 예정일 07-18','09:12'],['Yongwon','@Dean 확인했습니다. 로케이션 B열 비워둘게요','09:30']],
- '202607120004':[['Miranti','협찬분 300개 — 캠페인 연동 확인했습니다','어제'],['EuJin','@Miranti 캠페인명은 7월 시딩으로 통일해주세요','어제'],['Miranti','수정 완료','어제']]
+ '202607130003':[['Dean','@Yongwon tracking number will be added later today','10:20']],
+ '202607130002':[['Dean','Wholesale PO confirmed — expected arrival 07-18','09:12'],['Yongwon','@Dean got it. I\'ll keep location row B open','09:30']],
+ '202607120004':[['Miranti','300 sponsored units — campaign link confirmed','Yesterday'],['EuJin','@Miranti please standardize the campaign name to July Seeding','Yesterday'],['Miranti','Updated','Yesterday']]
 };
 document.querySelectorAll('.comment-btn').forEach(btn=>{
   btn.addEventListener('click',e=>{
@@ -833,8 +842,8 @@ document.querySelectorAll('.comment-btn').forEach(btn=>{
     const cs=IR_COMMENTS[no.trim()]||[];
     const cols=tr.children.length;
     const panel=document.createElement('tr'); panel.className='cpanel-ir';
-    const inner=cs.length?cs.map(c=>'<div class="c-item"><span class="who">'+c[0]+'</span><span>'+c[1].replace(/@(\w+)/g,'<span class="at">@$1</span>')+'</span><time>'+c[2]+'</time></div>').join(''):'<div class="c-item" style="color:var(--ink-3)">아직 Comments 없음</div>';
-    panel.innerHTML='<td colspan="'+cols+'" style="padding:10px 14px">'+inner+'<div class="cwrite"><input placeholder="Comment 입력 — @이름 태그 시 Slack 자동 알림"><button class="btn btn-blue btn-sm">등록</button></div></td>';
+    const inner=cs.length?cs.map(c=>'<div class="c-item"><span class="who">'+c[0]+'</span><span>'+c[1].replace(/@(\w+)/g,'<span class="at">@$1</span>')+'</span><time>'+c[2]+'</time></div>').join(''):'<div class="c-item" style="color:var(--ink-3)">No comments yet</div>';
+    panel.innerHTML='<td colspan="'+cols+'" style="padding:10px 14px">'+inner+'<div class="cwrite"><input placeholder="Write a comment — @name tags trigger a Slack alert"><button class="btn btn-blue btn-sm">Post</button></div></td>';
     tr.after(panel);
   });
 });

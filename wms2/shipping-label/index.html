@@ -1,4 +1,4 @@
-<title>WMS 2.0 — 송장/라벨 레이아웃 와이어프레임</title>
+<title>WMS 2.0 — Shipping Label Layouts Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -61,7 +61,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .barcode.short{height:34px}
 .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
 
-/* DELEO A4 (현행) */
+/* DELEO A4 (current) */
 .deleo{width:520px;padding:34px 40px;font-size:13px}
 .deleo .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
 .deleo .logo{font-size:30px;font-weight:800;letter-spacing:1px}
@@ -93,7 +93,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .yun .r-last{display:flex;justify-content:space-between;padding:6px 14px;font-size:11px;border-top:2px solid #000}
 .yun .star2{padding:2px 14px 8px;font-size:12px;font-weight:700}
 
-/* DELEO 개선안 (가로, B) */
+/* DELEO improved (landscape, B) */
 .deleoNew{width:760px;padding:22px 26px;font-size:12.5px}
 .deleoNew .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .deleoNew .logo{font-size:24px;font-weight:800;letter-spacing:1px}
@@ -112,7 +112,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .hl-under{position:relative}
 .bc4{font-family:"SF Mono",Menlo,monospace;font-weight:800;font-size:14.5px;text-align:center;letter-spacing:1px}
 
-/* YUN 가로 출력 개선안 (B) — 실물 100×150mm 라벨을 가로 방향(150×100mm)으로 사용, 축척 5px/mm */
+/* YUN landscape improvement (B) — actual 100×150mm label used in landscape (150×100mm), scale 5px/mm */
 .yunNew{width:750px;height:500px;padding:0;border:2px solid #000;display:grid;grid-template-columns:300px 1fr;font-size:12px}
 .yunNew .carrier{border-right:2px solid #000;display:flex;flex-direction:column;min-height:0}
 .yunNew .carrier .rt{display:grid;grid-template-columns:60px 1fr;border-bottom:2px solid #000}
@@ -141,14 +141,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · 송장/라벨 레이아웃 와이어프레임</h1>
-  <span class="hint">실제 DELEO(피킹)·YUN(캐리어) 라벨 기반 · B 개선안 대비</span>
+  <h1>WMS 2.0 · Shipping Label Layouts Wireframe</h1>
+  <span class="hint">Based on actual DELEO (picking) · YUN (carrier) labels · vs Plan B improvements</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-pane="p-deleo">DELEO 현행</button>
-    <button class="wf-tab" data-pane="p-deleoNew">DELEO 개선안 (B)</button>
-    <button class="wf-tab" data-pane="p-yun">YUN 캐리어 라벨</button>
-    <button class="wf-tab" data-pane="p-yunNew">YUN 가로 출력 (B)</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab on" data-pane="p-deleo">DELEO Current</button>
+    <button class="wf-tab" data-pane="p-deleoNew">DELEO Improved (B)</button>
+    <button class="wf-tab" data-pane="p-yun">YUN Carrier Label</button>
+    <button class="wf-tab" data-pane="p-yunNew">YUN Landscape (B)</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
@@ -162,16 +162,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 
 <div class="toolbar">
-  <span class="lbl">Order 407506 · Deleo BaroShip 출고</span>
+  <span class="lbl">Order 407506 · Deleo BaroShip dispatch</span>
   <span class="sp"></span>
-  <button class="btn btn-gray btn-sm">⬅ Order로</button>
-  <button class="btn btn-line btn-sm">라벨 PDF 다운로드</button>
-  <button class="btn btn-blue btn-sm">🖨 프린트</button>
+  <button class="btn btn-gray btn-sm">⬅ Back to Order</button>
+  <button class="btn btn-line btn-sm">Download Label PDF</button>
+  <button class="btn btn-blue btn-sm">🖨 Print</button>
 </div>
 
-<!-- ===== DELEO 현행 ===== -->
+<!-- ===== DELEO current ===== -->
 <div class="pane on" id="p-deleo">
-  <p class="paneintro">현행 DELEO 피킹/패킹 라벨(A4 세로) — 실제 출력물 그대로. 상품명(한글)·수량만 있어 창고 피커가 SKU·로케이션을 알 수 없음. 개선안은 [DELEO 개선안 (B)] 탭 참고.</p>
+  <p class="paneintro">Current DELEO picking/packing label (A4 portrait) — reproduced exactly as printed. Only the product name (Korean) and quantity, so warehouse pickers can't tell the SKU or location. See the [DELEO Improved (B)] tab for the improved version.</p>
   <div class="paper deleo">
     <div class="top">
       <div class="logo">DELEO</div>
@@ -194,9 +194,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ===== DELEO 개선안 (B) ===== -->
+<!-- ===== DELEO improved (B) ===== -->
 <div class="pane" id="p-deleoNew">
-  <p class="paneintro">개선안(기획 B) — 가로 출력 + SKU·브랜드·사이즈·<b>로케이션</b> 추가, 수량 <u>밑줄 강조</u>(오집 방지), 샘플 세트 행 별도 표기. 창고 피커가 라벨만으로 어디서 무엇을 몇 개 집는지 즉시 파악.</p>
+  <p class="paneintro">Improved (Plan B) — landscape print + SKU·brand·size·<b>location</b> added, quantity <u>underlined for emphasis</u> (mispick prevention), sample-set rows marked separately. Pickers can instantly tell where, what, and how many to pick from the label alone.</p>
   <div class="paper deleoNew anno">
     <span class="dot" style="top:16px;right:26px">1</span>
     <div class="top">
@@ -234,9 +234,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ===== YUN 캐리어 라벨 ===== -->
+<!-- ===== YUN carrier label ===== -->
 <div class="pane" id="p-yun">
-  <p class="paneintro">YUN Express 국제배송 캐리어 라벨(4×6) — 배송사가 생성하는 규격 라벨이라 레이아웃 변경 불가. 어드민은 그대로 출력만. (실제 Order 407508 / NZ 배송)</p>
+  <p class="paneintro">YUN Express international carrier label (4×6) — a carrier-generated standard label, so the layout can't be changed. The admin just prints it as-is. (Actual Order 407508 / NZ shipment)</p>
   <div class="paper yun anno">
     <span class="dot" style="top:-11px;left:-11px">4</span>
     <div class="r1"><div class="th">TH</div><div class="route">KRTHZXR</div></div>
@@ -259,9 +259,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ===== YUN 가로 출력 개선안 (B) ===== -->
+<!-- ===== YUN landscape improvement (B) ===== -->
 <div class="pane" id="p-yunNew">
-  <p class="paneintro">개선안(기획 B) — YUN 라벨 실물 <b>100×150mm</b>를 <b>가로 방향(150×100mm)</b>으로 사용해 <b>제품명 전체가 잘리지 않고 노출</b>. 좌측 = 캐리어 규격 요소 <b>전부 유지</b>(라우팅·목적지·트래킹 바코드·SHIP TO·Tel·2차 바코드·참조번호·*2), 우측 = 제품 표(BC 4자리·SKU·Location·브랜드·수량 밑줄 — DELEO 개선안과 동일 규칙). 구현 방식(라벨 회전 출력 vs 동반 페이지)은 개발단에서 YUN 출력 포맷 확인 후 확정.</p>
+  <p class="paneintro">Improved (Plan B) — the actual <b>100×150mm</b> YUN label used in <b>landscape (150×100mm)</b> so <b>product names show in full without truncation</b>. Left = carrier-spec elements <b>all kept</b> (routing · destination · tracking barcode · SHIP TO · Tel · secondary barcode · reference number · *2); right = item table (4-digit BC · SKU · Location · brand · underlined qty — same rules as the DELEO improvement). Implementation (rotated label print vs companion page) will be finalized after checking YUN's output format in development.</p>
   <div class="paper yunNew anno">
     <span class="dot" style="top:-11px;left:-11px">6</span>
     <div class="carrier">
@@ -303,20 +303,20 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </table>
     </div>
   </div>
-  <div style="text-align:center;color:var(--ink-3);font-size:12px;margin-top:10px">목업 축척 5px/mm — 실물 100×150mm 라벨을 가로로 회전해 사용</div>
+  <div style="text-align:center;color:var(--ink-3);font-size:12px;margin-top:10px">Mockup scale 5px/mm — the actual 100×150mm label rotated to landscape</div>
 </div>
 
 <div class="legend">
-  <h3>송장/라벨 — 신규 / 변경 주석 (기획 B 반영)</h3>
+  <h3>Shipping Labels — New / Changed Annotations (Plan B applied)</h3>
   <ol>
-    <li><span class="n">1</span><span>DELEO 피킹 라벨 <b>가로 출력</b> 전환 — SKU·브랜드·사이즈·Location 컬럼 추가로 피커가 라벨만 보고 집품 <span class="ref">— B</span></span></li>
-    <li><span class="n">2</span><span>수량 <u>밑줄+대형 폰트</u> 강조 — 다품목 오집 방지 <span class="ref">— B</span></span></li>
-    <li><span class="n">3</span><span>샘플 세트 행 별도 표기(앰버 틴트 + SAMPLE 배지 + 종류·수량) — 판매 상품과 구분, Order Management 샘플 배정과 연동. <b>정보 이원화(2026-08-03 확정)</b>: 이 샘플 행(어떤 샘플·몇 개)은 <b>센터 내부용</b> 표기 — <b>운송사 전달 데이터</b>에는 맨 마지막 제품명의 "(+ sample set)" 문구만 포함 <span class="ref">— B / G</span></span></li>
-    <li><span class="n">4</span><span>YUN 캐리어 라벨(현행)은 배송사 규격 재현 — 목적지코드(NZ)·라우팅(R·KRTHZXR)·트래킹(YT…)·SKINSEOUL_오더번호 그대로. 개선안은 [YUN 가로 출력 (B)] 탭 <span class="ref">— 실화면</span></span></li>
-    <li><span class="n">5</span><span>제품 표 좌측 <b>BC 란 신설</b> — 제품(88) 바코드의 <b>뒤 4자리</b>. 피킹·패킹 시 실물 바코드 끝자리와 육안 대조로 오집 방지. DELEO·YUN 제품 표 공통, 샘플 세트 등 88바코드 없는 행은 "—" <span class="ref">— B</span></span></li>
-    <li><span class="n">6</span><span>YUN <b>세로 → 가로 출력 전환</b> — 실물 <b>100×150mm</b> 라벨을 가로 방향(150×100mm)으로 사용, 제품명 전체 노출. 캐리어 규격 요소(라우팅·목적지·트래킹 바코드·SHIP TO·Tel·2차 바코드·참조번호·*2)는 <b>전부 유지</b>, 제품 표는 DELEO 개선안과 공통 규칙(BC·SKU·Location·브랜드·수량 밑줄). 구현 방식(회전 출력 vs 동반 페이지)은 개발단 확인 <span class="ref">— B</span></span></li>
+    <li><span class="n">1</span><span>DELEO picking label switched to <b>landscape</b> — SKU·brand·size·Location columns added so pickers can pick from the label alone <span class="ref">— B</span></span></li>
+    <li><span class="n">2</span><span>Quantity emphasized with <u>underline + large font</u> — prevents mispicks on multi-item orders <span class="ref">— B</span></span></li>
+    <li><span class="n">3</span><span>Sample-set row marked separately (amber tint + SAMPLE badge + kind·qty) — distinguishes it from sold items, linked to Order Management sample assignment. <b>Two-track info (confirmed 2026-08-03)</b>: this sample row (which sample · how many) is a <b>center-internal</b> notation — the <b>data sent to the carrier</b> only includes a "(+ sample set)" note on the last product name <span class="ref">— B / G</span></span></li>
+    <li><span class="n">4</span><span>YUN carrier label (current) reproduces the carrier's standard spec — destination code (NZ) · routing (R·KRTHZXR) · tracking (YT…) · SKINSEOUL_order-number as-is. The improved version is in the [YUN Landscape (B)] tab <span class="ref">— actual screen</span></span></li>
+    <li><span class="n">5</span><span>New <b>BC column</b> at the left of the item table — the <b>last 4 digits</b> of the product (88) barcode. During picking/packing, a visual check against the physical barcode's ending digits prevents mispicks. Common to the DELEO and YUN item tables; rows without an 88 barcode (e.g. sample sets) show "—" <span class="ref">— B</span></span></li>
+    <li><span class="n">6</span><span>YUN switched from <b>portrait to landscape</b> — the actual <b>100×150mm</b> label used in landscape (150×100mm), exposing full product names. Carrier-spec elements (routing · destination · tracking barcode · SHIP TO · Tel · secondary barcode · reference number · *2) are <b>all kept</b>; the item table follows the same rules as the DELEO improvement (BC·SKU·Location·brand·underlined qty). Implementation (rotated print vs companion page) to be confirmed in development <span class="ref">— B</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">DELEO 현행/YUN 캐리어 라벨은 실제 출력 PDF 그대로 재현. DELEO 개선안·YUN 가로 출력만 기획 B 적용. 프린트 화면이라 상단 Comments 허브는 생략(라벨 출력 전용). 브랜드명은 개선안에서 항상 노출. BC 4자리 값(0912·8853)은 예시.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">DELEO Current / YUN Carrier Label reproduce the actual printed PDFs as-is. Only DELEO Improved and YUN Landscape apply Plan B. The top Comments hub is omitted since this is a print screen (label output only). Brand names are always shown in the improved versions. The 4-digit BC values (0912·8853) are examples.</p>
 </div>
 
 <script>
@@ -329,6 +329,6 @@ document.querySelectorAll('.wf-tab[data-pane]').forEach(b=>{
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent=document.body.classList.contains('no-anno')?'주석 보이기':'주석 숨기기';
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
 });
 </script>
