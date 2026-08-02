@@ -167,6 +167,9 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
 .tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+#m-reserved .body{overflow-x:auto}
+#m-reserved .tbl th,#m-reserved .tbl td{padding:8px 8px}
+#m-reserved .btn{white-space:nowrap}
 </style>
 
 <div class="wf-bar">
@@ -177,6 +180,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-pane="p-search">Stock History Search</button>
     <button class="wf-tab" data-pane="p-inbound">Inbound Form</button>
     <button class="wf-tab" data-pane="p-outbound">Outbound Form</button>
+    <button class="wf-tab" data-modal="m-reserved">Modal: Reserved Orders</button>
+    <button class="wf-tab" data-modal="m-resrelease">Modal: Cancel Inbound (Release Reservation)</button>
+    <button class="wf-tab" data-modal="m-auditlog">Modal: Past Audit Logs</button>
+    <button class="wf-tab" data-modal="m-adjlog">Modal: ADJUST Events (07-22)</button>
+    <button class="wf-tab" data-modal="m-adjlog6">Modal: ADJUST Events (06-30)</button>
+    <button class="wf-tab" data-modal="m-adjust">Modal: Confirm Audit Differences</button>
     <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
@@ -324,7 +333,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div class="cs-controls">
         <input class="inp" placeholder="Search SKU / product name">
-        <select class="sel"><option>All Locations</option><option>A-02-13</option><option>B-01-07</option></select>
+        <select class="sel"><option>All Locations</option><option>Line A</option><option>Line B</option><option>Line C</option></select>
         <select class="sel"><option>All Sourcing Routes</option><option>SMART BUY</option><option>JIT</option><option>WHOLESALE</option><option>PARTNERSHIP</option></select>
         <span class="sp" style="flex:1"></span>
         <button class="btn btn-gray btn-sm">⬇ Export</button>
@@ -355,7 +364,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           </tbody>
         </table>
       </div>
-      <div style="margin-top:12px;display:flex;gap:14px;align-items:center" class="audcol" hidden>
+      <div style="margin-top:12px;display:none;gap:14px;align-items:center" class="audcol" id="auditSummary">
         <span style="font-size:13px">Total stock loss (sum of diff × product cost): <b style="color:var(--amber)">+₩46,260</b> <span style="color:var(--ink-3)">— target 0</span></span>
         <button class="btn btn-blue" data-modal="m-adjust">Confirm Audit Differences (ADJUST log)</button>
       </div>
@@ -372,7 +381,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">10</span><span><b>Page renamed "Stock Status" → "Inventory"</b> — the standard name covering the whole inventory domain (current stock · history · in/outbound). Landing (default tab) = Current Stocks. Legacy references such as "Export Stock Status" are mapped during development <span class="ref">— E naming</span></span></li>
     <li><span class="n">12</span><span>Location = <b>editable input on every row</b> — unassigned products (amber "Unassigned") are also listed so they can be assigned on the spot. Products without a barcode get an input in the Barcode column (same rule as View Orders) <span class="ref">— E manual location change</span></span></li>
     <li><span class="n">11</span><span>Default sort = <b>Available descending</b> — most sellable stock first. Re-sortable by clicking column headers <span class="ref">— E</span></span></li>
-    <li><span class="n">5</span><span><b>New Current Stocks tab · <b>default landing</b></b> — the live Stock History screen is lookup-centric (single SKU search). The full current-stock list + Location/Sourcing Route filters become the first tab. The Sourcing Route filter <b>includes JIT</b> (confirmed 2026-08-03) — order cancellations · mis-delivery returns can leave JIT stock behind, so JIT residual stock is also listed and filterable <span class="ref">— E new</span></span></li>
+    <li><span class="n">5</span><span><b>New Current Stocks tab · <b>default landing</b></b> — the live Stock History screen is lookup-centric (single SKU search). The full current-stock list + Location/Sourcing Route filters become the first tab. The Sourcing Route filter <b>includes JIT</b> (confirmed 2026-08-03) — order cancellations · mis-delivery returns can leave JIT stock behind, so JIT residual stock is also listed and filterable Location filter groups by <b>line (A / B / C …)</b> — the line list is derived <b>dynamically from registered locations</b> (2026-08-03 decision). <span class="ref">— E new</span></span></li>
     <li><span class="n">6</span><span>Click Reserved Qty → <b>allocated orders modal (M3)</b> — Order ID · Status · reserved qty · timestamp; marks <b>suspected phantom</b> when the order is cancelled/refunded but the reservation remains. Per-row <b>Cancel Inbound (M4)</b>: release confirmation + <b>Restock yes/no</b> (yes = restore Available, no = record the loss as ADJUST) <span class="ref">— E</span></span></li>
     <li><span class="n">7</span><span>Stock Audit (stock-take) mode — starting it <b>re-sorts by location ascending</b> (audit along the walking path, Notion E "display in location order"); exiting restores Available descending. Enter physical counts → Diff auto-calculated + <b>Loss column (diff × product cost)</b> → bottom <b>total = total stock loss (target 0)</b> → clicking confirm opens the <b>summary modal (M1)</b>: review the ADJUST list · new additions · Reserved shortage check · total loss, then record. Monthly audit logs retained <span class="ref">— E</span></span></li>
     <li><span class="n">8</span><span>Stock History Events — Type/Status rendered as badges, Pending confirm rows highlighted + filter chips (All/Confirmed/Pending) <span class="ref">— E</span></span></li>
@@ -567,6 +576,10 @@ document.querySelectorAll('[data-close]').forEach(b=>{
 document.querySelectorAll('.overlay').forEach(o=>{
   o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
 });
+/* wf-bar modal shortcut tabs — open the modal only, keep pane state intact (2026-08-03) */
+document.querySelectorAll('.wf-tab[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopImmediatePropagation();});
+});
 document.querySelectorAll('.wf-tab').forEach(b=>{
   b.addEventListener('click',()=>{
     document.querySelectorAll('.wf-tab').forEach(x=>x.classList.remove('on'));
@@ -590,8 +603,8 @@ const csOrig=[...csBody.querySelectorAll('tr')].filter(r=>!r.classList.contains(
 document.getElementById('toggleAudit').addEventListener('click',function(){
   const on=document.querySelectorAll('#p-current .audcol')[0].style.display!=='table-cell';
   document.querySelectorAll('#p-current th.audcol, #p-current td.audcol').forEach(c=>{c.style.display=on?'table-cell':'none';});
-  const foot=document.querySelector('#p-current div.audcol');
-  if(foot) foot.hidden=!on;
+  const foot=document.getElementById('auditSummary');
+  if(foot) foot.style.display=on?'flex':'none';
   const ar=document.querySelector('#p-current .audrow');
   ar.style.display=on?'table-row':'none';
   const rows=on

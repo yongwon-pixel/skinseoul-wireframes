@@ -1,4 +1,4 @@
-<title>WMS 2.0 — 마감 페이지 와이어프레임</title>
+<title>WMS 2.0 — Closing Wireframe</title>
 <style>
 :root{
   --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
@@ -12,7 +12,7 @@
   --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
   --shadow:0 2px 10px rgba(20,16,27,.10);
 }
-/* 기존 어드민이 라이트 단일 테마이므로 다크 모드 없이 고정 */
+/* the existing admin is light-only, so no dark mode — fixed light theme */
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas);color:var(--ink);
@@ -84,7 +84,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
 .mut{color:var(--ink-3);font-size:12.5px}
 
-/* comment panel — View Orders와 동일 문법 */
+/* comment panel — same grammar as View Orders */
 .cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
 .cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
 .cpanel .c-item:last-of-type{border-bottom:none}
@@ -94,7 +94,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
 .cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
 
-/* ★ 저장(북마크) 토글 — Mentions/Saved 공통 */
+/* ★ save (bookmark) toggle — shared by Mentions/Saved */
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
 
@@ -122,7 +122,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
 
-/* header comment inbox dropdown — Comments 허브 (Mentions / Saved 탭) */
+/* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
 .inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
 .inboxdd.open{display:block}
@@ -140,14 +140,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .state{display:none}
 .state.on{display:block}
 
-/* ══ 마감 페이지 전용 신규 요소 (색은 기존 팔레트만 사용) ══ */
-/* 대형 바코드 스캔 입력 — 창고에서 스캐너로 빠르게 연속 스캔 */
+/* ══ closing-page-only new elements (existing palette colors only) ══ */
+/* large barcode scan input — fast continuous scanning with a warehouse scanner */
 .scanbig{display:flex;gap:10px;align-items:stretch;margin-top:14px;max-width:900px}
 .scanbig input{flex:1;font-size:22px;font-weight:700;letter-spacing:1px;padding:14px 18px;
   border:2px solid var(--ink);border-radius:9px;background:var(--page);color:var(--ink);outline:none;font-variant-numeric:tabular-nums}
 .scanbig .btn{font-size:16px;padding:0 26px}
 
-/* 음성 알림 토글 바 */
+/* voice alert toggle bar */
 .voicebar{display:flex;align-items:center;gap:16px;margin-top:10px;flex-wrap:wrap}
 .vswitch{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--ink-2);cursor:pointer;user-select:none}
 .vtrack{width:42px;height:22px;border-radius:99px;background:var(--green);position:relative;transition:background .15s}
@@ -155,7 +155,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .vtrack i{position:absolute;top:2px;left:22px;width:18px;height:18px;border-radius:99px;background:#fff;transition:left .15s}
 .vtrack.off i{left:2px}
 
-/* 대형 상태 표시 — 멀리서도 인지 (Dean 요청 핵심) */
+/* large status display — recognizable from a distance (core of Dean's request) */
 .bigstatus{display:flex;align-items:center;gap:22px;margin-top:16px;border-radius:12px;padding:24px 30px}
 .bigstatus .ic{font-size:56px;line-height:1;flex:none}
 .bigstatus .big{font-size:38px;font-weight:800;letter-spacing:-.5px;line-height:1.05}
@@ -167,7 +167,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .bs-neutral{background:var(--canvas);border:2px solid var(--line-strong);color:var(--ink-2)}
 @keyframes bspulse{0%,100%{box-shadow:0 0 0 0 rgba(220,53,69,0)}50%{box-shadow:0 0 0 7px rgba(220,53,69,.20)}}
 
-/* 마감 진행 카운트 + 프로그래스 */
+/* closing progress counts + progress bar */
 .clsstat{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
 .tile{flex:1;min-width:132px;border:1px solid var(--line);border-radius:9px;padding:12px 16px;background:var(--page)}
 .tile .lab{font-size:12px;color:var(--ink-3);font-weight:600}
@@ -178,7 +178,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .prog .p-ok{background:var(--green)} .prog .p-warn{background:var(--red)}
 .proglab{font-size:12px;color:var(--ink-3);margin-top:6px}
 
-/* 마감 상태 pill */
+/* closing status pill */
 .pagetabs{display:flex;border-bottom:1px solid var(--line-strong);margin:2px 0 14px}
 .pagetabs button{border:1px solid transparent;background:transparent;color:var(--blue);padding:8px 16px;font-size:13.5px;border-radius:7px 7px 0 0;margin-bottom:-1px}
 .pagetabs button.on{border-color:var(--line-strong);border-bottom-color:var(--page);background:var(--page);color:var(--ink);font-weight:600}
@@ -191,7 +191,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .row-bad td{background:color-mix(in srgb,var(--red-soft) 60%,var(--page))}
 .row-ok td{background:color-mix(in srgb,var(--green-soft) 38%,var(--page))}
 
-/* 배너 (Ready to be Outbounded 재확인 등) */
+/* banners (Ready to be Outbounded recheck, etc.) */
 .clsbanner{margin-top:16px;border-radius:8px;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .clsbanner.info{background:var(--blue-soft);border:1px solid var(--blue)}
 .clsbanner.info b{color:var(--blue)}
@@ -203,22 +203,24 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </style>
 
 <div class="wf-bar">
-  <h1>WMS 2.0 · 마감 페이지 와이어프레임</h1>
-  <span class="hint">v1 — 상태 탭으로 전환 · 보라색 번호 = 변경사항 주석</span>
+  <h1>WMS 2.0 · Closing Wireframe</h1>
+  <span class="hint">v1 — switch states with the tabs · purple numbers = change annotations</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-state="s0">0 · 시작 전 (수동 카운팅)</button>
-    <button class="wf-tab" data-state="s1">1 · 정상 스캔 (출고 완료)</button>
-    <button class="wf-tab" data-state="s2">2 · 경고 · Processing(미출고)</button>
-    <button class="wf-tab" data-state="s2b">2b · 경고 · 없는 주문</button>
-    <button class="wf-tab" data-state="s3">3 · 경고 · 중복 스캔</button>
-    <button class="wf-tab" data-state="s4">4 · 마감 완료</button>
-    <button class="wf-tab" data-modal="m-process">모달: Processing 건 처리</button>
-    <button class="wf-tab" data-state="shist">5 · 마감 기록 (페이지)</button>
-    <button class="wf-toggle" id="annoToggle">주석 숨기기</button>
+    <button class="wf-tab on" data-state="s0">0 · Before Start (manual count)</button>
+    <button class="wf-tab" data-state="s1">1 · OK Scan (outbounded)</button>
+    <button class="wf-tab" data-state="s2">2 · Warning · Processing (not outbounded)</button>
+    <button class="wf-tab" data-state="s2b">2b · Warning · Unknown Order</button>
+    <button class="wf-tab" data-state="s3">3 · Warning · Duplicate Scan</button>
+    <button class="wf-tab" data-state="s4">4 · Closing Complete</button>
+    <button class="wf-tab" data-modal="m-process">Modal: Process Processing Order</button>
+    <button class="wf-tab" data-state="shist">5 · Closing History (page)</button>
+    <button class="wf-tab" data-modal="m-process">Modal: Process Processing Order</button>
+    <button class="wf-tab" data-modal="m-scandel">Modal: Delete Scan Row</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
-<!-- ══════════════ STATE 0 : 마감 시작 전 (수동 카운팅 입력) ══════════════ -->
+<!-- ══════════════ STATE 0 : Before Closing Start (manual count input) ══════════════ -->
 <section class="state on" id="s0">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -230,40 +232,40 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div>
 
     <div class="anno" style="display:block;margin-top:26px;border:1.5px solid var(--blue);border-radius:14px;padding:46px 24px;text-align:center;background:var(--blue-soft)">
       <span class="dot" style="top:-11px;left:-11px">1</span>
       <div style="font-size:30px">🧮</div>
-      <div style="font-size:18px;font-weight:800;margin-top:8px;color:var(--ink)">① 오늘 출고 대상 (수동 카운팅)</div>
-      <div class="mut" style="margin-top:6px">포장 완료 실물을 <b>직접 센 수</b>를 입력하고 마감을 시작하세요 — 이 수와 스캔 정상 건수가 <b>정확히 일치</b>해야 마감 확정됩니다</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px;color:var(--ink)">① Today's Outbound Target (manual count)</div>
+      <div class="mut" style="margin-top:6px">Enter the <b>hand-counted number</b> of physically packed parcels and start closing — the OK-scan count must <b>exactly match</b> this number to confirm closing</div>
       <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;align-items:center">
-        <input id="targetIn0" value="" placeholder="직접 센 수" style="width:150px;font-size:20px;border:1.5px solid var(--blue);border-radius:9px;padding:10px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)">
-        <span style="font-weight:700;color:var(--ink)">건</span>
-        <button class="btn btn-blue" id="startBtn0">마감 시작</button>
+        <input id="targetIn0" value="" placeholder="Hand-counted qty" style="width:150px;font-size:20px;border:1.5px solid var(--blue);border-radius:9px;padding:10px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)">
+        <span style="font-weight:700;color:var(--ink)">orders</span>
+        <button class="btn btn-blue" id="startBtn0">Start Closing</button>
       </div>
     </div>
   </div>
 </div></div>
 
 <div class="legend">
-  <h3>State 0 변경사항 — 마감 시작 전 (수동 카운팅 입력)</h3>
+  <h3>State 0 Changes — Before Closing Start (manual count input)</h3>
   <ol>
-    <li><span class="n">1</span><span><b>시작 전 화면은 카운팅 입력만 노출</b> — 스캔창·카운트 타일 등 다른 인터페이스를 모두 숨겨 "숫자 입력이 첫 단계"임을 명확히(2026-07-23 단순화). 포장 완료 실물을 직접 센 수를 입력해야 [마감 시작] 가능, 시작하면 진행 화면(State 1)으로 전환. 시작 후에도 State 1 상단에서 <b>숫자 변경·마감 취소</b> 가능. 어제까지 기록은 상단 탭 마감 기록에서 조회 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span><b>The pre-start screen exposes only the count input</b> — the scan input, count tiles and every other interface are hidden to make "enter the number first" explicit (simplified 2026-07-23). [Start Closing] requires the hand-counted number of packed parcels; starting switches to the in-progress screen (State 1). After starting, the count can still be <b>edited and the closing cancelled</b> at the top of State 1. Records up to yesterday are viewed in the Closing History tab above <span class="ref">— F Closing</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 1 : 정상 스캔 (출고 완료) ══════════════ -->
+<!-- ══════════════ STATE 1 : OK Scan (outbounded) ══════════════ -->
 <section class="state" id="s1">
 <div class="mockwrap"><div class="mock anno">
 
-  <div class="toast"><span>✓ 출고 완료 확인 — YT2618100710108810</span><small>다음 바코드 바로 스캔 가능</small></div>
+  <div class="toast"><span>✓ Outbound confirmed — YT2618100710108810</span><small>Ready for the next barcode scan</small></div>
 
   <div class="nav">
     <span class="brand">SkinSeoul</span>
@@ -281,118 +283,118 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">내가 태그된 Comments <small>모두 읽음 처리</small></div>
-        <div class="it unread"><div class="body"><b>Order 413540</b> · Dean: "@Yongwon 이 오더 마감 때 Processing 떠서 제로패킹 확인했습니다"<br><time>18:02</time></div><button class="star" title="저장">★</button></div>
-        <div class="it unread"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 중복 스캔 3건 — 합포장 건이라 정상입니다"<br><time>17:44</time></div><button class="star on" title="저장됨">★</button></div>
-        <div class="it"><div class="body"><b>Order 413330</b> · Kai: "오늘 마감 완료 확인했습니다"<br><time>어제</time></div><button class="star" title="저장">★</button></div>
+        <div class="paneheader">Comments where I'm tagged <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413540</b> · Dean: "@Yongwon this order showed Processing at closing, so I checked it at Zero Packing"<br><time>18:02</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 3 duplicate scans — combined-box orders, this is fine"<br><time>17:44</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it"><div class="body"><b>Order 413330</b> · Kai: "Confirmed today's closing is complete"<br><time>yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">내가 저장한 Comments <small>★ 해제 시 목록에서 제거</small></div>
-        <div class="it"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 중복 스캔 3건 — 합포장 건이라 정상입니다"<br><time>17:44</time></div><button class="star on" title="저장 해제">★</button></div>
+        <div class="paneheader">Comments I saved <small>Unstar to remove from this list</small></div>
+        <div class="it"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 3 duplicate scans — combined-box orders, this is fine"<br><time>17:44</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
   </div>
 
   <div class="pagepad">
     <span class="dot" style="margin-left:-6px">9</span>
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="anno"><div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div><span class="dot" style="top:-11px;right:-9px">11</span></div>
 
     <div class="clsbanner info anno" style="margin:0 0 12px">
       <span class="dot" style="top:-11px;left:-10px">10</span>
-      <b>① 오늘 출고 대상 (수동 카운팅)</b>
-      <span>마감 진행 중 (18:02 시작 · Dean) — 스캔 정상 건수가 이 수와 <b>정확히 일치</b>해야 마감 확정</span>
-      <input id="targetIn1" value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink)"> 건
-      <button class="btn btn-line btn-sm" id="targetEdit">↺ 숫자 변경</button>
-      <button class="btn btn-red-line btn-sm" id="closeCancel">✕ 마감 취소</button>
+      <b>① Today's Outbound Target (manual count)</b>
+      <span>Closing in progress (started 18:02 · Dean) — the OK-scan count must <b>exactly match</b> this number to confirm closing</span>
+      <input id="targetIn1" value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink)"> orders
+      <button class="btn btn-line btn-sm" id="targetEdit">↺ Edit count</button>
+      <button class="btn btn-red-line btn-sm" id="closeCancel">✕ Cancel Closing</button>
     </div>
 
     <div class="scanbig anno">
-      <input value="YT2618100710108810" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
+      <input value="YT2618100710108810" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
       <span class="dot" style="top:-11px;left:-10px">1</span>
-      <button class="btn btn-blue">스캔</button>
+      <button class="btn btn-blue">Scan</button>
     </div>
     <div class="voicebar anno">
       <span class="dot" style="top:-11px;left:-10px">3</span>
-      <span class="vswitch" id="voiceToggle"><span class="vtrack"><i></i></span> 음성 알림: <span id="voiceState" style="color:var(--green)">켜짐</span> — 경고 시 "Please check this order" 자동 재생</span>
-      <button class="btn btn-line btn-sm" id="voiceTest">🔊 음성 테스트</button>
+      <span class="vswitch" id="voiceToggle"><span class="vtrack"><i></i></span> Voice alert: <span id="voiceState" style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm" id="voiceTest">🔊 Test voice</button>
     </div>
 
-    <!-- 정상 스캔 확인 — 컴팩트 라인 (대형 패널은 경고 상태 전용) -->
+    <!-- OK-scan confirmation — compact line (large panel is warning-state only) -->
     <div class="okline anno">
       <span class="dot" style="top:-11px;left:-11px">2</span>
-      <b>✓ #5 출고 완료</b>
+      <b>✓ #5 Outbounded</b>
       <span>Order 413540 · Tracking YT2618100710108810 · Prepare Shipment</span>
       <span class="sp"></span>
       <span class="mut">18:41:07 · Dean</span>
     </div>
 
-    <!-- 마감 진행 카운트 -->
+    <!-- closing progress counts -->
     <div class="clsstat anno">
       <span class="dot" style="top:-11px;left:-10px">4</span>
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">3</div></div>
-      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">2</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val">79</div></div>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">3</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">2</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">79</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:3.6%"></i><i class="p-warn" style="width:2.4%"></i></div>
-    <p class="proglab">마감 진행 3.6% — 정상 3/84건 (수동 카운팅 대비 81건 부족) · 경고 2건 해소 필요 — <b>정상 84/84 정확 일치 + 경고 0 이어야 마감 확정, 초과 스캔도 불일치</b></p>
+    <p class="proglab">Closing progress 3.6% — OK 3/84 (81 short of the manual count) · 2 warnings to resolve — <b>closing confirms only at an exact OK 84/84 match with 0 warnings; over-scan is also a mismatch</b></p>
 
 
-    <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 정상(초록) / 경고(빨강) 구분, #1부터 순서대로 — 새 스캔은 아래에 추가</span></p>
+    <p class="sub" style="margin-top:22px">Scan list <span class="mut" style="font-weight:400">— OK (green) / Warning (red), in order from #1 — new scans append at the bottom</span></p>
     <table class="tbl anno">
       <thead><tr>
-        <th>#<span class="dot" style="top:2px;left:-12px">6</span></th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th class="anno">마감 판정<span class="dot" style="top:-11px;right:-8px">5</span></th><th>작업자</th><th>비고</th><th style="width:44px"></th>
+        <th>#<span class="dot" style="top:2px;left:-12px">6</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th class="anno">Closing Verdict<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#1</td>
           <td class="num">18:39:52</td><td class="num">YT2618100710077629</td><td class="num" style="color:var(--blue)">413472</td>
           <td class="num">2</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#2</td>
           <td class="num">18:40:18</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Miranti</td><td>First scan</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#3</td>
           <td class="num">18:40:31</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Miranti</td><td class="mut"><b>#2와 중복</b> — 동일 송장 (합포장 확인 필요)</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-dup">⚠ Duplicate scan</span></td><td>Miranti</td><td class="mut"><b>Duplicate of #2</b> — same tracking no. (check for combined box)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#4</td>
           <td class="num">18:40:55</td><td class="num">YT2618100710223471</td><td class="num" style="color:var(--blue)">413511</td>
           <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
-          <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-processing">⚠ Not outbounded</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">Process this order</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
-    <p class="mut" style="margin-top:12px">순번(#) = 마감 시작 후 1부터 누적 · 낮은 순번부터 표시 · 백엔드 전체 저장 (마감 리포트 Export 시 전량 포함)</p>
+    <p class="mut" style="margin-top:12px">Sequence (#) = cumulative from 1 after closing starts · lowest first · all rows stored in the backend (fully included in the closing report export)</p>
 
     <div class="clsbanner done anno" style="margin-top:20px">
       <span class="dot" style="top:-11px;left:-10px">8</span>
-      <b>마감 확정</b>
-      <span>정상 스캔 수가 <b>수동 입력한 오늘 출고 대상(84)과 정확히 일치</b>하고 경고 0건이 되면 <b>활성화만</b> 됩니다 — <b>자동 확정 없음, 반드시 이 버튼을 눌러야 마감.</b> 일치 도달 후에도 스캔창은 계속 활성(예: 84로 셌는데 85번째 실물이 나오는 경우 대비) — 초과 스캔 발생 시 불일치로 버튼 재비활성 → 숫자 변경(↺) 또는 초과 건 정리 후 확정. 확정 시 마감 기록 저장 + <b>Daily Shipping Status</b> 자동 갱신</span>
-      <button class="btn btn-gray btn-sm">마감 확정 (79건 남음 · 경고 2건)</button>
+      <b>Confirm Closing</b>
+      <span>This button is <b>only enabled</b> once the OK-scan count <b>exactly matches today's manually entered outbound target (84)</b> with 0 warnings — <b>no auto-confirm; closing happens only when this button is pressed.</b> The scan input stays active even after the match (e.g. an 85th parcel turns up after counting 84) — an over-scan makes it a mismatch and disables the button again → edit the count (↺) or clear the extra scans, then confirm. Confirming saves the closing record + auto-updates <b>Daily Shipping Status</b></span>
+      <button class="btn btn-gray btn-sm">Confirm Closing (79 remaining · 2 warnings)</button>
     </div>
 
   </div>
@@ -401,25 +403,25 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div></div>
 
 <div class="legend">
-  <h3>State 1 변경사항 — 정상 스캔 (출고 완료)</h3>
+  <h3>State 1 Changes — OK Scan (outbounded)</h3>
   <ol>
-    <li><span class="n">1</span><span>마감 전용 대형 바코드 스캔 입력 — 오늘 포장 건의 <b>운송사 인계용 송장번호</b>를 찍어 확인(예: YUN Express는 YT-프리픽스 — YT2618100710108810). 스캔 즉시 출고 상태 판정. 스캐너의 <b>자동 Enter로 제출 → 판정 → 전체 선택 복귀</b>가 반복되어 연속 스캔 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">2</span><span>정상 스캔 확인 = <b>컴팩트 한 줄 바</b>(초록: 순번·오더·트래킹·상태·시각·작업자). <b>대형 색상 패널은 경고 상태(빨강)에서만</b> 사용 — 멀리서 인지가 필요한 건 경고뿐이라 정상용 대형 패널은 제거(2026-07-23) <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">3</span><span>음성 알림 토글(기본 켜짐) — 경고 시 "Please check this order" 자동 재생, 스캐너로 빠르게 찍을 때 화면 안 봐도 인지. 음성 테스트 버튼 제공 <span class="ref">— F Dean</span></span></li>
-    <li><span class="n">4</span><span>마감 진행 카운트 — 출고 대상(<b>수동 입력값</b>)/확인 완료/경고/남은 스캔 + 진행 프로그래스 바(정상 초록·경고 빨강 세그먼트) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">5</span><span>정상 스캔 = 오더 상태가 <b>Prepare Shipment인 건만</b> → 초록 "출고 완료". 그 외 상태(Processing 등)는 전부 경고(현재 마감 과정의 "출고처리 됐는지 확인" 대체) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">6</span><span>스캔 리스트 — 정상(초록 틴트)/경고(빨강 틴트) 행 구분, <b>맨 왼쪽 # = 스캔 순번(라인 넘버)</b>. 중복 경고 시 <b>몇 번과 몇 번이 중복인지 # 기준으로 표기</b>(예: #3 ↔ #2). 낮은 순번 → 높은 순번 순, 새 스캔은 아래에 추가. 각 행 우측 <b style="color:var(--red)">✕</b> = 스캔 기록 삭제(확인 모달 "없애시겠습니까? 예/아니오") — 오스캔·없는 주문 정리, 삭제 시 카운트 제외(M2) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">7</span><span>우상단 Comments 허브 — [@ Mentions] 태그된 코멘트 + [★ Saved] + 전체 코멘트 검색(시간 역순), 마감 예외 소통 이력 집계 <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">8</span><span>마감 확정 버튼 — <b>정상 스캔 수 = 수동 입력 출고 대상(정확 일치, 초과도 불일치) + 경고 0</b> 이어야 활성. <b>활성=자동 확정 아님, 클릭해야 마감</b>(도달 후에도 스캔 계속 가능 — 초과 발견 시 재비활성). 확정 시 마감 기록 저장 + Daily Shipping Status 자동 갱신(수기 스프레드시트 갱신 과정 대체) <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">9</span><span>좌우 여백 축소 — 스크롤 없이 전 칼럼+상태 한 화면 <span class="ref">— C 화면(공통)</span></span></li>
-    <li><span class="n">10</span><span><b>오늘 출고 대상 수동 카운팅</b> — 마감 시작(State 0)에서 입력된 값이 잠금 표시. <b>[↺ 숫자 변경]</b>으로 대상 수 수정, <b>[✕ 마감 취소]</b>로 오늘 마감 세션 취소(시작 전 화면으로 복귀, 스캔 기록 폐기 확인 필요). 시스템 수치가 아니라 실물 카운트가 기준 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">11</span><span><b>상단 메뉴 [마감 | 마감 기록]</b> — 마감 기록은 <b>별도 페이지로 전환</b>(모달 아님): 일별 스냅샷·CSV Export. 상세는 상단 "5 · 마감 기록" 탭 참조 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span>Closing-dedicated large barcode scan input — scan the <b>carrier-handover tracking number</b> of today's packed orders to verify (e.g. YUN Express uses the YT prefix — YT2618100710108810). Outbound status is judged the instant it is scanned. The scanner's <b>auto-Enter submits → verdict → focus returns with all text selected</b>, repeating for continuous scanning. <b>Scanner protocol</b>: a barcode scanner types the number followed by an automatic Enter. During continuous scanning the cursor must always stay in this scan input, and the page must <b>never refresh</b> between scans — every scan lands in this same input with no extra clicks (shared with View Orders scan protocol) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">2</span><span>OK-scan confirmation = <b>compact one-line bar</b> (green: sequence · order · tracking · status · time · worker). <b>The large colored panel is used only in warning states (red)</b> — only warnings need recognition from a distance, so the large OK panel was removed (2026-07-23) <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">3</span><span>Voice alert toggle (on by default) — plays "Please check this order" automatically on warnings, so warnings register without watching the screen during fast scanning. A Test voice button is provided <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">4</span><span>Closing progress counts — outbound target (<b>manually entered value</b>) / OK / warnings / remaining scans + a progress bar (green OK · red warning segments) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">5</span><span>OK scan = <b>only orders whose status is Prepare Shipment</b> → green "Outbounded". Every other status (Processing etc.) is a warning (replaces the current closing step "check whether it was outbound-processed") <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">6</span><span>Scan list — OK (green tint) / warning (red tint) rows, <b>leftmost # = scan sequence # (line number)</b>. Duplicate warnings <b>state which scans collide by #</b> (e.g. #3 ↔ #2). Sorted lowest to highest, new scans append at the bottom. The <b style="color:var(--red)">✕</b> on the right of each row = delete scan row (confirm modal "Remove this scan? Yes / No") — for clearing mis-scans and unknown orders; deleted rows are excluded from the counts (M2) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">7</span><span>Comments hub in the top bar — @Mentions + Saved + full comment search (newest first), aggregating the communication trail of closing exceptions <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">8</span><span>Confirm Closing button — enabled only when <b>OK-scan count = the manually entered outbound target (exact match; over-scan is also a mismatch) + 0 warnings</b>. <b>Enabled ≠ auto-confirmed; closing requires the click</b> (scanning stays possible after the match — finding an extra disables it again). Confirming saves the closing record + auto-updates Daily Shipping Status (replaces the manual spreadsheet update) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">9</span><span>Reduced side margins — every column + status fits on one screen without scrolling <span class="ref">— C Screen (common)</span></span></li>
+    <li><span class="n">10</span><span><b>Today's outbound target manual count</b> — the value entered at closing start (State 0) is shown locked. <b>[↺ Edit count]</b> edits the target; <b>[✕ Cancel Closing]</b> cancels today's closing session (returns to the pre-start screen; discarding scan records requires confirmation). The baseline is the physical count, not a system figure <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">11</span><span><b>Top menu [Closing | Closing History]</b> — Closing History switches to a <b>separate page</b> (not a modal): daily snapshots · CSV export. See the "5 · Closing History" tab above for details <span class="ref">— F Closing</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">동작 규칙(화면 밖): <b>마감 시작(수동 카운팅 입력) 전에는 스캔창 비활성.</b> 마감 시작 후에는 페이지 아무 곳 클릭 시 스캔창 자동 포커스(전체 선택)·연속 스캔, 처리 결과는 새로고침 없이 우상단 토스트 — 화면 문구 없이 동작으로만 구현. 스캔한 송장의 오더 상태를 즉시 조회 → <b>Prepare Shipment면 정상</b>(초록·무음), 그 외 상태(Processing 등)거나 오늘 이미 스캔된 송장(중복)이면 경고(빨강·음성). <b>마감 확정 조건 = 정상 스캔 수가 수동 입력한 오늘 출고 대상과 정확히 일치 + 경고 0건</b>(초과 스캔도 불일치). <b>일치 도달 = 확정 버튼 활성화일 뿐 자동 마감 아님</b> — 전부 스캔했는지 확인한 뒤 사람이 [마감 확정]을 눌러야 마감되며, 도달 후에도 스캔창은 유지되어 초과 실물(85번째)이 나오면 불일치 경고로 전환·버튼 재비활성. Processing 건 처리(M1)의 Outbound는 <b>실제 오더 상태 변경</b>으로 전 화면에 반영. 매칭 오더가 없는 송장은 <b>"없는 주문" 경고(상태 2b)</b> — 마감 카운트 미포함. <b>마감 진행 상태는 서버 저장</b> — 스캔 도중 다른 페이지로 이탈했다 돌아와도, 새로고침해도 카운팅·스캔 리스트·경고가 그대로 유지되며 마감 확정 또는 명시적 재시작 전까지 클리어되지 않음. <b>연속 스캔:</b> 스캐너가 붙여주는 자동 Enter가 제출을 대신하며(스캔 버튼 클릭 불필요), 판정 직후 커서는 스캔창에 전체 선택 상태로 복귀 — 다음 스캔이 이전 값을 덮어써 몇 건이든 끊김 없이 연속 스캔.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): <b>the scan input is disabled until closing starts (manual count entered).</b> After closing starts, clicking anywhere on the page auto-focuses the scan input (all text selected) for continuous scanning, and results show as a top-right toast without a reload — implemented purely as behavior, with no on-screen copy. The scanned tracking number's order status is looked up instantly → <b>Prepare Shipment = OK</b> (green · silent); any other status (Processing etc.) or a tracking number already scanned today (duplicate) = warning (red · voice). <b>Closing confirm condition = OK-scan count exactly matches the manually entered outbound target + 0 warnings</b> (over-scan is also a mismatch). <b>Reaching the match only enables the Confirm button — it is not auto-closing</b>: a person must press [Confirm Closing] after checking that everything was scanned, and the scan input stays alive after the match, so an extra parcel (an 85th) flips it to a mismatch warning and disables the button again. Outbound in Process Processing Order (M1) is a <b>real order-status change</b> reflected on every screen. A tracking number with no matching order = <b>"unknown order" warning (State 2b)</b> — excluded from the closing count. <b>Closing progress is stored server-side</b> — leaving for another page and coming back, or refreshing, keeps the count, scan list and warnings intact; nothing clears until closing is confirmed or explicitly restarted. <b>Continuous scanning:</b> the scanner's automatic Enter substitutes for pressing Scan (no button click needed), and right after the verdict the cursor returns to the scan input with the text fully selected — the next scan overwrites the previous value, so any number of scans run without interruption. The scanner types the number followed by an automatic Enter; during continuous scanning the cursor must always stay in this scan input, and the page must <b>never refresh</b> between scans — every scan lands in this same input with no extra clicks (shared with View Orders scan protocol).</p>
 </div>
 </section>
 
-<!-- ══════════════ STATE 2 : 경고 · Processing (미출고) ══════════════ -->
+<!-- ══════════════ STATE 2 : Warning · Processing (not outbounded) ══════════════ -->
 <section class="state" id="s2" data-voice="Please check this order">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -431,52 +433,52 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div>
-    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
     <div class="scanbig">
-      <input value="YT2618100710223471" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
-      <button class="btn btn-blue">스캔</button>
+      <input value="YT2618100710223471" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
     </div>
     <div class="voicebar">
-      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "Please check this order" 자동 재생</span>
-      <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
     </div>
 
 
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">4</div></div>
-      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val">80</div></div>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:3.6%"></i></div>
-    <p class="proglab">마감 진행 4.8% — 경고 3건 해소 후 마감 확정 가능</p>
+    <p class="proglab">Closing progress 4.8% — Confirm Closing becomes available after resolving 3 warnings</p>
 
-    <p class="sub" style="margin-top:22px">스캔 리스트 <span class="mut" style="font-weight:400">— 경고 건은 빨강 틴트 강조</span></p>
+    <p class="sub" style="margin-top:22px">Scan list <span class="mut" style="font-weight:400">— warning rows highlighted with a red tint</span></p>
     <table class="tbl anno">
       <thead><tr>
-        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#4</td>
           <td class="num">18:40:55</td><td class="num">YT2618100710223471</td><td class="num" style="color:var(--blue)">413511</td>
           <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
-          <td><span class="cs-processing">⚠ 미출고</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">이 오더 처리</button></td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-processing">⚠ Not outbounded</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">Process this order</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
@@ -484,14 +486,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 2 변경사항 — 경고 · Processing (미출고)</h3>
+  <h3>State 2 Changes — Warning · Processing (not outbounded)</h3>
   <ol>
-    <li><span class="n">1</span><span>Processing(미출고) 스캔 = <b>리스트 행 빨강 틴트 + "⚠ 미출고" 판정 + 음성 "Please check this order" 자동 재생</b>. 처리도 리스트에서 — 행의 <b>[이 오더 처리]</b> 버튼(M1: 제로패킹 확인 → Outbound, <b>실제 오더 상태 변경</b> Processing → Prepare Shipment 전 화면 반영). 대형 경고 패널·조치 배너는 2026-07-23 제거(리스트에서 확인·처리로 충분) <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span>A Processing (not outbounded) scan = <b>red-tinted list row + "⚠ Not outbounded" verdict + auto-play of the "Please check this order" voice</b>. Handling happens in the list too — the row's <b>[Process this order]</b> button (M1: Zero Packing check → Outbound, a <b>real order-status change</b> Processing → Prepare Shipment reflected on every screen). The large warning panel and action banner were removed 2026-07-23 (verifying and handling in the list is enough) <span class="ref">— F Closing</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 2b : 경고 · 없는 주문 ══════════════ -->
+<!-- ══════════════ STATE 2b : Warning · Unknown Order ══════════════ -->
 <section class="state" id="s2b" data-voice="Please check this order">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -503,52 +505,52 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div>
-    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
     <div class="scanbig">
-      <input value="YT2618100719984412" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
-      <button class="btn btn-blue">스캔</button>
+      <input value="YT2618100719984412" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
     </div>
     <div class="voicebar">
-      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "Please check this order" 자동 재생</span>
-      <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
     </div>
 
 
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">4</div></div>
-      <div class="tile warn"><div class="lab">경고 (미출고·중복·없는 주문)</div><div class="val">4</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val">80</div></div>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate · unknown order)</div><div class="val">4</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:4.8%"></i></div>
-    <p class="proglab">마감 진행 4.8% — 없는 주문은 카운트 미포함, 경고 해소 후 마감 확정 가능</p>
+    <p class="proglab">Closing progress 4.8% — unknown orders are not counted; Confirm Closing after resolving warnings</p>
 
-    <p class="sub" style="margin-top:22px">스캔 리스트</p>
+    <p class="sub" style="margin-top:22px">Scan list</p>
     <table class="tbl anno">
       <thead><tr>
-        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
           <td class="num">18:41:07</td><td class="num">YT2618100710108810</td><td class="num" style="color:var(--blue)">413540</td>
           <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Dean</td><td>–</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#7</td>
           <td class="num">18:42:05</td><td class="num">YT2618100719984412</td><td class="num" style="color:var(--ink-3)">–</td>
           <td class="num" style="color:var(--ink-3)">–</td><td class="num" style="color:var(--ink-3)">–</td>
-          <td><span class="cs-dup">⚠ 없는 주문</span></td><td>Dean</td><td class="mut">송장 오입력 또는 타 시스템 주문 — 실물 라벨 확인</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-dup">⚠ Unknown order</span></td><td>Dean</td><td class="mut">Mistyped tracking no. or an order from another system — check the physical label</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
@@ -556,14 +558,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 2b 변경사항 — 경고 · 없는 주문</h3>
+  <h3>State 2b Changes — Warning · Unknown Order</h3>
   <ol>
-    <li><span class="n">1</span><span>매칭 오더 없는 송장 = <b>리스트 행 빨강 틴트 + "⚠ 없는 주문" 판정</b>(Order·상태 "–") + 음성 자동 재생. <b>마감 카운트 미포함</b> — 실물 라벨 재확인·재스캔, 계속 없으면 관리자 확인. View Orders 미인식(제품 바코드) 플로우와 별개로 송장 자체가 시스템에 없는 케이스 <span class="ref">— 2026-07-23 추가</span></span></li>
+    <li><span class="n">1</span><span>A tracking number with no matching order = <b>red-tinted list row + "⚠ Unknown order" verdict</b> (Order · status "–") + auto voice. <b>Not included in the closing count</b> — recheck the physical label and rescan; if still not found, escalate to a manager. Distinct from the View Orders unrecognized (product barcode) flow — here the tracking number itself does not exist in the system <span class="ref">— added 2026-07-23</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 3 : 경고 · 중복 스캔 ══════════════ -->
+<!-- ══════════════ STATE 3 : Warning · Duplicate Scan ══════════════ -->
 <section class="state" id="s3" data-voice="Please check this order">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -575,52 +577,52 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div>
-    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
     <div class="scanbig">
-      <input value="YT2618100710184356" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
-      <button class="btn btn-blue">스캔</button>
+      <input value="YT2618100710184356" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
     </div>
     <div class="voicebar">
-      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span> — 경고 시 "Please check this order" 자동 재생</span>
-      <button class="btn btn-line btn-sm sim-voice">🔊 다시 듣기</button>
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
     </div>
 
 
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">4</div></div>
-      <div class="tile warn"><div class="lab">경고 (미출고·중복)</div><div class="val">3</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val">80</div></div>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:3.6%"></i></div>
-    <p class="proglab">마감 진행 4.8% — 중복은 카운트 중복 집계 안 됨</p>
+    <p class="proglab">Closing progress 4.8% — duplicates are not double-counted</p>
 
-    <p class="sub" style="margin-top:22px">스캔 리스트</p>
+    <p class="sub" style="margin-top:22px">Scan list</p>
     <table class="tbl anno">
       <thead><tr>
-        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>스캔 시각</th><th>송장 바코드</th><th>Order ID</th><th>제품 수</th><th>오더 상태</th><th>마감 판정</th><th>작업자</th><th>비고</th><th style="width:44px"></th>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
       </tr></thead>
       <tbody>
         <tr class="row-ok">
           <td class="num" style="color:var(--ink-3);font-weight:700">#2</td>
           <td class="num">18:40:18</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-shipped">✓ 출고 완료</span></td><td>Miranti</td><td>최초 스캔</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Miranti</td><td>First scan</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
         <tr class="row-bad">
           <td class="num" style="color:var(--ink-3);font-weight:700">#6</td>
           <td class="num">18:41:44</td><td class="num">YT2618100710184356</td><td class="num" style="color:var(--blue)">413498</td>
           <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
-          <td><span class="cs-dup">⚠ 중복 스캔</span></td><td>Dean</td><td class="mut"><b>#2와 중복</b> — 최초 18:40:18 (Miranti)</td>
-          <td><button class="btn btn-line btn-sm scandel" title="스캔 기록 삭제" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+          <td><span class="cs-dup">⚠ Duplicate scan</span></td><td>Dean</td><td class="mut"><b>Duplicate of #2</b> — first scanned 18:40:18 (Miranti)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
         </tr>
       </tbody>
     </table>
@@ -628,17 +630,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 3 변경사항 — 경고 · 중복 스캔</h3>
+  <h3>State 3 Changes — Warning · Duplicate Scan</h3>
   <ol>
-    <li><span class="n">1</span><span>오늘 이미 스캔된 송장 재스캔 = <b>리스트 행 빨강 틴트 + "⚠ 중복 스캔" 판정</b> + 음성 자동 재생 — 엑셀 A열 중복값 기능의 디지털 대체. 비고에 <b>라인 번호로 어느 스캔끼리 중복인지 명시</b>(#6 ↔ #2, 최초 스캔·작업자 포함, 합포장 여부 판단). 중복은 마감 카운트 이중 집계 안 함, 합포장 사유는 오더 Comments로 기록 <span class="ref">— F Dean / 현재과정 1</span></span></li>
+    <li><span class="n">1</span><span>Rescanning a tracking number already scanned today = <b>red-tinted list row + "⚠ Duplicate scan" verdict</b> + auto voice — a digital replacement for the Excel column-A duplicate-value check. The Notes column <b>states which scans collide by line number</b> (#6 ↔ #2, with first scan time and worker, to judge combined-box cases). Duplicates are not double-counted toward closing; combined-box reasons are logged in the order's Comments <span class="ref">— F Dean / current process 1</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ STATE 4 : 마감 완료 ══════════════ -->
+<!-- ══════════════ STATE 4 : Closing Complete ══════════════ -->
 <section class="state" id="s4">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast"><span>✓ 오늘 마감 확정 완료 — 84/84건</span><small>Daily Shipping Status 자동 갱신됨</small></div>
+  <div class="toast"><span>✓ Today's closing confirmed — 84/84 orders</span><small>Daily Shipping Status auto-updated</small></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -648,67 +650,67 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="pagetabs">
-      <button class="on">마감</button>
-      <button data-goto="shist">마감 기록</button>
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
     </div>
-    <p class="mut" style="margin:0 0 8px">① 오늘 출고 대상(수동 카운팅): <b style="color:var(--ink)">84건</b> — 마감 시작 18:02 (Dean)</p>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
     <div class="scanbig">
-      <input value="" placeholder="송장 바코드를 스캔하세요 — 스캔 즉시 출고 상태 판정">
-      <button class="btn btn-blue">스캔</button>
+      <input value="" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
     </div>
     <div class="voicebar">
-      <span class="vswitch"><span class="vtrack"><i></i></span> 음성 알림: <span style="color:var(--green)">켜짐</span></span>
-      <button class="btn btn-line btn-sm sim-voice">🔊 음성 테스트</button>
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span></span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Test voice</button>
     </div>
 
     <div class="bigstatus bs-ok anno">
       <span class="dot" style="top:-11px;left:-11px">1</span>
       <span class="ic">✓</span>
       <div>
-        <div class="big">오늘 마감 완료 — 전 건 확인</div>
-        <div class="bmeta">수동 카운팅 84건 = 정상 스캔 84건 <b>정확 일치</b> · 경고 0건 · 2026-07-13 18:52 마감 확정 (Yongwon)</div>
+        <div class="big">Today's closing complete — all orders verified</div>
+        <div class="bmeta">Manual count 84 = OK scans 84, an <b>exact match</b> · 0 warnings · closing confirmed 2026-07-13 18:52 (Yongwon)</div>
       </div>
-      <div class="bside">경고<br><b style="color:var(--green)">0</b><br>남은 스캔 0</div>
+      <div class="bside">Warnings<br><b style="color:var(--green)">0</b><br>Remaining scans 0</div>
     </div>
 
     <div class="clsstat">
-      <div class="tile"><div class="lab">오늘 출고 대상 (수동 입력)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">확인 완료 (출고됨)</div><div class="val">84</div></div>
-      <div class="tile ok"><div class="lab">경고 (해소됨)</div><div class="val">0</div></div>
-      <div class="tile"><div class="lab">남은 스캔</div><div class="val">0</div></div>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">Warnings (resolved)</div><div class="val">0</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">0</div></div>
     </div>
     <div class="prog"><i class="p-ok" style="width:100%"></i></div>
-    <p class="proglab">마감 진행 100% — 정상 84/84 정확 일치 + 경고 0 → 마감 확정 완료 · 오늘 기록이 마감 기록에 저장됨</p>
+    <p class="proglab">Closing progress 100% — OK 84/84 exact match + 0 warnings → closing confirmed · today's record saved to Closing History</p>
 
     <div class="clsbanner done anno">
       <span class="dot" style="top:-11px;left:-10px">2</span>
-      <b>마감 리포트</b>
-      <span>오늘 마감 결과를 Export — 기존 <b>SS Daily Shipping Status</b> 수기 복사/붙여넣기·수식 제거 과정을 대체. 마감 확정 시 자동 스냅샷 저장됨.</span>
-      <button class="btn btn-green-line btn-sm">마감 리포트 다운로드 (CSV)</button>
+      <b>Closing Report</b>
+      <span>Exports today's closing result — replaces the manual copy/paste and formula-stripping into <b>SS Daily Shipping Status</b>. A snapshot is saved automatically on closing confirmation.</span>
+      <button class="btn btn-green-line btn-sm">Download Closing Report (CSV)</button>
     </div>
 
     <div class="clsbanner info anno" style="margin-top:12px">
       <span class="dot" style="top:-11px;left:-10px">3</span>
-      <b>경고 처리 요약</b>
-      <span>오늘 경고 총 3건 — Processing 1건(413511, Outbound 처리 후 해소) · 중복 2건(합포장 확인, Comments 기록). 상세는 로그·Comments 참조.</span>
+      <b>Warning Resolution Summary</b>
+      <span>3 warnings today — 1 Processing (413511, resolved after Outbound) · 2 duplicates (combined-box confirmed, logged in Comments). See the log and Comments for details.</span>
     </div>
 
   </div>
 </div></div>
 <div class="legend">
-  <h3>State 4 변경사항 — 마감 완료</h3>
+  <h3>State 4 Changes — Closing Complete</h3>
   <ol>
-    <li><span class="n">1</span><span>정상 스캔 = 수동 카운팅 대상과 <b>정확 일치</b> + 경고 0 상태에서 <b>[마감 확정] 버튼을 눌러야</b> 이 화면 — 자동 마감 없음(일치 후에도 초과 실물 확인 여지). 마감 확정 시각·확정자 기록. 확정 즉시 오늘 스냅샷이 마감 기록(M2)에 저장 <span class="ref">— F 마감</span></span></li>
-    <li><span class="n">2</span><span>마감 리포트 Export(CSV) — 기존 SS Daily Shipping Status 수기 복사/붙여넣기·수식 제거 과정을 대체 <span class="ref">— F 마감(현재과정)</span></span></li>
-    <li><span class="n">3</span><span>경고 처리 요약 — 오늘 발생한 Processing/중복 경고와 해소 결과 집계 <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">1</span><span>This screen requires <b>pressing [Confirm Closing]</b> while OK scans are an <b>exact match</b> with the manual count target and warnings are 0 — no auto-closing (room to find extra parcels even after the match). Confirmation time and confirmer are recorded. On confirmation today's snapshot is saved to Closing History (M2) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">2</span><span>Closing report export (CSV) — replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status <span class="ref">— F Closing (current process)</span></span></li>
+    <li><span class="n">3</span><span>Warning resolution summary — aggregates today's Processing/duplicate warnings and their resolutions <span class="ref">— F Dean</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ 마감 기록 페이지 ══════════════ -->
+<!-- ══════════════ Closing History page ══════════════ -->
 <section class="state" id="shist">
 <div class="mockwrap"><div class="mock anno">
   <div class="nav">
@@ -720,70 +722,70 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="logout">Logout</button>
   </div>
   <div class="pagepad">
-    <h2>WMS - 마감 (Closing)</h2>
-    <p class="sub">오늘 포장 건 바코드 스캔 확인</p>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
     <div class="anno"><div class="pagetabs">
-      <button data-goto="back">마감</button>
-      <button class="on">마감 기록</button>
+      <button data-goto="back">Closing</button>
+      <button class="on">Closing History</button>
     </div><span class="dot" style="top:-11px;left:120px">1</span></div>
 
-    <p class="mut" style="margin:0 0 10px">마감 확정 시 자동 저장되는 일별 스냅샷 — 출고 대상(수동 카운팅)·정상 스캔·경고 처리·확정자를 감사 추적</p>
+    <p class="mut" style="margin:0 0 10px">Daily snapshots saved automatically on closing confirmation — an audit trail of outbound target (manual count) · OK scans · warning resolution · confirmer</p>
     <table class="logtbl" style="font-size:13px">
-      <tr><th>날짜</th><th>출고 대상 (수동)</th><th>정상 스캔</th><th>경고 (발생→해소)</th><th>일치</th><th>마감자</th><th>확정 시각</th><th></th></tr>
-      <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (오늘)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-12</td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ 일치</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      <tr><th>Date</th><th>Outbound Target (manual)</th><th>OK Scans</th><th>Warnings (raised→resolved)</th><th>Match</th><th>Closed By</th><th>Confirmed At</th><th></th></tr>
+      <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (today)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      <tr><td class="num">07-12</td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+      <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
     </table>
-    <p class="mut" style="margin-top:10px">불일치 상태로는 마감 확정이 불가하므로 기록은 항상 "일치"로 저장됩니다 — 불일치 원인(누락·초과 스캔·미해소 경고)은 확정 전에 해소해야 합니다.</p>
+    <p class="mut" style="margin-top:10px">Closing cannot be confirmed while mismatched, so records are always saved as "Match" — mismatch causes (missed scans · over-scans · unresolved warnings) must be resolved before confirmation.</p>
   </div>
 </div></div>
 <div class="legend">
-  <h3>마감 기록 — 신규 주석</h3>
+  <h3>Closing History — New Annotations</h3>
   <ol>
-    <li><span class="n">1</span><span><b>마감 기록은 별도 페이지</b> — 상단 탭 [마감 | 마감 기록]으로 전환(모달 아님, 2026-07-23 전환). 일별 스냅샷: 날짜·출고 대상(수동)·정상 스캔·경고 발생→해소·일치 여부·마감자·확정 시각. <b>각 마감 일자의 행 우측 CSV 버튼으로 그 날의 마감 리포트(스캔 전체 목록 포함)를 개별 다운로드</b>. "마감" 탭을 누르면 보던 마감 화면으로 복귀 <span class="ref">— F 마감</span></span></li>
+    <li><span class="n">1</span><span><b>Closing History is a separate page</b> — switched via the top tabs [Closing | Closing History] (not a modal; converted 2026-07-23). Daily snapshot: date · outbound target (manual) · OK scans · warnings raised→resolved · match · closed by · confirmed at. <b>The per-day CSV button on each closing date's row downloads that day's closing report individually (full scan list included)</b>. Pressing the "Closing" tab returns to the closing screen you were viewing <span class="ref">— F Closing</span></span></li>
   </ol>
 </div>
 </section>
 
-<!-- ══════════════ MODAL : Processing 건 처리 (제로패킹 확인 → Outbound) ══════════════ -->
+<!-- ══════════════ MODAL : Process Processing Order (Zero Packing check → Outbound) ══════════════ -->
 <div class="overlay" id="m-process">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M1</span>
-    <header>Processing 건 처리 — Order 413511<button class="x" data-close>✕</button></header>
+    <header>Process Processing Order — Order 413511<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">이 오더는 아직 출고(Outbound) 처리되지 않았습니다.</b>
-      <p class="mut" style="margin:6px 0 0">Tracking YT2618100710223471 · 제품 1 · 상태 <span class="cs-processing">Processing</span></p>
+      <b style="color:var(--ink)">This order has not been outbound-processed yet.</b>
+      <p class="mut" style="margin:6px 0 0">Tracking YT2618100710223471 · 1 item · Status <span class="cs-processing">Processing</span></p>
       <div style="margin-top:14px">
-        <label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox"> <span><b style="color:var(--ink)">제로패킹에서 이 오더 패킹 상태 확인함</b> — 정상 포장 완료 확인 시 체크 (현재 마감 과정 6단계)</span></label>
+        <label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox"> <span><b style="color:var(--ink)">Packing status of this order verified at Zero Packing</b> — check when proper packing is confirmed (step 6 of the current closing process)</span></label>
       </div>
       <div style="margin-top:12px">
-        <b style="color:var(--ink)">메모 (Optional)</b>
-        <textarea class="mtextarea" placeholder="패킹 상태·조치 내용 — 작성 시 오더 Comments 히스토리 및 마감 로그에 함께 기록됩니다"></textarea>
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Packing status and actions taken — if written, it is also recorded to the order's Comments history and the closing log"></textarea>
       </div>
-      <div class="note">Outbound 처리 시 <b>실제 오더 상태가 Processing → Prepare Shipment로 변경</b>됩니다(오더 상세·View Orders 등 전 화면에 즉시 반영). 마감 리스트에서도 이 건이 <b>초록 "출고 완료"</b>로 재판정됩니다. 패킹 미완이면 별도 처리 후 재스캔하세요.</div>
+      <div class="note">Processing Outbound <b>changes the real order status Processing → Prepare Shipment</b> (immediately reflected on every screen — order detail, View Orders, etc.). In the closing list this row is re-judged as green <b>"Outbounded"</b>. If packing is incomplete, handle it separately and rescan.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>닫기</button>
-      <button class="btn btn-green btn-sm" data-close>Outbound 처리 → 경고 해소</button>
+      <button class="btn btn-line btn-sm" data-close>Close</button>
+      <button class="btn btn-green btn-sm" data-close>Process Outbound → resolve warning</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ MODAL : 스캔 기록 삭제 확인 ══════════════ -->
+<!-- ══════════════ MODAL : Delete Scan Row confirmation ══════════════ -->
 <div class="overlay" id="m-scandel">
   <div class="modal anno">
     <span class="dot" style="top:-11px;left:-11px">M2</span>
-    <header>스캔 기록 삭제<button class="x" data-close>✕</button></header>
+    <header>Delete Scan Row<button class="x" data-close>✕</button></header>
     <div class="body">
-      <b style="color:var(--ink)">이 스캔 기록을 없애시겠습니까?</b>
+      <b style="color:var(--ink)">Remove this scan?</b>
       <p class="mut" id="scandelInfo" style="margin:8px 0 0">#7 · YT2618100719984412</p>
-      <div class="note">삭제 시 리스트와 마감 카운트에서 제외됩니다 — 오스캔·없는 주문 등 정리 용도. 삭제 이력은 백엔드에 보관됩니다.</div>
+      <div class="note">Deleting excludes it from the list and the closing counts — for clearing mis-scans, unknown orders, etc. Deletion history is kept in the backend.</div>
     </div>
     <div class="foot">
-      <button class="btn btn-line btn-sm" data-close>아니오</button>
-      <button class="btn btn-sm" id="scandelYes" style="background:var(--red);color:#fff">예 — 없애기</button>
+      <button class="btn btn-line btn-sm" data-close>No</button>
+      <button class="btn btn-sm" id="scandelYes" style="background:var(--red);color:#fff">Yes — remove</button>
     </div>
   </div>
 </div>
@@ -797,7 +799,7 @@ document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
     const st=document.getElementById(t.dataset.state);
     st.classList.add('on');
     window.scrollTo({top:0});
-    /* 경고 상태로 진입하면 음성 자동 재생 (Dean 요청 시연) */
+    /* entering a warning state auto-plays the voice (demo of Dean's request) */
     if(st.dataset.voice) speak(st.dataset.voice);
   });
 });
@@ -818,7 +820,7 @@ document.querySelectorAll('[data-open]').forEach(b=>{
     else el.style.display = el.style.display==='none' ? 'block' : 'none';
   });
 });
-/* Comments 허브 탭 전환 (Mentions / Saved) */
+/* Comments hub tab switch (Mentions / Saved) */
 document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
   b.addEventListener('click',e=>{
     e.stopPropagation();
@@ -830,12 +832,12 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
     });
   });
 });
-/* ★ 저장 토글 */
+/* ★ save toggle */
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
 
-/* ── 음성 알림 (Web Speech API) — 경고 시 "확인 필요" 실제 재생 ── */
+/* ── voice alert (Web Speech API) — actually plays the warning phrase ── */
 let voiceOn = true;
 function speak(text){
   if(!voiceOn) return;
@@ -854,7 +856,7 @@ if(vt){
     voiceOn=!voiceOn;
     vt.querySelector('.vtrack').classList.toggle('off',!voiceOn);
     const st=document.getElementById('voiceState');
-    st.textContent = voiceOn?'켜짐':'꺼짐';
+    st.textContent = voiceOn?'On':'Off';
     st.style.color = voiceOn?'var(--green)':'var(--ink-3)';
     if(voiceOn) speak('Please check this order');
   });
@@ -863,12 +865,12 @@ const vtest=document.getElementById('voiceTest');
 if(vtest) vtest.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;});
 document.querySelectorAll('.sim-voice').forEach(b=>b.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;}));
 
-/* State 0 — 수동 카운팅 입력 + 마감 시작 → 진행 중 화면(State 1)으로 전환 데모 */
+/* State 0 — manual count input + Start Closing → switch to in-progress screen (State 1) demo */
 document.getElementById('startBtn0').addEventListener('click',()=>{
   if(!document.getElementById('targetIn0').value.trim()) return;
   document.querySelector('.wf-tab[data-state="s1"]').click();
 });
-/* 스캔 행 ✕ — 확인 모달 후 삭제 */
+/* scan row ✕ — delete after confirm modal */
 let delRow=null;
 document.querySelectorAll('.scandel').forEach(b=>b.addEventListener('click',e=>{
   e.stopPropagation();
@@ -881,14 +883,14 @@ document.getElementById('scandelYes').addEventListener('click',()=>{
   if(delRow){delRow.remove();delRow=null;}
   document.getElementById('m-scandel').classList.remove('open');
 });
-/* 숫자 변경 / 마감 취소 (State 1 배너) */
+/* edit count / cancel closing (State 1 banner) */
 document.getElementById('targetEdit').addEventListener('click',()=>{
   const i=document.getElementById('targetIn1'), b=document.getElementById('targetEdit');
-  if(i.disabled){i.disabled=false;i.focus();i.select();b.textContent='저장';}
-  else{i.disabled=true;b.textContent='↺ 숫자 변경';}
+  if(i.disabled){i.disabled=false;i.focus();i.select();b.textContent='Save';}
+  else{i.disabled=true;b.textContent='↺ Edit count';}
 });
 document.getElementById('closeCancel').addEventListener('click',()=>{showState('s0');});
-/* 마감 기록 페이지 전환 — 상단 탭 */
+/* Closing History page switch — top tabs */
 let lastState='s0';
 function showState(id){
   document.querySelectorAll('.state').forEach(x=>x.classList.remove('on'));
@@ -902,6 +904,6 @@ document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',(
 }));
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
-  this.textContent = document.body.classList.contains('no-anno') ? '주석 보이기' : '주석 숨기기';
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
 });
 </script>

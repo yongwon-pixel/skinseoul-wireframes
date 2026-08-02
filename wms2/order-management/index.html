@@ -290,7 +290,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Close</button>
-      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close>Cancel Selected Periods</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close id="sampCancelBtn">Cancel Selected Periods</button>
     </div>
   </div>
 </div>
@@ -421,6 +421,15 @@ if(mc){mc.addEventListener('click',()=>{
   let t=document.getElementById('gtoast');
   if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
     t.innerHTML='✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center</small>';
+    document.body.appendChild(t);}
+  t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
+
+/* 2026-08-03: cancel confirmation toast (global rule — confirm actions toast top-right) */
+const scb=document.getElementById('sampCancelBtn');
+if(scb){scb.addEventListener('click',()=>{
+  let t=document.getElementById('gtoast2');
+  if(!t){t=document.createElement('div');t.id='gtoast2';t.className='gtoast';
+    t.innerHTML='✓ Assignment period cancelled<small>New assignments stopped for the selected period · already-assigned orders kept</small>';
     document.body.appendChild(t);}
   t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
 </script>
