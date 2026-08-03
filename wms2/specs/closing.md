@@ -106,9 +106,9 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 | `[WF-7]` **(fixed 2026-08-03)** `#closeCancel` cancelled immediately with no confirmation | `#s1` banner | §3.11 — the confirm dialog `[PD-5 · OWNER-PENDING]` now exists in the wireframe as `#m-cancel` with the §3.11 copy |
 | `[WF-8]` **(fixed 2026-08-03)** `#startBtn0` silently no-oped on empty/invalid input | `#s0` | §3.1 — the wireframe now raises the explicit red validation toasts (adjudication C-6); the >9999 advisory confirm remains `[ADMIN]`-only |
 | `[WF-12]` **(fixed 2026-08-03)** duplicated "Modal: Process Processing Order" wf-bar tab | wf-bar | §2.1 — chrome only; the duplicate tab was removed |
-| `[WF-15]` **(open — do not fix unilaterally)** Comments hub pane headers and the unstar hint diverge from the cross-page `[G-7]` contract ("Comments where I'm tagged" / "Comments I saved" / "Unstar to remove from this list") | `#inbox1` `.paneheader` | §3.8 — the canonical `[G-7]` strings are specified there; the wireframe strings are asserted only as `[WF]` demo copy. Deliberately **excluded** from the 2026-08-03 fix batch: the register conditions this fix on `[G-7]` first publishing the six canonical strings, then editing all eight wireframes in one pass — editing closing alone would fork the QA suites |
+| `[WF-15]` **(fixed 2026-08-03)** Comments hub pane headers and the unstar hint diverged from the cross-page `[G-7]` contract (shipped "Comments where I'm tagged" / "Comments I saved" / "Unstar to remove from this list") | `#inbox1` `.paneheader` | §3.8 — `[G-7]` v1.2 published the canonical set HUB-1…HUB-7, and all eight wireframes plus all eight QA suites moved to it in one commit, which is the condition the register attached to this fix. `[WF]` and `[ADMIN]` now assert the same strings |
 
-The five `(fixed 2026-08-03)` rows were applied to `wms2/closing/index.html` in the owner-approved wireframe-edit batch of 2026-08-03 (same pass that built the Amend flow); the rows are kept for provenance, and the affected `[WF]` QA scenarios (QA-S0-02, QA-TARGET-04, QA-CHROME-03/04) now assert the fixed behavior.
+The six `(fixed 2026-08-03)` rows were applied to `wms2/closing/index.html` in the owner-approved wireframe-edit batch of 2026-08-03 (same pass that built the Amend flow); the rows are kept for provenance, and the affected `[WF]` QA scenarios (QA-S0-02, QA-TARGET-04, QA-CHROME-03/04) now assert the fixed behavior.
 
 **Unregistered wireframe divergences found while auditing this spec** (not yet in `_wireframe-fixes.md`; listed so QA classifies them as demo artifacts, not implementation targets):
 
@@ -401,18 +401,19 @@ Behavior is global [G-7]; only the closing deltas are specified here.
 
 **Rendering.** A nav button "💬 Comments" carrying an unread-mention badge (mock `2`), opening a dropdown with tabs `@ Mentions` (badge `2`) and `★ Saved`. Each row shows the entity (`Order 413540`), the author, the comment text, a time, and a `★` toggle. The dropdown is wired only in State 1 in the demo (U-e); in the admin it is identical on every state.
 
-**Hub copy is a cross-page byte-exact contract [G-7], and the wireframe's copy is stale** `[WF-15]`. The hub is the same component on all eight screens, so closing may not carry its own wording. Canonical strings for the shipping admin, with the wireframe's divergent strings named so QA can tier them:
+**Hub copy is a cross-page byte-exact contract [G-7]** `[WF-15]`. The hub is the same component on all eight screens, so closing carries no wording of its own — the strings below are quoted from `[G-7]` v1.2, which publishes them as HUB-1…HUB-7:
 
-| Element | Canonical (`[ADMIN]`) | Wireframe renders (`[WF]` — `[WF-15]`) |
-|---|---|---|
-| Mentions pane header | `Comments mentioning me · Click to open the order` | `Comments where I'm tagged` |
-| Saved pane header | `Saved comments · Click to open the order` | `Comments I saved` |
-| Unstar hint | `Unstar to remove from the list` | `Unstar to remove from this list` |
-| Read-all action | `Mark all read` | `Mark all read` (already canonical) |
-| Search results header | `{n} results · newest first · click to open the order` | not built (U-c) |
-| Empty search state | `No matching comments` | not built (U-c) |
+| Element | `[G-7]` id | Canonical string | Wireframe before the 2026-08-03 fix |
+|---|---|---|---|
+| Mentions pane header | HUB-1 | `Comments mentioning me · Click to open the order` | `Comments where I'm tagged` |
+| Saved pane header | HUB-2 | `Saved comments · Click to open the order` | `Comments I saved` |
+| Unstar hint | HUB-3 | `Unstar to remove from the list` | `Unstar to remove from this list` |
+| Read-all action | HUB-4 | `Mark all read` | `Mark all read` (already canonical) |
+| Search results header | HUB-5 | `{n} results · newest first · click to open the order` | not built (U-c) |
+| Empty search state | HUB-6 | `No matching comments` | not built (U-c) |
+| Search placeholder | HUB-7 | `🔍 Search all comments — order no. · author · text` | not built (U-c) |
 
-Adopted 2026-08-03 from the four-page majority (order-detail · order-management · ready-to-outbound · stock-status) after cross-page defect M3a-D7; closing and inbound-request were the two outliers on the pane headers. `[WF]` QA asserts the wireframe strings (QA-HUB-01/02) and `[ADMIN]` QA asserts the canonical ones (QA-HUB-09) — the two must never be conflated.
+Cross-page defect M3a-D7 found closing and inbound-request to be the two outliers on the pane headers. `[G-7]` v1.2 resolved the whole set on 2026-08-03 and `[WF-15]` was applied to `wms2/closing/index.html` in the same commit, so **`[WF]` (QA-HUB-01/02) and `[ADMIN]` (QA-HUB-09) now assert the same strings** on the four elements this wireframe builds. The last three remain `[ADMIN]`-only because the search pane itself is unbuilt here (U-c).
 
 **Full-text search across all comments** (entity no. / author / text, newest first, click opens the entity) is required by [G-7] but is **not built in this wireframe** (U-c). It ships in the admin; its QA is `[ADMIN]`.
 
@@ -1181,7 +1182,7 @@ Clicking `#annoToggle` only sets `display:none` on the dots — it does **not** 
 |---|---|---|
 | `#m-process header`, `#m-scandel header` | `<button class="x">✕</button>` | `"… Order 413511✕"`, `"Delete Scan Row✕"` |
 | `[data-open="inbox1"]` | `<span class="badge-n">2</span>` | `"💬 Comments2"` |
-| `.paneheader` (both panes) | `<small>Mark all read</small>` / `<small>Unstar to remove from this list</small>` | `"Comments where I'm tagged Mark all read"`, `"Comments I saved Unstar to remove from this list"` |
+| `.paneheader` (both panes) | `<small>Mark all read</small>` / `<small>Unstar to remove from the list</small>` | `"Comments mentioning me · Click to open the order Mark all read"`, `"Saved comments · Click to open the order Unstar to remove from the list"` |
 | `span.user` | `<span class="avatar">Y</span>` | `"YYongwon Ryu"` |
 
 An extended helper is acceptable and equivalent: `c.querySelectorAll('.dot, .badge-n, .paneheader small, header button.x, .avatar').forEach(d => d.remove())`. If you use it, the four rows above become plain equality against the string without the descendant.
@@ -2058,14 +2059,14 @@ All scenarios in this block require the R4 instrumentation.
 **QA-HUB-01 `[WF]`** — the hub opens with an unread badge
 - Given `section#s1` is active
 - Then the nav button `#s1 [data-open="inbox1"]` R2-normalized text **starts with** "💬 Comments" (the badge asserted in the next clause is nested *inside* the button, so its full normalized text is "💬 Comments2" — R2b) and it carries `.badge-n` whose text reads "2"
-- When it is clicked, `#inbox1` gains class `open`, its Mentions pane header (`#inbox1 [data-pane="mentions"] .paneheader`) R2-normalized text **starts with** "Comments where I'm tagged" (the `<small>Mark all read</small>` action is nested inside it — R2b), and it lists three entries whose bold entity labels are "Order 413540", "Order 413498" and "Order 413330"
+- When it is clicked, `#inbox1` gains class `open`, its Mentions pane header (`#inbox1 [data-pane="mentions"] .paneheader`) R2-normalized text **starts with** "Comments mentioning me · Click to open the order" (the `<small>Mark all read</small>` action is nested inside it — R2b), and it lists three entries whose bold entity labels are "Order 413540", "Order 413498" and "Order 413330"
 - And the first two entries carry class `unread`
-- And these two pane strings are stale demo copy `[WF-15]`; the canonical `[G-7]` strings are asserted in QA-HUB-09
+- And these two pane strings are the canonical `[G-7]` HUB-1 / HUB-4 strings since the 2026-08-03 `[WF-15]` fix; QA-HUB-09 asserts the same values at `[ADMIN]` tier
 
 **QA-HUB-02 `[WF]`** — tab switching
 - Given `#inbox1` is open
 - When the tab `[data-tab="saved"]` ("★ Saved") is clicked
-- Then it gains class `on`, the pane `[data-pane="saved"]` becomes visible and its `.paneheader` R2-normalized text **starts with** "Comments I saved" (the `<small>Unstar to remove from this list</small>` action is nested inside it — R2b), and `[data-pane="mentions"]` is hidden
+- Then it gains class `on`, the pane `[data-pane="saved"]` becomes visible and its `.paneheader` R2-normalized text **starts with** "Saved comments · Click to open the order" (the `<small>Unstar to remove from the list</small>` action is nested inside it — R2b), and `[data-pane="mentions"]` is hidden
 - And the Saved pane lists exactly one entry, "Order 413498"
 
 **QA-HUB-03 `[WF]`** — the star toggle *(destructive — reload after)*
@@ -2102,13 +2103,13 @@ All scenarios in this block require the R4 instrumentation.
 - Then the verdict renders, the row appends and the toast shows, the hub stays open, and the scanned characters land in the scan input — not in the hub
 - When focus **is** in the hub's search field, the wedge input goes to that field and no scan is submitted (`[L-S1-F]` clause 2)
 
-**QA-HUB-09 `[ADMIN]`** — the hub carries the canonical cross-page copy `[G-7]` `[WF-15]`
+**QA-HUB-09 `[ADMIN]`** — the hub carries the canonical cross-page copy `[G-7]` HUB-1…HUB-6 `[WF-15]`
 - Given the Comments hub is open on the shipping closing page
 - Then the Mentions pane header reads exactly "Comments mentioning me · Click to open the order"
 - And the Saved pane header reads exactly "Saved comments · Click to open the order"
 - And the unstar hint reads exactly "Unstar to remove from the list" and the read-all action reads exactly "Mark all read"
 - And a search returning results renders the header "{n} results · newest first · click to open the order", while a search with no match renders exactly "No matching comments"
-- And none of the wireframe's strings ("Comments where I'm tagged", "Comments I saved", "Unstar to remove from this list") appears anywhere in the rendered hub
+- And none of the pre-2026-08-03 wireframe strings ("Comments where I'm tagged", "Comments I saved", "Unstar to remove from this list") appears anywhere in the rendered hub — they were removed from the drawing by the `[WF-15]` fix, so this negative now also holds at `[WF]` tier
 
 ---
 

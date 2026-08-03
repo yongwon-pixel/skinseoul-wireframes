@@ -1,6 +1,6 @@
 # WMS 2.0 — Global Rules (`_global-rules`)
 
-Version 1.1 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
+Version 1.2 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
 
 Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed; remaining `[PD-n]` tags are register-adopted provisional defaults.
 
@@ -48,6 +48,25 @@ Infrastructure failures (agent offline, printer unreachable) surface as a red to
 - System auto-comments (expected-qty edit, unrecognized match-confirm) use the same pipeline with `source=system`.
 - Commentable entity types include orders **and** inbound requests **and** unrecognized-pool items.
 - Every screen carries the top-right Comments hub: `[@ Mentions]` + `[★ Saved]` + full-text search across **all** comments (entity no. / author / text), newest first, click opens the entity. Badge = unread mention count.
+
+### Canonical hub copy (byte-identical on every page)
+
+The hub is **one control replicated on all eight screens**, so its copy is a byte-exact cross-page contract. Until 2026-08-03 no canonical existed, so each wireframe shipped its own wording and each spec asserted its own form byte-exactly — eight QA suites that no single implementation could satisfy. The strings below are published as contract to close that fork (cross-page defect **M3a D7**; register entries `[WF-VO-1]`, `[WF-15] closing`, `[WF-NEW-E]`, `[IR-WFX-1]`, and the §F / §H factual corrections in `_wireframe-fixes.md`). **CONFIRMED 2026-08-03 (owner-approved remediation batch).**
+
+| # | Element | Canonical string | Corpus basis before canonicalization (8 pages) |
+|---|---|---|---|
+| **HUB-1** | `@ Mentions` pane header | `Comments mentioning me · Click to open the order` | **majority 5/8** (OD · RTO · INV · OM · TM) |
+| **HUB-2** | `★ Saved` pane header | `Saved comments · Click to open the order` | **majority 5/8** (same five) |
+| **HUB-3** | Saved-pane unstar hint | `Unstar to remove from the list` | **no majority** — `… from list` 3 (VO · OM · IR) / `… from the list` 2 (RTO · TM) / `… from this list` 2 (INV · CL) / `Unstar to remove` 1 (OD). Resolved to the standard English form, which three specs had already named as the intended canonical (`closing.md` §3.8, `tracking-missing.md` §3.6, `order-detail.md` §2.7) |
+| **HUB-4** | Read-all action | `Mark all read` | **majority 6/8** (only VO · IR said `Mark all as read`) |
+| **HUB-5** | Search results header | `{n} results · newest first · click to open the order` | **majority 4/5** (VO was the outlier; CL · TM · IR ship no search pane) |
+| **HUB-6** | Empty search state | `No matching comments` | **majority 4/5** (VO shipped a capitalized `Comments`) |
+| **HUB-7** | Search box placeholder | `🔍 Search all comments — order no. · author · text` | **majority 4/5** (VO was the outlier) |
+
+Reading rules:
+- `{n}` in HUB-5 is a count substituted at render time, never a literal — a zero-hit search still renders the header, followed by HUB-6 as a separate node.
+- HUB-1 / HUB-2 say **order** even on screens whose hub entries are inbound requests or unrecognized-pool items (View Orders tab 6, Inbound Request, Tracking Missing). The hub is one component with one string; "click opens the entity" is the behavior, and the word `order` is not re-worded per entity type.
+- A page may not introduce a local variant of any of the seven. Where a spec's `[WF]` tier previously asserted its own wireframe's divergent string, both the wireframe and the assertion were moved to the canonical value in the same commit (2026-08-03).
 
 ## [G-8] Data-capture doctrine
 Every operator-initiated action persists: actor, timestamp, entity, old value → new value, quantity. This covers inbound/outbound/cancel, quantity edits, location changes, closing confirmations, audit adjustments, comment posts, imports, sample-assignment changes, print job results, and Slack dispatch results.
@@ -106,6 +125,7 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 ## Change history
 | Version | Date | Changes |
 |---|---|---|
+| 1.2 | 2026-08-03 | **[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7. All eight wireframes and all eight spec QA suites were moved to these values in the same commit. HUB-7 (search placeholder) is one beyond the six the register enumerated — same component, same defect class, unambiguous 4/5 majority. |
 | 1.1 | 2026-08-03 | Owner decisions applied: PD-1→[G-15], PD-2→[G-3a], PD-3→[G-7], PD-5→[G-2], PD-7→[G-9], PD-8→[G-10] now **CONFIRMED**; tags removed. |
 | 1.1 | 2026-08-03 | [G-13] amended per **PD-51**: v1 renders "sample set" only on internal invoices and picking labels — no sample type/quantity breakdown until sample types exist. |
 | 1.1 | 2026-08-03 | Slack section: **Failed-dispatch retry queue** clause added per **PD-4** (exponential backoff, persisted results, admin-log flag after N retries, background-only in v1). |
