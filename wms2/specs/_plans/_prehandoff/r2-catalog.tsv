@@ -1,0 +1,134 @@
+C-1	MAJOR	shipping-label §5는 View Orders(order Print·single-item auto-print)와 RTO(row Print·Bulk Print Labels)를 '내부 송장(PACKING)을 발행하는 표면'으로 계약하지만, 두 화면 스펙의 프린트 파이프라인·이벤트 
+C-2	MAJOR	shipping-label은 'fully CONFIRMED·frozen'(v1.2, 2026-08-03)인데 VO §6.4/§9.1과 RTO §9.1은 라벨·송장 레이아웃을 여전히 'Phase 3-1(추후 별도 오너 세션)' 미래 작업으로 서술하는 드리프트가 있고, VO는 내부 문서를 
+C-3	MAJOR	RTO M1 헤더 {units}의 정의('테이블이 렌더하는 그 집합의 Σ(qty)')와 WF-9 적용 후의 테이블(샘플 행 ×1 포함 5행)이 충돌한다 — 정의대로 계산하면 9인데 QA-M1-01은 8 units를 단언한다. 동시에 shipping-label §3.3은 내부 지류에서 샘
+C-4	MINOR	같은 샘플 세트 픽에 대한 로케이션 서술이 두 내부 지류에서 갈린다 — 내부 송장은 'location = sample shelf'(로케이션 값을 표기)인데, 피킹 리스트는 '로케이션 없음, `Sample` 마커 렌더·정렬 불참'으로 서술한다. 피커가 걷는 지류(M1)에는 샘플 위치가 없
+C-5	MINOR	박스 실물 수량의 서술이 선언 없이 분기한다 — shipping-label은 'paper and box must agree'로 샘플 포함 9를 확정했는데, RTO Total Items는 스스로를 'the count of physical units to put in the box'라 정의
+C-6	MINOR	내부 송장 상품명 칼럼에 EN 브랜드 볼드 프리픽스 요구가 빠져 있다 — RTO는 G-6를 '한국어 이름 어디서나 bold EN brand 필수'로 읽어 M1·Ready Item Details에 강제(BR-6, 브랜드 누락을 결함 RTO-WFX-5로 등록)하는데, 같은 내부 지류인 송장
+C-7	MINOR	캐노니컬 이벤트 `print.job_result`의 페이로드 상태 어휘가 두 프린트 표면 스펙에서 다르다 — VO DC-29는 status ∈ {success, pending, agent_offline, printer_unreachable, timeout, rejected}, RTO D
+C-8	MINOR	[쌍 감사 범위 밖 부수 발견 — view-orders 내부] v1.3에서 추가된 M1 로케이션 시나리오가 기존 ID를 재사용해 QA-M1-06과 QA-M1-07이 각각 2회 등장(ID 충돌)하고, §8.14 집계(279 / 136 WF / 143 ADMIN / 92 negatives)
+C-9	MAJOR	같은 서버 액션(order.outbounded)의 아웃바운드 게이트가 두 스펙에서 다르다 — closing M1 게이트는 '취소 플래그 아님(not order.cancelled)'을 요구하며 이를 '전역 술어(VO BR-9와 동일, no page exception)'라고 주장하지만, V
+C-10	MAJOR	캐노니컬 공유 이벤트(order.status_changed / order.outbounded)의 페이로드가 두 작성자 간에 어긋난다 — 상태값 레지스터(closing: 소문자-하이픈 'prepare-shipment' 의무, VO: 공백형 'prepare shipment')와 판별자 스킴
+C-11	MAJOR	딥링크 경로 형식에 대해 두 스펙이 정반대의 규범 주장을 QA로 고정했다 — closing은 디렉토리형이 '[G-12]로 확정(fixed), index.html형 금지'라며 2026-08-03 정규화 완료를 선언하고, VO는 같은 날짜 기준으로 G-12의 디렉토리형을 '예시적(illus
+C-12	MINOR	VO의 크로스페이지 레지스터 CP-5가 closing의 2026-08-03 M3a-D3 교정(취소=플래그, 언더라잉 상태+Cancelled 마커 렌더링) 이후에도 'closing이 Cancelled를 주문 상태로 쓴다'는 교정 전 상태를 현재형으로 기술하고 있다 — CP-1/CP-4/C
+C-13	MINOR	closing의 M1 전파 계약이 VO에 존재하지 않는 표면·행동을 단언한다 — 'View Orders의 Processing working set에서 빠진다/더는 리스팅하지 않는다(수동 리프레시 없이)'고 쓰지만 VO는 주문 리스트가 없는 단일 스캔 허브이고, VO 자신의 외생 상태변경
+C-14	MINOR	상태 렌더링 레지스터 불일치 — closing은 8개 상태값을 '렌더 문자열에서는 항상 타이틀케이스 라벨'(refunded→Refunded, M3a-D19 크로스페이지 정규화)로 못박았지만, VO는 State 4 상태 필을 소문자 `refunded`로 byte-exact QA 단언하고(
+C-15	MAJOR	WF-9(피킹 리스트 샘플 행)·PD-36의 현재 상태가 문서 간·문서 내에서 정반대로 서술된다 — RTO §3.15/QA-E-20은 '2026-08-03 적용 완료·PD-36 사실상 확정'이라 하고, RTO §2.4·§9.4·OQ-1 말미와 OM §9.1은 '샘플 행 없음·PD-36 
+C-16	MAJOR	MKT 오더 PIC의 타입 계약이 정면 충돌한다 — OM은 자유 텍스트 PIC를 허용하고 그것이 'RTO에 렌더된다'고 명시(BR-4·E-59)하는데, RTO [L-8]은 'PIC resolves to a system user'(PD-33)로 못박고 자유 텍스트 분기를 전혀 정의하지 않
+C-17	MAJOR	공유 컴포넌트인 Comments 허브의 클릭 라우팅 계약이 갈린다 — OM(BR-32)·G-7은 허브 행이 inbound request/pool item일 수 있고 클릭이 '그 엔티티의 화면'으로 라우트된다고 하는데, RTO §3.10·§6.2는 무조건 'opens the order (
+C-18	MINOR	OM §6.3이 임포트 후 도착지를 `../ready-to-outbound/#marketing`(Marketing view 활성화)으로 계약하지만, RTO 스펙·와이어프레임 어디에도 `#marketing` 프래그먼트로 탭을 활성화하는 수신측 계약이 존재하지 않는다.
+C-19	MINOR	carrier_unresolved 후속 조치의 오너 존재 여부가 상반된다 — OM §6.2는 '풀필먼트 담당자에게 수동 Slack 연락(PD-55 owner-decided)'이라 하고, RTO §6.1은 현행 산문으로 'No route and no owner exist for that 
+C-20	MINOR	'8화면 동일'이라 선언된 허브의 닫힘 계약이 갈린다 — OM은 outside click + Esc 두 경로를 규범으로 명시하는데, RTO는 outside click만 명시하고 Esc는 스펙 전체에서 부재한다.
+C-21	MINOR	동일 허브의 `Mark all read` 확인 서피스가 갈린다 — RTO는 G-2/BR-34 근거로 녹색 토스트 `✓ All mentions marked as read`를 규범(spec-defined)으로 부여했는데, OM의 같은 액션(E-39·QA-CMT-10)은 토스트 없이 배지 클
+C-22	MINOR	PD-51로 개정된 G-13('sample set' 단일 표기, which/how-many 폐기)이 반영되지 않은 현행 산문이 양쪽에 남아 있다 — OM §1.3은 '피커에게 which sample·how many를 알려야 한다'를 현재형 규범 근거로 서술하고, RTO §2.4 WF-9
+C-23	BLOCKER	IR v1.3의 PD-79 CANCELLED 라이프사이클이 VO에 전혀 미반영 — 취소된 요청의 등록 송장 스캔에 대해 VO는 '항상 State 6 진입', IR은 '매칭 비활성화로 미인식 풀 낙하'로 정반대 동작을 규정한다 (VO 전문에 CANCELLED 요청 상태·PD-79·deac
+C-24	MAJOR	예상수량 변경 원점의 배타성 주장 충돌 — VO는 '예상수량 편집은 M6에서만 발생하며 Inbound Request 리스트는 편집 컨트롤이 없다'고 규정하는데, IR의 PD-79 Edit 기능은 REQUESTED 요청의 Order Qty를 데스크에서 (사유 enum 없이) 편집한다.
+C-25	MAJOR	IR §5.2의 'VO가 쓰는 이벤트' 계약이 VO의 실제 이벤트 대장과 불일치 — DC-9는 VO에 존재하지 않는 이벤트명이고, DC-7/DC-8은 같은 이벤트명에 페이로드·인코딩이 다르다.
+C-26	MAJOR	캐노니컬 이벤트 `comment.auto_posted`의 종류 enum이 양쪽에서 서로 다르고(필드명 kind vs trigger 포함), VO가 요청에 남긴다는 partial_saved 코멘트가 요청 코멘트 스레드의 주 표면인 IR의 enum에 없다.
+C-27	MAJOR	State 0 Expected Inbound 뱃지의 멤버십 술어 불일치 — VO(뱃지 소유 페이지)는 'REQUESTED·PARTIAL 전부'로 규정하고, IR은 'Expected arrival 공란 요청은 뱃지·확장 테이블에서 제외'라는 추가 게이트를 단정한다.
+C-28	MINOR	State 6 배너 딥링크 경로 표기 불일치 — VO는 `../inbound-request/index.html#reqlist`로 전면 통일(§9.5 CP-8 선언)했으나 IR §6.2는 여전히 디렉토리형 `../inbound-request/#reqlist`로 표기하고 IR 쪽에는 아무 
+C-29	MINOR	PD-66(무식별자 풀 항목) 해소 상태 드리프트 — VO는 '오너 결정 완료, 케이스 부존재'로 본문까지 개정했으나 IR §9.2 OQ-2는 여전히 '어느 쪽도 행동 미규정, 오너 결정 필요'라고 서술한다.
+C-30	MINOR	공유 데모 엔티티의 수치·소유 불일치 — 같은 Inbound No. 202607120001이 VO에서는 PARTIAL 620/800·송장 10325661220417, IR에서는 PARTIAL 120/180·송장 10324880021991이고, 그 10324880021991은 VO Sta
+C-31	MINOR	M6 모달의 계약 문구가 소비 표면(IR Request List Qty 셀) 렌더 형식을 다르게 서술 — VO 모달 카피는 '(300→120)' 즉 {old}→{new}만 표기한다고 하나 IR/BR-30은 `✎ {old}→{new} ({reason token})`으로 사유 토큰이 항상 
+C-32	BLOCKER	같은 창고의 '로컬 타임존'을 stock-status는 KST(Asia/Seoul), order-detail은 SGT로 규범 선언하고 있어, 두 페이지가 공유하는 동일 재고이동 이벤트가 화면마다 1시간 어긋난 시각으로 렌더된다 — 어느 쪽 X-리스트/충돌 선언에도 없는 미선언 정면 모순
+C-33	MAJOR	order-detail은 Inventory M4 릴리스의 효과로 '해당 라인이 PENDING으로 복귀 + Inventory가 DC-21 기장'을 계약으로 주장하지만, stock-status의 [L-M4] Confirm 효과에는 라인 상태 쓰기가 전혀 없다(DC-4/DC-5/DC-6만 p
+C-34	MAJOR	stock-status M4 메모의 듀얼라이트(주문 Comments 히스토리에 `comment.posted`·`source=m4-memo`)를 받는 order-detail의 코멘트 택소노미에 이 랜딩을 표현할 자리가 없다 — DC-26은 `source=human`, DC-32의 orig
+C-35	MAJOR	order-detail은 'cancelled는 상태값이 아니라 플래그'(BR-12)로 확정하고 [X-3]에서 위반자로 Closing만 지목했지만, stock-status [L-M3]도 Status 컬럼에 `cancelled`를 상태값으로 렌더하고 팬텀 술어를 'order status ∈
+C-36	MAJOR	stock-status는 [L-M3] Order ID를 Order Detail 딥링크로 규범 지정하지만, order-detail의 DC-34 entry_path 닫힌 enum에는 Inventory발 도착값이 없다 — 'all must land on this page, with DC-34
+C-37	MAJOR	JIT 재고 수량 계약 모순: order-detail은 'JIT 라인은 Latest Inventory Count = 0이 정상(no warehouse stock backs them)'을 규칙·QA로 못박았지만, stock-status BR-7은 JIT 잔여 재고가 창고에 실재하며 리스트
+C-38	MINOR	order-detail BR-4의 크로스페이지 노트가 INV-WFX-2 적용(2026-08-03) 이후 낡았다 — 'Inventory 폼 노트가 여전히 Request Inbound로 보내고 그 문자열을 QA로 byte-exact 단언한다'고 현재형으로 기술하지만, stock-status
+C-39	MINOR	order-detail이 emit하고 'Inventory 화면이 읽는' DC-21의 movement_type 4종 중 역전 2종(cancel_inbound_restock, cancel_outbound_reversal)을 stock-status Stock History의 닫힌 4-배지 어
+C-40	MINOR	동일 주문·동일 SKU 픽스처 드리프트: stock-status는 Order 407847에 SKU 100004819의 INBOUND +6(PENDING) 이동을 단언하지만 order-detail의 Order 407847은 4개 라인(100005104/100043697/100005088/
+C-41	MINOR	Cancel Inbound 3-계약 충돌(X-1)의 귀책 서술이 상충: stock-status는 '조정 의무는 다른 두 스펙(View Orders·Order Detail)에 있다'고 쓰고, order-detail은 '어느 행도 이 페이지 행동의 결함이 아니다'라며 자기 계약(BR-49)
+C-42	BLOCKER	M2b 등록 시 발사되는 #unrecognized-tracking 메시지의 멘션 타깃이 정면 상충한다 — view-orders 라우팅 표는 "none (channel post)", tracking-missing은 "suspected PIC 전원 @멘션(1인 1회)"이며, tracking
+C-43	MAJOR	PD-66이 view-orders에는 OWNER-DECIDED로 반영(식별자 필수, OQ-1 해소, QA-CV-22 un-deferred)됐으나 tracking-missing 본문은 여전히 NO-DEFAULT·미결(§9.1, E-3, L-1 col 1 nullability, QA-VAL
+C-44	MAJOR	온더스팟 M2 매칭의 이벤트 계약이 불일치한다 — tracking-missing은 DC-8(풀 아이템 OPEN→MATCHED)에 source=view-orders-m2를 요구하지만 양쪽 모두 온더스팟 매칭은 "풀에 들어가지 않는다"고 규정하고, view-orders의 대응 이벤트 DC-
+C-45	MAJOR	같은 액션(M2b send)의 인테이크 이벤트가 이름·페이로드 모두 다르다 — tracking-missing DC-1은 tracking_no(스캔 시 자동수집, "carried on the intake payload")와 네임스페이스 태깅을 요구하지만 view-orders DC-42 페
+C-46	MAJOR	M2b send의 중복 방지 계약이 갈린다 — tracking-missing E-1은 tracking_no+barcode 서버 dedupe와 "already in pool" 피드백을 업스트림(View Orders)에 요구하지만, view-orders는 G-9 확정 액션 범위를 E-13에
+C-47	MAJOR	M2 주문번호 룩업의 이벤트 정의가 갈린다 — tracking-missing DC-3(View Orders에서 발생)는 result enum에 sent_to_pool을 포함하고 이것만으로 룩업 실패율 KPI를 산출한다고 못박았지만, view-orders의 동일 액션 이벤트 DC-40은 
+C-48	MAJOR	코멘트 허브 검색 문자열(HUB-5/6/7)의 적용 범위가 상충한다 — view-orders QA-C-18은 "8개 화면 전부 byte-identical, 어느 화면이든 차이는 실패"로 단언하는데 tracking-missing은 admin에 검색 입력 탑재를 의무화하면서도 "이 페이지는
+C-49	MINOR	view-orders CP-8이 tracking-missing을 index.html 경로 폼 진영으로 기술하지만, tracking-missing은 이미 디렉토리 폼으로 정규화하고 index.html 변형 재도입을 금지해 CP-8의 상대 페이지 성격 규정이 스테일이다.
+C-50	MINOR	tracking-missing DC-17(unrecognized_item.rescan_resolved)은 View Orders에서 발생·기록되는 이벤트로 규정되지만, view-orders의 이벤트 대장(DC-1…DC-47, 무결 보장)에는 대응 이벤트가 없다.
+C-51	MINOR	정본(canonical) 크로스페이지 이벤트명 개수가 문서 간 다르다 — view-orders §5는 "9 groups covering 11 literal names", tracking-missing은 "the ten canonical cross-page names"로 서술한다.
+C-52	MINOR	M2b의 온스크린 계약이 약속하는 Slack 알림 필드(product name · barcode · qty · memo · 실패 주문번호)와 양쪽 §6.1/DC-4가 규정하는 실제 페이로드(tracking no. · product · qty · memo · registrant · sus
+C-53	MINOR	같은 페이지가 사용자 문안에서 두 이름으로 불린다 — view-orders의 M2b 계열 문자열은 "Missing Tracking List (page)", tracking-missing의 페이지 아이덴티티는 "WMS - Unrecognized Tracking List"다.
+C-54	MINOR	REMOVED 상태 풀 아이템의 허브 엔트리 클릭 타깃이 갈린다 — view-orders(및 tracking-missing §3.6)는 "row 또는 matched order" 2분기인데 tracking-missing QA-CMT-14는 REMOVED에 대해 "read-only hist
+C-55	BLOCKER	같은 물리 액션(주문 Outbound/Cancel Outbound)의 재고 원장 계약이 정반대다 — OD는 outbound·cancel-outbound마다 inventory.movement를 기록하도록 요구하지만 VO의 재고 이벤트(DC-39)에는 outbound 계열 origin이 아
+C-56	MAJOR	'절대 diverge 금지'로 선언된 Cancel Outbound 페어가 이벤트 계약에서 이미 divergent다 — 동일 이름 order.outbound_cancelled의 페이로드가 다르고(order_id 단독 vs lines[]+reason), VO는 canonical order.
+C-57	MAJOR	VO v1.3(v21, 'owner review — M1 restock location')이 추가한 M1 위치 계약(BR-58·E-94·DC-11 restock_location, '위치 없는 재고 입고 금지')이 OD에 미반영된 드리프트다 — OD의 Cancel Inbound는 위치 입
+C-58	MAJOR	canonical 이벤트 order.status_changed의 저장 literal이 두 스펙에서 다르다 — VO는 페이로드·QA에서 공백형 `prepare shipment`를 지속하지만 OD는 하이픈형 `prepare-shipment`를 'verbatim' 계약으로 명시하고 X-9에서
+C-59	MAJOR	양쪽 모두 '공유 개념의 이벤트명 이원화는 정확히 5개'라고 선언(CP-7/X-8)하지만, 이 페어만 대조해도 선언 밖의 이원화가 최소 3개 더 있다 — cancel-inbound(item.inbound_cancelled vs line_item.inbound_cancelled), bul
+C-60	MINOR	같은 사실(cancel-inbound 사유 메모)의 지속 경로가 다르다 — VO는 '메모는 이중 지속, 단일 귀속 금지'(DC-11.memo + DC-23 주문 코멘트)인데 OD의 note는 DC-11에만 남고 OD의 자동코멘트 origin enum에 cancel 사유가 없다.
+C-61	MINOR	같은 주문의 '같은 로그'가 두 페이지에서 다른 계약을 갖는다 — 제목(Inbound / Outbound Log vs Inbound / Outbound Actor Log), 컬럼명(Worker·Memo vs Operator·Note), 동일 이벤트의 액션 문자열(INBOUND Cance
+C-62	MINOR	OD가 지속하는 도착 경로 `view_orders_row`('View Orders — order row click → order detail')의 상대편 어포던스가 VO 스펙에 존재하지 않는다 — VO의 크로스페이지 링크 표에 Order Detail행이 없고, VO에선 입력 밖 아무 클
+C-63	MINOR	같은 액션의 성공 토스트 문구가 페이지별로 다른데(VO `✓ Inbound complete — {SKU}`/`✓ Outbound complete — Order {id}` vs OD `Inbounded — {SKU}`/`Outbound sent — {n} item(s)`), OD의 D-2
+C-64	MINOR	VO CP-1이 order-detail에 요구한 잔여 수정('전량 restock을 §3에 명시하고 이유를 적을 것')은 OD L-2/BR-49로 이미 이행됐는데 CP-1은 미해결로 남아 있다 — 같은 표에서 CP-4는 RESOLVED로 마킹된 것과 비대칭.
+C-65	MINOR	같은 기능(주문별 코멘트 컴포저)의 placeholder가 두 페이지에서 다른 문구로 같은 Slack 계약을 서술한다 — 허브 카피 이원화(CP-4/X-6)와 동일한 실패 계급인데 컴포저는 대상에서 빠져 있다.
+C-66	MINOR	VO의 M1 QA 시나리오 ID가 v21 개정에서 충돌했다 — QA-M1-06과 QA-M1-07이 각각 두 번 존재한다(신규 [WF] BR-58 / [ADMIN] E-94 쌍이 기존 [ADMIN] E-26 / E-27 쌍과 같은 번호).
+C-67	MAJOR	[L-M4]는 사유(reason) 필드를 가진 파괴적 액션인데 스펙이 사유를 선택 사항으로 만들고, PD-5 규칙을 재서술하면서 G-2의 'plus a reason' 요소를 누락했다 — CONFIRMED 전역규칙과의 미신고 델타.
+C-68	MAJOR	§3 전문(preamble)이 G-9의 동시편집 규칙 본문을 재서술하면서 '+ non-green toast'를 누락하고 counting-flow 예외의 범위 한정('State 6 receive, closing scans')을 삭제해, 이 페이지의 감사 카운팅이 서버 머지 대상인 것처럼 
+C-69	MINOR	전역규칙이 PD-4로 CONFIRMED한 재시도 방식(자동 재발송 + exponential backoff, 개발자 결정은 N뿐)을 스펙이 'Retry policy is a developer decision'으로 통째로 개발자 위임해 확정 범위를 잘못 넓혔다.
+C-70	MINOR	오너 확정된 PD-1·PD-3·PD-4에 대응하는 BR-28·BR-23·BR-30의 Decided 컬럼이 여전히 'Provisional 2026-08-03'로 남아 있다 — 헤더 면책 문구는 '태그(tags)'만 명시적으로 커버하므로 이 산문 셀들은 옛 상태 서술로 남는다.
+C-71	MINOR	0행 익스포트 성공 시 'non-green toast'를 지정한 §3.20 델타가 G-2의 'Green for success, red for failure' 본문과 충돌한다(익스포트는 성공했는데 초록이 아님).
+C-72	MAJOR	closing.md 헤더는 [WF-15]를 현재형으로 'remains open'이라 서술하지만, _global-rules.md [G-7] v1.2는 8개 와이어프레임·8개 QA 스위트가 동일 커밋에서 canonical로 이동 완료됐다고 CONFIRMED로 못박았고, closing.md 
+C-73	MAJOR	closing.md §3.21/§6.6은 PD-2(송신음 스코프)를 여전히 '오너가 해소해야 할 열린 긴장'으로 서술하고 reversal-impact 절까지 유지하지만, _global-rules.md [G-3a]는 PD-2를 owner CONFIRMED로 종결했다 — 게다가 확정된 규칙
+C-74	MINOR	closing.md §6.1은 Slack 재전송을 통째로 'Retry policy is a developer decision'으로 위임하지만, 전역규칙(PD-4 CONFIRMED)은 백그라운드 재시도 큐 + 지수 백오프 자동 재전송 + N회 초과 시 admin 로그 플래그를 규칙으로 고
+C-75	MINOR	closing.md QA-HUB-09는 검색결과 헤더(HUB-5)를 '결과가 있는 검색'에 조건화해 서술하지만, [G-7]의 reading rule은 0건 검색에서도 헤더가 항상 렌더되고 HUB-6이 별도 노드로 뒤따른다고 규정한다 — 이 QA 문구대로면 0건 시 헤더를 생략한 구현도 
+C-76	MINOR	[G-7] v1.2는 canonical 문자열을 7종(HUB-7 포함)으로 발행하고 '8개 스펙 QA 스위트가 모두 이 값으로 이동했다'고 주장하지만, closing.md의 유일한 hub-copy ADMIN 시나리오 QA-HUB-09는 HUB-1…HUB-6만 단언하고 HUB-7(검색 p
+C-77	MINOR	closing.md §3.8은 M3a-D7이 pane header에서 'closing과 inbound-request 두 페이지'를 outlier로 찾았다고 서술하지만, [G-7]의 corpus basis는 HUB-1/HUB-2 majority가 5/8(OD·RTO·INV·OM·TM)이라
+C-78	MINOR	Amend 플로우가 [G-2] CONFIRMED 의무 두 건을 비껴간다: `closing.startAmend` 성공(CONFIRMED→AMENDING 상태 변경, DC-26 영속)은 확인성 액션인데 토스트가 정의돼 있지 않고(앰버 배너만), `[✕ Exit amendment]`는 작업 
+C-79	MINOR	closing.md §6.3/QA-HIST-11은 딥링크 URL의 '디렉토리 형식 `../{slug}/#{anchor}`'이 [G-12]에 의해 고정됐다고 주장하지만, [G-12] 본문은 링크의 실재성만 규정하고 형식은 예시 하나로만 보여줄 뿐 canonical 형식을 규정하지 않는다 
+C-80	MINOR	closing.md는 전역규칙 본문을 두 곳에서 재서술한다(§5 서두가 [G-8]의 'actor · timestamp · entity · old→new · quantity' 독트린 문장을, §3.13 clause 10이 [G-1]의 3불변을 그대로 반복) — 현재는 의미 드리프트가 없으
+C-81	MAJOR	§1.3이 [G-13] 듀얼뷰의 존재 이유를 '피커에게 어떤 샘플을 몇 개인지 알려줘야 한다'로 서술하는데, 이는 G-13이 PD-51 확정으로 명시적으로 폐기(supersede)한 옛 요구사항을 현재 규범 근거로 주장하는 것이다 (§10 결정로그 2026-08-03 행에도 동일한 폐기
+C-82	MINOR	Slack 실패 재발송 정책: 전역규칙(PD-4 확정)은 '지수 백오프로 자동 재발송, N만 개발자 결정'으로 고정했는데 스펙은 두 곳에서 '재시도 정책 전체가 개발자 결정'이라고 더 넓게 재서술한다 (계약상 델타만 서술해야 하는 규칙 본문의 상이한 재서술).
+C-83	MINOR	G-5 라우트 렌더링 소비자 목록과 스펙 주장의 상호 모순: 스펙은 이 페이지의 주문 테이블이 [G-5] 소싱 라우트를 렌더한다고 주장하지만 G-5의 소비자 열거에 Order Management가 없고, 동시에 스펙 §6.6/§6.7은 'JIT는 이 화면에 전혀 나타나지 않는다'고 단언
+C-84	MINOR	전역규칙 v1.1이 PD-1/2/3/4/5/7/8을 CONFIRMED 처리하고 'tags removed'를 선언했는데, 스펙 본문에는 PD-1~PD-7의 `[PD-n · OWNER-PENDING]` 태그가 약 20곳에 잔존하고 §9.1은 이들을 여전히 살아있는 pending 의존성·가역
+C-85	MAJOR	PD-36 결정 상태가 두 문서에서 정반대다 — _global-rules [G-13]은 피킹리스트 sample-set 라인의 존재 여부 자체가 아직 OWNER-PENDING이라고 하는데, 스펙 §3.15는 오너 승인 배치로 WF-9가 적용되어 PD-36이 긍정으로 '확정(settled)
+C-86	MAJOR	스펙 §2.4의 WF-9 등재 행이 [G-13]을 '어떤 샘플을 몇 개(which sample and how many)' 표기를 요구하는 규칙으로 인용하는데, 이는 G-13이 PD-51 오너 확정으로 명시적으로 폐기(supersede)한 옛 요구사항이다 — 현행 규칙과 다른 내용을 규칙
+C-87	MAJOR	§9.3 D-12의 제약 열 'multiple mentions stay one message [E-75]'는 v1.2에서 교정된 @멘션 팬아웃 계약(멘션된 사용자별 1메시지 — 스펙이 [G-7]의 코퍼스 전체 계약이라고 못박은 것)과 정반대의 옛(v1.0/v1.1) 동작을 규범으로 남기
+C-88	MAJOR	[G-4]는 캐리어 라벨을 '각 캐리어의 기존 기본 출력물을 그대로(verbatim) 인쇄 — 커스텀 캐리어 라벨 레이아웃은 존재하지 않고 앞으로도 만들지 않는다'로 오너 확정했는데, 스펙 §9.1(및 §6.4 항목 6)은 'Deleo나 YUN 라벨에 무엇이 그려지는지, 필드 배치, 바
+C-89	MAJOR	[G-2]는 '모든 confirming action — register, confirm, cancel, send, save, remove/delete — 은 우상단 토스트를 띄운다'를 오너 강조로 확정했는데, 스펙 BR-34/§4.1은 영속 상태 변경인 ★ star/unstar(DC-3
+C-90	MINOR	PD-71 상태 모순 — _global-rules는 PD-71을 2026-08-03 오너 확정 목록에 포함('owner decision round is fully closed')하는데, 스펙 §9.2는 'PD-71 remains open', §6.3은 'the register marks
+C-91	MINOR	§5 서두의 'Doctrine [G-8]' 문장이 G-8 규칙 본문을 예시만 바꿔 재서술한다('UI logs (actor log, scan feed, audit history)' → 'UI surfaces (comment history, hub badges)') — 전역규칙 헤더의 't
+C-92	MINOR	Slack 재시도 정책 위임 범위 모순 — 전역규칙(PD-4 확정)은 '지수 백오프로 자동 재발송 + N회 후 어드민 알림 로그 플래그'를 고정하고 N만 개발자 결정으로 남겼는데, 스펙 §6.1/D-12는 'Retry policy is a developer decision'으로 정책 전
+C-93	MINOR	QA-M1-04가 'v1 assigns no SKU to the sample set'의 근거로 [G-13]을 인용하지만, G-13 본문에는 샘플 세트의 SKU 부여에 관한 조항이 없다(있는 것은 '샘플 구분 없음·타입/수량 미표기'뿐) — 규칙이 말하지 않는 내용을 규칙 명의로 주장하는
+C-94	MINOR	PD-55는 전역규칙·스펙 §9.2 OQ-2 모두 오너 확정(2026-08-03)인데, §6.1 non-route 표는 이를 현재형으로 'No route and no owner exist for that follow-up — that is precisely the gap recorded
+C-95	MAJOR	전역규칙이 '오너 결정 라운드 완전 종결(PD-55·71·74 포함 owner-decided)'을 선언했는데, order-detail 본문(§9.2·§6.4·[L-9]·QA-OUT-13)은 이 셋을 여전히 '미결정(NO provisional default)' 실질 서술로 유지한다 — 같
+C-96	MINOR	[G-4]가 라벨 레이아웃 문제를 종결(캐리어 라벨=디폴트 verbatim 확정 + 내부 인보이스=specs/shipping-label.md)로 CONFIRMED했는데, order-detail은 4곳([L-13]·§6.3·§9.1·BR-28)에서 여전히 'Phase 3-1, 오너와의 별
+C-97	MINOR	BR-39가 [G-2]의 PD-5 확정 문안을 재서술하면서(계약상 스펙은 델타만 서술) 'reason field'를 'reason enum'으로 바꿔 적용 범위를 좁혔다 — 자유텍스트 reason 필드(Cancel Inbound note, Cancel Outbound reason)는 f
+C-98	MINOR	DC-32의 origin enum에 `expected_qty_edit`가 포함돼 있으나, [G-11]과 이 스펙 자신의 §5.3·QA-DC-5에 따르면 expected-qty 자동 코멘트는 인바운드 요청에만 달리고 주문에는 절대 달리지 않는다 — 이 페이지에서 발생 불가능한 enum 값
+C-99	MINOR	스펙이 크로스페이지 캐노니컬 이벤트명을 '10개(the canonical ten)'로 반복 서술하나, _global-rules의 캐노니컬 목록은 `product.barcode_registered`를 포함해 11개 이름이다.
+C-100	MINOR	[L-1] 9단계의 셀프멘션 Slack 발송 억제는 [G-7] 본문('@mention은 멘션된 사람에게 Slack으로 통지')이 예외 없이 요구하는 통지를 페이지 델타로 제거한 것이며, 스펙 스스로 오너 결정이 없는 dev default임을 인정한다.
+C-101	MINOR	BR-10·[L-11]이 KR 브랜드 볼드를 '이 페이지의 델타([G-6]를 1열→2열로 확장)'라고 규정하나, G-6 본문이 이미 전역적으로 '한국어 제품명도 EN 브랜드 볼드를 단다'고 명시한다 — 규칙이 말하지 않는 baseline(1열)을 주장하는 인용.
+C-102	MINOR	§3.0.2에서 주소 편집 실패만 '인라인 필드 에러, 토스트 없음'으로 규정해, [G-2]의 '모든 확인성 액션은 토스트 — 실패는 빨간색' 문안과 어긋나는 유일한 실패 행이다.
+C-103	BLOCKER	전역규칙 헤더(와 스펙 배너)는 PD-66을 2026-08-03 오너 결정 완료로 선언했는데, 스펙 본문(§9.1, [E-3], QA-VAL-10, [L-1] 1열)은 여전히 '미결정·행동 미기술·QA 영구 BLOCKED' 상태라 결정된 행동이 스펙에 부재한다.
+C-104	MAJOR	전역규칙이 CONFIRMED 처리한 PD-1/3/4/6/7/8/51을 스펙 §9.1 인벤토리가 '14 entries still OWNER-PENDING'·'PD-51 NO-DEFAULT'로, 읽기 계약 item 2가 '이 페이지의 확정은 PD-5와 PD-60뿐'으로 서술해 옛 결정 상태
+C-105	MAJOR	스펙 §3.6이 'HUB-5/HUB-6/HUB-7은 이 페이지에 적용 안 됨'이라 선언하는데, [G-7]은 모든 화면에 검색 포함 허브를 요구하고 스펙 스스로도 어드민이 검색 입력을 반드시 탑재해야 한다(WF-NEW-A, QA-CMT-07)고 요구해, 탑재될 검색 UI의 3개 캐노니컬 
+C-106	MINOR	§3.3의 [G-5] 델타 논거가 자기모순: 풀 셀 델타는 '[G-5] 소비자 목록에 이 페이지가 없다'로 정당화하면서, 같은 표에서 M1 Channel 셀은 '[G-5] in full'의 지배를 받는다고 서술 — 동일 소비자 목록에 대한 상호배타적 두 독법이다.
+C-107	MINOR	스펙이 전역규칙 버전을 v1.0으로 핀(헤더·읽기 계약 item 1)하고 item 7은 §3.6 허브 문자열을 '아직 전역규칙에 올라가지 않은 후보 개정'으로 유지하는데, 실제 전역규칙은 v1.2이고 HUB 문자열은 이미 [G-7]에 게재됐다 — item 7 자신의 규칙대로면 해당 항목
+C-108	MINOR	§5.1이 '전역규칙이 고정한 캐노니컬 크로스페이지 이벤트명은 10개'라고 서술하지만 전역규칙의 목록은 11개 개별 이름(쌍을 1개로 묶어도 9개)이라 어느 셈법으로도 10이 나오지 않는다.
+C-109	MINOR	§6.1 서두 '페이로드 필드는 전역규칙 라우팅 테이블 그대로이며 전 행 CONFIRMED 2026-08-03'는 4행(에이징 다이제스트)에 대해 거짓이다 — 전역 라우팅 테이블에 해당 행이 없고, 그 행은 스펙 스스로 PD-61 OWNER-PENDING으로 태깅했다.
+C-110	MINOR	[BR-9] 근거란이 "[G-8]'s 'why' requirement"를 인용하지만 [G-8] 본문에는 이유(why/reason) 요구가 없다 — G-8은 actor·timestamp·entity·old→new·quantity만 규정한다.
+C-111	MINOR	[G-7] HUB-1/2의 캐노니컬화 이전 코퍼스 서술('majority 5/8 — OD·RTO·INV·OM·TM')이 스펙의 서술('four-page-majority strings', TM 와이어프레임은 발산해 WF-NEW-E로 교정)과 모순 — TM이 다수파에 있었는지에 대해 두 문
+C-112	MAJOR	M6 사유 enum의 세 번째 옵션 문자열이 두 정본에서 다르다 — [G-11]은 "exact enum"으로 "Other (memo)"를 박아두었는데 스펙(BR-53, QA-S6-13)은 정확히 `Other`를 규범으로 선언하고 [G-11]의 문구를 재해석으로 무력화한다.
+C-113	MAJOR	[G-10]이 CONFIRMED(owner, PD-8)로 확정한 내용(추적번호 시스템 전역 유일 + 인바운드/아웃바운드 별도 네임스페이스 + 인바운드 우선 해석)을 스펙 본문이 여전히 PD-82·PD-86 OWNER-PENDING에 걸어두고 있으며, 이 두 태그는 헤더의 supersed
+C-114	MAJOR	[G-4]는 "우리가 디자인하는 것은 내부 인보이스(PACKING)뿐"이라고 확정(CONFIRMED, owner)했는데, 스펙 M4는 우리가 내용을 구성하는 별도의 공급사 반품 라벨(운송사명+한글 상품명+사이즈+수량, 생략 규칙, 라이브 프리뷰)을 규범으로 정의하고 그 물리 레이아웃을 
+C-115	MINOR	[L-S1-6]은 [G-5]가 order-facing 배지를 "exactly 4"라고 말한다고 인용부호까지 붙여 주장하지만 G-5 본문에 그 표현은 없고("Order-facing badges (4)"), G-5는 이미 자체적으로 OTHER의 다운스트림 렌더링을 규정하고 있어 '전역규칙과
+C-116	MINOR	PARTIAL 배지의 분수 의미가 상충한다 — [G-11]은 "PARTIAL (n/m remaining)"이라 하는데 스펙은 일관되게 {received}/{expected}(예: 620/800, 620=수령분)를 렌더한다.
+C-117	MINOR	[G-2](CONFIRMED, PD-5)는 파괴적 액션에 확인 다이얼로그를 요구하고 스펙 자신도 "이 페이지의 파괴적 액션은 항상 confirm step을 거친다"고 단언하는데, Cancel Outbound([L-S3-2])는 클릭 즉시 상태를 롤백하며 어떤 확인 단계도 서술되지 않는다
+C-118	MINOR	스펙 헤더가 전역규칙을 "v1.0"으로 핀해 인용하지만 실제 _global-rules.md는 v1.2이고, 스펙 본문 자체가 v1.2에서만 존재하는 내용([G-7] HUB-1…HUB-7)에 의존한다.
+C-119	MINOR	정본 이벤트명 개수가 세 군데서 다르다 — 전역규칙 목록은 9개 그룹(슬래시쌍 포함 11개 리터럴), 스펙 §5는 "9 groups covering 11 literal names", §9.5 CP-7은 "The 10 canonical names"라고 셈해 어느 집계와도 맞지 않는다.
+C-120	MINOR	BR-44와 BR-45는 [G-9]·[G-10]의 규칙 본문을 [G-n] 인용 없이 사실상 그대로 재서술한다 — "델타만 서술, 본문 재서술 금지" 계약 위반이며, 같은 감사가 BR-33~36은 이미 정리했다고 기록한 것과 대비된다.
+C-121	MINOR	전역규칙이 "오너 결정 라운드 완전 종료, PD-1~8 등 확정"이라 선언했는데 스펙 §9.2는 PD-1~8을 여전히 '제공적 디폴트(provisional default) 33개'에 포함시키고 PD-66만 결정됐다고 단서 달며, §10.1 상태열도 PD-1/3/4/5/6/7/8 행을 "
+C-122	MINOR	[G-1] 불변식 1은 "이전 값이 선택된 채(previous value selected)" 포커스 복귀를 요구하고 델타가 불변식을 제거하는 것을 금지하는데, [L-S6b-2]는 입력을 비우는(emptied) 동작을 [G-1]을 인용하며 서술한다 — 자면상 불변식 1의 절반을 제거하는 
+C-123	MINOR	BR-36은 KR 상품명 열에도 굵은 EN 브랜드가 붙는다는 것을 "Page delta on [G-6]"·"two-column repetition is page-specific"이라고 주장하지만, 그 내용은 [G-6]이 이미 전역으로 규정한 본문이라 델타가 아니라 재서술이다.
+C-124	MINOR	QA-M2-11은 #unrecognized-tracking 채널 알림 문구 검증에 [G-7]을 키로 달았지만, [G-7]은 코멘트 시스템(#fulfillment-admin-comments 멘션 알림)에 관한 규칙이고 미인식 풀 Slack 라우트는 전역규칙의 별도 Slack routing
+C-125	MINOR	딥링크 경로 형식이 두 문서에서 다르다 — [G-12]는 `../inbound-request/#reqlist` 형식을 쓰고 스펙·QA는 `../inbound-request/index.html#reqlist`만을 이 페이지의 유일 허용 형식으로 규정한다 (스펙이 CP-8로 자가 신고했고 
+C-126	MAJOR	오너 확정(PD-79)된 CANCELLED 터미널 상태·편집/취소 알림이 _global-rules에 미반영 — [G-11] 라이프사이클, [G-7] 시스템 자동코멘트 열거, Slack 라우팅 표가 스펙과 모순된다.
+C-127	MAJOR	M1 동시 저장을 서버측 merge로 규정한 스펙이 [G-9](CONFIRMED, PD-7)의 동시성 모델과 모순 — G-9는 merge를 'counting flows (State 6 receive, closing scans)'에만 허용하고 그 외 동시 편집은 409인데, 스펙은 델타 
+C-128	MAJOR	스펙이 [G-11]의 두 문자를 오기로 선언하고 '정정 예정'이라 했으나 _global-rules v1.2에 정정이 반영되지 않아 PARTIAL 표기(n/m remaining vs received/expected)와 M6 사유 enum 3번째 옵션(Other (memo) vs Other
+C-129	MAJOR	PD-66이 오너 확정(전역규칙 헤더 명시)됐는데 스펙 §9.2 OQ-2는 여전히 'No behavior is specified on either side / Owner decision required'로 미결 상태를 규범 서술한다.
+C-130	MAJOR	스펙 §9.1이 Comments-hub 캐노니컬을 아직 미발행 상태('follows [G-7] once the six shared strings are canonicalised')로 서술하나, [G-7] v1.2는 일곱 개 문자열(HUB-1…HUB-7)을 이미 확정 계약으로 발행했고 스
+C-131	MINOR	View Orders 해석 우선순위(inbound-request 우선)가 [G-10]에선 PD-8로 CONFIRMED인데 스펙은 같은 규칙을 [PD-86 · OWNER-PENDING]로 태깅해(§3.3.7·BR-16·[E-22]·QA-E-08·§6.3) 확정/미결 상태가 두 문서에서 충
+C-132	MINOR	§3.3.7(및 BR-9)이 [G-10] 규칙 본문을 다른 표현으로 재서술하고 스스로 'primary home of [G-10]'을 자처해, '스펙은 인용만 하고 본문을 재서술하지 않는다'는 전역규칙 헤더 계약을 위반한다.
+C-133	MINOR	§2.4 관찰 3이 Saved 페인 헤더를 '과반 없음'(split 5/1/2)으로 서술하나 [G-7] HUB-2 표는 같은 항목을 'majority 5/8'로 기록해 캐노니컬 산정 근거 서술이 모순된다.
+C-134	MINOR	§5 전문의 '전역 캐노니컬 목록이 ten names를 커버한다'는 수치가 틀렸다 — 실제 목록은 그룹 9개 / 개별 이벤트명 11개로 어느 셈법으로도 10이 아니다.
