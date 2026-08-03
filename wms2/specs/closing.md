@@ -1,6 +1,6 @@
 # Closing — Screen Specification (WMS 2.0)
 
-Page slug: `closing` · Spec version 1.1 · 2026-08-03 (v1.0 authored, v1.1 audited and completed)
+Page slug: `closing` · Spec version 1.2 · 2026-08-03 (v1.0 authored · v1.1 audited and completed · v1.2 remediated against the M1 coverage audit, the M2 adversarial QA run, and the M3a/M3b cross-page findings)
 Wireframe (SST): `wms2/closing/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/closing/
 Global rules: `_global-rules` (cited as `[G-n]`; this spec writes page deltas only and never restates a rule body).
 Provisional decisions: `_provisional-decisions.md` (cited inline as `[PD-n · OWNER-PENDING]`).
@@ -36,7 +36,7 @@ v1 has **no role gating**: any admin user may start, edit the count, cancel, sca
 
 These are not ambience notes — each one is the reason a specific rule below exists.
 
-- **A scanner is in the operator's hand, and a parcel is in the other.** The hands are busy; there is no free hand for a mouse and no patience for a click between parcels. Hence [G-1]: the cursor lives in the scan input, the page never refreshes, and no click is ever required between scans. Hence also the click-anywhere refocus rule in `[L-S1-F]` — a stray click on the table must not silently break the loop.
+- **A scanner is in the operator's hand, and a parcel is in the other.** The hands are busy; there is no free hand for a mouse and no patience for a click between parcels. Hence the three [G-1] invariants, which this page inherits unchanged (deltas in §3.2). Hence also the click-anywhere refocus rule in `[L-S1-F]` — a stray click on the table must not silently break the loop.
 - **The eyes are on the parcels and the label, not on the monitor.** The operator scans, hears, and moves on. This is why warnings speak (`[G-3b]`, en-US TTS "Please check this order", confirmed 2026-07-23) and why OK scans are deliberately **silent** and rendered as a one-line green bar instead of a large panel (Dean's request, 2026-07-23). If OK also made noise, the audio channel would carry no information — which is why the one non-warning sound on this page (§3.21) must be audibly distinct.
 - **The monitor sits at arm's length or further, often across a packing bench.** The only thing that must be readable from that distance is a problem — hence red row tint, a red pill, and the big green completion panel on State 4. The large red panel was removed on 2026-07-23 once the voice channel existed: reading the row is enough when the ear already told you to look.
 - **Speed is roughly one parcel every few seconds** across 80–100 parcels, often with two people scanning into the same session from two stations. Hence server-atomic sequence numbers, server-side session state, and the rule that a slow lookup must never lock the input (`[BR-26]`).
@@ -103,10 +103,11 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 | `[WF-7]` `#closeCancel` cancels immediately with no confirmation, although the legend says cancelling discards scan records | `#s1` banner | §3.11 — a confirm dialog is mandatory `[PD-5 · OWNER-PENDING]` |
 | `[WF-8]` `#startBtn0` silently no-ops on empty/invalid input | `#s0` | §3.1 — explicit validation error (adjudication C-6) |
 | `[WF-12]` duplicated "Modal: Process Processing Order" wf-bar tab | wf-bar | §2.1 — chrome only |
+| `[WF-15]` Comments hub pane headers and the unstar hint diverge from the cross-page `[G-7]` contract ("Comments where I'm tagged" / "Comments I saved" / "Unstar to remove from this list") | `#inbox1` `.paneheader` | §3.8 — the canonical `[G-7]` strings are specified there; the wireframe strings are asserted only as `[WF]` demo copy |
 
 **Unregistered wireframe divergences found while auditing this spec** (not yet in `_wireframe-fixes.md`; listed so QA classifies them as demo artifacts, not implementation targets):
 
-- **U-a** State 1 "Remaining scans" tile reads **79** while target 84 and OK 3 imply **81**; the `.proglab` sentence on the same screen says "81 short of the manual count". The formula in §3.5 is authoritative (`Remaining = max(0, target − OK)` → 81); the tile value 79 is bad demo data. States 2, 2b and 3 are internally consistent (84 − 4 = 80).
+- **U-a** State 1 "Remaining scans" tile reads **79** while target 84 and OK 3 imply **81**; the `.proglab` sentence on the same screen says "81 short of the manual count". The formula in §3.5 is authoritative (`Remaining = max(0, target − OK)` → 81); the tile value 79 is bad demo data. **The same `79` also appears in the Confirm Closing button label** (`index.html:397`, "Confirm Closing (79 remaining · 2 warnings)"), which §3.9 quotes byte-exactly and QA-CONFIRM-01 asserts byte-exactly: that quoted string is **demo data, not a worked example** of the label formula — `remaining` is never `target − ok − warnings`. States 2, 2b and 3 are internally consistent (84 − 4 = 80).
 - **U-b** State 4 renders an enabled-looking scan input. After confirmation the input is **disabled** `[PD-73 · OWNER-PENDING]` (§3.17).
 - **U-c** The Comments hub in the DOM has only the `@ Mentions` / `★ Saved` tabs; the full-text comment search required by [G-7] and named in State 1 legend #7 is not built in the wireframe. The search is specced (§3.8) and its QA is `[ADMIN]`.
 - **U-d** The warnings tile label differs between states ("Warnings (not outbounded · duplicate)" in S1/S2/S3 vs "Warnings (not outbounded · duplicate · unknown order)" in S2b vs "Warnings (resolved)" in S4). §3.5 fixes the canonical labels.
@@ -129,6 +130,9 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 - The **session state machine** is `IDLE → IN_PROGRESS → (CONFIRMED | CANCELLED→IDLE)`. `CONFIRMED` is terminal for that calendar date `[PD-70 · OWNER-PENDING]`.
 - The confirm predicate is a pure function evaluated **server-side** and mirrored client-side: `ok_count == target AND outstanding_warnings == 0`.
 - All rendered times and all date boundaries use the **warehouse's single operating timezone** (`[BR-36]`); storage timezone is a developer decision.
+- **`[GD-n]` citation form.** `[GD-n]` is a *global-rule delta* — an amendment already folded into `_global-rules.md` v1.0. The delta log itself is `_plans/_review.md` §4 (`GD-1`…`GD-10`); it is not part of the shipped 8-spec + `_global-rules` corpus, so every `[GD-n]` in this spec is written with the resulting rule text beside it and the ID is a provenance pointer only. This page cites `[GD-5]` (§10) and `[GD-9]` (§3.18, §6.5).
+- **Sub-rule citation form.** `[G-3]`'s branches are cited as `[G-3a]` / `[G-3b]` / `[G-3c]` throughout this spec (never `[G-3](a)`), so a mechanical `[G-n]` grep resolves.
+- **Foreign keys are never bracketed.** A `[L-…]` in square brackets is always one of **this** page's 22 legend units plus the 4 furniture keys (§2.1, §2.2), so a mechanical key-existence check over this file cannot produce a phantom. Another spec's key is written unbracketed with its file — `order-detail.md` L-9, `view-orders.md` L-S4-6 — and another spec's business rule is written with its page code (VO `BR-9`, OD `BR-12`), never as a bare `[BR-n]`, which on this page always means a closing rule from §4.
 
 ### 3.0.1 Page furniture
 
@@ -308,11 +312,13 @@ These formulas reproduce the wireframe's own rendered percentages exactly: 3/84 
 | Tracking matches **more than one** order | `ambiguous` | `⚠ Unknown order` (default) | red | yes | no | no |
 | Order status = `Prepare Shipment` | `ok` | `✓ Outbounded` | green | **no** | **yes** | no |
 | Order status = `Processing` | `not_outbounded` | `⚠ Not outbounded` | red | yes | no | **yes** |
-| Order status ∈ {`Pending`, `On Hold`, `Shipped`, `Completed`, `Cancelled`, `Refunded`, `Failed`} | `not_outbounded` | `⚠ Not outbounded` | red | yes | no | no |
+| Order status ∈ {`Pending`, `On Hold`, `Shipped`, `Completed`, `Refunded`, `Failed`} | `not_outbounded` | `⚠ Not outbounded` | red | yes | no | no |
+| Order carries the **cancellation flag** (any underlying status) | `not_outbounded` | `⚠ Not outbounded` | red | yes | no | no |
 
+- **`Cancelled` is not an order status.** The vocabulary is exactly the 8 WooCommerce statuses `pending` · `processing` · `on-hold` · `completed` · `refunded` · `failed` · `shipped` · `prepare-shipment`; cancellation is a separate flag set by `✕ Cancel Order` on Order Detail (OD `BR-12`, `view-orders.md` L-S4-6), not a ninth value. A cancelled order therefore renders its **underlying status** in the Order Status column with a `Cancelled` marker beside it, and the verdict is `not_outbounded` in every case. Corrected 2026-08-03 (cross-page defect M3a-D3); the register title of `[PD-76 · OWNER-PENDING]` still lists "Cancelled" among the statuses and needs the same correction at the owner's next pass — the behavior specified here is the corrected one.
 - Duplicate is checked **before** status, so rescanning an already-scanned OK parcel yields a duplicate warning, not a second OK (`[BR-5]`). The check is against any non-deleted row with the same normalized tracking, regardless of that row's verdict — two unknown scans of the same bad label produce one `unknown` and one `duplicate` (E-70).
 - The dedupe scope is **the current session only** (`[BR-37]`). A parcel scanned in yesterday's confirmed closing and scanned again today is not a duplicate; its order will normally be `Shipped`/`Completed`, so it warns as `⚠ Not outbounded` — which is the correct signal, because a parcel that already left should not be on today's bench (E-63).
-- Abnormal non-Processing statuses share the `⚠ Not outbounded` pill; the **actual status is rendered in the Order Status column**, which is where the operator reads the difference. `[Process this order]` appears **only** for `Processing`, because M1 is specifically a `Processing → Prepare Shipment` transition and offering it elsewhere would produce an invalid mutation `[PD-76 · OWNER-PENDING]`.
+- Abnormal non-`Processing` statuses (and the cancellation flag) share the `⚠ Not outbounded` pill; the **actual status is rendered in the Order Status column**, which is where the operator reads the difference. `[Process this order]` appears **only** for `Processing`, because M1 is specifically a `Processing → Prepare Shipment` transition and offering it elsewhere would produce an invalid mutation `[PD-76 · OWNER-PENDING]`.
 - **Ambiguous** (one tracking number on two or more orders — carrier number reuse or a data error, E-14): the server must never silently pick one. The row is a warning, excluded from OK, and the Notes cell lists every colliding Order ID. Reusing the `⚠ Unknown order` pill is the default because it introduces no new UI vocabulary and preserves the count-exclusion semantics; a distinct label is a developer decision (DQ-2).
 - **This page matches customer-order (outbound) carrier tracking numbers only.** Inbound-request tracking numbers live in a **separate namespace** and may legitimately collide with outbound ones `[PD-8 · OWNER-PENDING]`; a scan here resolves against outbound tracking and nothing else, so an inbound-request number scanned at closing is `unknown`, never a match (E-13). A product EAN (`8809…`), an Order ID or a Deleo number likewise resolves to `unknown`. There is no unified search on this page.
 
@@ -331,7 +337,7 @@ These formulas reproduce the wireframe's own rendered percentages exactly: 3/84 
 | `Tracking Barcode` | the normalized scanned value, never truncated (E-50) |
 | `Order ID` | blue, a **real deep link** to the order detail screen [G-12], opened in a **new tab** while a session is `IN_PROGRESS` so the scan loop survives (E-74); `–` when unknown |
 | `Items` | total unit count on the order; `0` for a zero-line order; `–` when unknown |
-| `Order Status` | the status pill at scan time (`Prepare Shipment` green, `Processing` red-outlined, others per admin palette); `–` when unknown |
+| `Order Status` | the status pill at scan time (`Prepare Shipment` green, `Processing` red-outlined, others per admin palette); `–` when unknown; a cancelled order renders its underlying status label plus a `Cancelled` marker (§3.6) |
 | `Closing Verdict` | the verdict pill from §3.6 |
 | `Worker` | the scanning actor's display name (mock: Dean / Miranti) |
 | `Notes` | verdict-specific, below |
@@ -349,6 +355,21 @@ These formulas reproduce the wireframe's own rendered percentages exactly: 3/84 
 | `ambiguous` | **(spec-authored)** `Matches {n} orders — {id1}, {id2}, … — resolve before closing` |
 | `not_outbounded`, status `Processing` | the button `[Process this order]` (opens M1) |
 | `not_outbounded`, other status | **(spec-authored)** `Order status is {status} — not shipped from this closing` |
+
+**Status label vs status value.** The 8 statuses are stored as **lowercase-hyphenated values** (`pending` · `processing` · `on-hold` · `completed` · `refunded` · `failed` · `shipped` · `prepare-shipment`) and rendered as **title-case labels**. This spec uses the label register in prose and in every rendered string, and the value register in every `DC-*` payload (e.g. DC-13 `processing → prepare-shipment`). Mapping, in order:
+
+| Value | Label |
+|---|---|
+| `pending` | `Pending` |
+| `processing` | `Processing` |
+| `on-hold` | `On Hold` |
+| `completed` | `Completed` |
+| `refunded` | `Refunded` |
+| `failed` | `Failed` |
+| `shipped` | `Shipped` |
+| `prepare-shipment` | `Prepare Shipment` |
+
+There is no `cancelled` value in either register (§3.6). Stated once here (cross-page defect M3a-D19, 2026-08-03) so `[BR-20]`'s mixed registers read unambiguously.
 
 **Sequence-number rules** (`[BR-17]`): numbers are never reused and never renumbered. Deleting row #3 leaves #1, #2, #4, #5 — this keeps every duplicate cross-reference ("Duplicate of #2") stable forever, and keeps the printed/exported record aligned with what the operator saw. Gaps in the sequence are therefore normal and are **not** a defect.
 
@@ -373,7 +394,20 @@ Behavior is global [G-7]; only the closing deltas are specified here.
 - Comments are **append-only** — no edit, no delete `[PD-3 · OWNER-PENDING]`.
 - Opening the hub never steals focus from the scan input and is never auto-closed by an arriving verdict (E-75).
 
-**Rendering** (wireframe): a nav button "💬 Comments" carrying an unread-mention badge (mock `2`), opening a dropdown with tabs `@ Mentions` (badge `2`) and `★ Saved`. The Mentions pane header reads "Comments where I'm tagged" with a "Mark all read" action; the Saved pane header reads "Comments I saved" with "Unstar to remove from this list". Each row shows the entity (`Order 413540`), the author, the comment text, a time, and a `★` toggle. The dropdown is wired only in State 1 in the demo (U-e); in the admin it is identical on every state.
+**Rendering.** A nav button "💬 Comments" carrying an unread-mention badge (mock `2`), opening a dropdown with tabs `@ Mentions` (badge `2`) and `★ Saved`. Each row shows the entity (`Order 413540`), the author, the comment text, a time, and a `★` toggle. The dropdown is wired only in State 1 in the demo (U-e); in the admin it is identical on every state.
+
+**Hub copy is a cross-page byte-exact contract [G-7], and the wireframe's copy is stale** `[WF-15]`. The hub is the same component on all eight screens, so closing may not carry its own wording. Canonical strings for the shipping admin, with the wireframe's divergent strings named so QA can tier them:
+
+| Element | Canonical (`[ADMIN]`) | Wireframe renders (`[WF]` — `[WF-15]`) |
+|---|---|---|
+| Mentions pane header | `Comments mentioning me · Click to open the order` | `Comments where I'm tagged` |
+| Saved pane header | `Saved comments · Click to open the order` | `Comments I saved` |
+| Unstar hint | `Unstar to remove from the list` | `Unstar to remove from this list` |
+| Read-all action | `Mark all read` | `Mark all read` (already canonical) |
+| Search results header | `{n} results · newest first · click to open the order` | not built (U-c) |
+| Empty search state | `No matching comments` | not built (U-c) |
+
+Adopted 2026-08-03 from the four-page majority (order-detail · order-management · ready-to-outbound · stock-status) after cross-page defect M3a-D7; closing and inbound-request were the two outliers on the pane headers. `[WF]` QA asserts the wireframe strings (QA-HUB-01/02) and `[ADMIN]` QA asserts the canonical ones (QA-HUB-09) — the two must never be conflated.
 
 **Full-text search across all comments** (entity no. / author / text, newest first, click opens the entity) is required by [G-7] but is **not built in this wireframe** (U-c). It ships in the admin; its QA is `[ADMIN]`.
 
@@ -391,7 +425,8 @@ confirm_enabled = (ok_count == target) AND (outstanding_warnings == 0)
 ```
 
 **Disabled label carries the blockers**, so the operator reads the reason off the button itself without hunting for it:
-`Confirm Closing ({remaining} remaining · {outstanding_warnings} warnings)` — wireframe example, byte-exact: **"Confirm Closing (79 remaining · 2 warnings)"**.
+`Confirm Closing ({remaining} remaining · {outstanding_warnings} warnings)` — the wireframe's rendered string, byte-exact: **"Confirm Closing (79 remaining · 2 warnings)"**.
+> **Not a worked example.** That `79` is the same bad demo datum as State 1's Remaining tile (**U-a**). Against target 84 / OK 3 the formula in §3.5 gives `remaining = 81`, so the shipped label would read "Confirm Closing (81 remaining · 2 warnings)". `remaining` is **never** `target − ok − warnings`; warnings never subtract from Remaining (QA-COUNT-04). The string above is quoted only because QA-CONFIRM-01 asserts it byte-exactly against the demo.
 - When only warnings block: `Confirm Closing ({n} warnings)` **(spec-authored)**.
 - When only the count blocks: `Confirm Closing ({n} remaining)` **(spec-authored)**.
 - **Over-scan** (`ok_count > target`): `Confirm Closing ({n} over target)` **(spec-authored)**. Over-scan is a mismatch, not a pass (`[BR-3]`).
@@ -631,7 +666,19 @@ A closing unknown **never** routes to `#unrecognized-tracking` and never creates
 
 **Footer.** `[Close]` (secondary) and `[Process Outbound → resolve warning]` (green primary).
 
-**Gate.** `[Process Outbound → resolve warning]` is **disabled until the Zero Packing checkbox is ticked** `[PD-77 · OWNER-PENDING]`. The checkbox is step 6 of the current closing process; an unchecked attestation would make the resolution meaningless. The wireframe does not enforce it — this is a spec-level requirement, QA `[ADMIN]`.
+**Gate.** `[Process Outbound → resolve warning]` is enabled **only when both conditions hold**:
+
+```
+m1_enabled = zero_packing_checked
+             AND every(line.inbound_status == INBOUNDED) AND line_count >= 1
+             AND order.status == processing
+             AND not order.cancelled
+```
+
+1. **Zero Packing attestation** `[PD-77 · OWNER-PENDING]` — the checkbox is step 6 of the current closing process; an unchecked attestation would make the resolution meaningless.
+2. **Inbound completeness** (`[BR-38]`) — M1 emits the canonical `order.outbounded` (DC-14), and the outbound predicate is global: View Orders `BR-9` and `order-detail.md` L-9 both state it as **iff every line is INBOUNDED**. Closing may not open a side door through that gate. When the order has any `PENDING` line the button stays disabled and the modal shows the reason **(spec-authored)**: "Cannot outbound — {n} of {m} items are not inbounded yet. Receive them on Order Detail first." The scan row's verdict stays `⚠ Not outbounded` and the warning stays outstanding (E-78). Added 2026-08-03 after cross-page defect M3a-D2; before this the closing gate was Zero Packing alone, which contradicted both other specs.
+
+Neither condition is enforced by the wireframe — both are spec-level requirements, QA `[ADMIN]` (QA-M1-05, QA-M1-14).
 
 **On confirm.**
 1. `closing.processOutbound(order_id, zero_packing_verified, memo, idempotency_key)` — double-click safe [G-9] (E-25).
@@ -641,7 +688,7 @@ A closing unknown **never** routes to `#unrecognized-tracking` and never creates
 5. **Audio.** This is an outbound-class button, so it plays the `[G-3a]` send sound `[PD-2 · OWNER-PENDING]`. Note the tension the owner is being asked to resolve: PD-2's enumeration names View Orders, RTO, Order Detail and Inventory and does **not** name closing, while adjudication C-5's verdict is scope-by-button-class ("every outbound-class button on every page"), which does reach this button. This spec applies the rule by class. Because closing's audio channel otherwise means "there is a problem", the sweep must be **audibly distinct** from the `[G-3b]` warning voice — a success sound mistakable for a warning would be worse than silence. Reversal impact if the owner scopes PD-2 by page instead: delete this clause; nothing else changes.
 6. **Memo routing**: a non-empty memo is dual-written to (a) the order's Comments history and (b) the closing log; `@mentions` inside it route per [G-7] (§6.1). An **empty** memo still produces a system auto-comment on the order recording the closing-driven transition (DC-16, `source=system`), so the order's trail always explains why its status moved at 18:44.
 
-**Stale-state handling** (E-24) `[PD-6 · OWNER-PENDING]`: if the order already left `Processing` (another operator outbounded it from View Orders while the modal was open), the server performs **no second transition**. If it is now `Prepare Shipment`, the call succeeds idempotently, the row is re-judged green, and the toast reads **(spec-authored)** "✓ Order {order_id} was already outbounded — warning resolved". If it moved to any other status, the call is rejected: red toast **(spec-authored)** "✕ Order {order_id} is now {status} — cannot outbound from closing", the row is re-judged against the current status, and nothing is written except the rejection record.
+**Stale-state handling** (E-24) `[PD-6 · OWNER-PENDING]`: if the order already left `Processing` (another operator outbounded it from View Orders while the modal was open), the server performs **no second transition**. If it is now `Prepare Shipment`, the call succeeds idempotently, the row is re-judged green, and the toast reads **(spec-authored)** "✓ Order {order_id} was already outbounded — warning resolved". If it moved to any other status, the call is rejected: red toast **(spec-authored)** "✕ Order {order_id} is now {status} — cannot outbound from closing", the row is re-judged against the current status, and nothing is written except the rejection record. If the order was **cancelled** while the modal was open (the cancellation flag, not a status — §3.6), the same rejection applies with the toast **(spec-authored)** "✕ Order {order_id} is cancelled — cannot outbound from closing" (E-56). A line that was un-inbounded meanwhile (Cancel Inbound from another screen) is rejected the same way, with the `[BR-38]` reason string.
 
 **Close paths.** `[Close]`, the header `✕`, and a backdrop click all dismiss with **zero** side effects — no status change, no comment, no event (a dismissed modal is a NON-event). Focus returns to the scan input on close (`[L-S1-F]` clause 2).
 
@@ -717,7 +764,7 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-4** | **No auto-confirm.** Reaching the match only *enables* the button; a human presses it. The scan input stays live after the match. | Protects against closing the day the instant the arithmetic lines up, before the operator has looked around the packing bench. | 2026-07-23, copy re-confirmed 2026-08-03 |
 | **BR-5** | Duplicates are **never double-counted**. Every repeat scan produces its own warning row whose Notes cite the colliding sequence number, the first scan's time, the first scanner's name, and — where it was not an OK — that scan's verdict. | Digital replacement for the Excel column-A duplicate check; those facts are what a human needs to judge a legitimate combined box. | 2026-07-23 · non-OK original clause 2026-08-03 |
 | **BR-6** | An **unknown order** (tracking matches nothing) is a warning, is excluded from `ok_count`, and blocks confirmation until cleared. | It is either a mistype or a parcel from another system — both need a human decision before the day is closed. | 2026-07-23 |
-| **BR-7** | M1 performs a **real order-status change** `Processing → Prepare Shipment`, reflected on every screen, gated behind the Zero Packing attestation. | The closing screen must not invent a private notion of "done"; and step 6 of the current process (verify packing) survives as the checkbox. | 2026-07-23 · gate `[PD-77 · OWNER-PENDING]` 2026-08-03 |
+| **BR-7** | M1 performs a **real order-status change** `Processing → Prepare Shipment`, reflected on every screen, gated behind the Zero Packing attestation **and** the `[BR-38]` inbound-completeness predicate. | The closing screen must not invent a private notion of "done"; and step 6 of the current process (verify packing) survives as the checkbox. | 2026-07-23 · gate `[PD-77 · OWNER-PENDING]` 2026-08-03 · inbound-completeness clause `[BR-38]` 2026-08-03 |
 | **BR-8** | **Closing progress is stored server-side.** Refresh, navigation, crash, or a switch of device restores target, scan list, counters and warnings. Nothing clears until confirmation or an explicit cancel/restart. | Shift handovers and walks to Zero Packing happen mid-closing daily; a client-only session would lose an hour of scanning. | 2026-08-03 (behavior paragraph, `[L-S1-F]`) |
 | **BR-9** | **Pre-start gating**: the scan input and every progress affordance are hidden/disabled until the manual count is entered. | Makes "enter the number first" structurally true rather than instructional; a scan before a target has nothing to be judged against. | 2026-07-23 |
 | **BR-10** | Closing History rows are **always "Match"** by construction — a mismatch cannot be confirmed. | The column is retained as an explicit invariant, so an auditor reading History knows a blank day means "not closed", never "closed badly". | 2026-07-23 |
@@ -730,7 +777,7 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-17** | Sequence numbers are **never reused and never renumbered**. Gaps after deletion are normal. | Keeps every duplicate cross-reference ("Duplicate of #2") stable forever and keeps the exported record aligned with what the operator saw on screen. | 2026-08-03 (dev default DQ-2 in plans, adopted as a rule) |
 | **BR-18** | After confirmation the session is **immutable**: the scan input is disabled and no second session may start on that calendar date. | A confirmed closing is a record; live input on it would create scans belonging to no session. | `[PD-73 · OWNER-PENDING]` / `[PD-70 · OWNER-PENDING]`, 2026-08-03 |
 | **BR-19** | A session that crosses midnight belongs to its **start date**. | The target count and the parcels are the start date's work. | `[PD-78 · OWNER-PENDING]`, 2026-08-03 |
-| **BR-20** | Non-`Processing` abnormal statuses (`Pending`/`On Hold`/`Shipped`/`Completed`/`Cancelled`/`Refunded`/`Failed`) share the `⚠ Not outbounded` pill, with the actual status shown in the Order Status column; `[Process this order]` appears **only** for `Processing`. | M1 is specifically a `Processing → Prepare Shipment` transition; offering it elsewhere would produce an invalid mutation. | `[PD-76 · OWNER-PENDING]`, 2026-08-03 |
+| **BR-20** | Non-`Processing` abnormal statuses (`Pending`/`On Hold`/`Shipped`/`Completed`/`Refunded`/`Failed`) and cancelled orders share the `⚠ Not outbounded` pill, with the actual status shown in the Order Status column (plus a `Cancelled` marker where the cancellation flag is set); `[Process this order]` appears **only** for `Processing`. **`Cancelled` is a flag, not a ninth status** — the vocabulary is the 8 lowercase-hyphenated values in §3.7, rendered as title-case labels. | M1 is specifically a `processing → prepare-shipment` transition; offering it elsewhere would produce an invalid mutation. Inventing a `Cancelled` status would break the 8-status vocabulary that VO `BR-12` / OD `BR-12` state as exhaustive. | `[PD-76 · OWNER-PENDING]`, 2026-08-03 · `Cancelled`-as-flag correction 2026-08-03 (M3a-D3; the PD-76 register title still needs the same edit) |
 | **BR-21** | A duplicate warning is cleared by **✕-deleting the duplicate row after logging the combined-box reason as a comment on the order**. Deleted warning rows still count in History's raised→resolved. | Matches State 4's `3→3` display and keeps the raised count honest. | `[PD-69 · OWNER-PENDING]`, 2026-08-03 |
 | **BR-22** | Deleting the **original** OK row of a duplicate pair does **not** re-judge the surviving duplicate; the operator deletes it and rescans. The same no-retro-judgment doctrine covers an unknown row whose order later appears. | Retro-judging a past row would rewrite the meaning of the scan sequence; a rescan produces a clean, timestamped verdict. | `[PD-75 · OWNER-PENDING]`, 2026-08-03 |
 | **BR-23** | A closing "unknown order" **never** routes to `#unrecognized-tracking` and never creates an unrecognized-pool item. The two flows are disjoint (§3.15). | Different input (tracking number vs product barcode), different owner, different resolution. Cross-wiring them would put carrier numbers into a product pool. | 2026-07-23, re-affirmed 2026-08-03 |
@@ -748,6 +795,7 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-35** | A session left `IN_PROGRESS` on an earlier date **blocks** starting a closing for a new date; the operator must confirm or cancel the open session first, and the client opens it automatically. | One-session-per-date (`[PD-70]`) plus start-date attribution (`[PD-78]`) are only coherent if an abandoned session is resolved rather than orphaned; two open sessions would make "today's closing" ambiguous. | 2026-08-03 (spec-authored) |
 | **BR-36** | Every rendered time, every date boundary and every "same calendar day" test uses the **warehouse's single operating timezone**; all persisted timestamps are server timestamps. | Two stations, one clock: a browser-local timestamp would let two operators disagree about the order of scans and about which day a 23:58 parcel belongs to. | 2026-08-03 (spec-authored; with E-59) |
 | **BR-37** | Duplicate detection is scoped to the **current session only**. There is no cross-day duplicate check. | Yesterday's parcel is caught by its order status (`Shipped`/`Completed` → warning), which is the more informative signal; a cross-day index would also flag legitimate carrier number reuse. | 2026-08-03 (spec-authored) |
+| **BR-38** | **M1 obeys the global outbound predicate.** `[Process Outbound → resolve warning]` is enabled only when the order has ≥1 line, **every line is `INBOUNDED`**, the status is `processing`, and the order is not cancelled — in addition to the Zero Packing attestation. A `Processing` order with any `PENDING` line stays `⚠ Not outbounded`, with the button disabled and the shortfall named. | M1 emits the canonical `order.outbounded` (DC-14). View Orders `BR-9` and `order-detail.md` L-9 both state the outbound gate as **iff every line is INBOUNDED**, with no page exception; a closing-only side door would ship an order whose goods were never received and would make the two other specs' "iff" false. | 2026-08-03 (cross-page defect M3a-D2; before this, closing's gate was Zero Packing alone) |
 
 ---
 
@@ -871,7 +919,7 @@ Cross-page references on this page are real links, never decoration:
 
 | Surface | Target |
 |---|---|
-| `Order ID` cell in the scan list (rendered blue) | the order detail screen for that order. Wireframe path `../order-detail/`; in the production admin the link resolves to the specific order (e.g. `/oms/orders/{order_id}`) — exact route is a developer decision. While a session is `IN_PROGRESS` the link opens in a **new tab** so the scan loop is never destroyed (E-74). **U-f: the wireframe renders these as plain `<td>` text, so this is `[ADMIN]` QA.** |
+| `Order ID` cell in the scan list (rendered blue) | the order detail screen for that order. Wireframe path `../order-detail/#{order_id}` — the **directory form** `../{slug}/#{anchor}` fixed by `[G-12]`, never `../order-detail/index.html#…` (cross-page defect M3a-D16, normalized 2026-08-03); in the production admin the link resolves to the specific order (e.g. `/oms/orders/{order_id}`) — exact route is a developer decision. While a session is `IN_PROGRESS` the link opens in a **new tab** so the scan loop is never destroyed (E-74). **U-f: the wireframe renders these as plain `<td>` text, so this is `[ADMIN]` QA.** |
 | M1 header order number | same target |
 | Comments hub entry | the entity the comment belongs to (an order) [G-7] |
 | Slack comment notification | deep link back to the order |
@@ -917,9 +965,9 @@ Synthesis parameters, the TTS voice fallback chain and AudioContext resume handl
 
 ## 7. Edge Cases & Error States
 
-IDs are page-scoped and stable. E-1…E-50 are the original planning assignments and keep their numbers wherever they appear; E-51…E-77 were added while writing and auditing this spec. Gaps in reading order (E-50 appearing inside §7.1, E-41 inside §7.2) are original assignments and are **not** renumbered. Every ID is mapped to at least one QA scenario in §8.17.
+IDs are page-scoped and stable. E-1…E-50 are the original planning assignments and keep their numbers wherever they appear; E-51…E-77 were added while writing and auditing this spec, and **E-78** was added during the 2026-08-03 remediation pass (`[BR-38]`). Gaps in reading order (E-50 appearing inside §7.1, E-41 inside §7.2) are original assignments and are **not** renumbered. Every ID is mapped to at least one asserting QA scenario in §8.18.
 
-**Total: 77 edge cases.**
+**Total: 78 edge cases.**
 
 ### 7.1 Scan input & verdict
 
@@ -929,7 +977,7 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | **E-2** | Malformed / truncated barcode (partial read shorter than the minimum length) | Rejected client-side before lookup; red toast **(spec-authored)** "✕ Incomplete scan — scan again"; no row, no `closing.scan_recorded`. The minimum-length rule is a developer decision (DQ-1). |
 | **E-3** | Well-formed tracking number matching no order | `unknown` verdict per §3.15: red row, `–` in Order/Items/Status, voice, excluded from `ok_count`, counted as an outstanding warning. |
 | **E-4** | Order in `Processing` | `not_outbounded` verdict, red row, `[Process this order]` in Notes, voice. |
-| **E-5** | Order in another non-`Prepare Shipment` status (`Pending`/`On Hold`/`Shipped`/`Completed`/`Cancelled`/`Refunded`/`Failed`) | Same `⚠ Not outbounded` pill; the real status renders in the Order Status column; **no M1 button** `[PD-76 · OWNER-PENDING]` (`[BR-20]`). Notes: "Order status is {status} — not shipped from this closing". |
+| **E-5** | Order in another non-`Prepare Shipment` status (`Pending`/`On Hold`/`Shipped`/`Completed`/`Refunded`/`Failed`), **or** an order carrying the cancellation flag | Same `⚠ Not outbounded` pill; the real status renders in the Order Status column (with a `Cancelled` marker where the flag is set — `Cancelled` is not a ninth status, §3.6); **no M1 button** `[PD-76 · OWNER-PENDING]` (`[BR-20]`). Notes: "Order status is {status} — not shipped from this closing". |
 | **E-6** | Second scan of a tracking already scanned in this session | `duplicate` verdict; Notes "Duplicate of #{n} — first scanned {hh:mm:ss} ({worker})"; not double-counted. |
 | **E-7** | Third and subsequent scans of the same tracking | Each repeat is its own warning row; every one references the **first** scan of that tracking `#n`, never the previous duplicate. |
 | **E-8** | Duplicate whose original OK row was deleted | The surviving duplicate is **not** auto-re-judged `[PD-75 · OWNER-PENDING]`; the operator deletes it and rescans the parcel (`[BR-22]`). |
@@ -984,8 +1032,9 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | **E-27** | Deleting an OK row that was part of an exact match | Confirm re-disables immediately; label returns to "Confirm Closing (1 remaining)". |
 | **E-28** | Deleting a warning row (duplicate / unknown / abnormal-status) | Outstanding warnings −1; the gate may become satisfied; the **raised** counter is unchanged (`[BR-16]`); DC-11 with `method=row_deleted`. |
 | **E-29** | M2 `Yes` double-clicked, or the same row deleted twice from two stations | Single deletion, no error, idempotent success [G-9]. |
-| **E-56** | M1 opened from a row whose order was cancelled while the modal was open | Treated as E-24's rejection branch: no transition; red toast "✕ Order {id} is now Cancelled — cannot outbound from closing"; the row re-judges to `⚠ Not outbounded` with the new status. |
+| **E-56** | M1 opened from a row whose order was cancelled while the modal was open | Treated as E-24's rejection branch: no transition; red toast "✕ Order {id} is cancelled — cannot outbound from closing"; the row re-judges to `⚠ Not outbounded` showing the underlying status plus the `Cancelled` marker (§3.6). |
 | **E-57** | An unknown-order row whose order is created in the system mid-session | No retro-judgment (same doctrine as `[BR-22]`). The operator deletes the unknown row and rescans the parcel, producing a clean OK. |
+| **E-78** | A `Processing` order with one or more lines still `PENDING` is scanned, and the operator opens M1 | The verdict is `not_outbounded` as usual and `[Process this order]` still appears (the status is `Processing`), but inside M1 `[Process Outbound → resolve warning]` is **disabled** with the reason "Cannot outbound — {n} of {m} items are not inbounded yet. Receive them on Order Detail first." (`[BR-38]`). Ticking Zero Packing does not enable it. No transition, no DC-13/DC-14, and the warning stays outstanding until the lines are received elsewhere and the parcel is rescanned. |
 | **E-75** | The Comments hub dropdown is open when a scan verdict arrives | The row, tiles and toast update behind the dropdown. The hub is never auto-closed and never takes focus from the scan input; equally, an open hub never swallows the wedge input (`[L-S1-F]` clause 2 exclusions apply only while a hub field has focus). |
 
 ### 7.4 Concurrency (`[ADMIN]` only)
@@ -1040,13 +1089,24 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 
 **R1 — Reset between mutating scenarios.** The wireframe has **no reset control**. Row deletion, star toggles, the voice toggle, the target-edit lock and `lastState` all persist until the page is reloaded. Reload the page before any scenario whose Given describes an untouched state. Scenarios marked *(destructive)* must be the last in their run or be followed by a reload.
 
-**R2 — Strip annotation dots before comparing text.** Purple annotation dots (`span.dot`) are rendered **inside** several elements, including two `<th>` cells in `#s1` (dot `6` inside `#` and dot `5` inside `Closing Verdict`). Raw `textContent` therefore reads `"#6"` and `"Closing Verdict5"`. Every "reads / is exactly" assertion in this section is made against this normalization:
+**R2 — Strip annotation dots before comparing text.** Purple annotation dots (`span.dot`) are rendered **inside** several elements, including two `<th>` cells in `#s1` (dot `6` inside `#` and dot `5` inside `Closing Verdict`). Raw `textContent` therefore reads `"#6"` and `"Closing Verdict5"`. Every text assertion in this section is made against this normalization:
 ```js
 const t = el => { const c = el.cloneNode(true);
   c.querySelectorAll('.dot').forEach(d => d.remove());
   return c.textContent.replace(/\s+/g, ' ').trim(); };
 ```
 Clicking `#annoToggle` only sets `display:none` on the dots — it does **not** remove them from `textContent`. Use the clone-and-strip helper, not the toggle.
+
+**R2b — Beware nested *functional* descendants; `.dot` is not the only text polluter.** Four elements this section asks you to compare carry a nested control whose text is concatenated by `textContent`. Assert them with `starts with` (the form used throughout §8 for these four), or strip the descendant first:
+
+| Element | Nested descendant | R2-normalized text |
+|---|---|---|
+| `#m-process header`, `#m-scandel header` | `<button class="x">✕</button>` | `"… Order 413511✕"`, `"Delete Scan Row✕"` |
+| `[data-open="inbox1"]` | `<span class="badge-n">2</span>` | `"💬 Comments2"` |
+| `.paneheader` (both panes) | `<small>Mark all read</small>` / `<small>Unstar to remove from this list</small>` | `"Comments where I'm tagged Mark all read"`, `"Comments I saved Unstar to remove from this list"` |
+| `span.user` | `<span class="avatar">Y</span>` | `"YYongwon Ryu"` |
+
+An extended helper is acceptable and equivalent: `c.querySelectorAll('.dot, .badge-n, .paneheader small, header button.x, .avatar').forEach(d => d.remove())`. If you use it, the four rows above become plain equality against the string without the descendant.
 
 **R3 — Address states and modals by attribute, never by tab text.** `Modal: Process Processing Order` appears **twice** in the `wf-bar` (`[WF-12]`), so a text selector matches two nodes. Use `.wf-tab[data-state="s2b"]`, `.wf-tab[data-modal="m-process"]`, `section#s2b`, `#m-process`.
 
@@ -1064,13 +1124,24 @@ Assertions then read `window.__spoken`. Clear it (`window.__spoken.length = 0`) 
 
 **R6 — Byte-exact** means: identical after R2 normalization, including the `·` separators, the `—` em dashes, the `✓`/`⚠`/`✕` glyphs and the `①` circled digit. Do not substitute ASCII equivalents.
 
+**R6b — Assertion verbs are normative.** Two conforming agents must return the same verdict on the same page, so the verbs are fixed:
+- `reads` · `reads exactly` · `is exactly` · **byte-exact** → **strict equality** after R2 (and R2b where it applies).
+- `starts with` → `String.prototype.startsWith` after R2.
+- `contains` · `carries the text` → substring after R2.
+- `yields N` → `querySelectorAll(...).length === N`.
+Where a clause names no verb it is strict equality. Never relax `reads` to *contains* to make a scenario pass — a mismatch is a FAIL to be reported, not normalized away.
+
 **R7 — Page-global demo state.** `voiceOn` is a single page-level variable shared by all states (U-g), so a toggle set in State 1 governs the auto-play of States 2/2b/3. `lastState` is only updated by `[data-goto]` clicks, never by `wf-bar` tabs. `delRow` is reset after each M2 confirm.
 
 **R8 — Known demo limitations that are NOT bugs.** Assert the demo behavior in `[WF]`, the correct behavior in `[ADMIN]`: tiles do not recompute after a row deletion; `#startBtn0` no-ops silently on empty input `[WF-8]` and accepts any non-empty string including `abc`; `#closeCancel` cancels without a dialog `[WF-7]`; State 1's "Remaining scans" tile reads 79 instead of 81 (U-a); State 4's scan input looks enabled (U-b); the Comments hub has no search (U-c) and is wired only in State 1 (U-e); the voice controls are wired only in State 1 (U-g); Order ID cells are not links (U-f); States 2/2b/3 render a muted target line instead of the full banner (U-j).
 
-**Reading a scenario.** Every Then-clause is an assertion. Where a scenario asserts a persisted event it names the `DC-n` id; §8.16 proves every event in §5.1 has at least one asserting scenario and §8.17 does the same for every `[E-n]`.
+**R9 — Activating a state or a modal.** Every scenario's Given names a section or a modal but not the route to it. Unless the scenario says otherwise: **to activate a state, click its `.wf-tab[data-state="sX"]`; to open a modal outside its per-row entry point, click `.wf-tab[data-modal="m-…"]`.** Both are wireframe chrome (`[L-F4]`) and exist only to reach a rendering a reviewer could not otherwise produce — never treat them as shipping affordances. In `[ADMIN]` scenarios the equivalent Given is "the live session is in that state"; there is no tab.
 
-**Totals: 168 scenarios — 68 `[WF]` · 100 `[ADMIN]` · 68 negative tests (40.5%).**
+**R10 — PD citations in scenario headings are shorthand.** A `[PD-n]` in a QA heading points at the behavior's defining sentence in §3 or §7, which carries the full `[PD-n · OWNER-PENDING]` tag. The scenario asserts the provisionally-adopted behavior, which is the behavior to build until the owner rules. **`[PD-71]` and `[PD-74]` are NO-DEFAULT (§9.2) and are never asserted by any scenario** — if a heading cites a PD, that PD has a provisional default.
+
+**Reading a scenario.** Every Then-clause is an assertion. Where a scenario asserts a persisted event it names the `DC-n` id; §8.17 proves every event in §5.1 has at least one asserting scenario and §8.18 does the same for every `[E-n]`.
+
+**Totals: 177 scenarios — 68 `[WF]` · 109 `[ADMIN]` · 71 negative tests (40.1%).**
 
 ---
 
@@ -1080,7 +1151,7 @@ Assertions then read `window.__spoken`. Clear it (`window.__spoken.length = 0`) 
 - Given the live wireframe is freshly loaded
 - Then `section#s0` has class `on` and `section#s1`, `#s2`, `#s2b`, `#s3`, `#s4`, `#shist` do not
 - And `.wf-tab[data-state="s0"]` has class `on` and its text is "0 · Before Start (manual count)"
-- And the card heading reads exactly "① Today's Outbound Target (manual count)"
+- And exactly one element matches `[...document.querySelectorAll('#s0 .pagepad div')].filter(e => t(e) === "① Today's Outbound Target (manual count)")` — that element is the card heading (the wireframe styles it inline, so there is no class to address; assert by exact R2 text and by a match count of 1)
 - And `#targetIn0` exists with placeholder "Hand-counted qty" and `value === ""`, followed by the literal text "orders" and the button `#startBtn0` labelled "Start Closing"
 
 **QA-S0-02 `[WF]` (negative)** — Start is blocked with an empty count `[E-16]`
@@ -1225,6 +1296,13 @@ Assertions then read `window.__spoken`. Clear it (`window.__spoken.length = 0`) 
 - Then focus does **not** move to `#s1 .scanbig input` (the demo has no refocus handler)
 - And the shipping behavior is asserted in QA-SCAN-11
 
+**QA-SCAN-17 `[ADMIN]` (negative)** — autofill, spell-check and IME composition cannot corrupt a wedge burst `[E-77]`
+- Given an active session and focus in the scan input
+- Then the input carries `autocomplete="off"`, `autocapitalize="off"` and `spellcheck="false"`, and no browser suggestion popup is rendered while a wedge burst is typed
+- When a `compositionstart` event fires mid-burst and the terminator (Enter or Tab) arrives before `compositionend`
+- Then the submit is **deferred to `compositionend`**: no partial string is submitted, exactly one row is appended, and exactly one **DC-7** exists carrying the complete tracking number
+- And no **DC-7** exists for any partial prefix of that value
+
 ---
 
 ### 8.3 QA-VERDICT — Verdict engine `[L-S1-5]` `[L-S1-2]` `[L-S1-6]` `[L-S2-1]`
@@ -1259,9 +1337,11 @@ Assertions then read `window.__spoken`. Clear it (`window.__spoken.length = 0`) 
 - Then the verdict is `ok`, the row is green, `ok_count` increments by 1, no sound plays, and **DC-7** records `verdict=ok` with `order_status_at_scan=prepare-shipment`
 
 **QA-VERDICT-07 `[ADMIN]` (negative)** — abnormal statuses warn without offering M1 `[E-5]` `[PD-76]`
-- When orders in `Shipped`, `Completed`, `Cancelled`, `On Hold`, `Refunded`, `Failed` and `Pending` are scanned
+- When orders in `Shipped`, `Completed`, `On Hold`, `Refunded`, `Failed` and `Pending` are scanned
 - Then each row shows the `⚠ Not outbounded` pill, the Order Status column shows the **actual** status, the Notes read "Order status is {status} — not shipped from this closing", and **no** "Process this order" button is rendered
 - And each row is an outstanding warning and contributes 0 to `ok_count`
+- When an order carrying the **cancellation flag** is scanned (cancellation is a flag, not a ninth status — §3.6)
+- Then its row shows the same `⚠ Not outbounded` pill, its Order Status column renders the **underlying** status label plus a `Cancelled` marker, no "Process this order" button is rendered, and **DC-7** records `order_status_at_scan` as one of the 8 lowercase-hyphenated values — never the literal `cancelled`
 
 **QA-VERDICT-08 `[ADMIN]` (negative)** — an ambiguous tracking number is never auto-resolved `[E-14]`
 - Given one tracking number attached to orders 413511 and 413540
@@ -1296,6 +1376,19 @@ Assertions then read `window.__spoken`. Clear it (`window.__spoken.length = 0`) 
 - Given tracking `YTD…` was OK-scanned in yesterday's confirmed closing and its order is now `Shipped`
 - When it is scanned in today's session
 - Then the verdict is `not_outbounded` (not `duplicate`), the Order Status column shows `Shipped`, and no cross-day duplicate index is consulted
+
+**QA-VERDICT-15 `[ADMIN]`** — a zero-line order in `Prepare Shipment` is still OK `[E-52]`
+- Given order 413700 has status `prepare-shipment` and **zero** line items
+- When its tracking number is scanned
+- Then the verdict is `ok`, the row is green, `ok_count` increments by 1, and the `Items` cell renders exactly `0` (not `–`, not blank)
+- And **DC-7** records `item_count=0` with `verdict=ok` — closing verifies that a parcel shipped, never what is inside it
+
+**QA-VERDICT-16 `[ADMIN]`** — a marketing order is judged purely on status `[E-66]`
+- Given a marketing order whose order number carries the `MKT-` prefix, status `prepare-shipment`
+- When its tracking number is scanned
+- Then the verdict is `ok` and it counts toward `ok_count` exactly like any other parcel — no prefix-based exclusion, no special pill, no separate bucket
+- And the same order in `processing` yields `not_outbounded` with the `[Process this order]` button, identical to a non-marketing order
+- And no filter anywhere in the closing pipeline references the order-number prefix
 
 ---
 
@@ -1497,6 +1590,13 @@ All scenarios in this block require the R4 instrumentation.
 - When all 12 rows are deleted
 - Then OK is 0, outstanding warnings is 0, Remaining is 40, Confirm is disabled with "Confirm Closing (40 remaining)", and the session is still `IN_PROGRESS`
 
+**QA-COUNT-13 `[ADMIN]`** — the scan list stays usable at several hundred rows `[E-60]` `[DQ-9]`
+- Given an `IN_PROGRESS` session that has accumulated **400** scan rows
+- When the 401st parcel is scanned
+- Then the new row is appended at the **bottom**, is visible without a manual scroll, and `document.activeElement` is still the scan input (the append never steals focus)
+- And the tiles, the progress bar and the Confirm label update within the same render, with no page refresh
+- And if the implementation paginates, the **latest** page is the one displayed during an active session; if it virtualizes, every row remains addressable by its sequence number for the CSV export and for `#{n}` duplicate cross-references
+
 ---
 
 ### 8.8 QA-TARGET — Target edit & cancel `[L-S1-10]`
@@ -1570,6 +1670,14 @@ All scenarios in this block require the R4 instrumentation.
 - Given an `IN_PROGRESS` session showing a Processing warning, an unknown warning, or a duplicate warning
 - Then the full target banner with "↺ Edit count" and "✕ Cancel Closing" is rendered in every one of those views, identical to the OK-scan view
 
+**QA-TARGET-14 `[ADMIN]`** — a scan that lands while the target edit is open is processed normally `[E-51]`
+- Given target 84 and OK 40, and "↺ Edit count" has been pressed so `#targetIn1` is unlocked, focused and holds the unsaved value `86`
+- When a parcel is scanned from the wedge
+- Then the scan is submitted and judged normally — the edit field never blocks the loop — a row is appended and one **DC-7** exists
+- And **no scanned character lands in the target field**: its value is still exactly `86` after the burst (`[L-S1-F]` clause 2 exclusion, also covered by QA-SCAN-12)
+- And the counters recompute against the **saved** target `84` (OK 41, Remaining 43), not against the unsaved `86`
+- When "Save" is then pressed, the counters recompute against `86` (Remaining 45) and **DC-3** records `old_qty=84 → new_qty=86` with `ok_count_at_edit=41`
+
 ---
 
 ### 8.9 QA-M1 — Process Processing Order `[L-M1]`
@@ -1626,8 +1734,10 @@ All scenarios in this block require the R4 instrumentation.
 **QA-M1-10 `[ADMIN]` (negative)** — stale order handling `[E-24]` `[E-56]`
 - Given the order was moved to `Prepare Shipment` from View Orders while the modal was open
 - Then no second transition occurs, the call succeeds idempotently, the row re-judges green, and the toast reads "✓ Order 413511 was already outbounded — warning resolved"
-- Given instead the order was moved to `Cancelled`
-- Then the call is rejected, a red toast reads "✕ Order 413511 is now Cancelled — cannot outbound from closing", the row re-judges against the current status, and no **DC-13**/**DC-14** is written
+- Given instead the order was **cancelled** while the modal was open (the cancellation flag, not a status — §3.6) `[E-56]`
+- Then the call is rejected, a red toast reads "✕ Order 413511 is cancelled — cannot outbound from closing", the row re-judges to `⚠ Not outbounded` showing the underlying status label plus the `Cancelled` marker, and no **DC-13**/**DC-14** is written
+- Given instead the order moved to any other status (`on-hold`, `refunded`, `failed`, …)
+- Then the call is rejected with "✕ Order 413511 is now {status} — cannot outbound from closing" and nothing is written except the rejection record
 
 **QA-M1-11 `[WF]` (negative)** — the wireframe does not gate the button on the checkbox (documents the gap)
 - Given `#m-process` is open with the checkbox unticked
@@ -1644,6 +1754,15 @@ All scenarios in this block require the R4 instrumentation.
 - Then exactly one `[G-3a]` send sound plays and no TTS utterance is spoken
 - And the sound is a synthesized rising sweep, measurably distinct from the warning voice, so an operator with eyes on a parcel cannot mistake a success for a warning
 
+**QA-M1-14 `[ADMIN]` (negative)** — M1 cannot outbound an order with un-inbounded lines `[E-78]` `[BR-38]`
+- Given order 413712 has status `processing` and 3 lines, of which **1 is still `PENDING`**, and its parcel has been scanned so the row shows `⚠ Not outbounded` with the `[Process this order]` button
+- When M1 is opened and the Zero Packing checkbox is ticked
+- Then "Process Outbound → resolve warning" is still `disabled`, and the modal shows the reason "Cannot outbound — 1 of 3 items are not inbounded yet. Receive them on Order Detail first."
+- And a forced request is rejected server-side: no **DC-13**, no **DC-14**, no **DC-11**, no comment, and the scan row stays `⚠ Not outbounded` as an outstanding warning
+- When the missing line is received on Order Detail and the parcel is rescanned
+- Then the new scan is judged against the live status exactly as any other scan (this page performs no retro-judgment of the earlier row — `[BR-22]`)
+- And this is the same predicate View Orders `BR-9` and `order-detail.md` L-9 enforce; closing opens no side door through it
+
 ---
 
 ### 8.10 QA-DEL — Delete Scan Row `[L-M2]` `[L-S1-6]`
@@ -1651,7 +1770,7 @@ All scenarios in this block require the R4 instrumentation.
 **QA-DEL-01 `[WF]`** — the modal identifies the row it will remove
 - Given `section#s1` is active with rows `#1`–`#5`
 - When the `✕` (`button.scandel`, title "Delete scan row") on row `#3` is clicked
-- Then `#m-scandel` gains class `open`, its `header` reads "Delete Scan Row", its body `b` reads "Remove this scan?", and `#scandelInfo` reads exactly "#3 · YT2618100710184356"
+- Then `#m-scandel` gains class `open`, its `header` R2-normalized text **starts with** "Delete Scan Row" (the header's `✕` close button is nested inside it — R2b; same shape as QA-M1-02), its body `b` reads "Remove this scan?", and `#scandelInfo` reads exactly "#3 · YT2618100710184356"
 
 **QA-DEL-02 `[WF]` (negative)** — "No" is a true no-op
 - Given `#m-scandel` is open for row `#3`
@@ -1753,7 +1872,7 @@ All scenarios in this block require the R4 instrumentation.
 - And the screen re-renders as State 4 with no page reload
 
 **QA-CONFIRM-11 `[ADMIN]` (negative)** — server revalidation catches stale state `[BR-29]` `[PD-6]`
-- Given order 413540 was scanned OK, then moved to `Cancelled` by another screen before Confirm was pressed
+- Given order 413540 was scanned OK, then moved to `on-hold` (or cancelled — §3.6) by another screen before Confirm was pressed
 - When Confirm is pressed
 - Then the confirmation is rejected, nothing is written except `closing.confirm_rejected` (**DC-22**) with `offending_order_ids=[413540]`, a red toast reads "✕ Cannot confirm — order 413540 is no longer Prepare Shipment", and the affected row is re-judged in place
 - And the session remains `IN_PROGRESS` with no partial snapshot
@@ -1773,6 +1892,14 @@ All scenarios in this block require the R4 instrumentation.
 - Then a file downloads immediately with no dialog, a `closing.report_exported` event (**DC-25**) exists with `source=state4_button` and `includes_deleted=true`, and the file contains the full scan list including deleted rows plus the header block (date, target, OK, raised→resolved, closed by, confirmed at)
 - When generation fails, a red toast reads "✕ Closing report could not be generated — try again" and no empty file is delivered
 - And a zero-scan day yields a well-formed file with headers and no data rows
+
+**QA-CONFIRM-16 `[ADMIN]` (negative)** — a retried Confirm cannot double-write `[E-37]` `[G-9]`
+- Given target 84, OK 84, 0 outstanding warnings, and a `closing.confirm` request whose **response is lost** after the server committed it (network drop, not a server error)
+- When the client retries with the **same idempotency key**
+- Then exactly **one** `closing.confirmed` (**DC-21**), exactly **one** `closing.snapshot_created` (**DC-23**) and exactly **one** `closing.daily_shipping_status_updated` (**DC-24**) exist for that date
+- And the retry returns the **confirmed state** — State 4, not an error dialog and not a second confirmation toast
+- And Closing History shows exactly one row for the date, and the SS Daily Shipping Status target carries exactly one appended day (§6.4 clause 2)
+- Given instead the first attempt never reached the server, when the retry is sent with the same key, then exactly one of each event is written and the outcome is identical — the caller cannot tell the two cases apart
 
 **QA-CONFIRM-15 `[WF]` (negative)** — State 4 exposes no session controls
 - Given `section#s4` is active
@@ -1795,7 +1922,7 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-HIST-03 `[WF]`** — today's row and the CSV action
 - Then the first data row reads `07-13 (today)` · `84` · `84` · `3→3` · `✓ Match` · `Yongwon` · `18:52` and contains a button labelled "CSV"
-- And that row's background is the green highlight
+- And that row carries the today-highlight: its inline `style` attribute is exactly `background:var(--green-soft)`, and its computed `background-color` differs from every other data row's in the same table (the other four carry no inline background)
 
 **QA-HIST-04 `[WF]`** — the invariant is stated on screen
 - Then the paragraph below the table reads "Closing cannot be confirmed while mismatched, so records are always saved as "Match" — mismatch causes (missed scans · over-scans · unresolved warnings) must be resolved before confirmation."
@@ -1830,20 +1957,30 @@ All scenarios in this block require the R4 instrumentation.
 - Then the table has 5 data rows dated `07-13 (today)`, `07-12`, `07-11`, `07-10`, `07-09`
 - And every row's Match cell reads "✓ Match", every row's OK Scans equals its Outbound Target, and every row carries a "CSV" button
 
+**QA-HIST-11 `[ADMIN]`** — an Order ID deep link opens a new tab and the session survives `[E-74]` `[G-12]` `[DQ-11]`
+- Given an `IN_PROGRESS` session with 40 rows and focus in the scan input
+- Then each scan-list `Order ID` cell is a real anchor (`<a href>`), not styled text — its `href` is the directory form `../order-detail/#{order_id}` (never `../order-detail/index.html#…`)
+- When the `Order ID` of row `#12` is clicked
+- Then the order opens in a **new browsing context** and the closing tab is **not** navigated: its `document` is the same one (a `window`-scoped marker set before the click still exists), all 40 rows and their sequence numbers are unchanged, the counters and the gate are unchanged, and focus is still in the scan input
+- When a parcel is scanned immediately after
+- Then it is judged normally and appended as row `#41` — the scan loop was never interrupted
+- And clicking the link writes **no** event (§5.3 NON-event)
+
 ---
 
 ### 8.13 QA-HUB — Comments hub `[L-S1-7]` `[G-7]`
 
 **QA-HUB-01 `[WF]`** — the hub opens with an unread badge
 - Given `section#s1` is active
-- Then the nav button `#s1 [data-open="inbox1"]` reads "💬 Comments" and carries `.badge-n` with text "2"
-- When it is clicked, `#inbox1` gains class `open`, its Mentions pane header reads "Comments where I'm tagged", and it lists three entries whose bold entity labels are "Order 413540", "Order 413498" and "Order 413330"
+- Then the nav button `#s1 [data-open="inbox1"]` R2-normalized text **starts with** "💬 Comments" (the badge asserted in the next clause is nested *inside* the button, so its full normalized text is "💬 Comments2" — R2b) and it carries `.badge-n` whose text reads "2"
+- When it is clicked, `#inbox1` gains class `open`, its Mentions pane header (`#inbox1 [data-pane="mentions"] .paneheader`) R2-normalized text **starts with** "Comments where I'm tagged" (the `<small>Mark all read</small>` action is nested inside it — R2b), and it lists three entries whose bold entity labels are "Order 413540", "Order 413498" and "Order 413330"
 - And the first two entries carry class `unread`
+- And these two pane strings are stale demo copy `[WF-15]`; the canonical `[G-7]` strings are asserted in QA-HUB-09
 
 **QA-HUB-02 `[WF]`** — tab switching
 - Given `#inbox1` is open
 - When the tab `[data-tab="saved"]` ("★ Saved") is clicked
-- Then it gains class `on`, the pane `[data-pane="saved"]` becomes visible with the header "Comments I saved", and `[data-pane="mentions"]` is hidden
+- Then it gains class `on`, the pane `[data-pane="saved"]` becomes visible and its `.paneheader` R2-normalized text **starts with** "Comments I saved" (the `<small>Unstar to remove from this list</small>` action is nested inside it — R2b), and `[data-pane="mentions"]` is hidden
 - And the Saved pane lists exactly one entry, "Order 413498"
 
 **QA-HUB-03 `[WF]`** — the star toggle *(destructive — reload after)*
@@ -1879,6 +2016,14 @@ All scenarios in this block require the R4 instrumentation.
 - When a parcel is scanned
 - Then the verdict renders, the row appends and the toast shows, the hub stays open, and the scanned characters land in the scan input — not in the hub
 - When focus **is** in the hub's search field, the wedge input goes to that field and no scan is submitted (`[L-S1-F]` clause 2)
+
+**QA-HUB-09 `[ADMIN]`** — the hub carries the canonical cross-page copy `[G-7]` `[WF-15]`
+- Given the Comments hub is open on the shipping closing page
+- Then the Mentions pane header reads exactly "Comments mentioning me · Click to open the order"
+- And the Saved pane header reads exactly "Saved comments · Click to open the order"
+- And the unstar hint reads exactly "Unstar to remove from the list" and the read-all action reads exactly "Mark all read"
+- And a search returning results renders the header "{n} results · newest first · click to open the order", while a search with no match renders exactly "No matching comments"
+- And none of the wireframe's strings ("Comments where I'm tagged", "Comments I saved", "Unstar to remove from this list") appears anywhere in the rendered hub
 
 ---
 
@@ -1960,7 +2105,7 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-CHROME-02 `[WF]`** — the page header and in-page tabs `[L-F2]` `[L-S1-11]`
 - For each state
-- Then `h2` reads "WMS - Closing" and `p.sub` reads "Barcode-scan verification of today's packed orders"
+- Then `h2` reads "WMS - Closing" and the **first** `p.sub` — address it as `#sX .pagepad > p.sub:first-of-type` — reads "Barcode-scan verification of today's packed orders". (`#s1`, `#s2`, `#s2b` and `#s3` each contain a **second** `p.sub` — the "Scan list …" caption, a later sibling under the same `.pagepad` — so a bare `p.sub` selector is not unique and must not be used.)
 - And a `.pagetabs` strip follows with exactly two buttons labelled "Closing" and "Closing History"; in `#shist` the active one is "Closing History", elsewhere it is "Closing"
 
 **QA-CHROME-03 `[WF]`** — the toast slot shape `[L-F3]`
@@ -1971,7 +2116,8 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-CHROME-04 `[WF]` (negative)** — the wf-bar duplicate tab must not be counted as a unit `[WF-12]`
 - Then `document.querySelectorAll('.wf-tab[data-modal="m-process"]')` yields **2** elements with identical text "Modal: Process Processing Order"
-- And the legend-unit count is computed from `.legend ol > li` + modal dots + the `#s1` legend `p`, giving 22 (§2.1) — never from the tab count, which would give 23
+- And the legend-unit count is computed **only** from the DOM units, not from tabs: `document.querySelectorAll('.legend ol > li')` yields **19**, `document.querySelectorAll('#m-process .dot, #m-scandel .dot')` yields **2**, and `document.querySelectorAll('#s1 .legend > p')` yields **1** — total **22**, matching §2.1
+- And the same page yields `document.querySelectorAll('.wf-tab').length === 10` and `document.querySelectorAll('.wf-tab[data-modal]').length === 3`, so a checker that substitutes the three *modal tabs* for the two *modal dots* reaches 19 + 1 + 3 = **23** and over-counts by one — that substitution is the error `[WF-12]` produces, and it is the only route to 23. Assert 22 from the three DOM counts above; never derive a unit count from `.wf-tab`.
 
 **QA-CHROME-05 `[ADMIN]` (negative)** — no wireframe chrome ships `[L-F4]`
 - Given the shipping admin closing page
@@ -1990,37 +2136,46 @@ All scenarios in this block require the R4 instrumentation.
 | Block | Keyed to | `[WF]` | `[ADMIN]` | Total | Negative |
 |---|---|---|---|---|---|
 | QA-S0 | `[L-S0-1]`, E-15/16/42/55/72/76 | 4 | 7 | 11 | 6 |
-| QA-SCAN | `[L-S1-1]`, `[L-S1-F]`, E-1/2/9/12/35/48/54/67/69/77 | 4 | 12 | 16 | 9 |
-| QA-VERDICT | `[L-S1-2]`, `[L-S1-5]`, `[L-S1-6]`, `[L-S2-1]`, E-4/5/13/14/52/63/64/65/66 | 5 | 9 | 14 | 6 |
+| QA-SCAN | `[L-S1-1]`, `[L-S1-F]`, E-1/2/9/12/35/48/54/67/69/77 | 4 | 13 | 17 | 10 |
+| QA-VERDICT | `[L-S1-2]`, `[L-S1-5]`, `[L-S1-6]`, `[L-S2-1]`, E-4/5/13/14/52/63/64/65/66 | 5 | 11 | 16 | 6 |
 | QA-UNKNOWN | `[L-S2b-1]`, E-3/13/57 | 3 | 4 | 7 | 3 |
 | QA-DUP | `[L-S3-1]`, E-6/7/8/65/70 | 3 | 7 | 10 | 2 |
 | QA-VOICE | `[L-S1-3]`, E-39/46/61 | 6 | 3 | 9 | 3 |
-| QA-COUNT | `[L-S1-4]`, `[L-S1-8]`, E-11/17/18/68 | 5 | 7 | 12 | 3 |
-| QA-TARGET | `[L-S1-10]`, E-17/18/19/20/21/51 | 5 | 8 | 13 | 5 |
-| QA-M1 | `[L-M1]`, E-22/23/24/25/56 | 5 | 8 | 13 | 6 |
+| QA-COUNT | `[L-S1-4]`, `[L-S1-8]`, E-11/17/18/60/68 | 5 | 8 | 13 | 3 |
+| QA-TARGET | `[L-S1-10]`, E-17/18/19/20/21/51 | 5 | 9 | 14 | 5 |
+| QA-M1 | `[L-M1]`, E-22/23/24/25/56/78 | 5 | 9 | 14 | 7 |
 | QA-DEL | `[L-M2]`, `[L-S1-6]`, E-26/27/28/29/58 | 6 | 4 | 10 | 4 |
-| QA-CONFIRM | `[L-S1-8]`, `[L-S4-1..3]`, E-10/11/37/40/49/73 | 7 | 8 | 15 | 7 |
-| QA-HIST | `[L-SH-1]`, `[L-S1-11]`, E-43/44/45 | 6 | 4 | 10 | 3 |
-| QA-HUB | `[L-S1-7]`, E-47/75 | 4 | 4 | 8 | 2 |
-| QA-PERSIST | `[L-S1-F]`, E-30…38/41/53/59/62/71 | 0 | 14 | 14 | 7 |
+| QA-CONFIRM | `[L-S1-8]`, `[L-S4-1]`, `[L-S4-2]`, `[L-S4-3]`, E-10/11/37/40/49/73 | 7 | 9 | 16 | 8 |
+| QA-HIST | `[L-SH-1]`, `[L-S1-11]`, E-43/44/45/74 | 6 | 5 | 11 | 3 |
+| QA-HUB | `[L-S1-7]`, E-47/75 | 4 | 5 | 9 | 2 |
+| QA-PERSIST | `[L-S1-F]`, E-30…34/36/38/41/53/59/62/71 | 0 | 14 | 14 | 7 |
 | QA-CHROME | `[L-F1]`…`[L-F4]`, `[L-S1-9]`, E-50 | 5 | 1 | 6 | 2 |
-| **Total** | | **68** | **100** | **168** | **68 (40.5%)** |
+| **Total** | | **68** | **109** | **177** | **71 (40.1%)** |
+
+**How to reproduce the totals** (count **scenario-header lines only** — `[WF]`, `[ADMIN]` and `(negative)` all recur in §8 prose and in the traceability tables, so an unfiltered `grep -c` over §8 over-counts):
+```sh
+awk '/^## 8\. QA Acceptance/,/^## 9\. Out of Scope/' closing.md | grep -E '^\*\*QA-' > /tmp/h
+wc -l < /tmp/h                  # 177
+grep -cF '`[WF]`'    /tmp/h     #  68
+grep -cF '`[ADMIN]`' /tmp/h     # 109
+grep -cF '(negative)' /tmp/h    #  71
+``` Every block row above sums column-wise to those four figures (68 + 109 = 177; 71 ÷ 177 = 40.1%). `E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range, which is why that range is written out rather than as `E-30…38`.
 
 **Legend-unit coverage — all 22 units plus the 4 furniture keys have at least one asserting scenario:**
 
 | Unit | Asserted by |
 |---|---|
 | `[L-S0-1]` | QA-S0-01…11 |
-| `[L-S1-1]` | QA-SCAN-01…16 |
+| `[L-S1-1]` | QA-SCAN-01…17 |
 | `[L-S1-2]` | QA-VERDICT-02, QA-VERDICT-09 |
 | `[L-S1-3]` | QA-VOICE-01…09 |
-| `[L-S1-4]` | QA-COUNT-01…12 |
-| `[L-S1-5]` | QA-VERDICT-01, 03, 06, 07, 08, 11, 14 |
-| `[L-S1-6]` | QA-VERDICT-05, QA-DUP-01…03, QA-DEL-03 |
-| `[L-S1-7]` | QA-HUB-01…08 |
-| `[L-S1-8]` | QA-CONFIRM-01, 02, 07…13, QA-COUNT-08 |
+| `[L-S1-4]` | QA-COUNT-01…13 |
+| `[L-S1-5]` | QA-VERDICT-01, 03, 06, 07, 08, 11, 14, 15, 16 |
+| `[L-S1-6]` | QA-VERDICT-05, 15, QA-DUP-01…03, QA-DEL-03, QA-HIST-11 |
+| `[L-S1-7]` | QA-HUB-01…09 |
+| `[L-S1-8]` | QA-CONFIRM-01, 02, 07…13, 16, QA-COUNT-08 |
 | `[L-S1-9]` | QA-CHROME-06 |
-| `[L-S1-10]` | QA-TARGET-01…13 |
+| `[L-S1-10]` | QA-TARGET-01…14 |
 | `[L-S1-11]` | QA-HIST-01, QA-HIST-05, QA-CHROME-02 |
 | `[L-S1-F]` | QA-SCAN-04, 11, 12, 16, QA-PERSIST-01, 02, QA-HUB-08 |
 | `[L-S2-1]` | QA-VERDICT-03, QA-M1-01, QA-COUNT-10 |
@@ -2029,8 +2184,8 @@ All scenarios in this block require the R4 instrumentation.
 | `[L-S4-1]` | QA-CONFIRM-03, 04, 10, 12, 15 |
 | `[L-S4-2]` | QA-CONFIRM-05, QA-CONFIRM-14, QA-HIST-07 |
 | `[L-S4-3]` | QA-CONFIRM-06, QA-DUP-08 |
-| `[L-SH-1]` | QA-HIST-01…10 |
-| `[L-M1]` | QA-M1-01…13 |
+| `[L-SH-1]` | QA-HIST-01…11 |
+| `[L-M1]` | QA-M1-01…14 |
 | `[L-M2]` | QA-DEL-01…10 |
 | `[L-F1]` | QA-CHROME-01 |
 | `[L-F2]` | QA-CHROME-02 |
@@ -2043,31 +2198,33 @@ All scenarios in this block require the R4 instrumentation.
 |---|---|
 | **DC-1** `closing.session_started` | QA-S0-06, QA-S0-09 |
 | **DC-2** `closing.start_rejected` | QA-S0-07, QA-S0-08, QA-S0-11, QA-PERSIST-10 |
-| **DC-3** `closing.target_edited` | QA-TARGET-07, QA-TARGET-10 |
+| **DC-3** `closing.target_edited` | QA-TARGET-07, QA-TARGET-10, QA-TARGET-14 |
 | **DC-4** `closing.target_edit_rejected` | QA-TARGET-06 |
 | **DC-5** `closing.session_cancelled` | QA-TARGET-08 |
 | **DC-6** `closing.session_restarted` | QA-TARGET-08 |
-| **DC-7** `closing.scan_recorded` | QA-SCAN-03, 05 (negative), 06 (negative), 07, 08, 14, 15, QA-VERDICT-06, 08, QA-UNKNOWN-04, QA-DUP-04, 09, QA-PERSIST-02 |
+| **DC-7** `closing.scan_recorded` | QA-SCAN-03, 05 (negative), 06 (negative), 07, 08, 14, 15, 17 (negative), QA-VERDICT-06, 07, 08, 15, QA-UNKNOWN-04, QA-DUP-04, 09, QA-TARGET-14, QA-PERSIST-02 |
 | **DC-8** `closing.scan_rejected` | QA-CONFIRM-12, QA-PERSIST-07 |
 | **DC-9** `closing.scan_lookup_failed` | QA-SCAN-10 |
 | **DC-10** `closing.warning_raised` | QA-VERDICT-10, QA-DUP-06 |
-| **DC-11** `closing.warning_resolved` | QA-UNKNOWN-06, QA-M1-06, QA-M1-09, QA-DEL-08 |
+| **DC-11** `closing.warning_resolved` | QA-UNKNOWN-06, QA-M1-06, QA-M1-09, QA-M1-14 (negative), QA-DEL-08 |
 | **DC-12** `closing.scan_row_deleted` | QA-DEL-06, QA-DEL-07 |
-| **DC-13** `order.status_changed` | QA-M1-06, QA-M1-09, QA-M1-10, QA-PERSIST-11 |
-| **DC-14** `order.outbounded` | QA-M1-06, QA-M1-09, QA-M1-10, QA-PERSIST-11 |
+| **DC-13** `order.status_changed` | QA-M1-06, QA-M1-09, QA-M1-10, QA-M1-14 (negative), QA-PERSIST-11 |
+| **DC-14** `order.outbounded` | QA-M1-06, QA-M1-09, QA-M1-10, QA-M1-14 (negative), QA-PERSIST-11 |
 | **DC-15** `comment.posted` | QA-M1-08, QA-PERSIST-11 |
 | **DC-16** `comment.auto_posted` | QA-M1-08 |
 | **DC-17** `comment.mention_notified` | QA-M1-08, QA-HUB-06, QA-PERSIST-11 |
 | **DC-18** `comment.starred` / `comment.unstarred` | QA-HUB-06 |
 | **DC-19** `comment.read` / `comment.mark_all_read` | QA-HUB-05 |
 | **DC-20** `closing.voice_alert_toggled` | QA-VOICE-06 |
-| **DC-21** `closing.confirmed` | QA-CONFIRM-10, QA-PERSIST-04 |
+| **DC-21** `closing.confirmed` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04 |
 | **DC-22** `closing.confirm_rejected` | QA-CONFIRM-07, 08, 11, 13 |
-| **DC-23** `closing.snapshot_created` | QA-CONFIRM-10, QA-PERSIST-04, QA-PERSIST-12 |
-| **DC-24** `closing.daily_shipping_status_updated` | QA-CONFIRM-10, QA-PERSIST-04, QA-PERSIST-08 |
+| **DC-23** `closing.snapshot_created` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-12 |
+| **DC-24** `closing.daily_shipping_status_updated` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-08 |
 | **DC-25** `closing.report_exported` | QA-CONFIRM-14, QA-HIST-07 |
 
 ### 8.18 Edge-case traceability (every `[E-n]` has an asserting scenario)
+
+All **78** edge cases map to at least one scenario, and every cell below names **only scenario IDs** — no `§`-pointers and no `DQ-n` pointers, which are documentation, not assertions. Six rows were repaired in the 2026-08-03 remediation pass, where the mapped scenario existed but asserted something else: E-37 (was QA-PERSIST-04, which tests *simultaneous* confirms = E-31 — now QA-CONFIRM-16 tests retry-after-timeout), E-52 (was QA-VERDICT-06, which asserts no item count — now QA-VERDICT-15), E-60 (was QA-COUNT-12, which deletes rows — now QA-COUNT-13), E-66 (was QA-VERDICT-07, which asserts statuses, never marketing orders — now QA-VERDICT-16), E-74 (was QA-HUB-08, which asserts hub focus, never links — now QA-HIST-11), E-77 (was QA-SCAN-15, which asserts terminators, never composition — now QA-SCAN-17). E-51's mapping moved from QA-TARGET-02 (which only unlocks the field) to QA-TARGET-14, which asserts the scan-during-edit behavior itself.
 
 | E | Asserted by | E | Asserted by |
 |---|---|---|---|
@@ -2082,8 +2239,8 @@ All scenarios in this block require the R4 instrumentation.
 | E-9 | QA-SCAN-02, QA-S0-04 | E-48 | QA-SCAN-12 |
 | E-10 | QA-CONFIRM-12, QA-SCAN-13 | E-49 | QA-CONFIRM-05 |
 | E-11 | QA-COUNT-08, QA-CONFIRM-09 | E-50 | QA-CHROME-06 |
-| E-12 | QA-SCAN-07 | E-51 | QA-TARGET-02, QA-SCAN-12 |
-| E-13 | QA-VERDICT-11 | E-52 | QA-VERDICT-06 |
+| E-12 | QA-SCAN-07 | E-51 | QA-TARGET-14, QA-SCAN-12 |
+| E-13 | QA-VERDICT-11 | E-52 | QA-VERDICT-15 |
 | E-14 | QA-VERDICT-08 | E-53 | QA-PERSIST-13 |
 | E-15 | QA-S0-05, QA-S0-09 | E-54 | QA-SCAN-08 |
 | E-16 | QA-S0-02, QA-S0-05 | E-55 | QA-S0-08 |
@@ -2091,13 +2248,13 @@ All scenarios in this block require the R4 instrumentation.
 | E-18 | QA-TARGET-10 | E-57 | QA-UNKNOWN-07 |
 | E-19 | QA-TARGET-06 | E-58 | QA-DEL-07 |
 | E-20 | QA-TARGET-05, QA-TARGET-08 | E-59 | QA-PERSIST-14 |
-| E-21 | QA-TARGET-11 | E-60 | QA-COUNT-12 (scale behavior), DQ-9 |
+| E-21 | QA-TARGET-11 | E-60 | QA-COUNT-13 |
 | E-22 | QA-M1-05, QA-M1-11 | E-61 | QA-VOICE-06 |
 | E-23 | QA-M1-06, QA-M1-07 | E-62 | QA-PERSIST-11 |
 | E-24 | QA-M1-10 | E-63 | QA-VERDICT-14 |
 | E-25 | QA-M1-09 | E-64 | QA-VERDICT-12 |
 | E-26 | QA-DEL-02, QA-DEL-03 | E-65 | QA-VERDICT-13, QA-DUP-08 |
-| E-27 | QA-DEL-09 | E-66 | QA-VERDICT-07 |
+| E-27 | QA-DEL-09 | E-66 | QA-VERDICT-16 |
 | E-28 | QA-DEL-08 | E-67 | QA-SCAN-15 |
 | E-29 | QA-DEL-07 | E-68 | QA-COUNT-12 |
 | E-30 | QA-PERSIST-03 | E-69 | QA-SCAN-14 |
@@ -2105,11 +2262,11 @@ All scenarios in this block require the R4 instrumentation.
 | E-32 | QA-PERSIST-05 | E-71 | QA-PERSIST-14 |
 | E-33 | QA-PERSIST-06 | E-72 | QA-S0-11 |
 | E-34 | QA-PERSIST-07 | E-73 | QA-CONFIRM-13 |
-| E-35 | QA-SCAN-10 | E-74 | QA-HUB-08 (focus survival), §6.3 |
+| E-35 | QA-SCAN-10 | E-74 | QA-HIST-11, QA-HUB-08 |
 | E-36 | QA-PERSIST-01 | E-75 | QA-HUB-08 |
-| E-37 | QA-PERSIST-04, QA-CONFIRM-14 | E-76 | QA-S0-10 |
-| E-38 | QA-PERSIST-08 | E-77 | QA-SCAN-15 (terminator handling), §3.2 |
-| E-39 | QA-VOICE-07 | | |
+| E-37 | QA-CONFIRM-16, QA-PERSIST-04 | E-76 | QA-S0-10 |
+| E-38 | QA-PERSIST-08 | E-77 | QA-SCAN-17 |
+| E-39 | QA-VOICE-07 | E-78 | QA-M1-14 |
 
 ---
 
@@ -2131,6 +2288,11 @@ Per the review conventions, this section lists **only**: NO-DEFAULT owner questi
 | Procurement Hub, COGS, DOH | excluded from this plan entirely (2026-08-02 owner decision) |
 | Box / size measurement and DWS capture | removed from this page 2026-07-23; the weighing project is separate |
 | Role and permission modelling | post-v1 owner decision [G-15] |
+| **Location scheme and the line-based location filter** `[G-14]` — no location is displayed, filtered, edited or captured anywhere on this page | Inventory (`stock-status`) `[G-14]`; the 1:1 question is `[PD-46]`. Closing judges a parcel by its order's status, never by where its goods sat |
+| **Audit-mode-only visibility** — closing has no audit mode, no audit-only column and no audit-gated affordance; every field on this page is visible in the single normal mode | Inventory (`stock-status`) stock audit sessions |
+| **JIT residual stock** and every other JIT-vs-wholesale residual concept | Inventory (`stock-status`); the fulfilment-model definitions are out of this spec set. A closing scan is judged purely on order status (`[BR-1]`), so no sourcing route, JIT flag or residual balance reaches this page |
+
+The three rows above were added 2026-08-03 after the mandatory-inclusion audit found them coded **n** for this page but stated **nowhere** — silent N/A cells, which the "explicit N/A, never silent" convention forbids (M3b §2.2).
 
 ### 9.2 Owner questions with **no default** (behavior deliberately unspecified)
 
@@ -2214,6 +2376,13 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | Spec-authored rules recorded during the first write-up, each with its rationale in §4: outstanding-vs-raised warning split `[BR-16]`; sequence numbers never renumbered `[BR-17]`; scan lookup must never lock the input `[BR-26]`; every scan persists at scan time `[BR-27]`. Unregistered wireframe divergences U-a…U-f filed in §2.3 | rule | §4, §2.3 |
 | 2026-08-03 | **Audit pass (spec v1.1).** Independent legend recount confirmed 22 units and added the reproduction method to §2.1. Four further unregistered divergences filed: U-g (voice controls wired only in State 1) · U-h ("Play again" vs "Test voice" labels) · U-i (State 4 switch copy) · U-j (warning states render a muted target line instead of the full banner, so `[BR-14]` gained the "banner in every in-progress rendering" clause) | normalization | §2.3, §3.11 |
 | 2026-08-03 | **Audit pass — five spec-authored rules added** where the earlier draft was silent: `[BR-33]` counting is per parcel, not per order (split and combined shipments) · `[BR-34]` no closing with target 0, so a zero-shipment day simply has no record · `[BR-35]` an unresolved earlier-date session blocks a new date · `[BR-36]` one warehouse timezone for every rendered time and every date boundary · `[BR-37]` duplicate detection is session-scoped, with no cross-day check. Fifteen edge cases added (E-63…E-77) | rule | §4, §7 |
+| 2026-08-03 | **Remediation pass (spec v1.2) — cross-page defect M3a-D2.** Closing's M1 gate was Zero Packing alone, which let a `Processing` order with `PENDING` lines emit the canonical `order.outbounded` through a path View Orders `BR-9` and `order-detail.md` L-9 both declare impossible ("iff every line is INBOUNDED"). Closing now enforces the same predicate; the button carries the shortfall reason and the warning stays outstanding | rule | `[BR-38]`, §3.21, E-78, QA-M1-14 |
+| 2026-08-03 | **Remediation — cross-page defect M3a-D3.** `Cancelled` was used as an order status in the verdict matrix, `[BR-20]` and `[E-5]`, contradicting the 8-status vocabulary VO `BR-12` / OD `BR-12` state as exhaustive. Cancellation is a **flag**: the Order Status column renders the underlying status plus a `Cancelled` marker. The `[PD-76]` register title still lists "Cancelled" and needs the same edit at the owner's next pass | **normalization** | §3.6, §3.7, `[BR-20]`, E-5, E-56, QA-VERDICT-07, QA-M1-10 |
+| 2026-08-03 | **Remediation — cross-page defect M3a-D7.** The Comments hub is one component on all eight screens, so its copy is a byte-exact `[G-7]` contract. Closing was an outlier on both pane headers and the unstar hint; the four-page majority strings are adopted as canonical and the wireframe's strings are demoted to `[WF]`-only demo copy, registered as `[WF-15]` | **normalization** | §3.8, §2.3, QA-HUB-01/02/09 |
+| 2026-08-03 | **Remediation — cross-page defects M3a-D16/D19/D20 and M3a-D13.** Deep links normalized to the `[G-12]` directory form `../{slug}/#{anchor}`; the 8 statuses declared as lowercase-hyphenated **values** rendered as title-case **labels**, with the mapping stated once; `[G-3a]`/`[G-3b]` fixed as this spec's sub-rule citation form; `[GD-n]` declared resolvable (`_plans/_review.md` §4) so no citation dangles | convention | §3.0, §3.7, §6.3 |
+| 2026-08-03 | **Remediation — M3b §2.2 silent-N/A gap.** Mandatory items 9 (line-based location filter), 10 (audit-mode-only visibility) and 11 (JIT residual stock) were coded **n** for closing but stated nowhere. Three explicit out-of-scope rows added; `G-14` and JIT now appear in this spec by name | **normalization** | §9.1 |
+| 2026-08-03 | **Remediation — M2 adversarial QA run (68/68 `[WF]` scenarios executed, 405 assertions).** Three expected strings were wrong because nested *functional* descendants pollute `textContent` the way `.dot` does (`header button.x`, `.badge-n`, `.paneheader small`, `.avatar`): fixed to `starts with`, and R2b now lists all four. §8.0 gained normative assertion verbs (R6b), a state-activation rule (R9) and a PD-shorthand rule (R10); four unassertable clauses (QA-S0-01 heading selector, QA-HIST-03 highlight, QA-CHROME-02 `p.sub`, QA-CHROME-04 "23") were made executable | QA | §8.0, QA-S0-01, QA-DEL-01, QA-HUB-01/02, QA-HIST-03, QA-CHROME-02/04 |
+| 2026-08-03 | **Remediation — M1 coverage audit.** §8.18's "every `[E-n]` has an asserting scenario" was false for six edge cases whose mapped scenario asserted something else (E-37/52/60/66/74/77) plus a partial (E-51). Seven `[ADMIN]` scenarios added (QA-SCAN-17 · QA-VERDICT-15/16 · QA-COUNT-13 · QA-TARGET-14 · QA-CONFIRM-16 · QA-HIST-11), plus QA-HUB-09 and QA-M1-14 from the cross-page fixes. §8.16 key lists corrected (E-35 belongs to QA-SCAN only; E-74 to QA-HIST; `[L-S4-1..3]` enumerated), §8.0's traceability pointers un-shifted (§8.17/§8.18), and U-a extended to the Confirm button's `79`. Scenario count 168 → 177, negative share 40.5% → 40.1% | QA | §8, §2.3, §3.9 |
 | 2026-08-03 | **Audit pass — QA rebuilt to a runnable contract.** §8.0 now fixes the execution environment (reset discipline, `.dot`-stripping text normalization, attribute-based selection because of `[WF-12]`, a speech-synthesis stub, row addressing, page-global demo state). One assertion in the earlier draft could not pass on the live wireframe — the 10-column header check read `#6` and `Closing Verdict5` because annotation dots sit inside those `<th>` cells; it is now normalized (QA-VERDICT-05). Scenario count 125 → 168, negative share 36.8% → 40.5%, and every `[E-n]` gained a traceability row (§8.18) | QA | §8 |
 
 **Nothing above has been silently dropped.** Where a feature was removed, §3.23 carries an explicit "must NOT exist" entry pointing back at the row that removed it; where a decision was reversed (Closing History modal → page), both directions are recorded here and the fossil that survives in the wireframe is named.

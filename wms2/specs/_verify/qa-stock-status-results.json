@@ -1,0 +1,367 @@
+[
+ {
+  "id": "QA-NAV-01",
+  "verdict": "PASS",
+  "evidence": "#p-current.on=True, others off, sub-tab='Current Stocks ● new · default' .on=True"
+ },
+ {
+  "id": "QA-NAV-02",
+  "verdict": "PASS",
+  "evidence": "sub-tab->{'panes': ['p-search'], 'wf': True}; wf-bar->{'panes': ['p-inbound'], 'st': True}"
+ },
+ {
+  "id": "QA-NAV-03",
+  "verdict": "PASS",
+  "evidence": "after open {'open': True, 'cur': True}; after Close {'open': False, 'cur': True}"
+ },
+ {
+  "id": "QA-NAV-04",
+  "verdict": "PASS",
+  "evidence": "innerText == 'WMS — Inventory'"
+ },
+ {
+  "id": "QA-NAV-06",
+  "verdict": "PASS",
+  "evidence": "0 /print/i matches in any pane/overlay innerText; 0 controls named /print/i"
+ },
+ {
+  "id": "QA-NAV-07",
+  "verdict": "PASS",
+  "evidence": "4 sub-tab buttons ['Current Stocks ● new · default', 'Stock History', 'Inbound Stock', 'Outbound Stock']; no tab named 'Audit Log' (NOTE: 'no Audit Log tab anywhere' had to be scoped to .subtabs+.wf-tab — the page does render the string 'Past Audit Logs')"
+ },
+ {
+  "id": "QA-NAV-08",
+  "verdict": "PASS",
+  "evidence": "0 matches for all four patterns across 4 panes + 6 overlays; 0 input[type=file]"
+ },
+ {
+  "id": "QA-NAV-09",
+  "verdict": "PASS",
+  "evidence": "10 .wf-tab in exact order + 1 .wf-toggle#annoToggle"
+ },
+ {
+  "id": "QA-CS-01",
+  "verdict": "PASS",
+  "evidence": "11 rows, SKU order + Available ['82', '61', '55', '34', '23', '16', '11', '6', '4', '2', '1'] match"
+ },
+ {
+  "id": "QA-CS-03",
+  "verdict": "PASS",
+  "evidence": "options=['All Locations', 'Line A', 'Line B', 'Line C']"
+ },
+ {
+  "id": "QA-CS-05",
+  "verdict": "PASS",
+  "evidence": "options == ['All Sourcing Routes', 'SMART BUY', 'JIT', 'WHOLESALE', 'PARTNERSHIP']"
+ },
+ {
+  "id": "QA-CS-08",
+  "verdict": "PASS",
+  "evidence": "11 route cells: bg rgba(0,0,0,0), font-weight 800; classes ['tag-jit', 'tag-partnership', 'tag-smartbuy', 'tag-wholesale']"
+ },
+ {
+  "id": "QA-CS-09",
+  "verdict": "PASS",
+  "evidence": "all 11 KR cells firstElementChild=<b>; 100005104 KR html='<b>Dr.Jart+</b> 포어레미디 리뉴잉 폼'"
+ },
+ {
+  "id": "QA-CS-10",
+  "verdict": "PASS",
+  "evidence": "100038120 .loc-in value='' placeholder='Unassigned', row present"
+ },
+ {
+  "id": "QA-CS-14",
+  "verdict": "PASS",
+  "evidence": "visible headers == spec list; audcol headers [['Counted Qty', 'none'], ['Diff', 'none'], ['Loss (₩)', 'none']]"
+ },
+ {
+  "id": "QA-CS-15",
+  "verdict": "PASS",
+  "evidence": "11 .thumb all 'IMG'; sizes ['30ml', '50ea', '50ml', '50ml', '350ml', '150ml', '100ml', '75ml', '150ml', '70ea', '250ml']"
+ },
+ {
+  "id": "QA-CS-16",
+  "verdict": "PASS",
+  "evidence": "0 Reserved cells contain .reslink / <a> / [data-modal]"
+ },
+ {
+  "id": "QA-LOC-01",
+  "verdict": "PASS",
+  "evidence": "1 input.loc-in per row; values ['B-02-03', 'A-03-02', 'B-01-07', 'A-02-13', 'C-01-05', 'A-01-04', 'A-01-05', 'A-02-20', 'C-02-01', '', 'B-03-02']"
+ },
+ {
+  "id": "QA-LOC-08",
+  "verdict": "FAIL",
+  "evidence": "placeholder ok=True, plain-text ok=True; BUT spec says 'Exactly one .bcin exists in the table' — document.querySelectorAll('#p-current table .bcin').length == 2 (['bcin', 'auSearch']): the [L-13] audit-row product search input #auSearch also carries class 'bcin' and lives inside the same <table> (tr.audrow)."
+ },
+ {
+  "id": "QA-LOC-18",
+  "verdict": "PASS",
+  "evidence": "live value == 'A-02-14', url unchanged (NOTE: spec says 'types A-02-14' into a field pre-filled 'A-02-13'; executed as replace/fill, since append would give 'A-02-13A-02-14')"
+ },
+ {
+  "id": "QA-AUD-01",
+  "verdict": "PASS",
+  "evidence": "pre={'label': 'Start Stock Audit', 'audVisible': 0, 'summary': 'none', 'audrow': 'none'}; post locs=['A-01-04', 'A-01-05', 'A-02-13', 'A-02-20', 'A-03-02', 'B-01-07', 'B-02-03', 'B-03-02', 'C-01-05', 'C-02-01', ''] last SKU=100038120"
+ },
+ {
+  "id": "QA-AUD-02",
+  "verdict": "PASS",
+  "evidence": "{'label': 'Start Stock Audit', 'audAllNone': True, 'summary': 'none', 'audrow': 'none', 'first': '100031877'}"
+ },
+ {
+  "id": "QA-AUD-03",
+  "verdict": "PASS",
+  "evidence": "#auditSummary innerText='Total stock loss (sum of diff × product cost): +₩46,260 — target 0\\nConfirm Audit Differences (ADJUST log)'; buttons=['Confirm Audit Differences (ADJUST log)']"
+ },
+ {
+  "id": "QA-AUD-04",
+  "verdict": "PASS",
+  "evidence": "9 equal / 2 seeded differences [{'sku': '100005104', 'total': '18', 'counted': '17'}, {'sku': '100012534', 'total': '9', 'counted': '11'}]"
+ },
+ {
+  "id": "QA-AUD-06",
+  "verdict": "PASS",
+  "evidence": "{'100005104': ('−1', '−₩15,000'), '100040311': ('0', '₩0'), '100004819': ('0', '₩0'), '100012534': ('+2', '+₩61,260'), '100024743': ('0', '₩0'), '100005088': ('0', '₩0'), '100031877': ('0', '₩0'), '100045210': ('0', '₩0'), '100039958': ('0', '₩0'), '100043697': ('0', '₩0'), '100038120': ('0', '₩0')}"
+ },
+ {
+  "id": "QA-AUD-11",
+  "verdict": "PASS",
+  "evidence": "all audit-only UI display:none (37 .audcol nodes)"
+ },
+ {
+  "id": "QA-AUD-12",
+  "verdict": "PASS",
+  "evidence": "#auDrop visible, entries ['UNOVE 딥 대미지 트리트먼트 · 320ml · 100048201', 'UNOVE 실크 헤어 오일 · 150ml · 100051200']"
+ },
+ {
+  "id": "QA-AUD-13",
+  "verdict": "PASS",
+  "evidence": "#auDrop innerText == 'No match — register manually via Unrecognized flow (F)', 0 [data-sku]"
+ },
+ {
+  "id": "QA-AUD-14",
+  "verdict": "PASS",
+  "evidence": "row count 12 -> 12 (unchanged); activeElement=#auSearch"
+ },
+ {
+  "id": "QA-AUD-16",
+  "verdict": "PASS",
+  "evidence": "first tbody row = ['100027733', 'IMG', '—', 'Torriden 다이브인 저분자 세럼 [NEW]', '50ml']… Counted=3 Diff=+3 Loss=— (신규); inputs cleared"
+ },
+ {
+  "id": "QA-AUD-17",
+  "verdict": "PASS",
+  "evidence": "Counted Qty=1, .loc-in value='Unassigned'"
+ },
+ {
+  "id": "QA-AUD-22",
+  "verdict": "PASS",
+  "evidence": "3 rows [('100005104', '18', '17', '−1'), ('100012534', '9', '11', '+2'), ('100048201', '0', '3', '+3')]; footer ['Cancel', 'Confirm — record 3 ADJUST events'] (NOTE: spec writes '18 → 17'; the modal has separate System/Counted columns — read as values. Header matched by prefix only: innerText appends '\\n✕' from the close button.)"
+ },
+ {
+  "id": "QA-AUD-23",
+  "verdict": "PASS",
+  "evidence": "note1 begins/ends as specified; note2 byte-equal"
+ },
+ {
+  "id": "QA-AUD-36",
+  "verdict": "PASS",
+  "evidence": "{'label': 'Exit Stock Audit', 'first': '100027733', 'cur': True, 'modal': False}"
+ },
+ {
+  "id": "QA-LOG-01",
+  "verdict": "PASS",
+  "evidence": "{'open': True, 'h': 'Past Audit Logs — monthly session records\\n✕', 'auditOff': 'Start Stock Audit'} (NOTE: 'starts' reading required — innerText appends '\\n✕' from the close button inside <header>; strict equality would FAIL)"
+ },
+ {
+  "id": "QA-LOG-02",
+  "verdict": "PASS",
+  "evidence": "header ok; 3 rows [['2026-07-22', 'Yongwon', '10', '2 (−1 / +2)', '1', '+₩46,260'], ['2026-06-30', 'Dean', '9', '5 (−4 / +1)', '0', '−₩128,460'], ['2026-05-31', 'Dean', '9', '0', '0', '₩0 · target met']]"
+ },
+ {
+  "id": "QA-LOG-03",
+  "verdict": "PASS",
+  "evidence": "header ok (prefix reading; innerText appends '\\n✕'), 3 rows @14:20:11, row3 purple+[NEW ADDITION]+Loss '—'"
+ },
+ {
+  "id": "QA-LOG-04",
+  "verdict": "PASS",
+  "evidence": "header ok (prefix reading; innerText appends '\\n✕'), 5 rows @17:05:42, note byte-equal"
+ },
+ {
+  "id": "QA-LOG-05",
+  "verdict": "PASS",
+  "evidence": "Detail cell '—', anchor data-modal=None, open overlays unchanged ['m-auditlog']"
+ },
+ {
+  "id": "QA-LOG-06",
+  "verdict": "PASS",
+  "evidence": "note byte-equal; every Product cell = <b>brand</b> + Korean"
+ },
+ {
+  "id": "QA-LOG-09",
+  "verdict": "AMBIGUOUS",
+  "evidence": "Assertable half PASSES: three DISTINCT Total Loss colours rgb(180, 83, 9) / rgb(220, 53, 69) / rgb(25, 135, 84) and the 2026-05-31 cell ends ' · target met'. Unassertable half: the spec names the colours 'amber' / 'red' / 'green' but supplies no hex, rgb, CSS variable or class to compare against, so 'amber' cannot be verified without reading the wireframe source (improvisation). Same gap in QA-RES-03 ('amber row background', 'red outline'), QA-AUD-16 / QA-LOG-03 ('purple-tinted'), QA-HIS-06 ('amber background'), QA-AUD-06 (colour of Diff/Loss), QA-CS-01 ('green'/'amber')."
+ },
+ {
+  "id": "QA-RES-01",
+  "verdict": "PASS",
+  "evidence": "{'nums': [['42', 'Total Qty'], ['8', 'Reserved Qty'], ['34', 'Available Qty']], 'reslink': True, 'rl': '8', 'deco': 'dotted', 'note': 'Click Reserved → allocated orders modal (incl. releasing phantom orders · restock)'}"
+ },
+ {
+  "id": "QA-RES-02",
+  "verdict": "FAIL",
+  "evidence": "Spec: header reads 'Reserved Quantity — Dongkook 마데카솔 크림 50ml (100004819) · 8 reserved'. §8.0 step 3 MANDATES innerText. Actual innerText of the OPEN modal header = 'Reserved Quantity —\\nDongkook\\n마데카솔 크림 50ml (100004819) · 8 reserved\\n✕'. `.modal header` is display:flex, so innerText line-breaks around the <b>Dongkook</b> flex item AND appends the ✕ close button. strict-equality=False, substring-containment=False (also false), whitespace-normalised containment=True. Bold + table header legs passed (True)."
+ },
+ {
+  "id": "QA-RES-03",
+  "verdict": "PASS",
+  "evidence": "3 rows as specified; only 409112 amber + SUSPECTED PHANTOM + red-outline button"
+ },
+ {
+  "id": "QA-RES-04",
+  "verdict": "PASS",
+  "evidence": "note byte-equal; 2+3+3 == header 8"
+ },
+ {
+  "id": "QA-RES-05",
+  "verdict": "FAIL",
+  "evidence": "Every leg passes EXCEPT the header. Spec: 'Cancel Inbound — Order 409112 · Dongkook 마데카솔 크림 × 3'; actual innerText (§8.0 mandates innerText) = 'Cancel Inbound — Order 409112 ·\\nDongkook\\n마데카솔 크림 × 3\\n✕' — `.modal header` is display:flex so the <b>Dongkook</b> flex item and the ✕ button become separate innerText lines. strict=False, substring=False, whitespace-normalised=True. Steps/radios/qty/hint/memo all matched: ['1. Release the reservation (Reserved) on this order?', '2. Restock the units?', '3. Restock Qty', '4. Memo (Optional)'], [{'checked': True, 'label': 'Yes — Available +3 (restock)'}, {'checked': False, 'label': 'No — exclude from stock (damaged · lost etc., record the loss as ADJUST(−3))'}], qty=['3'], hint=True."
+ },
+ {
+  "id": "QA-RES-06",
+  "verdict": "PASS",
+  "evidence": "note byte-equal; foot buttons ['Cancel', 'Confirm']"
+ },
+ {
+  "id": "QA-HIS-01",
+  "verdict": "PASS",
+  "evidence": "{'opts': ['SKU', 'Product Name', 'Order ID', 'Tracking No'], 'val': '100004819', 'ph': 'Enter SKU (e.g. 100004819)', 'btn': '🔍 Search'}"
+ },
+ {
+  "id": "QA-HIS-03",
+  "verdict": "PASS",
+  "evidence": "{'sku': '100004819', 'name': 'Madecassol Cream 50ml', 'krTag': 'B', 'kr': 'Dongkook 마데카솔 크림', 'brand': 'Dongkook', 'route': 'SMART BUY', 'bg': 'rgba(0, 0, 0, 0)', 'fw': '800'}"
+ },
+ {
+  "id": "QA-HIS-04",
+  "verdict": "PASS",
+  "evidence": "{'n': 1, 'row': 'A-02-13 42', 'note': 'One location per SKU — change locations via the Current Stocks input field'}"
+ },
+ {
+  "id": "QA-HIS-05",
+  "verdict": "PASS",
+  "evidence": "header ok; 6 rows in order ['INBOUND +6 PENDING', 'OUTBOUND −2 CONFIRMED', 'RESERVE −8 CONFIRMED', 'INBOUND +30 CONFIRMED', 'ADJUST −1 CONFIRMED', 'INBOUND +12 CONFIRMED']"
+ },
+ {
+  "id": "QA-HIS-06",
+  "verdict": "PASS",
+  "evidence": "single tr.pending row = ['INBOUND', '+6', 'PENDING', '12101316464794', 'Coupang', '–', '407847', '07-13 09:12', 'Miranti']; bg rgb(255, 243, 224)"
+ },
+ {
+  "id": "QA-HIS-07",
+  "verdict": "PASS",
+  "evidence": "PENDING row contains 0 button / a / checkbox"
+ },
+ {
+  "id": "QA-HIS-08",
+  "verdict": "PASS",
+  "evidence": "[['All', True], ['Confirmed', False], ['Pending confirm', False]]"
+ },
+ {
+  "id": "QA-HIS-15",
+  "verdict": "PASS",
+  "evidence": "['07-13 09:12', '07-12 18:40', '07-12 11:05', '07-10 14:22', '07-09 16:50', '07-08 10:11']"
+ },
+ {
+  "id": "QA-HIS-18",
+  "verdict": "PASS",
+  "evidence": "{'cnt': {'ty-in': 3, 'ty-out': 1, 'ty-res': 1, 'ty-adj': 1}, 'adjQtyClass': 'num diff-neg', 'adjQty': '−1'}"
+ },
+ {
+  "id": "QA-FRM-01",
+  "verdict": "PASS",
+  "evidence": "{'flds': ['SKU *', 'Quantity *', 'Tracking No', 'Carrier', 'Order ID (optional)'], 'carrier': ['Coupang', 'Deleo', 'Direct'], 'btn': '＋ Record Inbound'}"
+ },
+ {
+  "id": "QA-FRM-02",
+  "verdict": "PASS",
+  "evidence": "no field labelled 'Location' on either form"
+ },
+ {
+  "id": "QA-FRM-03",
+  "verdict": "PASS",
+  "evidence": "form-note byte-equal"
+ },
+ {
+  "id": "QA-FRM-08",
+  "verdict": "PASS",
+  "evidence": "{'flds': ['SKU *', 'Quantity *', 'Tracking No', 'Carrier', 'Order ID (optional)'], 'carrier': ['Deleo', 'YUN', 'Coupang'], 'btn': '－ Record Outbound', 'note': \"Record a warehouse outbound directly. Location auto-applies the SKU's registered location; outbound exceeding Available Qty is blocked.\"}"
+ },
+ {
+  "id": "QA-FRM-19",
+  "verdict": "PASS",
+  "evidence": "one enabled, non-readonly Carrier <select> per form [{'n': 1, 'sels': [1], 'bad': [{'ro': False, 'dis': False}]}, {'n': 1, 'sels': [1], 'bad': [{'ro': False, 'dis': False}]}]"
+ },
+ {
+  "id": "QA-COM-01",
+  "verdict": "PASS",
+  "evidence": "{'btn': '💬 Comments\\n3', 'badge': '3', 'badgeColor': 'rgb(220, 53, 69)'} / {'open': True, 'tabOn': '@ Mentions 3', 'unread': ['409112', '407847', '407506']}"
+ },
+ {
+  "id": "QA-COM-02",
+  "verdict": "PASS",
+  "evidence": "{'mDisp': 'none', 'sDisp': 'block', 'n': 1, 'order': '407847', 'header': 'Saved comments · Click to open the order\\nUnstar to remove from this list'} (NOTE: 'reads' taken as prefix — the paneheader also carries a trailing <small>Unstar to remove from this list</small>)"
+ },
+ {
+  "id": "QA-COM-03",
+  "verdict": "PASS",
+  "evidence": "initial [['409112', False], ['407847', True], ['407506', False]]; after click True; after 2nd click False"
+ },
+ {
+  "id": "QA-COM-04",
+  "verdict": "PASS",
+  "evidence": "{'tabs': 'none', 'header': '1 results · newest first · click to open the order', 'n': 1, 'marks': ['phantom']}"
+ },
+ {
+  "id": "QA-COM-05",
+  "verdict": "FAIL",
+  "evidence": "Spec: 'the pane renders exactly `No matching comments`'. Actual pane innerText = '0 results · newest first · click to open the order\\nNo matching comments' — the pane ALSO renders a '0 results · newest first · click to open the order' header above the empty state. Lenient reading (the .empty node alone) = True. Clear-query restore leg passed: True."
+ },
+ {
+  "id": "QA-COM-12",
+  "verdict": "PASS",
+  "evidence": "{'header': '2 results · newest first · click to open the order', 'orders': ['409112', '407812']}"
+ },
+ {
+  "id": "QA-COM-14",
+  "verdict": "PASS",
+  "evidence": "0 <b> elements inside the result pane; pane text '0 results · newest first · click to open the order\\nNo matching comments'"
+ },
+ {
+  "id": "QA-EXP-01",
+  "verdict": "PASS",
+  "evidence": "{'h': [['⬇ Export Stock Status', 'btn btn-gray btn-sm']], 'c': [['⬇ Export', 'btn btn-gray btn-sm']]}"
+ },
+ {
+  "id": "QA-GLB-08",
+  "verdict": "AMBIGUOUS",
+  "evidence": "2 of 3 clauses RUN and pass: 0 elements with a scan/feed id or class, 0 'scan' strings in any pane/overlay innerText (=> no scan feed list, no scan counter). 3rd clause NOT RUNNABLE: 'no input that re-focuses itself after a commit' names no input, no commit gesture and no observable for 're-focus' — a plain <input> legitimately keeps focus after Enter, so any probe invented here would be improvisation."
+ },
+ {
+  "id": "QA-GLB-09",
+  "verdict": "AMBIGUOUS",
+  "evidence": "Proxy test PASSES: 0 Korean strings in th / label / .paneheader / .form-note / button / h2 / h4 chrome; the Korean actually present sits in product-name cells plus the data string '— (신규)'. But the scenario is NOT machine-runnable as written: it asks whether each Korean string is 'product-, brand-, or data-derived' and §8 never enumerates the 11 KR product names, so the partition had to be invented (element-role proxy). The stated baseline 'the only non-product Korean is 신규' is likewise unverifiable without that list."
+ },
+ {
+  "id": "QA-GLB-11",
+  "verdict": "PASS",
+  "evidence": "money values seen: ['+₩15,000', '+₩46,260', '+₩61,260', '₩0', '−₩128,460', '−₩15,000', '−₩17,800', '−₩28,400', '−₩36,000', '−₩61,260']; all signed with thousands separators; /\\$|USD/ matches 0. NOTE: 0 bare '₩' occurrence(s) exist as the column header 'Loss (₩)' — treated as a currency label, not a money value, since the spec does not say."
+ },
+ {
+  "id": "QA-GLB-12",
+  "verdict": "PASS",
+  "evidence": "0 edit/delete/reverse/undo/re-open controls in any pane or overlay"
+ }
+]

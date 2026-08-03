@@ -1,6 +1,6 @@
 # Order Detail — Screen Specification (WMS 2.0)
 
-Page slug: `order-detail` · Spec version 1.1 · 2026-08-03
+Page slug: `order-detail` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-detail/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-detail/
 Global rules: `_global-rules.md` (cited as `[G-n]`). This document writes **page deltas only** and never restates a global rule body.
 Adjudications: `_plans/_review.md` §1 (cited as `[C-n]`) — see §2.6 for the ones that bind this page.
@@ -70,9 +70,9 @@ Permissions in v1: a **single admin role** — no role gating on any control on 
 | Legend list entries | `.legend ol li` | 14 |
 
 Numbering notes an auditor must not flag as holes:
-- The legend `<ol>` renders in DOM order **1, 2, 3, 4, 5, 6, 12, 10, 11, 14, 13, 9, 7, 8**. This is a render-order artifact of the 2026-07-22/23 edits, not a gap. Every dot 1–14 exists on screen.
+- The legend `<ol>` renders in DOM order **1, 2, 3, 4, 5, 6, 12, 10, 11, 14, 13, 9, 7, 8**. This is a render-order artifact of the 2026-07-22 and 2026-07-23 edits, not a gap. Every dot 1–14 exists on screen.
 - Dot **14** exists only in State 2 (On Hold). Dots 1–13 exist identically in both states, which is why the total dot-element count is 28 and not 15.
-- There are no `[L-{state}-F]` off-screen footer blocks on this page. The legend's closing paragraph ("Global nav · address fields · Operator Comments position · Fulfillment Tracking (SHIPMENT DETAILS + TRACKING HISTORY) · Line Items horizontal scroll are identical to the live admin (full capture 2026-07-21) — TRACKING HISTORY abbreviated here (the real screen shows all events, unchanged). Live data from Order #407847 (Maytal Saltoon).") is a provenance note; its content is specified under `[L-6]`, `[L-F8]`, `[L-F9]`, `[L-F12]` and `[L-F17]`.
+- There are no `[L-{state}-F]` off-screen footer blocks on this page. The legend's closing paragraph ("Global nav · address fields · Operator Comments position · Fulfillment Tracking (SHIPMENT DETAILS + TRACKING HISTORY) · Line Items horizontal scroll are identical to the live admin (full capture 2026-07-21) — TRACKING HISTORY abbreviated here (the real screen shows all events, unchanged). Live data from Order #407847 (Maytal Saltoon).") is a provenance note; its content is specified under `[L-1]` (Operator Comments position), `[L-6]`, `[L-10]`, `[L-F8]`, `[L-F9]`, `[L-F12]` and `[L-F17]` — with the 1680px Line Items horizontal scroll specified in §1.3 and `[L-10]`.
 - Per `_review.md` §3.1, Order Detail is keyed as a **single-state page**: `[L-n]`, not `[L-S1-n]`. The two tabs are a wireframe demo device, not two product screens `[BR-45]`.
 
 ### 2.2 States, modals and how to reach them
@@ -137,15 +137,16 @@ State 2 is a **full duplicate of the page**, not a partial render (2026-07-22, c
 | `[L-F16]` | **Hide Comments** toggle | Operator Comments header | §3 `[L-1]` |
 | `[L-F17]` | Global nav (SkinSeoul · Operation AI ▾ · Catalog Management ▾ · OMS Center ▾ · Site Management ▾ · Customer Management ▾ · SkinSeoul WP Admin) + user chip + **Logout** | top nav | §3 furniture |
 
-Four furniture keys are specified inside the legend entry they physically belong to rather than in §3's furniture block, because splitting them would separate a control from its behavior: **`[L-F7]` View Label** under `[L-13]`, **`[L-F12]` SHIPMENT DETAILS** under `[L-6]`, **`[L-F16]` Hide Comments** under `[L-1]`. All 17 furniture keys have a normative spec paragraph in §3.
+Three furniture keys are specified inside the legend entry they physically belong to rather than in §3's furniture block, because splitting them would separate a control from its behavior: **`[L-F7]` View Label** under `[L-13]`, **`[L-F12]` SHIPMENT DETAILS** under `[L-6]`, **`[L-F16]` Hide Comments** under `[L-1]`. The other **14** (F1, F2, F3, F4, F5, F6, F8, F9, F10, F11, F13, F14, F15, F17) are in §3's furniture block. 14 + 3 = **all 17 furniture keys have a normative spec paragraph in §3**.
 
 ### 2.5 Wireframe defects, demo artifacts and non-defects
 
-**A. Registered wireframe defect touching this page**
+**A. Registered wireframe defects touching this page**
 
 - **`[WF-3]` (cross-page).** View Orders State 3 legend #4 still carries the "(proposal)" qualifier on "Cancel Inbound disabled after Outbound". That rule is adopted `[PD-10 · OWNER-PENDING]` and **binds Order Detail too** — see `[BR-14]`. Spec and QA use the adopted rule; the "proposal" wording is stale text and must not be specced.
+- **`[OD-WFX-1 · proposed]` (this page, registered 2026-08-03).** The Change Status dropdown **does not close on an outside click**: `order-detail/index.html` has no document-level click handler (the modal has one — `overlay.addEventListener('click', …)` — the dropdown does not). The specified behavior is unchanged and correct: clicking elsewhere closes the dropdown with no status change `[L-8]` step 1 `[E-46]` `NE-2`. Until the drawing is patched, the assertion is not runnable against the wireframe, so `QA-STA-4` is tagged `[ADMIN]` — **this is a missing wireframe affordance, not a spec change and not a bug to file against the spec**. Backlog entry in §9.5; register entry in `_wireframe-fixes.md` §I.
 
-No `_wireframe-fixes` entry (WF-1, WF-2, WF-4 … WF-14) targets `wms2/order-detail/index.html`.
+No other `_wireframe-fixes` entry (WF-1, WF-2, WF-4 … WF-14) targets `wms2/order-detail/index.html`.
 
 **B. Demo-data artifacts — illustrative, not behavioral (do not derive rules, do not file bugs)**
 
@@ -167,7 +168,7 @@ Order Detail's wireframe has no server and therefore: no toast implementation, n
 
 **E. Adjudicated non-issues — do not "fix"**
 
-- **Deleo Tracking No. is absent from View Orders but present on Order Detail.** Deliberate asymmetry (2026-07-21/22), recorded in `_review.md` §1 as an adjudicated non-issue and here as `[BR-9]`.
+- **Deleo Tracking No. is absent from View Orders but present on Order Detail.** Deliberate asymmetry (2026-07-21, restated 2026-07-22), recorded in `_review.md` §1 as an adjudicated non-issue and here as `[BR-9]`.
 - **Row 1 is pre-rendered in edit mode in both states.** It is the worked example for `[L-12]`, not a stuck row.
 - **The wf-bar, legend, purple dots and `#annoToggle`** are wireframe chrome. They do not exist in the production admin `NE-13`.
 
@@ -186,6 +187,22 @@ Order Detail's wireframe has no server and therefore: no toast implementation, n
 
 Not binding here: `[C-1]` (carrier auto-record — View Orders / Inbound Request), `[C-4]` and `[C-10]` (Closing), `[C-8]` and `[C-9]` (RTO), `[C-11]` (G-11 reason enum — View Orders M6 / Inbound Request).
 
+### 2.7 Open cross-page conflicts that touch this page `[X-n]` (2026-08-03)
+
+The 2026-08-03 cross-page consistency pass (`_verify/m3a-cross-page.md`) found **nine** disagreements between this spec and another screen's spec. **None is a defect in this page's behavior** — in every row this spec's position is either the one the global rule supports or the one that cannot be changed without editing the wireframe (SST). They are recorded here so a reader who finds the other spec's sentence does not "harmonize" this page by hand, and so the owner has one list to adjudicate. Each row names where this page states its position and what would have to change if the owner rules the other way.
+
+| ID | Conflict | This page's position (and where) | Resolution owner / what changes if reversed |
+|---|---|---|---|
+| **`[X-1]`** | **Cancel Inbound contract.** View Orders M1 and Inventory M4 expose a restock Yes/No + an editable Restock Qty; this page has neither and hard-codes `restock=true` on the full line qty. | `[L-2]` Cancel Inbound + `[BR-49]` + `DC-11` | Cross-page. If the owner adopts the M1/M4 form here, `[L-2]` gains the two controls and `DC-11` gains `restock` (bool) + `restock_qty`; `[BR-49]` is deleted. Nothing else on this page moves. |
+| **`[X-2]`** | **Outbound gate scope.** Closing `[L-M1]` emits the canonical `order.outbounded` behind a Zero-Packing gate that does **not** require every line `INBOUNDED`. | `[L-9]` enable predicate + `[BR-1]` — scoped to **this page's control**, see the note under the predicate | Closing owns the reconciliation. If the owner rules the gate is system-wide, Closing adds the predicate; this page is unchanged. |
+| **`[X-3]`** | **`Cancelled` as a status value.** Closing renders `Cancelled` in an `Order Status` column; the 8-status vocabulary has no such value. | `[L-8]` + `[BR-12]` — cancellation is a **flag**, not a ninth status | Cross-page. If the owner makes it a status, `[L-8]`'s list becomes 9 values and `[BR-12]` is amended; `✕ Cancel Order` `[L-F5]` would then be a status pick. |
+| **`[X-4]`** | **`OUTBOUNDED` line status.** RTO's Bulk Outbound writes each line `INBOUNDED → OUTBOUNDED`; this page's rendering contract is exhaustive at two values. | `[L-10]` `Inbound Status` + `[BR-50]` | Cross-page. If line-level outbound is adopted, `[L-10]` gains the third tag, `[BR-50]` is deleted, and Cancel Outbound `[BR-19]` must specify `OUTBOUNDED → INBOUNDED`. |
+| **`[X-5]`** | **`OTHER (channel)` badge.** RTO §1.4/§4.2 states OTHER renders on Order Detail; this page states it never does. `[G-5]` supports this page. | `[L-4]` + `[C-3]` `[PD-80 · OWNER-PENDING]` | `[G-5]` amendment. If OTHER becomes order-facing, `[L-4]` and `QA-REN-5` change together. |
+| **`[X-6]`** | **Comments-hub copy.** Six hub strings are not byte-identical across the eight specs; this page is the outlier on one of them (`Unstar to remove`). | `[L-7]` — the strings specified here are the **shipped wireframe strings**, asserted byte-exactly by `QA-HUB-1`/`QA-HUB-3` | `[G-7]` amendment + a wireframe edit. **Not changed unilaterally here**: rewriting the string in the spec alone would make a `[WF]` assertion fail against the SST wireframe. |
+| **`[X-7]`** | **`@mention` Slack fan-out.** RTO §3.9 sends one message naming every mentioned user; this page sends one per distinct mention. `[G-7]`'s singular payload field supports this page. | `[L-1]` step 7 + §6.1 + `[E-80]` + `DC-27` | `[G-7]` amendment. If fan-out is collapsed, `DC-27` becomes one row per comment instead of one per target user. |
+| **`[X-8]`** | **Shared-concept event names.** Five cross-page concepts carry a different name per page (idempotency suppression, stock movement, comment search, Slack dispatch outcome, line inbound). The **10 canonical names are byte-identical everywhere** `[C-12]`; this is the tier below them. | §5 Naming paragraph + `DC-36` / `DC-21` / `NE-8` / `DC-27` / `DC-10` | `_global-rules` promotion. Renaming a page-scoped event is a find-and-replace here; `NE-8` (comment search declared a **non**-event while three pages persist it) is the only row that is a `[G-8]` disagreement rather than a naming one. |
+| **`[X-9]`** | **Order-status casing.** Closing renders `Prepare Shipment` / `On Hold` / `Processing` (title case, spaces) where this page and View Orders use `prepare-shipment` / `on-hold` / `processing` as the vocabulary. No spec previously said which register is the value and which the label. | `[L-8]` "Value vs label" — the 8 lowercase-hyphenated strings are the **values**; the badge renders a title-cased **label** of the same value, with the mapping given | Corpus-wide. This page now states the mapping; if `_global-rules` states it instead, `[L-8]`'s paragraph becomes a citation. No behavior changes either way. |
+
 ---
 
 ## 3. Functional Specification
@@ -195,8 +212,8 @@ Not binding here: `[C-1]` (carrier auto-record — View Orders / Inbound Request
 | Global rule | Page delta on Order Detail |
 |---|---|
 | `[G-1]` Scanner protocol | **Does not apply.** No scan surface exists here and none may be added `[BR-30]`. |
-| `[G-2]` No refresh + confirmation toast | This page has **no** refresh exception of any kind, and its success strings are fixed in §3.0.2 so they are byte-assertable. Removals and deletions count as confirming actions `[GD-5]` `[PD-5 · OWNER-PENDING]`. |
-| `[G-3]` Audio | Only (a) applies, on `📦 Outbound` `[PD-2 · OWNER-PENDING]`. (b) TTS and (c) the wrong-product warning tone have no analogue here and must not be implemented `[BR-29]`. |
+| `[G-2]` No refresh + confirmation toast | This page has **no** refresh exception of any kind, and its success strings are fixed in §3.0.2 so they are byte-assertable. Removals and deletions count as confirming actions — `[GD-5]`, i.e. the 2026-08-03 amendment to `[G-2]` recorded in `_review.md` §4, which reads *"removal/deletion confirmations count as confirming actions"* `[PD-5 · OWNER-PENDING]`. |
+| `[G-3]` Audio | Only (a) applies, on `📦 Outbound` `[PD-2 · OWNER-PENDING]`. (b) TTS and (c) the wrong-product warning tone have no analogue here and must not be implemented `[BR-29]`. This is **page behavior**, not a cross-reference: the trigger, the once-per-commit rule and the "sound is never proof" limit are all specified in `[L-9]` and asserted by `QA-OUT-4` / `QA-OUT-5`. |
 | `[G-4]` Instant printing | Print surfaces on this page: `🖨 Print` only. `View Label` is a preview, not a print surface. Failure copy is fixed in §3.0.2. |
 | `[G-5]` Sourcing routes | Order-facing badge set only (4). `OTHER (channel)` never renders on this page `[C-3]`. |
 | `[G-6]` Product naming | This is the only screen showing EN **and** KR names side by side, so brand-bold applies to both columns `[L-11]`. |
@@ -213,6 +230,11 @@ Additional cross-cutting behavior that is **not** in any global rule:
 - **Slack is a side effect, never part of the transaction** `[PD-4 · OWNER-PENDING]` `[BR-38]`.
 - **Every guard that disables a control renders its reason next to the control**, not only in a tooltip `[BR-46]`. A disabled control that does not say why generates support tickets against working logic — that is the lesson `[BR-3]` was written from.
 - **Every blocked attempt persists `DC-9`** with a `reason_code` `[BR-47]`. Guards are measured, not silent.
+
+**Two notation notes, so a mechanical audit does not read them as gaps:**
+
+- **Sub-rule citation form.** This spec writes `` `[G-3]`(a) `` / `(b)` / `(c)`, matching `_global-rules`' own labelling of the sub-rules. Three other specs write `[G-3a]`. Both forms are in use corpus-wide; no binding source picks one, so a corpus-wide `[G-n]` grep must accept both until `_review.md` §3 fixes a convention.
+- **`_review.md` §2b codes this page's audio row `Δ` (cross-reference only). That coding is stale** — the send-sound contract is specified here as page behavior with its own QA scenario, so the correct code is `Y` (`_verify/m3b-review-audit.md` §6.4). Nothing in this spec changes; the matrix is what is wrong.
 
 ### 3.0.2 Toast-string registry (normative content; one vocabulary for the whole page)
 
@@ -278,7 +300,7 @@ and a primary button labelled exactly **`Add Comment`** (`#addCmt` in State 1, `
 6. Green toast: `Comment added`.
 7. For each **distinct** resolved mention, dispatch one Slack message `[G-7]` and persist `DC-27 comment.mention_notified` with the delivery result. Mentioning the same user twice in one body produces **one** message, not two `[E-80]`. Dispatch is asynchronous to the commit.
 8. A mention token that does not resolve to a system user posts as **plain text** — stored in the body, absent from `mentions[]`, recorded in `unresolved_mention_tokens[]`, no Slack message `[E-28]`.
-9. Self-mention (author == mentioned user) posts normally but suppresses the dispatch — no self-notification, recorded as `DC-27.suppressed_reason=self_mention`. This mirrors the resolver==registrant suppression in the match pipeline `[PD-16 · OWNER-PENDING]` `[E-60]`.
+9. Self-mention (author == mentioned user) posts normally but suppresses the dispatch — no self-notification, recorded as `DC-27.suppressed_reason=self_mention`. **By analogy with `[PD-16 · OWNER-PENDING]`, which decides only the match-pipeline auto-comment (resolver == registrant); no owner decision exists for a human `@self` in a free-text comment.** Suppression is therefore the **dev default**, recorded in §9.4 D-19, not a registered provisional decision `[E-60]`.
 10. A body consisting of nothing but a resolved `@mention` is valid and posts normally — the mention *is* the message ("@Dean" = "look at this order") `[E-81]`.
 
 **Comments are append-only.** There is no edit control and no delete control, and none may be added. Corrections are posted as new comments. The corpus is a deliberate AI-training and audit asset `[G-7]` `[PD-3 · OWNER-PENDING]` `[BR-11]`.
@@ -329,6 +351,8 @@ A row in edit mode (`tr.row-edit`) shows neither: its Actions cell holds `✓` a
 5. Row re-renders to `PENDING` + `Inbound`. Green toast: `Inbound cancelled — {SKU} restocked`.
 6. The Actor Log gains a row rendered exactly `CANCEL INBOUND (Restock)`.
 7. **Cross-page integrity:** Inventory's M4 release path can also reverse a reservation `[PD-45 · OWNER-PENDING]`. Both paths write `DC-21`; the server must ensure one line's receipt is reversed **once** — the second attempt is a stale-entity rejection `[PD-6 · OWNER-PENDING]`, not a second movement.
+
+**Cancel Inbound on this page always restocks the full line quantity** `[BR-49]` `[X-1]`. There is **no restock Yes/No choice and no Restock Qty input** on Order Detail — the symmetric counterpart of "per-line inbound is all-or-nothing" `[BR-41]`: a receipt taken in full is reversed in full. The partial reversal cases — restock **less** than was received (partial damage), or decline the restock entirely — are **View Orders `[L-M1]`** and **Inventory `[L-M4]`** operations, which own the Yes/No radio, the editable quantity and the remainder accounting. Adding those controls here would create a second, unreconciled partial-restock path, exactly as a quantity field on inbound would create a second partial-receipt path. `DC-11` therefore always carries `restock=true` and the full line qty; a developer implementing the M1/M4 form on this page is implementing a different rule.
 
 **Bulk Inbound Selected Items (footer).** Label exactly **`Bulk Inbound Selected Items`**, green outline (`.btn.btn-green-line.btn-sm`), positioned in `.li-foot` immediately left of **📦 Outbound**.
 1. **Enabled only when ≥1 line checkbox is checked.** With zero selected it renders disabled — not an error toast `[E-7]`.
@@ -383,7 +407,7 @@ A row in edit mode (`tr.row-edit`) shows neither: its Actions cell holds `✓` a
 - JIT always carries the purchase channel in parentheses: `JIT (Coupang)`, `JIT (Naver)`, `JIT (Other retail)`. The channel is the value the handler picked from the dropdown at purchase time; it is provenance, not a category `[BR-6]`.
 - JIT semantics: **the item was purchased after the customer's order was placed.** That is why JIT lines show `Latest Inventory Count = 0` — no warehouse stock backs them `[BR-7]`.
 - The wireframe implements the colorlessness in CSS: `.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0}` (`var(--ink)` = `#14101B` = `rgb(20, 16, 27)`).
-- **`OTHER ({channel})` does not appear on Order Detail line items.** OTHER is an *inbound-origin* route offered by the Inbound Request form; the order-facing badge set stays at four `[G-5]` `[C-3]` `[PD-80 · OWNER-PENDING]`. If a future order-side consumer needs it, that is a change to `[G-5]`, not to this page.
+- **`OTHER ({channel})` does not appear on Order Detail line items.** OTHER is an *inbound-origin* route offered by the Inbound Request form; the order-facing badge set stays at four `[G-5]` `[C-3]` `[PD-80 · OWNER-PENDING]`. If a future order-side consumer needs it, that is a change to `[G-5]`, not to this page. **Cross-page note:** RTO's §1.4 and §4.2 assert the opposite — that OTHER renders on Order Detail. `[G-5]`'s "order-facing badges (4)" clause supports this page; the disagreement is open as `[X-5]` and is not a licence to add a fifth badge here.
 
 **Order Number column.** The **per-product purchase order number** (e.g. Coupang order `12101316464794`), not the SkinSeoul order number and not a shipment identifier. It renders as a link for lookup; clicking opens the purchase-side lookup in a new tab and persists `DC-33 order.external_link_opened` with `target=order_number_lookup`. When absent (WHOLESALE, PARTNERSHIP lines) it renders `–` and is not a link `[E-44]` `[E-59]`.
 
@@ -441,6 +465,8 @@ They may legally coincide; they never resolve to the same screen. Labels, export
 3. **Pane header** (`.paneheader`) — Mentions: `Comments mentioning me · Click to open the order` + a `Mark all read` action. Saved: `Saved comments · Click to open the order` + `Unstar to remove`.
 4. **Items** (`.it`) — `Order {no} · {author}: "{text}"` + relative time + `★` toggle. Unread items carry class `unread` (blue tint).
 
+**Hub copy is the shipped wireframe copy, and it is not yet byte-identical across the eight screens** `[X-6]`. The strings above (`Comments mentioning me · Click to open the order`, `Saved comments · Click to open the order`, `Unstar to remove`, `Mark all read`, `{n} results · newest first · click to open the order`, `No matching comments`) are what `order-detail/index.html` renders today, and `QA-HUB-1`/`QA-HUB-3`/`QA-HUB-4` assert them byte-exactly against the wireframe as SST. Four of the six already match the corpus majority; `Unstar to remove` is this page's outlier against a proposed canonical `Unstar to remove from the list`. **Harmonizing is a `[G-7]` amendment plus a wireframe edit, executed together** — changing the string in this spec alone would make a `[WF]` assertion fail against a correct drawing, so it is deliberately not done here.
+
 **Badge semantics.** The nav badge equals the number of **unread mentions for the current user** — not unread comments, not all comments `[BR-44]`. With zero unread mentions the badge is absent (not `0`), and the Mentions pane renders its own empty state `[E-92]`.
 
 **Search behavior (all-orders, not a tab filter).**
@@ -470,7 +496,9 @@ They may legally coincide; they never resolve to the same screen. Labels, export
 `pending` · `processing` · `on-hold` · `completed` · `refunded` · `failed` · `shipped` · `prepare-shipment`.
 The current status carries class `on`. The order's status badge renders next to the title: `Processing` (`.st-processing`, green), `On Hold` (`.st-hold`, amber) etc.
 
-**Cancel is NOT a status value.** Cancelling an order is the separate `✕ Cancel Order` control `[L-F5]`. Do not add `cancelled` to this list `[BR-12]`.
+**Value vs label.** The eight strings above are the **stored values** — lowercase, hyphenated — and every event payload uses them verbatim (`DC-1 old_status → new_status`, `processing → prepare-shipment`). The **badge renders a title-cased label** of the same value: `pending` → `Pending`, `processing` → `Processing`, `on-hold` → `On Hold`, `completed` → `Completed`, `refunded` → `Refunded`, `failed` → `Failed`, `shipped` → `Shipped`, `prepare-shipment` → `Prepare Shipment`. The dropdown items render the **values**, which is why `QA-STA-1` asserts lowercase strings while `QA-STA-5` asserts `Processing` / `On Hold` on the badge. Neither register is a second vocabulary `[X-9]`.
+
+**Cancel is NOT a status value.** Cancelling an order is the separate `✕ Cancel Order` control `[L-F5]`. Do not add `cancelled` to this list `[BR-12]`. **Cancellation is a flag on the order, not a ninth status:** a cancelled order keeps whatever status value it carried and gains a cancellation marker (`DC-4` records `previous_status`), which is why `[L-F5]` persists `order.cancelled` rather than a `DC-1` status transition, and why a cancelled order still renders read-only with its history `[E-56]`. A screen that needs to *display* "cancelled" renders the underlying status plus that marker `[X-3]`.
 
 **Trigger → behavior.**
 1. Click the button → dropdown opens. Clicking elsewhere closes it with no change `[E-46]` `NE-2`.
@@ -507,6 +535,7 @@ enabled  ==  every(line.inbound_status == INBOUNDED)
 - Blocked from `on-hold`, `refunded`, `failed`, `completed`, `shipped`, `prepare-shipment` `[PD-29 · OWNER-PENDING]` `[BR-1]` `[E-16]`.
 - A 0-line order can never ship: the `line_count >= 1` term exists because deleting the last line is allowed `[PD-24 · OWNER-PENDING]` `[E-55]`.
 - **Releasing the hold alone does not enable the button** when inbound is incomplete, and completing inbound alone does not enable it while on hold. The causes are independent and both must clear `[BR-3]` `[E-12]` `[E-13]`.
+- **Scope of the predicate.** It governs **this control**, on this page, and the View Orders row control that shares its grammar `[BR-4]`. It is not asserted as the only path that can ever emit `order.outbounded`: Closing's `[L-M1]` scan flow emits the same canonical event behind a **Zero Packing** gate that does not evaluate inbound completeness. That divergence is an open cross-page conflict `[X-2]` owned by Closing, not a licence to relax the gate here. Stated so nobody reads "enabled iff …" as a system-wide invariant it currently is not.
 
 **Disabled rendering.** `disabled` attribute + class `btn-gray` + `opacity:.55` + `cursor:not-allowed` (State 2 wireframe). Disabled is not enough on its own: the UI must **say which gate is blocking** `[BR-46]` — the hold banner names the hold `[L-14]`, and the per-row `PENDING` tags name the incomplete inbound. When both apply, both are visible simultaneously; that is exactly what the State 2 demo shows.
 
@@ -556,7 +585,7 @@ Re-adding any of them is a regression. A developer reading an old capture will f
 
 **`*` asterisk provenance.** SKU and Qty cells render the WooCommerce original in parentheses with an asterisk (`100005104` / `(100005104*)`, `1 (1*)`) in a `.bot` span. This is the pre-variation-pack-recalculation value. **Both copies are permanent** — the original is never overwritten `[BR-26]` `[DC-17]`. The inline note (`.liinfo`) states it: `Edit a line via the Edit button. Use checkboxes to select items for bulk Inbound. * = WooCommerce original before variation-pack recalculation · 🤖 = auto-filled by Agent · Scroll right to see the Inventory fields.`
 
-**`Inbound Status`** renders exactly `INBOUNDED` (`.tag.tag-inbounded`, green solid) or `PENDING` (`.tag.tag-pending`, amber).
+**`Inbound Status`** renders exactly `INBOUNDED` (`.tag.tag-inbounded`, green solid) or `PENDING` (`.tag.tag-pending`, amber). **These two values are the whole vocabulary — there is no `OUTBOUNDED` line status** `[BR-50]`. Outbound is order-level `[BR-4]`: it moves the *order* to `prepare-shipment` and writes `DC-19` + `DC-21`, and it touches no line-level inbound state, which is exactly why Cancel Outbound `[BR-19]` needs no line-state reversal. RTO's Bulk Outbound spec writes `INBOUNDED → OUTBOUNDED` per line; if that write reaches the same record, every row here renders an unmapped status. Open as `[X-4]` — until it is adjudicated, a third tag must not be added to this contract.
 
 **Sample-set display.** When Order Management has assigned a sample set to this order, the internal view shows **which** sample and **how many** in the line-items area `[G-13]` `[PD-27 · OWNER-PENDING]` `[BR-34]`. The carrier-facing `(+ sample set)` appending is a label/export concern and does **not** change what this page displays. The source that defines which sample and how many is an unresolved owner question `[PD-51 · NO-DEFAULT]` (§9.2) — the display requirement stands regardless of where the definition comes from. Order Detail **never edits** the assignment `[E-57]`.
 
@@ -615,12 +644,12 @@ RTO's Korean-name rule (`[G-6]`: Ready Item Details and the picking list use Kor
 - Double-click yields one print job `[E-6]` `[G-9]`.
 - **Printing is never a gate** on any other action.
 - **Reprints are a normal recovery path.** Clicking Print again while an earlier job for the same order is still queued is allowed; each click is its own `DC-24`/`DC-25` pair with its own job id, so duplicate labels are attributable `[E-63]`. This is not the same as `[E-6]`, which is one click delivered twice.
-- Print with no label/tracking yet: disabled with the reason `No label yet`, rather than producing an empty print job `[E-40]`.
+- Print with no label/tracking yet: disabled with the reason `No label yet`, rather than producing an empty print job `[E-40]`. **This answers a plan-raised owner question (`order-detail.B` Q-A5, "disabled vs error toast — and View Label when the label is missing") that has no entry in `_provisional-decisions.md`.** It is therefore *not* a `[PD-n]`: it is a dev default recorded in §9.4 D-20, chosen for consistency with `[BR-46]` (a guard renders its reason) and `[E-7]` (disabled beats an error toast, because a disabled control teaches the precondition). If the owner later registers it, `[E-40]`, this bullet and `[L-F7]` take the tag together.
 - Print on a cancelled order: disabled with the reason `Order cancelled` — a label for a cancelled order is a picking error waiting to happen `[E-85]`.
 - **`DC-25 result=success` proves the job reached the agent, not that paper came out.** A printer that is online but out of paper reports success. That limit is stated so nobody treats the event as physical proof `[E-84]`.
 - **Label layout content is out of scope** — Phase 3-1. This section specifies print *behavior* only.
 
-**`[L-F7]` View Label** opens a read-only preview of the existing label. Read action, explicit non-event `NE-5`. Disabled with `No label yet` when no label exists.
+**`[L-F7]` View Label** opens a read-only preview of the existing label. Read action, explicit non-event `NE-5`. Disabled with `No label yet` when no label exists — same dev default as Print, §9.4 D-20 `[E-40]`.
 
 ---
 
@@ -683,7 +712,8 @@ When a hold reason was captured `[PD-20 · OWNER-PENDING]`, it is rendered in pl
 
 **`[L-F4]` ⧉ Clone Order.** Creates a new order from this one.
 - **Copied:** line items (SKU + qty) and the billing and shipping addresses.
-- **NOT copied:** comments, actor log, tracking numbers, the agent-tracking fields (`Order Number`, `Order Date`, `Product Cost`, `CP Link`), PIC, status, and any assigned sample set. A clone is a new purchase, not duplicated history; the clone is evaluated against the sample rules in force when it is created, by Order Management `[PD-31 · OWNER-PENDING]` `[BR-21]` `[E-50]` `[E-83]`.
+- **NOT copied:** comments, actor log, tracking numbers, the agent-tracking fields (`Order Number`, `Order Date`, `Product Cost`, `CP Link`), PIC and status — this list is exactly `[PD-31 · OWNER-PENDING]` `[BR-21]` `[E-50]`. A clone is a new purchase, not duplicated history.
+- **Also not copied: any assigned sample set.** This is an **extension beyond PD-31's registered list**, which does not name sample assignment; it follows from `[G-13]`'s period rules — the clone is evaluated against the sample rules in force when *it* is created, by Order Management, so carrying the source order's set forward would bypass them. Recorded as an extension rather than as PD-31 content so the register and this spec do not appear to disagree; if the owner adds it to PD-31, this bullet merges into the one above `[E-83]`.
 - Cloning a 0-line order is allowed and produces a 0-line order `[E-82]`.
 - Confirm step → persist `DC-5 order.cloned` (`source_order_id → new_order_id`, `copied_fields[]`, `excluded_fields[]`, actor, ts) → green toast `Order cloned — {new order no.}` with a link to the new order.
 
@@ -729,14 +759,14 @@ When a hold reason was captured `[PD-20 · OWNER-PENDING]`, it is rendered in pl
 
 ## 4. Business Rules
 
-Every rule carries a rationale and a decision date. Global rules are cited, never restated — where a rule row names a global rule, the row states this page's **delta**. Reversals appear in §10.3. IDs `[BR-1]`–`[BR-40]` are stable from spec v1.0; `[BR-41]`–`[BR-48]` were added in v1.1 and are never renumbered.
+Every rule carries a rationale and a decision date. Global rules are cited, never restated — where a rule row names a global rule, the row states this page's **delta**. Reversals appear in §10.3. IDs `[BR-1]`–`[BR-40]` are stable from spec v1.0; `[BR-41]`–`[BR-48]` were added in v1.1 and `[BR-49]`–`[BR-50]` in v1.2. IDs are never renumbered.
 
 | ID | Rule | Rationale | Decided |
 |---|---|---|---|
 | **BR-1** | **Outbound gate.** 📦 Outbound is enabled only when every line is `INBOUNDED`, the order has ≥1 line, and the status is `processing` or `pending`. Blocked from `on-hold`, `refunded`, `failed`, `completed`, `shipped`, `prepare-shipment`. | Ship-incomplete prevention: an order that leaves with 3 of 4 items becomes a CS case and a refund. Making the gate a pure function of status + inbound completeness removes judgement from a speed-pressured moment. `[PD-29 · OWNER-PENDING]` | 2026-07-14 (completeness); status set 2026-08-03 |
 | **BR-2** | **Hold blocks Outbound but never Inbound.** While `on-hold`, per-row Inbound, Bulk Inbound, line edits, comments and Print all stay available. | Hold exists for urgent CS (cancellation, address change). Goods keep arriving at the dock regardless of what CS is negotiating; stopping receipt would strand physical stock in an unrecorded state. | 2026-07-14, restated 2026-07-22 |
 | **BR-3** | **The two Outbound gates are independent.** Releasing the hold alone does not enable Outbound; completing inbound alone does not either. The UI must always show which gate is blocking. | Operators filed "button broken" tickets against a working gate. The combined 3/4 + hold demo exists to make the multi-cause case impossible to miss. | 2026-07-22; legend clause added 2026-08-03 |
-| **BR-4** | **Inbound is per product; Outbound is order-level.** Per-row Inbound / Cancel Inbound on each line; Bulk Inbound and Outbound in the table footer. The name "Request Inbound" is retired and must not reappear. | Matches the View Orders grammar so one mental model covers both screens; physically, items arrive one at a time while a parcel ships once. | 2026-07-14 (rework), per-row buttons 2026-07-23 |
+| **BR-4** | **Inbound is per product; Outbound is order-level.** Per-row Inbound / Cancel Inbound on each line; Bulk Inbound and Outbound in the table footer. The name "Request Inbound" is retired and must not reappear. | Matches the View Orders grammar so one mental model covers both screens; physically, items arrive one at a time while a parcel ships once. **Cross-page note:** Inventory's `[L-F2]` form note still sends operators to "Request Inbound on View Orders / the order detail" and asserts that string byte-exactly in its QA. The control does not exist on either page; that is stale copy on Inventory, not a reason to reinstate the name here. | 2026-07-14 (rework), per-row buttons 2026-07-23 |
 | **BR-5** | **No auto-outbound on Order Detail.** Reaching full inbound enables the button; a human clicks it. | Order Detail is a desk screen for exception handling. Silent shipping from an inspection screen is the wrong default. Auto-outbound on full inbound is a View Orders scan/bulk behavior only. `[C-7]` `[PD-21 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-6** | **Sourcing routes render as the 4 order-facing labels**; JIT carries the purchase channel in parentheses, chosen by the handler at purchase time. Rendering rule per `[G-5]`. | Colour coding was tried and rejected — the table already carries two status colours and a third scheme made the row unreadable. The channel is provenance for cost reconciliation. | 2026-07-13 (4 routes), 2026-07-14 (colorless), 2026-07-23 (channel parenthetical) |
 | **BR-7** | **`Latest Inventory Count = 0` on a JIT line is correct, not an error.** | JIT items are purchased after the order; no warehouse stock backs them. Without this rule written down, every audit re-raises it as a bug. | 2026-07-23 (restore) |
@@ -744,7 +774,7 @@ Every rule carries a rationale and a decision date. Global rules are cited, neve
 | **BR-9** | **Deleo Tracking No. is retained on Order Detail** even though it was removed from View Orders. | Deliberate asymmetry: View Orders is a speed surface where the column was noise; Order Detail is the reconciliation surface where it is evidence. Adjudicated as a non-issue in `_review.md` §1 so nobody "harmonizes" the two screens. | 2026-07-21 |
 | **BR-10** | **Brand is bold-prefixed on both the EN and the KR product name** — page delta on `[G-6]`, which this page applies to two columns instead of one. | Pickers and CS both identify products brand-first; the KR column is read by the same people as the EN one. | `[G-6]` baseline; KR cells normalized 2026-08-03 |
 | **BR-11** | **Comments are append-only and permanent.** No edit, no delete. Corrections are new comments. | `[G-7]` declares the comment history an AI-training and audit asset; mutability silently rewrites the corpus. `[PD-3 · OWNER-PENDING]` | 2026-08-03 |
-| **BR-12** | **Status vocabulary is exactly 8 WooCommerce statuses**, applied instantly. `cancelled` is not among them — cancelling is `✕ Cancel Order`. | Mirrors the live admin exactly; inventing a ninth value would desynchronize WooCommerce. | as-live, restated 2026-07-22 |
+| **BR-12** | **Status vocabulary is exactly 8 WooCommerce statuses**, applied instantly. `cancelled` is not among them — cancelling is `✕ Cancel Order`, and cancellation is a **flag on the order**, not a ninth status value: the order keeps its status and gains a marker (`DC-4` records `previous_status`). The 8 strings are stored **values**; the badge renders a title-cased **label** of the same value `[L-8]`. | Mirrors the live admin exactly; inventing a ninth value would desynchronize WooCommerce. The flag-vs-status and value-vs-label clauses were added 2026-08-03 because another screen renders `Cancelled` in a status column and a third mixes both casing registers in one sentence `[X-3]` `[X-9]`. | as-live, restated 2026-07-22; flag/label clauses 2026-08-03 |
 | **BR-13** | **`refunded`, `failed` and `completed` require a confirm dialog**; all other status picks apply immediately. | These three have financial effects. Everything else is reversible by picking again. `[PD-28 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-14** | **Per-row Cancel Inbound is disabled once the order is outbounded — Cancel Outbound must run first.** | The only ordering that keeps inventory arithmetic reversible: reversing a receipt underneath a shipment produces stock that exists in neither place. `[PD-10 · OWNER-PENDING]`; the View Orders legend still labels this "(proposal)" `[WF-3]` | 2026-07-09 (proposed), adopted 2026-08-03 |
 | **BR-15** | **✕ Cancel Order is blocked while any line is `INBOUNDED`** — `Cancel Inbound (restock) on {n} line(s) first`. | Auto-restock would move stock without an operator decision on damage or loss. Same ordering-guard doctrine as BR-14. `[PD-22 · OWNER-PENDING]` | 2026-08-03 |
@@ -753,14 +783,14 @@ Every rule carries a rationale and a decision date. Global rules are cited, neve
 | **BR-18** | **+ Add Line Item is blocked after outbound.** | Post-shipment line changes desynchronize the shipped contents from the record. `[PD-25 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-19** | **Cancel Outbound exists on Order Detail**, with the same rollback as View Orders (`prepare-shipment` → `processing`), replacing 📦 Outbound in the footer once outbounded. | Parity: a correction started on Order Detail must be finishable here, or the operator has to hunt for another screen mid-correction. `[PD-26 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-20** | **Reset Order clears fulfillment/shipment state only** — never line-item inbound/outbound state, never an inventory movement. | Mirrors live semantics without letting a button labelled "reset" silently reverse physical stock movements. `[PD-30 · OWNER-PENDING]` | 2026-08-03 |
-| **BR-21** | **Clone copies line items + addresses only.** Comments, actor log, tracking, agent-tracking fields, PIC, status and sample assignment are not copied. | A clone is a new purchase, not duplicated history; copying a purchase record would double-count cost, and copying a sample set would bypass Order Management's period rules. `[PD-31 · OWNER-PENDING]` | 2026-08-03 |
+| **BR-21** | **Clone copies line items + addresses only.** Comments, actor log, tracking, agent-tracking fields, PIC and status are not copied `[PD-31 · OWNER-PENDING]`; **sample assignment is additionally excluded as a `[G-13]` extension**, not as PD-31 content `[L-F4]`. | A clone is a new purchase, not duplicated history; copying a purchase record would double-count cost, and copying a sample set would bypass Order Management's period rules. PD-31's registered list does not name sample assignment, so the exclusion is carried here as an extension with its own `[G-13]` rationale. | 2026-08-03; sample-set extension recorded separately 2026-08-03 |
 | **BR-22** | **Change Tracking # warns on a cross-order duplicate and allows it with confirm; the label is never auto-regenerated or invalidated.** | Combined boxes make duplicates legitimate. Silent label regeneration would print without operator intent, violating `[G-4]`. `[PD-32 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-23** | **PIC is a system-user picker, not free text, and the new PIC is not auto-notified.** | PIC feeds filters and mention routing, so it must resolve to a real user; auto-notifying every reassignment would be noise. Use an @mention comment to notify. `[PD-33 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-24** | **Hold reason is optional free text, persisted with the hold event, and rendered in the banner.** | The banner already reads like a reason exists. Mandatory would block urgent CS at the exact moment speed matters. `[PD-20 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-25** | **Only the 5 agent-tracking fields are editable inline.** WooCommerce commerce fields (Qty, Subtotal, Total, names, size) are not editable on this screen. | Those values are owned by the storefront; editing them here would fork the source of truth. | 2026-07-14 |
 | **BR-26** | **WooCommerce originals (`*`) are preserved beside recalculated values, permanently.** | Variation-pack recalculation changes SKU and qty; without the original, cost and settlement reconciliation is impossible. Provenance is never overwritten. | 2026-07-14 |
 | **BR-27** | **Agent-autofilled (🤖) fields remain human-editable, and the actor type (human / agent / system) is always recorded and always distinguishable.** | Product-cost provenance drives margin analysis; "who put this number here" must survive. `[G-8]` | 2026-07-14 |
-| **BR-28** | **Print surfaces on this page are `🖨 Print` only; `View Label` is a preview, not a print surface.** Failure copy is fixed in §3.0.2. Label layout is out of scope (Phase 3-1). | Page delta on `[G-4]`: naming the surface set prevents a developer wiring the preview into the agent, which would print on every glance. `[PD-19 · OWNER-PENDING]` | 2026-07-21 (label de-suffixed), reconfirmed 2026-08-03 |
+| **BR-28** | **Print surfaces on this page are `🖨 Print` only; `View Label` is a preview, not a print surface.** Failure copy is fixed in §3.0.2. Label layout is out of scope (Phase 3-1). | Page delta on `[G-4]`: naming the surface set prevents a developer wiring the preview into the agent, which would print on every glance. (No PD governs the surface set — `[PD-19 · OWNER-PENDING]` decides only that an offline print agent never gates the inbound, and is cited where it belongs, in `[L-13]` and `[E-39]`.) | 2026-07-21 (label de-suffixed), reconfirmed 2026-08-03 |
 | **BR-29** | **Of `[G-3]`, only (a) applies here, on `📦 Outbound`.** No TTS `(b)`, no warning tone `(c)`. | `[G-3]`(a) is written by button class, not by page. The closing voice alert and the View Orders warning tone are scan-loop mechanisms and have no analogue on a desk screen. `[C-5]` `[PD-2 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-30** | **No scan input exists on this page and none may be added.** `[G-1]` does not apply. | Scanning is View Orders / Closing work. A scan field here would create a second, unreconciled inbound path. | 2026-08-03 |
 | **BR-31** | **This page has no refresh exception**, and every confirming action's success string is fixed in §3.0.2. | Page delta on `[G-2]`: refreshing loses the operator's scroll position in an 18-column horizontally scrolled table and their place in the thread; fixed strings make the toast an assertable contract rather than a developer's improvisation. | 2026-08-03 |
@@ -781,6 +811,8 @@ Every rule carries a rationale and a decision date. Global rules are cited, neve
 | **BR-46** | **Every guard that disables a control renders its reason next to the control**, not only in a tooltip or a hover. | Generalization of BR-3: a silent disabled button produces support tickets against working logic, and on a 1680px table the operator may never see a tooltip anchored off-screen. | 2026-08-03 |
 | **BR-47** | **Every blocked attempt persists `DC-9 order.action_rejected` with a `reason_code`.** | Guards must be measured. Without this, nobody can tell whether a guard is protecting the operation or fighting it, and the first complaint becomes an argument instead of a query. | 2026-08-03 |
 | **BR-48** | **No FX conversion on this page.** Order totals render in the order's currency (`AUD 129.8`), product costs in the purchase currency (`₩17,100`). | Mixing a converted figure into a settlement screen invites someone to reconcile against a rate the page never states. Conversion belongs to BI, not to the operational record. | 2026-08-03 |
+| **BR-49** | **Cancel Inbound on this page always restocks the full line quantity.** No restock Yes/No choice and no Restock Qty input exists here; `DC-11` always carries `restock=true` and the full line qty. Partial restock and declined restock are View Orders `[L-M1]` / Inventory `[L-M4]` operations. | Symmetric counterpart of `[BR-41]`: a receipt taken in full is reversed in full. Two partial-restock paths with different remainder accounting would put the same physical reversal in the ledger twice, differently. Open cross-page conflict `[X-1]` — the other two screens expose the controls; this one deliberately does not. | 2026-08-03 |
+| **BR-50** | **There is no `OUTBOUNDED` line status.** `Inbound Status` is exactly `INBOUNDED` or `PENDING`; outbound is order-level and moves the order to `prepare-shipment` without touching line state. | `[BR-4]`'s grammar taken to its conclusion, and the reason Cancel Outbound `[BR-19]` needs no line-state reversal. RTO's spec writes a per-line `OUTBOUNDED`; if that write lands on this record every row renders an unmapped tag `[X-4]`. | 2026-08-03 |
 
 ---
 
@@ -789,6 +821,8 @@ Every rule carries a rationale and a decision date. Global rules are cited, neve
 **Doctrine.** `[G-8]` governs. Order Detail's deltas on it are three: (a) **blocked attempts persist** (`DC-9`) so guards are measurable; (b) **suppressed duplicates persist** (`DC-36`) so the double-click fix is provable; (c) **arrival path persists** (`DC-34`) so the owner can see how people reach an order. Order Detail is the densest audit surface in the system — it is where "who did this and why" gets answered.
 
 **Naming.** Cross-page shared events use the canonical byte-identical names from `_global-rules` `[C-12]`: `comment.posted`, `comment.mention_notified`, `comment.starred` / `comment.unstarred`, `comment.read` / `comment.mark_all_read`, `comment.auto_posted`, `order.status_changed`, `order.outbounded`, `print.job_result`. All other names are page-scoped lowercase `entity.action`. Literal API/endpoint naming is a developer decision.
+
+**Below the canonical ten, five shared *concepts* carry a different name on each page** — idempotent duplicate suppressed (`action.idempotency_suppressed` here), stock moved (`inventory.movement` here), comment search executed (declared a **non**-event here, `NE-8`), Slack dispatch outcome (folded into `comment.mention_notified` here), line received (`line_item.inbounded` here). This spec keeps its names because renaming one page unilaterally would break the other page's QA; promoting the five into `_global-rules` is the fix, tracked as `[X-8]`. The `NE-8` row is the one that is more than cosmetic: three other screens **persist** a comment-search event, so it is a `[G-8]` disagreement, and this page's position is stated as a deliberate non-event with an owner-optional upgrade path (§5.4).
 
 **Envelope.** Every event carries this in addition to its own payload: `event_id`, `event_name`, `order_id`, `actor` (`user_id` + display name, or `system` / `agent`), `actor_type` ∈ {`human`, `agent`, `system`}, `occurred_at` (**UTC**) + `display_timezone` `[BR-43]`, `source_screen = order-detail`, `idempotency_key`, `client_request_id`.
 
@@ -817,7 +851,7 @@ IDs are page-scoped and stable. `DC-35` appears in group D and `DC-36`/`DC-37` i
 | ID | Event | Trigger | Payload | UI surface |
 |---|---|---|---|---|
 | **DC-10** | `line_item.inbounded` | `[L-2]` per-row Inbound, or a child of a bulk submission | `line_id`, `sku`, `sku_original` (`*`), `qty` (always the full line qty `[BR-41]`), `PENDING → INBOUNDED`, `parent_event_id` when from bulk | Actor Log `INBOUND` row |
-| **DC-11** | `line_item.inbound_cancelled` | `[L-2]` Cancel Inbound | `line_id`, `sku`, `qty`, `INBOUNDED → PENDING`, `restock=true`, `note` (free text, may be empty) | Actor Log `CANCEL INBOUND (Restock)` |
+| **DC-11** | `line_item.inbound_cancelled` | `[L-2]` Cancel Inbound | `line_id`, `sku`, `qty` (**always the full line qty**), `INBOUNDED → PENDING`, `restock=true` (**always — no Yes/No and no qty input on this page** `[BR-49]` `[X-1]`), `note` (free text, may be empty) | Actor Log `CANCEL INBOUND (Restock)` |
 | **DC-12** | `line_item.bulk_inbound_submitted` | `[L-2]` Bulk Inbound Selected Items | `selected_line_ids[]`, `processed_count`, `skipped_already_inbounded_count`, `skipped_line_ids[]`, `skipped_deleted_line_ids[]`, `failed_line_ids[]` | one batch toast; children render as rows |
 | **DC-13** | `line_item.edited` | `[L-12]` ✓ Save | `line_id`, `field_diff{}` limited to the 5 whitelisted fields, **changed fields only** | row re-render |
 | **DC-14** | `line_item.autofilled` | purchasing agent writes a field | `line_id`, `fields{}`, `values{}`, `source`, `actor_type=agent` | 🤖 marker |
@@ -936,7 +970,7 @@ Channels below are CONFIRMED by the owner on 2026-08-03 per `_slack-routing` `[C
 | 1 | A comment containing one or more resolved `@mentions` is posted `[L-1]` `[DC-26]` | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | order no., comment text, time, author, @mentioned user, deep link to this order | the mentioned user, @-ed in the message body so Slack raises a personal notification; the channel doubles as a team-visible archive `[G-7]` |
 | 2 | A system auto-comment lands on this order — unrecognized match confirmed `[DC-32]` | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | tracking no., matched product line, resolver, order no., deep link | the original **registrant**; suppressed when resolver == registrant `[PD-16 · OWNER-PENDING]` |
 
-**One message per distinct mention.** Two `@Dean` tokens in one comment produce one Slack message `[E-80]`. A self-mention produces none `[E-60]`.
+**One message per distinct mention.** Two `@Dean` tokens in one comment produce one Slack message `[E-80]`. A self-mention produces none `[E-60]`. Three *different* users mentioned in one body produce **three** messages, one per target — `[G-7]`'s payload carries a single "@mentioned user" field, and `DC-27` is one row per target user. RTO's spec states the opposite (one message naming everyone); that is open as `[X-7]`, and this page's shape is the one `[G-7]` supports.
 
 **Explicit non-routes from this page** (stated so nobody wires them):
 - `#unrecognized-tracking` — triggered by View Orders / tracking-missing registration only.
@@ -1095,7 +1129,7 @@ Every case states the **expected behavior**, not a question. Where a case has no
 | **E-37** | Network failure mid-Outbound | Same contract as E-36. The send sound may have played without a commit — **the sound is feedback, never proof.** Only `DC-19` is proof. |
 | **E-38** | Network failure while posting a comment | Retry with the same key produces no duplicate comment. |
 | **E-39** | Print agent offline or printer unreachable | Explicit **red** toast `Print agent unreachable — label not printed` within the configured timeout. **No silent success. No browser print-dialog fallback.** `DC-25` persists the failure result. The failure never blocks any other action `[G-4]` `[PD-19 · OWNER-PENDING]`. |
-| **E-40** | Print (or View Label) when the order has no label/tracking yet | Disabled with the reason `No label yet` rather than producing an empty job. A forced request persists `DC-9` (`reason_code=no_label`). |
+| **E-40** | Print (or View Label) when the order has no label/tracking yet | Disabled with the reason `No label yet` rather than producing an empty job. A forced request persists `DC-9` (`reason_code=no_label`). **Dev default, not a PD:** the plan raised "disabled vs error toast" as an owner question (`order-detail.B` Q-A5) and no entry exists in `_provisional-decisions.md`; the answer here follows `[BR-46]` and `[E-7]` and is recorded in §9.4 D-20 `[L-13]` `[L-F7]`. |
 | **E-58** | The same operator has the same order open in two browser tabs | Both tabs are live. The second mutation from the stale tab hits the version check → 409 → that tab reloads the row `[E-21]`. No cross-tab locking is required. |
 | **E-63** | Print clicked while a previous job for the same order is still queued at the agent | Allowed — reprints are a normal recovery path. Each click is its own `DC-24`/`DC-25` pair with its own job id, so duplicate labels are attributable. Distinct from `[E-6]`, which is one click delivered twice. |
 | **E-74** | The server returns 5xx on any mutating action | Red toast naming the action (`Could not {action} — try again`), the UI state is **not** optimistically advanced, and the client keeps the idempotency key for the retry. No event is written client-side; whether the server wrote one is resolved by the retry, not guessed. |
@@ -1163,6 +1197,17 @@ Example of the trap: `document.querySelectorAll('.c-item')` returns **4** (two p
 
 **Preconditions for every `[WF]` scenario:** fresh page load, annotations visible (the wf-bar button reads `Hide annotations`), active tab `1 · Processing (default)` unless the scenario says otherwise. Switching state tabs scrolls to top and moves the `on` class; treat each scenario as starting from a fresh load.
 
+**MANDATORY — text extraction and string comparison.** §8's assertions are byte-level, so how the text is extracted decides the verdict. These four rules are part of the contract, not the runner's private convention; a runner that skips them reports failures against a correct wireframe.
+
+| Rule | Contract |
+|---|---|
+| **1 · Strip annotation text** | The purple `.dot` spans live **inside** asserted elements. Remove every `.dot` descendant's text before comparing (`clone = el.cloneNode(true); clone.querySelectorAll('.dot').forEach(d => d.remove())`). Without this, `Are you sure?` reads `Are you sure?✕`-style pollution: measured examples are `Product Name` → `Product Name11`, `Inventory` → `Inventory10`, `…to ship` → `…to ship14`, `…4:51:40 AM)` → `…4:51:40 AM)6`, `Egita` → `Egita ✎ Edit5`, `Bulk Inbound Selected Items` → `Bulk Inbound Selected Items2`. |
+| **2 · Normalize whitespace** | Replace `<br>` with a single space, collapse runs of whitespace, trim: `.replace(/\s+/g,' ').trim()`. Four `.litable` headers are two-line markup (`Latest<br>Inventory Count`, `Inbound<br>Status`, `Sourcing<br>Route`, `Product<br>Cost 🤖`) and raw `textContent` yields `LatestInventory Count`. |
+| **3 · Two string registers, explicitly** | **`reads exactly` / `text is exactly` / `value is`** = strict equality after rules 1–2. **`reads` / `contains` / `begins with`** = substring (or prefix) after rules 1–2. Every clause in §8 uses one of these verbs deliberately. |
+| **4 · Element-scoped, not subtree-scoped, where a clause says so** | Where a clause names a child (`its first text node`, `the `.x` control`), assert against that node, not the parent's flattened text. |
+
+*(These rules affect `QA-DEL-1`, `QA-REN-1`, `QA-REN-9`, `QA-SUB-3`, `QA-INB-4`, `QA-HUB-1`, `QA-OUT-2` and `QA-STA-5` — eight scenarios that flip verdict on the extraction method alone. Rule 1 is a **text-extraction** rule, not a precondition change: annotations stay visible for the whole run, exactly as the precondition above requires, and `QA-MAP-1` / `QA-MAP-4` still assert the dots as elements.)*
+
 **Wireframe demo limitations — never file these as bugs** (they are *why* a scenario is `[ADMIN]`): no toasts, no Web Audio, no server, and no working handler on the status-dropdown items, `Mark all read`, per-row `Inbound` / `Cancel Inbound`, `Bulk Inbound Selected Items`, `📦 Outbound`, `🖨 Print`, `View Label`, `✓` / `✕` row save-cancel, `Today`, `M3 Delete`, `+ Add Line Item`, or any subbar button. Also never file the three Actor Log demo-data inconsistencies listed in §2.5 B.
 
 Scenarios marked **· NEGATIVE** assert that something must *not* happen.
@@ -1188,8 +1233,8 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 
 **QA-MAP-3 §2.2 — exactly one state is visible at a time. [WF]**
 - **Then** on load, `#st-normal` carries class `on` and `#st-hold` does not
-- **When** I click the wf-tab `2 · On Hold`
-- **Then** `#st-hold` carries class `on`, `#st-normal` does **not** · NEGATIVE, the tab `2 · On Hold` carries class `on`, `1 · Processing (default)` does not, and the window scroll position is `0`
+- **When** I scroll the window down to `y = 600` (so the scroll assertion below is not vacuous — on a fresh load `scrollY` is already `0`), **then** click the wf-tab `2 · On Hold`
+- **Then** `#st-hold` carries class `on`, `#st-normal` does **not** · NEGATIVE, the tab `2 · On Hold` carries class `on`, `1 · Processing (default)` does not, and `window.scrollY` is `0`
 - **When** I click `1 · Processing (default)`
 - **Then** the classes swap back. *(No event is persisted for any of this — `NE-7`, `NE-13`.)*
 
@@ -1212,7 +1257,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 
 ### QA-CMT — Operator Comments `[L-1]`
 
-**QA-CMT-1 `[L-1]` — the composer renders with the exact placeholder and buttons. [WF]**
+**QA-CMT-1 `[L-1]` `[L-F16]` — the composer renders with the exact placeholder and buttons. [WF]**
 - **Given** state `1 · Processing`
 - **Then** `#st-normal .cmt-new textarea` has placeholder exactly `Write a comment — @name to notify via Slack (order no. · text · time · author included). Per-order history accumulates here.`
 - **And** `#st-normal #addCmt` is labelled exactly `Add Comment`
@@ -1296,6 +1341,13 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I open a **cancelled** order and post a comment
 - **Then** it persists normally (`DC-26`) — commentability is not gated by order state.
 
+**QA-CMT-16 `[L-1]` `[L-7]` `[E-34]` `[E-35]` `[DC-28]` `[DC-29]` — star races settle consistently and the thread never goes stale. [ADMIN]**
+- **When** I toggle the same comment's `★` rapidly from the thread and from the hub's `★ Saved` pane in an interleaved sequence
+- **Then** the final state is the same in both surfaces (last write wins on the `user_id` + `comment_id` key), **and** every toggle persisted in order as `DC-28` / `DC-29` — the corpus keeps the flip-flop rather than collapsing it · NEGATIVE
+- **And** another user's Saved tab is unaffected · NEGATIVE
+- **Given** another operator posts a comment on this order while my page is open
+- **Then** the thread does **not** stay stale: at minimum it refreshes on my next action on the page, and the new comment appears without a full-page reload `[G-2]`. *(Poll vs push is dev-time, §9.4 D-6; the minimum above is the assertable contract.)*
+
 ---
 
 ### QA-HUB — Comments hub `[L-7]`
@@ -1304,7 +1356,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I click `#st-normal .icon-btn[data-open="inbox1"]` (visible label `💬 Comments`)
 - **Then** `#inbox1` gains class `open`
 - **And** `#inbox1 .csearch input` has placeholder exactly `🔍 Search all comments — order no. · author · text`
-- **And** `#inbox1 .tabs button` returns 2 buttons reading `@ Mentions` and `★ Saved`, with `@ Mentions` carrying class `on`
+- **And** `#inbox1 .tabs button` returns 2 buttons whose labels **begin with** `@ Mentions` and `★ Saved`, with the `@ Mentions` button carrying class `on` (the Mentions tab carries an inline `.badge-n` child, so its flattened label is `@ Mentions 2`; the badge value is asserted by `QA-HUB-2`)
 - **And** `#inbox1 [data-pane="mentions"] .paneheader` reads `Comments mentioning me · Click to open the order` and contains a `Mark all read` action.
 
 **QA-HUB-2 `[L-7]` `[BR-44]` — the unread badge and unread styling. [WF]**
@@ -1390,8 +1442,9 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **And** the rows for SKUs `100005088` and `100012534` still show `INBOUNDED` with `Cancel Inbound`.
 
 **QA-INB-3 `[L-2]` `[BR-40]` — the retired labels must not exist. · NEGATIVE [WF]**
-- **Then** the string `Request Inbound` appears **nowhere** in the rendered page in either state, including the legend
-- **And no** header cell of `.litable` reads `Inbound Request`.
+- **Then** the string `Request Inbound` appears in **no** button label, **no** header cell and **no** body text inside `#st-normal` or `#st-hold`
+- **And no** header cell of `.litable` reads `Inbound Request`
+- *(Scope is the product surface only. The legend's item 2 contains the sentence `"Request Inbound" name retired; unclickable-button bug fixed` — that is annotation chrome `NE-13`, it is **expected**, and it is required by `QA-MAP-5`'s sibling assertion on the legend. Asserting against the whole document instead would forbid the one sentence whose job is to record the retirement, and §10.2 names this scenario as the guard for the retired label, not for the legend.)*
 
 **QA-INB-4 `[L-2]` `[L-9]` `[L-F14]` `[L-F15]` — the footer renders four controls in order. [WF]**
 - **Then** `#st-normal .li-foot` contains, left to right: the text `Total Quantity: 4`, a button labelled exactly `Bulk Inbound Selected Items`, a button labelled exactly `📦 Outbound`, and (right-aligned) a button labelled exactly `+ Add Line Item`
@@ -1471,6 +1524,20 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **Given** a 10-line bulk submission where the server rejects 1 line
 - **Then** 9 `line_item.inbounded` children persist, `DC-12.failed_line_ids[]` names the tenth, a **red** toast names the failed line, **and** the 9 successes are **not** rolled back · NEGATIVE.
 
+**QA-INB-17 `[L-2]` `[E-3]` `[G-9]` `[DC-36]` — double-click Bulk Inbound processes the selection once. · NEGATIVE [ADMIN]**
+- **Given** 3 `PENDING` lines selected
+- **When** I click `Bulk Inbound Selected Items` twice within 300 ms
+- **Then** exactly **one** `line_item.bulk_inbound_submitted` exists (`DC-12`) and exactly **3** `line_item.inbounded` children (`DC-10`) — **not** 6 · NEGATIVE
+- **And** exactly **3** `inventory.movement` rows exist (`DC-21`), exactly **one** toast is shown, and the Actor Log gains exactly **3** rows
+- **And** `action.idempotency_suppressed` records the second submission with its `idempotency_key` and `delta_ms` (`DC-36`).
+
+**QA-INB-18 `[L-2]` `[E-9]` `[PD-6 · OWNER-PENDING]` `[PD-7 · OWNER-PENDING]` `[DC-37]` — a stale row is rejected, never double-received. · NEGATIVE [ADMIN]**
+- **Given** operator B inbounded a line one second before operator A clicks `Inbound` on the same row
+- **When** A's request reaches the server
+- **Then** it is rejected: **no** second `line_item.inbounded` and **no** second `inventory.movement` are written · NEGATIVE
+- **And** `entity.version_conflict` persists with `entity_type=line_item`, both versions and `attempted_action=line_item.inbounded` (`DC-37`)
+- **And** A's row re-renders as `INBOUNDED` with `Cancel Inbound`, and a **non-green** toast states the line was already inbounded — never a green success toast.
+
 ---
 
 ### QA-OUT — Outbound gating `[L-9]` `[L-14]`
@@ -1486,7 +1553,9 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **And** the row with SKU `100043697` shows `PENDING` with a green `Inbound` button — proving both gates (hold **and** 3/4 inbound) block simultaneously `[BR-3]`.
 
 **QA-OUT-3 `[L-9]` `[BR-40]` — the relabel is complete. · NEGATIVE [WF]**
-- **Then** the string `Outbound to Deleo BaroShip` appears **nowhere** in the rendered page in either state or the legend body text describing the current label, and both footer buttons' visible label is exactly `📦 Outbound`.
+- **Then** **no button label** in either state reads `Outbound to Deleo BaroShip`, and the string appears in **no** body text inside `#st-normal` or `#st-hold`
+- **And** both footer buttons' visible label is exactly `📦 Outbound`
+- *(The legend's item 9 quotes the old label historically — `"Outbound to Deleo BaroShip" → relabeled to "Outbound"`. That occurrence is **expected** and is explicitly **required** by `QA-MAP-5`; the two scenarios must both pass. Scope this assertion to the product surface, never to the annotation layer `NE-13`.)*
 
 **QA-OUT-4 `[L-9]` `[DC-19]` `[DC-21]` — Outbound persists a gate snapshot and one aggregate log row. [ADMIN]**
 - **Given** a real order in `processing` with every line `INBOUNDED`
@@ -1540,6 +1609,17 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I click `📦 Outbound`
 - **Then** the action is refused immediately with a red toast (`No connection — action not sent`) and **nothing** is queued silently.
 
+**QA-OUT-13 `[L-9]` `[L-8]` `[E-14]` `[E-52]` `[E-67]` `[PD-74 · NO-DEFAULT]` — the hold/outbound race and the post-closing reversal both resolve without a partial write. · NEGATIVE [ADMIN]**
+- **Given** an Outbound request is in flight and another operator sets the status to `on-hold` in the same moment
+- **Then** the server resolves the two atomically and exactly one of these holds, never a mixture · NEGATIVE:
+  - if the outbound commits first, it stands and the hold applies to an already-outbounded order (`DC-1` + `DC-2`, nothing recalled `[E-67]`);
+  - if the hold commits first, the outbound is rejected with `order.action_rejected`, `reason_code=hold_blocks_outbound` (`DC-9`), and **no** `order.outbounded` and **no** `inventory.movement` are written
+- **And** in both branches the persisted record is complete — there is **no** partial outbound and **no** orphaned movement · NEGATIVE
+- **Given** an order whose parcel was already scanned at a **confirmed** Closing session
+- **When** I click `Cancel Outbound` and confirm
+- **Then** the reversal is allowed at the data layer and fully persisted (`DC-20` + reversal `DC-21`), so the Closing snapshot and this order disagree **visibly** rather than silently
+- **And** this page offers **no** affordance to amend or reopen the closing session — reconciling it is a Closing concern with no decided path `[PD-74 · NO-DEFAULT]` · NEGATIVE.
+
 ---
 
 ### QA-STA — Change Status & Hold `[L-8]` `[L-14]`
@@ -1558,10 +1638,11 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I click `#st-hold button[data-open="statusddH"]`
 - **Then** `#statusddH` is visible, its `on-hold` item carries class `on`, and its `processing` item does **not** · NEGATIVE.
 
-**QA-STA-4 `[L-8]` `[E-46]` — clicking outside closes the dropdown with no change. · NEGATIVE [WF]**
+**QA-STA-4 `[L-8]` `[E-46]` `[OD-WFX-1 · proposed]` — clicking outside closes the dropdown with no change. · NEGATIVE [ADMIN]**
 - **Given** `#statusdd` is open
 - **When** I click the page background
 - **Then** the dropdown is no longer visible, the status badge still reads `Processing`, and no toast appears. *(No event — `NE-2`.)*
+- **Tier reason (one line):** `[ADMIN]` because the wireframe has **no document-level click handler** — measured 2026-08-03: the dropdown stays open after a background click, while the modal's three dismissal paths all work. The specified behavior is unchanged and correct; the drawing is missing the affordance, registered as `[OD-WFX-1 · proposed]` in `_wireframe-fixes.md` §I and listed in §2.5 A and §9.5. **Do not file this as a spec bug and do not "fix" the spec to match the drawing.** Once `[OD-WFX-1 · proposed]` is applied, this scenario becomes `[WF]` unchanged.
 
 **QA-STA-5 `[L-14]` — the status badge and hold banner render per state. [WF]**
 - **Given** state `1 · Processing`
@@ -1569,10 +1650,12 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **Given** state `2 · On Hold`
 - **Then** `#st-hold .status` reads exactly `On Hold` with class `st-hold`, and `#holdBannerH` is visible with the exact banner copy.
 
-**QA-STA-6 `[L-14]` — the five State-2 diffs and nothing else. [WF]**
+**QA-STA-6 `[L-14]` — the six State-2 diffs and nothing else. [WF]**
+- **Comparison basis (mandatory):** compare the **normalized visible text** of each named block (§8.0 rules 1–2: `.dot` text removed, whitespace collapsed), **not** the DOM, **not** attributes. The id diff in item (6) is asserted separately as an explicit id-set comparison, because it is the one structural difference the rest of §8 depends on.
 - **Given** both states
-- **Then** exactly these differ: (1) the status badge text/class; (2) the presence of `#holdBannerH`; (3) which `.statusdd div` carries class `on`; (4) the footer Outbound button's `disabled`/`btn-gray` state and its missing `id`; (5) row 2's tag (`INBOUNDED` vs `PENDING`) and its Actions button (`Cancel Inbound` vs `Inbound`)
-- **And** the nav, subbar, address panels, comments thread, Fulfillment Tracking block, Actor Log rows and the other three line rows are identical between `#st-normal` and `#st-hold` · NEGATIVE (nothing else changes).
+- **Then** exactly these differ: (1) the status badge text/class; (2) the presence of `#holdBannerH`; (3) which `.statusdd div` carries class `on`; (4) the footer Outbound button's `disabled`/`btn-gray` state and its missing `id`; (5) row 2's tag (`INBOUNDED` vs `PENDING`) and its Actions button (`Cancel Inbound` vs `Inbound`); **(6) the state-suffixed element ids — `inbox1`/`inbox1H`, `statusdd`/`statusddH`, `addCmt`/`addCmtH` — plus `#ordStatus` and `#obBtn`, which exist only in State 1, and `#holdBannerH`, which exists only in State 2**
+- **And** by the comparison basis above, the nav, subbar, address panels, comments thread, Fulfillment Tracking block, Actor Log rows and the other three line rows are textually identical between `#st-normal` and `#st-hold` · NEGATIVE (nothing else changes)
+- *(Diff 6 is why `QA-HUB-8`, `QA-STA-3` and `QA-CMT-7` use the `H`-suffixed ids. State 2's status badge has **no** id, which is why `QA-STA-5` switches to `#st-hold .status`.)*
 
 **QA-STA-7 `[L-8]` `[DC-1]` `[DC-2]` — a status change persists old→new and toasts. [ADMIN]**
 - **When** I pick `on-hold` from the dropdown
@@ -1680,7 +1763,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 **QA-DEL-1 `[L-M3]` — the modal opens from the wf-bar with exact copy. [WF]**
 - **When** I click the wf-bar button `Modal: Delete Line`
 - **Then** `#m-del` gains class `open`
-- **And** `#m-del .modal header` text is exactly `Are you sure?` and contains a `.x` control reading `✕`
+- **And** `#m-del .modal header`'s **first text node** is exactly `Are you sure?`, and the same `header` contains a `.x` control whose text is exactly `✕` (the `.x` button is a child of `header`, so the header's flattened text is `Are you sure?✕` — assert the text node, §8.0 rule 4)
 - **And** `#m-del .modal .body` text is exactly `This action cannot be undone. This will permanently delete the line item.`
 - **And** `#m-del .modal .foot` contains exactly two buttons labelled exactly `Cancel` and `Delete`, in that order.
 
@@ -1785,7 +1868,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 **QA-REN-3 `[L-10]` `[E-41]` `[BR-7]` — Latest Inventory Count is 0 on JIT and a real number on WHOLESALE. · NEGATIVE [WF]**
 - **Then** in `#st-normal`, the rows with SKUs `100005104`, `100043697` and `100012534` (all `JIT (Coupang)`) show `Latest Inventory Count` = `0`
 - **And** the row with SKU `100005088` (`WHOLESALE`) shows `12`
-- **And** a `0` on a JIT line **must not** be reported as a defect — it is the expected value.
+- **And** a `0` on a JIT line **must not** be reported as a defect — it is the expected value. *(Runner guidance, not a machine-checkable clause: it constrains the report, not the page. Same role as `QA-REN-8`'s closing note.)*
 
 **QA-REN-4 `[L-4]` `[G-5]` — sourcing routes render as colorless black bold text. [WF]**
 - **Then** the Sourcing Route cells contain `span.tag` elements with classes `tag-jit` / `tag-wholesale`
@@ -1859,11 +1942,38 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **And** the carrier-facing string `(+ sample set)` does **not** appear as a line item on this page
 - *(The source that defines which sample and how many is `[PD-51 · NO-DEFAULT]`; until it is answered this scenario is executable only for the "no control exists" half.)*
 
+**QA-REN-17 `[L-4]` `[E-44]` `[E-59]` — absent agent-tracking values render `–` and are not links. · NEGATIVE [WF]**
+- **Given** state `1 · Processing` and the row with SKU `100005088` (the `WHOLESALE` line)
+- **Then** its `Order Number`, `Order Date`, `Tracking Number` and `CP Link` cells each read exactly `–`
+- **And** none of those four cells contains an `<a>` element — `–` is plain text, never a link · NEGATIVE
+- **And** the same row's `Product Cost 🤖` cell reads exactly `₩22,425` — a `–` in the other four is an absent purchase record, **not** an empty row.
+
+**QA-REN-18 `[L-11]` `[E-45]` `[G-6]` — a brandless product renders without a prefix and nothing is synthesized. · NEGATIVE [ADMIN]**
+- **Given** a line whose catalog record carries no brand
+- **Then** the `Product Name` and `Product Name KR` cells render the product name with **no** leading `<b>` brand element
+- **And** the UI **does not** synthesize, guess or back-fill a brand from the SKU, the supplier or another line · NEGATIVE
+- **And** no event is emitted and no error state is shown — the fix is a catalog data fix, not a UI workaround.
+
+**QA-REN-19 `[L-3]` `[E-65]` — Actor Log truncation is explicit, never silent. · NEGATIVE [ADMIN]**
+- **Given** an order with more inbound/outbound events than the display cap
+- **Then** the rendered rows are the newest `{N}` in newest-first order, and the section renders a visible `showing latest {N}` marker
+- **And** the full history is reachable from `↻ Audit History` `[L-F2]`
+- **And** the table **never** drops rows without the marker — a silently shortened log is a defect, not a display choice · NEGATIVE. *(Cap value and pagination mechanics are dev-time, §9.4 D-7; the explicitness is not.)*
+
+**QA-REN-20 `[L-10]` `[E-90]` `[E-41]` `[BR-7]` — the JIT inventory count across its lifecycle. [ADMIN]**
+- **Given** a `JIT (Coupang)` line on an order that has not yet been inbounded
+- **Then** `Latest Inventory Count` reads `0` — correct, not an error `[E-41]`
+- **When** the line is inbounded
+- **Then** the count refreshes to a positive transient value in the same response
+- **When** the order is outbounded
+- **Then** the count returns to `0`
+- **And** a JIT line still showing a positive count after outbound is a **reconciliation signal to raise**, not a display bug to suppress — and this page emits **no** adjustment event of its own to "correct" it · NEGATIVE.
+
 ---
 
 ### QA-SUB — Page furniture `[L-F1]`–`[L-F17]`
 
-**QA-SUB-1 `[L-F1]`–`[L-F5]` — the subbar renders exactly five controls with exact labels. [WF]**
+**QA-SUB-1 `[L-F1]` `[L-F2]` `[L-F3]` `[L-F4]` `[L-F5]` — the subbar renders exactly five controls with exact labels. [WF]**
 - **Then** `#st-normal .subbar` contains, in order: `← Back to Orders` (class `back`, left), then right-aligned `↻ Audit History` (`link-btn`), `↗ View in WP` (`link-btn blue`), `⧉ Clone Order` (`link-btn blue`), `✕ Cancel Order` (`link-btn red`)
 - **And** the same five, with the same labels and classes, exist in `#st-hold .subbar`.
 
@@ -1911,7 +2021,8 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I click `⧉ Clone Order` and confirm
 - **Then** `order.cloned` persists with `source_order_id → new_order_id`, `copied_fields[]` = lines + billing + shipping, and `excluded_fields[]` (`DC-5`)
 - **And** a green toast reads `Order cloned — {new order no.}` with a link
-- **And** the new order has **no** comments, **no** actor-log rows, **no** tracking numbers, **no** `Order Number` / `Order Date` / `Product Cost` / `CP Link` values, **no** PIC, **no** sample assignment, and a fresh status `[E-83]`
+- **And** the new order has **no** comments, **no** actor-log rows, **no** tracking numbers, **no** `Order Number` / `Order Date` / `Product Cost` / `CP Link` values, **no** PIC and a fresh status — this list is PD-31's registered exclusion set
+- **And** the new order carries **no** sample assignment either — the `[G-13]` extension stated in `[L-F4]`, not PD-31 content `[E-83]`
 - **When** the source order has 0 lines
 - **Then** the clone succeeds and produces a 0-line order `[E-82]`.
 
@@ -1976,6 +2087,48 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **And** product costs render in the purchase currency (`₩17,100`, `₩22,425`, `₩30,630`)
 - **And no** USD figure and **no** converted amount appears anywhere on the page.
 
+**QA-SUB-20 `[G-15]` `[E-69]` `[BR-33]` `[PD-1 · OWNER-PENDING]` — v1 is a single admin role, and every mutation still names its actor. · NEGATIVE [ADMIN]**
+- **Given** any two authenticated users of the v1 admin
+- **Then** both see the identical control set on this page: **no** control is hidden, greyed or removed on account of who is logged in, and the only disabled controls are the business gates named in `[BR-1]`, `[BR-14]`, `[BR-15]`, `[BR-16]`, `[BR-18]` and `[E-40]` / `[E-85]` / `[E-86]` · NEGATIVE
+- **And** the high-trust actions (`✕ Cancel Order`, `Reset Order`, M3 `Delete`, `Cancel Outbound`, status → `refunded`) are reachable by both, each behind its confirm step
+- **And** every resulting event carries the acting user's `actor` id and display name — the actor record, not a role gate, is the v1 control `[BR-33]`.
+
+---
+
+### QA-NET — Network, session and recovery `[E-36]`–`[E-38]` `[E-58]` `[E-64]` `[E-76]`
+
+Every scenario in this block is `[ADMIN]`: each needs a server to fail against. They exist because the network-failure contract is the part of `[G-9]` that a demo can never demonstrate and a production incident always tests.
+
+**QA-NET-1 `[L-2]` `[E-36]` `[G-9]` — a lost response on Inbound still yields exactly one receipt. · NEGATIVE [ADMIN]**
+- **Given** the write lands on the server but the response never reaches the client
+- **When** the client retries with the **same idempotency key**
+- **Then** exactly **one** `line_item.inbounded` and exactly **one** `inventory.movement` exist — the retry is suppressed as `DC-36`, not applied twice · NEGATIVE
+- **When** the operator reloads the page instead of retrying
+- **Then** the row renders whatever the server holds, and the Actor Log — not the pre-reload screen — is ground truth.
+
+**QA-NET-2 `[L-9]` `[E-37]` — a lost response on Outbound proves nothing by sound. · NEGATIVE [ADMIN]**
+- **Given** the send sound has played and the response is then lost
+- **When** the client retries with the same idempotency key
+- **Then** exactly **one** `order.outbounded` and one set of movements exist
+- **And** if the request never committed, **no** `order.outbounded` exists **despite the sound having played** — the audio is feedback, never proof; only `DC-19` proves an outbound · NEGATIVE.
+
+**QA-NET-3 `[L-1]` `[E-38]` — a lost response on Add Comment creates no duplicate. · NEGATIVE [ADMIN]**
+- **Given** a comment write whose response is lost
+- **When** the client retries with the same idempotency key
+- **Then** exactly **one** `comment.posted` exists (`DC-26`), the thread shows the comment **once**, and at most one `comment.mention_notified` per distinct mention is dispatched (`DC-27`) · NEGATIVE.
+
+**QA-NET-4 `[E-58]` `[E-76]` `[E-21]` `[DC-37]` — two tabs and an expired session both fail safely. · NEGATIVE [ADMIN]**
+- **Given** the same operator has this order open in two tabs and mutates from the stale one
+- **Then** the version check rejects it (409), that tab reloads the affected row, and **no** cross-tab lock is required · NEGATIVE — `entity.version_conflict` persists (`DC-37`)
+- **Given** the session expires mid-action
+- **Then** the action is rejected with a red toast and a re-authentication prompt, and on re-auth the operator returns to **this order**, not to a list
+- **And** the un-sent action is **not** auto-replayed after re-auth · NEGATIVE.
+
+**QA-NET-5 `[E-64]` `[G-2]` — the browser Back button never restores stale state. · NEGATIVE [ADMIN]**
+- **Given** a status change was applied on this page and the operator navigates away and then presses Back
+- **Then** the page re-renders from the server showing the **current** status — **no** cached pre-change render is restored · NEGATIVE
+- **And** because no action on this page depends on a full-page refresh `[G-2]`, Back is always safe: **no** action is re-submitted and **no** event is duplicated by the navigation · NEGATIVE.
+
 ---
 
 ### QA-DC — Data-capture sweeps
@@ -1990,7 +2143,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **Then** the returned `line_item.inbounded` / `line_item.inbound_cancelled` / `order.outbounded` / `order.outbound_cancelled` events match the Actor Log rows one-for-one in content and order
 - **And** rebuilding the log from the store reproduces the rendered table exactly — the UI holds no row the store does not have · NEGATIVE.
 
-**QA-DC-3 `[G-8]` §5.4 — declared non-events produce nothing. · NEGATIVE [ADMIN]**
+**QA-DC-3 `[G-8]` `[L-F16]` §5.4 — declared non-events produce nothing. · NEGATIVE [ADMIN]**
 - **When** I toggle row checkboxes, toggle select-all, open and close the status dropdown without picking, toggle `Hide Comments`, type and clear a hub search, switch hub tabs, cancel a row edit, dismiss M3 three ways, open `View Label`, dismiss a destructive confirm dialog, and scroll the line-items table horizontally
 - **Then** **zero** events are persisted for any of those actions (`NE-1`–`NE-16`)
 - **And** a subsequent real action still persists normally — proving the absence is a guard, not a broken pipeline.
@@ -2013,22 +2166,25 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **Then** four `inventory.movement` events persist with `movement_type` = `inbound`, `cancel_inbound_restock`, `outbound`, `cancel_outbound_reversal`, each carrying `source_event_id` and `balance_after`
 - **And** the net balance change is exactly zero.
 
-**QA-DC-7 `[G-8]` §5.5 — retention, queryability and export. [ADMIN]**
+**QA-DC-7 `[G-8]` `[L-F2]` §5.5 — retention, queryability and export. [ADMIN]**
 - **Given** events older than any plausible retention window
 - **Then** **no** event from §5.1 has been purged and **no** comment has been deleted · NEGATIVE
 - **And** the store answers filters on `order_id`, `sku`, `actor`, `actor_type`, `event_name`, `reason_code` and a date range
 - **And** the `↻ Audit History` surface exports to CSV following the Closing report's encoding and column precedent
 - **And** Order Detail itself exposes **no** export button in v1 · NEGATIVE.
 
-**QA-DC-8 `[G-8]` `[BR-27]` `[BR-43]` `[E-88]` — actor-type and timestamp fidelity survive. · NEGATIVE [ADMIN]**
+**QA-DC-8 `[G-8]` `[BR-27]` `[BR-43]` `[E-88]` `[E-89]` — actor-type and timestamp fidelity survive. · NEGATIVE [ADMIN]**
 - **Then** every event carries `actor_type` ∈ {`human`, `agent`, `system`} and the three are distinguishable in every query — they are **never** collapsed into one "user" field
 - **And** every event stores `occurred_at` in UTC **plus** a `display_timezone`
-- **And** an event whose actor was later removed from the user directory still renders that actor's historical display name in the Actor Log — never `Unknown`, never blank.
+- **And** an event whose actor was later removed from the user directory still renders that actor's historical display name in the Actor Log — never `Unknown`, never blank
+- **And** with the browser set to a timezone other than the warehouse's, the Actor Log, the comment timestamps and the hub times render **warehouse local** — the browser zone changes **nothing** on this page · NEGATIVE `[E-89]`; the `SGT`-suffixed fields render as printed and TRACKING HISTORY still shows both `Time (local)` and `UTC` §3.0.3.
 
-**QA-DC-9 `[G-9]` `[BR-32]` `[BR-47]` `[DC-9]` `[DC-36]` — guards and suppressions are measurable. [ADMIN]**
-- **When** I trigger each guard once (cancel-order with inbounded lines, add-line after outbound, delete an inbounded line, cancel-inbound after outbound, outbound from `on-hold`, outbound with 0 lines, print with no label, print on a cancelled order)
-- **Then** eight `order.action_rejected` events persist, each with a distinct `reason_code` from the §5.1 enum (`DC-9`)
-- **And** after a double-click on any mutating control, `action.idempotency_suppressed` persists with `suppressed_action`, `idempotency_key`, `original_event_id` and `delta_ms` (`DC-36`) — the double-click fix is provable from data, not asserted.
+**QA-DC-9 `[G-9]` `[BR-32]` `[BR-47]` `[DC-9]` `[DC-36]` `[E-70]` — guards and suppressions are measurable. [ADMIN]**
+- **When** I trigger each guard once, in this order (cancel-order with inbounded lines, add-line after outbound, delete an inbounded line, cancel-inbound after outbound, outbound from `on-hold`, outbound with 0 lines, print with no label, print on a cancelled order)
+- **Then** **eight** `order.action_rejected` events persist (`DC-9`), carrying, in that order, the reason codes `inbounded_lines_present`, `order_outbounded`, `line_inbounded`, `order_outbounded`, `hold_blocks_outbound`, `no_lines`, `no_label`, `order_cancelled` — **seven distinct codes across eight events**, every one drawn from the §5.1 enum
+- *(`order_outbounded` legitimately appears twice: add-line-after-outbound `[E-25]` and cancel-inbound-after-outbound `[E-10]` are the same rejection cause. Do **not** assert eight distinct codes; if the owner later wants them separable, that is a change to the `DC-9` enum in §5.1 plus `[E-10]` and `[E-25]`, not to this scenario.)*
+- **And** after a double-click on any mutating control, `action.idempotency_suppressed` persists with `suppressed_action`, `idempotency_key`, `original_event_id` and `delta_ms` (`DC-36`) — the double-click fix is provable from data, not asserted
+- **And** a replayed request arriving **after** the dedupe window has expired is processed as a new, genuine action rather than suppressed, and its `delta_ms` on the earlier `DC-36` is what makes the window tunable `[E-70]` · NEGATIVE.
 
 ---
 
@@ -2037,22 +2193,25 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 | Block | Scenarios | `[WF]` | `[ADMIN]` | Negative (heading) | Negative (any clause) |
 |---|---|---|---|---|---|
 | QA-MAP | 6 | 6 | 0 | 1 | 2 |
-| QA-CMT | 15 | 7 | 8 | 6 | 11 |
+| QA-CMT | 16 | 7 | 9 | 6 | 12 |
 | QA-HUB | 12 | 8 | 4 | 3 | 7 |
-| QA-INB | 16 | 5 | 11 | 5 | 12 |
-| QA-OUT | 12 | 3 | 9 | 8 | 11 |
-| QA-STA | 12 | 6 | 6 | 5 | 10 |
+| QA-INB | 18 | 5 | 13 | 7 | 14 |
+| QA-OUT | 13 | 3 | 10 | 9 | 12 |
+| QA-STA | 12 | 5 | 7 | 5 | 10 |
 | QA-EDIT | 12 | 5 | 7 | 7 | 10 |
 | QA-DEL | 10 | 6 | 4 | 5 | 6 |
 | QA-PRT | 8 | 2 | 6 | 6 | 6 |
-| QA-REN | 16 | 12 | 4 | 7 | 10 |
-| QA-SUB | 19 | 8 | 11 | 11 | 12 |
-| QA-DC | 9 | 0 | 9 | 3 | 6 |
-| **Total** | **147** | **68** | **79** | **67 (45.6%)** | **103 (70.1%)** |
+| QA-REN | 20 | 13 | 7 | 10 | 14 |
+| QA-SUB | 20 | 8 | 12 | 12 | 13 |
+| QA-NET | 5 | 0 | 5 | 5 | 5 |
+| QA-DC | 9 | 0 | 9 | 3 | 7 |
+| **Total** | **161** | **68** | **93** | **79 (49.1%)** | **118 (73.3%)** |
 
-A scenario counts as negative when it asserts that something must **not** happen. The stricter **heading** count (`· NEGATIVE` in the scenario title) is **45.6%**; counting every scenario that carries at least one negative Then-clause gives **70.1%**. Both are far above the 25% floor required by `_review.md` §3.4.
+A scenario counts as negative when it asserts that something must **not** happen. The stricter **heading** count (`· NEGATIVE` in the scenario title) is **49.1%** (79 of 161); counting every scenario that carries at least one negative Then-clause gives **73.3%** (118 of 161). Both are far above the 25% floor required by `_review.md` §3.4.
 
-`[WF]` share is 46.3% (68 of 147). Every `[WF]` scenario is executable today against the live wireframe with the selectors and strings given; every `[ADMIN]` scenario is written so it becomes executable unchanged the day the real admin exists.
+`[WF]` share is **42.2%** (68 of 161). Every `[WF]` scenario is executable today against the live wireframe with the selectors and strings given; every `[ADMIN]` scenario is written so it becomes executable unchanged the day the real admin exists.
+
+**v1.2 delta, for anyone diffing against v1.0/v1.1 counts:** 14 scenarios were added to close the `[E-n]` coverage gap (`QA-INB-17`, `QA-INB-18`, `QA-CMT-16`, `QA-OUT-13`, `QA-REN-17`–`QA-REN-20`, `QA-SUB-20`, `QA-NET-1`–`QA-NET-5`) and one existing scenario, `QA-STA-4`, moved from `[WF]` to `[ADMIN]` because the wireframe lacks the outside-click handler `[OD-WFX-1 · proposed]`. `[WF]` therefore stays at 68 (−1 retagged, +1 new: `QA-REN-17`) while `[ADMIN]` rises 79 → 93. No scenario was renumbered and none was deleted.
 
 ### 8.2 Data-capture → QA coverage map
 
@@ -2068,17 +2227,19 @@ Every `[DC-n]` in §5.1 has at least one QA scenario whose Then-clause asserts i
 | **DC-6** | QA-SUB-15 | **DC-25** | QA-PRT-3, QA-PRT-4 |
 | **DC-7** | QA-SUB-16 | **DC-26** | QA-CMT-4, QA-CMT-8, QA-CMT-9, QA-CMT-10, QA-CMT-12, QA-CMT-15 |
 | **DC-8** | QA-SUB-11 | **DC-27** | QA-CMT-8, QA-CMT-10, QA-CMT-11, QA-CMT-12 |
-| **DC-9** | QA-DC-9, QA-DEL-8, QA-INB-10, QA-OUT-7, QA-OUT-8, QA-OUT-9, QA-OUT-11, QA-PRT-5, QA-PRT-8, QA-SUB-8, QA-SUB-14 | **DC-28** | QA-CMT-14 |
-| **DC-10** | QA-INB-6, QA-INB-12, QA-INB-13 | **DC-29** | QA-CMT-14 |
+| **DC-9** | QA-DC-9, QA-DEL-8, QA-INB-10, QA-OUT-7, QA-OUT-8, QA-OUT-9, QA-OUT-11, QA-OUT-13, QA-PRT-5, QA-PRT-8, QA-SUB-8, QA-SUB-14 | **DC-28** | QA-CMT-14, QA-CMT-16 |
+| **DC-10** | QA-INB-6, QA-INB-12, QA-INB-13, QA-INB-17, QA-INB-18 (non-creation), QA-NET-1 | **DC-29** | QA-CMT-14, QA-CMT-16 |
 | **DC-11** | QA-INB-8, QA-INB-9 | **DC-30** | QA-HUB-10 |
-| **DC-12** | QA-INB-12, QA-INB-15, QA-INB-16, QA-SUB-18 | **DC-31** | QA-HUB-9 |
+| **DC-12** | QA-INB-12, QA-INB-15, QA-INB-16, QA-INB-17, QA-SUB-18 | **DC-31** | QA-HUB-9 |
 | **DC-13** | QA-EDIT-6, QA-EDIT-9, QA-EDIT-11, QA-EDIT-12 | **DC-32** | QA-DC-5 |
 | **DC-14** | QA-EDIT-11 | **DC-33** | QA-SUB-17 |
 | **DC-15** | QA-DEL-7, QA-DEL-9, QA-DEL-10 | **DC-34** | QA-DC-1, QA-HUB-10 |
 | **DC-16** | QA-SUB-14 | **DC-35** | QA-SUB-12 |
 | **DC-17** | QA-DC-4 | **DC-36** | QA-DC-9, QA-DEL-10, QA-INB-7, QA-OUT-5, QA-PRT-6 |
 | **DC-18** | QA-DC-5 | **DC-37** | QA-EDIT-10, QA-OUT-8 |
-| **DC-19** | QA-OUT-4, QA-OUT-5, QA-OUT-6 (non-creation), QA-STA-11 (non-creation) | **NE-1 … NE-16** | QA-DC-3 (single sweep enumerating all sixteen) |
+| **DC-19** | QA-OUT-4, QA-OUT-5, QA-OUT-6 (non-creation), QA-OUT-13, QA-STA-11 (non-creation), QA-NET-2 | **NE-1 … NE-16** | QA-DC-3 (single sweep enumerating all sixteen) |
+| **DC-21** *(also)* | QA-INB-17, QA-NET-1 | **DC-26** *(also)* | QA-NET-3 |
+| **DC-36** *(also)* | QA-INB-17, QA-NET-1 | **DC-37** *(also)* | QA-INB-18, QA-NET-4 |
 
 **Positive paths are asserted positively.** `DC-4` (order cancelled) and `DC-16` (line added) have both a guard scenario and a **success** scenario — `QA-SUB-9` and `QA-SUB-14` each run the allowed path first and the blocked path second. A negative-only assertion ("no event exists") is not evidence that the event can be written, so no `[DC-n]` in this spec relies on one.
 
@@ -2087,14 +2248,27 @@ Every `[DC-n]` in §5.1 has at least one QA scenario whose Then-clause asserts i
 Run in this order; each group leaves the page in a known state and the next group re-loads.
 
 1. **QA-MAP-1 … QA-MAP-6** — verify the map before trusting any selector.
-2. **QA-REN-1 … QA-REN-12** — pure render assertions, no interaction, no state mutation.
+2. **QA-REN-1 … QA-REN-12 and QA-REN-17** — pure render assertions, no interaction, no state mutation.
 3. **QA-SUB-1 … QA-SUB-7, QA-SUB-19** — furniture render assertions.
-4. **QA-INB-1 … QA-INB-5, QA-OUT-1 … QA-OUT-3, QA-STA-1 … QA-STA-6, QA-EDIT-1 … QA-EDIT-5, QA-PRT-1, QA-PRT-2** — per-legend render and state-tab assertions.
+4. **QA-INB-1 … QA-INB-5, QA-OUT-1 … QA-OUT-3, QA-STA-1 … QA-STA-3, QA-STA-5, QA-STA-6, QA-EDIT-1 … QA-EDIT-5, QA-PRT-1, QA-PRT-2** — per-legend render and state-tab assertions. **`QA-STA-4` is deliberately absent from the `[WF]` run**: it is `[ADMIN]` until the wireframe gains an outside-click handler `[OD-WFX-1 · proposed]`.
 5. **QA-HUB-1 … QA-HUB-8** — dropdown interactions (reload between search scenarios; the search pane persists in the DOM once created).
 6. **QA-CMT-1 … QA-CMT-7** — thread mutations. **Reload before each**, because `QA-CMT-3` and `QA-CMT-5` permanently append rows to the in-page thread for the rest of the session.
 7. **QA-DEL-1 … QA-DEL-6** — modal interactions; close the modal between scenarios.
 
 `[ADMIN]` scenarios are unordered and each states its own Given.
+
+### 8.4 Edge-case → QA coverage, and the four deliberate exclusions
+
+**Every `[E-n]` in §7 is either referenced by a QA scenario or listed below with the reason it is not machine-assertable.** A coverage checker can therefore treat any unlisted, unreferenced `[E-n]` as a real hole. The v1.2 pass closed **18 of the 19** gaps the 2026-08-03 coverage audit found: `E-3`, `E-9`, `E-14`, `E-34`, `E-35`, `E-36`, `E-37`, `E-38`, `E-44`, `E-45`, `E-52`, `E-58`, `E-64`, `E-65`, `E-70`, `E-76`, `E-89` and `E-90` are now asserted by `QA-INB-17`, `QA-INB-18`, `QA-OUT-13`, `QA-CMT-16`, `QA-NET-1`–`QA-NET-5`, `QA-REN-17`–`QA-REN-20`, `QA-DC-8` and `QA-DC-9`. The nineteenth, `E-69`, is the first row of the table below. Rows 2–4 are cases that *do* have a scenario, listed so nobody reads their **deliberately unasserted half** as an oversight.
+
+| `[E-n]` | Why it has no scenario of its own | Where it is nonetheless honored |
+|---|---|---|
+| **`E-69`** | It is an **org-policy statement** ("an operator without fulfillment training opens the page"), not a behavior the page performs. Its one machine-checkable consequence — that nothing is role-gated in v1 — **is** asserted. | `QA-SUB-20` asserts the no-role-gating half `[G-15]` `[BR-33]`. |
+| **`E-30`** *(partially)* | The max-comment-length half is explicitly dev-time (§9.4 D-13); asserting a number here would invent one. | The escaping half is asserted by `QA-CMT-13` and `QA-HUB-7`. |
+| **`E-57`** *(partially)* | The "which sample and how many" half has **no defined source** `[PD-51 · NO-DEFAULT]`; a scenario asserting rendered values would specify behavior the owner has not decided. | `QA-REN-16` asserts the executable half — that no assignment control exists here and no `order.sample_assignment_changed` is emitted. |
+| **`E-86`** *(partially)* | What *unblocks* a carrier-less order is undecided `[PD-55 · NO-DEFAULT]`. | `QA-OUT-11` asserts the block, the visible reason, `reason_code=no_carrier` and the absence of any assignment control. |
+
+The three `· partially` rows are not coverage gaps: in each, the unasserted half is a `NO-DEFAULT` owner question or a declared dev-time choice, and asserting it would contradict §9.2 / §9.4.
 
 ---
 
@@ -2107,7 +2281,7 @@ Per `_review.md` §3.8, this section lists **only** three things: what this scre
 | Area | Why, and where it lives instead |
 |---|---|
 | **Scanner protocol `[G-1]`** | Order Detail is not a scan surface and must never gain a scan input `[BR-30]`. Scanning lives in View Orders (all states) and Closing. QA must not apply the `[G-1]` invariants here. |
-| **Audio `[G-3]`(b) TTS and (c) warning tone** | (b) is a Closing scan-warning mechanism; (c) is a View Orders State 6 wrong-product signal. Neither has an analogue on a desk screen `[BR-29]`. Only `[G-3]`(a) applies here. |
+| **Audio `[G-3]`(b) TTS and (c) warning tone** | (b) is a Closing scan-warning mechanism; (c) is a View Orders State 6 wrong-product signal. Neither has an analogue on a desk screen `[BR-29]`. Only `[G-3]`(a) applies here — and (a) is **in scope as page behavior**, specified in `[L-9]` step 2 with its own QA scenario, not merely cross-referenced (`_review.md` §2b codes this row `Δ`; that coding is stale, §3.0.1). |
 | **Label / invoice layout content** | Deferred to **Phase 3-1**, a separate session with the owner. This spec covers print *behavior* `[G-4]` only, never what is printed on the label. |
 | **Sample assignment UI** | Order Management is the primary home `[G-13]`. Order Detail only **displays** the assigned sample `[PD-27 · OWNER-PENDING]` `[BR-34]`. Sample-set contents on the picking list are RTO's concern `[PD-36 · OWNER-PENDING]`. |
 | **Unrecognized-tracking resolution UI** | tracking-missing (primary) and View Orders M2. Order Detail is a landing surface only `[BR-35]`. |
@@ -2161,6 +2335,9 @@ These are **not** owner questions and are not tracked as PDs. The spec states a 
 | D-15 | Bulk-inbound chunk size for large orders `[E-87]` | Invisible to the operator: one submission, one `DC-12`, one toast, regardless of chunking |
 | D-16 | Autocomplete behavior for `@mention` in the composer | Presence and debounce are free; the **parse contract** (`mentions[]`, `unresolved_mention_tokens[]`, deduplication, self-mention suppression) is not `[E-28]` `[E-60]` `[E-80]` |
 | D-17 | Retry policy for Slack dispatch (backoff, attempt cap) | Every attempt's result persists on `DC-27`; the primary action never waits on it `[PD-4 · OWNER-PENDING]` |
+| D-18 | **Carrier tracking-sync cadence and scheduling owner** `[L-6]` `[DC-23]` — how often a sync runs and who schedules it is specified nowhere in the input documents (raised as `order-detail.A` OQ-11, only half of which reached D-12) | Cadence is free **provided it is observable in `DC-23`**: the `(synced …)` marker must always reflect the last **successful** sync, a failed sync keeps the previous timestamp and persists its failure result, and a fabricated time is never displayed `[E-43]`. The feed stays inbound-only §6.5 |
+| D-19 | **Self-mention Slack suppression** `[L-1]` step 9 `[E-60]` — whether a human's `@self` in a free-text comment notifies the author. `[PD-16]` decides only the match-pipeline auto-comment; no owner decision covers this case | **Default: suppress**, recorded as `DC-27.suppressed_reason=self_mention`, by analogy with the resolver == registrant suppression. The comment itself always posts normally. If the owner later registers the question, `[L-1]` step 9, `[E-60]` and `QA-CMT-10` take the tag together |
+| D-20 | **`No label yet` guard style** `[E-40]` `[L-13]` `[L-F7]` — disabled-with-reason vs an error toast when Print / View Label has no label, and the same question on a cancelled order `[E-85]`. Raised as an owner question (`order-detail.B` Q-A5) with no register entry | **Default: disabled with the reason rendered next to the control**, consistent with `[BR-46]` and with `[E-7]`'s "a disabled control teaches the precondition". A forced request still persists `DC-9` so the guard is measured `[BR-47]` |
 
 ### 9.5 Wireframe work implied by this spec (backlog — not to be applied during spec writing)
 
@@ -2172,6 +2349,7 @@ Handled by the wireframe-edit pass after P3-3/P3-4, deployed via `/wf-deploy ord
 - The **hold-reason input** on the status change `[PD-20 · OWNER-PENDING]` and its rendering inside the banner are specified but not drawn.
 - The **Actor Log empty state** `[E-42]` and the explicit **truncation marker** `[E-65]` are specified but not drawn.
 - **Demo-data correction (candidate, not registered in `_wireframe-fixes`):** the three Actor Log inconsistencies in §2.5 B — the `OUTBOUND` row on an order rendered `Processing` with Outbound still enabled; the `CANCEL INBOUND` with no later re-inbound on a row rendering `INBOUNDED`; and State 2 carrying the same `OUTBOUND` row while a line is `PENDING`. All three are illustrative, none is a behavioral statement.
+- **`[OD-WFX-1 · proposed]` (this page):** the **Change Status dropdown must close on an outside click**. `order-detail/index.html` has a backdrop handler for the modal but no document-level handler for the dropdown, so it stays open (measured 2026-08-03). The specified behavior `[L-8]` step 1 `[E-46]` is unchanged; the drawing is missing it. Until the handler lands, `QA-STA-4` is tagged `[ADMIN]` §8; applying the fix flips it back to `[WF]` with no edit to the scenario. Registered in `_wireframe-fixes.md` §I.
 - `[WF-3]` (cross-page): once the owner confirms `[PD-10]`, the View Orders State 3 legend must drop the "(proposal)" qualifier; Order Detail's `[BR-14]` already assumes the adopted rule.
 
 ---
@@ -2212,7 +2390,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-07-23 | JIT sourcing route gains the **purchase-channel parenthetical** — `JIT (Coupang)` / `(Naver)` / `(Other retail)` | commit `7c12bc2` |
 | 2026-07-23 | Order Detail section tags restored | commit `d7a5728` |
 | 2026-07-23 | **REVERSAL — `Latest Inventory Count` restored** after being removed in the column cleanup; returned to the live screen's position as the first column of the Inventory group, in **both** states. JIT rows legitimately show `0` `[BR-7]` | commit `bbaa96f` |
-| 2026-07-23 | **REVERSAL (cross-page, affects `[G-13]` references here) — sample assignment**: the 07-22 note recording sample assignment as "removed" was superseded within a day by the 07-23 ON/OFF redesign, reconfirmed 2026-08-03. The 07-22 note was stale, not a decision | plan ledger, handoff note G |
+| 2026-07-23 | **REVERSAL (cross-page, affects `[G-13]` references here) — sample assignment**: the 2026-07-22 note recording sample assignment as "removed" was superseded within a day by the 2026-07-23 ON/OFF redesign, reconfirmed 2026-08-03. The 2026-07-22 note was stale, not a decision | plan ledger, handoff note G |
 | 2026-07-29 | **Comments hub all-orders search added** — every comment across every order, newest first, purple `<mark>` highlight, click opens the order, clearing the input restores the previous tab. 8 sites on View Orders + 2 on Order Detail | commit `8e5abeb` |
 | 2026-08-02 | Phase 1 consistency sweep: Order Detail's hub badge normalized to unread-count `2` (was `3`) `[BR-44]`, a stale JS comment corrected (`Completed / On Hold` → `Processing / On Hold`), hub search empty-state wording aligned | commit `d88673c` |
 | 2026-08-02 | Developer handoff notes published in Notion (6 implementation notes, incl. the double-click bug and the local print agent requirement) | plan ledger |
@@ -2232,10 +2410,13 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **`[G-15]` created** — v1 ships a single admin role; no role gating on any screen `[PD-1 · OWNER-PENDING]` | `_review.md` §4 GD-8 |
 | 2026-08-03 | Spec template fixed at 10 sections; specs are written to be read end-to-end by AI agents running QA | owner, plan ledger |
 | 2026-08-03 | **Spec v1.1 audit corrections** (this document): the line-items table is **18 columns, not 20** — both planning lenses were approximate `[BR-42]`; per-line inbound declared all-or-nothing so no second partial-receipt path is invented `[BR-41]`; the four coexisting time formats fixed as a contract with an explicit timezone invariant `[BR-43]`; the three Actor Log demo-data inconsistencies recorded so QA does not derive rules from them (§2.5 B); all `[WF]` QA selectors state-scoped, because both states are always in the DOM (§8.0) | spec audit, 2026-08-03 |
+| 2026-08-03 | **Spec v1.2 remediation** (this document), from three independent verification passes — coverage audit, adversarial QA execution against the live wireframe, and the cross-page/`_review` audits. Behavioral additions: Cancel Inbound restocks the full line qty with no Yes/No and no qty input `[BR-49]`; there is no `OUTBOUNDED` line status `[BR-50]`; cancellation is a flag and the 8 statuses are values rendered as title-case labels `[BR-12]`. QA: `QA-INB-3` and `QA-OUT-3` rescoped to the product surface so they stop forbidding legend text that `QA-MAP-5` requires; `QA-DC-9` corrected to seven distinct reason codes across eight guards; a text-extraction contract added to §8.0 (annotation `.dot` text stripped, `<br>` normalized, `reads exactly` vs `reads` defined) because eight scenarios flipped verdict on the runner's private convention; `QA-STA-4` retagged `[ADMIN]` behind the new `[OD-WFX-1 · proposed]`; 14 scenarios added to close 18 of 19 uncovered edge cases, with §8.4 stating the one deliberate exclusion. Bookkeeping: `[PD-19]` dropped from `BR-28`, the sample-set clone exclusion recorded as a `[G-13]` extension rather than PD-31 content, self-mention suppression and the `No label yet` guard recorded as dev defaults (D-19, D-20) because no register entry exists for either, tracking-sync cadence added as D-18, and nine open cross-page conflicts recorded as `[X-1]`–`[X-9]` in §2.7 | `_verify/m1-order-detail.md`, `_verify/m2-order-detail.md`, `_verify/m3a-cross-page.md`, `_verify/m3b-review-audit.md` |
 
 ### 10.2 Removed features — must NOT exist
 
 Recorded so nobody re-implements them from a stale capture or an old document `[BR-40]`. Each has a negative QA assertion.
+
+**Scope of those assertions (corrected 2026-08-03).** They forbid the removed item **as a rendered control** — a button label, a header cell, body text in `#st-normal` / `#st-hold`. They do **not** forbid the wireframe legend from *naming* what was retired: legend items 2 and 9 exist precisely to record `"Request Inbound" name retired` and `"Outbound to Deleo BaroShip" → relabeled`, and `QA-MAP-5` requires that text. Asserting against the whole document would put `QA-INB-3` / `QA-OUT-3` in direct contradiction with `QA-MAP-5` — as both did before this correction — and would make an unaided QA agent file two bug reports against a correct drawing.
 
 | Removed item | Replaced by | Removed on | Asserted by |
 |---|---|---|---|
@@ -2257,7 +2438,7 @@ Recorded so nobody re-implements them from a stale capture or an old document `[
 ### 10.3 Reversal chains (recorded verbatim so nobody re-litigates them)
 
 1. **`Latest Inventory Count`**: present in the live admin → **removed** during the 2026-07-22 Inventory column cleanup → **restored** 2026-07-23 (commit `bbaa96f`) at the live screen's exact position, in both states, with the explicit note that `0` on a JIT line is correct. Current state: **present** `[L-10]` `[BR-7]`.
-2. **Sample assignment** (cross-page, referenced here via `[G-13]` / `[PD-27]`): **removed** 2026-07-22 → **reinstated as simple ON/OFF with multiple overlapping periods** 2026-07-23 → **reconfirmed** 2026-08-03. The 07-22 "removed" note was stale within a day; Notion §G and the handoff note were corrected on 2026-08-03. Current state: **ON/OFF, exactly one sample set per order**.
+2. **Sample assignment** (cross-page, referenced here via `[G-13]` / `[PD-27]`): **removed** 2026-07-22 → **reinstated as simple ON/OFF with multiple overlapping periods** 2026-07-23 → **reconfirmed** 2026-08-03. The 2026-07-22 "removed" note was stale within a day; Notion §G and the handoff note were corrected on 2026-08-03. Current state: **ON/OFF, exactly one sample set per order**.
 3. **"Cancel Inbound disabled after Outbound"**: **proposed** 2026-07-09 → left in proposal state through July → **adopted as a rule** 2026-08-03 `[PD-10 · OWNER-PENDING]`. The View Orders legend still carries the "(proposal)" qualifier, which is a wireframe defect `[WF-3]`, not a live ambiguity. Current state: **adopted** `[BR-14]`.
 4. **Comment-mention Slack channel**: drafted as "channel pending owner" in `global-rules-draft` and `decision-sources` → **confirmed 2026-08-03** as `#fulfillment-admin-comments` (`C0BMGEWM5QA`), owner-created `[C-2]`. Current state: **confirmed**; "pending" must never be written for this row again.
 5. **Comments hub search**: did not exist → **added 2026-07-29** (commit `8e5abeb`) as an all-orders search, not a tab filter → empty-state wording normalized 2026-08-02 and englishized 2026-08-03. Current state: **present, all-orders scope** `[L-7]`.
@@ -2266,4 +2447,4 @@ Recorded so nobody re-implements them from a stale capture or an old document `[
 
 ---
 
-*End of specification. 15 legend units + 17 page-furniture units = 32 specified units · 48 business rules · 37 persisted events + 16 non-events · 92 edge cases · 147 QA scenarios.*
+*End of specification. 15 legend units + 17 page-furniture units = 32 specified units · 50 business rules · 37 persisted events + 16 non-events · 92 edge cases · 161 QA scenarios (68 `[WF]` · 93 `[ADMIN]`) · 9 open cross-page conflicts `[X-1]`–`[X-9]`.*

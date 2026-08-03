@@ -1,15 +1,17 @@
 # Unrecognized Tracking — Screen Specification
 
 **Slug:** `tracking-missing` · **Wireframe (SST):** `wms2/tracking-missing/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/tracking-missing/
-**Spec version:** 1.1 (audited + finalized) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1 · **Global rules:** `_global-rules.md` v1.0
-**Companion registers:** `_plans/_provisional-decisions.md` (PD) · `_plans/_wireframe-fixes.md` (WF) · `_plans/_review.md` (C-1…C-12, §3 conventions)
+**Spec version:** 1.2 (remediation pass — three independent verifications applied) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1 · **Global rules:** `_global-rules.md` v1.0
+**Companion registers:** `_plans/_provisional-decisions.md` (PD) · `_plans/_wireframe-fixes.md` (WF) · `_plans/_review.md` (C-1…C-12, §3 conventions, §4 GD-1…GD-10)
 
 > **Reading contract.**
-> 1. Every `[G-n]` is a citation to `_global-rules.md`. This document **never restates a global rule body** — it cites the rule and adds only the page delta.
+> 1. Every `[G-n]` is a citation to `_global-rules.md` v1.0. This document restates a global rule body **only where the page narrows or extends it**, and in that case the delta, its rationale, and its date are named in the same sentence. Everywhere else it cites and adds the page delta only.
 > 2. Every behavior resting on a provisional decision is tagged `[PD-n · OWNER-PENDING]` **in the sentence where it appears**, including inside QA scenarios. Reversing a PD means editing only the tagged sentences and nothing else.
 > 3. Where the wireframe is stale, wrong, or missing an affordance, this spec states the **correct** behavior and names the defect (`WF-n`). The wireframe text is never specced as-is.
 > 4. IDs `[L-*]`, `[BR-n]`, `[DC-n]`, `[N-n]`, `[E-n]` are page-scoped and **never renumbered**. Merged entries keep both IDs.
 > 5. Quoted UI strings are byte-accurate to the wireframe unless marked *(spec-authored)*.
+> 6. Every `[GD-n]` is one of the ten global-rule deltas recorded in `_plans/_review.md` §4. All ten landed in `_global-rules.md` v1.0 (verified 2026-08-03), so a `[GD-n]` citation is a **provenance pointer, not a live rule** — the binding text is always the `[G-n]` body it produced. `[GD-n]` IDs are resolvable only in `_review.md` §4; they are cited here for traceability and never as the source of a behavior.
+> 7. Three page-level readings in this document are **candidate global amendments that have not yet been raised into `_global-rules.md`** and are therefore stated locally on purpose: `[BR-44]` (the scope of `[G-2]`'s refresh prohibition), §5.1's event-name note (shared-concept event naming), and §3.6's Comments-hub pane-header strings. Each names the cross-page defect that raised it. If the global rule is later amended, the global text supersedes and the page statement is deleted, not edited.
 
 ---
 
@@ -119,13 +121,18 @@ Tag these `[ADMIN]` when asserting the correct behavior; the current behavior is
 7. **`finishMatch()` decrements only if `#poolrow1` still exists.** If row 1 was already removed with `.xdel`, a subsequent `Match to this product` click still shows `#matchToast` but leaves the counters unchanged. In the admin, a confirmed match always decrements for the row it actually closed.
 8. **`#inbox1` does not close on an outside click or on `Esc`.** The only handler is the toggle on the `💬 Comments` button. The admin must close it on both `[BR-40]`.
 9. **`#poolrow1` is the only row carrying an `id`.** The admin assigns `id="poolrow-{pool_item_id}"` to every row so deep links can target one.
+10. **`.xdel` is not double-click safe: two clicks remove one row but decrement both counters twice.** The handler is `b.closest('tr').remove(); poolDec();` with no guard. After the first click the `<tr>` is detached, but the button is still its descendant, so `b.closest('tr')` still resolves, `.remove()` silently no-ops, and `poolDec()` runs a second time — counters go `3 → 2 → 1` while **two** rows remain rendered, breaking `[BR-33]`'s three-way invariant inside the wireframe. This is defect **WF-NEW-D**. Note the asymmetry that makes it easy to miss: the sibling handler `finishMatch()` *does* guard (`const row=document.getElementById('poolrow1'); if(row){…}`), which is the only reason QA-NEG-01 is safe to run as `[WF]` while QA-NEG-03 is not. Current behavior is asserted by QA-WFQ-07; the correct behavior is asserted by QA-NEG-03 `[ADMIN]`.
 
 ### 2.5 New wireframe defects found while writing this spec
 
-Not present in `_wireframe-fixes.md` (WF-1…WF-14); filed here for the wireframe-edit pass. Deploy rule: any wireframe edit goes out through `/wf-deploy tracking-missing`, never by editing the published copy.
+Not present in `_wireframe-fixes.md` (WF-1…WF-14) when this spec was first written; filed here for the wireframe-edit pass. **WF-NEW-D and WF-NEW-E have since been appended to `_wireframe-fixes.md` §B so the wireframe pass is driven off the register, not off this spec.** Deploy rule: any wireframe edit goes out through `/wf-deploy tracking-missing`, never by editing the published copy.
+
+> **Register-citation warning.** `_review.md` §2a's tracking-missing Notes cell cites this page's dead-code cleanup as **`WF-9`**. That is wrong: `WF-9` is *ready-to-outbound — picking list modal has no sample-set lines*. The correct entry for this page's v1 CSS/JS leftovers is **`WF-10`** (confirmed against `_wireframe-fixes.md`; raised as m3b finding 5.3). Every citation in **this** document uses `WF-10`. A wireframe-edit pass driven off `_review.md` rather than off `_wireframe-fixes.md` will search the wrong file and leave the real leftovers in place.
 
 - **[WF-NEW-A] — Comments hub is missing the full-text search input.** File: `wms2/tracking-missing/index.html`, `#inbox1`. Legend 5 and `[G-7]` both require search across all comments; the markup ships only the two tabs. Every other page carrying the hub got the search input in commit `8e5abeb` (2026-07-29). Fix: add the search input to `#inbox1`.
 - **[WF-NEW-B] — Candidate order numbers are not links.** Verified: the file contains **0** `<a>` elements. Selectors: the `Suspected Orders` cells in all three pool rows, and the `Order` column in `#m-match`. `[G-12]` states cross-page references are real links. Fix: wrap in an anchor to the order.
+- **[WF-NEW-D] — `.xdel` double-click double-decrements both counters.** File: `wms2/tracking-missing/index.html`, lines 400–404. `document.querySelectorAll('.xdel').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); b.closest('tr').remove(); poolDec();}))` — no guard, no debounce. A second click within the debounce window resolves `b.closest('tr')` on the already-detached row, `.remove()` no-ops, and `poolDec()` fires again: one row removed, counters decremented twice (§2.4.10). `[G-9]` requires double-click safety and `[BR-33]`/`[BR-41]` require the counters to track rendered rows. Fix: mirror `finishMatch()`'s guard — capture the row first and only call `poolDec()` when the row was actually attached. **Also filed in `_wireframe-fixes.md` §B.**
+- **[WF-NEW-E] — Comments-hub pane headers diverge from the corpus-canonical strings.** File: `wms2/tracking-missing/index.html`, `#inbox1` `.paneheader` (lines 227 and 234). This page ships `Comments mentioning me` and `Saved comments`; four of the eight pages ship `Comments mentioning me · Click to open the order` and `Saved comments · Click to open the order`. `[G-7]` states the hub is the same on every screen but does not yet publish the pane strings as byte-exact contract, so the divergence is invisible to a single-page reader and is asserted byte-exactly by six different QA suites (cross-page defect m3a D7). Fix: adopt the four-page-majority strings here, and publish the six hub strings in `[G-7]`. Until `[G-7]` carries them, §3.6 states the admin string and QA asserts both tiers. **Also filed in `_wireframe-fixes.md` §B.**
 - **[WF-NEW-C] — Dead CSS beyond `WF-10`'s list.** `WF-10` names `.trk`, `.shelf`, `.wait`, `.slack-pill`, `.picava`, `.picname`, `.cntchip`, `.logsec` and the trk-input script block. Additionally unused in the rendered DOM: `.ordercard`, `.seg`, `.bulkbar`, `.cpanel`, `.logtbl`, `.act-in/.act-out/.act-cancel`, `.auto`, `.mtextarea`, `.qty`, `.qty-warn`, `.tag-pending`, `.tag-inbounded`, `.tag-exist`, `.tag-smartbuy`, `.tag-wholesale`, `.tag-partnership`, `.route-note`, `.row-exist`, `.thumb`, `.grp-gap`, `.status`, `.st-processing/.st-prepare/.st-hold/.st-missing`, `.chip-return`, `.comment-btn`, `.btn-green-line`, `.btn-red-line`, `.btn-gray`, `.bar-under`, `.modal .qrow`, `.inboxdd .empty`. **Do not delete `.toast.err`** — it is unused in the wireframe but is the specified failure variant (§3.9). Fix: delete together with `WF-10`.
 
 ### 2.6 Mandatory-inclusion map (the 12 owner-flagged items)
@@ -185,7 +192,7 @@ Header row is `.tbl th` (dark `--ink` background, white text, `white-space:nowra
 
 | # | Header (exact) | Source | Format / semantics | Editable? |
 |---|---|---|---|---|
-| 1 | `Tracking No` | Auto-collected by the View Orders scanner at scan time; carried on the intake payload | `.num` tabular figures, digits only, no grouping (e.g. `10323100841207`). Nullability is undecided — see `[PD-66 · OWNER-PENDING]` and §9.1 | Read-only |
+| 1 | `Tracking No` | Auto-collected by the View Orders scanner at scan time; carried on the intake payload | `.num` tabular figures, digits only, no grouping (e.g. `10323100841207`). Nullability is undecided — see `[PD-66 · OWNER-PENDING]` and §9.1. **Namespace:** the number is stored with the namespace the scan originated in — `outbound` for a customer parcel, `inbound` for an unrequested supplier arrival `[BR-11]` — and the uniqueness guard `[BR-19]`, `[E-11]` is evaluated **within that namespace only**. A pool item whose number is `inbound` therefore does **not** collide with an identical `outbound` number, which is exactly the configuration `[E-33]` describes (an unrequested-inbound parcel matched to a customer order): the namespace check is silent there by design, so `[E-33]`'s only defence remains the memo surfaced in `[L-M1]` *(spec-authored)* | Read-only |
 | 2 | `Order No` | The Coupang purchase order number typed by the registrant in the View Orders lookup popup (M2), carried only when the lookup **failed** | `.num`, `--ink-3` gray. Renders the literal `–` (en dash U+2013) when absent, which is the normal case `[BR-12]`. A present value is **display-only context** and never influences candidate computation `[E-2]`, `[E-68]` | Read-only |
 | 3 | `Product Name` | The catalog product chosen by autocomplete in View Orders M2b, snapshotted at intake `[BR-43]` | Brand in `<b>` + space + English name + `, ` + size suffix, e.g. `COSRX Advanced Snail 96 Mucin Power Essence, 100ml` with `COSRX` bold `[L-4]` | Read-only |
 | 4 | `Product Name KR` | Catalog Korean name for the same product, snapshotted at intake | Korean name with the English brand in bold, e.g. `COSRX 어드밴스드 스네일 96 뮤신 에센스` with `COSRX` bold `[G-6]` | Read-only |
@@ -248,8 +255,10 @@ Consequences that must be honored:
 **Rendering, per candidate, exact format:**
 
 ```
-{PIC in <b>} · {"Order " + order_no, blue --blue #0D6EFD, font-weight 700, .num} · {route (channel), .mut} · {status, .mut}
+{PIC in <b>} · {"Order " + order_no, blue --blue #0D6EFD, font-weight 700, .num} · {route (channel) · status — one trailing <span class="mut">, --ink-3 #7E7C83, non-bold}
 ```
+
+The route and the status share **one** `.mut` span; they are not two separately styled fragments. This is the load-bearing detail behind the `[G-5]` page delta below.
 
 Live examples from the wireframe:
 - `Dean · Order 414230 · JIT (Naver) · Processing`
@@ -257,7 +266,16 @@ Live examples from the wireframe:
 - `Harshit · Order 414102 · JIT (Naver) · Processing`
 - `Miranti · Order 413998 · JIT (Official Mall) · Processing`
 
-**Route label rendering.** Route + channel is colorless bold black text `[G-5]` — the `.tag-jit` class in this file is deliberately neutralized (`background:transparent; color:var(--ink); padding:0`). An `OTHER`-route order renders `OTHER ({channel name})` in the same form `[PD-80 · OWNER-PENDING]`. The route originates in the Inbound Request and is matched via the invoice number; this page only displays it `[BR-15]`.
+**Route label rendering — declared page delta on `[G-5]` (decided 2026-08-03).** This page renders the route in **two structurally different places**, and `[G-5]`'s badge contract governs only one of them:
+
+| Surface | Form | Computed rendering | Governed by |
+|---|---|---|---|
+| `[L-M1]`'s `Channel` cell | **Badge** — `<span class="tag tag-jit">JIT (Naver)</span>` | `background:transparent`, `padding:0`, `font-weight:800`, `color:var(--ink)` = `rgb(20, 16, 27)` | `[G-5]` in full: colorless **bold black**, never a coloured pill. Asserted by QA-M1-10 |
+| `[L-2]`'s pool cell | **Running text** — the trailing `<span class="mut">JIT (Naver) · Processing</span>` of a compound candidate sentence | `background:transparent`, no border, `padding:0`, non-bold, `color:var(--ink-3)` = `rgb(126, 124, 131)` | `[G-5]`'s **"never a coloured pill"** half applies and is a hard requirement. `[G-5]`'s **bold-black** half does **not** apply — page delta, see below. Asserted by QA-SUS-05 |
+
+**Why the delta.** `[G-5]`'s consumer list is *View Orders badges, Inventory, Order Detail* — this page is not on it, and the pool cell does not render a badge at all. The route there is one clause inside `{PIC} · {Order no.} · {route (channel)} · {status}`, a sentence in which the **order number** is the emphasized element (blue, 700). Rendering the route bold black inside that sentence would create a second competing emphasis and would require splitting a span that also carries the status. So on this page the badge contract lands on M1's `Channel` cell only; the pool cell's route is muted running text (`--ink-3`, non-bold), and the never-a-pill prohibition holds on both. **Decided 2026-08-03; rationale: the candidate line is a compound sentence, not a badge.** Reversal impact if the owner rejects the delta: change the format line above to render the route fragment `--ink` bold, split the `.mut` span in all four pool candidate lines (a new wireframe defect), and re-tag QA-SUS-05's colour clause `[ADMIN]` with a `[WF]` counterpart in §8.15. Nothing else changes.
+
+An `OTHER`-route order renders `OTHER ({channel name})` in whichever of the two forms its surface uses `[PD-80 · OWNER-PENDING]`. The route originates in the Inbound Request and is matched via the invoice number; this page only displays it `[BR-15]`.
 
 **Order number must be a real link** to the order `[G-12]`, `[BR-37]` — currently defect `WF-NEW-B`.
 
@@ -331,7 +349,18 @@ Cited by reference to `[G-7]`; only page deltas are specified here.
 
 **Location and chrome.** Top-right of the nav: `<button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>`. The dropdown `#inbox1` is 370 px wide, anchored `top:46px; right:110px`.
 
-**Tabs.** `@ Mentions` (with an inline count badge, `3` in the wireframe) and `★ Saved`. Mentions pane header: `Comments mentioning me` with a right-aligned blue `Mark all read`. Saved pane header: `Saved comments` with `Unstar to remove from the list`.
+**Tabs.** `@ Mentions` (with an inline count badge, `3` in the wireframe) and `★ Saved`.
+
+**Pane headers — page delta pending a `[G-7]` amendment (cross-page defect m3a D7).** `[G-7]` states the hub is identical on all eight screens but does not yet publish the pane strings as byte-exact contract, and the eight wireframes have drifted. The corpus-canonical strings — the four-page majority (`order-detail`, `order-management`, `ready-to-outbound`, `stock-status`) — are the ones the admin must ship:
+
+| Element | Wireframe on this page (current, `[WF]`) | Admin string (canonical, `[ADMIN]`) |
+|---|---|---|
+| Mentions pane header | `Comments mentioning me` | `Comments mentioning me · Click to open the order` |
+| Saved pane header | `Saved comments` | `Saved comments · Click to open the order` |
+| Unstar hint | `Unstar to remove from the list` | `Unstar to remove from the list` — **already canonical, do not change** |
+| Read-all action | `Mark all read` | `Mark all read` — **already canonical, do not change** |
+
+The two divergent headers are wireframe defect `WF-NEW-E`. QA asserts the current strings under `[WF]` (QA-CMT-03, QA-CMT-05) and the canonical strings under `[ADMIN]` (QA-CMT-15) so neither tier produces a false failure. When `[G-7]` is amended to publish the six hub strings, that text supersedes this table and this block is deleted. `Mark all read` is right-aligned and blue.
 
 **Badge semantics.** `.badge-n` on the button = **unread mention count**, not item count. The wireframe correctly shows badge `3` against 4 rendered mention items (three `.unread`, one read) — intended, not a defect. Counts above 99 render `99+` while the persisted count stays exact `[E-55]`.
 
@@ -536,26 +565,26 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 | **BR-12** | **Order No is the Coupang purchase order number** (`12101316464794` format) and is **normally `–`.** A present value is display-only context and never affects candidate computation. | Lookup-matched items are resolved upstream and never reach the pool; a number that reached the pool is by definition one the lookup rejected, so trusting it would re-import the error. | 2026-07-23 |
 | **BR-13** | **No photo capture on this page — permanently** `[PD-63 · OWNER-PENDING]`. No upload control, no column, no thumbnail, no phase pointer. | The 2026-07-21 hold was resolved by deletion in the 2026-08-03 review (item 15). Leaving it "deferred" invites re-implementation from stale docs. | 2026-07-21 hold → 2026-08-03 deletion |
 | **BR-14** | **Brand bold-prefixing covers every product surface on this page** — both name columns, M1's summary card and `Included Product` cells, the auto-comment, and the toast `[G-6]`. Catalog casing is preserved verbatim and the two columns may differ. | The resolver judges a product they cannot see; the brand is the fastest discriminator (§1.4). | View Orders decision B; reconfirmed 2026-08-03 |
-| **BR-15** | **Route/channel labels render as colorless black bold text**, `ROUTE (channel)` `[G-5]`. `OTHER` renders as `OTHER ({channel})` `[PD-80 · OWNER-PENDING]`. The route originates in the Inbound Request and is matched via the invoice number; this page only displays it. | Colored pills would compete with the yellow row highlight, which is the page's one real signal. | 2026-07-13 badge convention; `OTHER` form 2026-08-03 |
+| **BR-15** | **Page delta on `[G-5]`, two surfaces.** The badge form (`[G-5]` in full: colorless bold black, never a pill) lands **only** on `[L-M1]`'s `Channel` cell. In `[L-2]`'s pool cell the route is one clause of a compound sentence and renders as muted running text (`--ink-3`, non-bold) inside the same `.mut` span as the status; only `[G-5]`'s never-a-coloured-pill prohibition applies there. Rendering table, rationale and reversal impact: §3.3. `OTHER` renders `OTHER ({channel})` in whichever form its surface uses `[PD-80 · OWNER-PENDING]`. This page only displays the route; its origin is the Inbound Request, matched via the invoice number. | Coloured pills would compete with the yellow row highlight, which is the page's one real signal; and inside the candidate sentence the emphasized element is the order number, not the route. | 2026-07-13 badge convention; `OTHER` form 2026-08-03; **pool-cell delta 2026-08-03** |
 | **BR-16** | **No search bar, no filters, no pagination, no column sorting.** | The pool is expected to hold a handful of items and the resolver arrives by deep link. A search bar would also re-legitimize the manual-search flow that `[BR-4]` deliberately removed. | 2026-07-23 |
 | **BR-17** | **Qty mismatch at match time is allowed** (pool qty 2 vs a ×1 line). The difference is recorded on the match event and stated in the auto-comment `[PD-65 · OWNER-PENDING]`. | 1+1 sets and combined boxes make mismatches normal; blocking would strand real matches with no alternative path. | 2026-08-03 |
 | **BR-18** | **A target product line that already carries a tracking number blocks the match** with an explicit error. No silent overwrite. | Overwriting would orphan whichever parcel was bound first, with no record of the swap. | 2026-08-03 |
-| **BR-19** | **A tracking number may not be bound to two order lines within one namespace.** Inbound (supplier→warehouse) and outbound (warehouse→customer) numbers are separate namespaces and may coincide `[PD-8 · OWNER-PENDING]`. | Matching integrity requires a single owner per number within a namespace; the two namespaces never resolve to the same screen. | 2026-08-03 |
+| **BR-19** | **Page-level extension of `[PD-8]`, declared as such.** `[PD-8 · OWNER-PENDING]` decides only that an *inbound* number is unique system-wide (a second **inbound request** carrying it is blocked) and that the inbound and outbound namespaces are separate and may coincide. It says nothing about **order lines**. This page extends it: within one namespace, a tracking number may not be bound to two order lines, and a match that would do so is blocked `[E-11]`. The extension is **not** register-backed — if the owner declines it, delete this rule, `[E-11]`, QA-VAL-03 and step 1's `tracking_in_use` check; `[PD-8]`'s inbound-request guard is unaffected. A pool item's number carries the namespace of the scan that produced it (`[L-1]` column 1), so an unrequested-inbound parcel's number is checked against inbound bindings only — see `[E-33]`. | Matching integrity requires a single owner per number within a namespace; the two namespaces never resolve to the same screen. | 2026-08-03 (page extension; `[PD-8]` itself unchanged) |
 | **BR-20** | **The match transaction is atomic across revalidate → line write → pool close.** Comment and Slack are non-blocking side effects: their failure never rolls back the match, and is persisted and retried `[PD-4 · OWNER-PENDING]`. | Notification is a side effect, not part of the transaction. A rolled-back match would leave the parcel unresolvable because of a Slack outage. | 2026-08-03 |
 | **BR-21** | **The server revalidates every precondition at confirm time**; on mismatch it rejects with a red toast and refreshes the affected view, with no partial writes `[PD-6 · OWNER-PENDING]`. | Candidates go stale between page load and click (an order ships, is cancelled, goes on-hold, is merged, or is matched elsewhere). | 2026-08-03 |
 | **BR-22** | **Concurrent edits use an optimistic version check** → 409 → reload the row + non-green toast `[PD-7 · OWNER-PENDING]`. No last-write-wins. | Two resolvers reaching for the same parcel is the expected failure, not the exotic one. | 2026-08-03 |
-| **BR-23** | **Match confirm and ✕ removal are double-click safe** via client debounce **and** a server idempotency key `[G-9]`. Key for match = `pool_item_id + line_id`; for removal = `pool_item_id + "remove"`. Suppressed duplicates are logged. | The current admin's double-processing behavior is a known defect carried in handoff note A; this page must not inherit it. | handoff note A, 2026-07-21 |
+| **BR-23** | **Idempotency-key semantics `[G-9]`:** match = `pool_item_id + line_id`; removal = `pool_item_id + "remove"`. Suppressed duplicates are logged `[DC-12]` / `[DC-16]`. Because the key always contains `pool_item_id`, two different pool items can never collide `[E-67]`. | `[G-9]` fixes the requirement; this rule fixes the two key shapes so a developer does not invent a third. The current admin's double-processing behavior is a known defect carried in handoff note A; the wireframe reproduces it on `.xdel` (`WF-NEW-D`), so the key is what stops it reaching production. | handoff note A, 2026-07-21; key shapes 2026-08-03 |
 | **BR-24** | **An empty candidate list renders explicit guidance,** not a blank cell: `No Processing order contains this product — check the order data upstream, or remove with a reason.` No search affordance is re-introduced `[PD-62 · OWNER-PENDING]`. | `[BR-4]` says an empty list means the data is wrong; the UI should say exactly that instead of implying the operator did something wrong. | 2026-08-03 |
 | **BR-25** | **A once-daily digest re-notifies `#unrecognized-tracking` with pool items open for more than 24 h** `[PD-61 · OWNER-PENDING]`. Same shape as the inbound-request morning check. | The 2026-07-23 simplification removed the only age signal; a daily digest restores it without re-adding UI. | 2026-08-03 |
 | **BR-26** | **No control on this page is role-gated in v1** `[G-15]`, `[PD-1 · OWNER-PENDING]`. | Six screens independently asked the same question; inventing per-page gates would produce eight inconsistent models. | 2026-08-03 |
-| **BR-27** | **Comments are append-only** on pool items and orders alike `[PD-3 · OWNER-PENDING]`. Memos are also immutable after registration; corrections are posted as comments. | Mutability would silently rewrite the corpus that `[G-7]` protects. | 2026-08-03 |
+| **BR-27** | **Page extension of `[G-7]`'s append-only property `[PD-3 · OWNER-PENDING]`:** the pool row's **Memo** is also immutable after registration. It is not a comment, so `[G-7]` does not reach it on its own; corrections to a memo are posted as comments on the pool item. | The memo is the registrant→resolver channel and is quoted verbatim into `[L-M1]` and `[DC-14]`'s snapshot; an editable memo would silently rewrite the record a resolver already acted on. | 2026-08-03 |
 | **BR-28** | **An on-the-spot match performed in View Orders M2 fires the same auto-comment and Slack route,** with the @mention suppressed when resolver == registrant `[PD-16 · OWNER-PENDING]`. | One match pipeline, one audit trail, regardless of which screen resolved it. | 2026-08-03 |
 | **BR-29** | **Comments-hub entries whose entity is `Unrecognized pool` open this page focused on that row;** if the item is no longer open, they open the matched order `[PD-67 · OWNER-PENDING]`. | The click must land where the operator can act; a resolved item has no row left to focus. | 2026-08-03 |
 | **BR-30** | **No scan surface on this page.** `[G-1]` applies only via the cross-page rescan loop on View Orders. | The bench is where scanners live. Adding a scan input here would invite registration outside `[BR-1]`. | 2026-08-03 (stated, not changed) |
 | **BR-31** | **No print surface on this page.** `[G-4]` does not land here; a print-agent outage cannot block, delay, or degrade any action on this screen. | Nothing on this page produces a physical artifact. | 2026-08-03 |
 | **BR-32** | **The Closing page's "unknown order" warning does NOT route to this pool,** and nothing in this pool feeds Closing. The two concepts are disjoint. | A closing scan failure is an outbound-verification problem; an unrecognized barcode is an inbound-identity problem. Conflating them would put customer parcels into a supplier-arrival queue. | 2026-08-03 (`_review` §1 adjudicated non-issue) |
 | **BR-33** | **Count invariant:** `#poolCount` == `#poolCountBottom` == rendered open rows, after every mutation including live arrival. | The counts are the only integrity check a human can perform on this screen. | 2026-07-23 (wireframe behavior), specified 2026-08-03 |
-| **BR-34** | **No programmatic full-page refresh anywhere on this page** `[G-2]`; this page is not the named RTO exception. | Stated as a delta because the page's only mutations (match, removal, arrival) are exactly where a naive implementation would reload. | 2026-08-03 |
+| **BR-34** | **This page claims no exception to `[G-2]`'s refresh prohibition** — the named RTO Bulk Outbound exception is the only one in the corpus and it is not here. Stated as a negative registry entry, not as a restatement. | The page's only mutations (match, removal, live arrival) are exactly where a naive implementation would reload, so the absence of an exception has to be on the record. | 2026-08-03 |
 | **BR-35** | **All pool events are retained indefinitely.** Four operational figures must be derivable from persisted events alone, with no extra instrumentation: resolution latency (`[DC-1]`→`[DC-8]`), Coupang lookup-failure rate (`[DC-3]`), removal-reason distribution (`[DC-14]`), and unrequested-inbound volume (`[DC-15]`). | Retro-fitting instrumentation for these later would require a schema change. Retention is a per-screen statement required by `[G-8]`. | 2026-08-03 |
 | **BR-36** | **The pool row's yellow highlight (`.row-hit`) is a requirement, not styling.** Every open row is highlighted; there is no un-highlighted open-row variant. | It is how an operator confirms across a desk that a row is still unresolved (§1.4). | 2026-07-23 |
 | **BR-37** | **Every order number rendered on this page is a real link** to that order `[G-12]` — in the pool's Suspected Orders cells, in M1's Order column, and in comment bodies. | Currently a wireframe defect (`WF-NEW-B`): the file contains zero anchors. | 2026-08-03 |
@@ -565,7 +594,7 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 | **BR-41** | **Both counters are derived from the rendered row collection,** never from the length of the server response. | If rendering fails, the invariant `[BR-33]` must surface the failure instead of reporting a number no human can see `[E-72]`. | 2026-08-03 |
 | **BR-42** | **Notification dispatch has a terminal state.** After the retry budget is exhausted the failure is dead-lettered and persisted `[DC-28]`; it never blocks or reverses a match or a removal. | An infinitely retrying queue hides a broken integration; a recorded terminal failure can be alerted on `[E-61]`. | 2026-08-03 |
 | **BR-43** | **Rows render the product identity snapshotted at intake,** never a live catalog join. | A catalog rename, merge, or deletion after intake must not blank or silently alter a pool row the operator is judging `[E-38]`. | 2026-08-03 |
-| **BR-44** | **A user-initiated browser reload is permitted** and is outside the `[G-2]` prohibition, which targets programmatic post-action refresh. State is re-fetched and both counters re-derive. | Otherwise QA cannot distinguish a forbidden auto-refresh from an operator pressing F5 `[E-57]`. | 2026-08-03 |
+| **BR-44** | **Candidate global amendment, stated locally under protest.** Reading: `[G-2]`'s "no full-page refresh after any action" targets **programmatic** post-action refresh; an operator pressing F5 is outside its scope, and state is re-fetched with both counters re-derived `[E-57]`. **This reading is not page-specific** — it applies identically to all eight screens, and settling it inside one page spec is how eight specs diverge (cross-page defect m1 D-7). It belongs in `[G-2]` as a global amendment; until that amendment is raised, this page states it here so QA has a rule to test, and deletes this row the day the global text lands. **Do not copy this row into another spec** — cite the global rule instead. | Otherwise QA cannot distinguish a forbidden auto-refresh from an operator pressing F5, and QA-FURN-07 has no verdict. | 2026-08-03 (page-local, pending promotion to `[G-2]`) |
 
 ---
 
@@ -580,6 +609,17 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 ### 5.1 Persisted events (28)
 
 `[DC-27]` and `[DC-28]` are grouped by meaning rather than by number; the numbering is stable and never renumbered.
+
+> **Event-name scope note (cross-page defect m3a D14).** The ten canonical cross-page names fixed by `_global-rules.md` are used byte-identically here: `comment.posted`, `comment.mention_notified`, `comment.starred` / `comment.unstarred`, `comment.read` / `comment.mark_all_read`, `comment.auto_posted`. Every **other** name below is a page-scoped `entity.action` name per `_review.md` §3.3. Four of them express concepts that other specs also name, with different strings, and **no canonical name exists for those concepts yet**:
+>
+> | Shared concept | This page's name | Named differently elsewhere |
+> |---|---|---|
+> | Idempotent duplicate suppressed | `unrecognized_item.match_duplicate_suppressed` `[DC-12]`, `unrecognized_item.removal_duplicate_suppressed` `[DC-16]` | `idempotency.duplicate_rejected` (VO, RTO) · `idempotency.duplicate_suppressed` (OM) · `action.idempotency_suppressed` (OD) · `inbound_request.idempotent_replay_suppressed` (IR) |
+> | Comment search executed | `comment.searched` `[DC-23]` | `comment.search_executed` (VO) · `comment.search.executed` (INV) · declared NON-event (OD) · optional telemetry (RTO) |
+> | Slack dispatch outcome | `slack.registration_notified` `[DC-4]`, `slack.aging_digest_sent` `[DC-19]`, `notification.retry_result` `[DC-24]` | `slack.dispatch_result` (VO) · `slack_notification.sent` (IR) · folded into `comment.mention_notified` (OD) |
+> | Stock moved | *(not emitted — this page never moves stock, §5.3)* | `inventory.stock_applied` (VO) · `inventory.movement` (OD) · `stock.inbound.recorded` (INV) |
+>
+> These are **names, not behaviors**: nothing in §3–§8 depends on the string. If a canonical name is promoted into `_global-rules.md`, the global name supersedes and only this table plus the affected `Event name` cells change. Note also that OD declares comment search a NON-event while three pages persist it — that is a `[G-8]` disagreement above this spec's authority and is recorded here so it is not silently resolved page by page.
 
 #### Group A — Intake (created upstream in View Orders; persisted against this page's entity)
 
@@ -708,14 +748,16 @@ Payload fields are verbatim from the routing table in `_global-rules.md` (all ro
 
 ### 6.2 Cross-page links and deep links `[G-12]`
 
+**Path form (normalized 2026-08-03, cross-page defect m3a D16).** All cross-page links use the **directory form** `../{slug}/#{anchor}` — the form `[G-12]` itself uses (`../inbound-request/#reqlist`) and the form the live wireframe URLs resolve to. The `index.html` variant that earlier drafts of this spec used is **not** to be re-introduced; QA asserts the directory form.
+
 | From | To | Link form | Notes |
 |---|---|---|---|
-| Suspected Orders cell — each candidate's order number `[L-2]` | Order Detail | `../order-detail/index.html#{order_no}` (wireframe) → filtered entity route in production | Currently rendered as non-anchored blue bold text — defect `WF-NEW-B`, rule `[BR-37]` |
+| Suspected Orders cell — each candidate's order number `[L-2]` | Order Detail | `../order-detail/#{order_no}` → filtered entity route in production | Currently rendered as non-anchored blue bold text — defect `WF-NEW-B`, rule `[BR-37]` |
 | M1 candidate table — `Order` column `[L-M1]` | Order Detail | same | same defect |
 | Comments hub item with entity `Unrecognized pool` `[L-5]` | This page, focused on that row; the matched order if the item is no longer open | `#poolrow-{pool_item_id}` | `[PD-67 · OWNER-PENDING]` |
-| Comments hub item with an order entity | Order Detail | `../order-detail/index.html#{order_no}` | Standard `[G-7]` behavior |
+| Comments hub item with an order entity | Order Detail | `../order-detail/#{order_no}` | Standard `[G-7]` behavior |
 | Auto-comment backlink `[DC-10]` | This page's pool item (historical record) | `#poolrem-{pool_item_id}` for removed/matched items | Lets an order reader trace where the tracking number came from |
-| `[L-M2]` removal with `Routed to inbound request` `[DC-15]` | Inbound Request → Request List tab | `../inbound-request/index.html#reqlist` (the anchor View Orders State 6 already uses) | The structured Inbound No. is what makes it queryable `[PD-64 · OWNER-PENDING]` |
+| `[L-M2]` removal with `Routed to inbound request` `[DC-15]` | Inbound Request → Request List tab | `../inbound-request/#reqlist` (the anchor `[G-12]` names and View Orders State 6 already uses) | The structured Inbound No. is what makes it queryable `[PD-64 · OWNER-PENDING]` |
 
 ### 6.3 Upstream / downstream page contracts
 
@@ -860,7 +902,7 @@ IDs are page-scoped and stable. `[E-1]`…`[E-31]` preserve the Lens-B plan numb
 ### 8.0 How to run this section
 
 **Tags.**
-- **[WF]** — executable **today** against the live wireframe at `https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/tracking-missing/` using only the selectors, labels, and strings given. An AI agent must be able to run these with no further questions.
+- **[WF]** — executable **today** against the live wireframe at `https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/tracking-missing/` using only the selectors, labels, and strings given. An AI agent must be able to run these with no further questions. **Every `[WF]` scenario in this document runs against that one URL** — no `[WF]` scenario targets another page's wireframe.
 - **[ADMIN]** — requires the real admin: server state, persistence, Slack delivery, cross-page navigation, or an affordance the wireframe does not have.
 - **(neg)** — negative test (asserts something is blocked, absent, rejected, or unchanged).
 - **BLOCKED** — a scenario that cannot have a verdict until an owner decision lands. Report as BLOCKED, never as PASS or FAIL.
@@ -869,10 +911,21 @@ IDs are page-scoped and stable. `[E-1]`…`[E-31]` preserve the Lens-B plan numb
 
 **Baseline (post-reload).** `#poolCount` reads `3`; `#poolCountBottom` reads `3`; three `.row-hit` rows exist; the first is `#poolrow1`; `#m-match` does not have class `open`; `#inbox1` does not have class `open`; `#matchToast` has `display:none`; annotations are visible.
 
-**Selector conventions.** IDs are used verbatim (`#poolCount`, `#poolCountBottom`, `#poolrow1`, `#m-match`, `#matchToast`, `#inbox1`, `#annoToggle`). Rows 2 and 3 are addressed as `table.tbl tbody tr:nth-of-type(2)` and `:nth-of-type(3)`. Buttons are addressed by exact accessible text where possible (`Review & Match`, `Match to this product`, `Cancel`, `Mark all read`) and by class where the label is a glyph (`.xdel`, `.star`, `.x`).
+**Selector conventions.** IDs are used verbatim (`#poolCount`, `#poolCountBottom`, `#poolrow1`, `#m-match`, `#matchToast`, `#inbox1`, `#annoToggle`). Buttons are addressed by exact accessible text where possible (`Review & Match`, `Match to this product`, `Cancel`, `Mark all read`) and by class where the label is a glyph (`.xdel`, `.star`, `.x`).
 
-**Totals: 151 scenarios — 67 [WF], 84 [ADMIN]. Negative scenarios: 48 (31.8%), above the 25% floor.** One further scenario (QA-VAL-10) is `BLOCKED` and carries no verdict.
-Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 · CMT 13 · FURN 8 · NEG 13 · VAL 11 · EMPTY 6 · XPG 8 · DATA 12 · A11Y 5 · WFQ 6.
+Six mechanical rules that a text assertion in this section depends on. They apply to **every** scenario below unless the scenario says otherwise:
+
+1. **Annotation dots are stripped before any text comparison.** `.dot` elements are demo chrome (§2.3) and three of them sit *inside* `<th>` cells, so the raw `textContent` of the `Product Name` header is `Product Name4`. Every "text is exactly X" / "reads X" assertion is made against the element's text **with all `.dot` descendants removed**. This is why the baseline can keep annotations visible.
+2. **`table.tbl` matches two elements** — the pool table and the candidate table inside `#m-match`. Unless a scenario names `#m-match`, `table.tbl` means the **first** (the pool table), and `the <tbody>` means that table's tbody. Pool rows 2 and 3 are addressed as `table.tbl:first-of-type tbody tr:nth-of-type(2)` / `:nth-of-type(3)`.
+3. **`.mockwrap` matches two elements and they nest.** At a narrowed viewport **both** overflow (outer 1280→viewport, inner 1457→1248) and **both** must be scrolled to bring the `Action` column into view; scrolling only the outer one leaves `.xdel` off-screen. Applies to QA-A11Y-05.
+4. **`.it` items are addressed positionally, not with `:nth-of-type`.** `.paneheader` is also a `<div>` inside the pane, so `.it:nth-of-type(1)` selects nothing. "the first item" means the first element matching `.it` in document order.
+5. **"Exactly" means the named node's own text**, not its subtree, whenever the scenario says so explicitly (e.g. QA-M1-01's leading text node). Where a scenario says "contains", containment is asserted.
+6. **Event-listener assertions need a CDP probe.** Any clause of the form "no click handler is bound" is unverifiable from the DOM; run `DOMDebugger.getEventListeners` over the named elements. Where CDP is unavailable, assert only the observable half the scenario names and record the listener clause as not-run — never as FAIL.
+
+**Totals: 168 scenarios — 66 [WF], 102 [ADMIN]. Negative scenarios: 61 (36.3%), above the 25% floor.** Of these, **one** (QA-VAL-10) is `BLOCKED` and carries no verdict; it is counted inside the 168 and inside the 102 `[ADMIN]`.
+Per-block counts: LOAD 12 · ROW 16 · SUS 13 · M1 13 · MATCH 10 · XDEL 12 · CMT 15 · FURN 10 · NEG 15 · VAL 12 · EMPTY 6 · XPG 9 · DATA 13 · A11Y 5 · WFQ 7 = 168.
+Per-block `[WF]`: LOAD 11 · ROW 9 · SUS 5 · M1 9 · MATCH 5 · XDEL 3 · CMT 7 · FURN 5 · NEG 1 · VAL 0 · EMPTY 2 · XPG 0 · DATA 0 · A11Y 2 · WFQ 7 = 66.
+Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CMT 3 · FURN 3 · NEG 15 · VAL 10 · EMPTY 2 · XPG 4 · DATA 3 · A11Y 0 · WFQ 3 = 61.
 
 ### 8.1 Block LOAD — page load and inventory (`[L-0]`, `[L-1]`, `[L-S1-Fa]`, `[L-S1-Fb]`)
 
@@ -882,9 +935,9 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-LOAD-03 [WF]** — Given the page is loaded, Then `.poolhead` is present with computed background `rgb(255, 251, 214)` (`#FFFBD6`) and border colour `rgb(245, 158, 11)` (`#F59E0B`), And its bold lead text reads `⚠ Unrecognized product pool · 3 items`.
 
-**QA-LOAD-04 [WF]** — Given the page is loaded, Then the pool table's `<th>` texts are exactly, in order: `Tracking No`, `Order No`, `Product Name`, `Product Name KR`, `Size`, `Barcode`, `Qty`, `Memo`, `Registrant (Center)`, `Registered At`, `Suspected Orders (Auto-matched)`, `Action` — 12 headers, no more, no fewer.
+**QA-LOAD-04 [WF]** — Given the page is loaded, Then the pool table's `<th>` texts — **each taken with its `.dot` annotation child removed** (§8.0 rule 1; three headers carry one) — are exactly, in order: `Tracking No`, `Order No`, `Product Name`, `Product Name KR`, `Size`, `Barcode`, `Qty`, `Memo`, `Registrant (Center)`, `Registered At`, `Suspected Orders (Auto-matched)`, `Action` — 12 headers, no more, no fewer. *(Without the strip the raw texts are `Product Name4`, `Suspected Orders (Auto-matched)2`, `Action3`; that is demo chrome, not a defect.)*
 
-**QA-LOAD-05 [WF]** — Given the page is loaded, Then `#poolCount` reads `3` And `#poolCountBottom` reads `3` And the `<tbody>` contains exactly 3 `<tr>` elements, all carrying class `row-hit` `[BR-33]`, `[BR-36]`.
+**QA-LOAD-05 [WF]** — Given the page is loaded, Then `#poolCount` reads `3` And `#poolCountBottom` reads `3` And the **pool table's** `<tbody>` (`table.tbl:first-of-type tbody`, §8.0 rule 2 — a second `table.tbl tbody` exists inside `#m-match`) contains exactly 3 `<tr>` elements, all carrying class `row-hit` `[BR-33]`, `[BR-36]`.
 
 **QA-LOAD-06 [WF] (neg)** — Given the page is loaded, Then no element matching `.searchbar`, `.pager`, `.bulkbar`, `.picava`, `.picname`, `.cntchip`, `.wait`, `.slack-pill`, `.logsec`, or `input[type=checkbox]` is **rendered** anywhere in the page body — the 2026-07-23 removals must not exist `[L-S1-Fa]`. (Unused CSS **class definitions** are permitted in the wireframe file; the assertion is on rendered DOM.)
 
@@ -916,7 +969,7 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-ROW-07 [WF]** — Given the three rows, Then their `Registrant (Center)` cells read `Miranti`, `Dean`, `Dean` And their `Registered At` cells read `07-13 10:12`, `07-13 09:48`, `07-13 09:30`, matching the `MM-DD HH:mm` KST format `[E-46]`.
 
-**QA-ROW-08 [WF]** — Given the three rows, Then they are ordered by `Registered At` descending (10:12, 09:48, 09:30) And no sortable-column affordance (no `<th>` click handler, no sort glyph) is present `[BR-16]`.
+**QA-ROW-08 [WF]** — Given the three rows, Then they are ordered by `Registered At` descending (10:12, 09:48, 09:30) And no sortable-column affordance is present `[BR-16]`: **(a)** no `<th>` renders a sort glyph (`▲ ▼ ↑ ↓ ⇅`), **(b)** no `<th>` carries an `onclick`, `data-sort`, or `aria-sort` attribute, and **(c)** no `<th>` has a bound `click` listener — clause (c) requires a `DOMDebugger.getEventListeners` probe over the 12 `<th>` elements (§8.0 rule 6, expected result `[]` on every one); without CDP, run (a) and (b) and record (c) as not-run.
 
 **QA-ROW-09 [WF]** — Given the page is loaded, Then exactly one `<tr>` carries an `id` attribute, and it is `poolrow1` (§2.4.9 demo limitation).
 
@@ -926,17 +979,25 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-ROW-12 [ADMIN] (neg)** — Given a pool item whose catalog product is subsequently **deleted**, Then the row still renders its snapshotted name, size, and barcode and does **not** blank out or error `[BR-43]`, `[E-38]`; And if the barcode no longer maps to any catalog product the candidate cell renders the `[E-5]` empty state rather than a failure.
 
+**QA-ROW-13 [ADMIN] (neg)** — Given a pool holding 25 open items, Then all 25 rows render in one plain vertically scrolling table, And **no** pagination control, **no** page-size selector, **no** search input, and **no** column filter appears anywhere on the page `[E-30]`, `[BR-16]`; And both counters read `25` `[BR-33]`.
+
+**QA-ROW-14 [ADMIN] (neg)** — Given a pool item whose catalog product has **no** Korean name, Then the `Product Name KR` cell renders the literal `–` in `.mut` gray, And it does **not** fall back to the English name, the brand alone, an empty cell, or a placeholder `[E-44]`, `[BR-14]`.
+
+**QA-ROW-15 [ADMIN] (neg)** — Given a pool item whose memo is 500 characters long and contains newlines and the literal text `<b>set</b>`, Then the `Memo` cell renders the string as **escaped plain text** (the characters `<b>` are visible; no bold is applied and no element is created), wraps within the cell, and is **never** truncated with an ellipsis or a "more" affordance; And the identical full string renders in `[L-M1]`'s summary card `[E-45]`, `[E-33]`.
+
+**QA-ROW-16 [ADMIN]** — Given a pool item with a 120-character English name, a 120-character Korean name, and the long memo of QA-ROW-15, Then those cells wrap and the row grows taller, And the row still carries `.row-hit` with its highlight intact `[BR-36]`, And both `Review & Match` and `✕` remain rendered, clickable, and inside the `Action` cell, And `#poolCount` == `#poolCountBottom` == the rendered row count `[E-64]`, `[BR-33]`.
+
 ### 8.3 Block SUS — Suspected Orders column (`[L-2]`)
 
 **QA-SUS-01 [WF]** — Given `#poolrow1`, Then its `Suspected Orders (Auto-matched)` cell contains exactly 2 `<div>` candidate lines.
 
-**QA-SUS-02 [WF]** — Given `#poolrow1`'s first candidate line, Then it reads `Dean · Order 414230 · JIT (Naver) · Processing`, with `Dean` in `<b>`, `Order 414230` computed colour `rgb(13, 110, 253)` (`#0D6EFD`) and `font-weight: 700`, and the trailing `JIT (Naver) · Processing` in the `.mut` gray.
+**QA-SUS-02 [WF]** — Given `#poolrow1`'s first candidate line, Then it reads `Dean · Order 414230 · JIT (Naver) · Processing`, with `Dean` in `<b>`, `Order 414230` computed colour `rgb(13, 110, 253)` (`#0D6EFD`) and `font-weight: 700`, and the trailing `JIT (Naver) · Processing` in one `span.mut` computed `rgb(126, 124, 131)` — the declared `[G-5]` page delta (§3.3), not a defect.
 
 **QA-SUS-03 [WF]** — Given `#poolrow1`'s second candidate line, Then it reads `Egita · Order 413871 · JIT (Official Mall) · Processing`.
 
 **QA-SUS-04 [WF]** — Given rows 2 and 3, Then each contains exactly 1 candidate line, reading `Harshit · Order 414102 · JIT (Naver) · Processing` and `Miranti · Order 413998 · JIT (Official Mall) · Processing` respectively.
 
-**QA-SUS-05 [WF] (neg)** — Given any route/channel label on the page, Then its computed `background-color` is transparent, it has no border, and its colour resolves to the ink colour `rgb(20, 16, 27)` (`#14101B`) — route labels are never coloured pills `[G-5]`, `[BR-15]`.
+**QA-SUS-05 [WF] (neg)** — Given each of the **four** trailing `span.mut` elements in the pool's `Suspected Orders (Auto-matched)` cells — the `{route (channel)} · {status}` clause of every candidate line, i.e. `JIT (Naver) · Processing` ×2 and `JIT (Official Mall) · Processing` ×2 — Then each has computed `background-color: rgba(0, 0, 0, 0)`, `border-style: none`, `padding: 0px`, and computed `color: rgb(126, 124, 131)` (`--ink-3`, non-bold) — the pool cell's route clause is **muted running text, never a coloured pill**: `[G-5]`'s no-pill prohibition holds, its bold-black badge form does not reach this surface (declared page delta, §3.3, `[BR-15]`). *(The badge form of the route label exists only in `[L-M1]`'s `Channel` cells and is asserted separately by QA-M1-10; there are **zero** `.tag-jit` / `.tag-smartbuy` / `.tag-wholesale` / `.tag-partnership` elements outside `#m-match`, so a page-wide `.tag-*` sweep would pass vacuously and must not be used as the assertion.)*
 
 **QA-SUS-06 [ADMIN]** — Given a pool item whose barcode appears in an order that is **not** in `Processing`, When the candidate set is computed, Then that order is absent from the set `[BR-3]`; And `[DC-5]` persists the computed set with the excluded order absent.
 
@@ -952,9 +1013,11 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-SUS-12 [ADMIN] (neg)** — Given two catalog products that share one barcode, Then candidates from **both** products appear and neither is auto-excluded `[E-47]`, `[BR-3]`; And the `Included Product` cell is what distinguishes them.
 
+**QA-SUS-13 [ADMIN] (neg)** — Given a `Processing` order containing a product whose catalog record stores **no barcode**, and a pool item registered for a different SKU, Then that order never enters the candidate set for any pool item — it simply fails the predicate `[E-69]`, `[BR-3]` — And **no** error, warning, banner, or toast is raised on this page about the null barcode; And `[DC-5]` / `[DC-6]` record the set without it and without an error field.
+
 ### 8.4 Block M1 — Review & Match modal (`[L-3]`, `[L-M1]`)
 
-**QA-M1-01 [WF]** — Given the baseline, When I click the `Review & Match` button inside `#poolrow1`, Then `#m-match` gains class `open` And its `<header>` text is exactly `Review & Match — Unrecognized Product` (em dash U+2014).
+**QA-M1-01 [WF]** — Given the baseline, When I click the `Review & Match` button inside `#poolrow1`, Then `#m-match` gains class `open` And its `<header>`'s **leading text node** is exactly `Review & Match — Unrecognized Product` (em dash U+2014), followed by the `✕` close button (`button.x[data-close]`) that is also a child of that `<header>`. *(The header's full `textContent` is therefore `Review & Match — Unrecognized Product✕`; assert the leading text node, not the subtree — §8.0 rule 5. The same `✕` is the control QA-EMPTY-05 clicks.)*
 
 **QA-M1-02 [WF]** — Given the baseline, When I click the wf-bar button labelled `Modal: Match Review (M1)`, Then `#m-match` gains class `open` (demo entry path only; declared non-event `[N-4]`).
 
@@ -977,6 +1040,8 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 **QA-M1-11 [ADMIN]** — Given `[L-M1]` is open in the admin, When I press `Esc`, Then the modal closes with zero side effects And focus returns to the `Review & Match` button that opened it `[BR-40]`, `[E-24]`, `[E-62]`.
 
 **QA-M1-12 [ADMIN]** — Given the admin, When I open `[L-M1]` for one pool item twice in a row, Then **two** `[DC-7]` events are persisted, each with its own `candidate_set_snapshot` and `opened_at`, And only the later snapshot is used as the diff baseline for a stale-candidate rejection (§3.4.1).
+
+**QA-M1-13 [ADMIN] (neg)** — Given a pool item registered with the memo `suspected inbound stock — no order expected` and a candidate set that is **not** empty (the SKU genuinely appears in a `Processing` customer order), When `[L-M1]` opens, Then the summary card renders the memo fragment `· Memo "suspected inbound stock — no order expected"` **in full**: not truncated, not ellipsised, not collapsed behind a toggle, and not hidden at any viewport width `[E-33]`, `[E-45]`, §3.7(a); And the candidate is still offered — the predicate does not and must not filter it out `[BR-3]` — so the memo is the only signal that stops the match. *(This is the mitigation `[E-33]` names; if the memo can be visually suppressed, the mitigation does not exist.)*
 
 ### 8.5 Block MATCH — happy path (`[L-3]`, `[L-M1]`, `[L-F1]`, `[E-20]`)
 
@@ -1024,19 +1089,21 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-XDEL-11 [ADMIN]** — Given a removal with reason `Routed to inbound request` and a well-formed Inbound No. that does not exist, or that exists but covers a different product, Then the removal is **accepted and recorded**, And `[DC-15]` is written with `resolves: false` `[E-35]`, `[E-70]`, `[PD-64 · OWNER-PENDING]`.
 
+**QA-XDEL-12 [ADMIN] (neg)** — Given `[L-M2]` is open on a pool row with a reason selected, an Inbound No. typed, and a memo typed, When I click `Cancel` (and, separately, when I press `Esc`), Then the modal closes, the row is still present, both counters are unchanged, no toast fires, And **no** event of any kind is persisted — not `[DC-14]`, not `[DC-16]`, and nothing for the typed field values `[E-36]`, `[N-6]`, `[N-10]`; And focus returns to the `✕` that opened it `[BR-40]`.
+
 ### 8.7 Block CMT — Comments hub (`[L-5]`, `[L-F3]`)
 
 **QA-CMT-01 [WF]** — Given the baseline, Then the nav contains a button whose text starts with `💬 Comments` And it carries a `.badge-n` reading `3`.
 
 **QA-CMT-02 [WF]** — Given the baseline, When I click the `💬 Comments` button, Then `#inbox1` gains class `open` And its tabs read `@ Mentions` (with an inline badge `3`) and `★ Saved`.
 
-**QA-CMT-03 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the pane header reads `Comments mentioning me` with a right-aligned `Mark all read` And the pane contains exactly 4 `.it` items, of which exactly 3 carry class `unread` — the badge counts unread mentions, not items (§3.6).
+**QA-CMT-03 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the pane header reads `Comments mentioning me` with a right-aligned `Mark all read` And the pane contains exactly 4 `.it` items **addressed positionally** (§8.0 rule 4 — `.paneheader` is also a `<div>`), of which exactly 3 carry class `unread` — the badge counts unread mentions, not items (§3.6). *(The header string is the wireframe's; the admin ships the canonical `· Click to open the order` suffix — defect `WF-NEW-E`, asserted by QA-CMT-15.)*
 
 **QA-CMT-04 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the second item's entity label is exactly `Unrecognized pool` (not an order number) And its body contains `Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"` with time `10:12` `[L-5]`.
 
-**QA-CMT-05 [WF]** — Given `#inbox1` is open, When I click the `★ Saved` tab, Then the mentions pane is hidden and the saved pane is shown, with header `Saved comments` / `Unstar to remove from the list` And exactly 1 item, whose entity label is `Unrecognized pool`.
+**QA-CMT-05 [WF]** — Given `#inbox1` is open, When I click the `★ Saved` tab, Then the mentions pane is hidden and the saved pane is shown, with header `Saved comments` / `Unstar to remove from the list` And exactly 1 item, whose entity label is `Unrecognized pool`. *(`Saved comments` is the wireframe's string — defect `WF-NEW-E`; `Unstar to remove from the list` is already the canonical one and must not be changed. Admin strings: QA-CMT-15.)*
 
-**QA-CMT-06 [WF]** — Given `#inbox1` is open on the Mentions tab, When I click the `.star` button on the first item, Then that button gains class `on`; When I click it again, Then it loses class `on`.
+**QA-CMT-06 [WF]** — Given `#inbox1` is open on the Mentions tab, When I click the `.star` button on the **first `.it` item in document order** (§8.0 rule 4), Then that button gains class `on`; When I click it again, Then it loses class `on`.
 
 **QA-CMT-07 [ADMIN] (neg)** — Given the admin's Comments hub, Then a full-text search input is present, And searching `10323100841207` returns matching comments across **all** entity types, newest first `[G-7]`, And `[DC-23]` persists `{query, result_count, searched_at}`, And clicking a result whose entity is `Unrecognized pool` navigates per `[PD-67 · OWNER-PENDING]`. *(The `[WF]` counterpart QA-WFQ-05 asserts the input is currently absent — defect `WF-NEW-A`.)*
 
@@ -1051,6 +1118,10 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 **QA-CMT-12 [ADMIN]** — Given the admin's Comments hub is open, When I click outside it, Then it closes; When it is open and I press `Esc`, Then it closes; And neither dismissal persists any event `[N-3]`, `[BR-40]`, `[E-56]`.
 
 **QA-CMT-13 [ADMIN]** — Given a user with 120 unread mentions, Then the `.badge-n` renders `99+` And the nav layout does not wrap or overflow, While `[DC-22]`'s underlying count remains exact `[E-55]`.
+
+**QA-CMT-14 [ADMIN]** — Given the admin's Comments hub holds an entry whose entity label is exactly `Unrecognized pool`, When I click it **while that pool item is still `OPEN`**, Then this page opens scrolled to `#poolrow-{pool_item_id}` with that row focused; When the same entry is clicked **after** the item reached `MATCHED`, Then the **matched order** opens instead; When it is clicked after the item reached `REMOVED`, Then a read-only historical view of the removed item opens — in no case is a dead link or a 404 produced `[E-31]`, `[E-60]`, `[BR-29]`, `[PD-67 · OWNER-PENDING]`.
+
+**QA-CMT-15 [ADMIN]** — Given the admin's Comments hub is open, Then the Mentions pane header reads exactly `Comments mentioning me · Click to open the order` And the Saved pane header reads exactly `Saved comments · Click to open the order` — the corpus-canonical strings, §3.6 — And the unstar hint reads `Unstar to remove from the list` And the read-all action reads `Mark all read`. *(The `[WF]` counterparts QA-CMT-03 / QA-CMT-05 assert the wireframe's shorter headers, which are defect `WF-NEW-E`; both tiers are correct as written and neither may be filed as a bug against the other.)*
 
 ### 8.8 Block FURN — furniture, toasts, and no-refresh (`[L-F1]`, `[L-F2]`, `[L-F3]`)
 
@@ -1070,13 +1141,17 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-FURN-08 [ADMIN]** — Given a server response containing 5 open items of which client rendering emits only 4 rows, Then `#poolCount` and `#poolCountBottom` read `4` (the rendered count), not `5` — counters are derived from rendered rows `[BR-41]`, `[E-72]`; And the discrepancy is detectable rather than hidden.
 
+**QA-FURN-09 [ADMIN] (neg)** — Given a match is confirmed and a removal is confirmed **1 s apart** (both inside the 4000 ms toast window), Then both toast texts are readable: the first is **not** silently replaced mid-window, and each text is displayed for at least 2 s — satisfied by stacking (both visible simultaneously, neither overlapping the other's text) or by queueing (the second begins its full window when the first ends). Stack-vs-queue is a developer decision (§9.2 D-4); **either** implementation must pass this scenario, and an implementation where the second toast overwrites the first in place **fails** it `[E-22]`.
+
+**QA-FURN-10 [ADMIN] (neg)** — Given a resolver matches a pool row, then navigates to the matched order, then presses browser **Back**, Then this page re-fetches from the server and the matched row does **not** reappear from the bfcache or the HTTP cache; And the pool fetch response carries `Cache-Control: no-store` (§9.2 D-13); And both counters read the post-match value `[E-58]`, `[BR-33]`.
+
 ### 8.9 Block NEG — idempotency and concurrency (all negative)
 
-**QA-NEG-01 [WF] (neg)** — Given `#m-match` is open from `#poolrow1` and `#poolCount` reads `3`, When I dispatch two `click` events on the same `Match to this product` button within 200 ms, Then exactly one pool row is removed And `#poolCount` reads `2` (never `1`) And exactly one `#matchToast` display cycle occurs `[E-9]`, `[G-9]`.
+**QA-NEG-01 [WF] (neg)** — Given `#m-match` is open from `#poolrow1` and `#poolCount` reads `3`, When I dispatch two `click` events on the same `Match to this product` button within 200 ms, Then exactly one pool row is removed And `#poolCount` reads `2` (never `1`) And **exactly one `#matchToast` display cycle occurs**, measured as: `#matchToast` computed `display` is `flex` continuously from the first dispatch until it becomes `none`, and it does not return to `flex` again within 6 s of the first dispatch `[E-9]`, `[G-9]`. *(This scenario is safe as `[WF]` only because `finishMatch()` guards with `const row=document.getElementById('poolrow1'); if(row){…}`. Its sibling `.xdel` handler has no such guard — see QA-NEG-03 and QA-WFQ-07.)*
 
-**QA-NEG-02 [ADMIN] (neg)** — Continuing QA-NEG-01 in the admin, Then the order has exactly **one** `Matched the unrecognized product` comment And exactly **one** message reached `#fulfillment-admin-comments` (`C0BMGEWM5QA`) And `[DC-12]` records the suppressed second attempt under the shared idempotency key `pool_item_id + line_id` `[BR-23]`.
+**QA-NEG-02 [ADMIN] (neg)** — Continuing QA-NEG-01 in the admin, Then the order has exactly **one** `Matched the unrecognized product` system comment `[DC-10]` And exactly **one** message reached `#fulfillment-admin-comments` (`C0BMGEWM5QA`) `[DC-11]` And `[DC-12]` records the suppressed second attempt under the shared idempotency key `pool_item_id + line_id` `[BR-23]`.
 
-**QA-NEG-03 [WF] (neg)** — Given the baseline, When I dispatch two `click` events on the same `.xdel` within 200 ms, Then exactly one row is removed And both counters decrement by exactly 1 `[G-9]`.
+**QA-NEG-03 [ADMIN] (neg)** — Given the admin, When I dispatch two `click` events on the same `✕` within 200 ms and confirm the resulting `[L-M2]` once, Then exactly one row is removed And both counters decrement by exactly 1 And the counters still equal the rendered row count `[G-9]`, `[BR-33]`, `[BR-41]`. **`[ADMIN]`, not `[WF]`:** the wireframe cannot exhibit this — its `.xdel` handler removes one row but runs `poolDec()` twice (defect `WF-NEW-D`, §2.4.10). The current behavior is asserted by QA-WFQ-07 so an automated agent produces a stable PASS there instead of a false FAIL here.
 
 **QA-NEG-04 [ADMIN] (neg)** — Given two browser sessions both have `[L-M1]` open for the same pool item, When session A confirms and then session B confirms, Then B's confirm is rejected with a red toast naming "already matched", B's list refreshes, and no second line write, comment, or Slack message occurs `[E-7]`, `[PD-7 · OWNER-PENDING]`; And `[DC-13]` records `reason: item_not_open` with B's actor.
 
@@ -1098,6 +1173,10 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-NEG-13 [ADMIN] (neg)** — Given a Slack dispatch that fails on every retry until the budget is exhausted, Then `[DC-28]` persists a terminal `notification.dead_lettered` record with `total_attempts` and `last_error`, And the match or removal it belonged to **still stands**, And no alert badge is introduced on this page `[E-61]`, `[BR-42]`, §6.1.
 
+**QA-NEG-14 [ADMIN] (neg)** — Given a match whose steps 1–3 succeed (line write + pool closure committed) and whose **step 4 comment post or step 5 Slack dispatch then fails**, Then the match is **not** rolled back: the order line still carries the tracking number `[DC-9]`, the pool item is still `MATCHED` `[DC-8]`, the row is still removed from the pool, both counters still decremented, and the **green** success toast still fired — the operator is **never** shown a failed-match message `[E-26]`, `[BR-20]`, `[PD-4 · OWNER-PENDING]`; And the failure is persisted `[DC-11]` with `delivery: failed` and retried `[DC-24]`. *(This is the single most dangerous inversion on the page: an implementation that reports the match as failed, or that reverses step 2, fails this scenario.)*
+
+**QA-NEG-15 [ADMIN] (neg)** — Given the same user has this page open in **two** tabs, both showing 3 rows, When a match is confirmed in tab A, Then tab B removes that row and both of its counters re-sync to `2` within the live-update transport's interval, with **no** full-page refresh in either tab `[E-59]`, `[E-21]`, `[G-2]`; And if tab B is stale and confirms the same item anyway, the server — not the newest tab — arbitrates: the confirm is rejected with `item_not_open` and `[DC-13]` is persisted `[E-43]`.
+
 ### 8.10 Block VAL — server validation
 
 **QA-VAL-01 [ADMIN] (neg)** — Given a candidate order that left `Processing` after `[L-M1]` opened, When the match is confirmed, Then the server rejects it, a **red** toast appears, the candidate list refreshes in place, the modal stays open, and **no** partial writes exist (line tracking unchanged, pool item still `OPEN`, no comment, no Slack) `[E-6]`, `[PD-6 · OWNER-PENDING]`; And `[DC-13]` records `reason: stale_candidate` with the status snapshot.
@@ -1108,7 +1187,7 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-VAL-04 [ADMIN]** — Given an **inbound** tracking number on an inbound request that happens to equal this **outbound** tracking number, When the match is confirmed, Then it is **allowed** — the namespaces are separate `[PD-8 · OWNER-PENDING]`, `[BR-19]`.
 
-**QA-VAL-05 [ADMIN] (neg)** — Given a pool item that is already `REMOVED`, When a stale client confirms a match on it, Then the server rejects with `item_not_open`, the client reloads, and both counts re-sync `[E-43]`, `[BR-33]`.
+**QA-VAL-05 [ADMIN] (neg)** — Given a pool item that is already `REMOVED`, When a stale client confirms a match on it, Then the server rejects with `item_not_open`, the client reloads, and both counts re-sync `[E-43]`, `[BR-33]`; And `[DC-13]` persists with `reason: item_not_open` and the rejecting actor.
 
 **QA-VAL-06 [ADMIN] (neg)** — Given `[L-M2]` is open with no reason selected, Then the `Remove from list` button is disabled and no removal is possible `[PD-60 · OWNER-PENDING]`, `[BR-9]`.
 
@@ -1122,9 +1201,11 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-VAL-11 [ADMIN] (neg)** — Given `[L-M2]` is open with a reason selected and the session expires or the network drops before confirm, Then the confirm fails with a red toast, the row stays, and no partial write exists; And retrying with the same idempotency key after re-auth produces exactly one removal `[E-42]`, `[G-9]`.
 
+**QA-VAL-12 [ADMIN] (neg)** — Given two different authenticated operators (neither of them the registrant, and neither holding any special role), When operator A confirms a match on one pool item and operator B confirms a removal on another, Then **both** succeed — **no** control on this page is role-gated in v1 and no permission error is returned `[E-29]`, `[BR-26]`, `[G-15]`, `[PD-1 · OWNER-PENDING]`; And `[DC-8]` and `[DC-14]` each record their own actor, so the two actions are attributable `[G-8]`.
+
 ### 8.11 Block EMPTY — empty and error states
 
-**QA-EMPTY-01 [WF]** — Given all three rows have been removed via `.xdel`, Then `#poolCount` and `#poolCountBottom` both read `0`, And `.poolhead` is still rendered, And the page layout has not collapsed `[E-19]`.
+**QA-EMPTY-01 [WF]** — Given all three rows have been removed via `.xdel` (one click each — **not** two; see QA-WFQ-07), Then `#poolCount` and `#poolCountBottom` both read `0`, And `.poolhead` is still rendered with a bounding-box height > 0, And the layout has not collapsed, measured as: the inner `.mockwrap`'s bounding-box height is **> 300 px**, the pool table's `<thead>` is still rendered with its 12 `<th>`, and `#poolCountBottom`'s bounding box lies **below** the table's `<thead>` `[E-19]`.
 
 **QA-EMPTY-02 [ADMIN]** — Given a pool with zero open items, Then the table renders the empty-state row `No unrecognized items. Products sent from View Orders after a barcode recognition failure appear here.` And `.poolhead` reads `⚠ Unrecognized product pool · 0 items` `[E-19]`, §3.2.4.
 
@@ -1146,13 +1227,15 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-XPG-04 [ADMIN]** — Given a match is performed **on View Orders M2** (on-the-spot), Then the same auto-comment and `#fulfillment-admin-comments` route fire, with `source: view-orders-m2` on `[DC-8]` `[PD-16 · OWNER-PENDING]`; And when the resolver is the registrant, the Slack mention is suppressed and `[DC-27]` is persisted.
 
-**QA-XPG-05 [WF] (neg)** — Given the closing wireframe at `https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/closing/`, When a scan produces the unknown-order warning, Then the warning stays on the Closing page, no navigation to this page occurs, and no pool row or `#unrecognized-tracking` message is produced `[BR-32]`. *(The two flows are disjoint — `_review.md` §1 adjudicated non-issue.)*
+**QA-XPG-05 [ADMIN] (neg)** — Given a Closing scan that produces the unknown-order warning, Then the warning stays on the Closing page, no navigation to this page occurs, and **no** pool row and **no** `#unrecognized-tracking` message is produced `[BR-32]`. *(The two flows are disjoint — `_review.md` §1 adjudicated non-issue.)* **`[ADMIN]`, not `[WF]`:** three of its four clauses are server and Slack state, which §8.0 defines as `[ADMIN]`, and the trigger lives on another page's wireframe, which no `[WF]` scenario in this document may target. The Closing-side half (the warning stays put, no navigation) is asserted in the **closing** spec against the closing wireframe; this row asserts only that nothing lands **here**.
 
 **QA-XPG-06 [ADMIN]** — Given the field written by `[DC-9]`, Then it is byte-identically the field the View Orders scan resolution path reads — a contract test that must fail loudly if either spec changes the field `[BR-5]`, §6.3.
 
 **QA-XPG-07 [ADMIN] (neg)** — Given an order in `Processing`, When a pool item is matched to one of its lines, Then the order's status is still `Processing` afterwards And **no** `order.status_changed` event is emitted §5.3.
 
 **QA-XPG-08 [ADMIN] (neg)** — Given any action performed on this page (match, removal, comment, star, mark-all-read, search), Then **no** `print.job_result`, **no** `product.barcode_registered`, and **no** `order.outbounded` event is ever emitted §5.3, `[BR-31]`.
+
+**QA-XPG-09 [ADMIN] (neg)** — Given a pool item matched to order `414230` line L, When that order is later **cancelled** on Order Detail, Then the tracking number written by `[DC-9]` **stays** on the line — it is not cleared, not nulled, and not reverted — And the pool item stays `MATCHED`; And this page offers **no** re-open, un-match, or restore control for it: the reversal path is Order Detail's / View Orders' cancel flow `[E-14]`, `[PD-22 · OWNER-PENDING]`, §6.3.
 
 ### 8.13 Block DATA — persistence and derivability
 
@@ -1180,6 +1263,8 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-DATA-12 [ADMIN]** — Given a match resolved on this page and another resolved on View Orders M2, Then their `[DC-8]` events carry `source: tracking-missing` and `source: view-orders-m2` respectively, and both carry `source_screen` on the baseline envelope `[PD-16 · OWNER-PENDING]`, §5.1.
 
+**QA-DATA-13 [ADMIN] (neg)** — Given a pool item created on 2026-12-31 and still `OPEN` on 2027-01-02, Then the `Registered At` cell still renders `12-31 23:40` with **no** year and this is **not** an error `[E-65]`; And the aging digest reports its age as **> 24 h** computed from `[DC-1]`'s full timestamp, never from the displayed `MM-DD HH:mm` string — an age computed from the display string would read as negative or as ~2 days-minus-a-year and must not be produced `[DC-18]`, `[PD-61 · OWNER-PENDING]`; And every persisted event for the item carries a full timestamp `[E-46]`.
+
 ### 8.14 Block A11Y — keyboard and announcement (`[E-62]`, `[BR-40]`, §3.14)
 
 **QA-A11Y-01 [WF]** — Given the baseline, When I Tab through `#poolrow1`, Then focus reaches the `Review & Match` button and then the `.xdel` button, in that order.
@@ -1190,7 +1275,7 @@ Per-block counts: LOAD 12 · ROW 12 · SUS 12 · M1 12 · MATCH 10 · XDEL 11 ·
 
 **QA-A11Y-04 [ADMIN]** — Given the admin, When any toast fires, Then its text is announced through an ARIA live region without moving focus `[L-F1]`, §3.14.
 
-**QA-A11Y-05 [WF]** — Given the browser viewport is narrowed to 900 px, Then `.mockwrap` scrolls horizontally, no column is hidden or reordered, and the `Action` column's buttons remain reachable by scrolling `[E-63]`.
+**QA-A11Y-05 [WF]** — Given the browser viewport is narrowed to 900 px, Then **both** nested `.mockwrap` elements report `scrollWidth > clientWidth` (outer 1280 → 900, inner 1457 → 1248), the 12 `<th>` are all still rendered in their original order with none hidden, and — after scrolling **both** `.mockwrap` elements to their maximum `scrollLeft` (§8.0 rule 3) — the `.xdel` button of `#poolrow1` has a bounding box fully inside the 900 px viewport `[E-63]`. *(Scrolling only the outer element leaves `.xdel` at roughly `left: 1045 px` and the scenario would FAIL for the wrong reason.)*
 
 ### 8.15 Block WFQ — current wireframe quirks (all [WF]; assert, do not file as bugs)
 
@@ -1208,46 +1293,97 @@ These record the live wireframe's behavior so an automated agent produces a stab
 
 **QA-WFQ-06 [WF]** — Given the baseline, When I click `#annoToggle`, Then `body` gains class `no-anno`, every `.dot` and `.legend` is hidden, and the button text becomes `Show annotations`; clicking again restores both. *(Demo chrome, §2.3; must not exist in the admin — QA-LOAD-12.)*
 
+**QA-WFQ-07 [WF]** — Given the baseline (`#poolCount` reads `3`), When I dispatch two `click` events on the **same** `.xdel` within 200 ms, Then exactly **one** row is removed (2 `<tr>` remain in the pool `<tbody>`) but `#poolCount` and `#poolCountBottom` both read **`1`**, not `2` — the counters and the rendered row count diverge. *(Defect `WF-NEW-D`, §2.4.10: `b.closest('tr')` still resolves on the detached row, so `.remove()` no-ops and `poolDec()` fires twice. Correct behavior asserted by QA-NEG-03 `[ADMIN]`. Do **not** file this as a bug from this section — it is already filed, in §2.5 and in `_wireframe-fixes.md`.)*
+
 ### 8.16 DC → QA coverage map
 
 Every persisted event has at least one **[ADMIN]** Then-clause asserting the persisted event `[G-8]`.
 
 | Event | Asserted by | Event | Asserted by |
 |---|---|---|---|
-| DC-1 | QA-XPG-02, QA-DATA-03 | DC-15 | QA-XDEL-07, QA-XDEL-11, QA-DATA-10 |
-| DC-2 | QA-NEG-07 | DC-16 | QA-XDEL-09 |
-| DC-3 | QA-DATA-04 | DC-17 | QA-XPG-01 |
-| DC-4 | QA-XPG-02, QA-VAL-08, QA-SUS-09, QA-SUS-10 | DC-18 | QA-DATA-06 |
-| DC-5 | QA-SUS-06, QA-XPG-02 | DC-19 | QA-DATA-06 |
-| DC-6 | QA-SUS-07, QA-SUS-08, QA-MATCH-09 | DC-20 | QA-DATA-07 |
-| DC-7 | QA-M1-08, QA-M1-12, QA-DATA-01 | DC-21 | QA-CMT-09 |
-| DC-8 | QA-MATCH-06, QA-MATCH-07, QA-MATCH-08, QA-DATA-12 | DC-22 | QA-CMT-08, QA-CMT-13 |
-| DC-9 | QA-MATCH-06, QA-XPG-06 | DC-23 | QA-CMT-07 |
-| DC-10 | QA-MATCH-06, QA-MATCH-10, QA-NEG-02 | DC-24 | QA-VAL-08 |
-| DC-11 | QA-MATCH-06, QA-DATA-07 | DC-25 | QA-EMPTY-04 |
-| DC-12 | QA-NEG-02 | DC-26 | QA-DATA-08 |
-| DC-13 | QA-VAL-01, QA-VAL-02, QA-VAL-03, QA-VAL-05, QA-NEG-04, QA-NEG-09, QA-NEG-10, QA-NEG-11 | DC-27 | QA-MATCH-10, QA-XPG-04, QA-DATA-01 |
-| DC-14 | QA-XDEL-06, QA-XDEL-07, QA-XDEL-08, QA-DATA-09 | DC-28 | QA-NEG-13 |
+Each cell was re-derived from the scenario bodies: a scenario is credited **only** where it names the `[DC-n]` ID in its own text.
 
-Non-events `[N-1]`…`[N-12]` are asserted collectively by **QA-DATA-05**, with `[N-4]` additionally by QA-M1-02 / QA-LOAD-12 and `[N-3]` by QA-CMT-12.
+| Event | Asserted by | Event | Asserted by |
+|---|---|---|---|
+| DC-1 | QA-XPG-02, QA-DATA-03, QA-DATA-13 | DC-15 | QA-XDEL-07, QA-XDEL-11, QA-DATA-10 |
+| DC-2 | QA-NEG-07 | DC-16 | QA-XDEL-09, QA-XDEL-12 |
+| DC-3 | QA-DATA-04 | DC-17 | QA-XPG-01 |
+| DC-4 | QA-XPG-02, QA-VAL-08, QA-SUS-09, QA-SUS-10 | DC-18 | QA-DATA-06, QA-DATA-13 |
+| DC-5 | QA-SUS-06, QA-SUS-13, QA-XPG-02 | DC-19 | QA-DATA-06 |
+| DC-6 | QA-SUS-07, QA-SUS-08, QA-SUS-13, QA-MATCH-09 | DC-20 | QA-DATA-07 |
+| DC-7 | QA-M1-08, QA-M1-12, QA-DATA-01 | DC-21 | QA-CMT-09 |
+| DC-8 | QA-MATCH-06, QA-MATCH-07, QA-MATCH-08, QA-DATA-12, QA-NEG-14, QA-VAL-12 | DC-22 | QA-CMT-08, QA-CMT-13 |
+| DC-9 | QA-MATCH-06, QA-XPG-06, QA-XPG-09, QA-NEG-14 | DC-23 | QA-CMT-07 |
+| DC-10 | QA-MATCH-06, QA-MATCH-10, QA-NEG-02 | DC-24 | QA-VAL-08, QA-NEG-14 |
+| DC-11 | QA-MATCH-06, QA-DATA-07, QA-NEG-02, QA-NEG-14 | DC-25 | QA-EMPTY-04 |
+| DC-12 | QA-NEG-02 | DC-26 | QA-DATA-08 |
+| DC-13 | QA-VAL-01, QA-VAL-02, QA-VAL-03, QA-VAL-05, QA-NEG-04, QA-NEG-09, QA-NEG-10, QA-NEG-11, QA-NEG-15 | DC-27 | QA-MATCH-10, QA-XPG-04, QA-DATA-01 |
+| DC-14 | QA-XDEL-06, QA-XDEL-07, QA-XDEL-08, QA-DATA-09, QA-XDEL-12, QA-VAL-12 | DC-28 | QA-NEG-13 |
+
+Non-events `[N-1]`…`[N-12]` are asserted collectively by **QA-DATA-05**, with `[N-4]` additionally by QA-M1-02 / QA-LOAD-12, `[N-3]` by QA-CMT-12, and `[N-6]`/`[N-10]` by QA-XDEL-12.
 
 ### 8.17 Legend-unit → QA coverage map
 
 | Unit | Asserted by |
 |---|---|
 | `[L-0]` | QA-LOAD-01, QA-LOAD-02 |
-| `[L-1]` | QA-LOAD-03…05, QA-ROW-01…12, QA-EMPTY-01, QA-EMPTY-02, QA-EMPTY-06 |
-| `[L-2]` | QA-SUS-01…12, QA-EMPTY-03 |
-| `[L-3]` | QA-M1-01, QA-MATCH-01…10, QA-XDEL-01…11 |
-| `[L-4]` | QA-ROW-02, QA-ROW-03, QA-ROW-04, QA-M1-03, QA-M1-06 |
-| `[L-5]` | QA-CMT-01…13 |
-| `[L-M1]` | QA-M1-01…12, QA-EMPTY-05 |
-| `[L-M2]` | QA-XDEL-04…11, QA-VAL-06, QA-VAL-11 |
-| `[L-F1]` | QA-MATCH-04, QA-MATCH-05, QA-FURN-02, QA-FURN-05, QA-FURN-06, QA-A11Y-04 |
+| `[L-1]` | QA-LOAD-03…05, QA-ROW-01…16, QA-EMPTY-01, QA-EMPTY-02, QA-EMPTY-06, QA-FURN-08 |
+| `[L-2]` | QA-SUS-01…13, QA-EMPTY-03 |
+| `[L-3]` | QA-M1-01, QA-MATCH-01…10, QA-XDEL-01…12, QA-NEG-03, QA-WFQ-07 |
+| `[L-4]` | QA-ROW-02, QA-ROW-03, QA-ROW-04, QA-ROW-14, QA-ROW-16, QA-M1-03, QA-M1-06 |
+| `[L-5]` | QA-CMT-01…15 |
+| `[L-M1]` | QA-M1-01…13, QA-EMPTY-05 |
+| `[L-M2]` | QA-XDEL-04…12, QA-VAL-06, QA-VAL-11 |
+| `[L-F1]` | QA-MATCH-04, QA-MATCH-05, QA-FURN-02, QA-FURN-05, QA-FURN-06, QA-FURN-09, QA-A11Y-04 |
 | `[L-F2]` | QA-FURN-01, QA-LOAD-05, QA-MATCH-03 |
 | `[L-F3]` | QA-FURN-04, QA-CMT-01, QA-CMT-13 |
-| `[L-S1-Fa]` | QA-LOAD-06, QA-LOAD-08, QA-LOAD-09, QA-LOAD-10 |
+| `[L-S1-Fa]` | QA-LOAD-06, QA-LOAD-08, QA-LOAD-09, QA-LOAD-10, QA-ROW-13 |
 | `[L-S1-Fb]` | QA-LOAD-08, QA-XPG-01, QA-XPG-02, QA-XPG-03 |
+
+### 8.18 Edge-case → QA coverage map
+
+Every `[E-n]` in §7 has at least one Then-clause somewhere in §8, with exactly one declared exception. Rows were re-derived by searching §8 for each ID.
+
+| Case | Asserted by | Case | Asserted by |
+|---|---|---|---|
+| E-1 | QA-NEG-07 | E-37 | QA-DATA-06 |
+| E-2 | QA-VAL-09 | E-38 | QA-ROW-11, QA-ROW-12 |
+| E-3 | QA-VAL-10 (**BLOCKED** — no criteria until `[PD-66]` lands, §9.1) | E-39 | QA-VAL-08 |
+| **E-4** | **Deliberately none — cross-reference only.** The case cannot occur here (View Orders M2b forces an autocomplete pick); its negative test lives in the **view-orders** spec, §7.1 | E-40 | QA-SUS-07 |
+| E-5 | QA-EMPTY-03, QA-ROW-12 | E-41 | QA-NEG-09 |
+| E-6 | QA-VAL-01 | E-42 | QA-VAL-11 |
+| E-7 | QA-NEG-04 | E-43 | QA-VAL-05, QA-NEG-15 |
+| E-8 | QA-NEG-05 | E-44 | QA-ROW-14 |
+| E-9 | QA-NEG-01 | E-45 | QA-ROW-15, QA-M1-13, QA-ROW-16 |
+| E-10 | QA-VAL-02, QA-NEG-09 | E-46 | QA-ROW-07, QA-DATA-13 |
+| E-11 | QA-VAL-03 | E-47 | QA-SUS-12 |
+| E-12 | QA-MATCH-07 | E-48 | QA-SUS-08 |
+| E-13 | QA-SUS-11 | E-49 | QA-NEG-10 |
+| E-14 | QA-XPG-09 | E-50 | QA-NEG-11 |
+| E-15 | QA-XPG-01 | E-51 | QA-MATCH-09 |
+| E-16 | QA-XDEL-04, QA-WFQ-03 | E-52 | QA-SUS-09 |
+| E-17 | QA-XPG-03 | E-53 | QA-SUS-10 |
+| E-18 | QA-XDEL-09, QA-NEG-05 | E-54 | QA-MATCH-10 |
+| E-19 | QA-EMPTY-01, QA-EMPTY-02, QA-EMPTY-06 | E-55 | QA-CMT-13 |
+| E-20 | QA-XDEL-03 | E-56 | QA-CMT-12 |
+| E-21 | QA-EMPTY-06, QA-XPG-02, QA-NEG-15 | E-57 | QA-FURN-07 |
+| E-22 | QA-FURN-09 | E-58 | QA-FURN-10 |
+| E-23 | QA-MATCH-05, QA-FURN-02 | E-59 | QA-NEG-15 |
+| E-24 | QA-EMPTY-05, QA-M1-11 | E-60 | QA-XDEL-10, QA-CMT-14 |
+| E-25 | QA-NEG-06 | E-61 | QA-NEG-13 |
+| E-26 | QA-NEG-14 | E-62 | QA-A11Y-01…04, QA-M1-11 |
+| E-27 | QA-DATA-08 | E-63 | QA-A11Y-05 |
+| E-28 | QA-EMPTY-04 | E-64 | QA-ROW-16 |
+| E-29 | QA-VAL-12 | E-65 | QA-DATA-13 |
+| E-30 | QA-ROW-13 | E-66 | QA-MATCH-08 |
+| E-31 | QA-CMT-14 | E-67 | QA-NEG-12 |
+| E-32 | QA-NEG-08 | E-68 | QA-VAL-09 |
+| E-33 | QA-M1-13, QA-ROW-15 | E-69 | QA-SUS-13 |
+| E-34 | QA-VAL-07 | E-70 | QA-XDEL-11 |
+| E-35 | QA-XDEL-05, QA-XDEL-11 | E-71 | QA-DATA-08 |
+| E-36 | QA-XDEL-12 | E-72 | QA-FURN-08 |
+
+**72 cases; 71 asserted; 1 declared exception (`[E-4]`).** `[E-3]` is asserted only as `BLOCKED` and carries no verdict by design — that is coverage of the *decision gap*, not of a behavior, and it must not be counted as a passing assertion.
 
 ---
 
@@ -1264,7 +1400,9 @@ Per `_review.md` §3.8 this section carries **only** NO-DEFAULT owner questions,
 - **QA consequence:** **QA-VAL-10** is reported as `BLOCKED`. An implementation must escalate rather than pick a behavior.
 - **Owner:** SkinSeoul Director (Yongwon). **Blocks:** the View Orders M2b validation rule and this page's column-1 nullability.
 
-**Provisional decisions carried by this page** (behavior IS specified; listed for the owner's review pass, not re-opened here): PD-1, PD-3, PD-4, PD-5, PD-6, PD-7, PD-8, PD-16, PD-60, PD-61, PD-62, PD-63, PD-64, PD-65, PD-67, PD-80. Cross-referenced only: PD-2 (cannot land — no outbound button), PD-22 (Order Detail), PD-68 (Closing), PD-85 (Inbound Request).
+**Provisional decisions carried by this page** (behavior IS specified; listed for the owner's review pass, not re-opened here): PD-1, PD-3, PD-4, PD-5, PD-6, PD-7, PD-8, PD-16, PD-60, PD-61, PD-62, PD-63, PD-64, PD-65, PD-67, PD-80 — **16 entries**. Cross-referenced only: PD-2 (cannot land — no outbound button), PD-22 (Order Detail), **PD-51 (Order Management — the sample-definition source; NO-DEFAULT, cited in §9.3)**, PD-68 (Closing), PD-85 (Inbound Request) — **5 entries**. Total distinct PDs cited by this document: **21 carried or cross-referenced**, plus `[PD-66]` above, which is neither carried nor cross-referenced but **owned** by this page as its one NO-DEFAULT question — **22 in all**.
+
+> **Note on `[PD-8]`.** It is listed as *carried* because this page adopts its namespace model. The order-line uniqueness rule in `[BR-19]` is a **page-level extension** of `[PD-8]`, not part of the register entry; it is flagged as such in `[BR-19]` and reverses independently.
 
 ### 9.2 Developer-time decisions (no owner input needed; a default is stated)
 
@@ -1295,7 +1433,7 @@ Per `_review.md` §3.8 this section carries **only** NO-DEFAULT owner questions,
 | Procurement Hub sheet pull (excluded from this page 2026-08-02) | **inbound-request** |
 | Display of the written tracking number; cancel / refund / clone / reset flows on the matched order | **order-detail** |
 | Closing's "unknown order" warning and its resolution path (disjoint from this pool `[BR-32]`) | **closing** |
-| Sample assignment `[G-13]` and the sample-definition source `[PD-51]` (mandatory item 5 — no sample surface here) | **order-management** |
+| Sample assignment `[G-13]` and the sample-definition source `[PD-51 · OWNER-PENDING]` (mandatory item 5 — no sample surface here; PD-51 is NO-DEFAULT and owned by order-management / RTO / order-detail, cross-referenced from here only) | **order-management** |
 | Sourcing-route origin and the `OTHER` free-text channel `[G-5]` (this page only renders what it is given `[BR-15]`) | **inbound-request** |
 | Location scheme, line-based location filter, audit-mode-only visibility `[G-14]`, and JIT residual stock (mandatory items 9, 10, 11 — none exist here) | **stock-status** |
 | Label and invoice layout content (deferred to Phase 3-1 with the owner) | none — post-Phase-3 |
@@ -1363,7 +1501,22 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | New defects **`WF-NEW-A`** (Comments hub missing its search input), **`WF-NEW-B`** (candidate order numbers are not links — the file contains zero anchors, violating `[G-12]`), **`WF-NEW-C`** (additional dead CSS beyond `WF-10`, excluding `.toast.err`) found while writing this spec | this document §2.5 | `[L-5]`, `[BR-37]`, D-10 |
 | 2026-08-03 | Adjudicated non-issue recorded: **Closing's "unknown order" ≠ this pool's "unrecognized product"** — the flows are disjoint and Closing does not route to `#unrecognized-tracking` | `_review` §1 | `[BR-32]`, QA-XPG-05 |
 | 2026-08-03 | **No Slack route for removals.** Adding one would create an unowned alert stream; the record lives in the audit trail instead | this spec, §6.1 | `[DC-14]`, §9.4 |
-| 2026-08-03 | **Audit pass (spec v1.1).** Added: sibling-recompute rule `[BR-38]`, mention dedupe `[BR-39]`, overlay/focus management `[BR-40]`, counters-from-DOM `[BR-41]`, notification dead-letter `[BR-42]` + `[DC-28]`, intake-snapshot rendering `[BR-43]`, user-reload allowance `[BR-44]`; edge cases `[E-47]`…`[E-72]`; §3.14 interaction baseline; §2.6 mandatory-inclusion map; §8 rewritten to 151 scenarios with a reset procedure and per-unit coverage maps | this document | §2.6, §3.14, §4, §5.1, §7, §8 |
+| 2026-08-03 | **Audit pass (spec v1.1).** Added: sibling-recompute rule `[BR-38]`, mention dedupe `[BR-39]`, overlay/focus management `[BR-40]`, counters-from-DOM `[BR-41]`, notification dead-letter `[BR-42]` + `[DC-28]`, intake-snapshot rendering `[BR-43]`, user-reload allowance `[BR-44]`; edge cases `[E-47]`…`[E-72]`; §3.14 interaction baseline; §2.6 mandatory-inclusion map; §8 rewritten to 151 scenarios with a reset procedure and per-unit coverage maps | this document | §2.6, §3.14, §4, §5.1, §7, §8 — **the 151 figure is the v1.1 count; superseded by the v1.2 row below** |
+| 2026-08-03 | **`[G-5]` page delta decided (spec v1.2).** The badge contract lands on `[L-M1]`'s `Channel` cell only; `[L-2]`'s pool cell renders the route as muted running text inside the status span. Resolves the v1.1 self-contradiction between §3.3's format line and its "Route label rendering" paragraph, which had encoded two mutually exclusive `[WF]` assertions (QA-SUS-02 vs QA-SUS-05) | verification m1 D-1 (BLOCKER) | §3.3 rendering table, `[BR-15]`, QA-SUS-02, QA-SUS-05 |
+| 2026-08-03 | **`WF-NEW-D` filed and QA-NEG-03 re-tiered `[WF]` → `[ADMIN]`.** The wireframe's `.xdel` double-click removes one row but decrements both counters twice; the spec had asserted the correct behavior as `[WF]`, guaranteeing a false FAIL and hiding a real wireframe bug. Counterpart `[WF]` quirk QA-WFQ-07 added; §2.4 gained limitation 10; the defect was appended to `_wireframe-fixes.md` §B | verification m1 D-2, m2 F3 | §2.4.10, §2.5, QA-NEG-03, QA-WFQ-07, `_wireframe-fixes.md` |
+| 2026-08-03 | **Edge-case coverage closed (spec v1.2).** 16 of 72 `[E-n]` had no acceptance criterion. 16 scenarios added (QA-ROW-13…16, QA-SUS-13, QA-M1-13, QA-XDEL-12, QA-CMT-14, QA-CMT-15, QA-FURN-09, QA-FURN-10, QA-NEG-14, QA-NEG-15, QA-VAL-12, QA-XPG-09, QA-DATA-13) and a new **§8.18 E→QA map** published. `[E-4]` remains the single declared exception (cross-reference to view-orders) | verification m1 D-3 | §8.18, §8.2, §8.3, §8.4, §8.6, §8.7, §8.8, §8.9, §8.10, §8.12, §8.13 |
+| 2026-08-03 | **`[PD-8]` extension declared.** `[BR-19]`'s order-line uniqueness rule is a page-level extension, not register text; `[L-1]` column 1 now defines which namespace a pool item's tracking number belongs to and names the `[E-33]` interaction the guard cannot catch | verification m1 D-5 | `[BR-19]`, `[L-1]` col. 1, §9.1 |
+| 2026-08-03 | **QA-XPG-05 re-tiered `[WF]` → `[ADMIN]`.** Three of its four clauses are server/Slack state and its trigger lives on the closing wireframe; `_review.md` §3.4 permits only `[WF]`/`[ADMIN]`, so no `[WF-XPG]` marker was invented. §8.0 now states that every `[WF]` scenario runs against this page's URL | verification m1 D-9, m2 F5 | §8.0, QA-XPG-05 |
+| 2026-08-03 | **QA assertion-mechanics hardened.** §8.0 gained six binding rules (strip `.dot` before text comparison; `table.tbl` and `.mockwrap` each match two elements; `.it` is positional; "exactly" scoping; CDP needed for listener clauses). QA-LOAD-04, QA-LOAD-05, QA-M1-01, QA-ROW-08, QA-CMT-03, QA-CMT-05, QA-CMT-06, QA-EMPTY-01, QA-NEG-01, QA-A11Y-05 amended | verification m2 F1, F2, §5, §6 | §8.0 and the ten named scenarios |
+| 2026-08-03 | **`WF-NEW-E` filed — Comments-hub pane headers diverge from the four-page-majority strings.** The admin adopts `Comments mentioning me · Click to open the order` / `Saved comments · Click to open the order`; the wireframe's shorter strings stay asserted under `[WF]`. Pending a `[G-7]` amendment that publishes the six hub strings as byte-exact contract | cross-page verification m3a D7 | §2.5, §3.6, QA-CMT-03, QA-CMT-05, QA-CMT-15 |
+| 2026-08-03 | **Deep-link path form normalized to the directory form** `../{slug}/#{anchor}`, matching `[G-12]` and the live wireframe URLs. The `index.html` variant is retired from this spec | cross-page verification m3a D16 | §6.2 |
+| 2026-08-03 | **Event-name scope note published** (§5.1): four shared concepts carry per-page names across the corpus with no canonical name yet; this page's names are declared page-scoped and superseded the day a canonical name lands in `_global-rules.md` | cross-page verification m3a D14 | §5.1 |
+| 2026-08-03 | **`[GD-n]` resolution note added** (reading contract item 6): GD IDs resolve only in `_review.md` §4, all ten landed in `_global-rules.md` v1.0, and a GD citation is provenance, never a live rule | cross-page verification m3a D13 | Reading contract |
+| 2026-08-03 | **`[BR-44]` reclassified as a candidate global amendment,** not a page behavior — the `[G-2]`-scope reading applies to all eight screens and must be promoted into `[G-2]`; stated locally only so QA-FURN-07 has a rule, and marked do-not-copy | verification m1 D-7 | Reading contract item 7, `[BR-44]` |
+| 2026-08-03 | **`[BR-15]`, `[BR-23]`, `[BR-27]`, `[BR-34]` trimmed to their deltas** and the reading contract's rule-restatement clause reworded to match what the document actually does | verification m1 D-6 | Reading contract item 1, §4 |
+| 2026-08-03 | **`[PD-51]` tagged `· OWNER-PENDING`** and added to §9.1's cross-referenced list; §8.16's `DC-10` / `DC-13` map rows reconciled by adding the missing citations to QA-NEG-02 and QA-VAL-05; §8.0's totals sentence reworded so QA-VAL-10 reads as inside the total, not additional | verification m1 D-4, D-8, D-10 | §8.0, §8.16, §9.1, §9.3 |
+| 2026-08-03 | **Register-citation warning added** to §2.5: `_review.md` §2a mis-cites this page's dead-code cleanup as `WF-9`; the correct entry is `WF-10`, which is what every citation in this document uses | verification m3b finding 5.3 | §2.5 |
+| 2026-08-03 | **Remediation pass (spec v1.2).** §8 recounted from the scenario bodies: **168 scenarios — 66 `[WF]`, 102 `[ADMIN]`; 61 negatives (36.3 %)**; per-block, per-tier and per-negative counts published in §8.0 and re-derivable from the blocks | this document | §8.0 and all of §8 |
 
 ### 10.1 Reversal chains (verbatim, so nobody re-implements a superseded state)
 

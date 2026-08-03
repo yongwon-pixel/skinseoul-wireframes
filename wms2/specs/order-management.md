@@ -1,6 +1,6 @@
 # Order Management Dashboard — Screen Specification
 
-Slug: `order-management` · Spec version 1.1 · 2026-08-03
+Slug: `order-management` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-management/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-management/
 Global rules: `_global-rules` (cited as `[G-n]`; page deltas only — rule bodies are never restated in this document).
 Companion registers: `_plans/_provisional-decisions.md` (PD register) · `_plans/_wireframe-fixes.md` (WF register) · `_plans/_review.md` (adjudications C-1…C-12, writing conventions §3).
@@ -103,7 +103,7 @@ The page has **one screen state** (the dashboard) plus three modals and one drop
 
 **Registered defects that touch this page: none.** None of WF-1…WF-14 is on `order-management`. `_wireframe-fixes` §E names this page twice, and both entries are honoured here: legend 3's missing dot is an intentional artifact (§2.2), and "order-management preview data is static" is a demo limitation, not a bug.
 
-Seven further artifacts were found while auditing the HTML against the decided behaviour. They are **proposed** additions to `_wireframe-fixes` and are **not** yet in the register. The spec below states the correct behaviour regardless; QA scenarios that observe the current (wrong) behaviour are labelled as defect-documentation.
+Seven further artifacts were found while auditing the HTML against the decided behaviour. They are now **registered** in `_wireframe-fixes` **§F** (appended 2026-08-03), and they keep the `· proposed` suffix in their IDs because that suffix is their register status — the wireframe-edit pass has not yet adjudicated them, and no wireframe edit may be applied while specs are being written (§9.2). The spec below states the correct behaviour regardless; QA scenarios that observe the current (wrong) behaviour are labelled as defect-documentation.
 
 - **[WF-15 · proposed]** M1 preview table: the collapse row `⋯ +8 more rows` uses `colspan="6"` while the table has **7** `<th>` (`Recipient · Country · SKU · Product Name · Qty · Campaign · Carrier (auto)`), so the row under-spans by one cell. Fix: `colspan="7"`. Verified by direct count of the `<thead>` row at line 329 against line 334. Documented by QA-IMP-35.
 - **[WF-16 · proposed]** M2 footer button `Start Assignment (ON)` carries `data-close` but **no toast handler** and no `id` — it closes the modal silently. This contradicts `[G-2]`, which `_review` C-6 rules wins over wireframe omissions. Fix: add an `id` and the toast defined in §3.6.5. Documented by QA-SMP-30.
@@ -171,9 +171,10 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
 - **Trigger:** drag-and-drop onto `.dropzone`, or click to open a file picker. (The wireframe's dropzone is inert — QA-IMP-37.)
 - **Accepted input:** `.xlsx` only. `.csv`, `.xls`, and files renamed to `.xlsx` that fail to parse as XLSX are rejected inline and no rows are parsed ([E-1]).
 - **Effect:** the file is uploaded and parsed server-side. Parsing produces a **draft batch** with a per-row result set: parsed values, row-level errors with reasons, and an advisory carrier resolution per row (§3.3). Only the first worksheet is read; formula cells are read as cached values ([E-70]). Field values are trimmed of leading/trailing whitespace before validation, and a value that is only whitespace is treated as missing ([E-68]).
+- **Parse contract — what is *not* validated here:** free-text fields are stored verbatim and are never measured against a carrier's field limits. A Recipient or Address longer than the destination carrier will accept still imports ([E-78]), and a Contact number without a country dialling code still imports ([E-79]); carrier-format validation belongs to the label/export pipeline, not to this parse. Row and byte limits ([E-16]) and template-schema matching ([E-17]) are the two file-level rejections that happen before any row is parsed.
 - **Preview render (byte-exact format):** a bold header line `Preview — {filename} · {n} rows parsed · {e} errors` (demo: `Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors`), followed by a table with headers `Recipient` · `Country` · `SKU` · `Product Name` · `Qty` · `Campaign` · `Carrier (auto)`. Long files collapse the middle with a single row `⋯ +{m} more rows` (demo: `⋯ +8 more rows`) spanning **all seven** columns ([WF-15 · proposed] under-spans it at six).
 - **Product Name rendering:** the brand is bold-prefixed per `[G-6]` — demo rows render `**Dr.Jart+** Cicapair Gentle Cleansing Foam`, `**Dr.Jart+** Cicapair Sleepair Mask`, `**innisfree** Green Tea Seed Hyaluronic Serum`. Product Name is resolved from the SKU by the system; it is not a template column, and a value supplied in an extra column of that name is ignored in favour of the system value ([E-72]).
-- **Row errors:** every failing row is counted in `{e}` and shown with its reason. A file with `{e} > 0` **cannot be confirmed** — the whole file is blocked, not partially imported (BR-12, `[PD-57 · OWNER-PENDING]`, [E-19]).
+- **Row errors:** every failing row is counted in `{e}` and shown with its reason. The blocking row validations are exactly five: a missing required field ([E-3]), an **unknown SKU** not present in the catalog ([E-4]), an invalid quantity ([E-5]), an **invalid or unsupported country code** ([E-6]), and a value that fails coercion ([E-69]). [E-6] is a *country* error and is distinct from an unconnected *carrier*, which never blocks ([E-7]). A file with `{e} > 0` **cannot be confirmed** — the whole file is blocked, not partially imported (BR-12, `[PD-57 · OWNER-PENDING]`, [E-19]).
 - **Persists:** `[DC-2] import.file_uploaded` on receipt (actor, timestamp, filename, byte size, SHA-256 hash, parse outcome) then `[DC-3] import.file_parsed` (draft batch id, row count, error count, per-row parse result, per-row **advisory** carrier result, parser/template version). Both persist **even if the operator abandons the modal** — an abandoned upload is evidence of an attempt `[G-8]`.
 
 #### 3.2.5 Footer and confirm
@@ -181,7 +182,7 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
 - **Copy (byte-exact):** `Cancel` (grey, `data-close`) and `Confirm Import ({n} orders)` (purple, `#mktConfirm`; demo label `Confirm Import (12 orders)`), where `{n}` is the number of parsed data rows.
 - **`Confirm Import` is enabled if and only if all of:**
   1. a file has been uploaded and parsed;
-  2. `{e} == 0` (no row errors) — BR-12;
+  2. `{e} == 0` (no row errors — an unknown SKU [E-4] and an invalid country code [E-6] each keep `{e} > 0` and therefore keep this gate shut) — BR-12;
   3. `{n} >= 1` ([E-2], [E-63]);
   4. Order Type is resolved (preset chip active, or Custom chip active with non-empty text) — [E-14];
   5. PIC is resolved (select value, or visible Custom input with non-empty text) — [E-15].
@@ -203,7 +204,7 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
 
 #### 3.2.6 Abandoning the modal
 
-Closing via `✕`, `Cancel`, `Esc`, or a click on the overlay backdrop discards the staged draft batch: **no orders are created** ([E-13]). `[DC-2]` and `[DC-3]` remain persisted, and `[DC-8] import.batch_abandoned` is written with the draft batch id and the reason (`user_closed` / `session_lost`). Uploaded source-file retention is specified in §5.5. The wireframe implements `✕`, `Cancel` and backdrop but **not** `Esc` ([WF-20 · proposed], [E-97]).
+Closing via `✕`, `Cancel`, `Esc`, or a click on the overlay backdrop discards the staged draft batch: **no orders are created** ([E-13]). `[DC-2]` and `[DC-3]` remain persisted, and `[DC-8] import.batch_abandoned` is written with the draft batch id and the reason (`user_closed` / `session_lost`). The same discard path covers an *involuntary* abandonment — a closed tab or a lost browser session mid-upload orphans the staged draft, which is reaped with reason `session_lost` and creates nothing ([E-55]). Uploaded source-file retention is specified in §5.5. The wireframe implements `✕`, `Cancel` and backdrop but **not** `Esc` ([WF-20 · proposed], [E-97]).
 
 #### 3.2.7 Modal note (byte-exact, must be present)
 
@@ -304,6 +305,7 @@ There is **no sample-type selector in this modal and none may be added** (BR-6).
   - Selected orders that are `MKT-`, cancelled, or otherwise ineligible are skipped and counted separately ([DC-16], [E-85]).
   - If the resolved selection is empty at submit time, the submit is blocked with `No eligible orders are selected.` and nothing is created ([E-84]).
   - Selections above the configured batch ceiling are processed asynchronously and the toast reports the queued count; the ceiling is a developer decision ([E-86], §9.3).
+- **What an assigned set prints (dual view, BR-8 `[G-13]`):** every order that receives a set is subject to the same split — carrier-facing data appends only `(+ sample set)` to the **last** product name, while the internal invoice and picking artifacts state **which** sample and **how many** ([E-34], `[PD-36 · OWNER-PENDING]`). This page decides the split; the divergence itself is asserted against the consuming specs (§6.5).
 - **Idempotency:** double-click safe `[G-9]` — one period, one assignment pass ([E-44] covers the network-failure variant: no partial or ghost period).
 - **Feedback — the toast this modal must show.** The wireframe omits it ([WF-16 · proposed]); `[G-2]` and `_review` C-6 require it:
   - Title (byte-exact): `✓ Sample assignment started`
@@ -316,6 +318,7 @@ There is **no sample-type selector in this modal and none may be added** (BR-6).
 
 - It does not modify orders retroactively (BR-15).
 - It does not remove a sample set when it ends or is cancelled (BR-19) — an assigned order keeps its set through outbound ([E-26]).
+- It does not track the order's own lifecycle. If an order is cancelled or refunded after a set was assigned, the assignment record persists on that order and **no** `sample.unassigned` event is written; sample handling on the internal documents then follows the order's lifecycle, not the period's ([E-31]).
 - It does not select a sample product type (BR-6).
 - It does not notify Slack. There is **no** Slack route for sample-period changes in v1 (§6.2).
 
@@ -387,6 +390,7 @@ The wireframe demo shows only `Active` and `Ended`. The complete vocabulary the 
 **A bulk "Hold Shipment" control must NOT exist on this screen.** There is no button, no menu item, no keyboard shortcut, and no bulk action that places orders on hold from the Order Management Dashboard.
 
 - **Where hold now lives:** Order Detail → `Change Status` → `on-hold` (spec `order-detail`; the status matrix is `[PD-28 · OWNER-PENDING]`, and the hold reason is `[PD-20 · OWNER-PENDING]`).
+- **Stale cross-reference elsewhere (cross-page defect M3a D10):** `view-orders`'s State-5 legend footer and its §9.1 still name *Order Management* as a place where a hold is applied by CS. That wireframe text predates this removal (2026-08-03) and is stale; the correction is owed on the View Orders side. It confers no requirement here — no hold control may be added to this page on the strength of that sentence, and QA-LST-04 asserts its absence.
 - **Why it was removed:** the OMS dashboard remains the live screen; a bulk hold from a list view sets an exception state on many orders without the per-order context in which a hold decision is actually made. Recorded 2026-08-03 (review round); the control existed in the 2026-07-09 real-capture rework.
 - **Legend treatment:** legend item 3 deliberately has **no on-screen dot** and must stay in the legend as a negative entry (`_wireframe-fixes` §E) so nobody re-implements it from a stale capture.
 - **QA:** an absence assertion (QA-LST-04).
@@ -449,6 +453,7 @@ The hub is the shared cross-screen pattern defined in `[G-7]`; only page deltas 
 - **Tabs (byte-exact):** `@ Mentions` (with an inline count badge, demo `3`) and `★ Saved`.
   - Mentions pane header: `Comments mentioning me · Click to open the order` with the right-aligned action `Mark all read`.
   - Saved pane header: `Saved comments · Click to open the order` with the right-aligned hint `Unstar to remove from list`.
+- **Declared cross-page string divergence (cross-page defect M3a D7).** The hub is intended to be byte-identical on all eight screens. On five of the six shared strings this page already carries the corpus-majority text (`Comments mentioning me · Click to open the order`, `Saved comments · Click to open the order`, `Mark all read`, `{n} results · newest first · click to open the order`, `No matching comments`). It diverges on exactly one — the Saved-pane hint, which reads `Unstar to remove from list` here and on `inbound-request`, against `Unstar to remove from the list` (RTO, TM) and `Unstar to remove from this list` (INV, CL). **This spec keeps `Unstar to remove from list`**: it is byte-exact to this page's wireframe, which `_review` §3.9 makes the source of truth for UI copy, and the corpus has no majority (2 / 2 / 2 / 1) that could override it. Converging the six strings is a `[G-7]` amendment, not a page delta; when `_global-rules` publishes them as byte-exact contract, this line and QA-CMT-03 change together.
 - **Rows:** `Order {no} · {author}: "{text}"` plus a `<time>` stamp, with a `★` star toggle. Unread rows carry `.unread` (blue tint `--blue-soft`). Demo dataset: `MKT-40233`, `MKT-40218`, `421771`, `MKT-40191`, `421502` — marketing and sales orders share one corpus.
 - **Page delta — cross-entity corpus (BR-32).** `[G-7]` makes orders, inbound requests **and** unrecognized-pool items commentable, and the hub searches **all** comments. A row surfaced here may therefore reference an entity that does not live on this page; the click routes to that entity's own screen, and for an already-resolved pool item it opens the matched order instead `[PD-67 · OWNER-PENDING]` ([E-92]).
 - **Click-through:** opens the referenced entity `[G-12]`. If a target order was cancelled after the comment was written, the click still opens it in its cancelled state ([E-49]).
@@ -553,16 +558,18 @@ Every rule carries its rationale and decision date. Reversals appear in §10. Ru
 | **BR-28** | **No scan surface.** `[G-1]` and `[G-3]` have nothing on this page to attach to: no scan input, no focus-retention rule, no send sound, no TTS. | Desk screen with no outbound-class button and no scan entry point. `_review` C-5 defines the send sound by button class `[PD-2 · OWNER-PENDING]` — this page has none of that class. | 2026-08-03 |
 | **BR-29** | **No print surface.** `[G-4]` has no Print button on this page. Print consequences of `[G-13]` land on the label/picking artifacts owned by other specs. | The import and sample flows produce no printable artifact here. | 2026-08-03 |
 | **BR-30** | **Assignment periods are a permanent record.** Rows are never deleted; `Ended` and `Cancelled` rows remain listed as record-only. | `[G-8]`: the period list is a view over persisted events and is the audit answer to "why did this order get a sample". | 2026-08-03 |
-| **BR-31** | **One operating timezone.** Every datetime entered, evaluated, displayed or reported on this page uses the admin's single configured operating timezone; storage is UTC; period matching evaluates the absolute instant, not the wall-clock string. No per-user timezone rendering in v1. | A sample period is a company-wide switch. If two operators in different timezones read different windows from the same row, the one-set invariant becomes untestable and a campaign silently starts at the wrong hour. Spec-level default; the zone value itself is configuration (§9.3). | 2026-08-03 (spec-level) |
+| **BR-31** | **One operating timezone.** Every datetime entered, evaluated, displayed or reported on this page uses the admin's single configured operating timezone; storage is UTC; period matching evaluates the absolute instant, not the wall-clock string. No per-user timezone rendering in v1. | A sample period is a company-wide switch. If two operators in different timezones read different windows from the same row, the one-set invariant becomes untestable and a campaign silently starts at the wrong hour. **Spec-level default awaiting owner sign-off — see §9.1**; the zone value itself is configuration (§9.3). | 2026-08-03 (spec-level) |
 | **BR-32** | **The Comments hub corpus is cross-entity.** Rows surfaced here may reference orders, inbound requests or unrecognized-pool items `[G-7]`; a click routes to that entity's own screen `[PD-67 · OWNER-PENDING]`. | `[G-7]` makes pool items a first-class commentable type and the hub searches all comments, so this page's hub cannot assume every row is an order. | 2026-08-03 |
-| **BR-33** | **`Selected orders only` resolves its order set at submit time, not at modal-open time.** The open-time count is a label only. | The list stays interactive behind the modal in the live admin; assigning to a stale set would silently sample the wrong orders. | 2026-08-03 |
-| **BR-34** | **Loading the page mutates nothing.** The page opens with the live admin's default filter set and writes no event on load. | An audit trail whose first row is "someone opened a screen" is noise; `[G-8]` scopes capture to operator-initiated actions. | 2026-08-03 |
+| **BR-33** | **`Selected orders only` resolves its order set at submit time, not at modal-open time.** The open-time count is a label only. | The list stays interactive behind the modal in the live admin; assigning to a stale set would silently sample the wrong orders. **Spec-level default awaiting owner sign-off — see §9.1.** | 2026-08-03 (spec-level) |
+| **BR-34** | **Loading the page mutates nothing.** The page opens with the live admin's default filter set and writes no event on load. | An audit trail whose first row is "someone opened a screen" is noise; `[G-8]` scopes capture to operator-initiated actions. **Spec-level default awaiting owner sign-off — see §9.1.** | 2026-08-03 (spec-level) |
 
 ---
 
 ## 5. Data Capture
 
 Doctrine: `[G-8]`. Event names use the canonical lowercase `entity.action` form; the shared cross-page names (`comment.posted`, `comment.mention_notified`, `comment.starred`, `comment.unstarred`, `comment.read`, `comment.mark_all_read`, `comment.auto_posted`, `order.status_changed`, `order.outbounded`, `print.job_result`, `product.barcode_registered`) are byte-identical to `_global-rules` and `_review` §3.3. Every event carries actor and timestamp; the table names the additional payload.
+
+**Declared name divergence on a shared *concept* (cross-page defect M3a D14).** `[DC-28] idempotency.duplicate_suppressed` is this page's name for "an idempotent repeat was suppressed". The same concept is named `idempotency.duplicate_rejected` on View Orders and RTO, `action.idempotency_suppressed` on Order Detail, `inbound_request.idempotent_replay_suppressed` on Inbound Request, and `unrecognized_item.match_duplicate_suppressed` on Tracking Missing. The concept is **not** in `_global-rules`' canonical list, so no name is binding yet and no page is in violation. This spec deliberately does **not** rename `[DC-28]` on its own — a unilateral rename moves the divergence instead of closing it. When the canonical name is published (a `_global-rules` / `_review` §3.3 amendment), `[DC-28]` adopts it and keeps its ID.
 
 ### 5.1 Import chain
 
@@ -654,7 +661,7 @@ Exactly **one** confirmed route fires from this page.
 
 | Trigger | Channel | Payload fields | Mention target |
 |---|---|---|---|
-| Comment `@mention` on any entity surfaced through this page's Comments hub `[L-5]` `[G-7]` | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | entity no. (order no. incl. `MKT-`, inbound no., or pool item ref), comment text, time, author, @mentioned user, deep link to the entity | the message body `@mentions` the tagged person, so Slack raises a personal notification while the channel doubles as a team-visible archive |
+| Comment `@mention` on any entity surfaced through this page's Comments hub `[L-5]` `[G-7]` | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | entity no. (order no. incl. `MKT-`, inbound no., or pool item ref), comment text, time, author, @mentioned user, deep link to the entity | per `[G-7]` |
 
 - Confirmed by the owner on 2026-08-03 (`_slack-routing`); any earlier "channel pending" wording is superseded (`_review` C-2).
 - Delivery failures are retried and persisted as `[DC-20]` with the failure outcome; they never block the comment or roll it back (BR-24, `[PD-4 · OWNER-PENDING]`). Retry policy is a developer decision.
@@ -681,6 +688,8 @@ Naming them closes the audit rather than leaving silence:
 | MKT order number in the list | Order Detail | `../order-detail/#{orderNo}` |
 | `[L-3]` Hold pointer | Order Detail → `Change Status` → `on-hold` | documentation pointer only; no control on this page |
 
+**Path form (cross-page defect M3a D16).** Every row above uses the **directory form** `../{slug}/#anchor` — never `../{slug}/index.html#anchor`. This is the form the live wireframe URLs use and the form `[G-12]` itself writes, and it is the normalisation M3a recommends for the whole corpus; this page is already conformant and must stay so. QA assertions on an `href` therefore assert the directory form.
+
 The wireframe implements none of these as `href`s (the order table is omitted and the hub rows are inert). In production they must be real links, not decoration `[G-12]`.
 
 ### 6.4 Sheet / file handoffs
@@ -696,7 +705,7 @@ The wireframe implements none of these as `href`s (the order table is omitted an
 
 ### 6.5 Print pipeline `[G-4]`
 
-**This page has no print surface.** There is no Print button, no auto-print, and no `print.job_result` event (BR-29). The instant carrier-agnostic print requirement lands on View Orders, Ready-to-Outbound, and Order Detail. The one print-adjacent decision made *here* is the sample dual-view (BR-8, `[G-13]`): the carrier-facing document receives only the appended `(+ sample set)` string, while internal invoice and picking artifacts must print **which** sample and **how many** `[PD-36 · OWNER-PENDING]`. Label and invoice layouts are Phase 3-1 and are not specified in this document (§9.2).
+**This page has no print surface.** There is no Print button, no auto-print, and no `print.job_result` event (BR-29). The instant carrier-agnostic print requirement lands on View Orders, Ready-to-Outbound, and Order Detail. The one print-adjacent decision made *here* is the sample dual-view (BR-8, `[G-13]`): the carrier-facing document receives only the appended `(+ sample set)` string, while internal invoice and picking artifacts must print **which** sample and **how many** `[PD-36 · OWNER-PENDING]`. The divergence between the two views is [E-34], and because this page is `[G-13]`'s primary home (§6.6) the check is owned here and asserted by QA-SMP-46 as a cross-reference against the consuming specs (`order-detail` display, `ready-to-outbound` picking list). Label and invoice layouts are Phase 3-1 and are not specified in this document (§9.2).
 
 ### 6.6 Global-rule applicability grid (closes the mandatory-inclusion audit)
 
@@ -706,7 +715,7 @@ The wireframe implements none of these as `href`s (the order table is omitted an
 | `[G-2]` No refresh + confirmation toast | **Yes** | §3.2.5, §3.6.5, §3.7.5, `[L-F5]` |
 | `[G-3]` Audio feedback | **No** | No outbound-class button and no scan warning (BR-28, `_review` C-5, `[PD-2 · OWNER-PENDING]`) |
 | `[G-4]` Instant print | **No** | No Print button (BR-29); dual-view consequences only |
-| `[G-5]` Sourcing routes | Cross-ref | Route badges render inside the unchanged order table (`[L-4]`); `MKT` is an order **class** badge, not a sourcing route, and must not be styled as one. The `OTHER (channel)` rendering added program-wide `[PD-80 · OWNER-PENDING]` reaches this page only through that table |
+| `[G-5]` Sourcing routes | Cross-ref | Route badges render inside the unchanged order table (`[L-4]`); `MKT` is an order **class** badge, not a sourcing route, and must not be styled as one. The `OTHER (channel)` rendering added program-wide `[PD-80 · OWNER-PENDING]` reaches this page only through that table. JIT has no surface here at all — see §6.7 item 11 |
 | `[G-6]` Product naming | **Yes** | M1 preview renders brand-bold English names; no Korean strings exist on this page (§2.2) |
 | `[G-7]` Comments | **Yes** | `[L-5]`, BR-32, §6.1 |
 | `[G-8]` Data capture | **Yes** | §5 |
@@ -717,6 +726,16 @@ The wireframe implements none of these as `href`s (the order table is omitted an
 | `[G-13]` Sample assignment | **Yes — primary home** | `[L-2a]`/`[L-2b]`/`[L-M2]`/`[L-M3]`, BR-6…BR-9, BR-15…BR-19 |
 | `[G-14]` Location scheme | **No** | No location concept on this page |
 | `[G-15]` Permissions | **Yes** | BR-22 |
+
+### 6.7 Mandatory-inclusion items with no `[G-n]` anchor — explicit N/A, never silent
+
+`_review` §2b's 12-item mandatory matrix carries three items that are not expressible as a `[G-n]` rule, so §6.6's grid cannot close them. They are stated here explicitly, because an unstated N/A is a hole, not a pass (audit finding M3b §2.2, which names this page for item 11).
+
+| Mandatory item | Applies here? | Statement |
+|---|---|---|
+| 9 · Line-based location filter | **No** | This page has no line-item view and no location concept. Filtering is by order (§3.13), never by line and never by location. Owned by `stock-status` and `view-orders` `[G-14]` |
+| 10 · Audit-mode-only visibility | **No** | There is no audit mode on this page and no control whose visibility depends on one. Owned by `stock-status` |
+| 11 · **JIT residual stock** | **No** | **JIT** appears nowhere on this screen. No JIT sourcing route is selectable here, no residual-stock figure is computed, displayed, filtered, exported or reported here, and none may be added. JIT is not a requestable inbound route `[G-5]`, and residual-stock handling is owned by the `stock-status` spec. The only route rendering this page sees at all is inside the unchanged order table (§6.6, `[G-5]` row) |
 
 ---
 
@@ -860,11 +879,19 @@ IDs are page-scoped and stable, and are never renumbered. **E-1…E-45** preserv
 2. **Toast identity.** The wireframe injects two separate nodes: `#gtoast` (created by `#mktConfirm`) and `#gtoast2` (created by `#sampCancelBtn`). Assert the node named in the scenario. "A toast is visible" means the node exists and `getComputedStyle(node).display !== 'none'`; it is hidden again ~2 600 ms after the click, so assert within that window.
 3. **Colour assertions** use `getComputedStyle(...).color` / `.backgroundColor` in `rgb()` form. Reference values on this page: green `--green` `#198754` = `rgb(25, 135, 84)` · amber `--amber` `#B45309` = `rgb(180, 83, 9)` · purple `--mkt` `#7C3AED` = `rgb(124, 58, 237)` · star `--star` `#F59E0B` = `rgb(245, 158, 11)`.
 4. **Modal state.** "Modal X is open" means `document.getElementById(X).classList.contains('open')`. Close a modal between scenarios by clicking its `[data-close]` control; the wireframe does not respond to `Esc` ([WF-20 · proposed]).
-5. **Text assertions are byte-exact**, including `·` (U+00B7), `—` (U+2014), `→` (U+2192), `✓`, `⬆`, `⬇`, `⧉`, `▦`, `✎`, `★`, `💬`, `📄`, `⋯`, and the preserved misspelling `Outbonded`.
+5. **Text assertions are byte-exact**, including `·` (U+00B7), `—` (U+2014), `→` (U+2192), `✓`, `⬆`, `⬇`, `⧉`, `▦`, `✎`, `★`, `💬`, `📄`, `⋯`, and the preserved misspelling `Outbonded`. Byte-exactness is applied to the node's text **after** exactly three declared normalisations, and after no others:
+   - **(5a) `<br>` → one space.** Four `.navlink` spans and other two-line labels carry a `<br>`, which `textContent` drops without substituting anything. Join across `<br>` with a single space before comparing (QA-LST-12).
+   - **(5b) `<label>` text is trimmed.** Where an `<input>` precedes its text inside a `<label>`, the DOM carries a leading space. Leading and trailing whitespace is stripped from `<label>` text before comparison; all other text is compared unstripped (QA-SMP-02, QA-SMP-03, QA-LST-07).
+   - **(5c) A trailing `.dot` annotation is excluded.** `[WF]` runs execute with annotations shown, so any element carrying class `anno` also contains a `<span class="dot">` whose text is the legend marker. Read such an element's own text (`firstChild.textContent`, or `textContent` with every descendant `.dot` removed) before comparing (QA-IMP-12, QA-LST-01).
+   Colours quoted from a **stylesheet rule** (`cssRules[].cssText`) are re-serialised by the CSSOM: an authored `#EBE1FF` comes back as `rgb(235, 225, 255)`. Either form satisfies a stylesheet-rule assertion; computed-style assertions remain `rgb()`-only per rule 3.
+6. **"Identical content"** — where a scenario asserts that a modal opened from the `.wf-bar` has content identical to the same modal opened from the page (QA-IMP-02, QA-SMP-28, QA-SMP-29), the comparison basis is `document.getElementById(id).querySelector('.modal').innerHTML` string equality between the two entry paths. No other basis is permitted.
+7. **`[WF-n · proposed]`** — the seven defect ids `[WF-15 · proposed]` … `[WF-21 · proposed]` are registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03). The `· proposed` suffix is their register status, not a claim that they are absent from the backlog: it means the wireframe-edit pass has not yet adjudicated them, and no wireframe edit may be applied while specs are being written (§9.2). A runner cross-checking the backlog will find all seven in §F. `WF-1` … `WF-14` remain unrelated to this page (§2.4).
 
 **Wireframe demo limitations that force an `[ADMIN]` tag** (`_wireframe-fixes` §E, §2.4): the M1 preview is static and the dropzone parses nothing; `#mktConfirm` toasts regardless of validation; `#sampCancelBtn` toasts regardless of selection; `Start Assignment (ON)` never toasts; filter-bar and action-row controls are inert; `Mark all read` has no handler; the order list table is absent from the mock.
 
-**Counts: 153 scenarios — 77 [WF], 76 [ADMIN]. Negative tests: 64 (41.8 %), well above the 25 % floor.** Negative scenarios are marked **(neg)**. Per block: IMP 52 · SMP 43 · LST 17 · CMT 23 · GBL 18. Every `[DC-n]` in §5 has at least one asserting Then-clause (matrix §8.6).
+**Edge cases intentionally left unasserted (declared, not silent).** Two of the 100 `[E-n]` ids carry no QA scenario **by design**, because each resolves to a `§9.3` developer decision with no fixed observable: **`[E-9]`** (within-file duplicate `recipient + SKU` rows — the recommended default is "allow silently", so there is no assertable artifact either way until dev picks a warning) and **`[E-42]`** (a user without write access — v1 adds no gating at all `[G-15]` `[PD-1 · OWNER-PENDING]`, so the only assertable v1 behaviour is QA-GBL-05's "no action is refused for role reasons", which is already covered). Every other `[E-1]` … `[E-100]` id is named in at least one scenario body.
+
+**Counts: 171 scenarios — 77 [WF], 94 [ADMIN]. Negative tests: 77 (45.0 %), well above the 25 % floor.** Negative scenarios are marked **(neg)**. Per block: IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18. Every `[DC-n]` in §5 has at least one asserting Then-clause (matrix §8.6).
 
 ### 8.1 Block IMP — Marketing Order Import `[L-1]` `[L-M1]` `[L-M1b]`
 
@@ -876,7 +903,7 @@ Then `#m-import` has class `open`, its `header` text starts with `Marketing Orde
 **QA-IMP-02 [WF]** — Open the import modal from the wf-bar
 Given the live wireframe is loaded
 When I click `.wf-bar button[data-modal="m-import"]` (label `Modal: Marketing Import`)
-Then `#m-import` has class `open` with identical content to QA-IMP-01.
+Then `#m-import` has class `open`, and `document.getElementById('m-import').querySelector('.modal').innerHTML` is string-identical to the value the same expression returns after opening via QA-IMP-01's filter-bar button (§8.0 rule 6).
 
 **QA-IMP-03 [WF]** — Step 1 copy
 Given `#m-import` is open
@@ -921,13 +948,14 @@ Then it contains the bold label `4. Upload` and a `.dropzone` whose text is `�
 
 **QA-IMP-11 [WF]** — Preview header format
 Given `#m-import` is open
-When I read the preview header
-Then it reads exactly `Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors`.
+When I read the preview header, located as `document.querySelector('#m-import table.tbl').previousElementSibling` (the `<b>` immediately preceding the preview table)
+Then that element is a `<b>` and its `textContent` reads exactly `Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors`.
 
 **QA-IMP-12 [WF]** — Preview table headers
-Given `#m-import` is open
-When I read `#m-import thead th` in order
-Then the seven headers are `Recipient`, `Country`, `SKU`, `Product Name`, `Qty`, `Campaign`, `Carrier (auto)`, and `#m-import thead th` has length `7`.
+Given `#m-import` is open with annotations shown (the §8.0 default)
+When I read `#m-import thead th` in order, taking each cell's own text per §8.0 rule 5c — `th.firstChild.textContent`, which excludes the `<span class="dot">` the annotated cell carries
+Then `#m-import thead th` has length `7` and the seven values are `Recipient`, `Country`, `SKU`, `Product Name`, `Qty`, `Campaign`, `Carrier (auto)`
+And the raw `textContent` of the seventh cell is `Carrier (auto)M1b`, because that cell is `<th class="anno">` and contains the `M1b` annotation dot — the dot is intentional chrome (QA-GBL-11, `_wireframe-fixes` §E) and its presence is **not** a defect.
 
 **QA-IMP-13 [WF]** — Brand-bold product names `[G-6]`
 Given `#m-import` is open
@@ -966,8 +994,9 @@ Then it reads exactly `On confirm, orders are created as MKT- orders and appear 
 
 **QA-IMP-19 [WF] (neg)** — No stock-error copy anywhere in the modal `[E-20]`
 Given `#m-import` is open
-When I search `#m-import` for the case-insensitive substrings `out of stock`, `not in the warehouse`, `insufficient`, `재고`
-Then none is present, and the only occurrence of `stock` is inside the QA-IMP-18 note where it appears in the phrase `regardless of stock or inbound status` (BR-1, R-2).
+When I search `#m-import` for the case-insensitive substrings `out of stock`, `not in the warehouse`, `insufficient`
+Then none is present, and the only occurrence of `stock` in `#m-import` is inside `.note.mkt` (§3.2.7), in the phrase `regardless of stock or inbound status` (BR-1, R-2).
+(No Korean-language token is searched for. §2.2 declares that no Korean string exists anywhere on this page, so a Korean "stock" probe could never match: it would assert nothing and would contradict the spec's own declaration. Korean-copy regression belongs to a page that renders Korean `[G-6]`.)
 
 **QA-IMP-20 [WF] (neg)** — No print, scan, or carrier-picker affordance in the modal
 Given `#m-import` is open
@@ -980,23 +1009,28 @@ When I upload `orders.csv`
 Then an inline error reads `Unsupported file — upload the .xlsx template.`, no preview renders, `Confirm Import` stays disabled, and `[DC-2] import.file_uploaded` persists with parse outcome `rejected_format`.
 
 **QA-IMP-22 [ADMIN] (neg)** — A row error blocks the whole file `[E-3]` `[E-19]`
-Given I upload a 12-row file where row 4 has an empty `Country`
+Given the real admin import modal is open
+When I upload a 12-row file where row 4 has an empty `Country`
 Then the preview header reads `… · 12 rows parsed · 1 errors`, row 4 shows its reason, `Confirm Import` is **disabled**, and `[DC-3] import.file_parsed` persists the per-row error reason (BR-12, `[PD-57 · OWNER-PENDING]`).
 
 **QA-IMP-23 [ADMIN] (neg)** — Zero-stock SKU must NOT block `[E-20]`
-Given I upload a file whose every SKU has stock 0 and no inbound history
-Then no error is raised, `Confirm Import` is enabled, and after confirming all orders exist and are listed in the RTO Marketing view (BR-1). Regression guard for R-2.
+Given the real admin import modal is open
+When I upload a file whose every SKU has stock 0 and no inbound history, and then click `Confirm Import`
+Then no error was raised, `Confirm Import` was enabled, and after the confirm all orders exist and are listed in the RTO Marketing view (BR-1). Regression guard for R-2.
 
 **QA-IMP-24 [ADMIN] (neg)** — Empty custom order type blocks confirm `[E-14]`
-Given a valid file is parsed with 0 errors and `✎ Custom` is the active order-type chip with an empty input
+Given a valid file is parsed with 0 errors
+When I click `✎ Custom` in Step 2 and leave `#otCustom` empty
 Then `Confirm Import` is disabled and the inline message reads `Enter an order type.`
 
 **QA-IMP-25 [ADMIN] (neg)** — Empty custom PIC blocks confirm `[E-15]`
-Given a valid file is parsed with 0 errors and the PIC custom input is visible and whitespace-only
+Given a valid file is parsed with 0 errors
+When I click `✎ Custom` in Step 3 and type only whitespace into the PIC custom input
 Then `Confirm Import` is disabled and the inline message reads `Enter a PIC name.`
 
 **QA-IMP-26 [ADMIN] (neg)** — Zero data rows blocks confirm `[E-2]` `[E-63]`
-Given I upload a valid template containing headers but no data rows
+Given the real admin import modal is open
+When I upload a valid template containing headers but no data rows
 Then the preview header reads `… · 0 rows parsed · 0 errors`, `Confirm Import` is disabled, and no empty batch is created.
 
 **QA-IMP-27 [ADMIN]** — Confirm persists the whole batch chain `[DC-6]` `[DC-9]` `[DC-10]` `[DC-11]` `[DC-12]`
@@ -1015,7 +1049,8 @@ When I click `Confirm Import` twice within 200 ms
 Then exactly one batch exists, exactly `{n}` orders were created, and one `[DC-28] idempotency.duplicate_suppressed` persists naming `import.batch_confirmed` `[G-9]`.
 
 **QA-IMP-29 [ADMIN] (neg)** — Network failure is atomic `[E-12]` `[DC-7]`
-Given a valid file is parsed and the network drops after the confirm request is sent
+Given a valid file is parsed
+When I click `Confirm Import` and the network drops after the request is sent
 Then either all `{n}` orders exist or none do — never a partial batch
 And a **red** toast is shown, and `[DC-7] import.batch_rejected` persists when the server rejected it.
 
@@ -1039,7 +1074,8 @@ Then no orders are created, a red toast names `GB`, and `[DC-7]` persists with r
 **QA-IMP-33 [ADMIN]** — Post-import list behaviour `[E-45]` `[E-57]`
 Given the header reads `2,818 orders` and a date filter plus page 2 are active
 When a 12-order import is confirmed
-Then the header reads `2,830 orders`, 12 new purple `MKT-` rows are present, the applied filter and page number are unchanged, and no page reload occurred.
+Then the header reads `2,830 orders`, 12 new purple `MKT-` rows are present, the applied filter and page number are unchanged, and no page reload occurred
+And the 12 rows now visible are exactly the 12 orders written by that batch's `[DC-9] order.created` events — the list is a view over them, so their count and their order numbers match one-for-one.
 
 **QA-IMP-34 [ADMIN]** — Export egress is recorded `[DC-26]` `[DC-27]`
 Given a filter set is applied
@@ -1073,32 +1109,39 @@ When I reopen `#m-import` and click `#mktConfirm` again
 Then `document.querySelectorAll('.gtoast').length === 1` and its id is `gtoast` — no second node is created for the same action (contrast [WF-18 · proposed], which is about two *different* actions).
 
 **QA-IMP-40 [ADMIN] (neg)** — Country given as a full name `[E-67]`
-Given a row whose Country is `United Kingdom`
-Then it normalises to `GB` and resolves to `YunExpress`; a row whose Country is `Nowhereland` is a row error `Invalid country` and blocks the file.
+Given the real admin import modal is open
+When I upload a file containing one row whose Country is `United Kingdom` and one whose Country is `Nowhereland`
+Then the first normalises to `GB` and resolves to `YunExpress`, while the second is a row error `Invalid country` that blocks the whole file.
 
 **QA-IMP-41 [ADMIN] (neg)** — Whitespace-only fields count as missing `[E-68]`
-Given a row whose Recipient is three spaces and whose SKU has a trailing non-breaking space
+Given the real admin import modal is open
+When I upload a file containing a row whose Recipient is three spaces and whose SKU has a trailing non-breaking space
 Then the SKU is trimmed and resolves normally, while the Recipient is treated as missing and produces a row error that blocks the file.
 
 **QA-IMP-42 [ADMIN] (neg)** — Non-integer quantity `[E-69]` `[E-5]`
-Given rows with Qty `1.5`, `1,000` and `'2`
+Given the real admin import modal is open
+When I upload a file containing rows with Qty `1.5`, `1,000` and `'2`
 Then `1,000` imports as `1000` and `'2` imports as `2`, while `1.5` is a row error that blocks the file.
 
 **QA-IMP-43 [ADMIN] (neg)** — Multi-sheet workbook and merged header cells `[E-70]`
-Given a workbook whose second sheet contains extra rows
+Given the real admin import modal is open
+When I upload a workbook whose second sheet contains extra rows
 Then only the first sheet is parsed and the second is ignored
-And given a workbook whose header row contains a merged cell, the file is rejected with an explicit reason and nothing is parsed.
+And when I instead upload a workbook whose header row contains a merged cell, the file is rejected with an explicit reason and nothing is parsed.
 
 **QA-IMP-44 [ADMIN] (neg)** — Outdated template rejected `[E-71]`
-Given a file built from a superseded template version
+Given the real admin import modal is open
+When I upload a file built from a superseded template version
 Then it is rejected with a message naming the required version and pointing back at `⬇ Download Template (.xlsx)`, and `[DC-2]` persists outcome `rejected_template_version`.
 
 **QA-IMP-45 [ADMIN]** — System values win over file-supplied name/number columns `[E-72]` `[E-51]`
-Given a file with extra `Product Name` and `Order No` columns whose values disagree with the catalogue and with the sequence
+Given the real admin import modal is open
+When I upload a file with extra `Product Name` and `Order No` columns whose values disagree with the catalogue and with the sequence, and I click `Confirm Import`
 Then the created orders carry the system-resolved product name and a system-minted `MKT-#####`, and the file's values are recorded on the parse result but never applied.
 
 **QA-IMP-46 [ADMIN]** — Discontinued SKU still imports `[E-73]`
-Given a row whose SKU is discontinued or unpublished
+Given the real admin import modal is open
+When I upload a file containing a row whose SKU is discontinued or unpublished
 Then no error is raised, the row imports, and the product-name snapshot is taken at creation time (same doctrine as BR-1).
 
 **QA-IMP-47 [ADMIN] (neg)** — Session expiry between upload and confirm `[E-74]`
@@ -1112,7 +1155,8 @@ When I retry the confirm with the same idempotency key
 Then exactly `{n}` orders exist in total, the committed batch is returned unchanged, and `[DC-28]` records the suppressed repeat — no second batch.
 
 **QA-IMP-49 [ADMIN]** — Two tabs, two batches `[E-76]` `[E-41]`
-Given the same operator confirms one import in tab A and a different import in tab B
+Given the same operator has this page open in tab A and tab B
+When the operator confirms one import in tab A and a different import in tab B
 Then two distinct batches exist with distinct `MKT-` ranges, no id collides, and neither draft's Order Type or PIC leaks into the other.
 
 **QA-IMP-50 [ADMIN] (neg)** — Browser Back does not revert `[E-77]`
@@ -1122,11 +1166,68 @@ Then the dashboard is shown, the batch still exists in full, and no revert or un
 
 **QA-IMP-51 [ADMIN]** — Disabled carrier connection behaves as unconnected `[E-80]`
 Given `GB` maps to `YunExpress` but that connection is disabled at confirm time
+When I upload a file of `GB` rows and click `Confirm Import`
 Then the `GB` rows render amber `Not connected — contact the Fulfillment Center`, the orders are created flagged, and `[DC-11]` persists with reason `connection_disabled`.
 
 **QA-IMP-52 [ADMIN]** — Per-row carriers in one batch `[E-81]` `[E-18]`
-Given a file containing `GB`, `AU` and `PE` rows where `GB` and `AU` map to different connected carriers
-Then each order carries its own row's carrier, no batch-level carrier is recorded, and the toast subtext counts only the `PE` row as unresolved.
+Given the configuration maps `GB` and `AU` to two different connected carriers and `PE` to none
+When I upload a file containing `GB`, `AU` and `PE` rows and click `Confirm Import`
+Then each order carries its own row's carrier, no batch-level carrier is recorded, and the toast subtext counts only the `PE` row as unresolved
+And one `[DC-10] order.carrier_assigned` persists per connected row, each naming that row's own carrier and mapping version — never a single batch-level assignment.
+
+**QA-IMP-53 [ADMIN] (neg)** — Unknown SKU blocks the whole file `[E-4]`
+Given the real admin import modal is open
+When I upload a 12-row file in which row 7's SKU is not present in the catalog
+Then row 7 shows the reason `Unknown SKU`, the preview header reads `… · 12 rows parsed · 1 errors`, `Confirm Import` is **disabled**, and no order is created for any of the other 11 rows either — the file is the unit of intent (BR-12, `[PD-57 · OWNER-PENDING]`)
+And `[DC-3] import.file_parsed` persists the per-row error reason.
+
+**QA-IMP-54 [ADMIN] (neg)** — Invalid country code blocks the file, and is distinct from an unconnected carrier `[E-6]` `[E-7]`
+Given the real admin import modal is open
+When I upload a file containing one row whose Country is `ZZ` (not a supported code) and one row whose Country is `PE` (supported, no connected carrier)
+Then the `ZZ` row shows the reason `Invalid country`, is counted in `{e}`, and blocks the whole file
+And the `PE` row is **not** an error: it renders amber `Not connected — contact the Fulfillment Center` and would not have blocked anything on its own — the two conditions must never be merged into one error class.
+
+**QA-IMP-55 [ADMIN] (neg)** — A file where every row is unconnected is still confirmable `[E-8]` `[DC-11]`
+Given the real admin import modal is open
+When I upload a 9-row file in which every row's country has no connected carrier, and I click `Confirm Import`
+Then `Confirm Import` was enabled, all 9 orders are created, every one carries the `carrier_unresolved` flag, and 9 `[DC-11] order.carrier_unresolved` events persist
+And the toast subtext reads `Carrier auto-assigned per country · 9 not connected — flagged to contact Fulfillment Center` (BR-20).
+
+**QA-IMP-56 [ADMIN] (neg)** — Row or byte limit rejects the file `[E-16]` `[DC-2]`
+Given the configured maximum row count and maximum file size
+When I upload a file that exceeds either limit
+Then it is rejected with an explicit message that names the limit value verbatim, no rows are parsed, no preview renders, and `[DC-2] import.file_uploaded` persists with parse outcome `rejected_limit` (limit values are a §9.3 developer decision; the assertion is that the message names whichever value was configured).
+
+**QA-IMP-57 [ADMIN] (neg)** — Template schema mismatch `[E-17]` `[DC-2]`
+Given the real admin import modal is open
+When I upload a file whose columns have been reordered and which carries one extra column, and then a second file that is missing the required `Country` header
+Then the reordered-plus-extra file parses normally — headers are matched by name and the extra column is ignored
+And the file missing a required header is rejected with a message naming the missing header, nothing is parsed, and `[DC-2]` persists with parse outcome `rejected_format`.
+
+**QA-IMP-58 [ADMIN] (neg)** — Tab closed mid-upload creates nothing `[E-55]` `[DC-8]`
+Given a file is uploading or a parsed draft is staged in the modal
+When I close the browser tab before clicking `Confirm Import`
+Then no orders are created, the staged draft is orphaned and reaped, and `[DC-8] import.batch_abandoned` persists with reason `session_lost` (§3.2.6).
+
+**QA-IMP-59 [ADMIN]** — Export during a commit is a consistent snapshot `[E-58]`
+Given a 12-order batch is committing
+When I click `⬇ Export` while that commit is in flight
+Then the exported file contains either all 12 of that batch's orders or none of them — never a partial batch — and the row count recorded in `[DC-26]` matches the rows the file actually contains.
+
+**QA-IMP-60 [ADMIN]** — Carrier mapping changes between preview and confirm `[E-65]` `[DC-10]`
+Given a file was parsed while `GB` mapped to `YunExpress`, so the preview's advisory `Carrier (auto)` cells read `YunExpress`
+When the mapping is changed to a different connected carrier and I then click `Confirm Import`
+Then the orders are assigned the **confirm-time** carrier, not the previewed one; `[DC-10] order.carrier_assigned` persists the confirm-time carrier and its mapping version; and the toast subtext reports confirm-time counts (§3.3).
+
+**QA-IMP-61 [ADMIN] (neg)** — Over-length recipient or address never blocks `[E-78]`
+Given the real admin import modal is open
+When I upload a file containing a Recipient and an Address longer than the destination carrier's field limit
+Then no error is raised, the rows import, and the values are stored verbatim — carrier-side truncation or rejection is a downstream concern and must never block order creation (§3.2.4).
+
+**QA-IMP-62 [ADMIN] (neg)** — Contact without a dialling code never blocks `[E-79]`
+Given the real admin import modal is open
+When I upload a file whose Contact values omit the country dialling code and use a format the carrier will later reject
+Then no error is raised at import, the values are stored verbatim, and no format validation runs here — carrier-format validation belongs to the label/export pipeline (§3.2.4).
 
 ### 8.2 Block SMP — Sample assignment `[L-2a]` `[L-2b]` `[L-M2]` `[L-M3]`
 
@@ -1164,11 +1265,13 @@ And `[DC-13] sample.period_created` persists with `target_type=all_new_in_period
 (The live wireframe shows **no** toast here — [WF-16 · proposed] — which is why this is `[ADMIN]`; QA-SMP-30 documents the current behaviour.)
 
 **QA-SMP-07 [ADMIN] (neg)** — End earlier than start blocks `[E-22]`
-Given `forever` is unchecked, start is `2026-07-23 10:00` and end is `2026-07-23 09:00`
+Given `#m-sampleon` is open with target `All new orders in this period`
+When I uncheck `forever`, set start to `2026-07-23 10:00` and set end to `2026-07-23 09:00`
 Then `Start Assignment (ON)` is disabled and the inline message reads `End must be later than start.`
 
 **QA-SMP-08 [ADMIN] (neg)** — Missing end with `forever` unchecked blocks `[E-54]`
-Given `forever` is unchecked and both end fields are empty
+Given `#m-sampleon` is open with a valid start date and time entered
+When I uncheck `forever` and leave both end fields empty
 Then `Start Assignment (ON)` is disabled and the inline message reads `Enter an end date and time, or choose forever.`
 
 **QA-SMP-09 [ADMIN] (neg)** — Zero-selection target disabled `[E-21]`
@@ -1242,7 +1345,8 @@ And choosing `Cancel periods` writes one `[DC-17]` per period and then shows the
 
 **QA-SMP-21 [ADMIN] (neg)** — Zero selection disables cancel `[E-28]`
 Given `#m-sampleoff` is open with no checkboxes checked
-Then `Cancel Selected Periods` is disabled, and clicking it produces no dialog, no toast and no event.
+When I attempt to click `Cancel Selected Periods`
+Then it is disabled, and the attempted click produces no dialog, no toast and no event.
 (The live wireframe fires the toast regardless — [WF-17 · proposed]; QA-SMP-31 documents that.)
 
 **QA-SMP-22 [ADMIN] (neg)** — Double-click cancels once `[E-29]` `[DC-28]`
@@ -1256,12 +1360,14 @@ When I reopen the Cancel modal
 Then its Status reads `Cancelled`, the row is greyed, it contains **zero** checkboxes, and it is never removed from the list.
 
 **QA-SMP-24 [ADMIN]** — Scheduled period `[E-53]`
-Given I create a period whose start datetime is 3 days in the future
-Then it appears with status `Scheduled`, carries a checkbox, and assigns nothing until its start datetime is reached.
+Given `#m-sampleon` is open
+When I create a period whose start datetime is 3 days in the future, then reopen `#m-sampleoff`
+Then that period appears with status `Scheduled`, carries a checkbox, and assigns nothing until its start datetime is reached.
 
 **QA-SMP-25 [ADMIN]** — Boundary inclusivity `[E-61]`
-Given a period `2026-08-05 09:00 → 2026-08-05 17:00`
-Then a sales order created at exactly `09:00:00` receives a set and one created at exactly `17:00:00` does not (start inclusive, end exclusive).
+Given an Active period `2026-08-05 09:00 → 2026-08-05 17:00`
+When one sales order is created at exactly `09:00:00` and another at exactly `17:00:00`
+Then the first receives a set and the second does not (start inclusive, end exclusive).
 
 **QA-SMP-26 [ADMIN] (neg)** — Concurrent cancel of the same period `[E-47]`
 Given operator A and operator B both have the Cancel modal open with period `P-7` checked
@@ -1269,18 +1375,19 @@ When A cancels and then B cancels
 Then B receives a non-green toast reporting that `P-7` was already cancelled, B's list reloads, exactly one `[DC-17]` exists for `P-7`, and B's other selections still process `[PD-6 · OWNER-PENDING]` `[PD-7 · OWNER-PENDING]`.
 
 **QA-SMP-27 [ADMIN]** — Period auto-end persists `[DC-18]`
-Given an Active period whose end datetime passes
+Given an Active period whose end datetime has not yet been reached
+When its end datetime passes
 Then its status becomes `Ended`, it loses its checkbox, and `[DC-18] sample.period_ended` persists with `old=Active → new=Ended`.
 
 **QA-SMP-28 [WF]** — M2 opens from the wf-bar
 Given the live wireframe is loaded
 When I click `.wf-bar button[data-modal="m-sampleon"]` (label `Modal: Sample Assignment ON`)
-Then `#m-sampleon` has class `open` with content identical to QA-SMP-02/03.
+Then `#m-sampleon` has class `open`, and `document.getElementById('m-sampleon').querySelector('.modal').innerHTML` is string-identical to the value the same expression returns after opening via the action-row button of QA-SMP-01 (§8.0 rule 6) — so the assertions of QA-SMP-02 and QA-SMP-03 hold unchanged from this entry point.
 
 **QA-SMP-29 [WF]** — M3 opens from the wf-bar
 Given the live wireframe is loaded
 When I click `.wf-bar button[data-modal="m-sampleoff"]` (label `Modal: Cancel Sample Assignment`)
-Then `#m-sampleoff` has class `open` with content identical to QA-SMP-16.
+Then `#m-sampleoff` has class `open`, and `document.getElementById('m-sampleoff').querySelector('.modal').innerHTML` is string-identical to the value the same expression returns after opening via the action-row button of QA-SMP-15 (§8.0 rule 6) — so the assertions of QA-SMP-16 hold unchanged from this entry point.
 
 **QA-SMP-30 [WF] (neg)** — `Start Assignment (ON)` is silent on the wireframe — documents [WF-16 · proposed]
 Given `#m-sampleon` is open and no `.gtoast` node exists
@@ -1311,11 +1418,13 @@ When I inspect the document
 Then a node with id `gtoast2` exists carrying class `gtoast`, and the import toast (if it was fired) is a separate node with id `gtoast` — the two actions do not share a slot ([WF-18 · proposed], [E-62]).
 
 **QA-SMP-35 [ADMIN] (neg)** — Zero-length period blocked `[E-82]`
-Given `forever` is unchecked and end datetime equals start datetime exactly
+Given `#m-sampleon` is open with a start date and time entered
+When I uncheck `forever` and set the end datetime equal to the start datetime exactly
 Then `Start Assignment (ON)` is disabled with `End must be later than start.` — the comparison is strictly later.
 
 **QA-SMP-36 [ADMIN] (neg)** — A period that has already ended cannot be created `[E-83]`
-Given start `2026-07-01 09:00` and end `2026-07-02 09:00`, both in the past
+Given `#m-sampleon` is open
+When I enter start `2026-07-01 09:00` and end `2026-07-02 09:00`, both already in the past
 Then `Start Assignment (ON)` is disabled with `A period that has already ended cannot be created.` and no `Ended` row is minted.
 
 **QA-SMP-37 [ADMIN]** — Selection resolved at submit `[E-84]` (BR-33)
@@ -1325,8 +1434,9 @@ Then 3 orders are assigned and the toast reports `3 orders assigned · …`
 And when the resolved selection is empty, the submit is blocked with `No eligible orders are selected.` and nothing is created.
 
 **QA-SMP-38 [ADMIN] (neg)** — Selected order cancelled meanwhile `[E-85]`
-Given one selected order is cancelled between selection and submit
-Then it is skipped, `[DC-16]` persists with reason `order_cancelled`, and it is counted in `{m} skipped (not eligible)`.
+Given the ON modal is open with target `Selected orders only`, and one of the selected orders is cancelled behind it
+When I press `Start Assignment (ON)`
+Then that order is skipped, `[DC-16]` persists with reason `order_cancelled`, and it is counted in `{m} skipped (not eligible)`.
 
 **QA-SMP-39 [ADMIN]** — Cancelling a Scheduled period `[E-87]`
 Given a `Scheduled` period that has not started
@@ -1334,21 +1444,63 @@ When I cancel it
 Then its status becomes `Cancelled`, `[DC-17]` persists with `old=Scheduled → new=Cancelled`, and no `[DC-14]` has ever existed for it.
 
 **QA-SMP-40 [ADMIN] (neg)** — Concurrent identical Start creates two periods `[E-88]` `[E-32]`
-Given operators A and B press `Start Assignment (ON)` with identical parameters at the same moment
+Given operators A and B each have `#m-sampleon` open with identical parameters
+When both press `Start Assignment (ON)` at the same moment
 Then two distinct periods persist (overlaps are permitted, E-46), neither is silently merged, and every order matched by both still receives exactly one set with a `[DC-15]` recording the suppression.
 
 **QA-SMP-41 [ADMIN]** — Scheduled period activates `[DC-29]`
-Given a `Scheduled` period whose start datetime arrives
+Given a `Scheduled` period whose start datetime has not yet arrived
+When that start datetime arrives
 Then its status becomes `Active`, `[DC-29] sample.period_started` persists with `old=Scheduled → new=Active`, and orders created from that instant onward receive sets.
 
 **QA-SMP-42 [ADMIN]** — Timezone and DST `[E-89]` `[E-90]` (BR-31)
-Given the admin's operating timezone is configured and a period spans a clock change
-Then two operators in different local timezones read the same wall-clock string on the period row, and matching evaluates the absolute instant so no order at the transition is double-assigned or skipped.
+Given the admin's operating timezone is configured and an Active period spans a daylight-saving or clock change
+When two operators in different local timezones each open `#m-sampleoff` and read that period's row, and sales orders are created either side of the transition
+Then both operators read the same wall-clock string on the row, and matching evaluates the absolute instant so no order at the transition is double-assigned or skipped.
 
 **QA-SMP-43 [ADMIN]** — Integration-created orders are matched `[E-91]`
 Given an Active `all_new_in_period` period
 When a sales order is created through the API rather than the admin UI
 Then it receives exactly one sample set and `[DC-14]` persists with reason `period_match`.
+
+**QA-SMP-44 [ADMIN] (neg)** — A period ending does not strip an unshipped order's set `[E-26]`
+Given an Active period assigned a sample set to an order that has not yet been outbounded
+When that period's end datetime passes and the period becomes `Ended`
+Then the order still holds its sample set, its internal invoice and picking artifacts still carry the sample lines, and **zero** unassignment events of any type exist for it — assignment binds at creation time, not at outbound (BR-19, §3.6.6).
+
+**QA-SMP-45 [ADMIN] (neg)** — Order cancelled or refunded after a set was assigned `[E-31]`
+Given an order holds a sample set assigned by an Active period
+When that order is cancelled, and separately when another such order is refunded
+Then the `[DC-14] sample.assigned_to_order` record persists on each order unchanged, **no** `sample.unassigned` event is written, and sample handling on the internal documents follows the order's own lifecycle rather than the period's (§3.6.6).
+
+**QA-SMP-46 [ADMIN] (neg)** — Dual-view divergence `[E-34]` `[G-13]` (BR-8) — cross-reference
+Given an order holds exactly one sample set, and this page is `[G-13]`'s primary home (§6.6)
+When I read the carrier-facing document produced for that order and the internal invoice and picking artifacts produced for the same order
+Then the carrier-facing document shows **only** `(+ sample set)` appended to the **last** product name, and names no sample product and no sample quantity anywhere
+And the internal invoice and the picking artifacts **do** state which sample and how many `[PD-36 · OWNER-PENDING]`
+And the two views therefore diverge by design; the consuming contracts are the `order-detail` spec (display) and the `ready-to-outbound` spec (picking list), which this scenario cross-references rather than restates (§6.5).
+
+**QA-SMP-47 [ADMIN] (neg)** — Network failure mid `Start Assignment (ON)` `[E-44]` `[DC-13]`
+Given `#m-sampleon` is open with a valid target and period
+When I click `Start Assignment (ON)` and the network drops after the request is sent
+Then either the period exists in full or it does not exist at all — no partial and no ghost period is left in the M3 list
+And retrying with the same idempotency key is safe: exactly one `[DC-13] sample.period_created` exists afterwards, and one assignment pass ran `[G-9]` (the sample-side twin of QA-IMP-29).
+
+**QA-SMP-48 [ADMIN]** — A period ends while `[L-M3]` is open `[E-60]` `[DC-18]`
+Given `#m-sampleoff` is open with two Active rows checked, one of which is about to reach its end datetime
+When that end datetime passes and the list refreshes
+Then that row flips `Active → Ended`, loses its checkbox entirely, and `[DC-18] sample.period_ended` persists
+And its checked selection is dropped, and the confirm dialog of QA-SMP-20 reports the **adjusted** count — `Cancel 1 assignment period(s)?`, not `Cancel 2 …`.
+
+**QA-SMP-49 [ADMIN]** — Cancel and order creation in the same second `[E-66]` `[DC-14]` `[DC-17]`
+Given an Active period and a sales order being created at almost the same instant
+When the period is cancelled and an order's creation timestamp precedes the cancellation timestamp, and a second order's creation timestamp follows it
+Then the first order receives its set and `[DC-14]` persists for it, the second receives none, and both facts persist alongside the single `[DC-17] sample.period_cancelled` — the server resolves against the cancellation timestamp, never against request arrival order (§3.7.5).
+
+**QA-SMP-50 [ADMIN]** — Selection above the batch ceiling goes asynchronous `[E-86]` `[DC-14]`
+Given a `Selected orders only` submission whose resolved selection exceeds the configured batch ceiling
+When I press `Start Assignment (ON)`
+Then the run is processed asynchronously, the toast reports the **queued** count rather than a completed count, and the `[DC-14]` events land as the batch drains until every eligible order in the resolved selection holds exactly one set (the ceiling value is a §9.3 developer decision; the assertion is the queued-count wording and the eventual completeness).
 
 ### 8.3 Block LST — Order list, page furniture and removed features `[L-3]` `[L-4]` `[L-F1]`…`[L-F4]` `[L-F6]`
 
@@ -1361,7 +1513,8 @@ Then it reads `Order list table — same as the current admin (omitted)` with a 
 Given the live wireframe is loaded
 When I read `getComputedStyle(document.documentElement).getPropertyValue('--mkt')` and `--mkt-soft`
 Then they are `#7C3AED` and `#F3EEFF`
-And the stylesheet defines `.tbl tr.mkt { background: var(--mkt-soft) }`, `.tbl tr.mkt:hover { background:#EBE1FF }`, `.tbl tr:hover { background: var(--blue-soft) }`, and `.mkt-badge { background: var(--mkt); color:#fff; font-weight:800; letter-spacing:.3px; margin-left:5px }`.
+And the stylesheet defines `.tbl tr.mkt { background: var(--mkt-soft) }`, `.tbl tr.mkt:hover { background:#EBE1FF }`, `.tbl tr:hover { background: var(--blue-soft) }`, and `.mkt-badge { background: var(--mkt); color:#fff; font-weight:800; letter-spacing:.3px; margin-left:5px }`
+And per §8.0 rule 5, the hex literals above are the **authored** form: read back out of `cssRules[].cssText` the CSSOM re-serialises `#EBE1FF` as `rgb(235, 225, 255)`, and either form satisfies this assertion.
 
 **QA-LST-03 [WF]** — Header and count `[L-F2]`
 Given the live wireframe is loaded
@@ -1391,6 +1544,7 @@ Then it contains: a date input valued `2026-06-01`, the separator `~`, a date in
 
 **QA-LST-08 [ADMIN]** — MKT row rendering `[E-36]`
 Given a confirmed import created order `MKT-40233`
+When I locate its row in the order list and hover it, and hover an adjacent sales row
 Then its list row has background `#F3EEFF`, carries an `MKT` badge immediately after the order number, shows the batch PIC in the PIC column, and hovers to `#EBE1FF` while an adjacent sales row hovers to `#E7F1FF`
 And the `MKT` badge is rendered as an order-class badge, not with any sourcing-route styling `[G-5]`.
 
@@ -1412,7 +1566,9 @@ Then the batch's orders are listed (case-insensitive substring, BR-4) and the PI
 **QA-LST-12 [WF]** — Global navigation shell `[L-F6]`
 Given the live wireframe is loaded
 When I read `.nav` left to right
-Then it contains the brand `SkinSeoul`; the menus `Operation AI ▾`, `Catalog Management ▾`, `OMS Center ▾`, `Site Management ▾`, `System Management ▾`, `Customer Management ▾`; the quick links `Agent Telemetry`, `Role Assets`, `Shared Asset Health`, `SkinSeoul WP Admin`; the `💬 Comments` button with badge `3`; the user chip `Y` + `Yongwon Ryu`; and `Logout`.
+Then it contains the brand `SkinSeoul`; the menus `Operation AI ▾`, `Catalog Management ▾`, `OMS Center ▾`, `Site Management ▾`, `System Management ▾`, `Customer Management ▾`; the `💬 Comments` button with badge `3`; the user chip `Y` + `Yongwon Ryu`; and `Logout`
+And `.nav .navlink` has length `4`, and — reading each span per §8.0 rule 5a, joining across its `<br>` with a single space — the four quick links are `Agent Telemetry`, `Role Assets`, `Shared Asset Health`, `SkinSeoul WP Admin`
+And their raw `textContent` values are `AgentTelemetry`, `RoleAssets`, `Shared AssetHealth`, `SkinSeoulWP Admin`, because each span is authored as two lines (`<span class="navlink">Agent<br>Telemetry</span>`) to mirror the live admin nav; `textContent` drops the `<br>` without substituting a space, and `innerText` substitutes `\n`. The two-line markup is deliberate and is **not** a defect.
 
 **QA-LST-13 [WF] (neg)** — No pagination is rendered in the mock (demo limitation)
 Given the live wireframe is loaded
@@ -1420,15 +1576,18 @@ When I query `.pager`
 Then no element matches — the table and its pagination are deliberately omitted (§2.2). This is not a defect; the product must ship the live admin's pagination unchanged (BR-11), which is asserted only in `[ADMIN]` scenarios.
 
 **QA-LST-14 [ADMIN]** — Empty result set `[E-100]`
-Given a filter set that matches no orders
+Given the Order Management Dashboard is loaded
+When I apply a filter set that matches no orders
 Then the count reads `0 orders`, the list shows its empty state, and `⬆ Import`, `Sample Assignment ON` and `Cancel Sample Assignment` all remain enabled.
 
 **QA-LST-15 [ADMIN] (neg)** — Free-text PIC is never retroactively resolved `[E-93]`
-Given orders carry the free-text PIC `Agency — Lumi` and a system user with that exact display name is created afterwards
+Given orders carry the free-text PIC `Agency — Lumi`
+When a system user with that exact display name is created afterwards
 Then those orders still store a free-text PIC, no re-linking event is written, and they still cannot be `@mention`-notified through that field.
 
 **QA-LST-16 [ADMIN] (neg)** — Loading the page writes nothing (BR-34) `[G-8]`
-Given I load the Order Management Dashboard and change nothing
+Given I am signed in as any admin user
+When I load the Order Management Dashboard and change nothing
 Then no persisted event of any kind is created for the page load or its initial data fetch.
 
 **QA-LST-17 [WF] (neg)** — No MKT row is rendered in the mock (guards a QA false negative)
@@ -1448,7 +1607,8 @@ And clicking the same button again removes class `open`.
 Given `#inbox1` is open
 When I read the tab strip and the mentions pane
 Then the tabs are `@ Mentions` (class `on`, with an inline badge `3`) and `★ Saved`
-And the mentions pane header reads `Comments mentioning me · Click to open the order` with the right-aligned action `Mark all read`.
+And `[data-pane="mentions"] .paneheader` has `firstChild.textContent` equal to `Comments mentioning me · Click to open the order ` and contains exactly one `<small>` whose text is `Mark all read`
+And that `<small>` is right-aligned, probed **geometrically** and not by computed margin: with `h = header.getBoundingClientRect()` and `s = small.getBoundingClientRect()`, `h.right - s.right <= 20` and `s.left - h.left >= 100`. (Do **not** assert `getComputedStyle(small).marginLeft === 'auto'` — the rule is authored as `margin-left:auto`, but Chromium resolves auto flex margins to `0px` at the computed-value stage, so that probe reports a false failure.)
 
 **QA-CMT-03 [WF]** — Saved tab
 Given `#inbox1` is open
@@ -1464,7 +1624,8 @@ Then `#inbox1 .tabs` has `display: none`, the pane `[data-pane="csr"]` is displa
 **QA-CMT-05 [WF] (neg)** — Search with no hits `[E-38]`
 Given `#inbox1` is open
 When I type `zzzz` into the search input
-Then `[data-pane="csr"]` contains exactly the text `No matching comments` and zero result rows.
+Then `[data-pane="csr"] .empty` reads exactly `No matching comments`, `[data-pane="csr"] .it` has length `0`, and `[data-pane="csr"] .paneheader` reads exactly `0 results · newest first · click to open the order`.
+(The result header is written on every query, hit or miss, so the whole pane's `textContent` is `0 results · newest first · click to open the orderNo matching comments`. The empty state lives *inside* the pane alongside the header; assert the two nodes separately, never the pane as one string.)
 
 **QA-CMT-06 [WF]** — Clearing the search restores the tabs
 Given a search query is active
@@ -1479,7 +1640,7 @@ Then that button gains class `on` and its computed colour is `rgb(245, 158, 11)`
 **QA-CMT-08 [WF] (neg)** — Search input cannot inject markup `[E-48]`
 Given `#inbox1` is open
 When I type `<b>x` into the search input
-Then `[data-pane="csr"]` renders the empty state `No matching comments` and `document.querySelectorAll('[data-pane="csr"] b').length === 0` — the query is escaped, never parsed as HTML.
+Then `[data-pane="csr"] .empty` reads exactly `No matching comments` and `document.querySelectorAll('[data-pane="csr"] b').length === 0` — the query is escaped, never parsed as HTML.
 
 **QA-CMT-09 [ADMIN]** — Star and unstar persist `[DC-21]` `[DC-22]`
 Given a comment is unstarred
@@ -1493,22 +1654,26 @@ Then every `.unread` tint is removed, the nav badge clears to `0` without a page
 And opening a single unread comment separately persists `[DC-23] comment.read`.
 
 **QA-CMT-11 [ADMIN]** — Mention routing `[DC-19]` `[DC-20]`
-Given a comment `@Yongwon please check` is posted on order `MKT-40233`
+Given I am viewing order `MKT-40233`
+When I post the comment `@Yongwon please check`
 Then `[DC-19] comment.posted` persists with the text and the mention list
 And `[DC-20] comment.mention_notified` persists with channel `#fulfillment-admin-comments` (`C0BMGEWM5QA`), the Slack ts, the mentioned user and outcome `delivered`
 And the Slack message body carries the entity no., the comment text, the time, the author, the `@mention` and a deep link (§6.1).
 
 **QA-CMT-12 [ADMIN] (neg)** — Slack failure never blocks `[E-40]`
-Given Slack returns an error for the mention dispatch
+Given a comment carrying an `@mention` is being posted
+When Slack returns an error for the mention dispatch
 Then the comment still exists and is visible in the hub, `[DC-20]` persists with outcome `failed` and a retry count, and nothing is rolled back (BR-24, `[PD-4 · OWNER-PENDING]`).
 
 **QA-CMT-13 [ADMIN] (neg)** — No edit or delete affordance `[G-7]` `[PD-3 · OWNER-PENDING]`
 Given any comment row in the hub or on an entity
+When I enumerate that row's controls and every API path this page exposes for that comment
 Then no edit control and no delete control is rendered, and no API path exposed by this page mutates or removes an existing comment (BR-23).
 
 **QA-CMT-14 [ADMIN]** — Badge overflow `[E-64]`
-Given 120 unread mentions
-Then the nav badge renders `99+`.
+Given 120 unread mentions exist for me
+When I read the nav badge on `💬 Comments`
+Then it renders `99+`.
 
 **QA-CMT-15 [WF]** — Numeric-order search returns sales orders only
 Given `#inbox1` is open
@@ -1545,8 +1710,9 @@ And this is the defect: the file already carries the `stopPropagation` guards wr
 
 **QA-CMT-21 [WF]** — Corpus mixes marketing and sales entities
 Given `#inbox1` is open
-When I search for an empty-adjacent common term and read the full dataset via QA-CMT-17
-Then the corpus contains both `MKT-` order numbers and plain numeric order numbers in one list — the hub is not scoped to marketing orders (§3.10).
+When I type `4` into `#inbox1 .csearch input` — the query that matches every row in the demo corpus (the same input QA-CMT-17 uses)
+Then `[data-pane="csr"] .it` has length `5` and the rows read `Order MKT-40233`, `Order MKT-40218`, `Order 421771`, `Order MKT-40191`, `Order 421502` — three `MKT-` order numbers and two plain numeric order numbers in one list, so the hub is not scoped to marketing orders (§3.10).
+(The empty query is **not** a valid input here: clearing the box hides `[data-pane="csr"]` and restores the tab strip, so the corpus cannot be read at all — QA-CMT-06.)
 
 **QA-CMT-22 [ADMIN]** — Cross-entity click-through `[E-92]` (BR-32)
 Given the hub surfaces a comment whose entity is an inbound request and another whose entity is an unrecognized-pool item
@@ -1555,8 +1721,14 @@ Then the first opens the Inbound Request list focused on that request and the se
 And a comment on an order cancelled after it was written still opens that order in its cancelled state `[E-49]`.
 
 **QA-CMT-23 [ADMIN] (neg)** — Session expiry while the hub is open `[E-99]`
-Given the hub is open and my session expires
+Given the hub is open
+When my session expires and I interact with the hub
 Then it renders an unauthenticated state and prompts re-authentication — it must **not** render an empty list with a zero badge, which would read as "no mentions".
+
+**QA-CMT-24 [ADMIN] (neg)** — Slack channel archived or renamed at dispatch time `[E-50]` `[DC-20]`
+Given `#fulfillment-admin-comments` (`C0BMGEWM5QA`) has been archived or renamed
+When a comment carrying an `@mention` is posted
+Then the comment commits and is visible in the hub regardless, the dispatch persists as `[DC-20] comment.mention_notified` with outcome `failed` and the channel id `C0BMGEWM5QA` recorded, and nothing is rolled back or blocked (BR-24, `[PD-4 · OWNER-PENDING]`; retry policy is a §9.3 developer decision).
 
 ### 8.5 Block GBL — Global contracts `[L-F1]` `[L-F5]` `[G-2]` `[G-8]` `[G-9]` `[G-15]`
 
@@ -1586,15 +1758,18 @@ When I confirm an import, start a period, cancel a period, merge orders and star
 Then every resulting event in §5 carries my actor id and a timestamp, and no action is refused for role reasons in v1 (BR-22, `[PD-1 · OWNER-PENDING]`).
 
 **QA-GBL-06 [ADMIN] (neg)** — Declared NON-events are not written `[G-8]` §5.4
-Given I change the date filter, toggle `▦ Columns`, page through the list, sort a column, select and deselect rows, open and close all three modals, switch comment tabs, and type a search query including a zero-hit query
+Given I am signed in on the Order Management Dashboard
+When I change the date filter, toggle `▦ Columns`, page through the list, sort a column, select and deselect rows, open and close all three modals, switch comment tabs, and type a search query including a zero-hit query
 Then **no** persisted event is created for any of these actions.
 
 **QA-GBL-07 [ADMIN]** — Uploaded source file retrievable (§5.5)
 Given a confirmed batch
+When I open its batch record and download the retained source file
 Then the original `.xlsx` is retrievable from the batch record and its SHA-256 matches the hash stored in `[DC-2]`.
 
 **QA-GBL-08 [ADMIN] (neg)** — No Slack route fires for import or sample actions (§6.2)
-Given I confirm an import and then start and cancel a sample period
+Given I am signed in on the Order Management Dashboard
+When I confirm an import and then start and cancel a sample period
 Then no Slack message is dispatched to any channel for these actions, no dispatch event is persisted other than for comment mentions, and in particular nothing reaches `#unrecognized-tracking`, `#wholesale-ops` or `#partnership-kr`.
 
 **QA-GBL-09 [WF] (neg)** — Two independent toast nodes — documents [WF-18 · proposed] `[E-62]`
@@ -1627,8 +1802,10 @@ Then none is present — this page has no outbound-class button and no scan warn
 
 **QA-GBL-14 [WF] (neg)** — No scanner surface `[G-1]` (BR-28)
 Given the live wireframe is loaded
-When I enumerate every `input`
-Then none is a scan field, none auto-focuses on load, none carries select-on-focus behaviour, and no code path returns focus to an input after an action — the `[G-1]` invariants have no surface here.
+When I enumerate every `input` and every `.focus()` call site in the document
+Then none is a scan field, no element carries `autofocus`, `document.activeElement` on load is `document.body` (nothing is focused), and no input carries select-on-focus behaviour
+And **no code path returns focus to a scan field after an action** — the `[G-1]` scan-focus-retention invariant has no surface here (BR-28)
+And the document's only two `.focus()` call sites are the custom-input affordances on `#otCustom` (§3.2.2) and `#picCustomIn` (§3.2.3), which QA-IMP-06 and QA-IMP-09 require. They are ordinary text inputs revealed by a chip toggle, not scan surfaces, and their presence is **not** a `[G-1]` violation. A runner must not read "no focus is ever moved" into this scenario: that reading contradicts QA-IMP-06 and QA-IMP-09 and cannot hold against any conformant implementation.
 
 **QA-GBL-15 [WF]** — Layout minimums `[E-96]`
 Given the live wireframe is loaded
@@ -1641,34 +1818,40 @@ When tab B, still showing the pre-import list, attempts a confirming action agai
 Then the server's revalidation rejects it with a non-green toast and reloads the affected view; nothing partial is written (BR-26, `[PD-6 · OWNER-PENDING]`).
 
 **QA-GBL-17 [ADMIN]** — Toast above an open modal `[E-95]`
-Given a confirming action fires while any overlay is still open
+Given any overlay on this page is open
+When a confirming action fires
 Then the toast renders above the overlay (`z-index: 200` vs `80`) and is fully visible, not clipped.
 
 **QA-GBL-18 [ADMIN]** — Keyboard operation of the modals `[E-98]`
-Given I open any of the three modals with the keyboard
-Then focus moves into the modal, Tab cycles within it without escaping to the page behind, and closing returns focus to the control that opened it.
+Given the Order Management Dashboard is loaded
+When I open any of the three modals with the keyboard, Tab through it, and then close it
+Then focus moves into the modal on open, Tab cycles within it without escaping to the page behind, and closing returns focus to the control that opened it.
 
 ### 8.6 Data-capture coverage matrix (every `[DC-n]` has an asserting Then-clause)
 
 | DC | Asserted by | DC | Asserted by |
 |---|---|---|---|
+Every cell below was re-checked against the cited scenario's **body**: a scenario is listed only if its Then-clause names that `[DC-n]` explicitly. Where a scenario asserts that the event was *not* written, the cell is marked `(absence)`.
+
+| DC | Asserted by | DC | Asserted by |
+|---|---|---|---|
 | DC-1 | QA-IMP-04 | DC-16 | QA-SMP-10, QA-SMP-13, QA-SMP-38 |
-| DC-2 | QA-IMP-21, QA-IMP-31, QA-IMP-44, QA-GBL-07 | DC-17 | QA-SMP-14, QA-SMP-20, QA-SMP-26, QA-SMP-39 |
-| DC-3 | QA-IMP-22, QA-IMP-31 | DC-18 | QA-SMP-27 |
+| DC-2 | QA-IMP-21, QA-IMP-31, QA-IMP-44, QA-IMP-56, QA-IMP-57, QA-GBL-07 | DC-17 | QA-SMP-14, QA-SMP-20, QA-SMP-26, QA-SMP-39, QA-SMP-49 |
+| DC-3 | QA-IMP-22, QA-IMP-31, QA-IMP-53 | DC-18 | QA-SMP-27, QA-SMP-48 |
 | DC-4 | QA-IMP-30 | DC-19 | QA-CMT-11 |
-| DC-5 | QA-IMP-30 | DC-20 | QA-CMT-11, QA-CMT-12 |
+| DC-5 | QA-IMP-30 | DC-20 | QA-CMT-11, QA-CMT-12, QA-CMT-24 |
 | DC-6 | QA-IMP-27 | DC-21 | QA-CMT-09 |
 | DC-7 | QA-IMP-29, QA-IMP-32, QA-IMP-47 | DC-22 | QA-CMT-09 |
-| DC-8 | QA-IMP-31, QA-IMP-47 | DC-23 | QA-CMT-10 |
+| DC-8 | QA-IMP-31, QA-IMP-47, QA-IMP-58 | DC-23 | QA-CMT-10 |
 | DC-9 | QA-IMP-27, QA-IMP-33 | DC-24 | QA-CMT-10 |
-| DC-10 | QA-IMP-27, QA-IMP-52 | DC-25 | QA-LST-09 (absence), QA-LST-10 |
-| DC-11 | QA-IMP-27, QA-IMP-51 | DC-26 | QA-IMP-34 |
+| DC-10 | QA-IMP-27, QA-IMP-52, QA-IMP-60 | DC-25 | QA-LST-09 (absence), QA-LST-10 |
+| DC-11 | QA-IMP-27, QA-IMP-51, QA-IMP-55 | DC-26 | QA-IMP-34, QA-IMP-59 |
 | DC-12 | QA-IMP-27 | DC-27 | QA-IMP-34 |
-| DC-13 | QA-SMP-06 | DC-28 | QA-IMP-28, QA-IMP-48, QA-SMP-22 |
-| DC-14 | QA-SMP-10, QA-SMP-12, QA-SMP-13, QA-SMP-43 | DC-29 | QA-SMP-41 |
+| DC-13 | QA-SMP-06, QA-SMP-47 | DC-28 | QA-IMP-28, QA-IMP-48, QA-SMP-22 |
+| DC-14 | QA-SMP-10, QA-SMP-12, QA-SMP-13 (absence), QA-SMP-43, QA-SMP-45, QA-SMP-49, QA-SMP-50 | DC-29 | QA-SMP-41 |
 | DC-15 | QA-SMP-10, QA-SMP-12, QA-SMP-40 | | |
 
-**Asserted absences** (a Then-clause requiring that nothing was written): no unassignment event on cancel or end (QA-SMP-14) · no Slack route for import or sample actions (QA-GBL-08) · no persistence for any declared NON-event (QA-GBL-06) · no event on page load (QA-LST-16) · no `[DC-25]` when the merge guard fires (QA-LST-09) · no `[DC-17]` when the confirm dialog is dismissed (QA-SMP-20) · no second batch on repeat submission (QA-IMP-28, QA-IMP-48) · no `order.status_changed` from this page, established by the absence of the control (QA-LST-04).
+**Asserted absences** (a Then-clause requiring that nothing was written): no unassignment event on cancel or end (QA-SMP-14, QA-SMP-44) · no unassignment event when the order itself is cancelled or refunded (QA-SMP-45) · no sample set on an `MKT-` order (QA-SMP-13) · no Slack route for import or sample actions (QA-GBL-08) · no persistence for any declared NON-event (QA-GBL-06) · no event on page load (QA-LST-16) · no `[DC-25]` when the merge guard fires (QA-LST-09) · no `[DC-17]` when the confirm dialog is dismissed (QA-SMP-20) · no second batch on repeat submission (QA-IMP-28, QA-IMP-48) · no ghost period after a mid-submit network failure (QA-SMP-47) · no order created from any blocked file (QA-IMP-53, QA-IMP-54) · no `order.status_changed` from this page, established by the absence of the control (QA-LST-04).
 
 ---
 
@@ -1681,7 +1864,7 @@ Then focus moves into the modal, Tab cycles within it without escaping to the pa
 | **`[PD-51]`** | The Sample Assignment ON flow deliberately has no sample-type selection (BR-6), yet `[G-13]` requires the internal invoice and picking artifacts to state **which** sample and **how many**. **Where is that definition configured, and by whom** — a Fulfillment Center standing setting, an admin screen, or per campaign? | No input document names a source for the sample-set definition. Inventing one would create both a UI affordance and an owner. | Blocks the internal-invoice and picking-list *content* (and therefore `_wireframe-fixes` WF-9, which is conditional on it). Does **not** block any flow on this page |
 | **`[PD-55]`** | Orders flagged `Not connected — contact the Fulfillment Center` are created and appear in RTO. **What unblocks them for outbound, and who owns the follow-up?** | No screen offers a manual carrier assignment and no Slack route exists for the handoff. Deciding it invents both an affordance and an owner. | Blocks the recovery path only. This spec states the flagged state and its persistence (`[DC-11]`, [E-7], [E-80]) |
 
-Owner questions that **do** have a provisional default are not repeated here — they live in `_provisional-decisions.md` and are tagged `[PD-n · OWNER-PENDING]` inline where the behaviour appears. This page depends on **PD-1, PD-2, PD-3, PD-4, PD-5, PD-6, PD-7, PD-20, PD-22, PD-27, PD-28, PD-35, PD-36, PD-52, PD-53, PD-54, PD-56, PD-57, PD-58, PD-59, PD-63, PD-67, PD-80** (plus the two NO-DEFAULT entries above).
+Owner questions that **do** have a provisional default are not repeated here — they live in `_provisional-decisions.md` and are tagged `[PD-n · OWNER-PENDING]` inline where the behaviour appears. This page's **behaviour-bearing** PD dependencies are **PD-1, PD-2, PD-3, PD-4, PD-5, PD-6, PD-7, PD-20, PD-22, PD-27, PD-28, PD-35, PD-36, PD-52, PD-53, PD-54, PD-56, PD-57, PD-58, PD-59, PD-63, PD-67, PD-80** (23), plus the two NO-DEFAULT entries above. One further PD id appears in this document without being a dependency: **`[PD-9]`** is cited once, untagged, in §10's 2026-08-03 "Program-wide item 16" row purely as a **non-applicable cross-reference** — it exists to stop a reader confusing inbound-side carrier auto-record (not supported) with this page's import-side carrier auto-assignment (BR-3). Reversing PD-9 changes nothing here. A `[PD-n` token extraction over this document therefore yields 26 distinct ids: 23 + 2 NO-DEFAULT + PD-9.
 
 **Three of those are applied beyond their register page list, deliberately and reversibly:**
 
@@ -1693,6 +1876,14 @@ Owner questions that **do** have a provisional default are not repeated here —
 
 `[PD-2]` is likewise cited as the *reason no sound applies here* rather than as behaviour: if PD-2 were reversed to "sound on View Orders and RTO only", this page's outcome is unchanged, because it has no outbound-class button either way.
 
+**Spec-level defaults awaiting owner sign-off (not in the PD register).** Three business rules added in v1.1 were authored by this spec rather than adopted from `_provisional-decisions.md`. They are written in §4 as decided behaviour because a spec cannot ship a hole, but no owner has ruled on them and none carries a `[PD-n]` id. They are surfaced here so that an owner reading §9 sees every open question, not only the registered ones. Each becomes a normal `[PD-n · OWNER-PENDING]` citation the moment it is entered in the register.
+
+| Rule | What it decides | Why it needs owner sign-off | Reversal impact |
+|---|---|---|---|
+| **BR-31** | One operating timezone: every datetime on this page is entered, evaluated and displayed in the admin's single configured zone; storage is UTC; matching evaluates the absolute instant; **no per-user timezone rendering in v1** | It has company-wide consequence by its own rationale — a sample period is a company-wide switch, and two operators reading different windows from one row makes the one-set invariant untestable. Only the *zone value* is a §9.3 dev decision; the *policy* is asserted here | If the owner wants per-user rendering: §3.6.2's timezone sentence, [E-89], [E-90] and QA-SMP-42 change; `[DC-13]`'s `operating timezone` payload field stays either way as the audit anchor |
+| **BR-33** | `Selected orders only` resolves its order set **at submit time**, not at modal-open time; the open-time `{n}` is a label only | It changes *which orders get sampled* when the list moves behind the modal. The alternative (freeze the set at open) is defensible and would make [E-84] and QA-SMP-37 assert the opposite | If reversed to open-time freeze: §3.4, §3.6.5, [E-84], QA-SMP-37 and `[DC-13]`'s order-id-list semantics all invert |
+| **BR-34** | Loading the page mutates nothing — no event on page load or initial fetch | `[G-8]` scopes capture to operator-initiated actions, but "was this screen opened" is a plausible audit ask that no input document rules on | If reversed: add a page-view event to §5 and delete §5.4 item 12 and QA-LST-16 |
+
 ### 9.2 Explicitly out of scope for this spec
 
 - **Label and invoice layouts** — the physical rendering of `(+ sample set)` on carrier-facing data and of the sample lines on internal invoice/picking artifacts is **Phase 3-1**, to be discussed with the owner after Phase 3. This spec specifies the *behaviour* (BR-8), never the layout.
@@ -1702,7 +1893,9 @@ Owner questions that **do** have a provisional default are not repeated here —
 - **RTO Marketing-view rendering and Bulk Outbound eligibility** — owned by the `ready-to-outbound` spec (`[PD-35 · OWNER-PENDING]`).
 - **`✕ Cancel Order` on an MKT order** — the per-order cleanup path referenced by BR-14 is owned by the `order-detail` spec (`[PD-22 · OWNER-PENDING]`).
 - **RBAC / role matrix** — post-v1 owner decision `[G-15]` `[PD-1 · OWNER-PENDING]`.
-- **Wireframe edits** — [WF-15] … [WF-21] proposed in §2.4 are backlog items for a separate wireframe-edit pass, deployed via `/wf-deploy order-management`; they must not be applied while specs are being written.
+- **JIT and JIT residual stock** (mandatory-inclusion item 11, stated explicitly rather than left silent — see §6.7) — **JIT never appears on this screen.** No JIT sourcing route is selectable here, and no residual-stock figure is computed, displayed, filtered, exported or reported here. JIT is not a requestable inbound route `[G-5]`, and residual-stock handling is owned by the `stock-status` spec. Nothing on this page may surface a residual figure by analogy with the order table's route badges.
+- **Line-based location filtering and audit-mode-only visibility** (mandatory items 9 and 10) — no line-item view, no location concept and no audit mode exists here `[G-14]`; owned by `stock-status` and `view-orders` (§6.7).
+- **Wireframe edits** — `[WF-15 · proposed]` … `[WF-21 · proposed]`, registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03), are backlog items for a separate wireframe-edit pass, deployed via `/wf-deploy order-management`; they must not be applied while specs are being written. The `· proposed` suffix is their register status, not an indication that they are missing from the register (§8.0 rule 7).
 
 ### 9.3 Decisions delegated to development (a default is stated; these are NOT owner questions)
 
@@ -1762,7 +1955,7 @@ Every decision that shaped this screen, dated, including reversals and removals.
 | 2026-08-03 | **Sample dual-view confirmed** | Carrier-facing data appends only `(+ sample set)` to the last product name (tax handling); internal invoice and picking artifacts show which sample and how many | BR-8, `[G-13]` |
 | 2026-08-03 | **Sample assignment retained** — Notion §G, the developer handoff note, and the plan ledger corrected | Closes the 2026-07-22 → 2026-07-23 reversal | R-1 |
 | 2026-08-03 | **Bulk Hold Shipment removed from this screen** | Hold is now `Change Status → on-hold` on Order Detail; the OMS dashboard stays the live screen. Legend item 3 remains as a dotless negative entry | BR-10, `[L-3]`, QA-LST-04, R-3 |
-| 2026-08-03 | **Comment `@mention` channel confirmed: `#fulfillment-admin-comments` (`C0BMGEWM5QA`)** (owner) | Message body `@mentions` the person (personal notification); the channel doubles as a team-visible archive. Supersedes every earlier "channel pending" wording | §6.1, `_review` C-2 |
+| 2026-08-03 | **Comment `@mention` channel confirmed: `#fulfillment-admin-comments` (`C0BMGEWM5QA`)** (owner) | Channel and ID fixed for this page's one Slack route; notification semantics are `[G-7]`'s and are not restated here. Supersedes every earlier "channel pending" wording | §6.1, `_review` C-2 |
 | 2026-08-03 | Photo column / photo upload **removed program-wide** `[PD-63 · OWNER-PENDING]` | Recorded here as a negative contract so it is not reintroduced by analogy; this page never had one | §3.8.1 |
 | 2026-08-03 | Program-wide item 16: **Carrier is not auto-recorded on inbound**, and no Carrier column is added (`_review` C-1, `[PD-9]`) | Does not apply to this page (no inbound surface); recorded so the *import-side* carrier auto-assignment (BR-3) is never confused with it | BR-3 note |
 | 2026-08-03 | `_global-rules` v1.0 published; `[G-15]` establishes a **single admin role for v1** `[PD-1 · OWNER-PENDING]` | No control on this page is role-gated; every mutation records the actor | BR-22 |
@@ -1772,7 +1965,8 @@ Every decision that shaped this screen, dated, including reversals and removals.
 | 2026-08-03 | PD register adopted for this page: import blocks the whole file on any error (PD-57); duplicate file warns rather than blocks (PD-58); no batch revert (PD-54); periods are not retroactive (PD-52); `Selected orders only` assigns immediately (PD-53); periods match sales orders only (PD-56); merging MKT with sales is blocked (PD-59) | All tagged `[PD-n · OWNER-PENDING]` in the sentences where they appear | BR-12…BR-18 |
 | 2026-08-03 | PD-51 and PD-55 recorded as **NO-DEFAULT** | The sample-set definition source, and the unblocking path for `carrier_unresolved` orders, are not decided and no behaviour is specified for them | §9.1 |
 | 2026-08-03 | Spec v1.0 authored | 9 legend units → 10 spec keys + 5 furniture keys; 30 business rules; 28 data-capture events; 66 edge cases; 94 QA scenarios | superseded by v1.1 |
-| 2026-08-03 | **Spec v1.1 — audit and finalisation pass.** Legend units re-counted directly from the HTML (9 units / 9 rendered dots, confirmed). Added `[L-F6]` (global nav shell) so the furniture count is 6 and the spec-addressable total is 16. Added BR-31 (single operating timezone), BR-32 (cross-entity comment corpus, `[PD-67 · OWNER-PENDING]`), BR-33 (selection resolved at submit), BR-34 (page load mutates nothing). Added `[DC-29] sample.period_started`. Extended edge cases to E-100. Rewrote §8 to 153 scenarios with an executable harness contract (§8.0). Proposed four further wireframe defects, [WF-18] … [WF-21]. Removed three inadvertent restatements of `[G-2]`, `[G-7]` and `[G-15]` rule bodies and replaced them with page deltas. Recorded the three PDs applied beyond their register page list (§9.1) | Nothing from v1.0 was dropped; all v1.0 IDs keep their meanings | this document |
+| 2026-08-03 | **Spec v1.1 — audit and finalisation pass.** Legend units re-counted directly from the HTML (9 units / 9 rendered dots, confirmed). Added `[L-F6]` (global nav shell) so the furniture count is 6 and the spec-addressable total is 16. Added BR-31 (single operating timezone), BR-32 (cross-entity comment corpus, `[PD-67 · OWNER-PENDING]`), BR-33 (selection resolved at submit), BR-34 (page load mutates nothing). Added `[DC-29] sample.period_started`. Extended edge cases to E-100. Rewrote §8 to 153 scenarios with an executable harness contract (§8.0). Proposed four further wireframe defects, [WF-18] … [WF-21]. Removed three inadvertent restatements of `[G-2]`, `[G-7]` and `[G-15]` rule bodies and replaced them with page deltas. Recorded the three PDs applied beyond their register page list (§9.1) | Nothing from v1.0 was dropped; all v1.0 IDs keep their meanings | superseded by v1.2 |
+| 2026-08-03 | **Spec v1.2 — remediation pass against three independent verification reports** (coverage audit M1, adversarial QA execution M2, cross-page + review audit M3a/M3b). **QA:** the five scenarios that could not pass as worded were repaired — QA-GBL-14's unscoped focus clause (which contradicted QA-IMP-06/09) is now scanner-scoped; QA-IMP-12 accounts for the `M1b` annotation dot inside the annotated `<th>`; QA-LST-12 accounts for the `<br>` inside the four `.navlink` spans; QA-CMT-05 asserts `.empty` / `.it` / `.paneheader` separately instead of the whole pane; QA-CMT-21 takes the concrete input `4`. §8.0 gained normalisation rules 5a–5c, an "identical content" definition (rule 6) and the `· proposed` definition (rule 7); QA-CMT-02 gained a geometric right-alignment probe, QA-IMP-11 a deterministic selector, QA-LST-02 the CSSOM colour form, QA-IMP-19 the `.note.mkt` artifact reference (and lost its unreachable Korean token). **Coverage:** 18 scenarios added (QA-IMP-53…62, QA-SMP-44…50, QA-CMT-24) so every previously uncovered edge case is asserted; `[E-9]` and `[E-42]` are declared intentionally unasserted in §8.0 with reasons. 42 scenarios gained an explicit `When` clause per `_review` §3.4. §8.6's three over-claiming cells were repaired. `[E-4]`, `[E-6]`, `[E-31]`, `[E-34]`, `[E-55]`, `[E-78]`, `[E-79]` gained the §3 back-reference from the clause they constrain. **Cross-page:** §6.7 added (explicit N/A for mandatory items 9/10/11, closing the JIT-residual silent cell); §3.10 declares the one Comments-hub string divergence and why the wireframe wins; §5 declares the `[DC-28]` shared-concept name divergence; §3.8 flags the stale View Orders hold cross-reference; §6.3 pins the directory deep-link form. **Registers:** `[WF-15 · proposed]`…`[WF-21 · proposed]` appended to `_wireframe-fixes` §F; `[G-7]`'s body removed from §6.1 and from this log; BR-31/33/34 surfaced in §9.1 as spec-level defaults awaiting owner sign-off; `[PD-9]`'s status as a non-applicable cross-reference stated in §9.1. **Counts recomputed:** 171 QA scenarios (77 `[WF]` / 94 `[ADMIN]`), 77 negatives = 45.0 %, per block IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18 | No ID renumbered, no rule reversed, no behaviour changed. Every v1.1 ID keeps its meaning | this document |
 
 ### Reversal chains (recorded verbatim so nobody re-litigates them)
 

@@ -42,7 +42,7 @@ Verdict rule (per supervisor): **2026-08-03 decisions always win**; wireframe le
 | ready-to-outbound | 15 (1–14 + M1) | 15 | OK | Legend render order 1–8,14,13,12,9,10,11 noted by A |
 | stock-status | 16 (dots 5–16 + M1–M4) | 16 | OK | B additionally keys baseline furniture [L-F1..F4] — adopt (2c) |
 | order-management | 9 (1,2,3-removed,4,5 + M1/M1b/M2/M3) | 9 | OK | Keying variants to standardize (2c) |
-| tracking-missing | 7 (0–5 + M1) | 7 | OK | Dead v1 CSS/JS excluded by both → WF-9 |
+| tracking-missing | 7 (0–5 + M1) | 7 | OK | Dead v1 CSS/JS excluded by both → WF-10 |
 | closing | 21 dots + L-1.B block = 22 keys | 21 + 1 offscreen = 22 keys | OK | Key style must be normalized (2c) |
 | inbound-request | 28 + 2 footer blocks | 28 (+ footer coverage) | OK | Both declare the dot-13 gap |
 
@@ -113,6 +113,12 @@ Codes: **P** = primary home · **Y** = lands materially · **Δ** = delta/cross-
 
 ---
 
-## Cross-reference correction (supervisor, 2026-08-03)
+## Cross-reference note — correction retracted (supervisor, 2026-08-03)
 
-This review was drafted BEFORE `_provisional-decisions.md` / `_wireframe-fixes.md` existed, so its original PD/WF citations were forward-guesses and did not match the registers that were written afterwards (the authoring agent was interrupted mid-run and resumed with independent numbering). All citations in this document have been mechanically remapped to the registers' actual IDs: PD 16→21, 20→27, 28→34, 29→36, 43→46, 53→5, 61→68, 75→80; WF 6→5, 7→10, 10→9 (PD-1, PD-2, WF-1, WF-2 were already correct). Verified by `_xref_check.py`. Pre-correction copies are kept as `*.v1-agentA.md`.
+**A previous "cross-reference correction" appended here was wrong and has been retracted.** The supervisor inferred, from a truncated agent report, that this review's PD/WF citations had been written before the registers existed and therefore pointed at the wrong IDs. That premise was never verified against this file. Independent audit (`_verify/m3b-review-audit.md`) established the facts:
+
+- This document's original citations — `PD-1, PD-2, PD-21, PD-27, PD-34, PD-36, PD-46, PD-60, PD-68, PD-80` and `WF-1, WF-2, WF-5, WF-9, WF-10` — **were already correct** against the registers. None of the IDs the supervisor "remapped from" (PD-16/20/28/29/43/53/61/75, WF-6/7) ever appeared here.
+- The remap pass was therefore a no-op for 10 of its 11 claimed substitutions, and the one substitution it did make (`WF-10` → `WF-9`, §2a tracking-missing row) **broke a citation that was correct**. That regression has been reverted; this file now matches `_review.v1-agentA.md` except for this note.
+- Root cause: the verification script encoded the supervisor's *expectations* of what this document cited, rather than extracting the citations from the document itself, so its "FAIL" lines described the register's contents, not a mismatch. Lesson recorded in `_plans/_supervisor-state.md`.
+
+All PD/WF citations in this document are verified against the registers as of 2026-08-03.

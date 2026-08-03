@@ -1,0 +1,472 @@
+{
+  "url": "file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-management/index.html",
+  "counts": {
+    "PASS": 72,
+    "FAIL": 4,
+    "AMBIGUOUS": 1
+  },
+  "results": [
+    {
+      "id": "QA-CMT-01",
+      "title": "Hub opens and closes from its trigger",
+      "verdict": "PASS",
+      "evidence": "open → badge 3 → close"
+    },
+    {
+      "id": "QA-CMT-02",
+      "title": "Tabs and pane headers",
+      "verdict": "PASS",
+      "evidence": "tabs=['@ Mentions 3', '★ Saved'] · header ok · action='Mark all read' flush right (left gap 291px, right gap 14px). NOTE: spec supplies no probe for 'right-aligned'; getComputedStyle(...).marginLeft returns '0px' for the auto margin."
+    },
+    {
+      "id": "QA-CMT-03",
+      "title": "Saved tab",
+      "verdict": "PASS",
+      "evidence": "['Order MKT-40218'] · header/hint byte-exact · mentions hidden"
+    },
+    {
+      "id": "QA-CMT-04",
+      "title": "Search hides the tabs and renders a result header",
+      "verdict": "PASS",
+      "evidence": "tabs=none · csr shown · header='3 results · newest first · click to open the order'"
+    },
+    {
+      "id": "QA-CMT-05",
+      "title": "(neg) Search with no hits [E-38]",
+      "verdict": "FAIL",
+      "evidence": "literal read of \"[data-pane=\\\"csr\\\"] contains exactly the text 'No matching comments'\": pane textContent is '0 results · newest first · click to open the orderNo matching comments' — the result header is also inside the pane. Lenient read (a .empty node whose text is exactly 'No matching comments' + zero .it rows) PASSES."
+    },
+    {
+      "id": "QA-CMT-06",
+      "title": "Clearing the search restores the tabs",
+      "verdict": "PASS",
+      "evidence": "{'tabs': 'flex', 'csr': 'none', 'onTab': 'mentions', 'onPane': 'block'}"
+    },
+    {
+      "id": "QA-CMT-07",
+      "title": "Star toggle",
+      "verdict": "PASS",
+      "evidence": "initial class='star' → on/rgb(245, 158, 11) → off/rgb(187, 186, 190)"
+    },
+    {
+      "id": "QA-CMT-08",
+      "title": "(neg) Search input cannot inject markup [E-48]",
+      "verdict": "PASS",
+      "evidence": "empty state · 0 <b> nodes — query escaped"
+    },
+    {
+      "id": "QA-CMT-15",
+      "title": "Numeric-order search returns sales orders only",
+      "verdict": "PASS",
+      "evidence": "{'ph': '2 results · newest first · click to open the order', 'rows': ['Order 421771', 'Order 421502']}"
+    },
+    {
+      "id": "QA-CMT-16",
+      "title": "Author search and `<mark>` highlighting",
+      "verdict": "PASS",
+      "evidence": "header ok · rows=['Order MKT-40233', 'Order MKT-40191'] · marks fw700"
+    },
+    {
+      "id": "QA-CMT-17",
+      "title": "Results are ordered newest-first",
+      "verdict": "PASS",
+      "evidence": "['Order MKT-40233', 'Order MKT-40218', 'Order 421771', 'Order MKT-40191', 'Order 421502']"
+    },
+    {
+      "id": "QA-CMT-18",
+      "title": "(neg) `Mark all read` is inert in the mock",
+      "verdict": "PASS",
+      "evidence": "3 unread before and after · badge still '3'"
+    },
+    {
+      "id": "QA-CMT-19",
+      "title": "Unread and saved states in the demo data",
+      "verdict": "PASS",
+      "evidence": "[{'o': 'Order MKT-40233', 'unread': True, 'star': False}, {'o': 'Order MKT-40218', 'unread': True, 'star': True}, {'o': 'Order 421771', 'unread': True, 'star': False}] · saved=['Order MKT-40218']"
+    },
+    {
+      "id": "QA-CMT-20",
+      "title": "(neg) The hub does not close on an outside click — documents [WF-21 · proposed]",
+      "verdict": "PASS",
+      "evidence": "hub stays open on outside click · no document-level handler — defect reproduced as specified"
+    },
+    {
+      "id": "QA-CMT-21",
+      "title": "Corpus mixes marketing and sales entities",
+      "verdict": "AMBIGUOUS",
+      "evidence": "When-clause is 'search for an empty-adjacent common term and read the full dataset via QA-CMT-17'. No concrete query string is given ('empty-adjacent common term' is undefined; the empty query hides the csr pane entirely, so it cannot be the intended input). Executed under the only concrete reading available (the QA-CMT-17 query `4`) the assertion holds: rows = ['Order MKT-40233','Order MKT-40218','Order 421771','Order MKT-40191','Order 421502'] — 3 MKT- + 2 numeric. Recorded AMBIGUOUS because the input is not specified."
+    },
+    {
+      "id": "QA-GBL-01",
+      "title": "Legend closing paragraph [L-F1]",
+      "verdict": "PASS",
+      "evidence": "both sentences present byte-exact"
+    },
+    {
+      "id": "QA-GBL-02",
+      "title": "Toast placement and styling [L-F5]",
+      "verdict": "PASS",
+      "evidence": "{'pos': 'fixed', 'top': '16px', 'right': '16px', 'z': '200', 'bg': 'rgb(25, 135, 84)', 'color': 'rgb(255, 255, 255)', 'fw': '700', 'fs': '13.5px', 'smfs': '11.5px', 'smop': '0.9'}"
+    },
+    {
+      "id": "QA-GBL-03",
+      "title": "(neg) No reload after any action [E-43] [G-2]",
+      "verdict": "PASS",
+      "evidence": "3 modals opened+closed · #mktConfirm · #sampCancelBtn · hub open/close · #annoToggle → sentinel intact"
+    },
+    {
+      "id": "QA-GBL-04",
+      "title": "(neg) Every dismissal path creates nothing",
+      "verdict": "PASS",
+      "evidence": "backdrop / ✕ / Cancel all close · .gtoast stays 0"
+    },
+    {
+      "id": "QA-GBL-09",
+      "title": "(neg) Two independent toast nodes — documents [WF-18 · proposed] [E-62]",
+      "verdict": "PASS",
+      "evidence": "[{'id': 'gtoast', 'disp': 'block', 'top': '16px', 'right': '16px'}, {'id': 'gtoast2', 'disp': 'block', 'top': '16px', 'right': '16px'}] — overlap defect reproduced as specified"
+    },
+    {
+      "id": "QA-GBL-10",
+      "title": "(neg) `Esc` does not dismiss anything — documents [WF-20 · proposed] [E-97]",
+      "verdict": "PASS",
+      "evidence": "all four surfaces survive Escape · no 'keydown' string in the file — defect reproduced as specified"
+    },
+    {
+      "id": "QA-GBL-11",
+      "title": "(neg) Wireframe-only chrome inventory (must not ship)",
+      "verdict": "PASS",
+      "evidence": "wf-bar 4 buttons exact · 9 .dot · 1 .legend"
+    },
+    {
+      "id": "QA-GBL-12",
+      "title": "Annotation toggle",
+      "verdict": "PASS",
+      "evidence": "toggle both directions verified"
+    },
+    {
+      "id": "QA-GBL-13",
+      "title": "(neg) No audio anywhere [G-3]",
+      "verdict": "PASS",
+      "evidence": "0 of 5 tokens present"
+    },
+    {
+      "id": "QA-GBL-14",
+      "title": "(neg) No scanner surface [G-1]",
+      "verdict": "FAIL",
+      "evidence": "code paths that return focus to an input after an action (.focus() call sites): spec says 0 · page has 2"
+    },
+    {
+      "id": "QA-GBL-15",
+      "title": "Layout minimums [E-96]",
+      "verdict": "PASS",
+      "evidence": "{'mock': '1240px', 'tbl': ['1180px', '1180px'], 'wrap': 'auto'}"
+    },
+    {
+      "id": "QA-IMP-01",
+      "title": "Open the import modal from the filter bar",
+      "verdict": "PASS",
+      "evidence": "open=True · header='Marketing Order Import✕' · gtoast=0 · sentinel held"
+    },
+    {
+      "id": "QA-IMP-02",
+      "title": "Open the import modal from the wf-bar",
+      "verdict": "PASS",
+      "evidence": "wf-bar opens #m-import; modal innerHTML byte-identical to filter-bar entry"
+    },
+    {
+      "id": "QA-IMP-03",
+      "title": "Step 1 copy",
+      "verdict": "PASS",
+      "evidence": "bold='1. Template' · btn='⬇ Download Template (.xlsx)' class='btn btn-line btn-sm' · helper byte-exact"
+    },
+    {
+      "id": "QA-IMP-05",
+      "title": "Order Type default state",
+      "verdict": "PASS",
+      "evidence": "seed=on/'Influencer Seeding' · custom='✎ Custom' no .on · #otCustom display:none"
+    },
+    {
+      "id": "QA-IMP-06",
+      "title": "Order Type custom toggle and focus",
+      "verdict": "PASS",
+      "evidence": "chip swap ok · display=inline-block · placeholder exact · activeElement=#otCustom"
+    },
+    {
+      "id": "QA-IMP-07",
+      "title": "Toggling back hides the custom input but keeps its value",
+      "verdict": "PASS",
+      "evidence": "display=none · seed=on · value retained 'Pop-up event giveaway'"
+    },
+    {
+      "id": "QA-IMP-08",
+      "title": "PIC defaults and helper copy",
+      "verdict": "PASS",
+      "evidence": "options/selected/btn/placeholder/helper all byte-exact"
+    },
+    {
+      "id": "QA-IMP-09",
+      "title": "PIC custom toggle and focus",
+      "verdict": "PASS",
+      "evidence": "toggle inline-block → focus → none"
+    },
+    {
+      "id": "QA-IMP-10",
+      "title": "Upload step copy",
+      "verdict": "PASS",
+      "evidence": "'4. Upload' bold present · dropzone text byte-exact"
+    },
+    {
+      "id": "QA-IMP-11",
+      "title": "Preview header format",
+      "verdict": "PASS",
+      "evidence": "'Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors' (NOTE: spec gives no selector for 'the preview header')"
+    },
+    {
+      "id": "QA-IMP-12",
+      "title": "Preview table headers",
+      "verdict": "FAIL",
+      "evidence": "the seven headers (byte-exact per §8.0 rule 5): spec says ['Recipient', 'Country', 'SKU', 'Product Name', 'Qty', 'Campaign', 'Carrier (auto)'] · page has ['Recipient', 'Country', 'SKU', 'Product Name', 'Qty', 'Campaign', 'Carrier (auto)M1b']"
+    },
+    {
+      "id": "QA-IMP-13",
+      "title": "Brand-bold product names [G-6]",
+      "verdict": "PASS",
+      "evidence": "rows 1-3 innerHTML byte-exact with <b> brand wrapper"
+    },
+    {
+      "id": "QA-IMP-14",
+      "title": "Connected-carrier rendering [L-M1b]",
+      "verdict": "PASS",
+      "evidence": "3 GB rows · all 'YunExpress' / rgb(25, 135, 84) / 700"
+    },
+    {
+      "id": "QA-IMP-15",
+      "title": "(neg) Unconnected carrier does not block [L-M1b] [E-7]",
+      "verdict": "PASS",
+      "evidence": "PE row copy/colour/weight exact · #mktConfirm disabled=False aria-disabled=None"
+    },
+    {
+      "id": "QA-IMP-16",
+      "title": "Confirm button label format",
+      "verdict": "PASS",
+      "evidence": "label byte-exact · class contains btn-mkt"
+    },
+    {
+      "id": "QA-IMP-17",
+      "title": "Confirm toast text, colour, dismissal and no reload [E-43] [E-45]",
+      "verdict": "PASS",
+      "evidence": "toast text/colour/geometry exact · hidden after 2.9s · sentinel held"
+    },
+    {
+      "id": "QA-IMP-18",
+      "title": "Modal note copy (BR-1 operator-visible)",
+      "verdict": "PASS",
+      "evidence": "byte-exact incl. preserved 'Outbonded'"
+    },
+    {
+      "id": "QA-IMP-19",
+      "title": "(neg) No stock-error copy anywhere in the modal [E-20]",
+      "verdict": "PASS",
+      "evidence": "0 forbidden substrings · 1× 'stock' in 'marketing view) regardless of stock or inbound status.\\n    \\n    \\n     '"
+    },
+    {
+      "id": "QA-IMP-20",
+      "title": "(neg) No print, scan or carrier-picker affordance in the modal",
+      "verdict": "PASS",
+      "evidence": "buttons=['✕', '⬇ Download Template (.xlsx)', 'Influencer Seeding', '✎ Custom', '✎ Custom', 'Cancel', 'Confirm Import (12 orders)'] · inputs=[{'t': 'text', 'r': None}, {'t': 'text', 'r': None}] · 1 select = PIC"
+    },
+    {
+      "id": "QA-IMP-35",
+      "title": "(neg) Preview collapse row under-spans — documents [WF-15 · proposed]",
+      "verdict": "PASS",
+      "evidence": "1 colspan cell · text exact · colspan=6 vs 7 headers — defect reproduced as specified"
+    },
+    {
+      "id": "QA-IMP-36",
+      "title": "Preview row arithmetic matches the header count",
+      "verdict": "PASS",
+      "evidence": "4 named + '⋯ +8 more rows' → 4+8=12 consistent with header"
+    },
+    {
+      "id": "QA-IMP-37",
+      "title": "(neg) The dropzone is inert in the mock",
+      "verdict": "PASS",
+      "evidence": "no filechooser event · 0 file inputs · preview innerHTML unchanged"
+    },
+    {
+      "id": "QA-IMP-38",
+      "title": "Modal geometry and dismissal controls",
+      "verdict": "PASS",
+      "evidence": "class='modal wide anno' · max-width=720px · ✕ present · foot=['Cancel', 'Confirm Import (12 orders)']"
+    },
+    {
+      "id": "QA-IMP-39",
+      "title": "(neg) Repeated confirms reuse one toast node",
+      "verdict": "PASS",
+      "evidence": "1 node, id='gtoast', reused across two confirms"
+    },
+    {
+      "id": "QA-LST-01",
+      "title": "Placeholder contract text",
+      "verdict": "PASS",
+      "evidence": "dot='4' display='inline-flex'; strings present (NOTE: literal 'reads' fails — textContent starts with the dot glyph '4')"
+    },
+    {
+      "id": "QA-LST-02",
+      "title": "MKT style tokens exist",
+      "verdict": "PASS",
+      "evidence": "--mkt=#7C3AED --mkt-soft=#F3EEFF · 4 rules present"
+    },
+    {
+      "id": "QA-LST-03",
+      "title": "Header and count [L-F2]",
+      "verdict": "PASS",
+      "evidence": "byte-exact"
+    },
+    {
+      "id": "QA-LST-04",
+      "title": "(neg) Bulk Hold Shipment must not exist [L-3]",
+      "verdict": "PASS",
+      "evidence": "0 control hits · legend 3 retains the negative entry · document-wide occurrences=1 (all in the legend)"
+    },
+    {
+      "id": "QA-LST-05",
+      "title": "(neg) No print or scan surface anywhere on the page",
+      "verdict": "PASS",
+      "evidence": "32 buttons, none 'Print' · no file/scan input · 0 <audio>"
+    },
+    {
+      "id": "QA-LST-06",
+      "title": "Action-row inventory [L-F4]",
+      "verdict": "PASS",
+      "evidence": "['⧉ Merge Orders', 'Sample Assignment ON', 'Cancel Sample Assignment'] · .sel-info='2 selected' rgb(88, 45, 181) fw700"
+    },
+    {
+      "id": "QA-LST-07",
+      "title": "Filter-bar inventory [L-F3]",
+      "verdict": "PASS",
+      "evidence": "{'dates': ['2026-06-01', '2026-07-14'], 'inps': ['Search (order / product)', 'Search PIC'], 'sels': ['All Status', 'Country: AU', '15'], 'cbs': [{'l': 'Order #', 'c': True}, {'l': 'Tracking #', 'c': False}], 'sep': True, 'tilde': True, 'btns': ['▦ Columns', '⬇ Export', '⬇ Yun Export', '⬆ Import']}"
+    },
+    {
+      "id": "QA-LST-12",
+      "title": "Global navigation shell [L-F6]",
+      "verdict": "FAIL",
+      "evidence": "quick links (byte-exact per §8.0 rule 5): spec says ['Agent Telemetry', 'Role Assets', 'Shared Asset Health', 'SkinSeoul WP Admin'] · page has ['AgentTelemetry', 'RoleAssets', 'Shared AssetHealth', 'SkinSeoulWP Admin']"
+    },
+    {
+      "id": "QA-LST-13",
+      "title": "(neg) No pagination is rendered in the mock",
+      "verdict": "PASS",
+      "evidence": "0 .pager elements"
+    },
+    {
+      "id": "QA-LST-17",
+      "title": "(neg) No MKT row is rendered in the mock",
+      "verdict": "PASS",
+      "evidence": "0 tr.mkt elements"
+    },
+    {
+      "id": "QA-SMP-01",
+      "title": "ON button opens M2",
+      "verdict": "PASS",
+      "evidence": "open=True · header='Sample Assignment ON✕' · sentinel held"
+    },
+    {
+      "id": "QA-SMP-02",
+      "title": "Target radios",
+      "verdict": "PASS",
+      "evidence": "2 radios · first checked · labels ok (trimmed). Literal byte-exact label match=False (DOM has leading space ' All new orders in this period')"
+    },
+    {
+      "id": "QA-SMP-03",
+      "title": "Period fields and `forever` default",
+      "verdict": "PASS",
+      "evidence": "2026-07-23 / 10:00 / ~ / 'End date' / 'Time' / forever checked — all present"
+    },
+    {
+      "id": "QA-SMP-04",
+      "title": "(neg) Modal note and absence of any sample-type picker",
+      "verdict": "PASS",
+      "evidence": "note contains both phrases · 0 <select> in #m-sampleon"
+    },
+    {
+      "id": "QA-SMP-05",
+      "title": "Footer buttons",
+      "verdict": "PASS",
+      "evidence": "[{'t': 'Cancel', 'c': 'btn btn-gray btn-sm'}, {'t': 'Start Assignment (ON)', 'c': 'btn btn-green btn-sm'}]"
+    },
+    {
+      "id": "QA-SMP-15",
+      "title": "Cancel button opens M3",
+      "verdict": "PASS",
+      "evidence": "open=True · header='Cancel Sample Assignment — Current Assignment Periods✕'"
+    },
+    {
+      "id": "QA-SMP-16",
+      "title": "M3 table content",
+      "verdict": "PASS",
+      "evidence": "headers + all 3 rows byte-exact; row1 'forever' in <b>"
+    },
+    {
+      "id": "QA-SMP-17",
+      "title": "(neg) Ended row has no checkbox element [E-27]",
+      "verdict": "PASS",
+      "evidence": "[{'status': 'Active', 'cb': 1}, {'status': 'Active', 'cb': 1}, {'status': 'Ended', 'cb': 0}]"
+    },
+    {
+      "id": "QA-SMP-18",
+      "title": "M3 note copy",
+      "verdict": "PASS",
+      "evidence": "byte-exact"
+    },
+    {
+      "id": "QA-SMP-19",
+      "title": "Cancel toast text and no reload",
+      "verdict": "PASS",
+      "evidence": "btn bg=rgb(220, 53, 69) · toast text byte-exact · sentinel held"
+    },
+    {
+      "id": "QA-SMP-28",
+      "title": "M2 opens from the wf-bar",
+      "verdict": "PASS",
+      "evidence": "wf-bar opens M2; innerHTML identical to action-row entry"
+    },
+    {
+      "id": "QA-SMP-29",
+      "title": "M3 opens from the wf-bar",
+      "verdict": "PASS",
+      "evidence": "wf-bar opens M3; innerHTML identical to action-row entry"
+    },
+    {
+      "id": "QA-SMP-30",
+      "title": "(neg) `Start Assignment (ON)` is silent — documents [WF-16 · proposed]",
+      "verdict": "PASS",
+      "evidence": "modal closed · 0 toasts · button has no id — defect reproduced as specified"
+    },
+    {
+      "id": "QA-SMP-31",
+      "title": "(neg) Cancel toasts at zero selection — documents [WF-17 · proposed]",
+      "verdict": "PASS",
+      "evidence": "disabled=False · no dialog · #gtoast2 shown — defect reproduced as specified"
+    },
+    {
+      "id": "QA-SMP-32",
+      "title": "M3 default checkbox states",
+      "verdict": "PASS",
+      "evidence": "{'per': [[True], [False], []], 'total': 2}"
+    },
+    {
+      "id": "QA-SMP-33",
+      "title": "(neg) `forever` does not disable the end fields — documents [WF-19 · proposed]",
+      "verdict": "PASS",
+      "evidence": "[{'p': 'End date', 'd': False}, {'p': 'Time', 'd': False}] · typed input accepted — defect reproduced as specified"
+    },
+    {
+      "id": "QA-SMP-34",
+      "title": "Cancel toast uses its own node",
+      "verdict": "PASS",
+      "evidence": "ids=['gtoast2'] · gtoast2.class='gtoast'"
+    }
+  ]
+}

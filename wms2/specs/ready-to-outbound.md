@@ -1,7 +1,7 @@
 # Ready to be Outbounded — Screen Specification
 
 **Slug:** `ready-to-outbound` · **Wireframe (SST):** `wms2/ready-to-outbound/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/ready-to-outbound/
-**Spec version:** 1.1 · **Date:** 2026-08-03 · **Template:** `_inputs/spec-template.md` (10 sections, in order)
+**Spec version:** 1.2 · **Date:** 2026-08-03 · **Template:** `_inputs/spec-template.md` (10 sections, in order)
 **Global rules:** `_global-rules.md` — cited as `[G-n]`; this document writes **page deltas only** and never restates a rule body.
 **Provisional decisions:** `_plans/_provisional-decisions.md` — any behavior resting on one is tagged `[PD-n · OWNER-PENDING]` in the sentence where it appears.
 **Wireframe defects:** `_plans/_wireframe-fixes.md` — this spec describes the **correct** behavior; stale wireframe text is never specified, only cited as a defect.
@@ -53,11 +53,11 @@ The second consequence is the shared progress bar [L-5]: one bar, one action at 
 - **No inspection.** No line-item editing, no status changes, no cancellation, no tracking entry. Those live on Order Detail; the Order ID link is the doorway [L-F5].
 - **No search over orders.** The pool is a day's worth of ready orders, filtered by four view tabs. An order search bar was never part of this screen and must not be added. (The Comments hub's full-text search is a comment search, not an order search [L-10].)
 - **No pagination.** Not present in the wireframe; large-selection behavior is handled by chunking, not paging (§9.3 D-2).
-- **No sourcing-route badge column.** [G-5] route labels (SMART BUY · JIT (channel) · WHOLESALE · PARTNERSHIP · OTHER (channel) `[PD-80 · OWNER-PENDING]`) are rendered on View Orders, Inventory, and Order Detail — **not here**. The only badges on this page are the state badge `Fully Inbounded` [L-7] and the origin badge `MKT` [L-8]. This is why the JIT badge was renamed on 2026-08-03 [BR-4].
+- **No sourcing-route badge column.** [G-5] route labels (SMART BUY · JIT (channel) · WHOLESALE · PARTNERSHIP, plus `OTHER (channel)` `[PD-80 · OWNER-PENDING]`) render on View Orders, Inventory, and Order Detail — **not here**. **Which of those surfaces may carry `OTHER (channel)` on an order-facing row is owned by [G-5], not by this page**: `order-detail.md` `[L-4]` states it never appears there while View Orders does render it, so that disagreement is recorded for [G-5] resolution (2026-08-03) and does not reach this page, which renders no route label of any kind. The only badges on this page are the state badge `Fully Inbounded` [L-7] and the origin badge `MKT` [L-8]. This is why the JIT badge was renamed on 2026-08-03 [BR-4].
 
 ### 1.5 Permissions
 
-v1 ships a single admin role: no role gating on any control on this page, and every mutating action records the actor [G-15] [G-8] `[PD-1 · OWNER-PENDING]`. Bulk Outbound is not gated more tightly than the print actions.
+[G-15] applies unchanged `[PD-1 · OWNER-PENDING]`. The only page delta worth stating: **Bulk Outbound carries no gate of its own** — it is not restricted more tightly than the two print actions.
 
 ---
 
@@ -138,8 +138,9 @@ Live base URL for every row: `https://yongwon-pixel.github.io/skinseoul-wirefram
 | ID | Defect | Correct behavior specified in |
 |---|---|---|
 | **WF-9** | M1 picking list has no sample-set rows, while [G-13] requires internal picking artifacts to show **which** sample and **how many**. Fix is **conditional** on owner approval of PD-36 *and* an answer to PD-51. | §3.15 (`[L-M1]`), [BR-21] `[PD-36 · OWNER-PENDING]` |
+| **`[RTO-WFX-9]`** | The bulk demo sets `#pfill`'s inline width synchronously on click but rewrites `#pbarLabel` only on the first 250 ms `setInterval` tick, so every run displays the **previous** action's label — including its mode string — for its opening ~250 ms. Appended to `_wireframe-fixes.md` §B on 2026-08-03; fix is one line (write the label once before starting the interval). *(Page-scoped ID: the register's next numeric ID was claimed concurrently by three other pages' remediation passes, so this entry continues this page's own `[RTO-WFX-n]` series — it is nonetheless a **registered** item, not a candidate.)* | §3.5 (`[L-5]`) specifies the correct behavior — the mode string is the contract from the moment the run starts. Until the fix lands, §8.0's running-label reading rule bounds every "during the run" assertion and QA-L5-04 samples only from the first tick. |
 
-**New defect candidates found while writing and auditing this spec** (not yet in `_wireframe-fixes.md`; page-scoped IDs used to avoid colliding with the `WF-n` register):
+**New defect candidates found while writing and auditing this spec** — `[RTO-WFX-1]`…`[RTO-WFX-8]`, none of them yet in `_wireframe-fixes.md`; page-scoped IDs are used to avoid colliding with the `WF-n` register. (`[RTO-WFX-9]` continues the same series but **is** registered — see the row above.)
 
 | ID | Defect | Why it matters | Correct behavior in |
 |---|---|---|---|
@@ -152,7 +153,9 @@ Live base URL for every row: `https://yongwon-pixel.github.io/skinseoul-wirefram
 | `[RTO-WFX-7]` | The comment `Post` button produces **no toast** and the wireframe never appends the posted comment to the panel. | Same [G-2] gap; posting is a persisted state change whose result is not visible in place until the panel re-renders. | §3.9 `[L-9]`, [BR-34] |
 | `[RTO-WFX-8]` | Demo-data inconsistencies: `#crow4` belongs to the **JIT** row and `#crow5` to the **MKT** row, so the panel ids run out of document order; and the same seeded comment is rendered as `Please double-check the ×5 quantity.` (inline panel, trailing period) and `@Yongwon Please double-check the ×5 quantity` (hub, no period). | A QA agent asserting "panel id order == row order" or comparing the two renderings will file false bugs. Declared here so the strings below are trusted as-is. | §8.10, §8.11 |
 
-**Demo limitations that are NOT defects** (per `_wireframe-fixes.md` §E — QA must tag these `[ADMIN]`, never file them as bugs): the wireframe does not lock the bulk buttons while a batch runs; it does not recompute the tiles/counts after row or selection changes; `Refresh` is inert; `Mark all read` is inert; `.printbtn` is inert; `Post` is inert; Bulk Outbound does not actually reload the page. Also **not** a defect: the browser `<title>` and the demo `wf-bar` heading spell `Outbounded` correctly while the admin surface preserves `Outbonded` — the wf-bar is wireframe chrome, not product UI `[L-F1]`.
+**Demo limitations that are NOT defects** (per `_wireframe-fixes.md` §E — QA must tag these `[ADMIN]`, never file them as bugs): the wireframe does not lock the bulk buttons while a batch runs; it does not recompute the tiles/counts after row or selection changes; `Refresh` is inert; `Mark all read` is inert; `.printbtn` is inert; `Post` is inert; Bulk Outbound does not actually reload the page. Also **not** a defect: the browser `<title>` and the demo `wf-bar` heading spell `Outbounded` correctly while the admin surface preserves `Outbonded` — the wf-bar is wireframe chrome, not product UI `[L-F1]`. Also **not** a defect: **legend item 7 quotes the superseded badge wording** (`wording changed from "JIT (channel) completed" on 2026-08-03 …`). A dated changelog entry cannot record a rename without naming the string it replaced, and the legend is annotation chrome that ships in no admin build (QA-F-09). The [BR-4] "must not appear anywhere" rule is scoped to the **shipping surface** — see §4.2 and QA-L7-02.
+
+**Wireframe timing artifact (not a defect, but QA must know it).** The demo script sets `#pfill.style.width='0%'` **synchronously** on click but rewrites `#pbarLabel` only inside the 250 ms `setInterval` callback, so for the opening ~250 ms of every run the label still carries the **previous** action's copy — including its mode string. Every "during the run" assertion in §8 is therefore valid only from the first tick onward; the reading rule is stated in §8.0 and the underlying wireframe issue is registered as **`[RTO-WFX-9]`** in `_wireframe-fixes.md` §B.
 
 ---
 
@@ -234,6 +237,8 @@ Conventions used throughout this section: **Trigger → Behavior → Inputs/Outp
 
 **Validation.** Disabled at zero selection. Orders that left the ready pool since load are revalidated server-side and rejected `[PD-6 · OWNER-PENDING]`. An order with **no carrier assigned** (the "Not connected — contact the Fulfillment Center" state) cannot produce a label: it is excluded from the batch, reported in the toast subtext, and persisted with `no_carrier` [E-61] — the unblocking path for such orders is an open question `[PD-55 · NO-DEFAULT]` (§9.2 OQ-2).
 
+**Exclusion subtext (spec-defined), reason-aware.** The Bulk Print Labels toast uses the same shape as `[L-4]`'s (§3.4 step 6) over the [DC-28] refusal enum, in this fixed order: `no_carrier` → `no carrier assigned`; `no_template` → `no label template`; `order_not_printable` → `order not printable`. One reason across all exclusions ⇒ `{n} excluded — {phrase}` (e.g. `1 excluded — no carrier assigned`); two or more ⇒ `{n} excluded — {a} {phrase A} · {b} {phrase B}`. Clause counts are **not pluralised** [BR-35]. With zero exclusions the subtext keeps the wireframe copy `Disappears automatically after a few seconds`.
+
 **Server action.** Batch label dispatch. Chunk size and job polling are developer decisions.
 
 **State transitions.** **None.** Printing a label never changes order status and never gates outbound [BR-33]. Reprinting is always allowed [BR-32] [E-29].
@@ -263,13 +268,13 @@ Conventions used throughout this section: **Trigger → Behavior → Inputs/Outp
    - Orders with zero line items → **auto-excluded** with `empty_order` [E-60].
    - Every exclusion is persisted with its reason [DC-21] and counted in the toast subtext.
 5. For each eligible order the server, atomically per order:
-   - transitions every `INBOUNDED` line to `OUTBOUNDED`;
    - transitions the **order status to `prepare-shipment`** — the single status Closing treats as normal, and the exact state that Cancel Outbound rolls back to `prepare-shipment → processing` `[PD-26 · OWNER-PENDING]` [BR-22];
+   - records every shipped line (`sku`, `qty`, `location`) inside the order-level outbound event [DC-9]. **Outbound is order-level and writes no line-level status.** The line vocabulary stays exactly `INBOUNDED` / `PENDING` — the set `view-orders.md` `[L-S1b-21]` and `order-detail.md` `[L-10]` render exhaustively — so a third value would make every Order Detail row of a shipped order render an unmapped status, and it is also what keeps Cancel Outbound's "touches no line-level inbound state" contract (`order-detail.md` BR-19, `view-orders.md` `[L-S3-2]`) true. Corrected 2026-08-03; §10 [BR-22];
    - decrements on-hand stock at each line's location and consumes the corresponding reservation [DC-10] [DC-20];
    - clears the temporary shelf value if one is set, capturing old→new `[PD-18 · OWNER-PENDING]`.
 6. On completion: green toast `✓ Bulk Outbound complete — {N} orders`, where `{N}` is the number of orders **actually outbounded**, not the number selected.
    - **`{N}` is never pluralised.** The literal template is `— {N} orders` for every value of `{N}`, including `1` and `0`. This is pinned because the wireframe's own template is unpluralised and because `Found N order(s)` [L-F3] uses a *different*, equally verbatim form; a developer must not harmonise the two [E-54].
-   - If any order was excluded, the toast's subtext slot carries `{n} excluded — items not inbounded` `[PD-35 · OWNER-PENDING]`; with zero exclusions the subtext keeps the wireframe copy `Disappears automatically after a few seconds`.
+   - If any order was excluded, the subtext slot carries a **reason-aware** exclusion line **(spec-defined)** `[PD-35 · OWNER-PENDING]`. The phrase per [DC-21] `exclusion_reason` is fixed: `lines_not_inbounded` → `items not inbounded` · `status_forbids_outbound` → `status blocks outbound` · `already_outbounded` → `already outbounded` · `left_ready_pool` → `no longer ready` · `empty_order` → `no line items`. When every exclusion shares one reason the subtext is `{n} excluded — {phrase}` (e.g. `2 excluded — items not inbounded`); when two or more reasons are present it is `{n} excluded — {a} {phrase A} · {b} {phrase B} …` with the clauses in the enum order just listed (e.g. `2 excluded — 1 items not inbounded · 1 status blocks outbound`). Clause counts are **not pluralised**, exactly like `{N}` [BR-35]. One hard-coded `items not inbounded` for all five reasons is forbidden: it sends the operator hunting for a receiving problem when the real cause is a hold they could release in one click. With zero exclusions the subtext keeps the wireframe copy `Disappears automatically after a few seconds`.
    - If **every** selected order was excluded, the toast still renders as `✓ Bulk Outbound complete — 0 orders` with the exclusion subtext; it is not suppressed and not recoloured. Nothing shipped, nothing was written, and the operator is told exactly that [E-53].
 7. **The page then refreshes.** This is the **sole designed exception** named in [G-2], established 2026-07-09 and deliberately kept through every subsequent rework. Ordering is fixed: sound → progress → toast → refresh, and the toast must survive the refresh (re-rendered after reload) so the operator who looked up late still sees the result [E-37]. Outbounded orders are gone from the list after the refresh; the selection is cleared.
 
@@ -311,7 +316,7 @@ Conventions used throughout this section: **Trigger → Behavior → Inputs/Outp
 
 - Top-right toast [G-2], green, auto-dismissing after a few seconds (wireframe: 3000 ms; exact duration is a developer decision).
 - **Exact success text:** `✓ {Action} complete — {N} orders`, where `{Action}` is one of `Print Pick Locations`, `Bulk Print Labels`, `Bulk Outbound`, and `{N}` is unpluralised [E-54].
-- Subtext slot: `Disappears automatically after a few seconds` by default; replaced by `{n} excluded — items not inbounded` when Bulk Outbound excluded orders `[PD-35 · OWNER-PENDING]`.
+- Subtext slot: `Disappears automatically after a few seconds` by default; **replaced** — never appended to — by the reason-aware exclusion line when Bulk Outbound excluded orders (§3.4 step 6) or when Bulk Print Labels refused orders (§3.3) `[PD-35 · OWNER-PENDING]`.
 - **No failure case in the completion UI** [BR-9]. This was decided on 2026-07-22 and is deliberately kept: the completion toast is an all-success artifact.
 - **Boundary against [G-4] failure surfacing** (adjudication C-9): infrastructure failures — print agent offline, printer unreachable, stale order rejected — do not corrupt the completion toast. They raise a **separate red toast**, the affected orders remain in the list, and per-order results are persisted regardless `[PD-34 · OWNER-PENDING]` [DC-16] [DC-24]. The all-success promise applies to the *completion notice*, not to the system's honesty about work that did not happen. When both fire, the red toast wins the slot and the green toast is rendered first and replaced [E-79].
 - **Single-slot replacement.** Consecutive actions replace the toast rather than stacking [E-18]; stacking vs replacement is a developer decision, but the wireframe behavior (single slot) is the default.
@@ -382,7 +387,7 @@ Deltas over [G-7] only.
 - A comment posted from here is the same entity as one posted from Order Detail or the hub; only `source` differs [E-45].
 - A comment may be posted on an order in any status, including one that has left the ready pool [E-43] [E-77].
 
-**@mention.** Routes to Slack per §6.1. Delivery failure never blocks the post `[PD-4 · OWNER-PENDING]`; the comment persists and delivery is retried [DC-2]. Mentioning an unknown or deactivated user produces defined inline feedback and no Slack send [E-16] [E-39]. **Multiple mentions in one comment produce exactly one Slack message naming every mentioned user**, not one message per user [E-75].
+**@mention.** Routes to Slack per §6.1. Delivery failure never blocks the post `[PD-4 · OWNER-PENDING]`; the comment persists and delivery is retried [DC-2]. Mentioning an unknown or deactivated user produces defined inline feedback and no Slack send [E-16] [E-39]. **One Slack message per distinct resolved mention**: a comment naming three different people produces three messages; the same person named twice in one body produces one [E-75]. This is [G-7]'s corpus-wide contract — its payload field is a single mentioned user, and `order-detail.md` §6.1 and `view-orders.md` `DC-20` implement it per user. Corrected here 2026-08-03 from an earlier "one message naming everyone" reading; §10.
 
 **Refresh interaction.** Bulk Outbound refreshes the page and therefore discards an unposted draft [E-20]. The chosen mitigation is a developer decision (warn-on-unload or preserve-draft); the *behavior must be documented in the build*, not left to chance.
 
@@ -443,7 +448,12 @@ Full-width layout (`.pagepad` = `16px 14px 0`), matching View Orders. Rationale:
 
 **Mixed orders.** For an order with non-inbounded lines, `Total Items` counts **all** units, not only ready units `[PD-37 · OWNER-PENDING]` [BR-16]. Precedent in the wireframe: `MKT-40233` renders `3` (2 inbounded + 1 not inbounded). Rationale: this badge is an order-size indicator for the desk operator, not a pick count — the pick count lives on the picking list, which contains only pickable lines.
 
-**Reconciliation invariant (QA-assertable).** `Σ(Total Items of selected rows)` **must equal** the `{items}` figure in the `[L-2]` button label **and** the `{units}` figure in the M1 header. Wireframe: rows `5 + 1 + 2 = 8` = `(3 orders · 8 items)` = `8 units total`. The invariant holds even in the presence of a defective zero/negative-quantity line [E-46].
+**Reconciliation invariants (QA-assertable) — two statements, not one.** They are separated because the page has two legitimate denominators and conflating them would put non-inbounded units on the picker's paper:
+
+- **(a) Unconditional.** `Σ(Total Items of selected rows)` **always equals** the `{items}` figure in the `[L-2]` button label. Both count **all** units of every selected order `[PD-37 · OWNER-PENDING]` [BR-16].
+- **(b) Conditional.** The `{units}` figure in the M1 header equals `Σ(qty of pickable — i.e. inbounded — lines only)` §3.15. It equals `{items}` **only when every selected order is fully inbounded**; otherwise it is lower by exactly the selected non-inbounded unit count. Since [BR-3] makes partially-inbounded MKT orders a routine member of the pool, that divergence is a **normal state, never a defect**.
+
+Wireframe (default selection, all three orders fully inbounded, so both statements coincide): rows `5 + 1 + 2 = 8` = `(3 orders · 8 items)` = `8 units total`. Worked divergent case: adding `MKT-40233` (Total Items `3`, one line not inbounded) gives `{items} = 11` and `{units} = 10`. Both statements hold even in the presence of a defective zero/negative-quantity line [E-46].
 
 **Rendering.** Grey `.cntbadge.cb-total` pill, tabular numerals.
 
@@ -479,6 +489,14 @@ The four predicates are **mutually exclusive and exhaustive** over the pool — 
 ### 3.15 `[L-M1]` — Picking List modal
 
 **Title bar.** `Print Pick Locations — Picking List ({orders} orders selected · {skus} SKUs · {units} units total)` with a `✕` close button inside the same `<header>` element (so a naive `textContent` read returns the title **plus** `✕` — QA must read the header's first text node).
+
+**Header figures — all three defined:**
+
+| Figure | Definition |
+|---|---|
+| `{orders}` | The number of selected orders, identical to the `{orders}` in the `[L-2]` button label. |
+| `{skus}` | The count of **distinct SKUs** across the pickable lines of the selection — **not** the row count. Because the same SKU in two orders produces **two** rows and no merge [BR-19] [E-14], `{skus}` ≤ the number of table rows, and the two diverge exactly when a SKU is shared. Wireframe: 4 rows, 4 distinct SKUs, so both readings coincide there and the ambiguity had to be pinned here instead. |
+| `{units}` | `Σ(qty)` over the **pickable (inbounded) lines only** — the same set the table renders. It equals the `{items}` figure in `[L-2]` only when every selected order is fully inbounded; see §3.13 invariant (b). |
 
 **Table columns.** `Location · SKU · Product · Qty · Order`.
 
@@ -587,14 +605,14 @@ Every rule carries its rationale and its decision date. Reversals are recorded h
 | **BR-1** | An order appears on this page when **at least one line item is `INBOUNDED`**. The source is the dedicated `readyToBeOutbonded` list API. | Matches the live admin's own inclusion rule and the normative How-to bullet; anything narrower would hide partially-picked orders that still need a box. | 2026-07-21 (captured from live admin) |
 | **BR-2** | Global sort: **regular Ready → MKT → fully-inbounded JIT (always bottom)**. | Route logic, not aesthetics. Warehouse rack stock is one walk; MKT orders are mixed and often partly un-inbounded; JIT goods sit on staging shelves. Interleaving them makes the picker cross the floor repeatedly. | 2026-07-22 |
 | **BR-3** | MKT orders are shown **immediately on import, regardless of stock or inbound status**. Import-time stock validation is **dropped**. | Marketing imports run before goods arrive; blocking the import stranded campaigns. **Reverses** the original planning text ("error if the product is not in the warehouse"), which is struck through in the planning doc. | 2026-07-23 (owner) |
-| **BR-4** | The JIT badge reads exactly **`Fully Inbounded`**. The former wording `JIT (channel) completed` must not appear anywhere. | A route-shaped badge collided visually with the colorless black-bold Sourcing Route labels [G-5]; operators read it as a route, not a state. Resolved item #11 of the 17-item judgment list. | 2026-08-03 (owner) |
+| **BR-4** | The JIT badge reads exactly **`Fully Inbounded`**. The former wording `JIT (channel) completed` must not appear on **any shipping surface** — not in the table, not in a badge, not in the modal, not in printed output. The wireframe's annotation legend is **exempt**: item 7 records the rename by quoting the superseded string, and annotations ship in no admin build (QA-F-09). | A route-shaped badge collided visually with the colorless black-bold Sourcing Route labels [G-5]; operators read it as a route, not a state. Resolved item #11 of the 17-item judgment list. | 2026-08-03 (owner) |
 | **BR-5** | `Total Items` = **sum of unit quantities**, never the SKU count. | The live admin's SKU count displayed `1` for a ×5 order; pickers under-picked. This is the page's highest-value correction. | 2026-07-22 |
 | **BR-6** | Korean product names in *Ready Item Details* and in the M1 picking list, with the **EN brand in bold** [G-6]. English names remain on order-facing pages. | Pickers match Korean front-of-pack text at the shelf; translating at the shelf is the slow step. | 2026-08-03 (owner) |
 | **BR-7** | The picking list is sorted **by location ascending**, so the route is a single pass. | The picker walks with paper, away from the monitor; any other sort order makes them re-cross aisles. | 2026-07-22 |
 | **BR-8** | **Print actions never refresh and always preserve the selection. Bulk Outbound refreshes after completion** — the sole designed exception named in [G-2]. | The morning wave is three actions on **one** selection; clearing it between prints would force re-selection and produce divergent sets. The outbound refresh is correct because the outbounded orders must leave the list. | 2026-07-09 (exception established) · 2026-07-22 (reworked) · 2026-08-03 (reconfirmed) |
 | **BR-9** | The bulk **completion UI has no failure case** — all-success is the normal path. | Deliberate simplification; failure-state UI was removed from the design. | 2026-07-22 |
 | **BR-9b** | Boundary to BR-9: **infrastructure failures surface separately**. Print agent offline, printer unreachable, or an order rejected at revalidation raises a **red toast**, leaves the affected orders in the list, and is always persisted per order. `[PD-34 · OWNER-PENDING]` | Keeps the 2026-07-22 decision intact while refusing to report success for work that did not happen (adjudication C-9). | 2026-08-03 |
-| **BR-10** | Every Print button on this page outputs the correct carrier's label **instantly on click** per [G-4]; **carrier resolution is per order, not per batch**. | The packer's hands are on boxes. The per-order delta matters because one batch legitimately mixes Deleo and YUN. Requires a local print agent (developer handoff note B). | 2026-08-03 (reconfirmed) |
+| **BR-10** | [G-4] governs all three print surfaces on this page unchanged. Page delta: **carrier resolution is per order, never per batch**. | The packer's hands are on boxes. The per-order delta matters because one batch legitimately mixes Deleo and YUN. Requires a local print agent (developer handoff note B). | 2026-08-03 (reconfirmed) |
 | **BR-11** | Bulk Outbound plays the **send sound** [G-3a]. `[PD-2 · OWNER-PENDING]` | Eyes-free confirmation for an operator who fires the batch and turns to the boxes. G-3(a) is written by button class, not by page (adjudication C-5). | 2026-08-03 (owner) |
 | **BR-12** | The Actions column contains **Print only**; the former `View Order` button is removed. Order details open through the Order ID link. | Two navigation affordances on one row is one too many at speed. | 2026-07-22 |
 | **BR-13** | All three bulk actions and both print paths are **double-click safe**: client debounce **and** server idempotency key [G-9]. | The current admin processes double clicks twice (developer handoff note A). This is a bug to fix, never to reproduce. | 2026-07-21 (logged) |
@@ -606,11 +624,11 @@ Every rule carries its rationale and its decision date. Reversals are recorded h
 | **BR-19** | Picking-list rows are **one per order × SKU; no cross-order merge**. | The `Order` column would be ambiguous, and the picker could not split a merged pick between two boxes. | 2026-07-22 (wireframe) |
 | **BR-20** | Mixed-location sort: **all rack-coded locations ascending first, then the `Shelf N` group ascending by N**, ties broken by order id then SKU. | Two physically separate areas, one pass each; the tie-break makes a reprint byte-identical to the original. | 2026-07-22 · 2026-08-03 |
 | **BR-21** | Internal picking artifacts (M1 and the printed picking list) show **which** sample set and **how many** [G-13]. `[PD-36 · OWNER-PENDING]` | The carrier-facing label only appends `(+ sample set)`; without the internal detail the picker cannot pick the sample. Wireframe gap **WF-9**, fix conditional on PD-36 + PD-51. | 2026-08-03 |
-| **BR-22** | Bulk Outbound sets each order's status to **`prepare-shipment`** and each `INBOUNDED` line to `OUTBOUNDED`. | `prepare-shipment` is the single status Closing treats as normal, and the exact state Cancel Outbound rolls back from `[PD-26 · OWNER-PENDING]`. | 2026-07-23 (closing rework) · 2026-08-03 |
+| **BR-22** | Bulk Outbound sets each order's status to **`prepare-shipment`**. The transition is **order-level and writes no line-level status** — the line vocabulary stays exactly `INBOUNDED` / `PENDING`; the shipped lines are recorded inside [DC-9]'s payload (`sku`, `qty`, `location`), not as a new line state. | `prepare-shipment` is the single status Closing treats as normal, and the exact state Cancel Outbound rolls back from `[PD-26 · OWNER-PENDING]`. The **order-level** correction: `view-orders.md` `[L-S1b-21]` and `order-detail.md` `[L-10]` define the line vocabulary exhaustively as `INBOUNDED` / `PENDING`, so an invented `OUTBOUNDED` line value would render unmapped on every Order Detail row of a shipped order, and it would contradict Cancel Outbound's "touches no line-level inbound state" contract (`order-detail.md` BR-19, `view-orders.md` `[L-S3-2]`). | 2026-07-23 (closing rework) · 2026-08-03 · 2026-08-03 (corrected to order-level) |
 | **BR-23** | Every Pick Locations line resolves to a visible locator: rack code, `Shelf N`, amber `Not inbounded`, or an explicit unknown marker. **Never blank.** | A blank cell reads as "nothing to pick" and the unit ships short. | 2026-07-22 · 2026-08-03 |
 | **BR-24** | **One table row per order.** Multi-line orders stack lines inside the cells. | The page is an order-level batch surface; line-level work happens on View Orders and Order Detail. | 2026-07-22 |
 | **BR-25** | **The scanner protocol [G-1] does not apply to this page.** There is no scan input, no focus-retention requirement, and no scan feed. | Stated explicitly so automated QA does not report a missing scanner surface as a defect. | 2026-08-03 |
-| **BR-26** | Single admin role; **no role gating** on any control here, including Bulk Outbound. Every mutating action records the actor [G-15] [G-8]. `[PD-1 · OWNER-PENDING]` | No role model exists in any input document; inventing per-page gates would create eight inconsistent models. | 2026-08-03 |
+| **BR-26** | [G-15] applies unchanged. Page delta: **no control here adds a gate of its own**, Bulk Outbound included. `[PD-1 · OWNER-PENDING]` | No role model exists in any input document; inventing per-page gates would create eight inconsistent models. | 2026-08-03 |
 | **BR-27** | Comments follow [G-7]'s append-only contract; corrections are new comments. `[PD-3 · OWNER-PENDING]` | The comment corpus is an AI-training and audit asset. | 2026-08-03 |
 | **BR-28** | The server **revalidates every order at execute time**; on mismatch it rejects with a red toast and refreshes the affected view. **No partial writes.** `[PD-6 · OWNER-PENDING]` | The list is a snapshot; orders move on other screens while a wave is being prepared. | 2026-08-03 |
 | **BR-29** | Concurrency: optimistic version check → `409` → reload the row and show a non-green toast. Each order outbounds **exactly once** across concurrent batches. `[PD-7 · OWNER-PENDING]` | Last-write-wins would double-decrement stock. | 2026-08-03 |
@@ -618,7 +636,7 @@ Every rule carries its rationale and its decision date. Reversals are recorded h
 | **BR-31** | **Print never gates outbound**, and outbound never requires a prior print. | Blocking goods movement on a printer is a stop-the-line risk (same doctrine as `[PD-19 · OWNER-PENDING]` on View Orders). | 2026-08-03 |
 | **BR-32** | **Reprinting is always allowed**, from the row button or Bulk Print Labels, and every print is recorded with a reprint sequence. | Damaged and mis-stuck labels are normal operations, not exceptions. | 2026-08-03 |
 | **BR-33** | A reprint does **not** auto-post a comment. Print events are event-only. | The wireframe's `Reprinted the shipping label` is a manual operator note; auto-comments would flood the corpus that [G-7] treats as a training asset. | 2026-08-03 |
-| **BR-34** | **[G-2] confirmation surfaces on this page are enumerated, not inferred.** Actions whose result is *not* visible in place — a label leaving a printer the operator is not facing, a comment persisting server-side, a batch completing, a read-state change spanning rows — get a toast. Actions whose result *is* immediately and unambiguously visible in place — the star glyph filling, a panel expanding, a modal opening, a checkbox toggling, `Cancel` — are confirmed by that in-place change and do not additionally toast. Full table below. | [G-2] (owner emphasis) says every confirming action toasts; adjudication C-6 says wireframe omissions are gaps, not decisions. Two omissions are therefore gaps (`[RTO-WFX-6]`, `[RTO-WFX-7]`) and the rest are in-place confirmations. If the owner reads [G-2] literally, adding a toast to `★` and to modal-open is one line each and changes nothing else. | 2026-08-03 |
+| **BR-34** | **[G-2] confirmation surfaces on this page are enumerated, not inferred.** Actions whose result is *not* visible in place — a label leaving a printer the operator is not facing, a comment persisting server-side, a batch completing, a read-state change spanning rows — get a toast. Actions whose result *is* immediately and unambiguously visible in place — the star glyph filling, a panel expanding, a modal opening, a checkbox toggling, `Cancel` — are confirmed by that in-place change and do not additionally toast. Full table below. **Shared boundary with `view-orders.md` BR-51**, stated so the corpus teaches one rule: a **state-changing** action always confirms, and its confirmation may render *in place* (View Orders' `✓ Saved` chip; this page's filling `★`) instead of in the top-right slot — while a pure **view-state** change (panel expand, tab switch, checkbox, modal open, `Cancel`) is not a confirming action at all and has nothing to confirm. That sentence belongs in [G-2] itself; until it lands there, both pages carry it. | [G-2] (owner emphasis) says every confirming action toasts; adjudication C-6 says wireframe omissions are gaps, not decisions. Two omissions are therefore gaps (`[RTO-WFX-6]`, `[RTO-WFX-7]`) and the rest are in-place confirmations. If the owner reads [G-2] literally, adding a toast to `★` and to modal-open is one line each and changes nothing else. | 2026-08-03 |
 | **BR-35** | Toast counts are **never pluralised**: the literal template is `— {N} orders` for every `{N}` including `0` and `1`. `Found {n} order(s)` keeps its own verbatim form and the two must not be harmonised. | Both strings are captured artifacts; "fixing" either breaks byte-level QA against the live admin. | 2026-08-03 |
 | **BR-36** | **Classification precedence:** an order that is both MKT-imported and JIT-sourced renders and sorts as **MKT**; its locators still show `Shelf N`. | The MKT origin governs settlement separation, which is the reason the split exists; the JIT route only governs where the goods sit. | 2026-08-03 |
 | **BR-37** | Comment bodies are **rendered as text, never as markup**, in the inline panel, the hub list, and search highlighting. | The corpus is operator-authored free text; an unescaped body is a stored-XSS vector on every screen that carries the hub [G-7]. | 2026-08-03 |
@@ -628,8 +646,8 @@ Every rule carries its rationale and its decision date. Reversals are recorded h
 | Action | Confirmation | Toast copy |
 |---|---|---|
 | `[L-M1]` `🖨 Print` (picking list) | Toast | `✓ Print Pick Locations complete — {N} orders` |
-| `[L-3]` Bulk Print Labels | Toast | `✓ Bulk Print Labels complete — {N} orders` |
-| `[L-4]` Bulk Outbound | Toast **+ send sound** | `✓ Bulk Outbound complete — {N} orders` (+ subtext) |
+| `[L-3]` Bulk Print Labels | Toast | `✓ Bulk Print Labels complete — {N} orders` (+ reason-aware refusal subtext, §3.3) |
+| `[L-4]` Bulk Outbound | Toast **+ send sound** | `✓ Bulk Outbound complete — {N} orders` (+ reason-aware exclusion subtext, §3.4 step 6) |
 | `[L-F6]` row `🖨` Print | Toast **(spec-defined)** | `✓ Label printed — order {orderId}` |
 | `[L-9]` comment `Post` | Toast **(spec-defined)** + in-place append | `✓ Comment posted` |
 | `[L-10]` `Mark all read` | Toast **(spec-defined)** + badge clears | `✓ All mentions marked as read` |
@@ -651,12 +669,12 @@ Recorded so nobody re-implements them from stale documents or leftover CSS. Each
 | **Ready Items column** | Any second count column beside `Total Items`; any use of the surviving `.cb-ready` green badge class `[RTO-WFX-4]` | 2026-07-22 |
 | **`View Order` button in the Actions column** | Any second navigation button on the row; the Actions column is Print only | 2026-07-22 |
 | **Failure-state UI in the bulk completion notice** | Any red/partial variant of the completion toast; failures surface as a *separate* toast [BR-9b] | 2026-07-22 |
-| **Badge wording `JIT (channel) completed`** | Anywhere. The badge is `Fully Inbounded` | 2026-08-03 |
+| **Badge wording `JIT (channel) completed`** | Anywhere on the **shipping surface** — table, badges, modal, printed output. The badge is `Fully Inbounded`. The wireframe's annotation legend is exempt: its dated changelog entry must quote the superseded string to record the rename, and annotations ship in no admin build (QA-F-09, QA-L7-02) | 2026-08-03 |
 | **Import-time stock-error validation for MKT orders** | Any block, warning, or hidden state for MKT orders whose products are not in stock | 2026-07-23 |
-| **Carrier column / automatic carrier recording** | Any Carrier field or column on this page. Automatic carrier recording is **not supported** anywhere in WMS 2.0 (adjudication C-1, `[PD-9 · OWNER-PENDING]`) | 2026-08-03 |
+| **Inbound Carrier column / automatic carrier recording** | Any **inbound** Carrier field or column on this page. Automatic capture of the *receiving* carrier is **not supported** anywhere in WMS 2.0 (adjudication C-1, `[PD-9 · OWNER-PENDING]`). **Scope note:** the order's **shipping** carrier is a different field entirely — it is resolved per order for label printing [BR-10] §6.4, stored on [DC-7], and its absence is a defined refusal path [E-61] [DC-28]. Do not delete that | 2026-08-03 |
 | **Photo capture** | No photo column, no upload affordance on this page. Photo capture is **permanently removed** program-wide, not deferred `[PD-63 · OWNER-PENDING]` | 2026-08-03 |
 | **Sourcing-route badge column** | No SMART BUY / JIT (channel) / WHOLESALE / PARTNERSHIP / OTHER label on this page; those render on View Orders, Inventory, and Order Detail [G-5] | 2026-08-03 (clarified) |
-| **Order search bar, pagination controls, per-PIC row grouping, Bulk Hold, a scan input, a resolved log** | None of these ever existed on this page and must not be added by analogy from other screens — they were removed from `tracking-missing`, `order-management`, and `closing` respectively, and their absence here is deliberate | n/a (see §10, 2026-07-23 row) |
+| **Order search bar, pagination controls, per-PIC row grouping, Bulk Hold, a scan input, a resolved log** | None of these ever existed on this page and must not be added by analogy from another screen. Per-feature attribution, since "respectively" cannot carry six features across three pages: **per-PIC row grouping** and the **resolved log** were removed from `tracking-missing` (2026-07-23, `_wireframe-fixes.md` WF-10); **Bulk Hold** was removed from `order-management` (2026-08-03, its BR-10). The remaining three — **order search bar**, **pagination controls**, **scan input** — have no removal origin at all: they never existed here and are named only so nobody imports them from a screen that does have them (`view-orders` and `closing` are the scan surfaces [G-1]) | n/a (see §10, 2026-07-23 row) |
 
 ---
 
@@ -673,14 +691,14 @@ Recorded so nobody re-implements them from stale documents or leftover CSS. Each
 | ID | Event name | Actor | Entity | Payload — old → new / quantities | Surfaced in UI? |
 |---|---|---|---|---|---|
 | **DC-1** | `comment.posted` | operator | order | `text` (stored raw, rendered escaped [BR-37]), `mentions[]` (resolved user ids), `source` = `rto_inline_panel` \| `rto_comments_hub`, `parent_entity` = order no. Append-only — no update/delete events exist for comments `[PD-3 · OWNER-PENDING]` | Yes — inline panel `[L-9]` + toast, hub `[L-10]`, Order Detail comment history |
-| **DC-2** | `comment.mention_notified` | system | comment | `channel` = `#fulfillment-admin-comments` (`C0BMGEWM5QA`), `mentioned_users[]` (one message names all [E-75]), `slack_ts`, `delivery_result` ∈ {`delivered`,`failed`,`retrying`}, `attempt_no` old → new, `deep_link`. Failure never rolls back DC-1 `[PD-4 · OWNER-PENDING]` | No (silent) — failures visible only in admin logs |
+| **DC-2** | `comment.mention_notified` | system | comment | `channel` = `#fulfillment-admin-comments` (`C0BMGEWM5QA`), `mentioned_user` — **one event and one Slack message per distinct resolved mention**; the same user named twice in one body yields one [E-75], matching `view-orders.md` `DC-20` and `order-detail.md` `DC-27` — `slack_ts`, `delivery_result` ∈ {`delivered`,`failed`,`retrying`}, `attempt_no` old → new, `deep_link`. Failure never rolls back DC-1 `[PD-4 · OWNER-PENDING]` | No (silent) — failures visible only in admin logs |
 | **DC-3** | `comment.starred` / `comment.unstarred` | operator | comment | `saved` false → true / true → false, `starred_by` | Yes — `★ Saved` tab, row star glyph (in-place, no toast [BR-34]) |
 | **DC-4** | `comment.read` / `comment.mark_all_read` | operator | comment(s) | `unread` → `read`; for mark-all: the full list of comment ids transitioned, `unread_count` old → new | Yes — hub badge, per-row `💬` badge, toast on mark-all |
 | **DC-5** | `pickinglist.printed` | operator | batch | `batch_id`, `order_ids[]`, **full line snapshot** `[{location, sku, brand_en, product_name_kr, qty, order_id, sample_set_id?, sample_qty?}]`, `totals {orders, skus, units}`, `sort` = `location_asc`, `printer_target`. The snapshot is the reproducible copy of the paper the picker walked with and is immutable against later renames [E-67]. Sample lines are included once `[PD-36 · OWNER-PENDING]` lands | Toast `[L-6]`; snapshot itself silent |
 | **DC-6** | `label.batch_printed` | operator | batch | `batch_id`, `order_ids[]`, `requested_count`, `dispatched_count`, `excluded_order_ids[]` with reason (`no_carrier` [E-61]), per-order job refs → DC-7 | Toast `[L-6]` |
 | **DC-7** | `label.printed` | operator | order | `carrier` (Deleo \| YUN \| …), `label_id`, `source` ∈ {`row_button`, `bulk`}, `reprint_seq` old → new (0 → 1 on first print, n → n+1 on reprint), `job_id` → DC-12 | Toast (row print, `[L-F6]`); reprint count silent |
 | **DC-8** | `outbound.batch_executed` | operator | batch | `batch_id`, `order_ids_requested[]`, `order_ids_eligible[]`, `order_ids_excluded[]`, `started_at` → `finished_at`, `idempotency_key`, per-order result refs → DC-16 | Progress `[L-5]` + toast `[L-6]` + sound `[G-3a]` |
-| **DC-9** | `order.outbounded` *(canonical)* | operator | order | per line: `line_status` `INBOUNDED` → `OUTBOUNDED`, `{sku, qty, location}`; `shelf` old → `null` (auto-clear on outbound) `[PD-18 · OWNER-PENDING]` | Yes — the row leaves the list after the refresh |
+| **DC-9** | `order.outbounded` *(canonical)* | operator | order | order `status` old → `prepare-shipment`; per shipped line the detail `{sku, qty, location}` — **no line-status field, because outbound writes no line-level status** [BR-22]; `shelf` old → `null` (auto-clear on outbound) `[PD-18 · OWNER-PENDING]` | Yes — the row leaves the list after the refresh |
 | **DC-10** | `inventory.stock_decremented` | system | SKU @ location | `on_hand_qty` old → new, `delta` (negative), `ref` = DC-9 | Silent here; feeds Inventory → Stock History → Outbound tab |
 | **DC-11** | `idempotency.duplicate_rejected` | operator | action + key | `action` ∈ {`pickinglist.print`,`label.print`,`outbound.bulk`}, `idempotency_key`, `original_event_id`, `rejected_at`. Persisted even though nothing else happens [G-9] | Silent (dev-chosen surfacing) |
 | **DC-12** | `print.job_result` *(canonical)* | system | print job | `job_id`, `agent_id`, `printer_id`, `state` `queued` → `sent` → `done` \| `failed`, `failure_reason` (agent unreachable / printer offline / timeout), `artifact_type` ∈ {`shipping_label`,`picking_list`}, `ref` = DC-5/6/7. `done` means the agent accepted and released the job — it cannot prove paper came out [E-78] | Red toast on failure `[G-2]`; lifecycle silent |
@@ -692,7 +710,7 @@ Recorded so nobody re-implements them from stale documents or leftover CSS. Each
 | **DC-18** | *(rule, not an event)* | — | — | The **resolved selection set** is embedded in the payload of DC-5, DC-6, and DC-8. Individual checkbox toggles are never logged `[NE-1]` | — |
 | **DC-19** | `order.status_changed` *(canonical)* | operator | order | `status` old → new (`processing` \| `pending` → `prepare-shipment`), `reason` = `bulk_outbound`, `batch_id`. Emitted alongside DC-9, not instead of it — the canonical name is required wherever a status moves [BR-22] | Silent here; visible on Order Detail actor log |
 | **DC-20** | `inventory.reservation_consumed` | system | reservation | `reserved_qty` old → new (released against the shipment rather than back to free stock), `order_id`, `sku`, `location`, `ref` = DC-9. Distinct from DC-10: one moves on-hand, the other closes the reservation | Silent; feeds Inventory Reserved views |
-| **DC-21** | `outbound.order_excluded` | system | order | `batch_id`, `order_id`, `exclusion_reason` ∈ {`lines_not_inbounded`, `status_forbids_outbound`, `already_outbounded`, `left_ready_pool`, `empty_order`}, `non_inbounded_line_count`. Feeds the toast subtext `{n} excluded — items not inbounded` `[PD-35 · OWNER-PENDING]` | Toast subtext only |
+| **DC-21** | `outbound.order_excluded` | system | order | `batch_id`, `order_id`, `exclusion_reason` ∈ {`lines_not_inbounded`, `status_forbids_outbound`, `already_outbounded`, `left_ready_pool`, `empty_order`}, `non_inbounded_line_count`. Feeds the **reason-aware** toast subtext (§3.4 step 6): every enum value has its own phrase, and the subtext may never report one reason for another `[PD-35 · OWNER-PENDING]` | Toast subtext only |
 | **DC-22** | `outbound.rejected_stale` | system | order | `batch_id`, `order_id`, `expected_version` → `actual_version`, `changed_fields[]`, `rejected_at`. No partial write occurred `[PD-6 · OWNER-PENDING]` | Red toast; detail silent |
 | **DC-23** | `outbound.batch_conflict` | system | batch | `batch_id`, `conflicting_batch_id`, `overlapping_order_ids[]`, `winner_batch_id`. Guarantees the audit trail for "who shipped it" when two operators overlap `[PD-7 · OWNER-PENDING]` | Non-green toast |
 | **DC-24** | `print.batch_infrastructure_failure` | system | batch | `batch_id`, `artifact_type`, `agent_id`, `failed_job_count`, `failure_class`. The batch-level companion to DC-12 that drives the **separate red toast** while the completion toast stays all-success `[PD-34 · OWNER-PENDING]` [BR-9b] | Red toast |
@@ -743,9 +761,9 @@ Exactly **one** Slack route originates on this page. Payload fields are verbatim
 |---|---|---|---|
 | Comment `@mention` posted from the inline row panel `[L-9]` or the Comments hub `[L-10]` | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | order no., comment text, time, author, @mentioned user, deep link to the order | the mentioned user — the message **body** @mentions them, so Slack raises a personal notification while the channel doubles as a team-visible archive [G-7] |
 
-**Delivery contract.** The comment commits first; Slack delivery is a side effect that is retried and persisted [DC-2] and never blocks the UI or rolls anything back `[PD-4 · OWNER-PENDING]` [BR-30]. Retry policy is a developer decision [D-12]. Multiple mentions in one comment produce one message [E-75].
+**Delivery contract.** The comment commits first; Slack delivery is a side effect that is retried and persisted [DC-2] and never blocks the UI or rolls anything back `[PD-4 · OWNER-PENDING]` [BR-30]. Retry policy is a developer decision [D-12]. **Fan-out: one message per distinct resolved mention** — three different people named in one comment produce three messages; the same person named twice produces one [E-75] [DC-2].
 
-**Self-mention.** When the author @mentions themselves the Slack notification is suppressed, consistent with the no-self-notification principle established for match confirmation `[PD-16 · OWNER-PENDING]`. The comment itself still persists.
+**Self-mention.** Whether an operator @mentioning **themselves** suppresses the Slack notification is **not decided by any register entry**: `[PD-16]`, previously cited here, decides only that the *system* match-confirm auto-comment suppresses the mention when `resolver == registrant`, and its scope line names View Orders / Tracking Missing / Order Detail — not this page, and not operator free text. That citation is withdrawn (2026-08-03). The behavior is therefore a **developer decision [D-18]** bounded by [BR-30]: the comment persists either way and delivery never blocks the post.
 
 **Explicit non-routes from this page** — stated so nobody wires them by analogy:
 
@@ -789,7 +807,7 @@ Future routes are decided per feature at development time (`_slack-routing.md` l
 
 **This page has no direct sheet handoff.** Stated explicitly because two adjacent screens do:
 
-- The **Daily Shipping Status** sheet is updated by **Closing** on confirmation, not by this page; its column mapping is an open question owned by the closing spec `[PD-71 · OWNER-PENDING]`.
+- The **Daily Shipping Status** sheet is updated by **Closing** on confirmation, not by this page; its column mapping is an open question owned by the closing spec `[PD-71 · NO-DEFAULT]` — the register marks it *not decided*, so it carries no provisional behavior and must not be tagged `OWNER-PENDING`.
 - The **Procurement Hub** sheet is fed by **Inbound Request**, not by this page.
 
 Outbound events from this page reach BI only through the persisted event stream (§5.3), never through a spreadsheet written from the browser.
@@ -817,7 +835,7 @@ Outbound events from this page reach BI only through the persisted event stream 
 
 ### 6.5 Audio
 
-Web Audio synthesis only, no external audio files [G-3]. The send sound fires on `[L-4]` Bulk Outbound at click time `[PD-2 · OWNER-PENDING]`. **No TTS on this page** — the spoken `Please check this order` alert belongs to Closing [G-3b]. **No warning tone on this page** — that is View Orders State 6 [G-3c]. Audio failure is swallowed and never affects the transaction [E-24] [E-49] `[NE-9]`. Exactly one control on this page is sound-bound; QA-L4-04 asserts it.
+The send sound fires on `[L-4]` Bulk Outbound at click time [G-3a] `[PD-2 · OWNER-PENDING]`. **No TTS and no warning tone on this page** [G-3b] [G-3c] — the spoken `Please check this order` alert belongs to Closing and the wrong-product warning tone to View Orders State 6. Audio failure is swallowed and never affects the transaction [E-24] [E-49] `[NE-9]`. Exactly one control on this page is sound-bound; QA-L4-04 asserts it.
 
 ---
 
@@ -852,7 +870,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 | **E-10** | **Network failure mid-batch** (request sent, response lost). | A retry with the same idempotency key must not double-outbound or double-print. The UI must show an **unresolved** state, never a false success toast. If the batch is genuinely incomplete, `outbound.batch_aborted` [DC-27] records the last completed sequence so the next load can reconcile. |
 | **E-11** | **Print agent offline / unreachable** [G-4]. | No silent success, no browser-dialog fallback, no queueing that looks like success. Red toast [G-2] names the printer or agent; the job result is persisted [DC-12] and the batch-level failure as [DC-24]. Affected orders remain in the list `[PD-34 · OWNER-PENDING]`. |
 | **E-12** | **Print agent fails mid-batch** (labels 1–2 printed, 3 fails). | Partial physical output is real and must not be denied. The completion toast stays all-success [BR-9]; a **separate** red toast reports the failed count; per-order job results are persisted so the operator can reprint exactly the failed orders from the row buttons `[PD-34 · OWNER-PENDING]`. |
-| **E-13** | **Order with mixed line statuses** (some `INBOUNDED`, some not). | It appears on the page (≥1 rule, [BR-1]). `Total Items` counts **all** units `[PD-37 · OWNER-PENDING]`; the picking list contains **only** the inbounded lines; Bulk Outbound **excludes the order** `[PD-35 · OWNER-PENDING]`. Three different denominators, each stated. |
+| **E-13** | **Order with mixed line statuses** (some `INBOUNDED`, some not). | It appears on the page (≥1 rule, [BR-1]). `Total Items` counts **all** units `[PD-37 · OWNER-PENDING]`; the picking list contains **only** the inbounded lines; Bulk Outbound **excludes the order** `[PD-35 · OWNER-PENDING]`. Three different denominators, each stated. **Consequence on the header figures:** with such an order selected, the M1 `{units}` total is **lower** than the `[L-2]` `{items}` figure by exactly that order's non-inbounded unit count — §3.13 invariant (b). That gap is the correct output, not a reconciliation failure. |
 | **E-19** | **Second bulk action started while the progress bar is running.** | All three bulk buttons, the M1 `🖨 Print`, `Refresh`, and the view tabs are locked for the duration [BR-18]. **The wireframe does not lock them** — `[ADMIN]`-only assertion. |
 | **E-21** | **MKT order with ZERO inbounded lines selected for Bulk Outbound.** | Auto-excluded (nothing to outbound); counted in the toast subtext; persisted with `exclusion_reason = lines_not_inbounded` [DC-21]. It is **not** an error and does not abort the batch. |
 | **E-22** | **Large selection (100+ orders).** | The batch is chunked; progress remains monotonic 0→100 across chunks; there is no pagination on this page, so the whole ready pool can legitimately be selected. Chunk size and progress granularity are developer decisions [D-2]. |
@@ -862,7 +880,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 | **E-34** | **An order already in `prepare-shipment` / `shipped` is still listed** (outbounded elsewhere since load). | Auto-excluded with `already_outbounded`; the row disappears on the next load [DC-26]. Never outbounded twice. |
 | **E-44** | **Browser tab left open overnight**; the list is a day stale. | Every order fails revalidation. The batch commits nothing, a single red toast reports the count, and the view refreshes `[PD-6 · OWNER-PENDING]`. The operator must not be able to ship yesterday's snapshot. |
 | **E-49** | **First user gesture of the session is the Bulk Outbound click itself.** | The `AudioContext` is created inside the gesture, so the sound plays. If the context is suspended or the device is muted, the outbound proceeds identically and silently [E-24] `[NE-9]`. |
-| **E-53** | **Every selected order is excluded** (e.g. all three are MKT rows with non-inbounded lines). | The green completion toast still renders as `✓ Bulk Outbound complete — 0 orders` with the subtext `{n} excluded — items not inbounded`. It is not suppressed and not recoloured: nothing shipped, nothing was written, and the operator is told exactly that. The page still refreshes [BR-8]. |
+| **E-53** | **Every selected order is excluded** (e.g. all three are MKT rows with non-inbounded lines). | The green completion toast still renders as `✓ Bulk Outbound complete — 0 orders` with the reason-aware exclusion subtext (§3.4 step 6) — here, one shared reason, so `3 excluded — items not inbounded`; had one of the three been on hold instead, `3 excluded — 2 items not inbounded · 1 status blocks outbound`. It is not suppressed and not recoloured: nothing shipped, nothing was written, and the operator is told exactly that. The page still refreshes [BR-8]. |
 | **E-54** | **`{N}` is 1, or 0, in a completion toast.** | The template is not pluralised: `✓ Bulk Outbound complete — 1 orders`. `Found {n} order(s)` keeps its own verbatim form [BR-35]. Neither string may be "corrected" — both are captured artifacts and both are asserted byte-for-byte by QA. |
 | **E-55** | **Session expires (401) mid-batch.** | The server rejects the remaining work rather than attributing it to a stale identity [L-F8]; committed orders stay committed; `outbound.batch_aborted` [DC-27] records `cause = session_expired` with the committed and not-attempted id lists; the UI surfaces a red toast and sends the operator to re-authenticate. No silent partial success. |
 | **E-56** | **Browser is offline when a bulk button is clicked.** | The request never leaves; the UI shows a red toast and **no** progress run and **no** completion toast. The send sound may still have played (it fires on click) — that is acceptable and is exactly why the sound is not a success signal, only a receipt-of-click signal [G-3a]. |
@@ -870,7 +888,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 | **E-58** | **Browser Back / bfcache after the Bulk Outbound refresh.** | The restored page must not present already-shipped orders as selectable. The list source is re-queried on `pageshow` when the page is restored from bfcache, or the page is marked no-store. Shipping the same wave twice because the operator pressed Back is not an acceptable failure mode. |
 | **E-59** | **A selected order was merged into another on Order Management** between load and execute. | Rejected as stale [DC-22]; `order.left_ready_pool` records `reason = merged` [DC-26]. The surviving order is not silently substituted — the operator re-selects it `[PD-59 · OWNER-PENDING]` context. |
 | **E-60** | **An order with zero line items appears in the pool** (upstream data defect). | It renders with `Total Items 0` and an empty item cell, and is auto-excluded from Bulk Outbound with `empty_order` [DC-21]. It is never hidden — a hidden broken order is an order nobody fixes. |
-| **E-61** | **A selected order has no carrier assigned** ("Not connected — contact the Fulfillment Center"). | Bulk Print Labels excludes it and reports it in the toast subtext; the row `🖨` refuses with a red toast; both persist `label.print_refused` [DC-28]. Bulk Outbound is **not** blocked by the missing carrier — the goods can leave the building before the carrier record resolves. **The unblocking path is an open question** `[PD-55 · NO-DEFAULT]` (§9.2 OQ-2); this page invents no affordance. |
+| **E-61** | **A selected order has no carrier assigned** ("Not connected — contact the Fulfillment Center"). | Bulk Print Labels excludes it and reports it in the toast subtext with its own reason phrase — one such order gives `1 excluded — no carrier assigned` (§3.3); the row `🖨` refuses with a red toast; both persist `label.print_refused` [DC-28]. Bulk Outbound is **not** blocked by the missing carrier — the goods can leave the building before the carrier record resolves. **The unblocking path is an open question** `[PD-55 · NO-DEFAULT]` (§9.2 OQ-2); this page invents no affordance. |
 | **E-62** | **Keyboard activation.** A bulk button focused and activated with Enter or Space; Enter held down producing key auto-repeat. | Identical to a click, including debounce and the lockout: exactly one batch. Auto-repeat must not queue batches [E-9] [BR-18]. |
 | **E-63** | **Client clock skew** — the operator's machine is minutes off. | Every persisted timestamp is the **server** clock (§5 envelope). Client time is never used for event ordering, dwell-time arithmetic, or the closing-day boundary. |
 
@@ -887,7 +905,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 | **E-36** | **A location code changed in Inventory between list load and M1 print.** | Same as E-30: revalidate and re-render. The snapshot always records the location that was actually printed. |
 | **E-40** | **Picking list printed, then the selection is changed, then Bulk Print Labels.** | Labels are produced for the **current** selection, not for the printed snapshot. The two artifacts are independent [BR-18]; there is no sequence gate `[PD-39 · OWNER-PENDING]`. |
 | **E-41** | **JIT order staged but with no shelf recorded.** | Pick Locations renders the unknown marker rather than an empty cell [BR-23]; the M1 row sorts into the `Shelf` group at the end with the marker visible. |
-| **E-46** | **A ready line has quantity 0 or a negative quantity** (upstream data defect). | The row is rendered with the raw value and flagged visually rather than hidden, and it does not corrupt the unit totals arithmetic (`Total Items`, `[L-2]` item count, M1 `units total` must still reconcile). A hidden bad row is a silent short-ship. |
+| **E-46** | **A ready line has quantity 0 or a negative quantity** (upstream data defect). | The row is rendered with the raw value and flagged visually rather than hidden, and it does not corrupt the unit totals arithmetic: `Σ(Total Items)` must still equal the `[L-2]` item count exactly (§3.13 invariant (a)), and the M1 `units total` must still equal the pickable-unit sum with its usual non-inbounded offset (invariant (b)). A hidden bad row is a silent short-ship. |
 | **E-64** | **Every selected order is JIT**, so every picking-list row is in the `Shelf N` group. | The list is still produced and still deterministic: group 1 is empty, group 2 sorts numerically by `N`, ties by order id then SKU [BR-20]. The note block's illustrative example (`A-02-13 → B-01-07 → Shelf 3`) is fixed copy and does not change with the data. |
 | **E-65** | **Two different orders need the same location code.** | Both rows render; the tie is broken by order id ascending, then SKU ascending, so **reprinting the same selection produces a byte-identical list** [BR-20]. An unstable sort would make a reprint disagree with the paper already in the picker's hand. |
 | **E-66** | **A sample set is assigned whose sample SKU has no registered location.** | The sample line still appears on the picking list with the unknown marker, once `[PD-36 · OWNER-PENDING]` lands. Dropping it would silently un-promise something the carrier-facing label already promised [G-13]. |
@@ -921,7 +939,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 | **E-43** | **Another operator posts a comment on a row while it is being outbounded.** | The comment persists against the order regardless of the order's status; the outbound is unaffected. Comments are never blocked by order state [BR-27]. |
 | **E-45** | **Comment posted from the hub for an order also open in an inline panel.** | One entity, two views. Both surfaces render the new comment on their next refresh; no duplicate is created. |
 | **E-74** | **Comment text contains HTML or a script tag.** | Stored raw, rendered **escaped** everywhere it appears — inline panel, hub list, and search highlighting [BR-37]. The highlight implementation must escape before inserting `<mark>`, never after. |
-| **E-75** | **One comment mentions three people.** | Exactly **one** Slack message is sent, naming all three in the body [DC-2 `mentioned_users[]`]. Three separate messages would triple-notify a channel that doubles as an archive [G-7]. |
+| **E-75** | **One comment mentions three people; and one comment names the same person twice.** | Three distinct mentions ⇒ **three** Slack messages and three [DC-2] events, one per distinct resolved user — the [G-7] contract, whose payload names a single mentioned user, and the shape `view-orders.md` `DC-20` and `order-detail.md` §6.1 implement. The same user named twice in one body ⇒ **one** message and one event; duplicates collapse on the resolved user, never on the comment. (This spec previously said one message named everyone; corrected 2026-08-03 §10.) |
 | **E-76** | **The Comments hub is open when the Bulk Outbound refresh fires.** | The hub closes with the reload. Unread and saved state are server-held, so nothing is lost; the operator reopens it. |
 | **E-77** | **A comment is posted on an order that has already left the ready pool.** | Accepted and persisted against the order. The comment corpus is order-scoped, not list-scoped; refusing it would lose exactly the post-hoc note ("shipped short, see photo") that disputes depend on. |
 
@@ -947,7 +965,7 @@ Web Audio synthesis only, no external audio files [G-3]. The send sound fires on
 **Target for `[ADMIN]` scenarios:** the real admin once built. These assert server behavior, persistence, concurrency, physical print output, Slack delivery, and the dynamic selection model that the wireframe does not implement.
 
 **Tagging.** Every scenario is tagged `[WF]` or `[ADMIN]` (no other tiers, per `_review.md` §3 convention 4). `[ADMIN]` scenarios are deferred rows, not failures.
-**Negatives.** Scenarios that assert something must *not* happen, must be blocked, or must be absent are marked **· negative**.
+**Negatives.** Scenarios that assert something must *not* happen, must be blocked, or must be absent are marked **· negative**. The mark may sit in the header tag (`[WF] · negative`) **or** appear as an inline `**· negative:**` clause inside the body; **either form makes the whole scenario a negative** for the count table below. Counting header tags alone undercounts by 2 and is wrong.
 
 **Preconditions unless stated otherwise.** Fresh page load, annotations visible, default view `All`, rows `422221` / `422176` / `422165` checked and `MKT-40233` / `422164` unchecked, no modal open, no comment panel open, hub closed. **Reset between scenarios by reloading the page** — the wireframe holds no persistent state.
 
@@ -960,7 +978,14 @@ Never assert `getComputedStyle(...).width`, which returns pixels.
 
 **Reading the M1 header correctly.** `#m-pick .modal > header` contains the title text **and** the `✕` button, so `textContent` returns `…units total)✕`. Assert on the header's **first child text node**, or on `textContent` with a trailing `✕` stripped.
 
-**Known wireframe artifacts QA must not file as bugs** (§2.4): inert checkboxes / `Refresh` / `Post` / `Mark all read` / `.printbtn`; no button lockout during a batch; no actual page reload after Bulk Outbound; `#crow4` belongs to the JIT row and `#crow5` to the MKT row (ids out of document order); the seeded comment carries a trailing period inline and none in the hub; the browser `<title>` and `wf-bar` heading spell `Outbounded` correctly while the admin surface preserves `Outbonded`.
+**Reading a running-state label correctly (applies to every "during the run" assertion).** The demo script sets `#pfill`'s inline width **synchronously** on click but rewrites `#pbarLabel` only on the first `setInterval` tick, 250 ms later. For the opening ~250 ms of a run the label therefore still shows the **previous** action's copy — on a fresh load, the idle demo copy — including that action's mode string. **Every "during the run" assertion below is valid only from the first tick onward: sample after `#pfill.style.width` has reached `20%` or later, never before.** This is a wireframe demo artifact (registered `[RTO-WFX-9]`), not a defect to file, and not a licence to weaken the assertion — from the first tick on, the label is exact.
+
+**String assertions: equality vs containment.** The two readings are never interchangeable, so each scenario says which it uses:
+- *"element E has textContent `X`"* / *"equals `X`"* ⇒ **strict equality** on that one element's `textContent`.
+- *"contains no occurrence of `X` in S"* / *"contains `X`"* ⇒ **substring scan** over the named subtree `S`. A containment assertion always names its subtree; a bare `document.body` scan is used only where the scenario says `document.body`.
+When a scenario asserts the absence of a string, the subtree it names is the whole scope of the claim — the annotation layer (`.legend`, `.dot`, `.wf-bar`) is **outside** every product-string claim unless explicitly included, because it ships in no admin build (QA-F-09).
+
+**Known wireframe artifacts QA must not file as bugs** (§2.4): inert checkboxes / `Refresh` / `Post` / `Mark all read` / `.printbtn`; no button lockout during a batch; no actual page reload after Bulk Outbound; `#crow4` belongs to the JIT row and `#crow5` to the MKT row (ids out of document order); the seeded comment carries a trailing period inline and none in the hub; the browser `<title>` and `wf-bar` heading spell `Outbounded` correctly while the admin surface preserves `Outbonded`; **legend item 7 quotes the superseded badge wording `JIT (channel) completed` inside its dated rename changelog** — a changelog cannot record a rename without naming the old string, and the legend is annotation chrome ([BR-4] is scoped to the shipping surface); **the first ~250 ms of every progress run still carries the previous action's label copy** (`[RTO-WFX-9]`, see the reading rule above).
 
 **Scenario counts** (coverage map in §8.19):
 
@@ -968,10 +993,10 @@ Never assert `getComputedStyle(...).width`, which returns pixels.
 |---|---|---|---|---|
 | QA-L1 selection & counts | 9 | 4 | 5 | 4 |
 | QA-L2 Print Pick Locations entry | 5 | 3 | 2 | 3 |
-| QA-M1 picking-list modal | 15 | 12 | 3 | 6 |
+| QA-M1 picking-list modal | 15 | 12 | 3 | 7 |
 | QA-L3 Bulk Print Labels | 8 | 4 | 4 | 5 |
-| QA-L4 Bulk Outbound | 13 | 5 | 8 | 6 |
-| QA-L5 progress bar | 7 | 5 | 2 | 4 |
+| QA-L4 Bulk Outbound | 13 | 5 | 8 | 7 |
+| QA-L5 progress bar | 7 | 5 | 2 | 5 |
 | QA-L6 completion toast | 8 | 5 | 3 | 5 |
 | QA-L7 JIT row | 5 | 3 | 2 | 2 |
 | QA-L8 MKT row | 7 | 4 | 3 | 3 |
@@ -981,12 +1006,12 @@ Never assert `getComputedStyle(...).width`, which returns pixels.
 | QA-L12 Pick Locations column | 6 | 4 | 2 | 3 |
 | QA-L13 Total Items | 5 | 3 | 2 | 2 |
 | QA-L14 view tabs | 8 | 7 | 1 | 3 |
-| QA-F page furniture | 13 | 10 | 3 | 5 |
+| QA-F page furniture | 13 | 10 | 3 | 7 |
 | QA-E edge cases | 39 | 6 | 33 | 29 |
 | QA-DC persistence assertions | 28 | 0 | 28 | 6 |
-| **Total** | **201** | **93** | **108** | **97** |
+| **Total** | **201** | **93** | **108** | **102** |
 
-Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
+Negative scenarios: **102 of 201 = 50.7 %** (requirement: ≥ 25 %). Counted under the rule stated above — a header tag **or** an inline `**· negative:**` clause makes the scenario a negative. Recomputed for v1.2: the v1.1 table counted header tags only and undercounted QA-M1, QA-F and QA-DC; v1.2 also adds negative riders to QA-L4-06, QA-L5-02 and QA-DC-09.
 
 ---
 
@@ -1005,7 +1030,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L1-03 `[WF]` — The item count reconciles with the visible badges**
 - **Given** the default state.
 - **When** the `Total Items` badges of the three checked rows are summed (`5` + `1` + `2`).
-- **Then** the sum is `8`, which equals the `8 items` in the `[L-2]` label and the `8 units total` in the M1 header [BR-16] [L-13].
+- **Then** the sum is `8`, which equals the `8 items` in the `[L-2]` label (§3.13 invariant (a), unconditional) **and** the `8 units total` in the M1 header — the latter only because all three default-selected orders are fully inbounded, which is invariant (b)'s equality case. Selecting `MKT-40233` as well would make `{items}` `11` and `{units}` `10`, and that divergence is correct, not a failure [BR-16] [L-13] [E-13].
 
 **QA-L1-04 `[WF]` · negative — Two select-all controls exist and neither is wired**
 - **Given** the default state.
@@ -1073,7 +1098,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-M1-01 `[WF]` — Header totals**
 - **Given** M1 is open.
 - **When** the header's first text node is read (per §8.0).
-- **Then** it equals exactly `Print Pick Locations — Picking List (3 orders selected · 4 SKUs · 8 units total)`, and the three numbers reconcile: `8` equals the sum of the selected rows' `Total Items` badges (`5 + 1 + 2`) and equals the `8 items` in the `[L-2]` button label [L-13].
+- **Then** it equals exactly `Print Pick Locations — Picking List (3 orders selected · 4 SKUs · 8 units total)`, and the three numbers reconcile: `8` equals the sum of the selected rows' `Total Items` badges (`5 + 1 + 2`) and equals the `8 items` in the `[L-2]` button label — an equality that holds here because every default-selected order is fully inbounded (§3.13 invariant (b)); `4 SKUs` is the distinct-SKU count, which coincides with the 4 rows only because no SKU is shared between the selected orders §3.15 [L-13].
 
 **QA-M1-02 `[WF]` — Column set**
 - **Then** `#m-pick .picktbl thead th` textContents are, in order, `Location`, `SKU`, `Product`, `Qty`, `Order`.
@@ -1091,7 +1116,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** the fifth-column values, in document order, are `422221`, `422165`, `422176`, `422165` — i.e. the list is ordered by location, **not** grouped by order [BR-7].
 
 **QA-M1-07 `[WF]` · negative — One row per order × SKU, no merge**
-- **Then** the two rows whose `Order` is `422165` (`A-03-02` and `B-02-11`) are **separate**; there is **no** row that aggregates a SKU across two orders, and no `Order` cell contains more than one order number [BR-19] [E-14].
+- **Then** the two rows whose `Order` is `422165` (`A-03-02` and `B-02-11`) are **separate**; there is **no** row that aggregates a SKU across two orders, and no `Order` cell contains more than one order number [BR-19] [E-14]. **· `[ADMIN]` rider — the `{skus}` divergence this creates:** when two selected orders need the **same** SKU, the picking table gains two rows while the header's `{skus}` stays at the distinct-SKU count, so `{skus}` < row count. The header must not be recomputed from the row count §3.15 [E-14].
 
 **QA-M1-08 `[WF]` · negative — The un-inbounded MKT line is absent**
 - **Then** no picking-list row carries SKU `100012534` (the `Dr.Jart+ 시카페어 슬리페어 마스크` line that shows `Not inbounded`), and no row's `Location` cell reads `Not inbounded`. Non-pickable lines never reach the picker's paper [E-3].
@@ -1105,7 +1130,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-M1-11 `[WF]` — Print closes the modal and runs the batch in print mode**
 - **Given** M1 is open on a fresh load.
 - **When** `🖨 Print` is clicked.
-- **Then** `#m-pick` loses class `open`; `#pfill.style.width` progresses to `100%`; during the run `#pbarLabel.childNodes[0].textContent` contains `Print Pick Locations in progress` **and** `No refresh · selection kept` and does **not** contain `refreshes after completion`; at 100 % `#toast` becomes visible with `#toast b` textContent `✓ Print Pick Locations complete — 3 orders`; the five order rows are still present and the three checkboxes are still checked (selection kept) [BR-8].
+- **Then** `#m-pick` loses class `open`; `#pfill.style.width` progresses to `100%`; **from the first progress tick onward** (sample only once `#pfill.style.width` is `20%` or greater — §8.0 running-label rule) `#pbarLabel.childNodes[0].textContent` contains `Print Pick Locations in progress` **and** `No refresh · selection kept` and does **not** contain `refreshes after completion`; at 100 % `#toast` becomes visible with `#toast b` textContent `✓ Print Pick Locations complete — 3 orders`; the five order rows are still present and the three checkboxes are still checked (selection kept) [BR-8].
 
 **QA-M1-12 `[WF]` · negative — Cancel, `✕`, and backdrop all close without printing**
 - **Given** a fresh load and M1 open.
@@ -1133,7 +1158,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L3-01 `[WF]` — Progress mode text is the print mode**
 - **Given** a fresh load.
 - **When** `🖨 Bulk Print Labels (3 orders)` is clicked.
-- **Then** during the run `#pbarLabel.childNodes[0].textContent` contains `Bulk Print Labels in progress` and `No refresh · selection kept`, and does **not** contain `refreshes after completion` [BR-8].
+- **Then** **from the first progress tick onward** (sample only once `#pfill.style.width` is `20%` or greater — §8.0 running-label rule) `#pbarLabel.childNodes[0].textContent` contains `Bulk Print Labels in progress` and `No refresh · selection kept`, and does **not** contain `refreshes after completion` [BR-8].
 
 **QA-L3-02 `[WF]` — Completion toast text and subtext**
 - **Then** at 100 % `#toast b` textContent equals `✓ Bulk Print Labels complete — 3 orders` and `#toast small` textContent equals `Disappears automatically after a few seconds`.
@@ -1159,7 +1184,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L3-07 `[ADMIN]` · negative — An order with no carrier is excluded, not silently skipped**
 - **Given** a selection containing one "Not connected — contact the Fulfillment Center" order.
 - **When** Bulk Print Labels runs.
-- **Then** that order produces no label, is reported in the toast subtext, and persists `label.print_refused` with `reason = no_carrier` [DC-28]; the other orders print normally [E-61] `[PD-55 · NO-DEFAULT]`.
+- **Then** that order produces no label; `#toast small` reads exactly `1 excluded — no carrier assigned` (§3.3 reason-aware subtext), **not** the default sentence and **not** the Bulk Outbound copy `items not inbounded`; `label.print_refused` persists with `reason = no_carrier` [DC-28]; the other orders print normally [E-61] `[PD-55 · NO-DEFAULT]`.
 
 **QA-L3-08 `[ADMIN]` · negative — Printing changes no order state**
 - **When** Bulk Print Labels completes for 3 orders.
@@ -1172,13 +1197,13 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L4-01 `[WF]` — Send sound path executes on click**
 - **Given** a fresh load, so `sndOutbound.ac` is `undefined`.
 - **When** `📦 Bulk Outbound (3 orders)` is clicked.
-- **Then** **no uncaught exception** is raised, and — in any environment where `window.AudioContext` (or `webkitAudioContext`) is constructible — `sndOutbound.ac` is an `AudioContext` instance, proving the sound path ran [G-3a]. In an environment without Web Audio the scenario still passes on the no-exception clause alone, which is the normative half [E-24].
+- **Then** **no uncaught exception** is raised, and — in any environment where `window.AudioContext` (or `webkitAudioContext`) is constructible — `sndOutbound.ac` is an `AudioContext` instance **constructed inside this click gesture**, proving both that the sound path ran and that the first user gesture of the session may itself be the Bulk Outbound click [G-3a] [E-49]. In an environment without Web Audio the scenario still passes on the no-exception clause alone, which is the normative half [E-24].
 
 **QA-L4-02 `[WF]` — Progress mode text is the refresh mode**
-- **Then** during the run `#pbarLabel.childNodes[0].textContent` contains `Bulk Outbound in progress` **and** `refreshes after completion`, and does **not** contain `No refresh · selection kept` [BR-8].
+- **Then** **from the first progress tick onward** (sample only once `#pfill.style.width` is `20%` or greater — §8.0 running-label rule) `#pbarLabel.childNodes[0].textContent` contains `Bulk Outbound in progress` **and** `refreshes after completion`, and does **not** contain `No refresh · selection kept` [BR-8].
 
 **QA-L4-03 `[WF]` — Completion toast text**
-- **Then** at 100 % `#toast` is visible with inline `display:flex`, positioned top-right, and `#toast b` textContent equals `✓ Bulk Outbound complete — 3 orders`; the toast hides within ~4 s.
+- **Then** at 100 % `#toast` is visible with inline `display:flex`, positioned top-right, and `#toast b` textContent equals `✓ Bulk Outbound complete — 3 orders`; the toast returns to `display:none` within **3–4 s of becoming visible** — the window is measured from the toast appearing, **not** from the click that started the batch (measured reference: visible at ~1.25 s after the click, hidden ~3.0 s later).
 
 **QA-L4-04 `[WF]` · negative — Exactly one control on the page is sound-bound**
 - **Given** the page is loaded.
@@ -1190,7 +1215,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 
 **QA-L4-06 `[ADMIN]` — State transition and stock movement**
 - **When** Bulk Outbound runs on three fully-inbounded orders.
-- **Then** every `INBOUNDED` line becomes `OUTBOUNDED`; each order's status becomes `prepare-shipment` [BR-22]; `order.outbounded` [DC-9], `order.status_changed` [DC-19], `inventory.stock_decremented` [DC-10] and `inventory.reservation_consumed` [DC-20] persist with old→new values; the three rows are gone after the refresh; the orders appear in Closing's scan population.
+- **Then** each order's status becomes `prepare-shipment` [BR-22]; `order.outbounded` [DC-9], `order.status_changed` [DC-19], `inventory.stock_decremented` [DC-10] and `inventory.reservation_consumed` [DC-20] persist with old→new values; the three rows are gone after the refresh; the orders appear in Closing's scan population. **· negative:** **no line-level status is written** — every line's `inbound_status` still reads `INBOUNDED`, no `OUTBOUNDED` line value exists anywhere in the store or on the Order Detail rendering of these orders, and the shipped-line detail lives only inside [DC-9]'s payload [BR-22].
 
 **QA-L4-07 `[ADMIN]` · negative — Idempotent double click**
 - **When** `📦 Bulk Outbound` is double-clicked.
@@ -1199,7 +1224,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L4-08 `[ADMIN]` · negative — Ineligible orders are excluded, not partially shipped**
 - **Given** a selection containing `MKT-40233` (one line not inbounded), one on-hold order, and two fully-inbounded orders.
 - **When** Bulk Outbound runs.
-- **Then** only the two fully-inbounded orders are outbounded; the toast reads `✓ Bulk Outbound complete — 2 orders` with subtext `2 excluded — items not inbounded`; **no** line of `MKT-40233` is outbounded (no partial outbound); `outbound.order_excluded` [DC-21] persists with `lines_not_inbounded` and `status_forbids_outbound` respectively [E-3] [E-21] [E-33] `[PD-35 · OWNER-PENDING]` `[PD-29 · OWNER-PENDING]`.
+- **Then** only the two fully-inbounded orders are outbounded; the toast reads `✓ Bulk Outbound complete — 2 orders` with subtext exactly `2 excluded — 1 items not inbounded · 1 status blocks outbound` — **two reasons, so two clauses in enum order; the single-phrase form `2 excluded — items not inbounded` is a FAIL here**, because it tells the operator to chase a receiving problem for an order that only needs its hold released (§3.4 step 6); **no** line of `MKT-40233` is outbounded (no partial outbound); `outbound.order_excluded` [DC-21] persists with `lines_not_inbounded` and `status_forbids_outbound` respectively [E-3] [E-21] [E-33] `[PD-35 · OWNER-PENDING]` `[PD-29 · OWNER-PENDING]`.
 
 **QA-L4-09 `[ADMIN]` — Fully-inbounded JIT rows are eligible**
 - **Given** a selection containing only the JIT row `422164` (`Fully Inbounded`).
@@ -1207,8 +1232,8 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** the order is outbounded normally; it is **not** excluded `[PD-35 · OWNER-PENDING]` [E-4].
 
 **QA-L4-10 `[ADMIN]` · negative — All orders excluded still toasts, with zero**
-- **Given** a selection of three orders that are all excluded.
-- **Then** the toast reads exactly `✓ Bulk Outbound complete — 0 orders` with the exclusion subtext; it is green, not red; no stock event and no `order.outbounded` exists; the page still refreshes [E-53] [BR-35].
+- **Given** a selection of three orders that are all excluded **for the same reason** (three MKT rows with non-inbounded lines).
+- **Then** the toast reads exactly `✓ Bulk Outbound complete — 0 orders` with subtext exactly `3 excluded — items not inbounded` (one shared reason ⇒ the single-phrase form); it is green, not red; no stock event and no `order.outbounded` exists; the page still refreshes [E-53] [BR-35].
 
 **QA-L4-11 `[ADMIN]` · negative — Counts are never pluralised**
 - **Given** a batch that outbounds exactly one order.
@@ -1233,13 +1258,15 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L5-02 `[WF]` — Monotonic 0 → 100**
 - **Given** a fresh load.
 - **When** any bulk action runs and `#pfill.style.width` is sampled every 100 ms.
-- **Then** the samples begin at `0%`, never decrease, and end at `100%`.
+- **Then** the samples begin at `0%`, never decrease, and end at `100%`. **· negative:** `[ADMIN]` rider — in the real admin the same run leaves **no per-tick row** in the [G-8] audit stream; only [DC-8]'s batch start and finish are persisted `[NE-2]`.
 
 **QA-L5-03 `[WF]` — Label pattern**
-- **Then** during any run `#pbarLabel.childNodes[0].textContent` matches `{Action} in progress — {p}% · {mode} · toast on completion`, where `{Action}` ∈ {`Print Pick Locations`, `Bulk Print Labels`, `Bulk Outbound`} and `{mode}` is that action's mode string.
+- **Then** in any run, **from the first progress tick onward** (`#pfill.style.width` ≥ `20%` — §8.0 running-label rule), `#pbarLabel.childNodes[0].textContent` matches `{Action} in progress — {p}% · {mode} · toast on completion`, where `{Action}` ∈ {`Print Pick Locations`, `Bulk Print Labels`, `Bulk Outbound`} and `{mode}` is that action's mode string.
 
 **QA-L5-04 `[WF]` · negative — Mode strings never cross over**
-- **Then** a `Bulk Outbound` run never renders `No refresh · selection kept`, and neither print run ever renders `refreshes after completion` [BR-8].
+- **Given** a fresh load.
+- **When** each of the three actions is run in turn and `#pbarLabel.childNodes[0].textContent` is sampled continuously, **discarding every sample taken before `#pfill.style.width` reaches `20%`** (§8.0 running-label rule — before the first tick the label still holds the previous action's copy — `[RTO-WFX-9]`).
+- **Then** across the retained samples a `Bulk Outbound` run **never** renders `No refresh · selection kept`, and neither print run **ever** renders `refreshes after completion` [BR-8]. *(Asserted absolutely without the first-tick bound, this scenario is unsatisfiable against the wireframe — the crossover it would report is the demo artifact, not a mode-string defect.)*
 
 **QA-L5-05 `[WF]` · negative — The idle label is demo copy, not a live state**
 - **Given** a fresh load with no batch run.
@@ -1259,7 +1286,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 
 **QA-L6-01 `[WF]` — Position and auto-dismiss**
 - **When** any bulk action completes.
-- **Then** `#toast` has inline `display:flex`, is anchored top-right (CSS `top:54px; right:16px` within `.mock`), and returns to `display:none` within ~3–4 s.
+- **Then** `#toast` has inline `display:flex`, is anchored top-right (CSS `top:54px; right:16px` within `.mock`), and returns to `display:none` within **3–4 s of becoming visible** — anchored to the toast appearing, never to the click that started the batch.
 
 **QA-L6-02 `[WF]` — Text pattern per action**
 - **Then** running each of the three actions produces, in turn, `✓ Print Pick Locations complete — 3 orders`, `✓ Bulk Print Labels complete — 3 orders`, `✓ Bulk Outbound complete — 3 orders` in `#toast b`.
@@ -1269,7 +1296,11 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** at most one `#toast` element is visible at any moment and its text is the most recent action's [E-18].
 
 **QA-L6-04 `[WF]` · negative — No failure variant exists in the completion notice**
-- **Then** the document contains no red/failure styling variant of `#toast` bound to batch completion, and no completion string containing `failed`, `error`, or `partial` [BR-9] §4.2.
+- **Then** all four clauses hold, each mechanically:
+  1. `document.querySelectorAll('.toast').length === 1` — there is exactly one toast element, so no second, differently-styled completion toast exists.
+  2. `getComputedStyle(document.getElementById('toast')).backgroundColor === 'rgb(25, 135, 84)'` — the `--green` value `#198754`.
+  3. Scanning every rule in `document.styleSheets` whose `selectorText` contains `toast`, **none** has a `cssText` containing `--red` or `--red-soft`; and no element in the document carries a class matching `/toast/` other than `#toast` itself.
+  4. After each of the three actions, neither `#toast b` nor `#toast small` contains `failed`, `error`, or `partial` [BR-9] §4.2.
 
 **QA-L6-05 `[WF]` · negative — The subtext is the default copy when nothing is excluded**
 - **Then** after any wireframe batch `#toast small` equals `Disappears automatically after a few seconds` and never the exclusion subtext, because the wireframe has no exclusion path [L-6].
@@ -1283,8 +1314,8 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** the green toast renders first and is replaced by the red one, so the operator's last-read state is the problem [E-79]. Both events persist regardless of what the slot showed.
 
 **QA-L6-08 `[ADMIN]` · negative — Exclusion subtext replaces, not appends**
-- **Given** a Bulk Outbound with 2 exclusions.
-- **Then** `#toast small` reads exactly `2 excluded — items not inbounded` and the default sentence is **absent**, not appended after it `[PD-35 · OWNER-PENDING]`.
+- **Given** a Bulk Outbound with 2 exclusions that share the reason `lines_not_inbounded`.
+- **Then** `#toast small` reads exactly `2 excluded — items not inbounded` and the default sentence `Disappears automatically after a few seconds` is **absent**, not appended after it. **When** the same batch instead excludes one order per reason, **then** the subtext is the multi-clause form of §3.4 step 6 and still **replaces** the default sentence `[PD-35 · OWNER-PENDING]`.
 
 ---
 
@@ -1293,8 +1324,9 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 **QA-L7-01 `[WF]` — Badge text is exactly `Fully Inbounded`**
 - **Then** the row containing Order ID `422164` has a `.jit-badge` whose textContent equals `Fully Inbounded`.
 
-**QA-L7-02 `[WF]` · negative — The old wording is absent everywhere**
-- **Then** `document.body.textContent` contains **no** occurrence of `JIT (channel) completed` — not in the table, not in the legend, not in the modal [BR-4] §4.2.
+**QA-L7-02 `[WF]` · negative — The old wording is absent from every shipping surface**
+- **Then** `document.querySelector('.mock').textContent` and `document.querySelector('#m-pick').textContent` contain **no** occurrence of `JIT (channel) completed` — not in the table, not in any row badge, not in the modal [BR-4] §4.2.
+- **The `.legend` and `.wf-bar` are exempt and must not be scanned:** they are wireframe chrome that ships in no admin build (QA-F-09), and legend item 7 deliberately records the 2026-08-03 rename by quoting the superseded string — a dated changelog cannot name a rename without it. Asserting over `document.body` instead would file a bug against a correct wireframe (§8.0 known artifacts).
 
 **QA-L7-03 `[WF]` — Yellow tint and bottom sort**
 - **Then** the `422164` row carries class `row-jit`; and in view `All` it is the **last** order row in document order, after `MKT-40233` [BR-2].
@@ -1374,9 +1406,9 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **When** a comment whose text is `<img src=x onerror=alert(1)>` is posted and then viewed in the inline panel, the hub list, and a hub search result that highlights part of it.
 - **Then** the literal text is displayed in all three surfaces, **no** script executes, and the `<mark>` wrapper is inserted around escaped text [E-74] [BR-37].
 
-**QA-L9-11 `[ADMIN]` · negative — Three mentions produce one Slack message**
-- **When** a comment mentioning three users is posted.
-- **Then** exactly one message reaches `#fulfillment-admin-comments` naming all three, and `comment.mention_notified` [DC-2] carries all three in `mentioned_users[]` [E-75].
+**QA-L9-11 `[ADMIN]` · negative — One Slack message per distinct mention, and duplicates collapse**
+- **When** (a) a comment mentioning three **different** users is posted, and (b) a second comment naming the **same** user twice is posted.
+- **Then** (a) **three** messages reach `#fulfillment-admin-comments` and three `comment.mention_notified` [DC-2] events persist, one per distinct resolved user — matching `view-orders.md` `DC-20` and `order-detail.md` §6.1; and (b) the duplicate-mention comment produces **exactly one** message and one event, **not** two [E-75] [G-7].
 
 ---
 
@@ -1474,15 +1506,16 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** row `MKT-40233` reads `3`, even though only 2 of its 3 units are inbounded [BR-16] `[PD-37 · OWNER-PENDING]`.
 
 **QA-L13-03 `[WF]` · negative — The removed Ready Items column does not exist**
-- **Then** the table has exactly 9 `th` cells and no second count column; **no element in the document uses the class `cb-ready`**, even though the stylesheet still defines it — recorded as `[RTO-WFX-4]`, and the class itself must be deleted §4.2.
+- **Then** `document.querySelectorAll('.tbl thead th').length` is exactly **9** (qualified selector — a bare `th` count returns 14) and there is no second count column; **no element in the document uses the class `cb-ready`**, even though the stylesheet still defines it — recorded as `[RTO-WFX-4]`, and the class itself must be deleted §4.2.
 
-**QA-L13-04 `[ADMIN]` — Reconciliation invariant across three surfaces**
+**QA-L13-04 `[ADMIN]` — Reconciliation invariants: one unconditional, one conditional**
 - **Given** any selection.
-- **Then** `Σ(Total Items of selected rows)` equals the `{items}` figure in the `[L-2]` label and the `{units}` figure in the M1 header, in every case [L-13].
+- **Then (a), unconditionally:** `Σ(Total Items of selected rows)` equals the `{items}` figure in the `[L-2]` label, in **every** case including selections containing partially-inbounded orders [BR-16] `[PD-37 · OWNER-PENDING]`.
+- **And (b), conditionally:** the `{units}` figure in the M1 header equals `Σ(qty of inbounded lines only)`. It equals `{items}` **only when every selected order is fully inbounded**; with a partially-inbounded order selected it is lower by exactly that order's non-inbounded unit count. **Asserting (b) unconditionally is itself the defect** — it would force non-inbounded units onto the picking list and send pickers after goods that are not in the building §3.13 [E-13].
 
 **QA-L13-05 `[ADMIN]` · negative — A defective quantity does not break the arithmetic**
 - **Given** a ready line with quantity `0`.
-- **Then** the line is rendered and visually flagged rather than hidden, and the three totals above still reconcile [E-46].
+- **Then** the line is rendered and visually flagged rather than hidden, and **both** invariants above still hold — (a) exactly, and (b) with the same non-inbounded offset it had before [E-46].
 
 ---
 
@@ -1539,7 +1572,8 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 - **Then** `.tbl thead th` has exactly 9 elements; the first contains an `input[type=checkbox]` and has empty textContent; the remaining eight textContents start with `Order ID`, `Order Date`, `Customer`, `Total Items`, `Ready Item Details`, `Pick Locations`, `Comments`, `Print` (the annotated headers carry a trailing dot number). There are exactly 5 order rows and 5 `.printbtn` buttons `[L-F7]`.
 
 **QA-F-06 `[WF]` · negative — The removed `View Order` button is absent**
-- **Then** no element in the document has textContent `View Order`, and the Print column contains only `.printbtn` [BR-12] §4.2.
+- **Then** `[...document.querySelectorAll('*')].filter(e => e.textContent === 'View Order').length === 0` — **strict equality**, per §8.0's equality-vs-containment rule — and every element inside each row's Print cell carries class `printbtn` [BR-12] §4.2.
+- **Not in scope:** the legend footer's prose `… View Order button removed …`. It is annotation chrome and a substring scan of `document.body` would flip this scenario's verdict; the claim here is that no **control** named `View Order` exists.
 
 **QA-F-07 `[WF]` — Order Date format**
 - **Then** every order row's third cell textContent equals `2026. 7. 21.` — the live admin's own date form, preserved verbatim [E-72] `[L-F7]`.
@@ -1575,7 +1609,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 | **QA-E-01** | `[E-5]` | `[WF]` · negative | **Given** the `Marketing` tab and its single order row removed from the DOM (`document.querySelector('tr[data-view="mkt"]:not(.crow)').remove()`), simulating an empty pool. **When** `Marketing` is clicked. **Then** no exception is thrown, the tbody shows no order row, and `#foundTxt` equals `Found 0 order(s) with items ready for outbound`. |
 | **QA-E-02** | `[E-24]` | `[WF]` · negative | **Given** `window.AudioContext` and `window.webkitAudioContext` are stubbed to throw. **When** `📦 Bulk Outbound (3 orders)` is clicked. **Then** no uncaught exception reaches the console, `#pfill.style.width` still reaches `100%`, and `#toast b` still reads `✓ Bulk Outbound complete — 3 orders`. Audio never gates the action. |
 | **QA-E-03** | `[E-47]` | `[WF]` · negative | **Then** `getComputedStyle(document.querySelector('.item-line')).whiteSpace` equals `nowrap`, so a long Korean name extends the cell instead of wrapping mid-name; the row's `×qty` pill remains the last element of its line. |
-| **QA-E-04** | `[E-73]` | `[WF]` | **Then** `.mockwrap` computes `overflow-x: auto` and `.mock` computes `min-width: 1240px`; narrowing the window produces horizontal scrolling and the 9 `th` cells remain 9. |
+| **QA-E-04** | `[E-73]` | `[WF]` | **Then** `.mockwrap` computes `overflow-x: auto` and `.mock` computes `min-width: 1240px`; narrowing the window produces horizontal scrolling and `document.querySelectorAll('.tbl thead th').length` remains **9**. (Use the qualified selector: a bare `th` count returns **14**, because `#m-pick .picktbl` contributes 5 more.) |
 | **QA-E-05** | `[E-62]` | `[WF]` | **Given** a fresh load. **When** `📦 Bulk Outbound (3 orders)` is focused and activated with the keyboard (Enter). **Then** exactly one progress run occurs and exactly one toast appears — identical to a mouse click. **· negative:** holding Enter to auto-repeat must not produce a second overlapping run in the admin [BR-18]. |
 | **QA-E-06** | `[E-35]` | `[WF]` · negative | **Then** row `422165`'s two item lines (`100039420` and `100013286`) render as two separate `.item-line` elements with two separate `.locline` locators, and M1 renders them as two separate rows — the page never merges lines it did not create. |
 | **QA-E-07** | `[E-6]` | `[ADMIN]` | **Given** an active selection and an open comment panel. **When** `Refresh` is clicked. **Then** the documented behavior occurs — selection preserved for orders still present, dropped for orders that left the pool, panels collapsed — and `rto.list_loaded` [DC-25] persists with `trigger = refresh` [D-7]. |
@@ -1584,7 +1618,7 @@ Negative scenarios: **97 of 201 = 48.3 %** (requirement: ≥ 25 %).
 | **QA-E-10** | `[E-10]` | `[ADMIN]` · negative | **Given** the response to a Bulk Outbound is lost. **When** the client retries with the same idempotency key. **Then** nothing is outbounded twice, no stock is double-decremented, the UI shows an unresolved state rather than a success toast, and `outbound.batch_aborted` [DC-27] records the last completed sequence if the batch was genuinely incomplete. |
 | **QA-E-11** | `[E-11]` | `[ADMIN]` · negative | **Given** the print agent is unreachable. **When** M1 `🖨 Print` runs. **Then** a red toast names the agent/printer, `print.job_result` = `failed` [DC-12] and `print.batch_infrastructure_failure` [DC-24] persist, the orders stay in the list, and **no** browser print dialog appears as a fallback. |
 | **QA-E-12** | `[E-12]` | `[ADMIN]` · negative | **Given** the print agent dies after 2 of 3 labels. **Then** the completion toast stays all-success, a separate red toast reports 1 failure, per-order results are persisted [DC-16], and reprinting only the failed order from its row button succeeds. |
-| **QA-E-13** | `[E-13]` | `[ADMIN]` | **Given** an order with 2 inbounded and 1 non-inbounded line. **Then** `Total Items` = 3; the picking list contains 2 rows for it; Bulk Outbound excludes it. All three denominators verified in one run. |
+| **QA-E-13** | `[E-13]` | `[ADMIN]` | **Given** an order with 2 inbounded and 1 non-inbounded line, selected alongside two fully-inbounded orders. **Then** `Total Items` = 3; the picking list contains 2 rows for it; Bulk Outbound excludes it. All three denominators verified in one run. **And the header figures diverge, correctly:** the `[L-2]` `{items}` count includes all 3 units while the M1 `{units}` total includes only the 2 pickable ones, so `{items} − {units} = 1` for this selection — §3.13 invariant (b), QA-L13-04(b). A run that reports these two as equal has put a non-inbounded unit on the picker's paper and **fails**. |
 | **QA-E-14** | `[E-15]` `[E-15b]` | `[ADMIN]` · negative | **Given** a ready SKU whose location was deleted in Inventory, and an order whose item-line and locator-line counts disagree. **Then** the Pick Locations cell shows the unknown marker (never blank), the picking-list row is present with the same marker, and the locator column is padded so the 1:1 pairing holds. |
 | **QA-E-15** | `[E-20]` | `[ADMIN]` | **Given** an unposted comment draft in an open inline panel. **When** Bulk Outbound completes and the page refreshes. **Then** the documented behavior occurs (warn on unload, or preserve the draft) — and it is the behavior written in the build docs, not an accident [D-7] `[NE-8]`. |
 | **QA-E-16** | `[E-21]` | `[ADMIN]` · negative | **Given** an MKT order with zero inbounded lines in the batch. **Then** it is auto-excluded with `exclusion_reason = lines_not_inbounded` [DC-21], counted in the toast subtext, and the batch is **not** aborted. |
@@ -1621,14 +1655,14 @@ All `[ADMIN]`. Each scenario's **Then** asserts that the named event exists in t
 | ID | Event | Given / When / Then |
 |---|---|---|
 | **QA-DC-01** `[ADMIN]` | `comment.posted` [DC-1] | **When** a comment is posted from the inline panel of order `422221`. **Then** `comment.posted` persists with actor, server timestamp, entity = order `422221`, `text`, `mentions[]`, `source = rto_inline_panel`. |
-| **QA-DC-02** `[ADMIN]` | `comment.mention_notified` [DC-2] | **When** that comment contains `@Yongwon`. **Then** `comment.mention_notified` persists with `channel = #fulfillment-admin-comments`, `mentioned_users[]`, `delivery_result`, and a `deep_link`. |
+| **QA-DC-02** `[ADMIN]` | `comment.mention_notified` [DC-2] | **When** that comment contains `@Yongwon`. **Then** one `comment.mention_notified` persists with `channel = #fulfillment-admin-comments`, `mentioned_user` = that user, `delivery_result`, and a `deep_link`. **When** a comment names three different users, **then** three such events persist — one per distinct resolved mention, not one carrying a list [E-75]. |
 | **QA-DC-03** `[ADMIN]` | `comment.starred` / `comment.unstarred` [DC-3] | **When** `★` is toggled on and off. **Then** two events persist with `saved` false→true and true→false, both carrying `starred_by`. |
 | **QA-DC-04** `[ADMIN]` | `comment.read` / `comment.mark_all_read` [DC-4] | **When** `Mark all read` is clicked with 2 unread. **Then** the event persists with both comment ids and `unread_count` 2→0. |
 | **QA-DC-05** `[ADMIN]` | `pickinglist.printed` [DC-5] | **When** M1 `🖨 Print` runs for 3 orders. **Then** the event persists with `order_ids[]`, a 4-line snapshot including `brand_en` and `product_name_kr`, `totals {3,4,8}`, and `sort = location_asc`. |
 | **QA-DC-06** `[ADMIN]` | `label.batch_printed` [DC-6] | **When** Bulk Print Labels runs for 3 orders, one of which has no carrier. **Then** the envelope persists with `requested_count = 3`, `dispatched_count = 2`, 2 per-order job refs, and the third in `excluded_order_ids[]` with `no_carrier`. |
 | **QA-DC-07** `[ADMIN]` | `label.printed` [DC-7] | **When** a row `🖨` is clicked twice on one order. **Then** two events persist with `source = row_button` and `reprint_seq` 0→1 then 1→2. |
 | **QA-DC-08** `[ADMIN]` | `outbound.batch_executed` [DC-8] | **When** Bulk Outbound runs. **Then** the envelope persists with requested / eligible / excluded id lists, `started_at`→`finished_at`, and the idempotency key. |
-| **QA-DC-09** `[ADMIN]` | `order.outbounded` [DC-9] | **Then** per order, every line records `INBOUNDED`→`OUTBOUNDED` with `{sku, qty, location}` and `shelf` old→`null`. |
+| **QA-DC-09** `[ADMIN]` | `order.outbounded` [DC-9] | **Then** per order the event records the order `status` old→`prepare-shipment`, the shipped-line detail `{sku, qty, location}` for every line, and `shelf` old→`null`. **· negative:** the payload carries **no** line-status field and no `OUTBOUNDED` value — outbound is order-level [BR-22]. |
 | **QA-DC-10** `[ADMIN]` | `inventory.stock_decremented` [DC-10] | **Then** each SKU@location records `on_hand_qty` old→new with a negative delta referencing the outbound event. |
 | **QA-DC-11** `[ADMIN]` | `idempotency.duplicate_rejected` [DC-11] | **When** a bulk button is double-clicked. **Then** the rejected attempt persists with the key and the original event id. **· negative:** no second batch event exists. |
 | **QA-DC-12** `[ADMIN]` | `print.job_result` [DC-12] | **When** a label prints and, separately, a printer is offline. **Then** the first job records `queued→sent→done` with agent id, printer id, and `artifact_type = shipping_label`; the second records `failed` with a reason. |
@@ -1640,7 +1674,7 @@ All `[ADMIN]`. Each scenario's **Then** asserts that the named event exists in t
 | **QA-DC-18** `[ADMIN]` | selection rule [DC-18] | **When** 3 rows are selected via 7 checkbox clicks and a batch runs. **Then** exactly **one** event carries the resolved 3-order selection and **zero** toggle events exist `[NE-1]`. **· negative.** |
 | **QA-DC-19** `[ADMIN]` | `order.status_changed` [DC-19] | **Then** each outbounded order records `processing`→`prepare-shipment` with `reason = bulk_outbound` and the batch id, alongside (not instead of) [DC-9]. |
 | **QA-DC-20** `[ADMIN]` | `inventory.reservation_consumed` [DC-20] | **Then** each reservation records `reserved_qty` old→new against the shipment, distinct from the on-hand decrement [DC-10]. |
-| **QA-DC-21** `[ADMIN]` | `outbound.order_excluded` [DC-21] | **When** the batch contains an MKT order with a non-inbounded line, a hold order, and an empty order. **Then** three exclusions persist with `lines_not_inbounded`, `status_forbids_outbound`, and `empty_order`, and the count matches the toast subtext. |
+| **QA-DC-21** `[ADMIN]` | `outbound.order_excluded` [DC-21] | **When** the batch contains an MKT order with a non-inbounded line, a hold order, and an empty order. **Then** three exclusions persist with `lines_not_inbounded`, `status_forbids_outbound`, and `empty_order`, and the toast subtext reproduces them clause-for-clause in enum order — `3 excluded — 1 items not inbounded · 1 status blocks outbound · 1 no line items` — so the persisted reasons and the operator-visible reasons cannot drift apart §3.4 step 6. |
 | **QA-DC-22** `[ADMIN]` | `outbound.rejected_stale` [DC-22] | **When** a stale order is submitted. **Then** the rejection persists with `expected_version`→`actual_version` and `changed_fields[]`, and no write occurred for that order. |
 | **QA-DC-23** `[ADMIN]` | `outbound.batch_conflict` [DC-23] | **When** two batches overlap. **Then** the conflict persists with both batch ids, the overlapping order ids, and the winner. |
 | **QA-DC-24** `[ADMIN]` | `print.batch_infrastructure_failure` [DC-24] | **When** the print agent is offline for a batch. **Then** the batch-level failure persists with `failed_job_count` and drives the separate red toast. |
@@ -1658,7 +1692,7 @@ All `[ADMIN]`. Each scenario's **Then** asserts that the named event exists in t
 | Every legend unit `[L-1]`…`[L-14]`, `[L-M1]` has ≥1 scenario | QA-L1…QA-L14, QA-M1 (§8.1–§8.15) |
 | Every furniture unit `[L-F1]`…`[L-F8]` has ≥1 scenario | `[L-F1]` QA-F-01 · `[L-F2]` QA-F-02 · `[L-F3]` QA-F-03 · `[L-F4]` QA-F-04 · `[L-F5]` QA-F-10/11 · `[L-F6]` QA-F-12 · `[L-F7]` QA-F-05/07 · `[L-F8]` QA-F-13 |
 | The §2.1 legend-unit declaration is machine-checkable | QA-F-08 (14 `li` + 15 `.dot`) |
-| Every `[E-n]` edge case is referenced by ≥1 scenario | QA-E block (§8.17) plus inline `[E-n]` citations across QA-L/QA-M/QA-F |
+| Every `[E-n]` edge case is referenced by ≥1 scenario | QA-E block (§8.17) plus inline `[E-n]` citations across QA-L/QA-M/QA-F. All 80 (`E-1`…`E-79` + `E-15b`) are covered; `[E-49]` is carried by QA-L4-01, which asserts the `AudioContext` is constructed inside the click gesture |
 | Every `[DC-n]` event has a Then-clause asserting persistence | QA-DC-01…QA-DC-28, 1:1 with §5.1 |
 | Every `[NE-n]` non-event is asserted as absent where testable | `[NE-1]` QA-DC-18 · `[NE-2]` QA-L5-02 · `[NE-3]` QA-DC-17 · `[NE-4]` QA-M1-12 · `[NE-9]` QA-E-02 · `[NE-12]` QA-L1-08 |
 | Negative tests ≥ 25 % | see the §8.0 count table |
@@ -1677,9 +1711,10 @@ Per `_review.md` §3 convention 8, this section lists **only**: (a) what this sc
 | **Label and invoice layout content** — what is drawn on a Deleo or YUN label, field placement, barcode position, sample-row rendering on the printed artifact | **Phase 3-1**, a separate owner session after Phase 3. This spec covers *when* a label prints, *which* carrier, *what is captured*, and *what happens on failure* — never the layout [G-4] |
 | **Order-level inspection and mutation** — status changes, line edits, cancellations, tracking corrections, holds, clone, reset | `order-detail.md` |
 | **Inbound flows** — receiving, scanning, expected-quantity edits, partial inbound, multi-tracking [G-10] | `view-orders.md`, `inbound-request.md` |
-| **The closing/scan lifecycle** and the Daily Shipping Status sheet | `closing.md` (`[PD-71 · OWNER-PENDING]` owns the sheet mapping) |
+| **The closing/scan lifecycle** and the Daily Shipping Status sheet | `closing.md` (`[PD-71 · NO-DEFAULT]` owns the sheet mapping — undecided, and nothing here depends on it) |
 | **Sample-set configuration** (ON/OFF, overlapping periods, targets) | `order-management.md` [G-13] |
-| **Stock audit, location registration, Reserved views, line-based location filtering** | `stock-status.md` [G-14] |
+| **Stock audit, location registration, Reserved views, line-based location filtering, audit-mode-only visibility** | `stock-status.md` [G-14] |
+| **JIT residual stock** — stock left over from cancelled or short-shipped JIT orders, and any view of it | `stock-status.md`. This page lists only orders that are **ready to ship**; residual stock is not an order and never surfaces here. Stated explicitly rather than left silent, because the mandatory-item matrix codes this item `n` for this page and `n` means *explicit N/A* |
 | **Unrecognized-tracking pool and matching** | `tracking-missing.md` |
 | **Sourcing-route badges** [G-5] | `view-orders.md`, `stock-status.md`, `order-detail.md`. This page renders no route label §1.4 |
 | **Pagination** | Not present on this page and not planned. Large selections are handled by request chunking, not paging [E-22] |
@@ -1691,7 +1726,7 @@ Per `_review.md` §3 convention 8, this section lists **only**: (a) what this sc
 
 ### 9.2 Open questions — NO-DEFAULT (owner)
 
-Only two NO-DEFAULT register entries name this page. Neither has a provisional behavior; nothing in this spec depends on an invented answer.
+Only two NO-DEFAULT register entries are **owned by** this page, and they are the two below. Neither has a provisional behavior; nothing in this spec depends on an invented answer. (A third NO-DEFAULT entry, `[PD-71]` — the Daily Shipping Status sheet mapping — is cited in §6.3 as context but is **owned by `closing.md`**, and no behavior on this page rests on it.)
 
 **OQ-1 — Where is "WHICH sample and HOW MANY" defined, and by whom?** `[PD-51 · NO-DEFAULT]`
 - **The gap.** [G-13] requires internal invoice and picking artifacts to show the sample kind and quantity, and [BR-21] carries that requirement onto this page's picking list. But the Order Management sample-assignment flow is deliberately a simple ON/OFF with **no sample-type selection**, and no input document names where the contents of a "sample set" are defined or who maintains them.
@@ -1727,6 +1762,7 @@ These are **not** owner questions and are not tracked as provisional decisions. 
 | **D-15** | Sticky columns / horizontal-scroll behavior at the 1240 px minimum width [E-47] [E-73] | The brand prefix and the `×qty` pill must remain reachable; columns are never dropped |
 | **D-16** | bfcache / `pageshow` handling after the Bulk Outbound refresh [E-58] | A restored page must not present already-shipped orders as selectable |
 | **D-17** | Whether a reprint auto-posts a comment | **Already decided against** [BR-33]; recorded here only so it is not re-opened. Event-only. |
+| **D-18** | Whether an operator @mentioning **themselves** suppresses the Slack notification §6.1 | No register entry decides it — `[PD-16]` covers only the *system* match-confirm auto-comment on View Orders / Tracking Missing / Order Detail, and that citation was withdrawn on 2026-08-03. Whichever way it goes, the comment persists and delivery never blocks or rolls back the post [BR-30]; and the choice must not change the per-distinct-mention fan-out [E-75] |
 
 ### 9.4 Wireframe fixes owed on this page
 
@@ -1735,6 +1771,7 @@ Tracked in `_wireframe-fixes.md` (register) and §2.4 (page-local candidates). N
 | Item | Status |
 |---|---|
 | **WF-9** — add sample rows to the M1 picking table | **Conditional** — blocked on `[PD-36]` approval **and** OQ-1 (`[PD-51]`) |
+| `[RTO-WFX-9]` — write `#pbarLabel` once **before** `setInterval` starts, mirroring the existing synchronous `fill.style.width='0%'` line, so a run never displays the previous action's mode string for its first 250 ms | **Registered** 2026-08-03 in `_wireframe-fixes.md` §B (page-scoped ID — see §2.4). Until it lands, §8.0's running-label reading rule bounds every "during the run" assertion |
 | `[RTO-WFX-1]` — wire the selection model, or annotate the static counts as demo-only; define the two select-all controls as one state | New candidate |
 | `[RTO-WFX-2]` — remove the duplicate `wf-bar` modal button (and the unstyled `.wf-tab` class) | New candidate |
 | `[RTO-WFX-3]` — make the Order ID a real anchor | New candidate |
@@ -1756,7 +1793,7 @@ Every dated decision that shaped this screen, 2026-07-09 → 2026-08-03, includi
 | 2026-07-09 | **Bulk Outbound refreshes after completion** is accepted as the sole designed exception to the no-refresh rule. | Same ledger; carried verbatim into [G-2] | [BR-8], `[L-4]`, `[L-5]` |
 | 2026-07-09 | Deleo Tracking No. is **removed from View Orders** but retained on Order Detail. | Deliberate asymmetry, reconfirmed 2026-07-21/22 | Context only — this page never had a tracking column |
 | 2026-07-13 | Batch generation of 9 draft screens from planning text alone; RTO draft produced without a capture of the live admin. | Ledger | Superseded on 2026-07-21 |
-| 2026-07-14 | **Real-capture pivot.** Nine screens are found to diverge from the live admin and are queued for redrawing from captures. | Ledger | Superseded the 07-13 RTO draft entirely |
+| 2026-07-14 | **Real-capture pivot.** Nine screens are found to diverge from the live admin and are queued for redrawing from captures. | Ledger | Superseded the 2026-07-13 RTO draft entirely |
 | 2026-07-21 | **Live admin captured.** Base structure, the column set, the page-title spelling `Ready to be Outbonded`, `Refresh`, `Found N order(s) with items ready for outbound`, the `Order Date` form `2026. 7. 21.`, and the `How to use` block are adopted **verbatim**. | Capture | [BR-14], `[L-F1]`…`[L-F4]`, `[L-F7]` |
 | 2026-07-21 | **Double-click double-processing bug** on inbound/outbound buttons is logged to the developer handoff note rather than drawn in the wireframe. | Owner instruction; handoff note A | [BR-13], [G-9], [E-9], QA-L4-07 |
 | 2026-07-21 | **Instant print requires a local print agent** (PrintNode-class) — a browser alone cannot push to a printer queue. | Handoff note B | [BR-10], §6.4 |
@@ -1768,7 +1805,7 @@ Every dated decision that shaped this screen, 2026-07-09 → 2026-08-03, includi
 | 2026-07-22 | **REMOVED: `View Order` button from the Actions column.** Actions reduced to Print; details open through the Order ID link. | Ledger | [BR-12], §4.2, `[L-F5]`, QA-F-06 |
 | 2026-07-22 | **REMOVED: failure-state UI from the bulk completion notice.** All-success is the normal path. | Ledger | [BR-9], `[L-6]`, §4.2, QA-L6-04 |
 | 2026-07-22 | Print actions keep the selection and never refresh; only Bulk Outbound refreshes. | Ledger | [BR-8], QA-M1-11, QA-L3-03 |
-| 2026-07-22 | Audit loss valuation set to `Diff × cost`, with the cost source deferred to development (FIFO lot cost recommended). | Handoff note E | Not this page — recorded because it is the same 07-22 decision batch |
+| 2026-07-22 | Audit loss valuation set to `Diff × cost`, with the cost source deferred to development (FIFO lot cost recommended). | Handoff note E | Not this page — recorded because it is the same 2026-07-22 decision batch |
 | 2026-07-23 | **REVERSAL — MKT import stock validation dropped.** Import first, inbound later is allowed; MKT orders appear in this list immediately regardless of stock or inbound status. This reverses the original planning text ("error if the product is not in the warehouse"), now struck through. | Owner decision; ledger + handoff note G | [BR-3], `[L-8]`, QA-L8-05 |
 | 2026-07-23 | **REVERSAL — sample assignment reinstated as simple ON/OFF** with multiple, possibly overlapping periods and no sample-type selection. The 2026-07-22 "removed" note was stale within a day and is superseded. | Owner decision; handoff note G corrected 2026-08-03 | Reaches this page through [G-13] → [BR-21] → M1 sample rows `[PD-36 · OWNER-PENDING]` |
 | 2026-07-23 | Closing reworked: the **single normal status is `prepare-shipment`**; everything else raises a warning. | Ledger | [BR-22] — fixes the target status of Bulk Outbound |
@@ -1798,8 +1835,9 @@ Every dated decision that shaped this screen, 2026-07-09 → 2026-08-03, includi
 | 2026-08-03 | **Select-all scope fixed**: visible (filtered) rows only; per-order selection persists across tab switches. | `[PD-38 · OWNER-PENDING]` | [BR-17], QA-L1-05/06/07 |
 | 2026-08-03 | **No sequence gate between the three bulk actions**; only one may run at a time (a lockout, not a sequence), extended in this spec to `Refresh` and the view tabs. | `[PD-39 · OWNER-PENDING]` | [BR-18], QA-L5-06/07 |
 | 2026-08-03 | Cross-cutting provisional decisions adopted and tagged inline: single admin role [PD-1]; send-sound scope [PD-2]; append-only comments [PD-3]; notification failure never blocks [PD-4]; destructive actions confirm + toast [PD-5]; stale-entity revalidation [PD-6]; optimistic concurrency [PD-7]. | `_provisional-decisions.md` §A | [BR-26]…[BR-30]. [PD-5] has no destructive action to govern on this page — the page has no delete affordance at all |
-| 2026-08-03 | Adjacent provisional decisions consumed by this page: shelf auto-clear on outbound [PD-16 self-mention suppression, PD-18]; manual-only outbound on Order Detail [PD-21]; Cancel Outbound parity [PD-26]; sample display on internal views [PD-27]; outbound status gate [PD-29]; PIC as a system-user picker [PD-33]; location 1:1 exclusivity [PD-46]; MKT/sales-order merge block [PD-59]; photo removal [PD-63]; Daily Shipping Status mapping [PD-71]; no Slack route for batch completion [PD-72]; OTHER-route rendering [PD-80]. | `_provisional-decisions.md` | §3, §4, §6 |
-| 2026-08-03 | **Spec v1.0 written**, then **v1.1 audited and finalised**: §7 expanded from 50 to 80 edge cases; §8 rewritten to 201 machine-runnable scenarios (93 `[WF]` / 108 `[ADMIN]`, 48.3 % negative) with wireframe-accurate selectors (inline `style.width`, `childNodes[0]`, header-first-text-node); [G-2] confirmation surfaces enumerated as [BR-34] with two newly found gaps; toast pluralisation, classification precedence, and comment escaping pinned as [BR-35]…[BR-37]; `label.print_refused` added as [DC-28]. Nine page-local wireframe defect candidates registered (`[RTO-WFX-1]`…`[RTO-WFX-8]` plus the conditional WF-9). | This document | — |
+| 2026-08-03 | Adjacent provisional decisions consumed by this page: shelf auto-clear on outbound [PD-18]; manual-only outbound on Order Detail [PD-21]; Cancel Outbound parity [PD-26]; sample display on internal views [PD-27]; outbound status gate [PD-29]; PIC as a system-user picker [PD-33]; location 1:1 exclusivity [PD-46]; MKT/sales-order merge block [PD-59]; photo removal [PD-63]; Daily Shipping Status mapping [PD-71 — **NO-DEFAULT**, cited as context only, owned by `closing.md`]; no Slack route for batch completion [PD-72]; OTHER-route rendering [PD-80]. | `_provisional-decisions.md` | §3, §4, §6 |
+| 2026-08-03 | **Spec v1.0 written**, then **v1.1 audited and finalised**: §7 expanded from 50 to 80 edge cases; §8 rewritten to 201 machine-runnable scenarios (93 `[WF]` / 108 `[ADMIN]`; the negative share stated here was recomputed in v1.2 — see the §8.0 table) with wireframe-accurate selectors (inline `style.width`, `childNodes[0]`, header-first-text-node); [G-2] confirmation surfaces enumerated as [BR-34] with two newly found gaps; toast pluralisation, classification precedence, and comment escaping pinned as [BR-35]…[BR-37]; `label.print_refused` added as [DC-28]. Nine page-local wireframe defect candidates registered (`[RTO-WFX-1]`…`[RTO-WFX-8]` plus the conditional WF-9). | This document | — |
+| 2026-08-03 | **Spec v1.2 — remediation of three independent verification passes** (coverage audit, adversarial QA execution, cross-page consistency). Behavior corrections: Bulk Outbound is **order-level** and writes no `OUTBOUNDED` line status [BR-22]; @mention Slack fan-out is **one message per distinct resolved mention** [E-75]; the exclusion subtext is **reason-aware** for all five [DC-21] reasons and gains a Bulk Print Labels counterpart §3.3. Contract clarifications: the §3.13 reconciliation invariant split into an unconditional (a) and a conditional (b); M1's `{skus}` defined as distinct SKUs; [BR-4]'s "anywhere" scoped to the shipping surface so the legend's dated changelog is exempt; §4.2's carrier-removal row scoped to the *inbound* carrier. QA runnability: §8.0 gains a running-label reading rule (`[RTO-WFX-9]`), an equality-vs-containment rule, and a negative-counting rule; QA-L5-04, QA-L6-04, QA-F-06, QA-E-04, QA-L13-03/04/05, QA-L7-02 rewritten to be executable with zero interpretation. Hygiene: `[PD-71]` retagged NO-DEFAULT; the `[PD-16]` self-mention citation withdrawn and re-homed as dev decision **D-18**; `[E-49]` given QA coverage; `[NE-2]` given a real assertion; three shorthand dates expanded; three restated global-rule bodies trimmed to deltas; a JIT-residual-stock out-of-scope row added so no mandatory-item N/A cell is silent. | `_verify/m1-ready-to-outbound.md` · `_verify/m2-ready-to-outbound.md` · `_verify/m3a-cross-page.md` · `_verify/m3b-review-audit.md` | §3, §4, §5, §6, §7, §8, §9, §10.1 |
 
 ### 10.1 Reversal chains recorded verbatim
 
@@ -1810,4 +1848,6 @@ Kept as chains, not as end-states, so nobody re-derives a superseded step from a
 3. **JIT badge wording** — `JIT (channel) completed` → **`Fully Inbounded` (2026-08-03)**. The old string must not appear anywhere [QA-L7-02].
 4. **Bulk failure UI** — failure states existed in the pre-07-22 design → **removed 2026-07-22** → **bounded, not restored, on 2026-08-03**: the completion notice stays all-success while infrastructure failures surface separately and every per-order result persists.
 5. **RTO item names** — English with bold brand → **Korean with bold EN brand in `Ready Item Details` and M1 (2026-08-03)**, while order-facing pages keep the English name. The wireframe still carries one English remnant (`AtoBarrier365 Body …`) — `[RTO-WFX-5]`.
-6. **This page's own draft** — 2026-07-13 wireframe drawn from planning text alone → **discarded and redrawn from the live admin capture on 2026-07-21/22**. No behavior from the 07-13 draft survives.
+6. **This page's own draft** — 2026-07-13 wireframe drawn from planning text alone → **discarded and redrawn from the live admin capture on 2026-07-21 / 2026-07-22**. No behavior from the 2026-07-13 draft survives.
+7. **Bulk Outbound's line-level write** — specified as `INBOUNDED → OUTBOUNDED` per line (v1.0/v1.1) → **corrected on 2026-08-03 to an order-level transition that writes no line status**, because `view-orders.md` `[L-S1b-21]` and `order-detail.md` `[L-10]` define the line vocabulary exhaustively as `INBOUNDED` / `PENDING`. The shipped-line detail moved into [DC-9]'s payload; [BR-22], §3.4 step 5, QA-L4-06, QA-DC-09.
+8. **Comment @mention Slack fan-out** — specified as one message naming every mentioned user (v1.0/v1.1) → **corrected on 2026-08-03 to one message per distinct resolved mention**, the [G-7] contract already implemented by `view-orders.md` `DC-20` and `order-detail.md` §6.1; duplicates of the same user in one body still collapse to one. [E-75], [DC-2], §3.9, §6.1, QA-L9-11, QA-DC-02.

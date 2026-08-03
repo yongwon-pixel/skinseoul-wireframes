@@ -1,7 +1,7 @@
 # Inbound Request — Screen Specification
 
-Slug: `inbound-request` · Wireframe SST: `wms2/inbound-request/index.html` (851 lines, v1) · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/
-Spec version 1.1 · 2026-08-03 · Companion: `_global-rules.md` (cited as `[G-n]`), `_plans/_provisional-decisions.md` (cited as `[PD-n · OWNER-PENDING]`), `_plans/_wireframe-fixes.md` (cited as `WF-n`), `_plans/_review.md` (adjudications `C-n`, conventions §3).
+Slug: `inbound-request` · Wireframe SST: `wms2/inbound-request/index.html` (850 lines, v1) · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/
+Spec version 1.2 · 2026-08-03 (remediation pass over v1.1) · Companion: `_global-rules.md` (cited as `[G-n]`), `_plans/_provisional-decisions.md` (cited as `[PD-n · OWNER-PENDING]`), `_plans/_wireframe-fixes.md` (cited as `WF-n`), `_plans/_review.md` (adjudications `C-n`, conventions §3).
 
 Reading contract: this document is written to be executed end-to-end by an AI QA agent and implemented by a developer with zero ambiguity. Global rules are **cited, never restated** — only this page's deltas appear here. Korean strings (product names, supplier names) are **data** and appear verbatim [G-6]. All UI copy in backticks is byte-accurate to the wireframe.
 
@@ -60,7 +60,11 @@ Stated so QA does not import behavior that does not apply, and so a developer do
 | [G-3] Audio feedback | **N/A** — no send sound, no TTS | No outbound-class button exists here, so `[PD-2]` does not reach this page |
 | [G-4] Instant printing | **N/A** — no Print button | No label, no picking artifact, no report is produced here |
 | [G-13] Sample assignment | **N/A** | Sample sets attach to customer orders, never to inbound requests |
-| [G-14] Location scheme | **N/A** | Locations are assigned during reception in View Orders State 6, not declared here |
+| [G-14] Location scheme — one location per SKU | **N/A** | Locations are assigned during reception in View Orders State 6, not declared here |
+| [G-14] Line-based location filter (A / B / C …) | **N/A** — no location filter on this page | Primary home is Inventory (`stock-status`). Nothing on this page filters, groups or displays by location line |
+| [G-14] Audit-mode-only visibility (counted qty, diff, loss columns) | **N/A** — no Stock Audit surface | Primary home is Inventory (`stock-status`). This page has no audit mode and no audit-gated column |
+| [G-6] RTO Korean product names in picking artifacts | **N/A** — no picking artifact here | [G-6] otherwise **does** apply (brand-bold EN product names, Korean supplier names verbatim); only the Korean-picking-name clause is out of scope |
+| **JIT residual stock** | **N/A** — never surfaced or computed here | JIT residual stock is Inventory's (`stock-status`) primary home. This page's `JIT Price (KRW)` is a *declared purchase price*, not a stock quantity, and no residual-stock figure is read, written or rendered on this page (§9.1) |
 
 ---
 
@@ -70,16 +74,19 @@ Stated so QA does not import behavior that does not apply, and so a developer do
 
 **Total legend units covered by this spec: 39.**
 
-- **28 numbered legend dots** (State 1: 15 · State 2: 2 · State 3: 10 · Modal M1: 1)
+- **28 on-screen legend dots** (State 1: 15 · State 2: 2 · State 3: 10 · Modal: 1, labelled `M1` rather than numbered)
 - **2 off-screen normative footer rule blocks** (`[L-S1-F]`, `[L-S2-F]`)
 - **9 page-furniture units** (`[L-F1]` … `[L-F9]`) — unnumbered on the wireframe but normative
 
 Plus **12 negative entries** (`[L-R1]` … `[L-R12]`) recording removed or rejected features that **must NOT exist** in the build. Negative entries are not legend units and are not counted in the 39.
 
-**Verification.** The wireframe carries exactly 28 on-screen `.dot` elements and exactly 28 legend `<li>` rows (State 1: `1,2,3,4,5,10,11,12,6,7,8,9,14,15,16`; State 2: `1,2`; State 3: `1`–`10`; Modal: `M1`) — a perfect 1:1 dot↔legend mapping with no orphan dot and no legend row lacking a dot. State 3's legend carries **no** trailing footer paragraph; States 1 and 2 each carry exactly one.
+**Verification (re-measured 2026-08-03, remediation pass).** The wireframe carries exactly **28** on-screen `.dot` elements (State 1: `1,2,3,4,5,10,11,12,6,7,8,9,14,15,16` = 15 · State 2: `1,2` = 2 · State 3: `1`–`10` = 10 · Modal: `M1` = 1) and exactly **27** legend `<li>` rows across its three `<div class="legend">` blocks (State 1: 15 · State 2: 2 · State 3: 10). The 28th dot, `M1`, is annotated directly on the modal and deliberately carries **no legend row** — it is an intentional orphan dot, specified in full at §3.4 and covered by QA-D-01…QA-D-18. **Every legend row has a dot; exactly one dot (`M1`) has no legend row.** State 3's legend carries **no** trailing footer paragraph; States 1 and 2 each carry exactly one.
+
+*(v1.1 of this spec asserted "28 legend `<li>` rows … no orphan dot". That claim was false against the SST and is corrected here; the orphan is now declared rather than denied.)*
 
 **Declared numbering gaps and artifacts** (so coverage checks do not flag phantom holes):
 
+- **The modal dot `M1` is an orphan dot** — 28 dots vs 27 legend rows. Intentional, not a coverage hole: `[L-M1]` is specced at §3.4 and carries 18 QA scenarios.
 - **State 1 has no dot 13.** The dot was vacated by the 2026-08-03 renumbering when the "View Orders link info" modal was removed. Intentional (`_wireframe-fixes.md` §E, supervisor ruling 14). State 1 dots run 1–12, 14, 15, 16.
 - **State 1's legend renders out of numeric order** (`… 5, 10, 11, 12, 6, 7, 8, 9, 14 …`). This is a render-order artifact of the CSS grid, not a missing item. Coverage is by key, not by position.
 - **State 2 restarts numbering at 1.** Its dots 1 and 2 are page-local and unrelated to State 1's dots 1 and 2.
@@ -95,7 +102,7 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 | S1 | `1 · New Request (Smart Buy)` | `#s1` | Default on load; or click top-bar `.wf-tab[data-state="s1"]` | §3.1 |
 | S2 | `2 · New Request (Wholesale / Partnership)` | `#s2` | Top-bar `.wf-tab[data-state="s2"]` | §3.2 |
 | S3 | `3 · Request List (Requested/Partial/Inbounded)` | `#s3` | Top-bar `.wf-tab[data-state="s3"]`; or the in-page tab `Request List`; or load with `#reqlist` / `#s3` | §3.3 |
-| M1 | `Modal: Add Tracking No` | `#m-invoice` | Top-bar `.wf-tab[data-modal="m-invoice"]`; or any `Add tracking` button in the Request List; or `Bulk add tracking numbers` | §3.4 |
+| M1 | `Modal: Add Tracking No` | `#m-invoice` | Top-bar `.wf-tab[data-modal="m-invoice"]`; or any `Add tracking` button in the Request List; or — **`[ADMIN]` only** — `Bulk add tracking numbers` (that button carries no `data-modal` in the wireframe and opens nothing there, see §2.4) | §3.4 |
 
 **S1 and S2 are one functional surface.** They are the same New Request form rendered with different demo data (S1 = Smart Buy route with a mid-entry blue prefill row; S2 = Wholesale route with a tracking number already known and a free-of-charge row). The spec treats them as a single form with route-parametrised examples; State 2's two dots are deltas, not a second screen.
 
@@ -157,8 +164,9 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 
 1. **State 1 purple note lists only three routes.** The note ends `… sourcing route shows as a badge (SMART BUY / WHOLESALE / PARTNERSHIP)` — it predates the 2026-07-26 addition of `OTHER`. The **correct behavior is four**: an `OTHER`-route request renders `OTHER ({channel name})` on the scan screen exactly like the other three `[PD-80 · OWNER-PENDING]` (§3.1.9, §3.3.3). The parenthetical is illustrative, not an exhaustive list.
 2. **A Tracking No cell that already holds a number offers no inline add affordance.** In the wireframe, `Add tracking` renders only when the cell is empty. Since `[G-10]` requires that numbers can keep arriving for a still-open request, the **specified path** for adding to a request that already has numbers is the bulk bar (§3.3.2, §3.3.4). Whether to add an inline `＋` to a filled cell is a UX question for the owner, not a licence to invent one now (§9.2 OQ-3).
+3. **The Comments-hub pane strings on this wireframe diverge from the rest of the corpus.** This page ships `Comments where I'm tagged` / `Mark all as read` / `Comments I saved` / `Unstar to remove from list`. Across the eight screens only two of those four strings have a majority at all — the mentions header (`Comments mentioning me · Click to open the order`, 4 pages) and the read-all action (`Mark all read`, 6 pages) — while the saved header and the unstar hint are split with **no** majority (`Unstar to remove` 1 · `… from the list` 2 · `… from this list` 2 · `… from list` 2, this page and `order-management`). `[G-7]` does **not** currently publish these six strings as byte-exact contract, so no canonical exists to conform to and none is invented here. Position: the `[WF]` assertions in §8 stay byte-accurate to **this** wireframe (convention §3.9); when `[G-7]` publishes the canonical set, the admin build follows `[G-7]` and this wireframe is corrected (proposed backlog entry **`[IR-WFX-1 · proposed]`**, `_wireframe-fixes.md` §G, conditional on that publication). See §3.1.13 and QA-F-11.
 
-**Wireframe demo limitations that are not defects** (QA must tag assertions about them `[ADMIN]`, not file bugs): filter chips toggle visually but do not filter rows; row checkboxes are inert and the `2 selected` count never changes; `Register Inbound Request` always fires the success toast regardless of validation; the M1 header is static (`Add Tracking No — 202607130003`) whichever row opened it; the Comments hub dropdown is wired only in State 1 (`data-open="inbox1"`), so States 2 and 3 render the button without a dropdown; the demo autocomplete list is static and does not respond to typing.
+**Wireframe demo limitations that are not defects** (QA must tag assertions about them `[ADMIN]`, not file bugs): filter chips toggle visually but do not filter rows; row checkboxes are inert and the `2 selected` count never changes; `Register Inbound Request` always fires the success toast regardless of validation; the M1 header is static (`Add Tracking No — 202607130003`) whichever row opened it; the Comments hub dropdown is wired only in State 1 (`data-open="inbox1"`), so States 2 and 3 render the button without a dropdown; the demo autocomplete list is static and does not respond to typing; **`Bulk add tracking numbers` (index.html:548) carries no `data-modal` attribute and therefore does not open `#m-invoice` in the wireframe — the bulk→M1 path is `[ADMIN]`-only, and clicking that button in the wireframe is expected to do nothing**; **no `.qrow` input in `#m-invoice` has an `Enter` handler, so the M1 keyboard contract (§3.4) is `[ADMIN]`-only**.
 
 ---
 
@@ -193,7 +201,7 @@ Conventions used below: **Trigger** → what starts it · **Behavior** → exact
 
 **Validation.** `Other` requires a non-blank `other_channel_text` (trimmed). Submitting with `Other` selected and an empty or whitespace-only channel name is blocked with an inline error on the field and focus moved to `.etc-in` (`[E-8]`, `[E-47]`).
 
-**Channel-text normalisation.** `other_channel_text` is stored trimmed and whitespace-collapsed. Case is preserved for display but the value is compared case-insensitively when grouping channels downstream, so `Gmarket`, `gmarket` and `GMARKET ` do not become three channels (`[E-78]`). Characters that would break a Slack message or the sheet are escaped at render time, never stripped from storage (`[E-79]`).
+**Channel-text normalisation** (dev-time decisions **D-22** / **D-23**, §9.3 — raised by this spec at the 2026-08-03 audit pass, not by the owner). `other_channel_text` is stored trimmed and whitespace-collapsed. Case is preserved for display but the value is compared case-insensitively when grouping channels downstream, so `Gmarket`, `gmarket` and `GMARKET ` do not become three channels (`[E-78]`, D-22). Characters that would break a Slack message or the sheet are escaped at render time, never stripped from storage (`[E-79]`, D-23). Both rules bind downstream consumers this spec does not own (View Orders badge, Inventory route filter, Procurement Hub sheet); if either turns out to be a business question rather than a storage one, it attaches to `[PD-80 · OWNER-PENDING]` as its unresolved second half.
 
 **Rendering [G-5] delta.** All four badges render as **colorless black bold text**, never coloured pills. `OTHER` renders downstream — Request List route column, View Orders scan badge, Inventory route filter — as black bold `OTHER ({channel name})`, and the free-text channel is carried into the Procurement Hub sheet `[PD-80 · OWNER-PENDING]`. JIT is deliberately absent from this form: JIT is an order-side sourcing outcome and is never a requestable inbound route [G-5] (review **C-3**).
 
@@ -345,11 +353,11 @@ The row placeholder repeats the rule: `Per-unit price ₩ (0 if free)`.
 
 #### 3.1.13 `[L-S1-14]` Comments hub (top right)
 
-**Behavior.** The shared admin-wide Comments hub [G-7], identical to the component on every other screen. Button `💬 Comments` with an unread-mention count badge (demo: `2`). The dropdown carries two tabs — `@ Mentions` (with its own count badge) and `★ Saved` — plus full-text search across **all** comments (entity no. / author / text), newest first; clicking an entry opens the entity.
+**Behavior.** The shared admin-wide Comments hub, exactly as specified in [G-7] — its search scope, sort order and click-to-open behavior are the global rule and are not restated here. Button `💬 Comments`; the dropdown carries the two tabs `@ Mentions` and `★ Saved`.
 
-**Page delta.** On this page the commentable entity type is the **inbound request** (`Inbound No.`), and hub entries render the Inbound No. as the entity label (demo entries: `202607130002 · Dean: "@Yongwon when is the tracking number for this wholesale one coming?"` at `11:20`; `202607120004 · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"` at `Yesterday`).
+**Page delta.** On this page the commentable entity type is the **inbound request** (`Inbound No.`), and hub entries render the Inbound No. as the entity label (demo entries: `202607130002 · Dean: "@Yongwon when is the tracking number for this wholesale one coming?"` at `11:20`; `202607120004 · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"` at `Yesterday`). Demo unread-badge value on this page: `2`, on both the nav button and the `@ Mentions` tab.
 
-**Pane headers.** `Comments where I'm tagged` with the action `Mark all as read`; `Comments I saved` with the hint `Unstar to remove from list`.
+**Pane headers — wireframe strings, cross-page divergence declared.** This wireframe ships `Comments where I'm tagged` with the action `Mark all as read`, and `Comments I saved` with the hint `Unstar to remove from list`. Other screens word all four differently, and for two of them the corpus has no majority at all (§2.4 observation 3). `[G-7]` does not publish these strings as byte-exact contract, so **there is no canonical to conform to yet and none is invented here**. Contract: the built admin renders whatever `[G-7]` publishes once the six hub strings are canonicalised; until then this page's `[WF]` assertions (QA-F-02, QA-F-03) stay byte-accurate to this wireframe and QA-F-11 carries the `[ADMIN]` half. See §2.4 observation 3 and proposed backlog entry **`[IR-WFX-1 · proposed]`** (`_wireframe-fixes.md` §G).
 
 **Star toggle.** `★` toggles saved state per user (`DC-12`). `Mark all as read` clears the unread badge (`DC-13`).
 
@@ -477,6 +485,8 @@ The `REQUESTED` / `PARTIAL` / `INBOUNDED` chips render the status pill inline fo
 | `PARTIAL n/m` | orange fill, white text, e.g. `PARTIAL 120/180` | Partially received; `n` received of `m` expected |
 | `INBOUNDED` | green fill, white text | Fully received; terminal |
 
+**Declared [G-11] delta — pill arithmetic (2026-08-03).** `[G-11]` writes the middle stage as "`PARTIAL (n/m remaining …)`". The rendered numbers on this page and on View Orders are **received / expected**, not remaining / expected: a request expecting 180 with 120 received renders `PARTIAL 120/180`, never `PARTIAL 60/180`. `[G-11]`'s parenthetical is a wording slip in the rule, not a different behavior; the received/expected form is what both consuming specs implement and what QA asserts (`[E-30]`, `BR-10`, QA-C-09, QA-E-01). `[G-11]` is to be corrected to "`PARTIAL ({received}/{expected}, amber)`"; this page does not change either way.
+
 **Transitions (all written from View Orders, never from here):**
 
 ```
@@ -493,13 +503,15 @@ No reverse transition exists on this page. `INBOUNDED` is terminal (`[BR-14]`). 
 
 **Expected-qty edit history.** When View Orders M6 edits an expected quantity, this page renders the history inline in the **Qty cell**, in the format `✎ {old}→{new} ({reason token})` as a `.route-note` with `title="Expected qty edit history"`. Demo row `202607120001` renders `✎ 300→180 (damaged)` beneath the new expected quantity `180`.
 
-**Reason-token render contract** (`[BR-30]`). The parenthetical is a **short token**, not the full [G-11] enum string — the wireframe shows `(damaged)`, not `(Damaged/defective — cannot accept)`, because the cell is narrow. The mapping is fixed so the token is never ambiguous:
+**Reason-token render contract** (`[BR-30]`). The parenthetical is a **short token**, not the full reason string — the wireframe shows `(damaged)`, not `(Damaged/defective — cannot accept)`, because the cell is narrow. The mapping is fixed so the token is never ambiguous:
 
-| [G-11] enum value | Token rendered in the Qty cell |
+| M6 reason option label (canonical) | Token rendered in the Qty cell |
 |---|---|
 | `Damaged/defective — cannot accept` | `damaged` |
 | `Supplier qty change` | `supplier qty change` |
-| `Other (memo)` | `other` — the operator's memo text is **not** inlined; it is readable in the auto-comment and in the cell's `title` (`[E-80]`) |
+| `Other` | `other` — the operator's memo text is **not** inlined; it is readable in the auto-comment and in the cell's `title` (`[E-80]`) |
+
+**Declared [G-11] delta — third reason option is `Other`, not `Other (memo)` (2026-08-03).** `[G-11]` prints the enum's third value as `"Other (memo)"`. The wireframe's View Orders M6 `<select>` ships the literal option text `Other`, and review adjudication **C-11** ruled the wireframe M6 strings canonical; View Orders records the same delta at its `BR-53` ("`[G-11]`'s 'Other (memo)' phrasing names the memo obligation, not the option string") and asserts `Other` byte-exactly in its QA. This spec adopts the same reading so the two QA suites can pass against one implementation: **the option label is `Other`**, the memo is a separate mandatory field when that option is chosen, and the persisted `DC-8` value stays `reason=other`. `[G-11]`'s enum text is to be corrected to match; nothing on this page changes when it is.
 
 **Multiple edits.** When a line has been edited more than once, the Qty cell renders the **most recent** edit as `✎ {previous}→{current} ({token})` and the full chain is available in the request's comment thread; the cell never grows unbounded (`[E-81]`). On a multi-line request, the Qty cell shows the request's **total** expected quantity and the marker indicates that at least one line was edited; per-line detail lives in View Orders and in the comments (`[E-82]`).
 
@@ -513,8 +525,8 @@ No reverse transition exists on this page. `INBOUNDED` is terminal (`[BR-14]`). 
 
 **Behavior.** Once per morning an automated job collects every request that is still `REQUESTED` **and has zero tracking numbers**, and posts them to Slack split by route:
 
-- `WHOLESALE` and `SMART BUY` → **#wholesale-ops**
-- `PARTNERSHIP` → **#partnership-kr**
+- `WHOLESALE` and `SMART BUY` → **#wholesale-ops** (channel name CONFIRMED 2026-07-27; `_slack-routing.md` publishes no ID for it — that is an unpublished ID, not a pending decision)
+- `PARTNERSHIP` → **#partnership-kr** (same: name confirmed, ID not published)
 - `OTHER` → channel deferred to development (§9.3, D-1)
 
 Payload per row: Inbound No., supplier, requested-by, age.
@@ -539,7 +551,7 @@ Payload per row: Inbound No., supplier, requested-by, age.
 
 **Namespace separation.** Inbound (supplier → warehouse) and outbound (warehouse → customer) tracking numbers are **separate namespaces and may legitimately coincide**; carriers reuse number ranges across directions. View Orders resolution precedence puts inbound-request tracking first (State 6) `[PD-86 · OWNER-PENDING]` (`[E-22]`).
 
-**Deleting or editing a saved number.** Allowed only while **no scan has matched it**. Once any scan has matched, deletion and edit are blocked; the correction path is a comment and, if necessary, a new request `[PD-81 · OWNER-PENDING]` (`[E-38]`). A permitted deletion persists the old value (`DC-4`) and, per [G-2] / [GD-5], requires a confirm step and a toast `[PD-5 · OWNER-PENDING]`.
+**Deleting or editing a saved number.** Allowed only while **no scan has matched it**. Once any scan has matched, deletion and edit are blocked; the correction path is a comment and, if necessary, a new request `[PD-81 · OWNER-PENDING]` (`[E-38]`). A permitted deletion persists the old value (`DC-4`) and requires a confirm step and a toast `[PD-5 · OWNER-PENDING]`, because **removal/deletion confirmations count as confirming actions under [G-2]** (owner emphasis, 2026-08-03).
 
 #### 3.3.8 `[L-S3-8]` INBOUNDED is auto-switched by a View Orders scan
 
@@ -566,7 +578,7 @@ It is display only. It exists to stop anyone from looking for the manual control
 
 ### 3.4 `[L-M1]` Modal — Add Tracking No
 
-**Open triggers.** (a) an `Add tracking` button in a Request List row; (b) `Bulk add tracking numbers` in the bulk bar; (c) in the wireframe only, the top-bar `Modal: Add Tracking No` tab. DOM: `#m-invoice`.
+**Open triggers.** (a) an `Add tracking` button in a Request List row; (b) **in the real admin only**, `Bulk add tracking numbers` in the bulk bar — that button carries no `data-modal` in the wireframe and opens nothing there, so the bulk→M1 path is `[ADMIN]`-only (§2.4); (c) in the wireframe only, the top-bar `Modal: Add Tracking No` tab. DOM: `#m-invoice`.
 
 **Header.** `Add Tracking No — {Inbound No.}` (demo: `Add Tracking No — 202607130003`), with an `✕` close control. *Wireframe limitation: the header is static regardless of which row opened it.*
 
@@ -579,6 +591,15 @@ Purple note: `Saved numbers auto-match to View Orders — when the center scans 
 **Row model.** `#tnList` holds one or more `.qrow` rows, each an input plus a `✕` button (`.tn-del`, title `Remove this tracking number`). The first row's placeholder is `e.g. 10325661220417 — last-mile / Coupang tracking number`; appended rows use `Additional tracking number`.
 
 **`＋ Add tracking number`** (`#tnAdd`) appends a row **and focuses its input**, so a block of numbers can be entered without touching the mouse.
+
+**Keyboard contract** (`[BR-24]`, the same head-down discipline as the unified search box). A dispatch email is transcribed number-by-number with both hands on the keyboard, so the modal must be operable without the mouse:
+
+- `Enter` in a `.qrow` input **appends a new row and focuses it**, exactly as clicking `＋ Add tracking number` does. It **never** fires `Save tracking numbers` — an accidental Enter must not commit a half-transcribed set.
+- `Enter` on a `.qrow` input that is empty after trimming is a **no-op** (no row is appended), so holding the key does not grow the list without bound.
+- `Escape` is a **no-op**. Dismissal is `Cancel`, the header `✕`, or a backdrop click only — an accidental Escape must not discard a pasted block of numbers.
+- Saving is by explicit activation of the `Save tracking numbers` button (click, or `Enter`/`Space` while that button itself holds focus).
+
+*Wireframe limitation: no `.qrow` input has an `Enter` handler in the wireframe, so this whole contract is `[ADMIN]` (QA-D-18). Do not assert it against the live mock.*
 
 **Multi-line paste.** Pasting several numbers separated by newlines, tabs, commas or semicolons into a single input **splits them across rows** rather than storing one malformed value; the split happens on paste so the operator can see and correct the result before saving (`[E-72]`).
 
@@ -737,7 +758,7 @@ Page-scoped, stable IDs. Every rule carries its rationale and its decision date.
 | **BR-27** | **Slack delivery is never part of the transaction.** The primary action always commits; delivery failure is persisted and retried and never blocks the UI or rolls anything back `[PD-4 · OWNER-PENDING]`. The same holds for memo materialisation and telemetry. | Notification is a side effect. A failed webhook must not prevent goods from being declared. | 2026-08-03 |
 | **BR-28** | **This page is not the single named [G-2] refresh exception**: no action here triggers a full-page reload, and every confirming action on it (register, M1 save, bulk add, comment post, permitted deletion) toasts. | Owner emphasis 2026-08-03 across all eight screens; a refresh here would discard an in-progress form. | 2026-08-03 |
 | **BR-29** | **Select-all covers only the currently visible (filtered) rows.** Off-screen rows are never selected by a select-all, and per-row selection persists across chip switches within a session. | Selecting rows the operator cannot see is the classic bulk-action accident; the same doctrine governs bulk selection on Ready to be Outbounded. | 2026-08-03 |
-| **BR-30** | **The Qty-cell edit marker renders a short reason token**, not the full [G-11] enum string, on the fixed mapping in §3.3.5. `Other (memo)` renders `other`; the memo text is never inlined into the cell. | The wireframe's `(damaged)` is narrower than the enum string it stands for; an ad-hoc abbreviation per developer would make the marker unreadable and untestable. | 2026-08-03 |
+| **BR-30** | **The Qty-cell edit marker renders a short reason token**, not the full reason string, on the fixed mapping in §3.3.5. The third option — whose label is `Other`, per §3.3.5's declared [G-11] delta — renders `other`; the memo text is never inlined into the cell. | The wireframe's `(damaged)` is narrower than the reason string it stands for; an ad-hoc abbreviation per developer would make the marker unreadable and untestable. | 2026-08-03 |
 | **BR-31** | **`OTHER`-route requests with no tracking are still collected by the morning check and written to `DC-14` with `channel=unrouted`,** even though no channel receives them yet. | Without this, an entire route's chase gap is invisible: the requests would be silently skipped and nobody could measure the cost of the missing channel decision. | 2026-08-03 |
 
 ---
@@ -747,6 +768,8 @@ Page-scoped, stable IDs. Every rule carries its rationale and its decision date.
 Doctrine [G-8]. This page's dataset is also the Procurement Hub scrape source (`BR-20`), so persistence here is doubly load-bearing.
 
 Shared cross-page event names are **byte-identical** to the canonical list in `_global-rules` and must not be renamed locally (review **C-12**). All other names follow lowercase `entity.action`; literal API naming is a developer decision.
+
+**Declared naming caveat (2026-08-03).** Two events below name a *concept* that other screens also persist under a different local name, because `_global-rules`' canonical list covers ten names and does not yet cover these: `DC-23` `inbound_request.idempotent_replay_suppressed` (elsewhere `idempotency.duplicate_rejected` / `…_suppressed` / `action.idempotency_suppressed`) and `DC-15` `slack_notification.sent` (elsewhere `slack.dispatch_result`). Both are semantically identical to their siblings. **When `_global-rules` promotes these concepts to canonical names, this page renames to match — the change is a rename only, with no payload or trigger change.** No name is invented or standardised unilaterally here.
 
 ### 5.1 Events owned by this page
 
@@ -814,18 +837,18 @@ Anything operator-initiated that is not on this list **must** persist.
 
 ### 6.1 Slack routing
 
-Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Channel IDs are given on first mention where the routing file publishes one; where it does not, that is recorded as an unpublished ID, not as a pending decision — the channel **names** are confirmed.
+Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Channel IDs are annotated on **first mention per spec** (convention §3.6): `#wholesale-ops` and `#partnership-kr` are first mentioned at §3.3.6 and carry their "ID not published" annotation there; `#fulfillment-admin-comments` is first mentioned in row 4 below and carries its ID. Where the routing file publishes no ID, that is an unpublished ID, not a pending decision — the channel **names** are confirmed.
 
 | # | Trigger (this page) | Channel | Payload fields | Mention target | Status |
 |---|---|---|---|---|---|
-| 1 | Morning check — request still `REQUESTED` with **no tracking number**, route `WHOLESALE` or `SMART BUY` | **#wholesale-ops** (ID not published in `_slack-routing.md`) | Inbound No., supplier, requested-by, age | none (channel-wide) | CONFIRMED 2026-07-27 · daily 1× |
-| 2 | Same, route `PARTNERSHIP` | **#partnership-kr** (ID not published) | Inbound No., supplier, requested-by, age | none (channel-wide) | CONFIRMED 2026-07-27 · daily 1× |
+| 1 | Morning check — request still `REQUESTED` with **no tracking number**, route `WHOLESALE` or `SMART BUY` | **#wholesale-ops** | Inbound No., supplier, requested-by, age | none (channel-wide) | CONFIRMED 2026-07-27 · daily 1× |
+| 2 | Same, route `PARTNERSHIP` | **#partnership-kr** | Inbound No., supplier, requested-by, age | none (channel-wide) | CONFIRMED 2026-07-27 · daily 1× |
 | 3 | Same, route `OTHER` | **no channel yet** — deferred to development (§9.3 D-1). Rows are still collected and persisted with `channel=unrouted` (`BR-31`) | same | — | Open, dev-owned |
 | 4 | Comment `@mention` on an inbound request (row panel or hub) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | entity no. (Inbound No.), comment text, time, author, @mentioned user, deep link to the request | the mentioned person, `@`-tagged in the message body | CONFIRMED by owner 2026-08-03 (review **C-2**) |
 | 5 | **Expected-qty edit** auto-comment (originating in View Orders M6, landing on this request) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | old→new qty, reason, editor | **@requester** of this inbound request | CONFIRMED 2026-08-03 |
 | 6 | **Unrecognized match confirmed** where the resolution routes to an inbound request | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | tracking no., matched product line, resolver | @registrant (suppressed when resolver == registrant `[PD-16 · OWNER-PENDING]`) | CONFIRMED 2026-08-03 · owned by `tracking-missing`, referenced here for the recovery loop |
 
-**Adjacent route, not fired from this page:** unrecognized barcode registration → **#unrecognized-tracking** (ID not published), owned by the `tracking-missing` spec. It appears here only because `BR-19`'s recovery loop begins there.
+**Adjacent route, not fired from this page:** unrecognized barcode registration → **#unrecognized-tracking** (first mention in this spec; `_slack-routing.md` publishes no ID for it), owned by the `tracking-missing` spec. It appears here only because `BR-19`'s recovery loop begins there.
 
 **Delivery semantics.** The `@mention` sits **in the message body**, so Slack raises a personal notification while the channel doubles as a team-visible archive [G-7]. Dispatch results are persisted (`DC-15`); failures are retried and never block or roll back the primary action `[PD-4 · OWNER-PENDING]` (`BR-27`). Retry policy is a dev decision.
 
@@ -856,7 +879,7 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 - **Direction:** the sheet **scrapes the Request List as-is** (`BR-20`). This admin does not write into the sheet in v1.
 - **Known mapping:** Inbound No. → sheet column A `PO No. (=Order ID)`. The form's field order (`Inbound No. → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost (KRW) → JIT Price (KRW) → Supplier`) mirrors the sheet's column order by design, and `Received Date` maps to the sheet's Received Date column.
 - **Deferred:** the full column mapping, scrape cadence, authentication and failure handling are the separate sheet-integration design, agreed 2026-07-23 to be the **last** step (§9.1). The `DC-20` event contract is stated now so the integration is auditable when it lands.
-- **Consistency requirement:** the scrape must read a committed snapshot; a half-written registration is never visible to it (`[E-18b]` = `[E-59]`).
+- **Consistency requirement:** the scrape must read a committed snapshot; a half-written registration is never visible to it (`[E-59]`).
 - **Out of scope:** the **Procurement Hub admin page** itself is excluded from this plan entirely (2026-08-02).
 
 ### 6.5 Print pipeline
@@ -869,9 +892,11 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 
 IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planning catalogue and keep their original meanings; `[E-47]`–`[E-92]` extend it. Merged entries keep both IDs and are listed under both.
 
-> **Retired ID.** The draft of this spec carried a key `E-c1` merged onto `[E-16]`. That merge was wrong — `[E-16]` is *empty Memo*, while `E-c1` was *empty comment post*, an unrelated case — and `E-c1` also violated the `[E-{n}]` key convention. `E-c1` is **retired and must not be reused**; the empty-comment case is now `[E-65]`. `[E-16]` is unchanged.
+> **Retired IDs.** Two non-conforming keys have been retired and **must never be reused**:
+> - **`E-c1`** — carried by an early draft, merged onto `[E-16]`. That merge was wrong (`[E-16]` is *empty Memo*, `E-c1` was *empty comment post*, an unrelated case) and `E-c1` violated the `[E-{n}]` key convention. The empty-comment case is `[E-65]`; `[E-16]` is unchanged.
+> - **`E-18b`** — a letter-suffixed alias for `[E-59]` (Procurement Hub scrape during an in-flight registration). It violated the same `[E-{n}]` convention that retired `E-c1`, and unlike `E-c1` it had a fully conforming key already in use. **`[E-59]` is the sole live key** for that case; the merge-alias notation `E-18b = E-59` is withdrawn (2026-08-03 remediation pass). Note this is an alias retirement, **not** a renumbering — no `[E-{n}]` has changed meaning or number.
 
-**Total: 93 edge cases** (`E-1` … `E-92`, plus the merged alias `E-18b`; no numbering gaps).
+**Total: 92 edge cases** (`E-1` … `E-92`, no numbering gaps, no letter-suffixed keys).
 
 ### 7.1 New Request — form validation
 
@@ -918,7 +943,7 @@ IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planni
 | **E-20** | Daily sequence overflow (`NNNN` > 9999) | Loud failure: registration blocked, red toast [G-2], attempt persisted. Must never wrap or reuse |
 | **E-21** = **E-35** | Tracking number supplied at creation already exists on **another** request | Blocked at save with an error naming the other Inbound No. `[PD-82 · OWNER-PENDING]`; `DC-19` persisted |
 | **E-22** | Inbound tracking number collides with a **customer-order (outbound)** tracking number | **Allowed** — separate namespaces. View Orders resolves inbound-request tracking first `[PD-86 · OWNER-PENDING]` |
-| **E-18b** = **E-59** | The Procurement Hub scrape runs while a registration is in flight | The scrape reads a consistent committed snapshot; a half-written request is never visible |
+| **E-59** | The Procurement Hub scrape runs while a registration is in flight | The scrape reads a consistent committed snapshot; a half-written request is never visible *(the retired alias `E-18b` named this same case; see the §7 preamble)* |
 | **E-74** | A form opened at 23:58 is submitted at 00:02 | The Inbound No. date bucket is the **submission** date, resolved from the declared server timezone; the new day's sequence starts at `0001`. The client clock is never authoritative |
 | **E-83** | Registration commits but memo materialisation (or telemetry) fails afterwards | The request exists, the toast fires, the failure is persisted and retried. After-commit side effects never roll back the request (`BR-27`) |
 | **E-88** | A number entered at creation is later re-entered in M1 on the **same** request | Idempotent — no duplicate `DC-3`, no error, no second match activation |
@@ -939,7 +964,7 @@ IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planni
 | **E-50** | Deep link when the target tab is already active, or an unknown hash | No-op; no error; the page renders normally |
 | **E-60** | A bulk add would apply the same number to two or more requests in one batch | Blocked for the second and subsequent requests, named in the result toast; `DC-19` per rejection (`BR-15`) |
 | **E-61** | First-run list with zero requests ever created | Explicit empty state; `All 0` chip; the `＋ New Inbound Request` button remains the obvious next action |
-| **E-80** | An M6 edit used reason `Other (memo)` | The Qty-cell token renders `other`; the memo text is **not** inlined into the cell — it is readable in the `title` attribute and in the auto-comment (`BR-30`) |
+| **E-80** | An M6 edit used the third reason option, `Other`, with memo text | The Qty-cell token renders `other`; the memo text is **not** inlined into the cell — it is readable in the `title` attribute and in the auto-comment (`BR-30`) |
 | **E-81** | A line has been expected-qty-edited more than once | The Qty cell renders only the **most recent** edit as `✎ {previous}→{current} ({token})`; the full chain lives in the comment thread. The cell never grows unbounded |
 | **E-82** | An expected-qty edit lands on one line of a **multi-line** request | The Qty cell shows the request's **total** expected quantity with the edit marker present; per-line attribution lives in View Orders and in the auto-comment |
 | **E-84** | Bulk selection spans more than one page of results | Select-all covers only the visible page (`BR-29`); a selection carried across pages must be shown in the bulk-bar count, and a live insert must not push a selected row off-page without the count line reflecting it |
@@ -1021,11 +1046,21 @@ Under v1's single admin role `[PD-1 · OWNER-PENDING]` [G-15] there are **no per
 
 Unless a scenario names a different step, every `[WF]` scenario begins from **N1** on a freshly loaded page (**NX**).
 
-**Wireframe reality baseline** (assert nothing beyond this in `[WF]` scenarios): route cards toggle `.on` and `Other` enables + focuses `.etc-in`; filter chips toggle `.on` but do **not** filter rows; row checkboxes are inert; `Register Inbound Request` **always** fires `#gtoast` regardless of input; the M1 header is static; `＋ Add tracking number` appends rows and last-row `✕` clears instead of removing; `.comment-btn` injects a `.cpanel-ir` row from the static `IR_COMMENTS` map; the Comments hub dropdown is wired only in State 1; the autocomplete list is static and does not respond to typing.
+**Wireframe reality baseline** (assert nothing beyond this in `[WF]` scenarios): route cards toggle `.on` and `Other` enables + focuses `.etc-in`; filter chips toggle `.on` but do **not** filter rows; row checkboxes are inert; `Register Inbound Request` **always** fires `#gtoast` regardless of input; the M1 header is static; `＋ Add tracking number` appends rows and last-row `✕` clears instead of removing; no `.qrow` input has an `Enter` handler; `Bulk add tracking numbers` carries no `data-modal` and opens nothing; `.comment-btn` injects a `.cpanel-ir` row from the static `IR_COMMENTS` map; the Comments hub dropdown is wired only in State 1; the autocomplete list is static and does not respond to typing.
 
-**Counts.** **115 scenarios** — Block A 30 · B 7 · C 24 · D 17 · E 11 · F 10 · G 16.
-Tier split: **51 `[WF]`-only · 62 `[ADMIN]`-only · 2 dual-tier** (`QA-A-19`, `QA-A-25`) — so 53 scenarios carry a `[WF]` assertion and 64 carry an `[ADMIN]` assertion.
-**50 negative tests (43.5 %)**, well above the 25 % floor.
+### 8.0a Text-normalisation and scoping rules (binding on every scenario below)
+
+These four rules exist because the wireframe interleaves demo annotation chrome and secondary controls into the same rendered text the assertions target. A runner that ignores them files false defects.
+
+1. **Strip annotation dots before every exact-string comparison.** All `reads exactly` / `reads` assertions are evaluated against the element's `textContent` **with every `.dot` descendant removed** — the wireframe's annotation numbers are demo chrome, not copy. Six `<th>` / `<label>` / copy elements carry an inline `<span class="dot">N</span>`. Equivalently, click `#annoToggle` (`Hide annotations`) once before running the text assertions: it adds `no-anno` to `<body>`, and `body.no-anno .dot{display:none!important}` removes them from the rendered text. This rule applies to **every** scenario in §8 without being restated in each one.
+2. **Use the selector exactly as written, including its scope prefix.** Where a scenario writes `#s1 .auto .opt`, query `#s1 .auto .opt` — do not widen it to `.opt`. Two class names in this wireframe are overloaded: `.opt` is both an autocomplete row and the "optional field" wrapper (`class="fld opt fld-inv"`), and `.it` exists in the hidden `[data-pane="saved"]` pane as well as the visible mentions pane.
+3. **Negative assertions are about controls, not prose, unless the scenario says otherwise.** A word that a scenario forbids as a *label* may legitimately appear in the wireframe's legend prose or sub-copy, which is annotation text describing the very rule being asserted. Each such scenario carries an explicit Precision note naming the legitimate occurrences; a naive full-document text search will false-fail. The three affected words on this page are `JIT`, `Size` and `SHIPPED`.
+4. **A label assertion is satisfied by a prefix match when the scenario declares an expected trailing element.** Two asserted labels contain a nested secondary element: the Request List Actions buttons carry a trailing `<span class="badge-n">` unread count, and the M1 `<header>` carries a trailing `<button class="x" data-close>✕</button>`. Each affected scenario states this explicitly; nowhere else on this page is a label allowed to carry extra text.
+
+**Counts.** **123 scenarios** — Block A 36 · B 7 · C 24 · D 18 · E 11 · F 11 · G 16.
+Tier split: **51 `[WF]`-only · 70 `[ADMIN]`-only · 2 dual-tier** (`QA-A-19`, `QA-A-25`) — so **53** scenarios carry a `[WF]` assertion and **72** carry an `[ADMIN]` assertion.
+**56 negative tests (45.5 %)**, well above the 25 % floor.
+**Coverage invariants**, each checkable from a map in this section: every `DC-n` in §5 carries ≥ 1 asserting scenario (§8.1) · every `[L-*]` unit and every `[L-R*]` negative entry carries ≥ 1 scenario (§8.2) · **every one of the 92 `[E-n]` edge cases carries ≥ 1 scenario (§8.3)**.
 
 ### Block A — New Request form `[L-S1-1]`…`[L-S1-16]`, `[L-S1-F]`, `[L-F6]`, `[L-F8]`
 
@@ -1040,7 +1075,8 @@ Given **N1**
 Then `#s1 .routecards` contains exactly **4** `.routecard` elements whose `<b>` titles are `Smart Buy`, `Wholesale`, `Brand Partnership`, `Other`
 And their `.rc-badge` texts are exactly `SMART BUY`, `WHOLESALE`, `PARTNERSHIP`, `OTHER`
 And the first card carries class `on`
-And **no card is labelled `JIT`** — JIT is never a requestable inbound route (`BR-2`).
+And **no `.routecard` `<b>` title and no `.rc-badge` text reads `JIT`** — JIT is never a requestable inbound route (`BR-2`).
+*Precision note: the word `JIT` DOES legitimately appear in the Smart Buy card's `<small>` sub-copy (`Stock replenishment · Coupang JIT sourcing (via PH)`) and in the product table's `JIT Price (KRW)` column header. This assertion is scoped to the two label elements the scenario enumerates — the `<b>` title and the `.rc-badge` — exactly as §8.0a rule 3 requires; a full-text search for `JIT` will produce a false failure.*
 
 **QA-A-03** `[WF]` — covers `[L-S1-2]`
 Given **N1**
@@ -1067,19 +1103,23 @@ And `inbound_request.registration_rejected` (`DC-18`) is persisted with the fiel
 **QA-A-07** `[WF]` — covers `[L-S1-5]`
 Given **N1**
 Then the `#s1 .auto input` placeholder reads exactly `Type any SKU No. · brand · product name → click a suggestion to add a row below` and its value is `100045210`
-And the dropdown shows exactly 3 `.opt` rows, the first carrying class `sel` and reading `Anua — Heartleaf 77% Soothing Toner, 250ml` with `100045210`
+And the dropdown shows exactly 3 **`#s1 .auto .opt`** rows, the first carrying class `sel` and reading `Anua — Heartleaf 77% Soothing Toner, 250ml` with `100045210`
+*Selector note (§8.0a rule 2): query `#s1 .auto .opt`, never the bare `.opt`. `#s1 .opt` matches **4** elements, because the Tracking No field wrapper is `class="fld opt fld-inv"` — there `opt` means "optional field", not "autocomplete option".*
 And the remaining two read `Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml` / `100045233` and `Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml` / `100045240`.
 
-**QA-A-08** `[ADMIN]` — covers `[L-S1-5]`, `[L-S1-6]`, `BR-24`
+**QA-A-08** `[ADMIN]` — covers `[L-S1-5]`, `[L-S1-6]`, `BR-24` / `[E-90]`
 When I type a brand name and click a suggestion
 Then one new row is appended to `.prodtbl tbody` with class `prefill`, its SKU / Brand / Product Name prefilled and `readonly`, and its Qty / Unit Cost / JIT inputs empty
 And **focus returns to the unified search box** with its value selected
-And tabbing from Order Qty moves to Unit Cost, then to JIT Price.
+And tabbing from Order Qty moves to Unit Cost, then to JIT Price
+And when the same sequence is performed **keyboard-only** — arrow keys to move the `sel` highlight in the suggestion list, then `Enter` to pick — the appended row, the readonly cells and the focus return are identical to the mouse path (`[E-90]`)
+And selecting a route card keyboard-only (arrow keys within the radio group, `Space` to pick) produces the same `on` class and the same `.etc-in` enable-and-focus as a mouse click (`[E-90]`).
 
-**QA-A-09 (negative)** `[ADMIN]` — covers `[L-S1-5]`, `BR-24`
+**QA-A-09 (negative)** `[ADMIN]` — covers `[L-S1-5]`, `BR-24` / `[E-90]`
 Given the cursor is in the unified search box and the suggestion list is closed
 When I press `Enter`
-Then the form is **not** submitted, no request is created, no toast fires, and the page does not navigate.
+Then the form is **not** submitted, no request is created, no toast fires, and the page does not navigate
+And the same holds when the list is open: `Enter` selects the highlighted suggestion and still does not submit (`[E-90]`).
 
 **QA-A-10 (negative)** `[WF]` — covers `[L-S1-6]` / `[E-13]`
 Given **N1** and the third `.prodtbl tbody tr` (class `prefill`)
@@ -1099,7 +1139,8 @@ Then no second row is appended and the inline notice `Already added — edit the
 
 **QA-A-13** `[WF]` — covers `[L-S1-10]`, `[L-S1-11]`, `[L-S1-4]`
 Given **N1**
-Then the `#s1 .prodtbl` header cells read exactly, in order: `SKU No.`, `Brand`, `Product Name`, `Order Qty`, `Unit Cost (KRW) *`, `JIT Price (KRW)`, and one empty cell
+Then the `#s1 .prodtbl` header cells, **each normalised per §8.0a rule 1 (`.dot` descendants removed)**, read exactly, in order: `SKU No.`, `Brand`, `Product Name`, `Order Qty`, `Unit Cost (KRW) *`, `JIT Price (KRW)`, and one empty cell
+*Normalisation note: the raw `textContent` of the 5th and 6th `<th>` is `Unit Cost (KRW) *10` and `JIT Price (KRW)11` because the legend dots `10` and `11` are rendered inside those cells. Strip `.dot` (or click `#annoToggle`) first.*
 And the disclaimer paragraph above the table contains the exact substrings `enter 0 if free of charge (required)` and `leave blank if unknown (optional)`
 And the `prefill` row's Unit Cost placeholder is `Per-unit price ₩ (0 if free)` and its JIT placeholder is `Blank if unknown`.
 
@@ -1120,7 +1161,7 @@ And `15,000` and `１５０００` are both accepted and persisted as the intege
 
 **QA-A-17** `[WF]` — covers `[L-S1-7]`, `[L-S1-12]`, `[L-S1-8]`
 Given **N1**
-Then the `Supplier` field carries a red `*`, the qualifier `— who is shipping the goods`, placeholder `e.g. 비엠유통, Coupang`, and value `Coupang`
+Then the `Supplier` label contains a required marker `*` whose element's computed `color` is exactly `rgb(220, 53, 69)` (the page's `--red`, `#DC3545`), the qualifier `— who is shipping the goods`, placeholder `e.g. 비엠유통, Coupang`, and value `Coupang`
 And the `Tracking No` field's wrapper has class `fld-inv`, its label contains `optional · can be added later after dispatch`, and its placeholder is `Add after dispatch — you can submit without it (add later)`
 And `Expected arrival` is an `input[type=date]` with value `2026-07-16`.
 
@@ -1137,11 +1178,12 @@ When I click `Register Inbound Request` twice within 500 ms
 Then exactly **one** element with id `gtoast` exists in the DOM and its hide timer has been reset — toasts never stack `[WF]`
 And exactly **one** request and **one** Inbound No. are created, and `inbound_request.idempotent_replay_suppressed` (`DC-23`) is persisted `[ADMIN]`.
 
-**QA-A-20** `[ADMIN]` — covers `[L-S1-3]`, `[L-F6]`, `DC-1`, `DC-2`, `DC-11`
+**QA-A-20** `[ADMIN]` — covers `[L-S1-3]`, `[L-F6]`, `DC-1`, `DC-2`, `DC-11` / `[E-16]`
 When a registration succeeds with a non-empty Memo
 Then `inbound_request.created` (`DC-1`) is persisted carrying actor, timestamp, `inbound_no` matching `^\d{12}$`, route, all lines with `unit_cost_krw`, supplier, and `source=manual`
 And `inbound_no.allocated` (`DC-2`) is persisted with the same `inbound_no`
-And `comment.auto_posted` (`DC-11`) is persisted with `trigger=memo_materialization`, authored as the requester at the registration timestamp.
+And `comment.auto_posted` (`DC-11`) is persisted with `trigger=memo_materialization`, authored as the requester at the registration timestamp
+And when the identical registration is repeated with the Memo left **empty**, `DC-1` and `DC-2` are still persisted but **no** `comment.auto_posted` row is created — an empty memo materialises nothing (`[E-16]`).
 
 **QA-A-21 (negative)** `[ADMIN]` — covers `[L-S1-1]` / `[E-1]`, `[E-14]`
 When I click `Register Inbound Request` with zero product rows
@@ -1156,9 +1198,9 @@ Given **N1**
 Then a `.note.purple` element exists containing the exact substring `auto-matches it to View Orders`
 And **no `<a>`, no `<button>`, and no element carrying a `data-modal` attribute exists inside it** — the "View Orders link info" modal must not be reachable from this page.
 
-**QA-A-24** `[WF]` — covers `[L-F6]`
+**QA-A-24** `[WF]` — covers `[L-F6]` / `[E-16]`
 Given **N1**
-Then a `textarea.mtextarea` under the label `Memo (Optional)` exists with placeholder `Notes about this inbound — anything written here is also logged to the request's Comments history` and an empty value.
+Then a `textarea.mtextarea` under the label `Memo (Optional)` exists with placeholder `Notes about this inbound — anything written here is also logged to the request's Comments history` and an empty value — the empty-memo starting state whose persistence consequence (no auto-comment) is asserted `[ADMIN]` in QA-A-20 (`[E-16]`).
 
 **QA-A-25** `[WF]` + `[ADMIN]` — covers `[L-S1-15]`
 Given **N1** `[WF]`
@@ -1167,7 +1209,8 @@ And `[ADMIN]` at the target admin viewport width the complete form from the rout
 
 **QA-A-26** `[WF]` — covers `[L-S1-F]`(c), `BR-22`
 Given **N1**, then **N3**
-Then every comments affordance on the page is labelled with the exact word `Comments`: the nav button reads `💬 Comments`, each Request List Actions button reads `💬 Comments`, and the hub tabs read `@ Mentions` and `★ Saved`
+Then every comments affordance on the page is labelled with the exact word `Comments`: the nav button's label **begins with** `💬 Comments`, every Request List Actions button's label **begins with** `💬 Comments`, and the hub tabs begin with `@ Mentions` and read `★ Saved`
+*Declared trailing element (§8.0a rule 4): the nav button, the `@ Mentions` tab and Actions rows 1–3 each carry a trailing unread-count `<span class="badge-n">`, so their raw `textContent` is `💬 Comments2`, `@ Mentions 2` and `💬 Comments 1|2|3`. The 6 Actions buttons read `['💬 Comments 1','💬 Comments 2','💬 Comments 3','💬 Comments','💬 Comments','💬 Comments']`. Assert the prefix, or compare after removing `.badge-n` descendants.*
 And no localised or alternative label (e.g. `메모`, `Notes`, `Remarks`) appears on any comments control.
 
 **QA-A-27 (negative)** `[ADMIN]` — covers `[L-S1-F]`(a), `[L-R9]`, `[PD-9 · OWNER-PENDING]`
@@ -1177,14 +1220,17 @@ And nothing in the build reads the stale State 1 footer clause "and Carrier" as 
 
 **QA-A-28** `[WF]` — covers `[L-S1-4]`, `[L-R7]`
 Given **N1**
-Then the DOM order of the form's data inputs is: route cards → unified search → product table (`SKU No.`, `Brand`, `Product Name`, `Order Qty`, `Unit Cost (KRW) *`, `JIT Price (KRW)`) → `Supplier` → `Tracking No` → `Expected arrival` → `Memo (Optional)`
-And **no column, field or label named `Size` exists anywhere on the page**.
+Then the DOM order of the form's data inputs is: route cards → unified search → product table (`SKU No.`, `Brand`, `Product Name`, `Order Qty`, `Unit Cost (KRW) *`, `JIT Price (KRW)`) → `Supplier` → `Tracking No` → `Expected arrival` → `Memo (Optional)` — header text normalised per §8.0a rule 1
+And **no `<th>`, no `<label>`, no form control and no table cell is named `Size`** (the same scoped form QA-G-16 uses).
+*Precision note (§8.0a rule 3): the string `Size` DOES legitimately appear once, inside State 1's legend prose — `… locked in via the unified search; no Size` — which is the annotation declaring this very removal. A full-document text search will produce a false failure.*
 
-**QA-A-29 (negative)** `[ADMIN]` — covers `[E-66]`, `[E-67]`, `[E-68]`
+**QA-A-29 (negative)** `[ADMIN]` — covers `[E-66]`, `[E-67]`, `[E-68]`, `[E-11]`
 When the picked catalog product is deleted or renamed between selection and submit
 Then registration still succeeds against the snapshot captured at selection, and the divergence is recorded on `DC-1`
 And when the catalog holds two entries for one SKU, the search surfaces both rather than silently picking one
-And an inactive or discontinued SKU is either excluded from results or shown with an explicit inactive marker.
+And an inactive or discontinued SKU is either excluded from results or shown with an explicit inactive marker
+And when the query matches nothing at all, the dropdown renders an explicit no-result affordance, **no row is appended**, no error is thrown, and nothing is submitted (`[E-11]`).
+*Wireframe limitation: the demo autocomplete list is static and does not respond to typing, so the no-result state cannot be reached on the mock — this clause is `[ADMIN]`.*
 
 **QA-A-30 (negative)** `[ADMIN]` — covers `[E-69]`, `[E-78]`, `[E-79]`
 When `Order Qty` exceeds the declared per-line maximum
@@ -1192,13 +1238,52 @@ Then it is rejected with an inline error — never truncated, wrapped, or clampe
 And when two requests use `Other` channel names differing only by case or padding, they group as one channel downstream
 And an `Other` channel name containing Slack or markdown control characters is stored verbatim and escaped only at render time.
 
+**QA-A-31 (negative)** `[ADMIN]` — covers `[L-S1-4]`, `[L-S1-6]` / `[E-2]`
+Given a valid form with two product rows, in which the **second** row's `Order Qty` input is left empty
+When I click `Register Inbound Request`
+Then registration is blocked before any server write, an inline error appears on that row, `document.activeElement` is that row's `Order Qty` input, no success toast fires, and `inbound_request.registration_rejected` (`DC-18`) is persisted naming the offending field
+And the same block occurs for `Order Qty = 0` and for a whitespace-only `Order Qty` — the field is required and must be an integer ≥ 1.
+*Wireframe limitation: the static page always toasts on Register — do not assert the block on the wireframe.*
+
+**QA-A-32 (negative)** `[ADMIN]` — covers `[L-S1-2]` / `[E-9]`
+Given three product rows exist with `Order Qty`, `Unit Cost (KRW)` and `JIT Price (KRW)` filled, `Supplier` filled, and route = `Smart Buy`
+When I select `Wholesale`, then `Brand Partnership`, then `Other` (entering a channel name), then `Smart Buy` again
+Then after every switch **all three rows still exist in the same order** and every entered value is byte-identical to what it was before the first switch — route is request-level, never row-level, and switching it must not clear, reorder or re-validate the product table
+And no row is appended or removed by a route change.
+
+**QA-A-33** `[ADMIN]` — covers `[L-S1-8]` / `[E-15]`, `[E-54]`
+When I set `Expected arrival` to a date in the past and register
+Then registration **succeeds** with a non-blocking warning shown at submit time — back-dated requests are legitimate — and the persisted `expected_arrival` is that past date
+And when I register with `Expected arrival` left blank, registration succeeds, `expected_arrival` is persisted as `null`, the Request List's `Expected arrival` cell renders empty, and the request is **excluded** from the View Orders "Expected Inbound N" badge and its expandable table.
+
+**QA-A-34 (negative)** `[ADMIN]` — covers `[L-S1-7]`, `[L-S1-3]`, `[G-9]` / `[E-18]`
+Given a valid, fully filled New Request form
+When the network fails after the request leaves the client but before a response returns
+Then an error state is shown, **every entered value is retained in the form** (rows, quantities, costs, supplier, memo), and retrying under the **same** idempotency key produces exactly one request and one Inbound No.
+And no Inbound No. is allocated that maps to no request — `inbound_no.allocated` (`DC-2`) never exists without its `inbound_request.created` (`DC-1`)
+And if the original submit had in fact committed server-side, the retry is absorbed and `inbound_request.idempotent_replay_suppressed` (`DC-23`) is persisted rather than a second request created.
+
+**QA-A-35 (negative)** `[ADMIN]` — covers `[L-S1-6]`, `[L-F9]` / `[E-56]`
+Given a single request built with 200 distinct SKU rows
+When it is registered and then viewed in the Request List
+Then neither the form nor the list row breaks: every line is persisted on `DC-1`, the `Brand · Product` cell collapses to `{Brand} {first product name} +199 more`, the `SKU` cell collapses to `{first SKU} +199`, and the `Qty` cell shows the summed expected quantity
+And no row is silently truncated, and no line is dropped from the Procurement Hub scrape.
+
+**QA-A-36 (negative)** `[ADMIN]` — covers `[L-S1-16]`, `[L-F5]`, `[L-F7]` / `[E-57]`, `[E-85]`, `[E-63]`
+Given a New Request form with unsaved entered rows and field values
+When I click the `Request List` page tab, and separately when I arrive at `#reqlist` by deep link, and separately when the session expires and I re-authenticate
+Then in **all three** cases the entered data is **never silently discarded** — the build either warns before leaving or preserves the draft client-side, and the chosen behavior is the same in all three cases (§9.3 D-6, D-18)
+And browser back/forward across the same transition behaves identically
+And re-authentication returns the operator to the populated form or to the preserved draft, never to an empty form with no notice.
+
 ### Block B — State 2 route variant `[L-S2-1]`, `[L-S2-2]`, `[L-S2-F]`
 
 **QA-B-01** `[WF]` — covers `[L-S2-1]`, `[L-R2]`
 Given **N2**
 Then `#s2` has class `on`, the `Wholesale` card carries class `on`, and the other three do not
 And the form contains **no Inbound No. input, no preview panel, and no element whose label contains `Inbound No.`** anywhere inside `#s2 .formcard`
-And the submit-row copy reads exactly `On registration, status = REQUESTED (tracking number entered → View Orders matching active immediately) · Inbound No. auto-assigned — shown in the Request List`.
+And the submit-row **copy element** `#s2 .submitrow .mut` — not the whole `.submitrow` — reads exactly `On registration, status = REQUESTED (tracking number entered → View Orders matching active immediately) · Inbound No. auto-assigned — shown in the Request List`, normalised per §8.0a rule 1.
+*Scoping note: `#s2 .submitrow` also contains the `Register Inbound Request` button and legend dot `1`, so its `textContent` is `Register Inbound Request On registration, … Request List1` and equality against it is impossible. Scope to the `.mut` copy span and strip `.dot`.*
 
 **QA-B-02** `[WF]` — covers `[L-S2-2]`, `[L-R3]`
 Given **N2**
@@ -1227,7 +1312,8 @@ Then every result is identical to the `SMART_BUY` run except that `OTHER` additi
 Given **N2**
 Then the State 2 legend footer paragraph contains the exact substring `REQUESTED → PARTIAL → INBOUNDED`
 And it records `SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02`
-And **no status control, badge, chip or option reading `SHIPPED` exists anywhere in the document**.
+And **no `.chip`, `.tag`, `.pill`, `<option>` or `<button>` anywhere in the document reads `SHIPPED`** — the assertion is about controls, not about the word.
+*Precision note (§8.0a rule 3): `SHIPPED` legitimately appears 3 times in legend and footer prose, each time as the annotation recording its own retirement. A full-document text search will produce a false failure; scope the query to the five control selectors named above.*
 
 **QA-B-07** `[ADMIN]` — covers `[L-S1-14]`
 Then the Comments hub is present and operable on **every** state of this page, not only the New Request form.
@@ -1235,10 +1321,12 @@ Then the Comments hub is present and operable on **every** state of this page, n
 
 ### Block C — Request List `[L-S3-1]`…`[L-S3-10]`, `[L-F3]`, `[L-F4]`, `[L-F5]`, `[L-F7]`, `[L-F9]`
 
-**QA-C-01** `[WF]` — covers `[L-F5]`, `[G-12]`
+**QA-C-01** `[WF]` — covers `[L-F5]`, `[G-12]` / `[E-31]`, `[E-50]`
 Given **NR**
-Then `#s3` has class `on` and the top-bar tab `3 · Request List (Requested/Partial/Inbounded)` carries class `on`
-And the same holds when the page is loaded with `#s3` instead of `#reqlist`.
+Then `#s3` has class `on` and the top-bar tab `3 · Request List (Requested/Partial/Inbounded)` carries class `on` (`[E-31]`)
+And the same holds when the page is loaded with `#s3` instead of `#reqlist`
+And loading with `#s3` **while `#s3` is already active**, and loading with an unknown hash such as `#nosuchtab`, are both no-ops: the page renders normally, `#s3` (respectively `#s1`) keeps exactly one active state, and no error is thrown (`[E-50]`)
+*Execution note: `#reqlist` / `#s3` must be applied on a **fresh document load**, not by mutating `location.hash` on the already-loaded page — a same-document hash change fires only `hashchange` and does not re-run the first-paint handler this scenario asserts. Navigate to `about:blank` first, then load the URL with the hash.*
 
 **QA-C-02** `[WF]` — covers `[L-S3-1]`, `[L-R4]`
 Given **N3**
@@ -1272,11 +1360,12 @@ And when the selection includes an `INBOUNDED` row, that row is excluded from th
 Given **N3**
 Then the Sourcing Route cells render `SMART BUY`, `WHOLESALE`, `PARTNERSHIP` as `.tag` spans whose computed `background-color` is fully transparent and whose computed `color` equals the page ink colour `rgb(20, 16, 27)`, with `font-weight` 800 — **black bold text, not coloured pills**.
 
-**QA-C-08** `[WF]` — covers `[L-S3-4]`, `[L-S3-7]`, `[G-10]`
+**QA-C-08** `[WF]` — covers `[L-S3-4]`, `[L-S3-7]`, `[G-10]` / `[E-27]`
 Given **N3**
 Then row `202607120004` renders two tracking numbers `10325661220417` and `10325661220418` in the Tracking No cell with the note `2 tracking numbers — all matching active`
 And rows `202607130003` and `202607130002` render an `Add tracking` button instead of numbers
-And row `202607120001` renders the single number `10324880021991` with no `Add tracking` button.
+And row `202607120001` renders the single number `10324880021991` with no `Add tracking` button
+And on **every** row whose cell already holds at least one number (`202607120004`, `202607120001`), there is **no `Add tracking` button and no other inline add affordance** — adding a further number to such a request goes through the bulk bar (`[E-27]`, §3.3.2).
 
 **QA-C-09** `[WF]` — covers `[L-S3-5]`, `BR-30`
 Given **N3**
@@ -1292,8 +1381,9 @@ And **neither INBOUNDED row contains any `<a>` or `<button>` pointing to View Or
 
 **QA-C-11 (negative)** `[WF]` — covers `[L-S3-10]`, `[L-F9]`, `[L-R9]`, `[PD-9 · OWNER-PENDING]`
 Given **N3**
-Then the Request List header row contains exactly 12 `th` cells in this order: (checkbox), `Inbound No.`, `Sourcing Route`, `Brand · Product`, `SKU`, `Qty`, `Tracking No`, `Expected arrival`, `Received Date`, `Requested by`, `Status`, `Actions`
-And **no `Carrier` column exists anywhere in the table**, and no 13th column exists.
+Then the Request List header row contains exactly 12 `th` cells whose texts, **normalised per §8.0a rule 1 (`.dot` descendants removed)**, read in this order: (checkbox), `Inbound No.`, `Sourcing Route`, `Brand · Product`, `SKU`, `Qty`, `Tracking No`, `Expected arrival`, `Received Date`, `Requested by`, `Status`, `Actions`
+And **no `<th>` or cell in the table is labelled `Carrier`**, and no 13th column exists.
+*Normalisation note: raw `textContent` for four of these cells is `Sourcing Route3`, `Tracking No4`, `Received Date10` and `Status5` — legend dots rendered inside the `<th>`. The count (12), the order and the Carrier absence all hold once `.dot` is stripped.*
 
 **QA-C-12 (negative)** `[WF]` — covers `[L-S3-4]`, `[E-28]`, `[PD-85 · OWNER-PENDING]`
 Given **N3**
@@ -1340,7 +1430,7 @@ And per-row selections persist across chip switches within the session
 And the bulk-bar count always equals the number of actually selected rows.
 
 **QA-C-21** `[ADMIN]` — covers `[L-S3-5]`, `BR-30` / `[E-80]`, `[E-81]`, `[E-82]`
-When an M6 edit uses reason `Supplier qty change`, then a second edit uses `Other (memo)` with memo text
+When an M6 edit uses reason `Supplier qty change`, then a second edit uses the third reason option — whose label is exactly `Other`, **not** `Other (memo)` (§3.3.5 declared `[G-11]` delta, View Orders `BR-53`, review **C-11**) — with memo text
 Then the Qty cell renders the **most recent** edit only, as `✎ {previous}→{current} (other)`
 And the memo text is not inlined into the cell but is readable in the cell's `title` and in the auto-comment
 And on a multi-line request the Qty cell shows the request total with the marker present, and per-line attribution is available in the comment thread.
@@ -1364,7 +1454,8 @@ And this element is **not** `#gtoast`: it exists before any click, it is not cre
 
 **QA-D-01** `[WF]` — covers `[L-M1]`
 Given **NM**
-Then `#m-invoice` gains class `open` and its `header` reads exactly `Add Tracking No — 202607130003`
+Then `#m-invoice` gains class `open` and its `header`'s text, **excluding the `.x` close control**, reads exactly `Add Tracking No — 202607130003`
+*Declared trailing element (§8.0a rule 4): the `<header>` also contains `<button class="x" data-close>✕</button>`, so its raw `textContent` is `Add Tracking No — 202607130003✕`. Remove the `.x` descendant (or assert on the header's title element) before comparing.*
 And the body contains the exact substrings `Enter the tracking number(s) once the goods have shipped.` and `One inbound request can hold multiple tracking numbers`.
 
 **QA-D-02** `[WF]` — covers `[L-M1]`, `[L-S3-4]`
@@ -1378,8 +1469,9 @@ Given **NM**
 Then `#tnList` contains exactly 1 `.qrow`
 When I click `＋ Add tracking number` (`#tnAdd`) twice
 Then `#tnList` contains 3 `.qrow` rows, each with an `input` and a `.tn-del` `✕` button, and the newest input is `document.activeElement`
-When I click `✕` on two rows, then `✕` on the last remaining row
-Then two rows are removed and the final row **remains** with its input value cleared — the row count never reaches 0.
+When I click `✕` on two rows, **then type the marker value `TEST123` into the surviving row's input**, then click `✕` on that last remaining row
+Then two rows are removed and the final row **remains** in the DOM, and its input `value` is now the empty string — the previously typed `TEST123` was cleared and the row count never reaches 0.
+*Execution note: the marker value is mandatory. Without it the "value cleared" check passes trivially against an already-empty input and asserts nothing.*
 
 **QA-D-04** `[WF]` — covers `[L-M1]`, `[L-F1]`, `[G-2]`
 Given **NM**
@@ -1455,6 +1547,15 @@ Given **NM**
 When I click on the overlay (`#m-invoice`) outside the `.modal` box
 Then `#m-invoice` loses class `open` and no toast appears — backdrop dismissal behaves exactly like `Cancel`.
 
+**QA-D-18 (negative)** `[ADMIN]` — covers `[L-M1]`, `BR-24` (§3.4 keyboard contract)
+Given M1 is open with one `.qrow` row whose input holds `10325661220417`
+When I press `Enter` in that input
+Then a new `.qrow` row is appended and its input becomes `document.activeElement` — identical to clicking `＋ Add tracking number` — and **`Save tracking numbers` does not fire**: the modal stays open, no `tracking_no.added` (`DC-3`) is written, and no toast appears
+And pressing `Enter` again in the new, still-empty row is a **no-op**: no further row is appended
+And pressing `Escape` anywhere in the modal is a **no-op** — the modal stays open with every entered value intact; dismissal is `Cancel`, the header `✕`, or a backdrop click only
+And an operator can therefore enter n numbers from a dispatch email without touching the mouse, and no keystroke short of activating `Save tracking numbers` commits anything.
+*Wireframe limitation: no `.qrow` input carries an `Enter` handler in the wireframe, so this contract is `[ADMIN]`-only — pressing Enter on the mock does nothing and that is not a bug to file (§2.4).*
+
 ### Block E — Cross-page lifecycle (with View Orders)
 
 **QA-E-01** `[ADMIN]` — covers `[L-S3-5]`, `DC-7` / `[E-30]`
@@ -1522,8 +1623,9 @@ Then `#inbox1` gains class `open` and shows two tabs labelled `@ Mentions` (with
 
 **QA-F-02** `[WF]` — covers `[L-S1-14]`, `DC-13`
 Given **N1** and `#inbox1` open
-Then the `@ Mentions` pane header reads `Comments where I'm tagged` with the action `Mark all as read`
-And the pane lists exactly two `.it` entries, both carrying class `unread`, whose bold entity labels are `202607130002` and `202607120004`
+Then the `@ Mentions` pane header reads `Comments where I'm tagged` with the action `Mark all as read` — this wireframe's strings; see §3.1.13 for the declared cross-page divergence and QA-F-11 for the `[ADMIN]` half
+And the pane lists exactly two **`#inbox1 [data-pane="mentions"] .it`** entries, both carrying class `unread`, whose bold entity labels are `202607130002` and `202607120004`
+*Selector note (§8.0a rule 2): scope to the mentions pane. A bare `.it` matches **3**, because `[data-pane="saved"]` is `display:none` but still present in the DOM and holds a third `.it`.*
 And the first reads `Dean: "@Yongwon when is the tracking number for this wholesale one coming?"` at `11:20`, and the second `Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"` at `Yesterday`.
 
 **QA-F-03** `[WF]` — covers `[L-S1-14]`, `DC-12`
@@ -1531,7 +1633,7 @@ Given **N1** and `#inbox1` open
 When I click the `★` button on the first mention entry
 Then that button toggles class `on`
 When I click the `★ Saved` tab
-Then the pane header reads `Comments I saved` with the hint `Unstar to remove from list`.
+Then the pane header reads `Comments I saved` with the hint `Unstar to remove from list` — this wireframe's strings; see §3.1.13 and QA-F-11.
 
 **QA-F-04** `[WF]` — covers `[L-F2]`
 Given **N3**
@@ -1571,6 +1673,13 @@ When a comment contains `@Dean,` (mention followed by punctuation) and a mention
 Then both resolve by the same admin-wide mention rule used on every other screen
 And any token that cannot be resolved falls through to the `[E-48]` behavior — comment posts, no Slack fires, token recorded.
 
+**QA-F-11** `[ADMIN]` — covers `[L-S1-14]`, `[G-7]` (§3.1.13 declared cross-page divergence)
+Given the built admin's Comments hub on this page
+Then its six shared strings — the mentions pane header, the saved pane header, the unstar hint, the read-all action, the search-results header and the empty-search state — are **byte-identical to whatever `[G-7]` publishes as the canonical set**, and byte-identical to the same six strings on the other seven screens
+And this page invents no local wording for any of them: where `[G-7]`'s canonical text differs from this wireframe's `Comments where I'm tagged` / `Mark all as read` / `Comments I saved` / `Unstar to remove from list`, **`[G-7]` wins in the build** and the wireframe is corrected (proposed backlog entry **`[IR-WFX-1 · proposed]`**)
+And the entity label in every hub entry on this page is the `Inbound No.` — that part is a genuine page delta and is unaffected by the canonicalisation.
+*Runnable only once `[G-7]` publishes the six strings; until then this scenario is a standing deferred assertion, and QA-F-02 / QA-F-03 remain the byte-exact `[WF]` checks against the shipped wireframe.*
+
 ### Block G — Automation, integrations and data-capture assertions
 
 **QA-G-01** `[ADMIN]` — covers `[L-S3-6]`, §6.1 rows 1–2, `DC-14`, `DC-15`
@@ -1609,7 +1718,7 @@ When the View Orders State 6 banner link is followed
 Then this page opens on the Request List **filtered to the referenced Inbound No.**
 And, if telemetry is enabled, `inbound_request.viewed_via_deeplink` (`DC-16`) records the entry source. *(`DC-16` is dev-optional; its absence is not a failure.)*
 
-**QA-G-08** `[ADMIN]` — covers §6.4, `BR-20`, `DC-20` / `[E-18b]`, `[E-59]`
+**QA-G-08** `[ADMIN]` — covers §6.4, `BR-20`, `DC-20` / `[E-59]`
 When the Procurement Hub sheet scrape runs
 Then it reads a consistent committed snapshot of the Request List (Inbound No. → sheet column A, plus Channel, SKU, Brand, Product Name, Order Qty, Unit Cost, JIT Price, Supplier, Received Date)
 And a half-written registration is never visible to the scrape
@@ -1648,7 +1757,8 @@ And `DC-14` / `DC-15` automation logs and `DC-18` / `DC-19` / `DC-22` / `DC-23` 
 
 **QA-G-16 (negative)** `[WF]` — covers `[L-R1]`…`[L-R12]` (wireframe-runnable half of `QA-G-12`)
 Given **N1**, then **N2**, then **N3**, then **NM**
-Then across all four surfaces the document contains: no element with `data-modal` other than `m-invoice`; no input or label whose text contains `Inbound No.` inside a `.formcard`; no checkbox bound to a free-of-charge behavior; no text `SHIPPED` in any chip, badge or option; no `<th>` or cell labelled `Size` or `Carrier`; no second submit button (exactly one button reads `Register Inbound Request` per state); and no `Add tracking` button on rows `202607100005` or `202607090002`.
+Then across all four surfaces the document contains: no element with `data-modal` other than `m-invoice`; no input or label whose text contains `Inbound No.` inside a `.formcard`; no checkbox bound to a free-of-charge behavior; no `.chip`, `.tag`, `.pill`, `<option>` or `<button>` reading `SHIPPED`; no `<th>`, `<label>`, form control or table cell labelled `Size` or `Carrier`; no second submit button (exactly one button reads `Register Inbound Request` per state); and no `Add tracking` button on rows `202607100005` or `202607090002`.
+*Precision note (§8.0a rule 3): `SHIPPED` (3 occurrences) and `Size` (1 occurrence) appear in legend/footer prose that documents their own removal, and `Carrier` appears in the stale State 1 footer (defect **WF-2**) and in legend `[L-S3-10]`'s negative declaration. Every clause above is scoped to controls and table cells; a full-document text search for any of the three words will produce a false failure.*
 
 ### 8.1 Data-capture coverage map
 
@@ -1656,8 +1766,8 @@ Every event in §5 has at least one QA scenario whose Then-clause asserts its pe
 
 | Event | Asserted by |
 |---|---|
-| `DC-1` `inbound_request.created` | QA-A-20, QA-A-29, QA-E-07, QA-G-11 |
-| `DC-2` `inbound_no.allocated` | QA-A-20, QA-E-09, QA-G-06 |
+| `DC-1` `inbound_request.created` | QA-A-20, QA-A-29, QA-A-33, QA-A-35, QA-E-07, QA-G-11 |
+| `DC-2` `inbound_no.allocated` | QA-A-20, QA-A-34, QA-E-09, QA-G-06 |
 | `DC-3` `tracking_no.added` | QA-D-08, QA-D-10, QA-G-11 |
 | `DC-4` `tracking_no.removed` | QA-D-12 |
 | `DC-5` `tracking_no.bulk_added` | QA-G-04 |
@@ -1673,12 +1783,12 @@ Every event in §5 has at least one QA scenario whose Then-clause asserts its pe
 | `DC-15` `slack_notification.sent` | QA-F-07, QA-G-01, QA-G-03 |
 | `DC-16` `inbound_request.viewed_via_deeplink` | QA-G-07 (dev-optional) |
 | `DC-17` `comment.mention_notified` | QA-F-07 |
-| `DC-18` `inbound_request.registration_rejected` | QA-A-06, QA-A-21 |
+| `DC-18` `inbound_request.registration_rejected` | QA-A-06, QA-A-21, QA-A-31 |
 | `DC-19` `tracking_no.duplicate_blocked` | QA-D-09, QA-G-05 |
 | `DC-20` `inbound_request.sheet_scraped` | QA-G-08 |
 | `DC-21` `unrecognized_pool.linked_to_request` | QA-E-07 |
 | `DC-22` `inbound_request.stale_conflict_rejected` | QA-D-14 |
-| `DC-23` `inbound_request.idempotent_replay_suppressed` | QA-A-19, QA-D-11 |
+| `DC-23` `inbound_request.idempotent_replay_suppressed` | QA-A-19, QA-A-34, QA-D-11 |
 | **NON-events** (§5.4) | QA-G-09 |
 | **Retention** (§5.3) | QA-G-15 |
 
@@ -1689,20 +1799,20 @@ Every one of the 39 legend units and all 12 negative entries carry at least one 
 | Unit | Scenarios |
 |---|---|
 | `[L-S1-1]` | QA-A-21 |
-| `[L-S1-2]` | QA-A-02, A-03, A-04, A-05, A-06 |
-| `[L-S1-3]` | QA-A-19, A-20, E-09, G-06 |
-| `[L-S1-4]` | QA-A-13, A-16, A-28 |
+| `[L-S1-2]` | QA-A-02, A-03, A-04, A-05, A-06, A-32 |
+| `[L-S1-3]` | QA-A-19, A-20, A-34, E-09, G-06 |
+| `[L-S1-4]` | QA-A-13, A-16, A-28, A-31 |
 | `[L-S1-5]` | QA-A-07, A-08, A-09 |
-| `[L-S1-6]` | QA-A-08, A-10, A-11, A-12 |
-| `[L-S1-7]` | QA-A-17, A-18 |
-| `[L-S1-8]` | QA-A-17 |
+| `[L-S1-6]` | QA-A-08, A-10, A-11, A-12, A-31, A-35 |
+| `[L-S1-7]` | QA-A-17, A-18, A-34 |
+| `[L-S1-8]` | QA-A-17, A-33 |
 | `[L-S1-9]` | QA-A-23 |
 | `[L-S1-10]` | QA-A-13, A-14 |
 | `[L-S1-11]` | QA-A-13, A-15 |
 | `[L-S1-12]` | QA-A-17, A-22 |
-| `[L-S1-14]` | QA-F-01, F-02, F-03, F-09, B-07 |
+| `[L-S1-14]` | QA-F-01, F-02, F-03, F-09, F-11, B-07 |
 | `[L-S1-15]` | QA-A-25 |
-| `[L-S1-16]` | QA-A-01 |
+| `[L-S1-16]` | QA-A-01, A-36 |
 | `[L-S1-F]` | QA-A-26 (c), QA-A-27 (a), QA-G-08 (b) |
 | `[L-S2-1]` | QA-B-01, B-04, B-05 |
 | `[L-S2-2]` | QA-B-02, B-03 |
@@ -1717,17 +1827,72 @@ Every one of the 39 legend units and all 12 negative entries carry at least one 
 | `[L-S3-8]` | QA-C-10, E-03 |
 | `[L-S3-9]` | QA-C-13 |
 | `[L-S3-10]` | QA-C-10, C-11, E-03, E-11 |
-| `[L-M1]` | QA-D-01 … D-17 |
+| `[L-M1]` | QA-D-01 … D-18 |
 | `[L-F1]` | QA-A-18, B-04, C-24, D-04 |
 | `[L-F2]` | QA-F-04, F-05, F-06, F-07, F-08, F-10 |
 | `[L-F3]` | QA-C-15 |
 | `[L-F4]` | QA-C-14 |
-| `[L-F5]` | QA-C-01, G-07 |
+| `[L-F5]` | QA-C-01, A-36, G-07 |
 | `[L-F6]` | QA-A-20, A-24 |
-| `[L-F7]` | QA-C-19 |
+| `[L-F7]` | QA-C-19, A-36 |
 | `[L-F8]` | QA-A-01 |
-| `[L-F9]` | QA-C-11, C-16 |
+| `[L-F9]` | QA-C-11, C-16, A-35 |
 | `[L-R1]`…`[L-R12]` | QA-G-12 (all, `[ADMIN]`), QA-G-16 (all, `[WF]`), plus targeted: R1 QA-A-23 · R2 QA-B-01 · R3 QA-B-02 · R4 QA-B-06, C-02, C-05 · R7 QA-A-28 · R9 QA-A-27, C-11 · R10 QA-C-10 · R12 QA-C-05, C-17 |
+
+### 8.3 Edge-case coverage map
+
+**Invariant: every one of the 92 `[E-n]` edge cases defined in §7 carries at least one QA scenario.** This map exists so the invariant is checkable from inside the document — §8.1 and §8.2 made the `DC-n` and `[L-*]` gaps visible, and without this table an executing QA agent could silently under-run §7. Any future edge case added to §7 must be added here in the same commit.
+
+| Edge case | Asserted by | Edge case | Asserted by |
+|---|---|---|---|
+| `E-1` = `E-14` | QA-A-21 | `E-47` | QA-A-06 |
+| `E-2` | QA-A-31 | `E-48` | QA-F-08, QA-F-10 |
+| `E-3` | QA-A-14 | `E-49` | QA-F-08 |
+| `E-4` | QA-A-14 | `E-50` | QA-C-01 |
+| `E-5` | QA-A-15 | `E-51` | QA-G-03 |
+| `E-6` | QA-A-16 | `E-52` | QA-G-02 |
+| `E-7` | QA-A-16 | `E-53` | QA-E-07 |
+| `E-8` | QA-A-06 | `E-54` | QA-A-33 |
+| `E-9` | QA-A-32 | `E-55` | QA-A-16 |
+| `E-10` | QA-A-22 | `E-56` | QA-A-35 |
+| `E-11` | QA-A-29 | `E-57` | QA-A-36 |
+| `E-12` | QA-A-12 | `E-58` | QA-D-08 |
+| `E-13` | QA-A-10 | `E-59` | QA-G-08 |
+| `E-15` | QA-A-33 | `E-60` | QA-G-05 |
+| `E-16` | QA-A-20, QA-A-24 | `E-61` | QA-C-04 |
+| `E-17` | QA-A-19 | `E-62` | QA-D-14 |
+| `E-18` | QA-A-34 | `E-63` | QA-A-36 |
+| `E-19` | QA-G-06 | `E-64` | QA-F-06 |
+| `E-20` | QA-G-06 | `E-65` | QA-F-08 |
+| `E-21` = `E-35` | QA-D-09 | `E-66` | QA-A-29 |
+| `E-22` | QA-E-08 | `E-67` | QA-A-29 |
+| `E-23` | QA-C-04 | `E-68` | QA-A-29 |
+| `E-24` | QA-C-06 | `E-69` | QA-A-30 |
+| `E-25` | QA-C-06 | `E-70` | QA-A-22 |
+| `E-26` | QA-C-04, QA-C-23 | `E-71` | QA-A-16 |
+| `E-27` | QA-C-08 | `E-72` | QA-D-15 |
+| `E-28` | QA-C-12, QA-D-13 | `E-73` | QA-D-16 |
+| `E-29` | QA-E-04 | `E-74` | QA-E-09 |
+| `E-30` | QA-E-01 | `E-75` | QA-G-13 |
+| `E-31` | QA-C-01 | `E-76` | QA-G-14 |
+| `E-32` | QA-D-07 | `E-77` | QA-G-03 |
+| `E-33` | QA-D-08 | `E-78` | QA-A-30 |
+| `E-34` | QA-D-08 | `E-79` | QA-A-30 |
+| `E-36` | QA-D-16 | `E-80` | QA-C-21 |
+| `E-37` | QA-D-03 | `E-81` | QA-C-21 |
+| `E-38` | QA-D-12 | `E-82` | QA-C-21 |
+| `E-39` | QA-D-14 | `E-83` | QA-G-03 |
+| `E-40` | QA-D-14 | `E-84` | QA-C-20, QA-C-23 |
+| `E-41` | QA-D-11 | `E-85` | QA-A-36 |
+| `E-42` | QA-E-05 | `E-86` | QA-F-09 |
+| `E-43` | QA-E-06 | `E-87` | QA-F-10 |
+| `E-44` | QA-E-02 | `E-88` | QA-D-08 |
+| `E-45` | QA-E-07 | `E-89` | QA-E-11 |
+| `E-46` | QA-A-19 | `E-90` | QA-A-08, QA-A-09 |
+| | | `E-91` | QA-E-10 |
+| | | `E-92` | QA-C-22 |
+
+Merged entries appear once under both IDs (`E-1` = `E-14`, `E-21` = `E-35`); the retired keys `E-c1` and `E-18b` are absent by design (§7 preamble). Rows: 90 distinct entries covering all 92 numeric IDs.
 
 ---
 
@@ -1745,8 +1910,12 @@ Per the writing convention, owner questions that already carry a provisional def
 | **Unrecognized pool UI and matching mechanics** | The **tracking-missing** and **View Orders** specs. Referenced here only for the `BR-19` recovery loop |
 | **Label / invoice layout content** | Deferred to the Phase 3-1 session with the owner. No print surface exists on this page anyway ([G-4] N/A, §6.5) |
 | **Automatic Carrier recording** | **Rejected** 2026-08-03 `[PD-9 · OWNER-PENDING]` → `[L-R9]`. Not deferred — rejected |
-| **Photo capture on inbound artifacts** | Permanently removed from the WMS 2.0 flows (2026-08-03, `[PD-63]`). No photo affordance on this page, and no phase pointer |
+| **Photo capture on inbound artifacts** | Provisionally removed **permanently** — not deferred to a later phase (2026-08-03, `[PD-63 · OWNER-PENDING]`). No photo affordance on this page, and no phase pointer. The "permanently" is the provisional answer's own wording and records the anti-re-implementation intent; it is not owner assent |
 | **Role / permission matrix** | Post-v1 owner decision `[PD-1 · OWNER-PENDING]` [G-15]. v1 is a single admin role with actor capture (`BR-26`) |
+| **JIT residual stock** | **Inventory (`stock-status`)** is the primary home. Nothing on this page reads, writes, computes or renders a residual-stock figure. `JIT Price (KRW)` here is a declared per-unit *purchase price* (`[L-S1-11]`), never a quantity, and is not an input to any residual-stock calculation (§1.5) |
+| **Line-based location filter and audit-mode-only visibility** [G-14] | **Inventory (`stock-status`)** owns both. This page has no location control, no location column, no Stock Audit mode and no audit-gated column (§1.5) |
+| **Korean product names in picking artifacts** [G-6] | **Ready to be Outbounded** owns the Korean-name picking rule. This page has no picking artifact; [G-6] otherwise applies here normally (brand-bold EN names, Korean supplier names verbatim) (§1.5) |
+| **Comments-hub canonical string set** [G-7] | `_global-rules` owns it. This page ships its wireframe's strings and follows `[G-7]` once the six shared strings are canonicalised (§3.1.13, QA-F-11) |
 
 ### 9.2 NO-DEFAULT open questions (owner must decide — no behavior is specified)
 
@@ -1790,6 +1959,8 @@ Raised by this spec, not previously registered. The wireframe renders `Add track
 | D-19 | Multi-line paste separators in M1 | Newline / tab / comma / semicolon at minimum; split visibly before save (`[E-72]`) |
 | D-20 | The single declared server timezone for the Inbound No. date bucket | One value system-wide; the client clock is never authoritative (`[E-74]`) |
 | D-21 | Inactive / discontinued SKUs in the unified search | Exclude, or show with an explicit inactive marker — never show as an ordinary match (`[E-68]`) |
+| D-22 | **`other_channel_text` comparison key for downstream grouping** | Recommended default: store trimmed with case preserved for display, and derive a **case-folded, whitespace-collapsed comparison key** used wherever channels are grouped (Request List route column, View Orders badge, Inventory route filter, Procurement Hub sheet). `Gmarket` / `gmarket` / `GMARKET ` must not become three channels (`[E-78]`, §3.1.2). Raised by this spec at the 2026-08-03 audit pass; escalate to the owner only if the grouping semantics turn out to be a business question rather than a storage one (it would then attach to `[PD-80 · OWNER-PENDING]` as its unresolved second half) |
+| D-23 | **`other_channel_text` escaping policy** | Recommended default: store the value **verbatim** and escape at render time per consumer (Slack markdown, HTML, sheet formula prefix). Never strip characters from storage — stripping loses the operator's actual channel name and is not reversible (`[E-79]`, §3.1.2). Same provenance and same escalation rule as D-22 |
 
 ---
 
@@ -1833,7 +2004,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | State 1 legend **renumbered — dot 13 vacated** by the modal removal (intentional gap) | §2.1 | Legend, supervisor ruling 14 |
 | 2026-08-03 | **Comment `@mention` channel CONFIRMED by the owner: `#fulfillment-admin-comments` (`C0BMGEWM5QA`)**, superseding the "pending" wording in the older drafts; expected-qty-edit and match-confirmed auto-comments route the same way | §6.1 rows 4–6, `[G-7]` · review **C-2** | `_slack-routing.md` |
 | 2026-08-03 | Global rules v1.0 issued (`[G-1]`…`[G-15]`), including: `[G-5]` amended so the inbound-origin form's fourth route is `OTHER` + free text while order-facing badges stay the original four; `[G-11]` reason enum aligned to the M6 strings; new `[G-15]` single admin role | `BR-2`, `BR-13`, `BR-26` · review **C-3** / **C-11** / **GD-8** | `_global-rules.md` |
-| 2026-08-03 | Owner emphasis re-confirmed across all eight screens: **no page refresh** and **a confirmation toast on every confirming action**, with removals counted as confirming actions | `BR-28`, `[G-2]`, `[GD-5]` · review **C-6** | `_global-rules.md` |
+| 2026-08-03 | Owner emphasis re-confirmed across all eight screens: **no page refresh** and **a confirmation toast on every confirming action**, with removals/deletions counted as confirming actions | `BR-28`, `[G-2]` · review **C-6** | `_global-rules.md` |
 | 2026-08-03 | Provisional decisions adopted for this page pending owner review — `[PD-1]` single role · `[PD-3]` comments append-only · `[PD-4]` Slack failure never blocks · `[PD-5]` removals confirm + toast · `[PD-6]` stale-entity revalidation · `[PD-7]` concurrency (merge for additive sets) · `[PD-8]`/`[PD-82]` tracking uniqueness · `[PD-9]` no carrier · `[PD-12]` over-receipt warn-and-count · `[PD-14]` new expected qty ≥ received · `[PD-16]` match auto-comment · `[PD-64]` pool removal captures the Inbound No. · `[PD-80]` `OTHER (channel)` rendering · `[PD-81]` frozen matched numbers · `[PD-83]` no duplicate SKU · `[PD-84]` no auto-transition on qty edit · `[PD-85]` `INBOUNDED` terminal · `[PD-86]` separate tracking namespaces. `[PD-2]` (send sound) is explicitly **N/A** here | Each tagged `[PD-n · OWNER-PENDING]` inline throughout §3–§8 | `_provisional-decisions.md` |
 | 2026-08-03 | **NOT decided, no default written:** post-registration correction/cancellation `[PD-79]`; pool entry without a tracking number `[PD-66]` | §9.2 OQ-1, OQ-2 | `_provisional-decisions.md` |
 | 2026-08-03 | **Photo capture confirmed permanently removed** (not deferred) across the WMS 2.0 inbound flows | §9.1 | `[PD-63]` |
@@ -1842,18 +2013,33 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 (audit pass) | **`OTHER`-route chase gap made auditable** — with no channel assigned, those requests are still collected into `DC-14` as `channel=unrouted` rather than silently skipped | `BR-31`, `[L-S3-6]`, `[E-75]`, §6.1 row 3 | Audit finding |
 | 2026-08-03 (audit pass) | **Edge-case key `E-c1` retired.** It had been merged onto `[E-16]` (empty Memo), which is an unrelated case, and it violated the `[E-{n}]` key convention. The empty-comment case is now `[E-65]`; `[E-16]` is unchanged and `E-c1` must never be reused | §7 preamble, `[E-65]` | Audit finding |
 | 2026-08-03 (audit pass) | **Two stale-text observations recorded** as proposed additions to the wireframe-fix backlog (not assigned `WF-` numbers, since that register is closed at `WF-14`): the State 1 purple note lists only three routes though four exist; a filled Tracking No cell offers no inline add affordance | §2.4, §9.2 OQ-3 | Audit finding |
+| 2026-08-03 (remediation pass) | **§2.1's SST verification claim corrected.** v1.1 asserted 28 legend `<li>` rows and "no orphan dot"; re-measurement gives **28 dots / 27 legend rows**, with the modal's `M1` dot an intentional orphan. Now declared instead of denied. Wireframe line count corrected 851 → **850** | §2.1, header | `wc -l` + legend-block parse of `inbound-request/index.html` |
+| 2026-08-03 (remediation pass) | **Edge-case coverage closed.** 15 of the 92 `[E-n]` carried no QA scenario. Six new `[ADMIN]` scenarios added (QA-A-31…A-36) and nine edge cases keyed onto scenarios that already exercised them; a new **§8.3 edge-case coverage map** makes the invariant "every `[E-n]` carries ≥ 1 scenario" checkable from inside the document | §8, §8.3, QA-A-08/09/20/24/29, QA-C-01/08 | Audit finding (M1 D2) |
+| 2026-08-03 (remediation pass) | **`E-18b` alias retired.** It was a letter-suffixed key violating the same `[E-{n}]` convention that retired `E-c1`, and `[E-59]` already named the case conformingly. `[E-59]` is now the sole key; §7's total drops 93 → **92**. Alias retirement only — no `[E-n]` renumbered | §7 preamble, §7.2, §6.4, QA-G-08 | Audit finding (M1 D5) |
+| 2026-08-03 (remediation pass) | **§8 given a text-normalisation and scoping contract (§8.0a).** An adversarial run of the whole 53-scenario `[WF]` set produced 8 false failures — annotation `.dot` text inside asserted labels (3), overloaded selectors `.opt` / `.it` (2), unscoped negatives on `JIT` / `Size` / `SHIPPED` (2), and undeclared child elements inside asserted labels (2). All eight were spec defects, not wireframe defects; the scenarios are corrected and the four rules are now stated once, globally | §8.0a, QA-A-02/07/13/17/26/28, QA-B-01/06, QA-C-11, QA-D-01/03, QA-F-02, QA-G-16 | Adversarial QA execution (M2 S-1…S-7) |
+| 2026-08-03 (remediation pass) | **M1 keyboard contract specified** — `Enter` in a `.qrow` input appends and focuses a row and never fires `Save tracking numbers`; empty-row `Enter` is a no-op; `Escape` is a no-op. Closes the A-plan's "paste n numbers without touching the mouse" requirement, of which only the `＋`/focus and multi-line-paste halves had been specced | §3.4, `BR-24`, QA-D-18 | Audit finding (M1 D9) |
+| 2026-08-03 (remediation pass) | **Bulk→M1 open path re-tiered `[ADMIN]`.** `Bulk add tracking numbers` (index.html:548) carries no `data-modal` and opens nothing in the wireframe; §2.2 and §3.4 stated it as a live navigation path and §2.4's demo-limitation list omitted it | §2.2, §2.4, §3.4 | Audit finding (M1 D3) |
+| 2026-08-03 (remediation pass) | **Declared `[G-11]` delta: the third M6 reason option's label is `Other`, not `Other (memo)`.** Adopts review **C-11** (wireframe M6 strings canonical) and aligns with View Orders `BR-53`, so the two QA suites can pass against one implementation. `[G-11]`'s enum text is to be corrected; no behavior on this page changes | §3.3.5, `BR-30`, `[E-80]`, QA-C-21 | Cross-page consistency audit (M3a D4) |
+| 2026-08-03 (remediation pass) | **Declared `[G-11]` delta: the `PARTIAL` pill renders received/expected, not remaining/expected.** `PARTIAL 120/180` means 120 of 180 received; `[G-11]`'s "n/m remaining" parenthetical is a wording slip in the rule and would yield `PARTIAL 60/180` if implemented literally | §3.3.5, `[E-30]`, `BR-10` | Cross-page consistency audit (M3a D17) |
+| 2026-08-03 (remediation pass) | **Comments-hub string divergence declared, not resolved unilaterally.** This wireframe's four pane strings differ from the rest of the corpus, and two of the four have no majority anywhere; `[G-7]` publishes no byte-exact canonical, so `[WF]` assertions stay true to this wireframe and QA-F-11 carries the `[ADMIN]` "follow `[G-7]`" half. Proposed backlog entry **`[IR-WFX-1 · proposed]`** (`_wireframe-fixes.md` §G — a page-scoped token, because three different `[WF-15]` entries were filed on three files in this same round), conditional on that publication | §2.4 obs. 3, §3.1.13, §9.1, QA-F-02/F-03/F-11 | Cross-page consistency audit (M3a D7) |
+| 2026-08-03 (remediation pass) | **`[GD-n]` citations removed from this spec.** `GD-1`…`GD-10` are defined only in `_plans/_review.md` §4, which is not part of the shipped 8-spec + `_global-rules` corpus, so the spec's one `GD-5` citation was a dangling reference. Replaced with the resulting rule text plus its date | §3.3.7, §10 | Cross-page consistency audit (M3a D13) |
+| 2026-08-03 (remediation pass) | **Silent mandatory-item N/A cells made explicit.** JIT residual stock, the line-based location filter, audit-mode-only visibility and the RTO Korean-picking-name clause were coded N/A for this page in the mandatory 12 × 8 matrix but were nowhere stated in the spec. Each now has an explicit row | §1.5, §9.1 | Review-audit finding (M3b consequence 2) |
+| 2026-08-03 (remediation pass) | **Two invented normative behaviors registered as dev decisions.** Case-insensitive `other_channel_text` grouping and escape-at-render-never-strip-at-storage were binding downstream consumers with no PD, no dev-decision row and no log entry | §3.1.2, §9.3 D-22 / D-23, `[E-78]`, `[E-79]` | Audit finding (M1 D10) |
+| 2026-08-03 (remediation pass) | **Traceability gap recorded, register not edited:** `_provisional-decisions.md` lists `Pages:` scopes for `[PD-12]` ("VO"), `[PD-16]` ("VO, TM, OD") and `[PD-63]` ("TM, VO") that do **not** name IR, although this spec cites all three with meanings that match the register exactly. If the owner reverses any of the three, the register's impact list will not point an editor at this file. **Fix belongs in the register (add `IR` to those three `Pages:` lines), not here** | §3.3.5, §6.1 row 6, §9.1 | Audit finding (M1 D8) |
+| 2026-08-03 (remediation pass) | **Event-name caveat declared.** `DC-23` and `DC-15` name concepts that other screens persist under different local names; `_global-rules`' canonical list does not yet cover them. This page renames to match when it does — rename only, no payload or trigger change. No name standardised unilaterally | §5 preamble | Cross-page consistency audit (M3a D14) |
+| 2026-08-03 (remediation pass) | Minor conformance fixes: banned `MM-DD` date shorthand expanded to `YYYY-MM-DD` in the reversal-chain block; `[G-7]`'s rule body no longer restated in §3.1.13 (citation + delta only); `[PD-63]` given its `· OWNER-PENDING` tag; Slack channel IDs annotated on first mention (§3.3.6) rather than in §6.1 | §3.1.13, §3.3.6, §6.1, §9.1, §10 | Audit findings (M1 D4, D6, D7, D12) |
 
 **Reversal chains at a glance** (so nobody re-implements a superseded state):
 
-1. **Inbound No.** manual PO matching (pre-07-23) → auto-assign **with** a preview panel (07-23) → auto-assign **without** any preview (07-26, current).
-2. **Free-of-charge stock:** FOC checkbox locking ₩0 (07-23) → checkbox retired, type `0` directly (07-26, current).
-3. **JIT Price scope:** Smart Buy + Wholesale only (07-23) → optional on **all** routes (07-26, current).
-4. **Product search:** per-row search boxes + add-row button (07-23) → single unified search box, no add-row button (07-27, current).
-5. **Submit:** two register buttons (07-23) → one `Register Inbound Request` (07-27, current).
-6. **Status stages:** `REQUESTED` / `SHIPPED` / `INBOUNDED` (07-23) → `SHIPPED` retired, 2 stages (07-27) → `PARTIAL` added, 3 stages (08-02, current).
-7. **View Orders linkage UI:** link-info modal + INBOUNDED result link (07-23 → 08-02) → both removed, badge only (08-03, current).
-8. **Carrier:** footer promised automatic capture (07-23 era) → automatic capture **rejected**, no column (08-03, current; the footer text is stale defect **WF-2**).
+1. **Inbound No.** manual PO matching (pre-2026-07-23) → auto-assign **with** a preview panel (2026-07-23) → auto-assign **without** any preview (2026-07-26, current).
+2. **Free-of-charge stock:** FOC checkbox locking ₩0 (2026-07-23) → checkbox retired, type `0` directly (2026-07-26, current).
+3. **JIT Price scope:** Smart Buy + Wholesale only (2026-07-23) → optional on **all** routes (2026-07-26, current).
+4. **Product search:** per-row search boxes + add-row button (2026-07-23) → single unified search box, no add-row button (2026-07-27, current).
+5. **Submit:** two register buttons (2026-07-23) → one `Register Inbound Request` (2026-07-27, current).
+6. **Status stages:** `REQUESTED` / `SHIPPED` / `INBOUNDED` (2026-07-23) → `SHIPPED` retired, 2 stages (2026-07-27) → `PARTIAL` added, 3 stages (2026-08-02, current).
+7. **View Orders linkage UI:** link-info modal + INBOUNDED result link (2026-07-23 → 2026-08-02) → both removed, badge only (2026-08-03, current).
+8. **Carrier:** footer promised automatic capture (2026-07-23 era) → automatic capture **rejected**, no column (2026-08-03, current; the footer text is stale defect **WF-2**).
 
 ---
 
-*End of specification — `inbound-request` v1.1, 2026-08-03.*
+*End of specification — `inbound-request` v1.2, 2026-08-03.*
