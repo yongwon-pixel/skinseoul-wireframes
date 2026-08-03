@@ -100,7 +100,8 @@ Cross-page references are real links, not decoration — e.g. View Orders State 
 ## [G-14] Location scheme
 - One location per SKU. Whether two SKUs may share one location is `[PD-46 · OWNER-PENDING]` (provisional: 1:1, i.e. a location holds one SKU).
 - Inventory's location filter groups by **line (A / B / C …)**; the line list is derived **dynamically from registered locations**, never hard-coded. **CONFIRMED 2026-08-03.**
-- Audit-mode-only UI (counted qty, diff, loss columns, the loss summary, the unregistered-product row) stays hidden until Stock Audit is started. **CONFIRMED 2026-08-03.**
+- Audit-mode-only UI (counted qty, diff, the audit summary bar, the unregistered-product row) stays hidden until Stock Audit is started. **CONFIRMED 2026-08-03.**
+- **The stock audit carries no monetary value — AMENDED 2026-08-04 (owner).** The audit reports **quantity differences only** (`−1` / `+1` / `0`). The former `Loss (₩)` column and the loss total were removed outright; a money column, a loss summary, a `Loss = Diff × cost` rule or any `₩` figure **must NOT exist** inside audit mode. The exact audit-only element set for the page is fixed by `stock-status.md` `[BR-5]`. This amendment is scoped to the stock audit and changes nothing about money elsewhere in the set — Inbound Request's `Unit Cost` / `JIT Price` and Order Detail's order amounts are untouched.
 
 ## [G-15] Permissions (v1)
 v1 ships a **single admin role**: no role gating on any screen, every mutating action records the actor [G-8]. A role/permission model is a post-v1 owner decision. **CONFIRMED 2026-08-03 (owner, PD-1: everyone may perform every action; who-did-it logging is mandatory)** — this rule exists because six screens independently raised the same question.

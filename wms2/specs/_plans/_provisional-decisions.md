@@ -1,6 +1,6 @@
 # Provisional Decisions Register — WMS 2.0 Specs
 
-> **STATUS: 12 decided 2026-08-03 (PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79) · rest provisional.**
+> **STATUS: 14 owner-decided (PD-1, 2, 3, 4, 5, 6, 7, 8, 51, 55, 66, 71, 74, 79) · rest provisional.** Decided 2026-08-03 except where an entry says otherwise (PD-43 retired 2026-08-04).
 > Every decision below was made by the spec team so P3-3 could write unambiguous specs while the owner was unavailable. Entries carrying an **OWNER-DECIDED 2026-08-03** line below are now owner-approved; every other entry remains provisional. Provisional entries are written into the specs as normal behavior tagged `[PD-n · OWNER-PENDING]`; reversing one means editing the tagged sentences on the listed pages and nothing else. For decided entries, any remaining inline `OWNER-PENDING` tag is superseded by this register.
 > Entries marked **NO-DEFAULT** were NOT decided — they appear in the specs' §9 Open Questions only, with no behavior specified.
 
@@ -247,9 +247,10 @@ Rationale: an operator holding a product must be able to look it up; every other
 Pages: INV (OQ-3/L-F1).
 
 **[PD-43] Is Loss (₩) / product cost visible to all warehouse staff in audit mode?**
-Provisional: **Visible to whoever runs the audit** (wireframe behavior); no admin-only split in v1 (ties to PD-1).
-Rationale: the loss total is the audit's own KPI; hiding it would make the audit screen unusable to the auditor.
+~~Provisional: **Visible to whoever runs the audit** (wireframe behavior); no admin-only split in v1 (ties to PD-1).~~
+~~Rationale: the loss total is the audit's own KPI; hiding it would make the audit screen unusable to the auditor.~~
 Pages: INV (OQ-4).
+**RETIRED 2026-08-04 (owner)** — the question has no subject any more. The owner removed loss-amount from the stock audit outright: the audit reports **quantity differences only** (`−1` / `+1`), so there is no `Loss (₩)` column and no product cost to make visible or hide. This entry is **not** reversible by reversing a visibility choice — reinstating it would mean reinstating money in the audit, which `stock-status.md` §9.1 records as must-NOT-exist. The ID is kept, not deleted and not reused, so a stale cross-reference still resolves and nobody re-derives the rule. Counts against the register: 86 entries total, 14 owner-decided, **1 retired (this one)**, 71 still provisional.
 
 **[PD-44] Audit session concurrency.**
 Provisional: **Exactly one active audit session per warehouse, with a single auditor of record. A second Start is blocked with a message naming the active session.**
@@ -495,7 +496,7 @@ Specs must state a default and mark it dev-owned; these are NOT owner questions 
 | Print [G-4] | agent product choice, timeout, retry policy, job polling |
 | Audio [G-3] | synth parameters, warning-vs-send tone separation, TTS voice fallback chain, AudioContext resume |
 | Data | live-feed retention horizon + export format, CSV encoding/columns, pagination page sizes, audit draft autosave, location-code regex and line-derivation parsing |
-| Costing | audit Loss product-cost source (FIFO lot cost recommended; deferred 2026-07-22) |
+| ~~Costing~~ | ~~audit Loss product-cost source (FIFO lot cost recommended; deferred 2026-07-22)~~ — **RETIRED 2026-08-04**: the owner removed loss-amount from the stock audit; the audit is counts-only, so there is no cost source to pick. Kept struck-through so the row does not reappear from a stale copy |
 | Sync | multi-operator live-sync transport and latency (closing, State 6), comment freshness (poll vs push), candidate recompute trigger (tracking-missing) |
 | Import | max rows/file size, header-matching policy, MKT- numbering scheme, uploaded-file retention |
 | Misc | sticky columns on the 1680px table, multi-match selection layout, comment search debounce/index scope, batch chunk size, "Other"-route morning-check channel |

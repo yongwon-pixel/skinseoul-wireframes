@@ -65,7 +65,7 @@ Stated so QA does not import behavior that does not apply, and so a developer do
 | [G-13] Sample assignment | **N/A** | Sample sets attach to customer orders, never to inbound requests |
 | [G-14] Location scheme — one location per SKU | **N/A** | Locations are assigned during reception in View Orders State 6, not declared here |
 | [G-14] Line-based location filter (A / B / C …) | **N/A** — no location filter on this page | Primary home is Inventory (`stock-status`). Nothing on this page filters, groups or displays by location line |
-| [G-14] Audit-mode-only visibility (counted qty, diff, loss columns) | **N/A** — no Stock Audit surface | Primary home is Inventory (`stock-status`). This page has no audit mode and no audit-gated column |
+| [G-14] Audit-mode-only visibility (counted qty, diff) | **N/A** — no Stock Audit surface | Primary home is Inventory (`stock-status`). This page has no audit mode and no audit-gated column. *(The rule listed a third audit column, `Loss (₩)`, until 2026-08-04; the owner removed money from the stock audit and it no longer exists anywhere — `[G-14]`. This page's N/A verdict is unchanged either way.)* |
 | [G-6] RTO Korean product names in picking artifacts | **N/A** — no picking artifact here | [G-6] otherwise **does** apply (brand-bold EN product names, Korean supplier names verbatim); only the Korean-picking-name clause is out of scope |
 | **JIT residual stock** | **N/A** — never surfaced or computed here | JIT residual stock is Inventory's (`stock-status`) primary home. This page's `JIT Price (KRW)` is a *declared purchase price*, not a stock quantity, and no residual-stock figure is read, written or rendered on this page (§9.1) |
 
@@ -565,6 +565,8 @@ Payload per row: Inbound No., supplier, requested-by, age.
 
 **Deleting or editing a saved number.** Allowed only while **no scan has matched it**. Once any scan has matched, deletion and edit are blocked; the correction path is a comment and, if necessary, a new request `[PD-81 · OWNER-PENDING]` (`[E-38]`). A permitted deletion persists the old value (`DC-4`) and requires a confirm step and a toast `[PD-5 · OWNER-PENDING]`, because **removal/deletion confirmations count as confirming actions under [G-2]** (owner emphasis, 2026-08-03).
 
+**The freeze is surface-independent** (2026-08-04): `BR-17` binds `[L-M1]`, the bulk path and the §3.3.11 **edit form** alike — an edit-mode save is not a bypass, and the single `Tracking No` field the edit form inherits from the creation form never rewrites, replaces or drops a saved set (`[E-101]`, `[E-102]`, §3.3.11 "Tracking numbers in edit mode").
+
 #### 3.3.8 `[L-S3-8]` INBOUNDED is auto-switched by a View Orders scan
 
 **Behavior.** The `INBOUNDED` transition is performed by the View Orders scan flow when the exact-match full-receipt gate is satisfied. This page reflects it: the status pill turns green and the Tracking No cell gains the note `Switched by View Orders scan inbound`.
@@ -614,6 +616,13 @@ Disabled buttons render gray (`.btn-gray` + `disabled`) and are inert. The gatin
    - Slack `@`-mentions the **requester** in `#fulfillment-admin-comments` through the same [G-7] comment-mention pipeline (§6.1 row 7).
 5. A save that changes **nothing** is a quiet no-op: edit mode exits, **no** `DC-24`, no auto-comment, no Slack (`[E-99]`).
 6. A save against a request that left `REQUESTED` while the form was open is rejected — red toast, row reloaded, form values retained, `DC-22` persisted (`[E-98]`).
+
+**Tracking numbers in edit mode (2026-08-04 — derived from rules already in force; no new policy).** Step 3 imports the creation form's field contract unchanged, and that contract holds **exactly one** `Tracking No` input, which "accepts a single number; additional numbers are added through `[L-M1]`" (§3.1.4, §3.1.7). Edit mode inherits **both halves** of that sentence, and that — with `BR-17` and `[E-39]` — settles what a request holding several numbers [G-10] does here. This paragraph is published because the two texts could be read against each other: the step-1 prefill list names `tracking`, and `DC-24`'s `diff[]` names "request-level fields", which together suggested an edit save might rewrite a number set that `BR-17` / `[E-38]` freeze. It does not, for the reasons below.
+
+- **The edit form is never a set editor.** `[L-M1]` and the bulk bar (§3.3.2) stay the only path to a second and further number, in edit mode exactly as at creation — step 3 imports §3.1.7 whole, not just its first clause. The `tracking` named in the step-1 prefill is the request's number **when it holds exactly one**; a request holding two or more shows its saved numbers **read-only**, never a truncated one-of-n standing in for the set (the list cell's contract, §3.3.4, is that the number list is never truncated, and no rule anywhere names *which* of n a single control would bind to). Which control renders the read-only set is a dev decision (§9.3 D-24).
+- **A matched number is frozen here too — `BR-17` outranks `DC-24`.** `BR-17` is a property of *a saved tracking number* ("only while no scan has matched it"), stated with **no surface qualifier**, and its rationale — removing a matched number orphans the State 6 reconciliation that used it — is exactly as true when the removal arrives from the edit form. An edit-mode save that would change or clear a matched number is blocked exactly as `[E-38]` blocks it in M1 (`[E-102]`); the correction path is unchanged (a comment and, if necessary, a new request). `BR-32`'s `REQUESTED`-only gate does not make this unreachable: a number is *matched* the moment a scan resolves to it, before any receipt is saved (`[E-38]` — "already has scans against it"), so a still-`REQUESTED` request can already carry one.
+- **Omission is never deletion.** Tracking numbers are additive, "not a replaced field" (`[E-39]`), and each number's save is atomic with its own match activation (`DC-3` + `DC-6`, `[E-62]`). A save therefore never removes a number by leaving it out of the form, and `DC-24`'s `diff[]` never carries a whole-set replacement of the tracking numbers (`[E-101]`).
+- **A permitted tracking change is persisted as a tracking event, not as a diff line only.** Registering the request's **first** number from the edit form persists `DC-3` + `DC-6` atomically under the same uniqueness check as at creation (`BR-15`; a duplicate blocks the save and persists `DC-19`), and `DC-3` carries `source=create_form` — edit mode is that same form and introduces no fourth source value; that the change happened in edit mode is recoverable from the `DC-24` written by the same save. Changing or clearing the single **unmatched** number persists `DC-4` (`old_value`, `new_value / null`, `had_matches=false`); clearing it is a removal and takes the confirm step and toast `BR-17` already mandates.
 
 **Cancel flow.** Click `Cancel` on a `REQUESTED` row → confirmation modal `[L-M2]` (§3.4b). Nothing is written until the modal's `Confirm cancellation`.
 
@@ -875,7 +884,7 @@ Shared cross-page event names are **byte-identical** to the canonical list in `_
 | **DC-6** | `tracking_match.activated` | Atomic with each number's save | system | `request_id`, `tracking_no`, `activated_at` | Note `{n} tracking numbers — all matching active` |
 | **DC-10** | `comment.posted` | `Post` in a row panel or the hub | author | `entity_type=inbound_request`, `inbound_no`, `text`, `mentions[]`, `unresolved_mention_tokens[]` | Panel + hub `[L-F2]` `[L-S1-14]` |
 | **DC-11** | `comment.auto_posted` (`source=system`) | Memo materialisation at registration; expected-qty edit; unrecognized match confirmed; request edited; request cancelled (both 2026-08-03) | system (on behalf of the causing actor) | `inbound_no`, `text`, `trigger` ∈ `memo_materialization / expected_qty_edit / unrecognized_match_confirmed / request_edited / request_cancelled`, `caused_by_event_id` | Comment thread |
-| **DC-24** | `inbound_request.edited` | Edit-mode save commits with ≥ 1 changed field (`[L-S3-11]`) | editor | `inbound_no` (unchanged, `BR-33`), `diff[]{field, old, new}` — request-level fields and line-level adds/removes/changes, `idempotency_key` | Updated row + toast; auto-comment via `DC-11` (`trigger=request_edited`) |
+| **DC-24** | `inbound_request.edited` | Edit-mode save commits with ≥ 1 changed field (`[L-S3-11]`) | editor | `inbound_no` (unchanged, `BR-33`), `diff[]{field, old, new}` — request-level fields and line-level adds/removes/changes, `idempotency_key`. **`diff[]` never carries the tracking-number set as a replaced value** — numbers are additive (`[E-39]`) and a permitted change is persisted as `DC-3`/`DC-4`/`DC-6` by the same save (§3.3.11, `[E-101]`) | Updated row + toast; auto-comment via `DC-11` (`trigger=request_edited`) |
 | **DC-25** | `inbound_request.cancelled` | `Confirm cancellation` in M2 (`[L-M2]`) | canceller | `inbound_no`, `reason` ∈ `purchase_cancelled / wrong_entry / other`, `reason_memo / null` (required iff `other`), `deactivated_tracking_nos[]`, `idempotency_key` | Gray `CANCELLED` pill + reason note + toast; auto-comment via `DC-11` (`trigger=request_cancelled`) |
 | **DC-12** | `comment.starred` / `comment.unstarred` | `★` toggle in the hub | user | `comment_id`, per-user saved state | `★ Saved` tab |
 | **DC-13** | `comment.read` / `comment.mark_all_read` | Opening a mention; `Mark all read` | user | `comment_ids[]` | Unread badge |
@@ -988,13 +997,13 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 
 ## 7. Edge Cases & Error States
 
-IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planning catalogue and keep their original meanings; `[E-47]`–`[E-92]` extend it; `[E-93]`–`[E-100]` were added 2026-08-03 with the `PD-79` Edit/Cancel feature (§7.8). Merged entries keep both IDs and are listed under both.
+IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planning catalogue and keep their original meanings; `[E-47]`–`[E-92]` extend it; `[E-93]`–`[E-100]` were added 2026-08-03 with the `PD-79` Edit/Cancel feature (§7.8); `[E-101]`–`[E-102]` were added 2026-08-04 for tracking numbers in edit mode (§3.3.11, §7.8). Merged entries keep both IDs and are listed under both.
 
 > **Retired IDs.** Two non-conforming keys have been retired and **must never be reused**:
 > - **`E-c1`** — carried by an early draft, merged onto `[E-16]`. That merge was wrong (`[E-16]` is *empty Memo*, `E-c1` was *empty comment post*, an unrelated case) and `E-c1` violated the `[E-{n}]` key convention. The empty-comment case is `[E-65]`; `[E-16]` is unchanged.
 > - **`E-18b`** — a letter-suffixed alias for `[E-59]` (Procurement Hub scrape during an in-flight registration). It violated the same `[E-{n}]` convention that retired `E-c1`, and unlike `E-c1` it had a fully conforming key already in use. **`[E-59]` is the sole live key** for that case; the merge-alias notation `E-18b = E-59` is withdrawn (2026-08-03 remediation pass). Note this is an alias retirement, **not** a renumbering — no `[E-{n}]` has changed meaning or number.
 
-**Total: 100 edge cases** (`E-1` … `E-100`, no numbering gaps, no letter-suffixed keys).
+**Total: 102 edge cases** (`E-1` … `E-102`, no numbering gaps, no letter-suffixed keys).
 
 ### 7.1 New Request — form validation
 
@@ -1133,6 +1142,8 @@ Under v1's single admin role `[PD-1 · OWNER-PENDING]` [G-15] there are **no per
 | **E-98** | **Edit/receipt race:** the request leaves `REQUESTED` (partial receipt) while the edit form is open, then the operator saves | The save is rejected — red toast, row reloaded, **form values retained** for copy-out, `DC-22` persisted, no partial write. The correction path for moved stock is View Orders M6 + comments (`BR-13`) |
 | **E-99** | An edit-mode save with **zero changed fields** | Quiet no-op: edit mode exits, **no** `DC-24`, no auto-comment, no Slack — nothing changed, so nothing is recorded (`BR-33`) |
 | **E-100** | Cancellation with reason `Other` and a blank or whitespace-only memo | Blocked in the modal with an inline error on the Memo field; nothing is written until a non-blank memo is supplied (§3.4b) |
+| **E-101** *(2026-08-04)* | Edit mode is opened on a `REQUESTED` request that holds **two or more** tracking numbers (split shipment, [G-10]) | The single inherited `Tracking No` field is **not** a set editor: the saved numbers render **read-only** (never a truncated one-of-n), the save neither replaces, reorders nor removes any of them, and `DC-24`'s `diff[]` carries no tracking-set replacement. Further numbers still go through `[L-M1]` / the bulk bar (§3.1.7, `[E-39]`, §3.3.11) |
+| **E-102** *(2026-08-04)* | An edit-mode save would change or clear a tracking number that a scan has **already matched** (possible while still `REQUESTED` — a scan matches before any receipt is saved) | **Blocked**, exactly as `[E-38]` blocks it in M1 — `BR-17` has no surface qualifier, so the edit form is not a bypass `[PD-81 · OWNER-PENDING]`. No `DC-4`, no `DC-24` diff entry for that number; the correction path is a comment and, if necessary, a new request. Changing or clearing an **unmatched** number stays permitted and persists `DC-4` with the confirm step and toast `BR-17` mandates |
 
 ---
 
@@ -1171,7 +1182,7 @@ These four rules exist because the wireframe interleaves demo annotation chrome 
 **Counts.** **130 scenarios** — Block A 36 · B 7 · C 31 · D 18 · E 11 · F 11 · G 16.
 Tier split: **55 `[WF]`-only · 73 `[ADMIN]`-only · 2 dual-tier** (`QA-A-19`, `QA-A-25`) — so **57** scenarios carry a `[WF]` assertion and **75** carry an `[ADMIN]` assertion.
 **58 negative tests (44.6 %)**, well above the 25 % floor.
-**Coverage invariants**, each checkable from a map in this section: every `DC-n` in §5 carries ≥ 1 asserting scenario (§8.1) · every `[L-*]` unit and every `[L-R*]` negative entry carries ≥ 1 scenario (§8.2) · **every one of the 100 `[E-n]` edge cases carries ≥ 1 scenario (§8.3)**.
+**Coverage invariants**, each checkable from a map in this section: every `DC-n` in §5 carries ≥ 1 asserting scenario (§8.1) · every `[L-*]` unit and every `[L-R*]` negative entry carries ≥ 1 scenario (§8.2) · **every one of the 102 `[E-n]` edge cases carries ≥ 1 scenario (§8.3)**.
 *(2026-08-03 feature pass: QA-C-25…QA-C-31 added for `[L-S3-11]` / `[L-S3-12]` / `[L-M2]`; QA-C-02, QA-C-14 and QA-A-26 re-baselined against the updated wireframe.)*
 
 ### Block A — New Request form `[L-S1-1]`…`[L-S1-16]`, `[L-S1-F]`, `[L-F6]`, `[L-F8]`
@@ -1596,14 +1607,16 @@ Given **N3**
 Then row `202607110006` renders: the `WHOLESALE` route tag; `Torriden` in bold with `Dive-In Low Molecular Hyaluronic Acid Serum, 50ml`; Qty `150`; a muted `–` Tracking No cell with the note `Tracking matching deactivated` and **no `Add tracking` button**; an en-dash Received Date; the gray `CANCELLED` pill with the note `Purchase cancelled · 07-12`; and the annotation dot `12` on its Status cell
 And the row is an ordinary list row — checkbox present, `💬 Comments` enabled — kept for audit, not visually quarantined.
 
-**QA-C-29** `[ADMIN]` — covers `[L-S3-11]`, `BR-33`, `DC-24`, `DC-11`, §6.1 row 7 / `[E-98]`, `[E-99]` *(added 2026-08-03)*
+**QA-C-29** `[ADMIN]` — covers `[L-S3-11]`, `BR-33`, `BR-17`, `DC-24`, `DC-11`, §6.1 row 7 / `[E-98]`, `[E-99]`, `[E-101]`, `[E-102]` *(added 2026-08-03 · tracking-in-edit-mode assertions added 2026-08-04)*
 Given a `REQUESTED` request whose Order Qty is edited from `200` to `260` and whose Supplier is changed
 When the edit-mode save commits
 Then the request is updated **in place** and its **Inbound No. is byte-identical to before the edit** — no re-allocation, no new `inbound_no.allocated` (`DC-2`) event, no new row
 And `inbound_request.edited` (`DC-24`) is persisted with actor, timestamp and the full `diff[]` naming both fields with old → new values
 And `comment.auto_posted` (`DC-11`, `trigger=request_edited`) lists `{field}: {old} → {new}` for every changed field, and a Slack message reaches `#fulfillment-admin-comments` (`C0BMGEWM5QA`) `@`-mentioning the requester
 And a save with **zero** changed fields exits edit mode writing no `DC-24`, no comment and no Slack (`[E-99]`)
-And a save against a request that left `REQUESTED` while the form was open is rejected with a red toast, a row reload and `DC-22` — form values retained (`[E-98]`).
+And a save against a request that left `REQUESTED` while the form was open is rejected with a red toast, a row reload and `DC-22` — form values retained (`[E-98]`)
+And given a `REQUESTED` request holding **two** tracking numbers, edit mode renders both **read-only** and an edit-mode save leaves both registered and both matching-active: no `tracking_no.removed` (`DC-4`), no tracking-set entry in `DC-24`'s `diff[]`, and the Request List cell still reads `2 tracking numbers — all matching active` (`[E-101]`)
+And an edit-mode save that would change or clear a tracking number a scan has already matched is **blocked** exactly as `[E-38]` blocks it in M1, writing no `DC-4` and no diff entry for that number, while the same operation on an **unmatched** number is permitted and persists `DC-4` with `had_matches=false` after its confirm step (`BR-17`, `[E-102]`).
 
 **QA-C-30** `[ADMIN]` — covers `[L-M2]`, `BR-34`, `DC-25`, `DC-11`, §6.1 row 8 / `[E-93]`, `[E-96]`, `[E-97]`, `[E-100]` *(added 2026-08-03)*
 When `Confirm cancellation` commits for a `REQUESTED` request holding two tracking numbers
@@ -2014,7 +2027,7 @@ Every one of the 42 legend units and all 12 negative entries carry at least one 
 
 ### 8.3 Edge-case coverage map
 
-**Invariant: every one of the 100 `[E-n]` edge cases defined in §7 carries at least one QA scenario.** This map exists so the invariant is checkable from inside the document — §8.1 and §8.2 made the `DC-n` and `[L-*]` gaps visible, and without this table an executing QA agent could silently under-run §7. Any future edge case added to §7 must be added here in the same commit.
+**Invariant: every one of the 102 `[E-n]` edge cases defined in §7 carries at least one QA scenario.** This map exists so the invariant is checkable from inside the document — §8.1 and §8.2 made the `DC-n` and `[L-*]` gaps visible, and without this table an executing QA agent could silently under-run §7. Any future edge case added to §7 must be added here in the same commit.
 
 | Edge case | Asserted by | Edge case | Asserted by |
 |---|---|---|---|
@@ -2068,8 +2081,9 @@ Every one of the 42 legend units and all 12 negative entries carry at least one 
 | `E-94` | QA-C-31 | `E-98` | QA-C-29 |
 | `E-95` | QA-C-31 | `E-99` | QA-C-27, QA-C-29 |
 | `E-96` | QA-C-30 | `E-100` | QA-C-30 |
+| `E-101` | QA-C-29 | `E-102` | QA-C-29 |
 
-Merged entries appear once under both IDs (`E-1` = `E-14`, `E-21` = `E-35`); the retired keys `E-c1` and `E-18b` are absent by design (§7 preamble). Rows: 98 distinct entries covering all 100 numeric IDs.
+Merged entries appear once under both IDs (`E-1` = `E-14`, `E-21` = `E-35`); the retired keys `E-c1` and `E-18b` are absent by design (§7 preamble). Rows: 100 distinct entries covering all 102 numeric IDs.
 
 ---
 
@@ -2135,6 +2149,7 @@ Raised by this spec, not previously registered. The wireframe renders `Add track
 | D-21 | Inactive / discontinued SKUs in the unified search | Exclude, or show with an explicit inactive marker — never show as an ordinary match (`[E-68]`) |
 | D-22 | **`other_channel_text` comparison key for downstream grouping** | Recommended default: store trimmed with case preserved for display, and derive a **case-folded, whitespace-collapsed comparison key** used wherever channels are grouped (Request List route column, View Orders badge, Inventory route filter, Procurement Hub sheet). `Gmarket` / `gmarket` / `GMARKET ` must not become three channels (`[E-78]`, §3.1.2). Raised by this spec at the 2026-08-03 audit pass; escalate to the owner only if the grouping semantics turn out to be a business question rather than a storage one (it would then attach to `[PD-80 · OWNER-PENDING]` as its unresolved second half) |
 | D-23 | **`other_channel_text` escaping policy** | Recommended default: store the value **verbatim** and escape at render time per consumer (Slack markdown, HTML, sheet formula prefix). Never strip characters from storage — stripping loses the operator's actual channel name and is not reversible (`[E-79]`, §3.1.2). Same provenance and same escalation rule as D-22 |
+| D-24 | **How edit mode renders the tracking numbers of a request that holds two or more** | The **behavior** is fixed and not a dev decision (§3.3.11, `[E-101]`): read-only, never truncated, never a set editor, never rewritten by the save. Only the control shape is dev's — recommended default: reuse the Request List cell's rendering (all numbers, one per line, plus the `{n} tracking numbers — all matching active` note, §3.3.4) in place of the single input, with `[L-M1]` / the bulk bar as the mutation path. Raised by this spec at the 2026-08-04 pre-handoff gate |
 
 ---
 
@@ -2203,6 +2218,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 (remediation pass) | **Event-name caveat declared.** `DC-23` and `DC-15` name concepts that other screens persist under different local names; `_global-rules`' canonical list does not yet cover them. This page renames to match when it does — rename only, no payload or trigger change. No name standardised unilaterally | §5 preamble | Cross-page consistency audit (M3a D14) |
 | 2026-08-03 (remediation pass) | Minor conformance fixes: banned `MM-DD` date shorthand expanded to `YYYY-MM-DD` in the reversal-chain block; `[G-7]`'s rule body no longer restated in §3.1.13 (citation + delta only); `[PD-63]` given its `· OWNER-PENDING` tag; Slack channel IDs annotated on first mention (§3.3.6) rather than in §6.1 | §3.1.13, §3.3.6, §6.1, §9.1, §10 | Audit findings (M1 D4, D6, D7, D12) |
 | 2026-08-03 (feature pass) | **`PD-79` RESOLVED by the owner — post-registration Edit & Cancel added ("keep it simple").** **Edit**: `REQUESTED`-only; New Request form reused in edit mode with an `Editing request {Inbound No.}` banner; Inbound No. never re-allocated; save → in-place update + green toast + diff auto-comment (old → new) + Slack `@requester` via the [G-7] pipeline. **Cancel**: `REQUESTED`-only (`PARTIAL`/`INBOUNDED` = stock moved → disabled + tooltip); confirm modal M2 with reason enum `Purchase cancelled` / `Wrong entry` / `Other` + memo; result = terminal **`CANCELLED`** (gray pill, row kept for audit), tracking matching deactivated, chip added, auto-comment + Slack. New units `[L-S3-11]` `[L-S3-12]` `[L-M2]`; rules `BR-32`–`BR-34`; `BR-10`/`BR-11`/`[L-R12]` scope-amended; events `DC-24`/`DC-25`; edge cases `[E-93]`–`[E-100]`; QA-C-25…C-31; §9.2 OQ-1 closed | §1.3(6), §2, §3.3.1/2/4/5/6/11/12, §3.4b, §3.5.4, §4, §5, §6.1 rows 7–8, §7.8, §8 | Owner decision 2026-08-03 · `_provisional-decisions.md` `[PD-79]` |
+| 2026-08-04 (pre-handoff gate) | **Tracking numbers in edit mode made explicit — derivation, not new policy.** The `PD-79` edit flow prefilled `tracking` (§3.3.11 step 1) and imported "every creation-form rule" (step 3) while the creation form holds exactly **one** `Tracking No` input (§3.1.4, §3.1.7) and a request may hold many [G-10]; read against `DC-24`'s "request-level fields" this left no arbiter versus `BR-17` / `[E-38]`'s freeze on matched numbers. Resolved from rules already in force: step 3 imports **both** halves of §3.1.7, so `[L-M1]` / bulk stay the only multi-number path and the edit form is never a set editor; `BR-17` carries no surface qualifier, so a matched number is frozen in the edit form exactly as in M1; `[E-39]`'s "additive, not a replaced field" makes omission ≠ deletion, so `DC-24`'s `diff[]` never carries a tracking-set replacement, and a permitted change persists `DC-3`/`DC-4`/`DC-6`. New edge cases `[E-101]` `[E-102]`; new dev decision D-24 (control shape only); QA-C-29 extended. No `[L-*]`, `BR-n`, `DC-n` or existing `[E-n]` was renumbered or removed | §3.3.7, §3.3.11, §5.1 (`DC-24` payload note), §7 preamble + totals, §7.8, §8.3, QA-C-29, §9.3 D-24 | Pre-handoff gate finding (external-developer read-through); derived wholly from `BR-17`, `BR-32`, `BR-33`, `[E-38]`, `[E-39]`, `[E-62]`, §3.1.4, §3.1.7, §3.3.4, [G-10] |
 | 2026-08-03 (feature pass) | **Wireframe defects WF-2 and WF-11 applied to the SST** in the same commit: the State 1 footer now states the Carrier negative explicitly, and the dead link-info-modal HTML comment was deleted (its slot now holds `#m-cancel`). §2.4's defect table re-marked FIXED; QA-G-16's Carrier precision note re-baselined | §2.4, §3.1.16(a), §3.3.10, QA-G-16 | `_wireframe-fixes.md` WF-2 / WF-11 |
 
 **Reversal chains at a glance** (so nobody re-implements a superseded state):

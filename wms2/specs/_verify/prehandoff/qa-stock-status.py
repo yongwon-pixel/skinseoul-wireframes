@@ -2,8 +2,32 @@
 """
 Pre-handoff QA — wms2/specs/stock-status.md §8, all 75 [WF]-tier scenarios.
 
-Executed against the local wireframe file (identical to tag review-baseline-20260803,
-verified by `git diff review-baseline-20260803 -- wms2/stock-status/index.html` = empty).
+Executed against the local wireframe file.
+
+De-monetisation 2026-08-04 (owner decision: "재고 실사의 손실액은 계산하지 말자. 그냥 −1 +1
+이런 것만 보이게 하자"). The Stock Audit carries no money at all. Removed from the wireframe: the
+`Loss (₩)` audit column and its eleven row cells, the `Loss` columns in [L-M1] / [L-M2] / [L-M2b],
+the [L-15] `Total Loss` column, the `Diff × product cost` calculation, and every ₩ figure. The
+audit now reports the adjustment count — `Adjustments: {n} ({−a} / {+b}) · New additions: {m}` —
+which is what the centre manager tracks toward 0.
+
+Strings and column contracts follow stock-status.md §3.3, §3.11, §3.13, §3.14 and [BR-4] / [E-72]
+as landed 2026-08-04. Where the spec's §8 rows had not yet caught up with its own §3 prose at the
+time of writing, the §3 prose was taken as authoritative.
+
+Assertions that existed only to check money were converted to must-NOT-exist negatives rather than
+deleted, so a reintroduced Loss column or ₩ figure fails loudly: QA-CS-14 and QA-AUD-01 assert
+exactly two audit headers, QA-AUD-06 exactly two `td.audcol` per row, QA-AUD-16 no cell after
+`Diff`, QA-AUD-22 seven [L-M1] cells, QA-LOG-02 six [L-15] cells, QA-LOG-03 six [L-M2] cells, and
+QA-GLB-11 is a page-wide currency negative. QA-LOG-09 was rewritten, NOT retired: its old subject
+(the `Total Loss` amber/red/green scale and the ` · target met` suffix) is gone, but the one colour
+rule that survived — a zero adjustment count renders green, per §3.11 — moved onto the surviving
+`Adjustments` column and is still asserted under that same ID. It is asserted there and nowhere
+else, so a colour regression names one scenario. Executed scenarios stay at 75; no [WF] ID retired.
+
+Money that is NOT audit loss is out of scope and untouched: Inbound Request `Unit Cost` /
+`JIT Price` (procurement cost of record) and Order Detail order totals (WooCommerce commerce data)
+live on other pages with their own runners.
 
 Protocol implemented exactly per §8.0:
   * Preflight before every scenario: load, wait #p-current.on, click Hide annotations,
@@ -65,13 +89,18 @@ KO_ALLOW = [
     "시카페어 젠틀 클렌징 폼", "포어레미디 리뉴잉 폼", "시카페어 슬리페어 마스크",
     "제로 모공 패드 2.0", "석류 콜라겐 탄력 크림", "바디로션", "하트리프 77% 수딩 토너",
     "딥 대미지 트리트먼트", "실크 헤어 오일", "자작나무 수분 크림", "다이브인 저분자 세럼",
-    "듀 틴트", "신규",
+    "듀 틴트",
+    # 17 → 16 (spec §8.0, 2026-08-04): the data string `신규` existed only inside the retired
+    # `Loss (₩)` / `Loss` cells as `— (신규)`. Removing money removed the page's last non-product
+    # Hangul, so the allow-list is now exactly the product names.
 ]
 
-MONEY_CENSUS = {
-    "+₩15,000", "+₩46,260", "+₩61,260", "₩0", "−₩15,000", "−₩17,800",
-    "−₩28,400", "−₩36,000", "−₩61,260", "−₩128,460",
-}
+# Money was removed from the Stock Audit entirely (owner decision 2026-08-04): the audit reports
+# quantity differences only (−1 / +1). There is therefore no money census left to assert — the
+# assertion inverted into a must-NOT-exist negative (QA-GLB-11). This page carries no non-audit
+# money either, so the negative is page-wide. Inbound Request `Unit Cost` / `JIT Price` and Order
+# Detail order totals are deliberately out of scope: different pages, different runners.
+MONEY_FORBIDDEN = re.compile(r"₩|\bKRW\b|\$|\bUSD\b|product cost|Loss \(", re.I)
 
 
 def norm(s):
@@ -367,8 +396,12 @@ def cs14(page):
     expect = ["SKU", "Image", "Product Name", "Product Name KR", "Size", "Barcode",
               "Sourcing Route", "Location", "Total", "Reserved", "Available"]
     check(r["vis"] == expect, "visible headers exactly " + str(expect), r["vis"])
-    check([a["txt"] for a in r["aud"]] == ["Counted Qty", "Diff", "Loss (₩)"],
-          "three th.audcol 'Counted Qty','Diff','Loss (₩)'", r["aud"])
+    # NEGATIVE (money removed 2026-08-04): exactly TWO audit columns. A third `Loss (₩)` column
+    # must not exist — the audit is quantity-only.
+    check([a["txt"] for a in r["aud"]] == ["Counted Qty", "Diff"],
+          "exactly two th.audcol 'Counted Qty','Diff' — no Loss column", r["aud"])
+    check(not any(MONEY_FORBIDDEN.search(a["txt"]) for a in r["aud"]),
+          "no money/cost token in any audit header", r["aud"])
     check(all(a["disp"] == "none" for a in r["aud"]), "th.audcol computed display none", r["aud"])
 
 
@@ -464,8 +497,9 @@ def aud01(page):
         audrowVis: QA.vis(document.querySelector('#p-current .audrow')),
         order: rows.filter(r=>!r.classList.contains('audrow')).map(r=>QA.t(r.cells[0]))};}""")
     check(post["btn"] == "Exit Stock Audit", "button becomes exactly 'Exit Stock Audit'", post["btn"])
-    check([h["t"] for h in post["heads"]] == ["Counted Qty", "Diff", "Loss (₩)"]
-          and all(h["v"] for h in post["heads"]), "audit headers visible", post["heads"])
+    check([h["t"] for h in post["heads"]] == ["Counted Qty", "Diff"]
+          and all(h["v"] for h in post["heads"]),
+          "audit headers 'Counted Qty','Diff' visible — no third Loss column", post["heads"])
     check(post["audrowVis"] and post["lastIsAudrow"], ".audrow visible as last tbody row", post)
     check(post["sumVis"], "#auditSummary visible", post["sumVis"])
     check(post["order"] == AUDIT_SORTED,
@@ -493,10 +527,14 @@ def aud03(page):
     enter_audit(page)
     r = page.evaluate("""() => ({
       txt: QA.t(document.getElementById('auditSummary')),
+      pre: QA.t(document.querySelector('#auditSummary span')),
       btn: [...document.querySelectorAll('#auditSummary button')].map(b=>QA.t(b))})""")
-    check("Total stock loss (sum of diff × product cost):" in r["txt"], "summary label present", r["txt"])
-    check("+₩46,260" in r["txt"], "summary contains '+₩46,260'", r["txt"])
-    check("— target 0" in r["txt"], "summary contains '— target 0'", r["txt"])
+    # Rewritten 2026-08-04 (spec §3.3): the bar carries counts, not a cost-weighted total.
+    check(r["pre"] == "Adjustments: 2 (−1 / +2) · New additions: 1",
+          "text before the button exactly 'Adjustments: 2 (−1 / +2) · New additions: 1'", r["pre"])
+    # NEGATIVE: no currency value, no cost-weighted total, no monetary target may return here.
+    check(not MONEY_FORBIDDEN.search(r["txt"]) and "target 0" not in r["txt"],
+          "no ₩ / cost token and no monetary 'target 0' in #auditSummary", r["txt"])
     check(r["btn"] == ["Confirm Audit Differences (ADJUST log)"],
           "button exactly 'Confirm Audit Differences (ADJUST log)'", r["btn"])
 
@@ -520,13 +558,22 @@ def aud06(page):
     enter_audit(page)
     r = page.evaluate("""() => [...document.querySelectorAll('#p-current tbody tr')]
         .filter(r=>!r.classList.contains('audrow'))
-        .map(r=>({sku: QA.t(r.cells[0]), diff: QA.t(r.cells[12]), loss: QA.t(r.cells[13])}))""")
-    by = {e["sku"]: (e["diff"], e["loss"]) for e in r}
-    check(by["100005104"] == ("−1", "−₩15,000"), "100005104 Diff −1 / Loss −₩15,000", by["100005104"])
-    check(by["100012534"] == ("+2", "+₩61,260"), "100012534 Diff +2 / Loss +₩61,260", by["100012534"])
+        .map(r=>({sku: QA.t(r.cells[0]), diff: QA.t(r.cells[12]),
+                  nAud: r.querySelectorAll('td.audcol').length, txt: QA.t(r)}))""")
+    by = {e["sku"]: e["diff"] for e in r}
+    check(by["100005104"] == "−1", "100005104 Diff −1", by["100005104"])
+    check(by["100012534"] == "+2", "100012534 Diff +2", by["100012534"])
     others = {k: v for k, v in by.items() if k not in ("100005104", "100012534")}
-    check(all(v == ("0", "₩0") for v in others.values()), "other nine rows Diff 0 / ₩0", others)
-    check(-15000 + 61260 == 46260, "arithmetic reconciles with +₩46,260", "-15000+61260")
+    check(all(v == "0" for v in others.values()), "other nine rows Diff 0", others)
+    # Count reconciliation replaces the retired money reconciliation: two non-zero rows, one
+    # negative and one positive, matching #auditSummary's `Adjustments: 2 (−1 / +2)` (QA-AUD-03).
+    nz = [v for v in by.values() if v != "0"]
+    check(len(nz) == 2 and sorted(nz) == ["+2", "−1"],
+          "two non-zero Diffs (−1 / +2) reconcile with 'Adjustments: 2 (−1 / +2)'", nz)
+    # NEGATIVE (money removed 2026-08-04): exactly two td.audcol per row — no per-row money cell.
+    check(all(e["nAud"] == 2 for e in r), "every data row exposes exactly two td.audcol", r)
+    check(not any(MONEY_FORBIDDEN.search(e["txt"]) for e in r),
+          "no row renders ₩ / a cost token", [e["txt"] for e in r if MONEY_FORBIDDEN.search(e["txt"])])
 
 
 @scenario("QA-AUD-11")
@@ -596,7 +643,7 @@ def aud16(page):
         sku: QA.t(c[0]), kr: QA.t(c[3]), size: QA.t(c[4]),
         total: QA.t(c[8]), res: QA.t(c[9]), avail: QA.t(c[10]),
         counted: c[11].querySelector('input.qty-in') ? c[11].querySelector('input.qty-in').value : null,
-        diff: QA.t(c[12]), loss: QA.t(c[13]),
+        diff: QA.t(c[12]), nCells: c.length, rowTxt: QA.t(tr),
         s: document.getElementById('auSearch').value,
         l: document.getElementById('auLoc').value,
         q: document.getElementById('auQty').value};}""")
@@ -607,7 +654,11 @@ def aud16(page):
     check(r["size"] == "50ml", "size 50ml", r["size"])
     check((r["total"], r["res"], r["avail"]) == ("0", "0", "0"), "Total 0 / Reserved 0 / Available 0", r)
     check(r["counted"] == "3" and r["diff"] == "+3", "Counted Qty 3, Diff +3", r)
-    check(r["loss"] == "— (신규)", "Loss '— (신규)'", r["loss"])
+    # NEGATIVE (money removed 2026-08-04): the inserted row ends at Diff. The former
+    # `Loss — (신규)` cell must not exist — a new addition is a quantity, not an amount.
+    check(r["nCells"] == 13, "inserted row has exactly 13 cells (Diff is last, no Loss cell)", r["nCells"])
+    check(not MONEY_FORBIDDEN.search(r["rowTxt"]) and "(신규)" not in r["rowTxt"],
+          "inserted row renders no ₩ / cost token and no '(신규)' loss placeholder", r["rowTxt"])
     check(r["s"] == "" and r["l"] == "" and r["q"] == "", "#auSearch/#auLoc/#auQty cleared", r)
 
 
@@ -645,6 +696,10 @@ def aud22(page):
     check(got == expect, "cell-by-cell SKU/System/Counted/Diff " + str(expect), got)
     check(r["news"] == 1, "exactly one row carries [NEW]", r["news"])
     check(all(x[5] != "0" for x in r["rows"]), "no zero-diff row", [x[5] for x in r["rows"]])
+    # NEGATIVE (money removed 2026-08-04): seven columns ending at Action — no Loss column.
+    check(all(len(x) == 7 for x in r["rows"]), "every row has exactly 7 cells (Action is last)", r["rows"])
+    check(not any(MONEY_FORBIDDEN.search(c) for x in r["rows"] for c in x),
+          "no ₩ / cost token in any [L-M1] row", r["rows"])
     check(r["primary"] == "Confirm — record 3 ADJUST events",
           "primary footer button exactly 'Confirm — record 3 ADJUST events'", r["primary"])
 
@@ -659,9 +714,10 @@ def aud23(page):
     check(len(r) == 2, "two notes in #m-adjust", r)
     check(r[0].startswith("⚠ Reserved shortage check") and r[0].endswith("None in this audit."),
           "amber note begins '⚠ Reserved shortage check' / ends 'None in this audit.'", r[0])
-    exp = ("Total stock loss: +₩46,260 (target 0) · the 1 new addition is not a loss — on confirm, "
+    exp = ("Adjustments: 2 (−1 / +2) · New additions: 1 (counted separately) — on confirm, "
            "Current Stocks · Available update immediately; monthly audit logs retained.")
-    check(r[1] == exp, "second note exactly [INV-WFX-1 applied wording]", r[1])
+    check(r[1] == exp, "second note exactly (spec §3.13, rewritten 2026-08-04)", r[1])
+    check(not MONEY_FORBIDDEN.search(r[1]), "NEGATIVE: no money total in the [L-M1] note", r[1])
 
 
 @scenario("QA-AUD-36")
@@ -697,13 +753,22 @@ def log02(page):
     open_modal_via_wfbar(page, "Modal: Past Audit Logs")
     r = page.evaluate("""() => ({
       head: [...document.querySelectorAll('#m-auditlog thead th')].map(t=>QA.t(t)),
-      rows: [...document.querySelectorAll('#m-auditlog tbody tr')].map(r=>[...r.cells].slice(0,6).map(c=>QA.t(c)))})""")
-    check(r["head"] == ["Audit Date", "Auditor", "SKUs Checked", "Adjustments", "New Additions", "Total Loss", "Detail"],
-          "header row exact", r["head"])
-    expect = [["2026-07-22", "Yongwon", "10", "2 (−1 / +2)", "1", "+₩46,260"],
-              ["2026-06-30", "Dean", "9", "5 (−4 / +1)", "0", "−₩128,460"],
-              ["2026-05-31", "Dean", "9", "0", "0", "₩0 · target met"]]
+      rows: [...document.querySelectorAll('#m-auditlog tbody tr')].map(r=>[...r.cells].slice(0,5).map(c=>QA.t(c))),
+      nCells: [...document.querySelectorAll('#m-auditlog tbody tr')].map(r=>r.cells.length)})""")
+    # Six columns (spec §3.11). The seventh, `Total Loss`, was RETIRED 2026-08-04 — not renamed.
+    check(r["head"] == ["Audit Date", "Auditor", "SKUs Checked", "Adjustments", "New Additions", "Detail"],
+          "header row exactly six columns — no 'Total Loss' / 'Total Diff'", r["head"])
+    expect = [["2026-07-22", "Yongwon", "10", "2 (−1 / +2)", "1"],
+              ["2026-06-30", "Dean", "9", "5 (−4 / +1)", "0"],
+              ["2026-05-31", "Dean", "9", "0", "0"]]
     check(r["rows"] == expect, "exactly three body rows with values " + str(expect), r["rows"])
+    check(r["nCells"] == [6, 6, 6], "NEGATIVE: every row has exactly 6 cells, no seventh", r["nCells"])
+    check(not any(MONEY_FORBIDDEN.search(c) for row in r["rows"] for c in row)
+          and not any(MONEY_FORBIDDEN.search(h) for h in r["head"]),
+          "NEGATIVE: no ₩ / cost token anywhere in [L-15]", r)
+    # The `Adjustments` colour rule (§3.11: a zero count renders green) is NOT asserted here —
+    # it is owned by QA-LOG-09, which was rewritten onto that column rather than retired. Keeping
+    # it in one place only, so a colour regression names a single scenario.
 
 
 @scenario("QA-LOG-03")
@@ -716,16 +781,24 @@ def log03(page):
       const m = document.getElementById('m-adjlog');
       const rows = [...m.querySelectorAll('tbody tr')];
       return {open: m.classList.contains('open'), head: QA.t(m.querySelector('header')),
+        cols: [...m.querySelectorAll('thead th')].map(t=>QA.t(t)),
         times: rows.map(r=>QA.t(r.cells[0])),
+        nCells: rows.map(r=>r.cells.length),
         thirdBg: getComputedStyle(rows[2]).backgroundColor,
         thirdNew: /\\[NEW ADDITION\\]/.test(rows[2].cells[2].textContent),
-        thirdLoss: QA.t(rows[2].cells[6])};}""")
+        bodyTxt: QA.t(m.querySelector('.body'))};}""")
     check(r["open"], "#m-adjlog gains class open", r)
     check(r["head"] == "2026-07-22 Stock Audit — 3 ADJUST events (Auditor: Yongwon, confirmed 14:20)",
           "header exactly (normalised)", r["head"])
     check(r["times"] == ["14:20:11"] * 3, "three rows all timestamped 14:20:11", r["times"])
-    check(r["thirdBg"] == COLORS["purple50"] and r["thirdNew"] and r["thirdLoss"] == "—",
-          "third row purple-tinted, [NEW ADDITION], Loss '—'", r)
+    check(r["thirdBg"] == COLORS["purple50"] and r["thirdNew"],
+          "third row purple-tinted and carries [NEW ADDITION]", r)
+    # NEGATIVE (money removed 2026-08-04): the ADJUST-event table ends at `Adjustment`. The former
+    # `Loss` column — and the third row's `—` money placeholder with it — must not exist.
+    check(r["cols"] == ["Time", "SKU", "Product", "Location", "System → Counted", "Adjustment"],
+          "six columns ending at 'Adjustment' — no Loss column", r["cols"])
+    check(r["nCells"] == [6, 6, 6], "every row has exactly 6 cells", r["nCells"])
+    check(not MONEY_FORBIDDEN.search(r["bodyTxt"]), "no ₩ / cost token in [L-M2]", r["bodyTxt"])
 
 
 @scenario("QA-LOG-04")
@@ -743,9 +816,11 @@ def log04(page):
     check(r["head"] == "2026-06-30 Stock Audit — 5 ADJUST events (Auditor: Dean, confirmed 17:05)",
           "header exactly (normalised)", r["head"])
     check(r["times"] == ["17:05:42"] * 5, "five rows all timestamped 17:05:42", r["times"])
-    exp = ("Total loss −₩128,460 — June exceeded the loss target; root-cause investigation "
+    exp = ("Adjustments: 5 (−4 / +1) — June is the outlier; root-cause investigation "
            "in progress (suspected picking mis-outbound).")
-    check(exp in r["note"], "note reads (contains) the June overrun text", r["note"])
+    check(exp in r["note"], "note reads (contains) the June outlier text", r["note"])
+    check(not MONEY_FORBIDDEN.search(r["note"]),
+          "NEGATIVE: the June outlier is stated in counts, never in money", r["note"])
 
 
 @scenario("QA-LOG-05")
@@ -753,11 +828,11 @@ def log05(page):
     open_modal_via_wfbar(page, "Modal: Past Audit Logs")
     r = page.evaluate("""() => {
       const row = [...document.querySelectorAll('#m-auditlog tbody tr')].find(r=>QA.t(r.cells[0])==='2026-05-31');
-      const a = row.cells[6].querySelector('a');
+      const a = row.cells[5].querySelector('a');   // Detail moved 6 → 5 when `Total Loss` retired
       const before = [...document.querySelectorAll('.overlay.open')].map(o=>o.id);
       if (a) a.click();
       const after = [...document.querySelectorAll('.overlay.open')].map(o=>o.id);
-      return {detail: QA.t(row.cells[6]), hasDM: a ? a.hasAttribute('data-modal') : null, before, after};}""")
+      return {detail: QA.t(row.cells[5]), hasDM: a ? a.hasAttribute('data-modal') : null, before, after};}""")
     check("—" in r["detail"], "2026-05-31 Detail cell contains literal '—'", r["detail"])
     check(r["hasDM"] is False, "anchor carries no data-modal attribute", r["hasDM"])
     check(r["before"] == r["after"] == ["m-auditlog"], "clicking it opens no modal", r)
@@ -773,7 +848,8 @@ def log06(page):
           return {first: c.firstElementChild ? c.firstElementChild.tagName : null,
                   brand: c.firstElementChild ? QA.norm(c.firstElementChild.textContent) : null};})})""")
     exp = ("Each event is also recorded as ADJUST type in that SKU's Stock History — search the SKU "
-           "and filter by type to inspect individually. Total loss +₩46,260 (new additions excluded).")
+           "and filter by type to inspect individually. Adjustments: 2 (−1 / +2) · "
+           "New additions: 1 (counted separately).")
     check(r["note"] == exp, "note exactly", r["note"])
     check(all(p["first"] == "B" and p["brand"] for p in r["prods"]),
           "every Product cell first element child is a <b> brand", r["prods"])
@@ -781,15 +857,42 @@ def log06(page):
 
 @scenario("QA-LOG-09")
 def log09(page):
+    """[L-15] adjustment-count colour rule — REWRITTEN 2026-08-04, not retired.
+
+    This ID used to assert the amber / red / green scale on the `Total Loss` cell plus the
+    ` · target met` suffix on the zero row. Money left the audit, so that column, its three-tier
+    scale and that suffix are gone. The one colour rule that survived moved onto the surviving
+    `Adjustments` column — spec §3.11: "a zero count renders green, every non-zero count renders
+    in the table's default colour" — and that is what this ID now pins (spec §8 QA-LOG-09).
+
+    Do not re-add a money column or a money colour scale under this ID. The colour rule lives
+    here and NOT in QA-LOG-02, so a regression names exactly one scenario.
+    """
     open_modal_via_wfbar(page, "Modal: Past Audit Logs")
-    r = page.evaluate("""() => [...document.querySelectorAll('#m-auditlog tbody tr')]
-        .map(row=>({date: QA.t(row.cells[0]), color: getComputedStyle(row.cells[5]).color, txt: QA.t(row.cells[5])}))""")
-    by = {e["date"]: e for e in r}
-    check(by["2026-07-22"]["color"] == COLORS["amber"], "07-22 Total Loss amber rgb(180, 83, 9)", by["2026-07-22"])
-    check(by["2026-06-30"]["color"] == COLORS["red"], "06-30 Total Loss red rgb(220, 53, 69)", by["2026-06-30"])
-    check(by["2026-05-31"]["color"] == COLORS["green"], "05-31 Total Loss green rgb(25, 135, 84)", by["2026-05-31"])
-    check(len({e["color"] for e in r}) == 3, "three distinct colours", r)
-    check(by["2026-05-31"]["txt"].endswith(" · target met"), "05-31 cell ends ' · target met'", by["2026-05-31"]["txt"])
+    r = page.evaluate("""() => ({
+      cells: [...document.querySelectorAll('#m-auditlog tbody tr')]
+        .map(r => ({d: QA.t(r.cells[0]), c: getComputedStyle(r.cells[3]).color})),
+      head: QA.t(document.querySelector('#m-auditlog thead tr')),
+      text: QA.t(document.querySelector('#m-auditlog'))})""")
+    # Guard the precondition: cells[3] must actually be `Adjustments`, or the colour probe below
+    # would be reading whatever column drifted into slot 3 and would pass for the wrong reason.
+    check(r["head"] == "Audit Date Auditor SKUs Checked Adjustments New Additions Detail",
+          "column 4 is `Adjustments` — the colour probe targets the right cell", r["head"])
+    zero = [e for e in r["cells"] if e["d"] == "2026-05-31"]
+    rest = [e for e in r["cells"] if e["d"] != "2026-05-31"]
+    check(len(zero) == 1 and len(rest) == 2,
+          "three [L-15] rows, exactly one being the zero-adjustment 2026-05-31 session", r["cells"])
+    check(zero[0]["c"] == COLORS["green"],
+          "2026-05-31 `Adjustments` cell computes --green " + COLORS["green"], zero)
+    check(all(e["c"] != COLORS["green"] for e in rest),
+          "the 2026-07-22 and 2026-06-30 `Adjustments` cells are NOT green", rest)
+    # Structural fallback named in the spec. Asserted *in addition to* the token comparison above,
+    # never instead of it — it is a drift detector, not a weaker substitute.
+    colors = [e["c"] for e in r["cells"]]
+    check(len(set(colors)) == 2,
+          "exactly one of the three `Adjustments` cells differs from the other two", colors)
+    check("target met" not in r["text"],
+          "NEGATIVE: the retired ' · target met' suffix appears nowhere in [L-15]", r["text"][:400])
 
 
 # ---------------------------------------------------------------- QA-RES -----
@@ -1299,7 +1402,8 @@ def glb09(page):
         for run in re.findall(r"[가-힣]+", txt):
             if not any(run in allow for allow in KO_ALLOW):
                 bad.append(run)
-    check(bad == [], "every Hangul run is a substring of one of the 17 allow-listed strings", bad)
+    check(bad == [], "every Hangul run is a substring of one of the 16 allow-listed strings "
+                     "(17 → 16 on 2026-08-04: `신규` lived only in the retired Loss cells)", bad)
     chrome = page.evaluate("""[...document.querySelectorAll('th,label,button,h2,h4,.paneheader,.form-note')]
         .map(e=>e.textContent).filter(t=>/[\\uac00-\\ud7a3]/.test(t))""")
     check(chrome == [], "no Hangul inside th/label/button/h2/h4/.paneheader/.form-note", chrome)
@@ -1307,18 +1411,28 @@ def glb09(page):
 
 @scenario("QA-GLB-11")
 def glb11(page):
+    """NEGATIVE — money must NOT exist anywhere on this page.
+
+    Was a money-census assertion (10 ₩ tokens, thousands separators, explicit signs). The owner
+    removed money from the stock audit on 2026-08-04: the audit reports quantity differences only.
+    Since every money value on this page belonged to the audit, the census inverted into a
+    page-wide must-NOT-exist. Money that is NOT audit loss — Inbound Request `Unit Cost` /
+    `JIT Price`, Order Detail order totals — lives on other pages and other runners, and is
+    deliberately untouched.
+    """
     texts = collect_full_text(page)
-    tokens = set()
+    hits = []
     for txt in texts:
-        check(not re.search(r"\$|USD", txt), "no $ / USD anywhere", txt[:200])
-        for m in re.findall(r"[+−-]?₩\d[\d,]*", txt):
-            tokens.add(m)
-    check(tokens == MONEY_CENSUS, "money census exactly " + str(sorted(MONEY_CENSUS)), sorted(tokens))
-    for t in tokens:
-        body = t.lstrip("+−-").lstrip("₩")
-        check(re.fullmatch(r"\d{1,3}(,\d{3})*", body), f"thousands separators on {t}", t)
-        if body != "0":
-            check(t[0] in "+−", f"explicit sign on non-zero value {t}", t)
+        for m in MONEY_FORBIDDEN.finditer(txt):
+            lo = max(0, m.start() - 40)
+            hits.append(txt[lo:m.end() + 40])
+    check(hits == [], "no ₩ / KRW / $ / USD / 'product cost' / 'Loss (' anywhere on the page "
+                      "or in any of its six modals", hits)
+    # Positive counterpart: the audit still reports its outcome — as counts (spec [E-72]).
+    # Signed counts (−1, +2) are not money and must survive the negative above.
+    joined = " ".join(texts)
+    check("Adjustments: 2 (−1 / +2)" in joined,
+          "the audit still reports its outcome, as signed counts rather than money", joined[:300])
 
 
 @scenario("QA-GLB-12")

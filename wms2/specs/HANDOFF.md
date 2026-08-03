@@ -2,7 +2,7 @@
 
 > Read this page first. It tells you what the document set is, in what order to read it, what every bracket notation means, how to run the QA suites, and exactly which decisions are yours to make.
 >
-> **Status:** specs frozen for handoff, 2026-08-03. All 647 `[WF]` QA scenarios pass against the live wireframes.
+> **Status:** specs frozen for handoff, 2026-08-03, with **one owner amendment applied 2026-08-04** — loss-amount removed from the stock audit, which is now counts-only (§6, §7, and `_global-rules.md` `[G-14]`). The scenario census is unchanged at 647 `[WF]`; the Inventory wireframe, spec and runner were re-synchronised in the same pass.
 
 ---
 
@@ -19,7 +19,7 @@ The eight screens:
 | 3 | **View Orders** | `view-orders.md` | The single scan hub. Every barcode entering the warehouse is typed into one input and the page decides on its own what the operator is holding — customer order, product EAN, supplier inbound label, returned parcel — and switches to the matching state. Nine states, six modals. |
 | 4 | **Order Detail** | `order-detail.md` | The single-order command center: line items, statuses, per-line inbound / cancel-inbound, inline edits to the five agent-tracking fields, print, comments. |
 | 5 | **Ready to be Outbounded** | `ready-to-outbound.md` | The packing bench queue. Order-level list with pick locations, bulk picking-list and label printing, bulk outbound with progress. |
-| 6 | **Inventory** | `stock-status.md` | Current stocks, stock-audit mode (location-ordered walk, loss totals, audit log), reserved-stock view and release, stock history. **Note the slug: the screen is called Inventory, the file is `stock-status.md`.** |
+| 6 | **Inventory** | `stock-status.md` | Current stocks, stock-audit mode (location-ordered walk, **count differences only — no money**, audit log), reserved-stock view and release, stock history. **Note the slug: the screen is called Inventory, the file is `stock-status.md`.** |
 | 7 | **Order Management Dashboard** | `order-management.md` | The order team's home screen. The order list itself is unchanged from the current admin and deliberately omitted; what is specified is the marketing-order import (template → preview → assignee) and sample-set assignment. |
 | 8 | **Unrecognized Tracking** | `tracking-missing.md` | The desk-side resolution pool for goods that arrived without a resolvable link to an order: suggested candidate orders, two-click matching, removal with reason. Push-driven from Slack, never polled. |
 | 9 | **Closing** | `closing.md` | End-of-day reconciliation between what physically left and what the system believes left: hand count, scan every parcel once, instant verdict per scan, confirm only at an exact match with zero warnings. Plus Closing History and post-confirmation amendment. |
@@ -33,7 +33,7 @@ Plus `shipping-label.md`, which covers the printed paperwork rather than a scree
 
 **Read in this order:**
 
-1. **`_global-rules.md`** (138 lines) — 16 cross-cutting rules `[G-1]`…`[G-16]` that every screen inherits, plus the canonical cross-page event names, the Slack routing table, and the byte-exact Comments-hub copy. Read it completely before any screen spec. Screen specs cite these rules by ID and state **page deltas only** — they never restate a rule body, so a screen spec read alone will look incomplete.
+1. **`_global-rules.md`** (139 lines) — 16 cross-cutting rules `[G-1]`…`[G-16]` that every screen inherits, plus the canonical cross-page event names, the Slack routing table, and the byte-exact Comments-hub copy. Read it completely before any screen spec. Screen specs cite these rules by ID and state **page deltas only** — they never restate a rule body, so a screen spec read alone will look incomplete.
 2. **The screen spec you are building.** Each is self-contained for its own screen.
 3. **`shipping-label.md`** — read before implementing any Print surface.
 
@@ -76,7 +76,7 @@ Every bracketed token in these documents is a stable identifier. **IDs are never
 | `[X-n]` | **Open cross-page conflict** where this screen's position disagrees with another screen's. Each row states this page's position and what changes if it is reversed. `order-detail.md` uses `[X-n]`; `ready-to-outbound.md` uses `[RTO-X-n]`. | §2 / §9.5 |
 | `CP-n` | Same concept, `view-orders.md`'s naming: **cross-page disagreements** involving that page, §9.5. Rows marked RESOLVED are kept as the record of a conflict that existed. | `view-orders.md` §9.5 |
 | `D-n` / `DQ-n` | **Developer decision register entry.** `D-n` in `order-detail`, `ready-to-outbound`, `tracking-missing`, `inbound-request`; `DQ-n` in `closing`; unkeyed tables in the others. See §5 below. | §9.2 / §9.3 / §9.4 |
-| `OQ-n` | **Open question with no default** — the owner must decide; no behavior is specified anywhere. Rare: only `stock-status.md` OQ-1 remains open. | §9 |
+| `OQ-n` | **Open question with no default** — the owner must decide; no behavior is specified anywhere. Rare: only `stock-status.md` **OQ-2** (sourcing-route resolution) remains open. `stock-status.md` OQ-1 (the audit loss-amount cost source) was **retired 2026-08-04** when the owner removed loss-amount from the stock audit — see §6. | §9 |
 | `— DEFERRED` | A QA scenario that carries **no assertion** because it is blocked on an owner decision. Counted in the totals, never executed, never fails. | §8.0 |
 
 ---
@@ -122,7 +122,7 @@ The specs distinguish three categories, and this is the third: decisions the spe
 | `order-management.md` | §9.3 (unkeyed table, by area) | 24 areas |
 | `order-detail.md` | §9.4, keyed `D-1`…`D-21` | 21 |
 | `ready-to-outbound.md` | §9.3, keyed `D-1`…`D-18` | 18 |
-| `stock-status.md` | §9.2 "Developer decisions" (unkeyed table) | 17 areas |
+| `stock-status.md` | §9.2 "Developer decisions" (unkeyed table) | 17 areas (`Costing` retired 2026-08-04 — 16 live) |
 | `tracking-missing.md` | §9.2, keyed `D-1`…`D-13` | 13 |
 | `closing.md` | §9.3, keyed `DQ-1`…`DQ-13` | 13 |
 | `inbound-request.md` | §9.3, keyed `D-1`…`D-23` | 23 |
@@ -145,6 +145,8 @@ The specs distinguish three categories, and this is the third: decisions the spe
 - `order-detail.md` **D-10** — whether a line delete or add propagates back to WooCommerce. Either answer is acceptable; an undefined answer creates a silent divergence between WooCommerce and the admin.
 - `order-detail.md` **D-21** — the WooCommerce sync direction contract: which admin-side changes are written outward, whether inbound changes arrive by webhook or poll, and which side wins when the same order changes on both sides in the same window. **No default is stated and none may be invented.** The optimistic-version → 409 rule `[G-9]` governs two operators on *this* system's record; it is not the admin ↔ WooCommerce rule.
 
+**Where the answer to both comes from (owner ruling, 2026-08-04):** not from a new design round and not from an owner decision — **the current admin already exchanges data with WooCommerce, so you read the existing behaviour out of that codebase and write it into the spec.** "None may be invented" still holds exactly as written; it means *do not guess*, not *wait for a ruling*. `PREREQUISITES.md` `D2` carries the same framing, owned `Joint`, and prerequisite `0.1` (repository access to the current admin) is what unblocks it. Unchanged either way: the status vocabulary stays at exactly **8 WooCommerce statuses** carried as-is, and a ninth value must NOT be invented `[BR-12]`.
+
 Similarly, `ready-to-outbound.md` **D-7** and `stock-status.md`'s audit-draft entry are choices that **must be chosen and documented in the build** — leaving them implicit is itself a defect, because they decide whether an operator silently loses work.
 
 ---
@@ -157,9 +159,13 @@ A sentence tagged `[PD-n · OWNER-PENDING]` means exactly this: **a reasonable d
 
 **14 entries are now owner-decided and CONFIRMED (2026-08-03):** `PD-1` through `PD-8`, plus `PD-51`, `PD-55`, `PD-66`, `PD-71`, `PD-74`, `PD-79`. The owner decision round is closed. Where an inline `[PD-n · OWNER-PENDING]` tag for one of those IDs still appears in a spec sentence, **the register ruling supersedes it** — this is stated in the status legend of `_global-rules.md` and in the header banner of each spec. What those 14 settled, in short: single admin role for v1 with mandatory actor logging; send sound on every outbound-class button; append-only comments; Slack failure never blocks and retries with backoff; every destructive action takes a confirm + reason + toast; server revalidates at confirm; concurrency by optimistic version check; inbound and outbound tracking numbers are separate namespaces; "sample set" only with no type breakdown in v1; the SS Daily Shipping Status sheet retired outright; `CANCELLED` as a terminal inbound-request state that deactivates tracking matching.
 
-The remaining **72 entries are still provisional**. Build them as written.
+**One entry is retired (2026-08-04):** `PD-43` asked whether the audit `Loss (₩)` / product cost was visible to all warehouse staff. The owner removed loss-amount from the stock audit, so the question has no subject left — it is **invalidated, not answered**, and it cannot be reversed by reversing a visibility choice; reinstating it would mean reinstating money in the audit, which `stock-status.md` §9.1 records as must-NOT-exist. The ID is kept in the register, not deleted and not reused, so stale cross-references still resolve.
 
-**One item is genuinely open with no default anywhere:** `stock-status.md` **OQ-1** — the product-cost source for the audit `Loss (₩)` column. The design (`Loss = Diff × cost`) is fixed; the source is not. FIFO lot cost via the Procurement Hub FIFO COGS ledger is recommended, but no decision exists and it needs owner sign-off on the costing basis. Every other behavior in the audit flow ships without it; the loss column renders `—` until it lands.
+The remaining **71 entries are still provisional**. Build them as written.
+
+**`stock-status.md` OQ-1 no longer exists.** It asked where the audit `Loss (₩)` column's product cost came from, and it was the item this section previously named as the last genuinely open question. **On 2026-08-04 the owner removed loss-amount from the stock audit entirely: the audit reports quantity differences only (`−1` / `+1`) and carries no monetary figure.** OQ-1 was therefore invalidated rather than answered — there is no cost basis to choose, no FIFO-COGS read, and no `Loss (₩)` column for a cost to feed. Do not go looking for a decision on it, and do not reinstate the column: `stock-status.md` §9.1 records it as must-NOT-exist.
+
+**One item is genuinely open with no default anywhere:** `stock-status.md` **OQ-2** — when a SKU has been inbounded through more than one sourcing route, which single value its `Sourcing Route` cell shows. The candidate answers (product-master attribute, first inbound's route, latest inbound's route, or a per-lot route with a display rule) are observably different, no provisional default exists, and the spec defines no `route.*` event and no route field on `[DC-1]`, so a change of the displayed value would today be neither specified nor traceable. It blocks the `Sourcing Route` cell of `[L-5]`, the route filter's result set, the Product Information card's route row, and the route column of both exports — and it reaches View Orders, whose existing-inventory exception renders "that stock's own sourcing route". **This is a schema decision** (product-master attribute vs per-lot attribute) and cannot be deferred past data-model design without a re-model.
 
 ---
 
@@ -173,7 +179,8 @@ The program-wide boundaries:
 - **No sample-type distinction.** Sample assignment is simple ON/OFF with multiple, possibly overlapping periods, and exactly one sample set per order even when periods overlap. v1 renders **"sample set" only** — no sample type, no per-type quantity — on internal invoices and picking labels alike. Distinguishing which sample and how many is follow-up work for the moment sample types are introduced `[G-13]`.
 - **No custom carrier-label layout, for any carrier.** Carrier labels are each carrier's existing default output, printed verbatim — YUN, DELEO, and any carrier added later such as FedEx. Only the internal invoice is ours to design `[G-4]`, `shipping-label.md` §2.
 - **Label and invoice layout content is Phase 3-1**, a separate owner session. The specs define print *behavior*, *which* carrier, *what is captured*, and *what happens on failure* — never what is drawn on the artifact.
-- **Procurement Hub is excluded from this spec set entirely** (owner decision, 2026-08-02). No link, no reference, no dependency. The single exception is a costing **read** for the Inventory audit loss calculation.
+- **Procurement Hub is excluded from this spec set entirely** (owner decision, 2026-08-02). No link, no reference, no dependency — and since 2026-08-04 **without exception**. The one exception used to be a costing **read** for the Inventory audit loss calculation; that calculation no longer exists (owner removed loss-amount from the stock audit; the audit is counts-only), so the read is withdrawn with it.
+- **No money in the stock audit.** The Inventory stock audit reports **count differences only** — `−1`, `+1`, `0`. There is no `Loss (₩)` column, no loss total, no `Loss = Diff × cost` rule, no product-cost lookup and no `₩` figure anywhere in the audit flow (owner decision, 2026-08-04). This is a **must NOT exist** boundary, not a deferral: `stock-status.md` §9.1 asserts its absence. It does **not** touch money elsewhere in the set — Inbound Request's `Unit Cost` / `JIT Price` and Order Detail's order amounts are unaffected and remain specified as before.
 - **No dedicated failed-dispatch queue screen.** Failed Slack dispatches retry in a background queue with exponential backoff and are flagged in the admin notification log after N retries; there is no UI for it in v1 `[G-2]` routing section.
 - **No sheet integration for Closing.** The SS Daily Shipping Status spreadsheet was retired outright; Closing History (daily snapshots plus per-day CSV) replaces it wholesale.
 - **No photo capture** anywhere on inbound artifacts or the unrecognized flow — removed permanently, not deferred.
@@ -217,6 +224,6 @@ Wireframe demo data is scaffolding. Where a mock value contradicts another mock 
 
 ## 9. Before you start
 
-- Read `PREREQUISITES.md` in this directory. It lists what SkinSeoul must have in place — print agent, label stock, Slack channels and bot, master data, two pending decisions — before parts of this can be built or tested. Several items block whole feature areas.
+- Read `PREREQUISITES.md` in this directory. It lists what SkinSeoul must have in place — print agent, label stock, Slack channels and bot, master data — before parts of this can be built or tested. Several items block whole feature areas. Its §D now holds **one** true owner decision, `D3` (morning-check run time); `D2` (WooCommerce sync direction) was reclassified `Joint` on 2026-08-04 as a read-the-current-admin-and-document task, and `D1` was retired the same day when the audit costing basis died with the loss column. **`A3`** is likewise no longer a procurement item — the current admin's existing carrier-label acquisition path is inherited as-is.
 - The findings ledger from the pre-handoff review is at `_plans/_prehandoff/ledger.md` if you want the audit trail: what was checked, what was found, what was refuted, and why.
 - **Notion is a mirror, not a source.** The spec pages under the Notion index are republished from these files. If the two ever disagree, this repository wins.
