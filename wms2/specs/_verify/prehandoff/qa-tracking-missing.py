@@ -816,9 +816,14 @@ def qa_neg_01(page):
 def qa_empty_01(page):
     for _ in range(3):
         _remove_first_row(page, "No action needed")
+    # §8.0 rule 3: '.mockwrap' matches two nested elements. The collapse guard measures
+    # the OUTER wrapper (the one wrapping .mock, held at >= 520px by .mock's min-height).
+    # The inner wrapper holds only the table and legitimately shrinks to the header row,
+    # so it is not the collapse signal and must not be the measured element.
     r = page.evaluate("""() => {
       const wraps = [...document.querySelectorAll('.mockwrap')];
-      const inner = wraps[1];
+      const outer = wraps.find(w => w.querySelector('.mock'));
+      const inner = wraps.find(w => w !== outer);
       const thead = document.querySelector('.mock table.tbl thead');
       const ths = thead ? thead.querySelectorAll('th').length : 0;
       const ph = document.querySelector('.poolhead');
@@ -826,7 +831,9 @@ def qa_empty_01(page):
       return {pc: window.qtxt(document.getElementById('poolCount')),
               pcbT: window.qtxt(pcb),
               phH: ph.getBoundingClientRect().height,
-              innerH: inner.getBoundingClientRect().height,
+              outerFound: !!outer,
+              outerH: outer ? outer.getBoundingClientRect().height : -1,
+              innerH: inner ? inner.getBoundingClientRect().height : -1,
               ths,
               pcbBelow: pcb.getBoundingClientRect().top > thead.getBoundingClientRect().bottom};
     }""")
@@ -834,8 +841,11 @@ def qa_empty_01(page):
     ck(r["phH"] > 0, ".poolhead still rendered (height > 0)", f"h={r['phH']:.0f}px")
     ck(r["ths"] == 12, "thead still rendered with 12 th", f"{r['ths']} th")
     ck(r["pcbBelow"], "#poolCountBottom below the thead", str(r["pcbBelow"]))
-    ck(r["innerH"] > 300, "inner .mockwrap bounding-box height > 300 px",
-       f"inner .mockwrap height = {r['innerH']:.0f}px")
+    ck(r["outerFound"], "the outer .mockwrap (wrapping .mock) is identifiable",
+       "no .mockwrap contains .mock")
+    ck(r["outerH"] > 300, "outer .mockwrap bounding-box height > 300 px",
+       f"outer .mockwrap height = {r['outerH']:.0f}px "
+       f"(inner = {r['innerH']:.0f}px, not the measured element)")
 
 
 def qa_empty_05(page):
@@ -1090,15 +1100,20 @@ def main():
 
     order = {"FAIL": 0, "ERROR": 1, "PASS": 2}
     RESULTS.sort(key=lambda r: (order.get(r["status"], 3), r["id"]))
+    npass = sum(1 for r in RESULTS if r["status"] == "PASS")
+    nfail = sum(1 for r in RESULTS if r["status"] == "FAIL")
+    nerr = sum(1 for r in RESULTS if r["status"] == "ERROR")
     summary = {
         "wireframe": str(WF_FILE),
         "total": len(RESULTS),
-        "pass": sum(1 for r in RESULTS if r["status"] == "PASS"),
-        "fail": sum(1 for r in RESULTS if r["status"] == "FAIL"),
-        "error": sum(1 for r in RESULTS if r["status"] == "ERROR"),
+        "pass": npass,
+        "fail": nfail,
+        "error": nerr,
         "results": RESULTS,
     }
     print(json.dumps(summary, ensure_ascii=False, indent=1))
+    # Machine-readable tail line for the supervisor's aggregator (last line of stdout).
+    print(f"== SUMMARY == PASS {npass} · FAIL {nfail} · ERROR {nerr}")
 
 
 if __name__ == "__main__":

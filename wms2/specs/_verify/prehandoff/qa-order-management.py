@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Pre-handoff [WF] QA runner — order-management (spec v1.2, 2026-08-03, §8).
+Pre-handoff [WF] QA runner — order-management (spec v1.3, 2026-08-03, §8).
+
+Re-baselined 2026-08-03 onto the applied wireframe fixes [WF-15]…[WF-21]
+(spec v1.3, §8.0 rule 7): QA-IMP-35, QA-SMP-19/30/31/33, QA-CMT-20,
+QA-GBL-09/10 now assert the fixed behaviour, keeping their ids.
 Executes all 77 [WF]-tagged scenarios from specs/order-management.md against
 wms2/order-management/index.html loaded via file:// (annotations shown).
 
@@ -37,6 +41,8 @@ S_TOAST1_SUB = "Carrier auto-assigned per country · 1 not connected — flagged
 S_M3_NOTE = "Multiple assignment periods may exist — select the period(s) to cancel, then confirm. Ended periods are for record only (cannot be cancelled). Cancellation immediately stops new assignments for that period (already-assigned orders are kept)."
 S_TOAST2 = "✓ Assignment period cancelled"
 S_TOAST2_SUB = "New assignments stopped for the selected period · already-assigned orders kept"
+S_TOAST3 = "✓ Sample assignment started"
+S_TOAST3_SUB = "All new sales orders from 2026-07-23 10:00 → forever · exactly 1 sample set per order"
 S_DROPZONE = "📄 Drag the completed template here or click to upload"
 S_M2_HDR = "Sample Assignment ON"
 S_M3_HDR = "Cancel Sample Assignment — Current Assignment Periods"
@@ -413,7 +419,7 @@ def imp20(page, c):
     c.eq("that select is the PIC picker", r["selFirst"], "Yongwon Ryu (me)")
 
 
-@scen("QA-IMP-35", "(neg) Preview collapse row under-spans — documents [WF-15 · proposed]")
+@scen("QA-IMP-35", "Preview collapse row spans the full table — re-baselined on [WF-15], applied 2026-08-03")
 def imp35(page, c):
     open_import(page)
     r = page.evaluate("""() => {
@@ -424,8 +430,10 @@ def imp35(page, c):
     }""")
     c.eq("exactly one colspan cell", r["n"], 1)
     c.eq("collapse text", r["txt"], "⋯ +8 more rows")
-    c.eq("colspan attribute is 6 (the registered defect [WF-15])", r["span"], "6")
+    c.eq("colspan attribute is 7 ([WF-15] applied)", r["span"], "7")
     c.eq("thead th length", r["ths"], 7)
+    c.eq("colspan equals the header count — the row spans the full table",
+         r["span"], str(r["ths"]))
 
 
 @scen("QA-IMP-36", "Preview row arithmetic matches the header count")
@@ -637,32 +645,47 @@ def smp18(page, c):
         "document.querySelector('#m-sampleoff .note').textContent"), S_M3_NOTE)
 
 
-@scen("QA-SMP-19", "Cancel toast text and no reload")
+@scen("QA-SMP-19", "Confirm dialog precedes the cancel toast; text and no reload — re-baselined on [WF-17], applied 2026-08-03")
 def smp19(page, c):
     sentinel(page)
     open_m3(page)
+    # Step 1 — the cancel button opens the confirm overlay and toasts nothing yet.
     page.click('#sampCancelBtn')
-    r = page.evaluate("""() => {
-      const t = document.getElementById('gtoast2');
+    r1 = page.evaluate("""() => {
+      const cf = document.getElementById('m-sampcancel-confirm');
+      const hd = cf ? cf.querySelector('header') : null;
       return { m3open: document.getElementById('m-sampleoff').classList.contains('open'),
-        confirmOpen: (document.getElementById('m-sampcancel-confirm') || { classList: { contains: () => false } })
-          .classList.contains('open'),
-        confirmTitle: document.getElementById('sampConfirmTitle')
-          ? document.getElementById('sampConfirmTitle').childNodes[0].textContent : null,
+        confirmExists: !!cf,
+        confirmOpen: cf ? cf.classList.contains('open') : false,
+        hdrFirst: hd ? hd.childNodes[0].textContent : null,
+        t2: !!document.getElementById('gtoast2') };
+    }""")
+    c.ok("#m-sampleoff still has class open", r1["m3open"], "already closed")
+    c.ok("confirm overlay #m-sampcancel-confirm exists", r1["confirmExists"])
+    c.ok("#m-sampcancel-confirm gains class open", r1["confirmOpen"])
+    c.eq("confirm header first text node (count follows the selection)",
+         r1["hdrFirst"], "Cancel 1 assignment period(s)?")
+    c.ok("no node with id gtoast2 exists yet", not r1["t2"],
+         "gtoast2 fired before the confirm step")
+    # Step 2 — confirming with #sampConfirmGo closes both overlays and fires the toast.
+    page.click('#sampConfirmGo')
+    r2 = page.evaluate("""() => {
+      const t = document.getElementById('gtoast2');
+      return { confirmOpen: document.getElementById('m-sampcancel-confirm').classList.contains('open'),
+        m3open: document.getElementById('m-sampleoff').classList.contains('open'),
         exists: !!t, visible: t ? window.__cs(t, 'display') !== 'none' : false,
         first: t ? t.firstChild.textContent : null,
         small: t && t.querySelector('small') ? t.querySelector('small').textContent : null,
         sen: window.__qaSentinel };
     }""")
-    c.ok("#m-sampleoff loses class open", not r["m3open"],
-         "still open; confirm dialog '#m-sampcancel-confirm' opened instead (title: %s)"
-         % r["confirmTitle"])
-    c.ok("#gtoast2 visible", r["exists"] and r["visible"],
-         "gtoast2 %s" % ("absent" if not r["exists"] else "hidden"))
-    if r["exists"]:
-        c.eq("toast title", r["first"], S_TOAST2)
-        c.eq("toast subtext", r["small"], S_TOAST2_SUB)
-    c.eq("sentinel", r["sen"], "om")
+    c.ok("#m-sampcancel-confirm loses class open", not r2["confirmOpen"])
+    c.ok("#m-sampleoff loses class open", not r2["m3open"])
+    c.ok("#gtoast2 visible", r2["exists"] and r2["visible"],
+         "gtoast2 %s" % ("absent" if not r2["exists"] else "hidden"))
+    if r2["exists"]:
+        c.eq("toast title", r2["first"], S_TOAST2)
+        c.eq("toast subtext", r2["small"], S_TOAST2_SUB)
+    c.eq("sentinel", r2["sen"], "om")
 
 
 @scen("QA-SMP-28", "M2 opens from the wf-bar — identical content")
@@ -696,27 +719,42 @@ def smp29(page, c):
          "differs (len %d vs %d)" % (len(h1), len(h2)))
 
 
-@scen("QA-SMP-30", "(neg) Start Assignment (ON) is silent — documents [WF-16 · proposed]")
+@scen("QA-SMP-30", "Start Assignment (ON) shows the specified toast — re-baselined on [WF-16], applied 2026-08-03")
 def smp30(page, c):
     open_m2(page)
     c.eq("no .gtoast before", page.evaluate(
         "document.querySelectorAll('.gtoast').length"), 0)
+    d = page.evaluate("""() => ({
+      target: document.querySelector('#m-sampleon input[name="samptarget"]').checked,
+      sd: document.getElementById('sampStartDate').value,
+      st: document.getElementById('sampStartTime').value,
+      fv: document.getElementById('sampForever').checked })""")
+    c.ok("default target is 'All new orders in this period'", d["target"])
+    c.eq("default start date", d["sd"], "2026-07-23")
+    c.eq("default start time", d["st"], "10:00")
+    c.ok("forever checked by default", d["fv"])
     page.click('#m-sampleon .foot button.btn-green')
     r = page.evaluate("""() => {
-      const ts = [...document.querySelectorAll('.gtoast')];
       const btn = document.querySelector('#m-sampleon .foot button.btn-green');
+      const t = document.getElementById('gtoast3');
       return { m2open: document.getElementById('m-sampleon').classList.contains('open'),
-        n: ts.length, ids: ts.map(t => t.id),
-        toastTxt: ts[0] ? ts[0].textContent : null, btnId: btn.id || '(none)' };
+        btnId: btn.id || '(none)', exists: !!t,
+        cls: t ? t.classList.contains('gtoast') : false,
+        visible: t ? window.__cs(t, 'display') !== 'none' : false,
+        first: t ? t.firstChild.textContent : null,
+        small: t && t.querySelector('small') ? t.querySelector('small').textContent : null };
     }""")
+    c.eq("the green footer button carries id sampStartBtn", r["btnId"], "sampStartBtn")
     c.ok("modal loses class open", not r["m2open"])
-    c.eq("no toast is shown (.gtoast length 0 — the [WF-16] silence)", r["n"], 0)
-    if r["n"]:
-        c.eq("(observed toast — spec expects silence)", r["toastTxt"], None)
-    c.eq("button lacks an id (per spec defect note)", r["btnId"], "(none)")
+    c.ok("#gtoast3 exists", r["exists"], "gtoast3 absent (no toast fired)")
+    c.ok("#gtoast3 carries class gtoast", r["cls"])
+    c.ok("#gtoast3 is visible", r["visible"])
+    if r["exists"]:
+        c.eq("toast title (byte-exact §3.6.5)", r["first"], S_TOAST3)
+        c.eq("toast subtext (byte-exact §3.6.5)", r["small"], S_TOAST3_SUB)
 
 
-@scen("QA-SMP-31", "(neg) Cancel toasts at zero selection — documents [WF-17 · proposed]")
+@scen("QA-SMP-31", "(neg) Zero selection disables cancel on the wireframe — re-baselined on [WF-17], applied 2026-08-03")
 def smp31(page, c):
     open_m3(page)
     page.uncheck('#m-sampleoff tbody tr:nth-child(1) input[type=checkbox]')
@@ -727,14 +765,18 @@ def smp31(page, c):
     r = page.evaluate("""() => ({
       confirmOpen: (document.getElementById('m-sampcancel-confirm') || { classList: { contains: () => false } })
         .classList.contains('open'),
-      t2: !!document.getElementById('gtoast2'),
-      t2vis: document.getElementById('gtoast2')
-        ? window.__cs(document.getElementById('gtoast2'), 'display') !== 'none' : false })""")
-    c.ok("#sampCancelBtn is NOT disabled (the [WF-17] defect)", not disabled,
-         "button is disabled at zero selection")
-    c.ok("no confirm dialog appears", not r["confirmOpen"])
-    c.ok("#gtoast2 is shown anyway (the [WF-17] defect)", r["t2"] and r["t2vis"],
-         "no toast fired (click at zero selection produced nothing)")
+      t2: !!document.getElementById('gtoast2') })""")
+    c.ok("#sampCancelBtn.disabled === true at zero selection", disabled,
+         "button is enabled at zero selection")
+    c.ok("#m-sampcancel-confirm does not gain class open", not r["confirmOpen"],
+         "confirm overlay opened from a blocked click")
+    c.ok("no #gtoast2 node is created", not r["t2"],
+         "gtoast2 was created by a blocked click")
+    # The gate tracks the selection, not the page load: re-checking row 1 re-enables it.
+    page.check('#m-sampleoff tbody tr:nth-child(1) input[type=checkbox]')
+    c.ok("re-checking row 1 re-enables the button", page.evaluate(
+        "document.getElementById('sampCancelBtn').disabled") is False,
+        "button stayed disabled after re-checking")
 
 
 @scen("QA-SMP-32", "M3 default checkbox states")
@@ -753,18 +795,35 @@ def smp32(page, c):
     c.eq("total checkbox elements", r["total"], 2)
 
 
-@scen("QA-SMP-33", "(neg) forever does not disable end fields — documents [WF-19 · proposed]")
+@scen("QA-SMP-33", "(neg) forever clears and disables the end fields — re-baselined on [WF-19], applied 2026-08-03")
 def smp33(page, c):
     open_m2(page)
-    r = page.evaluate("""() => ({
+    probe = """() => ({
       fv: document.getElementById('sampForever').checked,
       edDis: document.getElementById('sampEndDate').disabled,
-      etDis: document.getElementById('sampEndTime').disabled })""")
-    c.ok("forever is checked (precondition)", r["fv"])
-    c.ok("End date input is NOT disabled (the [WF-19] defect)", not r["edDis"],
-         "sampEndDate.disabled === true")
-    c.ok("Time input is NOT disabled (the [WF-19] defect)", not r["etDis"],
-         "sampEndTime.disabled === true")
+      etDis: document.getElementById('sampEndTime').disabled,
+      edVal: document.getElementById('sampEndDate').value,
+      etVal: document.getElementById('sampEndTime').value })"""
+    r = page.evaluate(probe)
+    c.ok("forever is checked (shipped default)", r["fv"])
+    c.ok("End date input is disabled", r["edDis"], "sampEndDate.disabled === false")
+    c.ok("Time input is disabled", r["etDis"], "sampEndTime.disabled === false")
+    c.eq("End date value is empty", r["edVal"], "")
+    c.eq("Time value is empty", r["etVal"], "")
+    # Unchecking re-enables both.
+    page.uncheck('#sampForever')
+    r2 = page.evaluate(probe)
+    c.ok("unchecking forever re-enables End date", not r2["edDis"])
+    c.ok("unchecking forever re-enables Time", not r2["etDis"])
+    # forever wins over a previously typed end value: re-checking clears and disables.
+    page.fill('#sampEndDate', '2026-08-31')
+    page.fill('#sampEndTime', '18:00')
+    page.check('#sampForever')
+    r3 = page.evaluate(probe)
+    c.ok("re-checking forever disables End date again", r3["edDis"])
+    c.ok("re-checking forever disables Time again", r3["etDis"])
+    c.eq("re-checking forever clears the typed End date", r3["edVal"], "")
+    c.eq("re-checking forever clears the typed Time", r3["etVal"], "")
 
 
 @scen("QA-SMP-34", "Cancel toast uses its own node")
@@ -1177,13 +1236,23 @@ def cmt19(page, c):
     c.eq("only MKT-40218 star on", r["starOn"], [False, True, False])
 
 
-@scen("QA-CMT-20", "(neg) Hub does not close on an outside click — documents [WF-21 · proposed]")
+@scen("QA-CMT-20", "The hub closes on an outside click — re-baselined on [WF-21], applied 2026-08-03")
 def cmt20(page, c):
     open_hub(page)
     page.click('.ptitle h2')  # a click on .pagepad content, outside the dropdown
-    r = page.evaluate("document.getElementById('inbox1').classList.contains('open')")
-    c.ok("#inbox1 still has class open (the [WF-21] defect)", r,
-         "hub closed on outside click (a document-level close handler is present)")
+    c.ok("#inbox1 loses class open on an outside click", page.evaluate(
+        "document.getElementById('inbox1').classList.contains('open')") is False,
+        "hub stayed open — no document-level close handler")
+    # A click inside the panel leaves it open (the stopPropagation guards are live).
+    open_hub(page)
+    page.click('#inbox1 .csearch input')
+    c.ok("a click on #inbox1 .csearch input leaves the hub open", page.evaluate(
+        "document.getElementById('inbox1').classList.contains('open')"),
+        "hub closed on an inside click (.csearch)")
+    page.click('#inbox1 .tabs button[data-tab="saved"]')
+    c.ok("a click on a tab button leaves the hub open", page.evaluate(
+        "document.getElementById('inbox1').classList.contains('open')"),
+        "hub closed on an inside click (tab button)")
 
 
 @scen("QA-CMT-21", "Corpus mixes marketing and sales entities")
@@ -1280,45 +1349,70 @@ def gbl04(page, c):
         "document.querySelectorAll('.gtoast').length"), 0)
 
 
-@scen("QA-GBL-09", "(neg) Two independent toast nodes — documents [WF-18 · proposed] [E-62]")
+@scen("QA-GBL-09", "(neg) Concurrent toasts are stacked, never overlaid — re-baselined on [WF-18], applied 2026-08-03 [E-62]")
 def gbl09(page, c):
     open_import(page)
     page.click('#mktConfirm')
+    # within the 2600 ms window, drive the cancel path through its confirm step
     open_m3(page)
     page.click('#sampCancelBtn')
-    # baseline routes through a confirm dialog before the cancel toast
-    if page.evaluate(
-            "(document.getElementById('m-sampcancel-confirm')||{classList:{contains:()=>false}}).classList.contains('open')"):
-        page.click('#sampConfirmGo')
+    page.click('#sampConfirmGo')
     r = page.evaluate("""() => {
       const ts = [...document.querySelectorAll('.gtoast')];
+      const rects = ts.map(t => t.getBoundingClientRect());
       return { n: ts.length, ids: ts.map(t => t.id),
         vis: ts.map(t => window.__cs(t, 'display')),
-        tops: ts.map(t => window.__cs(t, 'top')) };
+        tops: ts.map(t => window.__cs(t, 'top')),
+        heights: ts.map(t => t.offsetHeight),
+        rects: rects.map(x => ({ top: x.top, bottom: x.bottom })) };
     }""")
     c.eq(".gtoast length", r["n"], 2)
     c.eq("ids", sorted(r["ids"]), ["gtoast", "gtoast2"])
     c.eq("both display block", r["vis"], ["block", "block"])
-    c.ok("both at the same fixed coordinates (overlapping — the [WF-18] defect)",
-         len(set(r["tops"])) == 1,
-         "tops differ: %s (stacked, not overlapping)" % r["tops"])
+    if r["n"] == 2:
+        # The contract is the offset formula, not the demo-copy pixel values.
+        c.eq("first visible toast sits at top:16px", r["tops"][0], "16px")
+        expect2 = "%dpx" % (16 + r["heights"][0] + 8)
+        c.eq("second toast at previous.top + previous.offsetHeight + 8px",
+             r["tops"][1], expect2)
+        a, b = r["rects"][0], r["rects"][1]
+        c.ok("bounding boxes do not intersect while both are visible",
+             a["bottom"] <= b["top"] or b["bottom"] <= a["top"],
+             "rects overlap: %s vs %s" % (a, b))
 
 
-@scen("QA-GBL-10", "(neg) Esc does not dismiss anything — documents [WF-20 · proposed] [E-97]")
+@scen("QA-GBL-10", "Esc dismisses the topmost overlay, else the Comments hub — re-baselined on [WF-20], applied 2026-08-03 [E-97]")
 def gbl10(page, c):
-    for mid in ["m-import", "m-sampleon", "m-sampleoff"]:
+    before = page.evaluate("document.querySelectorAll('.gtoast').length")
+    # One overlay at a time — each is closed by a single Escape.
+    for mid in ["m-import", "m-sampleon", "m-sampleoff", "m-sampcancel-confirm"]:
         page.evaluate("document.getElementById('%s').classList.add('open')" % mid)
         page.keyboard.press("Escape")
-        still = page.evaluate(
-            "document.getElementById('%s').classList.contains('open')" % mid)
-        c.ok("#%s still open after Esc (the [WF-20] defect)" % mid, still,
-             "#%s was closed by Esc (a keydown listener exists)" % mid)
+        c.ok("#%s loses class open after Esc" % mid, page.evaluate(
+            "document.getElementById('%s').classList.contains('open')" % mid) is False,
+            "#%s survived Esc" % mid)
         page.evaluate("document.getElementById('%s').classList.remove('open')" % mid)
+    # Topmost unwind: confirm stacked on top of M3 — one press per overlay.
+    page.evaluate("""() => { document.getElementById('m-sampleoff').classList.add('open');
+      document.getElementById('m-sampcancel-confirm').classList.add('open'); }""")
+    page.keyboard.press("Escape")
+    r1 = page.evaluate("""() => ({
+      cf: document.getElementById('m-sampcancel-confirm').classList.contains('open'),
+      m3: document.getElementById('m-sampleoff').classList.contains('open') })""")
+    c.ok("first Esc closes only the confirm overlay", not r1["cf"])
+    c.ok("first Esc leaves #m-sampleoff open (topmost only)", r1["m3"],
+         "#m-sampleoff was closed by the same press")
+    page.keyboard.press("Escape")
+    c.ok("second Esc closes #m-sampleoff", page.evaluate(
+        "document.getElementById('m-sampleoff').classList.contains('open')") is False)
+    # No overlay open: Esc falls through to the Comments hub.
     open_hub(page)
     page.keyboard.press("Escape")
-    c.ok("#inbox1 still open after Esc (the [WF-20] defect)", page.evaluate(
-        "document.getElementById('inbox1').classList.contains('open')"),
-        "#inbox1 was closed by Esc")
+    c.ok("#inbox1 loses class open when no overlay is open", page.evaluate(
+        "document.getElementById('inbox1').classList.contains('open')") is False,
+        "#inbox1 survived Esc")
+    c.eq("no dismissal created a toast", page.evaluate(
+        "document.querySelectorAll('.gtoast').length"), before)
 
 
 @scen("QA-GBL-11", "(neg) Wireframe-only chrome inventory (must not ship)")
