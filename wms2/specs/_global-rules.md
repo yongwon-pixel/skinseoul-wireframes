@@ -29,6 +29,7 @@ Page deltas may add local behavior (e.g. Closing disables the input before the c
 Any Print button outputs the correct carrier's label **immediately on click** — no new tab, no browser print dialog, no preview step — regardless of carrier (Deleo, YUN, or any carrier added later). This requires a local print agent (PrintNode-class) that pushes directly to the printer queue; browsers cannot do this alone (see handoff note 2).
 Print surfaces: View Orders (order Print, single-item auto-print on scan, M4 return labels), RTO (row Print, Bulk Print Labels, M1 picking list), Order Detail (Print). Closing report is **CSV download only** — not a print surface `[PD-68 · OWNER-PENDING]`.
 Infrastructure failures (agent offline, printer unreachable) surface as a red toast [G-2] and are persisted as `print.job_result` [G-8]. **CONFIRMED 2026-08-03 (owner: "print button alone must produce the label").**
+Carrier labels themselves are always **each carrier's existing default output, printed verbatim** — no custom carrier-label layout exists or will be built, for YUN, DELEO, or any carrier added later (e.g. FedEx). Only the internal invoice ("PACKING") is ours to design — see `specs/shipping-label.md`. **CONFIRMED 2026-08-03 (owner).**
 
 ## [G-5] Sourcing routes
 - **Order-facing badges (4):** SMART BUY · JIT (purchase channel in parentheses: Coupang / Naver / Other retail) · WHOLESALE · PARTNERSHIP.
