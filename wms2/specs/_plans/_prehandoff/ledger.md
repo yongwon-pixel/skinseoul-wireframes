@@ -25,3 +25,12 @@
 | F-18 | **BLOCKER** | R4b 노션 | TM 미러: `\|` 10/10행 전부 손상 — DC-3·8·11·20·24는 **UI-visible 열 값 삭제**, DC-13은 페이로드 enum 7개 중 5개+UI열까지 소실(td 6개로 조기 종료), DC-14는 `\|`→`/` 무단 치환. §2.2 표는 `<th>` 리터럴로 전 행에 팬텀 5열 추가 | TM 미러 감사 실측 | VERIFIED |
 | F-19 | **MAJOR** | R4b 노션 | **블록쿼트 안 마크다운 표가 노션에서 표로 렌더 안 됨** — TM §5.1 서두 "Shared concept" 표(4행)가 `\|`·`\|---\|` 이스케이프 그대로 노출된 산문으로 표시 | TM 미러 감사(레포 L621) | VERIFIED |
 | F-20 | **BLOCKER** | 교차 | **PD-66 처리가 레포·노션 양쪽 모두 불완전 — 정본 자체의 내부 모순.** 레포 TM 배너는 "PD-66 OWNER-DECIDED"인데 본문 7곳 이상(§3.2.2·§3.7·E-3·§8.0·QA-VAL-10·§9.1·§10)이 여전히 "미결정·NO-DEFAULT·BLOCKED". 노션은 5곳을 RESOLVED로 갱신했으나 2곳(§8.0 totals·§10 결정로그)은 옛 텍스트 → 노션도 자기모순. **C-103(모순 사냥 BLOCKER 후보)과 동일 건, 독립 2회 검출** | TM 미러 감사 + 모순 사냥 C-103 | VERIFIED |
+| | | | **— R2 반증 결과 (17/17, 2.93M tok) —** | | |
+| F-21 | **BLOCKER** | R2 (C-23) | **취소된 입고 요청의 송장 스캔 동작이 정반대** — VO는 "등록 번호는 **항상** State 6"(BR-17·[L-S1-1] 우선순위 1·G-10 "Every registered number"), IR v1.3은 "취소 시 **매칭 비활성화** → 미인식 풀 낙하"(BR-34·E-96). VO 전문에 CANCELLED·deactivat 각 0건. 두 QA(IR QA-C-30 vs VO L1177)를 한 구현이 동시 통과 불가 | 반증 2/2 생존(양측 독립 경로) | VERIFIED |
+| F-22 | **BLOCKER** | R2 (C-42) | **미인식 등록 슬랙 알림의 멘션 대상 상충** — VO 라우팅표 "none (channel post)" vs TM "의심 PIC 전원 @멘션(1인 1회)". TM의 push-not-poll 설계(검색·수동 PIC 조회 제거 근거) 전체가 이 멘션에 의존 | 반증 2/2 생존 | VERIFIED |
+| F-23 | **MAJOR** | R2 (C-32) | **창고 로컬 타임존 이원화** — INV BR-32 "모든 시각 KST(Asia/Seoul)" vs OD §3.0.3 "warehouse local (**SGT**)". 양쪽 X-리스트·CP 목록·전역규칙 어디에도 미선언(전역규칙에 KST/SGT 문자열 0건). 같은 이벤트가 화면마다 1시간 어긋나 렌더 | 반증 2인 생존(등급 MAJOR/BLOCKER 분할 → 보수적 MAJOR) | VERIFIED |
+| F-24 | 재판정 | R2 (C-55) | 출고/출고취소 시 재고 원장 기록 여부 — OD는 `inventory.movement` 필수, VO는 재고 이벤트 없음. **반증 1/2 분할**(BLOCKER vs MINOR) → 3차 심판 대기 | 반증 분할 | OPEN |
+| F-25 | **MAJOR** | R2 (C-103)=F-20 | PD-66 배너-본문 모순 — 반증은 1/2 분할이었으나 **TM 미러 감사가 독립적으로 본문 7곳 미결정 상태를 실측**해 실재 확정. 등급은 보수적으로 MAJOR | 반증 분할 + F-20 독립 확인 | VERIFIED |
+| F-26 | MAJOR | R2 | **경계면·전역규칙 MAJOR 13건 생존** (C-15·16·17·24·25·26·27·33·35·46·47·56·58) — 상세는 r2-contradiction-raw.md | 반증 개별 통과 | VERIFIED |
+| F-27 | NOTE | R2 | 반증에서 **19건 기각·17건 MINOR 강등** — 선언된 divergence·이력 서술·층위 차이로 설명됨. 오탐률 36/49(73%)로 적대 검증의 실효 확인 | 반증 집계 | CLOSED |
+| F-28 | **BLOCKER** | R4b 노션 | INV 미러: `\|` 11/11행 전부 손상 — BR "damaged/lost" 분류·DC-17/21/31 페이로드+Note 열·E-21의 DC-17/PD-5 상호참조·QA-NAV-08/GLB-08/GLB-11의 어서션 절이 **페이지 어디에도 없음**(0-hit 검증). DC-6 9열화로 §5.1 표 전체에 팬텀 2열 | INV 미러 감사 실측 | VERIFIED |
