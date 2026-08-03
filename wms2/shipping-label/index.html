@@ -6,7 +6,7 @@
   --line:#DEE2E6; --line-strong:#BBBABE;
   --nav:#1B1F24; --nav-fg:#C7CBD1;
   --blue:#0D6EFD; --blue-soft:#E7F1FF;
-  --green:#198754; --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --green:#198754; --amber:#B45309; --amber-soft:#FFF7E6; --amber-line:#FDBA74;
   --paper:#111;
 }
 *{box-sizing:border-box}
@@ -61,20 +61,41 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .barcode.short{height:34px}
 .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
 
-/* DELEO A4 (current) */
-.deleo{width:520px;padding:34px 40px;font-size:13px}
-.deleo .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
-.deleo .logo{font-size:30px;font-weight:800;letter-spacing:1px}
-.deleo .bc{width:180px}
-.deleo .meta{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 14px;font-size:12.5px;margin-bottom:18px}
-.deleo .meta .k{color:#555}
-.deleo table{width:100%;border-collapse:collapse;font-size:13px}
-.deleo th,.deleo td{border:1px solid #000;padding:8px 10px;text-align:center}
-.deleo th{font-weight:700}
-.deleo td.item{text-align:left}
-.deleo .foot{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;color:#333}
+/* ══ Internal invoice (PACKING) — shared table look, scale 5px/mm ══ */
+.pk{display:flex;flex-direction:column}
+.pk .hd{display:flex;align-items:flex-start;gap:12px}
+.pk .hd .ttl{font-weight:800;font-size:19px;letter-spacing:.5px;line-height:1.1}
+.pk .hd .ono{font-size:12.5px;font-weight:600;margin-top:2px}
+.pk .hd .bc{flex:1;max-width:230px;margin:0 auto}
+.pk .hd .tq{font-weight:800;font-size:15px;white-space:nowrap;margin-left:auto}
+.pk table{width:100%;border-collapse:collapse;font-size:12.5px}
+.pk th,.pk td{border:1px solid #000;padding:6px 8px;text-align:center}
+.pk th{font-weight:700}
+.pk td.nm{text-align:left}
+.pk tr.total td{font-weight:800}
+.pk .ft{display:flex;justify-content:space-between;font-size:11.5px;margin-top:auto;padding-top:6px}
 
-/* YUN 4x6 */
+/* current YUN internal — portrait 100×150 (500×750) */
+.pkYun{width:500px;height:750px;padding:26px 28px}
+.pkYun .hd{margin-bottom:16px}
+/* current DELEO internal — landscape 150×100 (750×500), generous margins as printed */
+.pkDeleo{width:750px;height:500px;padding:26px 34px}
+.pkDeleo .hd{margin-bottom:14px}
+
+/* NEW unified internal — landscape 150×100 (750×500), minimal margins */
+.pkNew{width:750px;height:500px;padding:12px 14px}
+.pkNew .hd{margin-bottom:8px;align-items:center}
+.pkNew .hd .ttl{font-size:17px}
+.pkNew .hd .tq{font-size:17px}
+.pkNew table{font-size:12.5px}
+.pkNew th,.pkNew td{padding:5px 8px}
+.pkNew td.qty{font-weight:800;font-size:14px}
+.pkNew td.loc{font-family:"SF Mono",Menlo,monospace;font-weight:700}
+.pkNew td.dim{color:#888}
+.pkNew tr.sample td{background:var(--amber-soft)}
+.pkNew .ft{font-size:11.5px}
+
+/* YUN carrier 4x6 */
 .yun{width:400px;padding:0;font-size:12.5px;border:2px solid #000}
 .yun .r1{display:grid;grid-template-columns:70px 1fr;border-bottom:2px solid #000}
 .yun .r1 .th{border-right:2px solid #000;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;padding:6px}
@@ -93,61 +114,29 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .yun .r-last{display:flex;justify-content:space-between;padding:6px 14px;font-size:11px;border-top:2px solid #000}
 .yun .star2{padding:2px 14px 8px;font-size:12px;font-weight:700}
 
-/* DELEO improved (landscape, B) */
-.deleoNew{width:760px;padding:22px 26px;font-size:12.5px}
-.deleoNew .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.deleoNew .logo{font-size:24px;font-weight:800;letter-spacing:1px}
-.deleoNew .top .bc{width:220px}
-.deleoNew .meta{display:flex;gap:26px;flex-wrap:wrap;font-size:12px;margin-bottom:14px}
-.deleoNew .meta b{font-weight:700}
-.deleoNew table{width:100%;border-collapse:collapse;font-size:12.5px}
-.deleoNew th,.deleoNew td{border:1px solid #000;padding:7px 9px}
-.deleoNew th{background:#f0f0f0;text-align:left}
-.deleoNew td.qty{text-align:center;font-size:16px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
-.deleoNew tr.sample td{background:#FFF7E6}
-.deleoNew .sample-tag{background:var(--amber);color:#fff;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:800}
-.deleoNew .loc{font-weight:700;font-family:"SF Mono",Menlo,monospace}
-.deleoNew .brand{font-weight:700}
-.deleoNew .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:11.5px;color:#333}
-.hl-under{position:relative}
-.bc4{font-family:"SF Mono",Menlo,monospace;font-weight:800;font-size:14.5px;text-align:center;letter-spacing:1px}
-
-/* YUN landscape improvement (B) — actual 100×150mm label used in landscape (150×100mm), scale 5px/mm */
-.yunNew{width:750px;height:500px;padding:0;border:2px solid #000;display:grid;grid-template-columns:300px 1fr;font-size:12px}
-.yunNew .carrier{border-right:2px solid #000;display:flex;flex-direction:column;min-height:0}
-.yunNew .carrier .rt{display:grid;grid-template-columns:60px 1fr;border-bottom:2px solid #000}
-.yunNew .carrier .rt .th{border-right:2px solid #000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;padding:4px}
-.yunNew .carrier .rt .route{font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;letter-spacing:1px}
-.yunNew .carrier .dr{display:grid;grid-template-columns:1fr 52px;border-bottom:2px solid #000}
-.yunNew .carrier .dr .dest{font-size:28px;font-weight:800;text-align:center;padding:3px;border-right:2px solid #000}
-.yunNew .carrier .dr .cls{font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.yunNew .carrier .bcwrap{padding:7px 10px 3px;text-align:center;border-bottom:2px solid #000}
-.yunNew .carrier .bcnum{font-size:10.5px;letter-spacing:.5px;margin-top:2px}
-.yunNew .carrier .ship{padding:7px 10px;font-size:11px;line-height:1.45;border-bottom:2px solid #000}
-.yunNew .carrier .ship .h{font-weight:700;margin-bottom:2px}
-.yunNew .carrier .tel{padding:4px 10px;font-size:10.5px;border-bottom:2px solid #000}
-.yunNew .carrier .bcwrap2{padding:6px 10px 2px;text-align:center}
-.yunNew .carrier .snum{font-size:10px;letter-spacing:.5px;margin-top:2px}
-.yunNew .carrier .r-last{display:flex;justify-content:space-between;padding:3px 10px;font-size:10px;border-top:2px solid #000;margin-top:auto}
-.yunNew .carrier .star2{padding:1px 10px 5px;font-size:11px;font-weight:700}
-.yunNew .items{padding:10px 12px;overflow:hidden}
-.yunNew .items .h{font-weight:800;font-size:12.5px;margin-bottom:6px}
-.yunNew table{width:100%;border-collapse:collapse;font-size:11.5px}
-.yunNew th,.yunNew td{border:1px solid #000;padding:5px 7px}
-.yunNew th{background:#f0f0f0;text-align:left;font-size:10.5px}
-.yunNew td.qty{text-align:center;font-size:14px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
-.yunNew .loc{font-weight:700;font-family:"SF Mono",Menlo,monospace}
-.yunNew .brand{font-weight:700}
+/* DELEO carrier label */
+.deleo{width:560px;padding:30px 36px;font-size:13px}
+.deleo .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.deleo .logo{font-size:30px;font-weight:800;letter-spacing:1px}
+.deleo .bc{width:200px}
+.deleo .meta{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 14px;font-size:12.5px;margin-bottom:18px}
+.deleo .meta .k{color:#555}
+.deleo table{width:100%;border-collapse:collapse;font-size:13px}
+.deleo th,.deleo td{border:1px solid #000;padding:8px 10px;text-align:center}
+.deleo th{font-weight:700}
+.deleo td.item{text-align:left}
+.deleo .foot{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;color:#333}
 </style>
 
 <div class="wf-bar">
   <h1>WMS 2.0 · Shipping Label Layouts Wireframe</h1>
-  <span class="hint">Based on actual DELEO (picking) · YUN (carrier) labels · vs Plan B improvements</span>
+  <span class="hint">Internal invoice (PACKING) = ours, being redesigned · Carrier labels = YUN/DELEO defaults, unchanged</span>
   <div class="wf-tabs">
-    <button class="wf-tab on" data-pane="p-deleo">DELEO Current</button>
-    <button class="wf-tab" data-pane="p-deleoNew">DELEO Improved (B)</button>
-    <button class="wf-tab" data-pane="p-yun">YUN Carrier Label</button>
-    <button class="wf-tab" data-pane="p-yunNew">YUN Landscape (B)</button>
+    <button class="wf-tab" data-pane="p-intYun">Internal — YUN Current</button>
+    <button class="wf-tab" data-pane="p-intDeleo">Internal — DELEO Current</button>
+    <button class="wf-tab on" data-pane="p-intNew">★ Internal — Unified (NEW)</button>
+    <button class="wf-tab" data-pane="p-yun">Carrier — YUN (fixed)</button>
+    <button class="wf-tab" data-pane="p-deleo">Carrier — DELEO (fixed)</button>
     <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
@@ -162,83 +151,101 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 </div>
 
 <div class="toolbar">
-  <span class="lbl">Order 407506 · Deleo BaroShip dispatch</span>
+  <span class="lbl">Order 428204 · internal invoice + carrier label print</span>
   <span class="sp"></span>
   <button class="btn btn-gray btn-sm">⬅ Back to Order</button>
   <button class="btn btn-line btn-sm">Download Label PDF</button>
   <button class="btn btn-blue btn-sm">🖨 Print</button>
 </div>
 
-<!-- ===== DELEO current ===== -->
-<div class="pane on" id="p-deleo">
-  <p class="paneintro">Current DELEO picking/packing label (A4 portrait) — reproduced exactly as printed. Only the product name (Korean) and quantity, so warehouse pickers can't tell the SKU or location. See the [DELEO Improved (B)] tab for the improved version.</p>
-  <div class="paper deleo">
-    <div class="top">
-      <div class="logo">DELEO</div>
+<!-- ═════ Internal invoice — YUN current (portrait) ═════ -->
+<div class="pane" id="p-intYun">
+  <p class="paneintro">Current internal invoice (PACKING) as printed for <b>YUN shipments — portrait</b> 100×150mm. Reproduced from the actual print (Order #427502). Only No · Korean product name · Qty; note the large unused whitespace below the table. To be replaced by the unified landscape format.</p>
+  <div class="paper pk pkYun">
+    <div class="hd">
+      <div><div class="ttl">PACKING</div><div class="ono mono">#427502</div></div>
       <div class="bc"><div class="barcode"></div></div>
-    </div>
-    <div class="meta">
-      <span class="k">Ref.</span><span>407506</span>
-      <span class="k">Tracking No.</span><span class="mono">DL20260630072138</span>
-      <span class="k">Order ID.</span><span class="mono">O20260630105170</span>
-      <span class="k">To.</span><span>FR</span>
+      <div class="tq">총수량: 5</div>
     </div>
     <table>
-      <thead><tr><th style="width:44px">No.</th><th>Item</th><th style="width:64px">Qty.</th></tr></thead>
+      <thead><tr><th style="width:40px">No</th><th>상품명</th><th style="width:56px">수량</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td class="item">데일리 웨트 힐크림</td><td>2</td></tr>
-        <tr><td colspan="2"><b>Total Qty.</b></td><td><b>2</b></td></tr>
+        <tr><td>1</td><td class="nm">릴라이브 그로우턴 엑소좀 듀얼 래쉬 듀얼…</td><td>1</td></tr>
+        <tr><td>2</td><td class="nm">그로우턴 엑소좀 브러쉬 앰플</td><td>1</td></tr>
+        <tr><td>3</td><td class="nm">트라넥삼산 7% 다크 솔루션 크림</td><td>1</td></tr>
+        <tr><td>4</td><td class="nm">345 릴리프 크림</td><td>1</td></tr>
+        <tr><td>5</td><td class="nm">코스알엑스 살리실산 데일리 젠틀 클렌저</td><td>1</td></tr>
+        <tr class="total"><td colspan="2">합계</td><td>5</td></tr>
       </tbody>
     </table>
-    <div class="foot"><span>2026-07-14</span><span>1 / 1</span></div>
+    <div class="ft"><span>[검수 후 폐기]</span><span>1/1</span></div>
   </div>
 </div>
 
-<!-- ===== DELEO improved (B) ===== -->
-<div class="pane" id="p-deleoNew">
-  <p class="paneintro">Improved (Plan B) — landscape print + SKU·brand·size·<b>location</b> added, quantity <u>underlined for emphasis</u> (mispick prevention), sample-set rows marked separately. Pickers can instantly tell where, what, and how many to pick from the label alone.</p>
-  <div class="paper deleoNew anno">
-    <span class="dot" style="top:16px;right:26px">1</span>
-    <div class="top">
-      <div class="logo">DELEO</div>
-      <div class="bc"><div class="barcode short"></div></div>
-    </div>
-    <div class="meta">
-      <span><b>Ref.</b> 407506</span>
-      <span><b>Tracking No.</b> <span class="mono">DL20260630072138</span></span>
-      <span><b>Order ID.</b> <span class="mono">O20260630105170</span></span>
-      <span><b>To.</b> FR</span>
-      <span><b>Date</b> 2026-07-14</span>
+<!-- ═════ Internal invoice — DELEO current (landscape) ═════ -->
+<div class="pane" id="p-intDeleo">
+  <p class="paneintro">Current internal invoice (PACKING) as printed for <b>DELEO shipments — landscape</b> 150×100mm. Reproduced from the actual print (Order #428204). Same 3 columns; generous margins mean this 9-unit order needs <b>two pages (1/2)</b>. The unified format keeps this landscape orientation.</p>
+  <div class="paper pk pkDeleo">
+    <div class="hd">
+      <div><div class="ttl">PACKING</div><div class="ono mono">#428204</div></div>
+      <div class="bc"><div class="barcode"></div></div>
+      <div class="tq">총수량: 9</div>
     </div>
     <table>
+      <thead><tr><th style="width:40px">No</th><th>상품명</th><th style="width:56px">수량</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="nm">PDRN 5% 액티브 앰플</td><td>1</td></tr>
+        <tr><td>2</td><td class="nm">코스알엑스 알로에 수딩 선 크림 SF+ A+++</td><td>2</td></tr>
+        <tr><td>3</td><td class="nm">리들샷 리프팅 아이크림</td><td>1</td></tr>
+        <tr><td>4</td><td class="nm">브이티코스메틱 리들샷</td><td>1</td></tr>
+        <tr><td>5</td><td class="nm">마데카 크림 타이트 리프팅</td><td>1</td></tr>
+        <tr><td>6</td><td class="nm">바이오힐보 프로바이오덤 리프팅 크림</td><td>1</td></tr>
+        <tr class="total"><td colspan="2">합계</td><td>9</td></tr>
+      </tbody>
+    </table>
+    <div class="ft"><span>[검수 후 폐기]</span><span>1/2</span></div>
+  </div>
+</div>
+
+<!-- ═════ Internal invoice — Unified NEW ═════ -->
+<div class="pane on" id="p-intNew">
+  <p class="paneintro"><b>Proposed unified internal invoice</b> — one carrier-agnostic format: YUN and DELEO today, and any carrier added later (e.g. FedEx) uses it unchanged. 100×150mm used <b>landscape (150×100mm)</b>, <b>minimal margins</b>. Keeps No · Korean product name · Qty; adds <b>사이즈</b> (from the Order line-items Size column) and <b>로케이션</b> (products with an assigned location); adds a bottom <b>합계</b> row. Corners: order no (top-left) · barcode (top-center) · total qty (top-right) · 검수 후 폐기 (bottom-left) · page (bottom-right). The same 9-unit order that needed 2 pages now fits <b>one page</b>.</p>
+  <div class="paper pk pkNew anno">
+    <span class="dot" style="top:-11px;left:-11px">1</span>
+    <div class="hd anno">
+      <span class="dot" style="top:-13px;left:118px">5</span>
+      <div><span class="ttl">PACKING <span class="mono" style="font-size:13px">#428204</span></span></div>
+      <div class="bc"><div class="barcode"></div></div>
+      <div class="tq">총수량: 9</div>
+    </div>
+    <table class="anno">
+      <span class="dot" style="top:-13px;left:388px">2</span>
+      <span class="dot" style="top:-13px;left:508px">3</span>
       <thead><tr>
-        <th style="width:52px" class="anno">BC<span class="dot" style="top:-13px;left:-11px">5</span></th><th style="width:36px">No.</th><th style="width:110px">SKU</th><th style="width:90px">Location</th><th>Brand · Item (옵션)</th><th style="width:70px">Qty.</th>
+        <th style="width:36px">No</th><th>상품명</th><th style="width:70px">사이즈</th><th style="width:92px">로케이션</th><th style="width:54px">수량</th>
       </tr></thead>
       <tbody>
-        <tr>
-          <td class="bc4">0912</td>
-          <td>1</td><td class="mono">100012534</td><td class="loc">A-02-20</td>
-          <td><span class="brand">Dr.Jart+</span> · Cicapair Sleepair Mask <span style="color:#555">(75ml)</span><br>데일리 웨트 힐크림</td>
-          <td class="qty anno">2<span class="dot" style="top:-13px;right:-11px">2</span></td>
-        </tr>
-        <tr class="sample anno">
-          <td class="bc4">—<span class="dot" style="top:8px;left:-10px">3</span></td>
-          <td>2</td><td class="mono">SAMPLE-3SET</td><td class="loc">SMP-01</td>
-          <td><span class="sample-tag">SAMPLE</span> 리텐션 사쉐 3세트 (D60 캠페인)</td>
-          <td class="qty">3</td>
-        </tr>
-        <tr><td colspan="5" style="text-align:right;font-weight:700">Total Qty.</td><td class="qty">5</td></tr>
+        <tr><td>1</td><td class="nm">PDRN 5% 액티브 앰플</td><td>30ml</td><td class="loc">A-03-12</td><td class="qty">1</td></tr>
+        <tr><td>2</td><td class="nm">코스알엑스 알로에 수딩 선 크림 SF+ A+++</td><td>50ml</td><td class="loc">A-01-07</td><td class="qty">2</td></tr>
+        <tr><td>3</td><td class="nm">리들샷 리프팅 아이크림</td><td>30ml</td><td class="loc">B-02-04</td><td class="qty">1</td></tr>
+        <tr><td>4</td><td class="nm">브이티코스메틱 리들샷</td><td>50ml</td><td class="dim">—</td><td class="qty">1</td></tr>
+        <tr><td>5</td><td class="nm">마데카 크림 타이트 리프팅</td><td>45ml</td><td class="loc">C-01-11</td><td class="qty">1</td></tr>
+        <tr><td>6</td><td class="nm">바이오힐보 프로바이오덤 리프팅 크림</td><td>50ml</td><td class="loc">B-03-02</td><td class="qty">1</td></tr>
+        <tr><td>7</td><td class="nm">코스알엑스 스네일 96 뮤신 파워 에센스</td><td>100ml</td><td class="loc">A-02-15</td><td class="qty">1</td></tr>
+        <tr class="sample anno"><td>8<span class="dot" style="top:6px;left:-11px">7</span></td><td class="nm">sample set</td><td class="dim">—</td><td class="loc">SMP-01</td><td class="qty">1</td></tr>
+        <tr class="total anno"><td colspan="4">합계<span class="dot" style="top:4px;right:64px">6</span></td><td class="qty">9</td></tr>
       </tbody>
     </table>
-    <div class="foot"><span>SkinSeoul WMS · Deleo BaroShip</span><span>1 / 1</span></div>
+    <div class="ft anno"><span>[검수 후 폐기]</span><span>1/1<span class="dot" style="top:-6px;right:-28px">4</span></span></div>
   </div>
+  <div style="text-align:center;color:var(--ink-3);font-size:12px;margin-top:10px">Mockup scale 5px/mm — 100×150mm label rotated to landscape · same order as the DELEO Current tab (2 pages → 1 page)</div>
 </div>
 
-<!-- ===== YUN carrier label ===== -->
+<!-- ═════ Carrier — YUN (fixed) ═════ -->
 <div class="pane" id="p-yun">
-  <p class="paneintro">YUN Express international carrier label (4×6) — a carrier-generated standard label, so the layout can't be changed. The admin just prints it as-is. (Actual Order 407508 / NZ shipment)</p>
+  <p class="paneintro">YUN Express international carrier label (4×6) — <b>carrier-generated standard, layout cannot be changed</b>. The admin prints it as-is (carrier default). Reproduced from an actual NZ shipment.</p>
   <div class="paper yun anno">
-    <span class="dot" style="top:-11px;left:-11px">4</span>
+    <span class="dot" style="top:-11px;left:-11px">8</span>
     <div class="r1"><div class="th">TH</div><div class="route">KRTHZXR</div></div>
     <div class="r2"><div class="dest">NZ</div><div class="cls">R</div></div>
     <div class="bcwrap"><div class="barcode tall"></div><div class="bcnum mono">YT2618100707828990</div></div>
@@ -259,64 +266,49 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ===== YUN landscape improvement (B) ===== -->
-<div class="pane" id="p-yunNew">
-  <p class="paneintro">Improved (Plan B) — the actual <b>100×150mm</b> YUN label used in <b>landscape (150×100mm)</b> so <b>product names show in full without truncation</b>. Left = carrier-spec elements <b>all kept</b> (routing · destination · tracking barcode · SHIP TO · Tel · secondary barcode · reference number · *2); right = item table (4-digit BC · SKU · Location · brand · underlined qty — same rules as the DELEO improvement). Implementation (rotated label print vs companion page) will be finalized after checking YUN's output format in development.</p>
-  <div class="paper yunNew anno">
-    <span class="dot" style="top:-11px;left:-11px">6</span>
-    <div class="carrier">
-      <div class="rt"><div class="th">TH</div><div class="route">KRTHZXR</div></div>
-      <div class="dr"><div class="dest">NZ</div><div class="cls">R</div></div>
-      <div class="bcwrap"><div class="barcode tall"></div><div class="bcnum mono">YT2618100707828990</div></div>
-      <div class="ship">
-        <div class="h">SHIP TO:</div>
-        Hardeep Kaur<br>
-        61 wellesley road<br>
-        Napier Hawke's Bay Region<br>
-        4110<br>
-        NEW ZEALAND
-      </div>
-      <div class="tel">Tel: +61434826165 +61434826165</div>
-      <div class="bcwrap2"><div class="barcode short"></div><div class="snum mono">SKINSEOUL_407508</div></div>
-      <div class="r-last"><span class="mono">KR0C540623</span><span>2026-07-14 09:00:08</span></div>
-      <div class="star2">*2</div>
+<!-- ═════ Carrier — DELEO (fixed) ═════ -->
+<div class="pane" id="p-deleo">
+  <p class="paneintro">DELEO carrier label — <b>DELEO-generated, kept at their default</b>. The admin prints it as-is. Reproduced from the actual print (Order #428204 / GB): note DELEO's own truncation to 3 items + “5 more” — full item detail lives on our internal invoice instead.</p>
+  <div class="paper deleo anno">
+    <span class="dot" style="top:-11px;left:-11px">9</span>
+    <div class="top">
+      <div class="logo">DELEO</div>
+      <div class="bc"><div class="barcode"></div></div>
     </div>
-    <div class="items">
-      <div class="h">Items — Order 407508</div>
-      <table>
-        <thead><tr>
-          <th style="width:42px">BC</th><th style="width:86px">SKU</th><th style="width:72px">Location</th><th>Brand · Item (옵션)</th><th style="width:42px">Qty.</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td class="bc4">0912</td><td class="mono">100012534</td><td class="loc">A-02-20</td>
-            <td><span class="brand">Dr.Jart+</span> · Cicapair Sleepair Mask <span style="color:#555">(75ml)</span></td>
-            <td class="qty">2</td>
-          </tr>
-          <tr>
-            <td class="bc4">8853</td><td class="mono">100018221</td><td class="loc" style="color:#888">JIT</td>
-            <td><span class="brand">Round Lab</span> · 1025 Dokdo Cleanser <span style="color:#555">(150ml)</span></td>
-            <td class="qty">1</td>
-          </tr>
-          <tr><td colspan="4" style="text-align:right;font-weight:700">Total Qty.</td><td class="qty">3</td></tr>
-        </tbody>
-      </table>
+    <div class="meta">
+      <span class="k">Ref.</span><span>428204</span>
+      <span class="k">Tracking No.</span><span class="mono">DL20260731073614</span>
+      <span class="k">Order ID.</span><span class="mono">O20260731105447</span>
+      <span class="k">To.</span><span>GB</span>
     </div>
+    <table>
+      <thead><tr><th style="width:44px">No.</th><th>Item</th><th style="width:64px">Qty.</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="item">PDRN 5% 액티브 앰플</td><td>1</td></tr>
+        <tr><td>2</td><td class="item">코스알엑스 알로에 수딩 선 크림 SF+ A+++</td><td>2</td></tr>
+        <tr><td>3</td><td class="item">리들샷 리프팅 아이크림</td><td>1</td></tr>
+        <tr><td colspan="3" style="text-align:center;color:#333">5 more</td></tr>
+        <tr><td colspan="2"><b>Total Qty.</b></td><td><b>9</b></td></tr>
+      </tbody>
+    </table>
+    <div class="foot"><span>2026-08-02</span><span>1 / 1</span></div>
   </div>
-  <div style="text-align:center;color:var(--ink-3);font-size:12px;margin-top:10px">Mockup scale 5px/mm — the actual 100×150mm label rotated to landscape</div>
 </div>
 
 <div class="legend">
-  <h3>Shipping Labels — New / Changed Annotations (Plan B applied)</h3>
+  <h3>Shipping Labels — Internal invoice redesign (2026-08-03 owner direction)</h3>
   <ol>
-    <li><span class="n">1</span><span>DELEO picking label switched to <b>landscape</b> — SKU·brand·size·Location columns added so pickers can pick from the label alone <span class="ref">— B</span></span></li>
-    <li><span class="n">2</span><span>Quantity emphasized with <u>underline + large font</u> — prevents mispicks on multi-item orders <span class="ref">— B</span></span></li>
-    <li><span class="n">3</span><span>Sample-set row marked separately (amber tint + SAMPLE badge + kind·qty) — distinguishes it from sold items, linked to Order Management sample assignment. <b>Two-track info (confirmed 2026-08-03)</b>: this sample row (which sample · how many) is a <b>center-internal</b> notation — the <b>data sent to the carrier</b> only includes a "(+ sample set)" note on the last product name <span class="ref">— B / G</span></span></li>
-    <li><span class="n">4</span><span>YUN carrier label (current) reproduces the carrier's standard spec — destination code (NZ) · routing (R·KRTHZXR) · tracking (YT…) · SKINSEOUL_order-number as-is. The improved version is in the [YUN Landscape (B)] tab <span class="ref">— actual screen</span></span></li>
-    <li><span class="n">5</span><span>New <b>BC column</b> at the left of the item table — the <b>last 4 digits</b> of the product (88) barcode. During picking/packing, a visual check against the physical barcode's ending digits prevents mispicks. Common to the DELEO and YUN item tables; rows without an 88 barcode (e.g. sample sets) show "—" <span class="ref">— B</span></span></li>
-    <li><span class="n">6</span><span>YUN switched from <b>portrait to landscape</b> — the actual <b>100×150mm</b> label used in landscape (150×100mm), exposing full product names. Carrier-spec elements (routing · destination · tracking barcode · SHIP TO · Tel · secondary barcode · reference number · *2) are <b>all kept</b>; the item table follows the same rules as the DELEO improvement (BC·SKU·Location·brand·underlined qty). Implementation (rotated print vs companion page) to be confirmed in development <span class="ref">— B</span></span></li>
+    <li><span class="n">1</span><span><b>One unified internal invoice, carrier-agnostic</b> — YUN switches from portrait to landscape; both print the same 100×150mm label in <b>landscape (150×100mm)</b>. The internal invoice is our own document, so <b>any carrier added later (e.g. FedEx) inherits this exact format with zero changes</b>; carrier labels always stay at each carrier's own default and are never touched <span class="ref">— owner 2026-08-03</span></span></li>
+    <li><span class="n">2</span><span><b>사이즈 column added</b> — value comes from the Order page line-items table's Size column (e.g. 50ml) <span class="ref">— owner 2026-08-03</span></span></li>
+    <li><span class="n">3</span><span><b>로케이션 column added</b> — shown for products with an assigned warehouse location (mono bold, e.g. A-01-07); products without one (JIT sourcing etc.) show “—” <span class="ref">— owner 2026-08-03</span></span></li>
+    <li><span class="n">4</span><span><b>Minimal margins</b> — padding cut to ~2–3mm on all sides so more rows fit per page: the same 9-unit order drops from 2 pages to 1. Corner items keep their positions: order no (top-left) · barcode (top-center) · 총수량 (top-right) · [검수 후 폐기] (bottom-left) · page n/m (bottom-right) <span class="ref">— owner 2026-08-03</span></span></li>
+    <li><span class="n">5</span><span>Top strip unchanged in content: <b>PACKING + order number</b> top-left, <b>order barcode</b> top-center, <b>총수량</b> top-right <span class="ref">— kept from current</span></span></li>
+    <li><span class="n">6</span><span><b>합계 row added at the bottom of the table</b> — total quantity repeated at the bottom, separate from the top-right 총수량, so the packer can verify without looking back up <span class="ref">— owner 2026-08-03</span></span></li>
+    <li><span class="n">7</span><span><b>Sample set row</b> — when the order has a sample assignment, one amber-tinted row rendered as exactly “sample set” (no type, no per-type qty — v1 rule [G-13]/PD-51); location = sample shelf. Carrier-facing data instead appends “(+ sample set)” to the last product name <span class="ref">— G-13</span></span></li>
+    <li><span class="n">8</span><span>YUN carrier label — carrier standard spec reproduced as-is (routing · destination · tracking barcode · SHIP TO · Tel · SKINSEOUL_no.); unchangeable <span class="ref">— actual print</span></span></li>
+    <li><span class="n">9</span><span>DELEO carrier label — DELEO default kept; their layout truncates to 3 items + “5 more”, which is fine because full detail lives on the internal invoice <span class="ref">— actual print</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">DELEO Current / YUN Carrier Label reproduce the actual printed PDFs as-is. Only DELEO Improved and YUN Landscape apply Plan B. The top Comments hub is omitted since this is a print screen (label output only). Brand names are always shown in the improved versions. The 4-digit BC values (0912·8853) are examples.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">The two “Current” tabs and both carrier tabs reproduce the actual prints photographed on 2026-08-03. Only the ★ Unified tab is a proposal. Label content stays Korean (product names, 총수량/합계/검수 후 폐기) — printed labels are data, not admin UI [G-6]. An earlier Plan-B concept (BC last-4-digits column, SKU column, brand bolding on the label) is superseded by this owner direction and kept only in git history; the BC column can be revived as an option if wanted.</p>
 </div>
 
 <script>
