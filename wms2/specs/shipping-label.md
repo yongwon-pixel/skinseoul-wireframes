@@ -2,8 +2,8 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.1 · **Written:** 2026-08-03 · **Global rules:** cited as `[G-n]`, never restated.
-> **Status:** carrier-label policy **CONFIRMED** (owner, 2026-08-03) · unified internal-invoice direction **CONFIRMED** (owner, 2026-08-03) — one open item remains (§6).
+> **Spec version:** 1.2 · **Written:** 2026-08-03 · **Global rules:** cited as `[G-n]`, never restated.
+> **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
 
@@ -47,7 +47,14 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 - **사이즈** — from the Order page line-items **Size** column (e.g. `50ml`). *(added 2026-08-03)*
 - **로케이션** — the SKU's registered warehouse location at print time (mono bold, e.g. `A-01-07`); products without one (JIT sourcing etc.) show `—`. *(added 2026-08-03)*
 - **수량** — bold, larger than body text (mispick prevention).
-- **Sample set row** `[G-13]`: when the order has a sample assignment, one amber-tinted row rendered as exactly `sample set` (no type, no per-type qty — PD-51), location = sample shelf. Carrier-facing data instead appends "(+ sample set)" to the last product name.
+- **Sample set row** `[G-13]`: when the order has a sample assignment, one amber-tinted row rendered as exactly `sample set` (no type, no per-type qty — PD-51), location = sample shelf. **The sample set counts toward `총수량` and `합계`** — the invoice verifies what is physically in the box, so paper and box must agree (e.g. `9 = 8 products + 1 sample set`) **[CONFIRMED 2026-08-03]**. Carrier-facing rendering is different — §3.5.
+
+### 3.5 Sample set — internal vs carrier-facing rendering **[CONFIRMED 2026-08-03]**
+Two renderings of the same sample assignment, and they must never be mixed up:
+| Surface | Rendering |
+|---|---|
+| **Internal invoice (this document)** | Own table row `sample set`, counted in `총수량`/`합계` |
+| **Data sent to the carrier** | **No separate line item.** Only the string `(+ sample set)` appended to the **last product name** (tax handling) — the carrier never receives a sample line, a sample qty, or a sample price `[G-13]` |
 
 ### 3.4 Typography (measured from the current prints, 2026-08-03)
 Measured glyph heights on the photographed labels, at the wireframe's 1mm = 5px scale:
@@ -71,10 +78,13 @@ Order number & barcode = the order record · 사이즈 = line-items Size · 로�
 ## 6. Open items (owner)
 1. ~~Column header language~~ — **DECIDED 2026-08-03: Korean** (`사이즈`/`로케이션`), as mocked (§3.3).
 2. ~~Multi-page totals~~ — **DECIDED 2026-08-03: last page only**; earlier pages read `계속 →`, top-right `총수량` on every page (§3.2).
-3. **Sample set in totals** — mockup counts it (`9 = 8 products + 1 sample set`); awaiting confirmation. *(sole remaining item)*
+3. ~~Sample set in totals~~ — **DECIDED 2026-08-03: counted** (`9 = 8 products + 1 sample set`), §3.3/§3.5.
+
+**All items decided — this spec is fully confirmed and frozen for the pre-handoff review.**
 
 ## Change history
 | Version | Date | Changes |
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.2 | 2026-08-03 | Owner decision: **sample set counts toward `총수량`/`합계`** (open item 3 — last one). §3.5 added: internal row vs carrier-facing `(+ sample set)`-on-last-product-name rendering, explicitly separated. Spec fully confirmed. |
