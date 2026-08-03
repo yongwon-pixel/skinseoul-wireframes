@@ -73,7 +73,7 @@ Counted directly from `wms2/order-management/index.html`, not from the planning 
 | `M1b` is a **sub-dot inside M1** | Sub-dot on the `Carrier (auto)` column header of the Import modal's preview table, keyed `[L-M1b]` per `_review` §2c.2 |
 | Order list table is **omitted** from the mock (dashed placeholder) | Deliberate — "identical to the current admin". `[L-4]` specifies the deltas only |
 | The spelling `Ready to be Outbonded` in the M1 note | The real admin's spelling, deliberately preserved (`_wireframe-fixes` §E). Kept byte-verbatim in this spec and in QA |
-| No dots `6`+ exist | The legend ends at 5; there is no gap |
+| No dot numbered `6` or higher exists | The legend ends at 5; there is no gap |
 | No Korean strings appear anywhere on this page | Stated so that `[G-6]`'s "Korean is data, never translated" clause is not looked for here and its absence is not read as a defect |
 
 ### 2.3 State / modal map
