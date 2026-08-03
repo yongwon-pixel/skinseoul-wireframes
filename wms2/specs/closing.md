@@ -775,7 +775,17 @@ Everything else behaves as in a live session: the target banner with `[↺ Edit 
 
 **The typical amendment** is exactly the owner's sentence: edit the target 84 → 85, scan the found parcel (OK, +1), gate satisfied at 85/85 · 0 warnings, press Re-confirm.
 
-**Re-confirm.** `closing.reconfirm(session_id, target_at_press, idempotency_key)` — gate, server revalidation, double-click safety and rejection semantics are **identical to §3.9** (`[BR-3]`/`[BR-4]`/`[BR-29]` apply unchanged; rejections persist DC-22). On success:
+**Re-confirm.** `closing.reconfirm(session_id, target_at_press, idempotency_key)` — gate, server revalidation, double-click safety and rejection semantics are **identical to §3.9** (`[BR-3]`/`[BR-4]`/`[BR-29]` apply unchanged; rejections persist DC-22).
+
+**Scope of the server revalidation** (clarified 2026-08-03). "Identical to §3.9" governs *what is checked and how a rejection behaves*; it does not widen §3.9's row set. The three §3.9 checks are evaluated as follows:
+
+- **Counts** — recomputed server-side over the **whole** amended list (loaded confirmed rows + rows added in this amendment), exactly as in §3.9.
+- **Target** — compared with `target_at_press` over that same whole list, so an edit that landed mid-flight still cannot be confirmed against a stale number (E-73, unchanged).
+- **Live order-status re-check** — applied to the scan rows **added in this amendment session only**. The rows loaded from the confirmed v{n} snapshot are **not** re-judged against live order state: their status was already certified at the original confirm, and it legitimately advances afterwards (`Prepare Shipment → Shipped`). Re-checking them would reject every amendment of any date whose parcels have since moved — including the owner's canonical case, the past-date correction (E-83) — so the snapshot rows keep the verdict they carried at v{n} (`[BR-42]`: earlier versions are never re-written).
+
+Everything the operator does *inside* the amendment stays under the full §3.9 discipline: a newly scanned parcel is verdicted live by §3.6 at scan time and re-checked at re-confirm, and if its order left `Prepare Shipment` in between, the re-confirm is rejected with the §3.9 red toast and DC-22.
+
+On success:
 
 - the session returns to `CONFIRMED`, now at **version v{n+1}**;
 - the History row is updated **in place** — same date, same single row (`[PD-70]` upheld), latest numbers, plus the **"Amended v{n+1}" badge** (version · actor · timestamp — §3.20);
@@ -857,7 +867,7 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-37** | Duplicate detection is scoped to the **current session only**. There is no cross-day duplicate check. | Yesterday's parcel is caught by its order status (`Shipped`/`Completed` → warning), which is the more informative signal; a cross-day index would also flag legitimate carrier number reuse. | 2026-08-03 (spec-authored) |
 | **BR-38** | **M1 obeys the global outbound predicate.** `[Process Outbound → resolve warning]` is enabled only when the order has ≥1 line, **every line is `INBOUNDED`**, the status is `processing`, and the order is not cancelled — in addition to the Zero Packing attestation. A `Processing` order with any `PENDING` line stays `⚠ Not outbounded`, with the button disabled and the shortfall named. | M1 emits the canonical `order.outbounded` (DC-14). View Orders `BR-9` and `order-detail.md` L-9 both state the outbound gate as **iff every line is INBOUNDED**, with no page exception; a closing-only side door would ship an order whose goods were never received and would make the two other specs' "iff" false. | 2026-08-03 (cross-page defect M3a-D2; before this, closing's gate was Zero Packing alone) |
 | **BR-39** | **Amendment entry.** Every confirmed Closing History row carries `[Amend]`. Amending always passes through the M3 confirm dialog (`[PD-5]` class) and transitions that date's **existing** session `CONFIRMED → AMENDING`, loading the full confirmed scan list with original sequence numbers. The confirmed record (v{n}) remains the authoritative History row until re-confirm — "the confirmed record stays until you re-confirm" is a verbatim owner requirement. | Owner decision 2026-08-03 (resolves `[PD-74]`): the correction path for a parcel found after confirmation reuses the closing screen and its whole verdict machinery, instead of inventing a parallel edit UI that could bypass the scan discipline. | 2026-08-03 (owner) |
-| **BR-40** | **Re-confirm gate = the confirm gate.** `[Re-confirm Closing]` obeys `[BR-3]`/`[BR-4]`/`[BR-29]` unchanged: exact match against the amended target, 0 outstanding warnings, a human press, full server revalidation. Success updates the record **in place** — same date, same single History row (`[PD-70]` upheld), version v{n}→v{n+1}, an "Amended" badge carrying version · actor · timestamp. Closing History itself carries the correction — no external sheet write exists (`[PD-71]`). | An amendment that could confirm with a looser gate would make the amended record weaker than the original; and a second row per date would break `[BR-10]`'s "one row per date" reading of History. | 2026-08-03 (owner) |
+| **BR-40** | **Re-confirm gate = the confirm gate.** `[Re-confirm Closing]` obeys `[BR-3]`/`[BR-4]`/`[BR-29]` unchanged: exact match against the amended target, 0 outstanding warnings, a human press, full server revalidation — **scoped as §3.24 states**: counts and target over the whole amended list, the live order-status re-check over the rows added in this amendment only (the confirmed v{n} snapshot rows are not re-judged, or a past-date amendment could never re-confirm, E-83). Success updates the record **in place** — same date, same single History row (`[PD-70]` upheld), version v{n}→v{n+1}, an "Amended" badge carrying version · actor · timestamp. Closing History itself carries the correction — no external sheet write exists (`[PD-71]`). | An amendment that could confirm with a looser gate would make the amended record weaker than the original; and a second row per date would break `[BR-10]`'s "one row per date" reading of History. | 2026-08-03 (owner) |
 | **BR-41** | **Single working context.** An amendment cannot start while any session on any date is `IN_PROGRESS` or `AMENDING`; a new date's closing cannot start while an amendment is open (extends `[BR-35]`). A second `[Amend]` on a date already `AMENDING` loads the existing amendment, never a fork. | Two open working sessions would make "the closing being worked on" ambiguous for every scan arriving from a wedge — the same ambiguity `[BR-35]` exists to prevent. | 2026-08-03 (spec-authored; derived from `[BR-35]`/`[PD-70]`) |
 | **BR-42** | **Amendment audit.** The pre-amend snapshot is never mutated: every re-confirm writes a **new** immutable snapshot version, and every version stays reproducible as CSV forever. Exiting an amendment discards the working changes from the record but retains any added scan rows in the audit log; entry, re-confirm, rejection and exit all persist (DC-26…DC-29). History's CSV serves the latest version; surfacing earlier versions is a developer decision (DQ-13). | An amendment is precisely the situation an auditor will ask about ("why does the sheet say 85 when it said 84 on the day?") — the answer must be reconstructible from data alone [G-8]. | 2026-08-03 (spec-authored) |
 
@@ -988,7 +998,7 @@ Cross-page references on this page are real links, never decoration:
 
 | Surface | Target |
 |---|---|
-| `Order ID` cell in the scan list (rendered blue) | the order detail screen for that order. Wireframe path `../order-detail/#{order_id}` — the **directory form** `../{slug}/#{anchor}` fixed by `[G-12]`, never `../order-detail/index.html#…` (cross-page defect M3a-D16, normalized 2026-08-03); in the production admin the link resolves to the specific order (e.g. `/oms/orders/{order_id}`) — exact route is a developer decision. While a session is `IN_PROGRESS` the link opens in a **new tab** so the scan loop is never destroyed (E-74). **U-f: the wireframe renders these as plain `<td>` text, so this is `[ADMIN]` QA.** |
+| `Order ID` cell in the scan list (rendered blue) | the order detail screen for that order. Wireframe path `../order-detail/#{order_id}` — the **directory form** `../{slug}/#{anchor}` fixed by `[G-12]`, never `../order-detail/index.html#…` (cross-page defect M3a-D16, normalized 2026-08-03); in the production admin the link resolves to the specific order (e.g. `/oms/orders/{order_id}`) — exact route is a developer decision. While a session is `IN_PROGRESS` the link opens in a **new tab** so the scan loop is never destroyed (E-74). **U-f: the wireframe renders these as plain `td` text, so this is `[ADMIN]` QA.** |
 | M1 header order number | same target |
 | Comments hub entry | the entity the comment belongs to (an order) [G-7] |
 | Slack comment notification | deep link back to the order |
@@ -1151,7 +1161,7 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | **E-80** | The operator leaves the page, the browser crashes, or the device switches **mid-amendment** | The `AMENDING` state persists server-side exactly like an in-progress session (`[BR-8]`); reopening Closing resumes the amendment. History keeps showing the confirmed v{n} record with an "Amendment in progress" marker (DQ-13) — never the half-finished working state. |
 | **E-81** | `[✕ Exit amendment]` without re-confirming | The working changes are discarded from the record; any added scan rows are retained in the audit log [G-8]; the session returns to `CONFIRMED` v{n}; History is unchanged; DC-29. "The confirmed record stays until you re-confirm" holds literally. |
 | **E-82** | Two operators press `[Amend]` on the same date, or one double-clicks it | Exactly one `AMENDING` state exists [G-9]; the second entry **loads the existing amendment** (mirror of E-55), DC-27 `reason=already_amending`. Never two working copies of one day. |
-| **E-83** | Amending a **past** date (not today's row) | Allowed — the amber banner names the amended date so the operator can never confuse it with today's work. The History row stays on its original date (`[BR-19]` unchanged); the amend timestamp lives in the badge, not in the Date column. |
+| **E-83** | Amending a **past** date (not today's row) | Allowed — the amber banner names the amended date so the operator can never confuse it with today's work. The History row stays on its original date (`[BR-19]` unchanged); the amend timestamp lives in the badge, not in the Date column. The re-confirm's live order-status re-check covers only the rows added in the amendment (§3.24) — by then the day's confirmed parcels have legitimately moved past `Prepare Shipment`, so re-judging them would make this case impossible. |
 | **E-84** | Re-confirm attempted with a mismatch or an outstanding warning | Identical to §3.9: the button is disabled with the blocker label ("Re-confirm Closing ({n} remaining / {n} warnings / {n} over target)"); a forced request is rejected server-side with DC-22 and no version increment. |
 | **E-85** | A parcel already counted in the confirmed list is scanned again during the amendment | `duplicate` warning — the dedupe scope covers the loaded confirmed rows (§3.24). The count can never be inflated by rescanning an already-counted box; the operator deletes the duplicate row (M2) before re-confirming. |
 | **E-86** | A new date's closing is started while an amendment is open | Blocked (`[BR-41]`, extension of `[BR-35]`): red toast, DC-2 `reason=amendment_open`; the client opens the amendment so the operator resolves it first. |
@@ -1220,7 +1230,8 @@ Where a clause names no verb it is strict equality. Never relax `reads` to *cont
 
 **Reading a scenario.** Every Then-clause is an assertion. Where a scenario asserts a persisted event it names the `DC-n` id; §8.17 proves every event in §5.1 has at least one asserting scenario and §8.18 does the same for every `[E-n]`.
 
-**Totals: 192 scenarios — 74 `[WF]` · 118 `[ADMIN]` · 77 negative tests (40.1%).**
+**Totals: 193 scenarios — 74 `[WF]` · 119 `[ADMIN]` · 77 negative tests (39.9%).**
+> Census delta 2026-08-03: 192 → **193** with QA-AMEND-16 (`[ADMIN]`, non-negative — it asserts a success path plus its rejection branch), added with the §3.24 revalidation-scope clarification. `[WF]` and the negative count are unchanged, so the negative share moves 40.1% → 39.9%.
 
 ---
 
@@ -2306,6 +2317,14 @@ All scenarios in this block require the R4 instrumentation.
 - Given the 07-11 row (v1 = 78/78) is amended to 79/79 three days later
 - Then the History row stays on **07-11** (`[BR-19]`), its badge carries the amend timestamp, and both snapshots remain reproducible: the v1 CSV byte-identical to the original day, the v2 CSV reflecting the amendment (latest served by the row's CSV button, earlier versions per DQ-13)
 
+**QA-AMEND-16 `[ADMIN]`** — the re-confirm revalidation is scoped to the amendment's own rows `[E-83]` `[BR-29]` `[BR-40]` (added 2026-08-03)
+- Given the 07-11 closing is `CONFIRMED` v1 (78/78) and, three days later, every order on its 78 confirmed scan rows has advanced past `Prepare Shipment` (e.g. to `Shipped`)
+- When that date is amended, the target is edited 78 → 79, the found parcel is scanned (verdict `ok` — OK 79) and "Re-confirm Closing" is pressed once
+- Then the re-confirm **succeeds**: the loaded confirmed rows are **not** re-judged against live order state, `closing.amended` (**DC-28**) exists with `old_target=78 → new_target=79` and `version=2`, and **no DC-22** exists
+- And the count and target checks still ran over the **whole** amended list, not just the added row: the re-confirm passes only at `ok_count == target == 79` (78 loaded + 1 added), and a target that drifted mid-flight is still rejected under `[BR-3]`/E-73 exactly as in §3.9
+- Given instead the newly scanned parcel's own order is moved out of `Prepare Shipment` between its scan and the press
+- Then the re-confirm **is** rejected exactly as in §3.9: red toast "✕ Cannot confirm — {reason}" naming that order, **DC-22** persisted, no version increment, and History still shows v1 (78/78)
+
 ---
 
 ### 8.16 Coverage summary
@@ -2326,18 +2345,19 @@ All scenarios in this block require the R4 instrumentation.
 | QA-HIST | `[L-SH-1]`, `[L-S1-11]`, E-43/44/45/74 | 6 | 5 | 11 | 3 |
 | QA-HUB | `[L-S1-7]`, E-47/75 | 4 | 5 | 9 | 2 |
 | QA-PERSIST | `[L-S1-F]`, E-30…34/36/38/41/53/59/62/71 | 0 | 14 | 14 | 7 |
-| QA-AMEND | `[L-SH-2]`, `[L-M3]`, E-79…86 | 6 | 9 | 15 | 6 |
+| QA-AMEND | `[L-SH-2]`, `[L-M3]`, E-79…86 | 6 | 10 | 16 | 6 |
 | QA-CHROME | `[L-F1]`…`[L-F4]`, `[L-S1-9]`, E-50 | 5 | 1 | 6 | 2 |
-| **Total** | | **74** | **118** | **192** | **77 (40.1%)** |
+| **Total** | | **74** | **119** | **193** | **77 (39.9%)** |
 
 **How to reproduce the totals** (count **scenario-header lines only** — `[WF]`, `[ADMIN]` and `(negative)` all recur in §8 prose and in the traceability tables, so an unfiltered `grep -c` over §8 over-counts):
 ```sh
 awk '/^## 8\. QA Acceptance/,/^## 9\. Out of Scope/' closing.md | grep -E '^\*\*QA-' > /tmp/h
-wc -l < /tmp/h                  # 192
+wc -l < /tmp/h                  # 193
 grep -cF '`[WF]`'    /tmp/h     #  74
-grep -cF '`[ADMIN]`' /tmp/h     # 118
+grep -cF '`[ADMIN]`' /tmp/h     # 119
 grep -cF '(negative)' /tmp/h    #  77
-``` Every block row above sums column-wise to those four figures (74 + 118 = 192; 77 ÷ 192 = 40.1%). `E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range, which is why that range is written out rather than as `E-30…38`.
+```
+Every block row above sums column-wise to those four figures (74 + 119 = 193; 77 ÷ 193 = 39.9%). `E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range, which is why that range is written out rather than as `E-30…38`.
 
 **Legend-unit coverage — all 24 units plus the 4 furniture keys have at least one asserting scenario:**
 
@@ -2363,7 +2383,7 @@ grep -cF '(negative)' /tmp/h    #  77
 | `[L-S4-2]` | QA-CONFIRM-05, QA-CONFIRM-14, QA-HIST-07 |
 | `[L-S4-3]` | QA-CONFIRM-06, QA-DUP-08 |
 | `[L-SH-1]` | QA-HIST-01…11 |
-| `[L-SH-2]` | QA-AMEND-01, 04…15 |
+| `[L-SH-2]` | QA-AMEND-01, 04…16 |
 | `[L-M1]` | QA-M1-01…14 |
 | `[L-M2]` | QA-DEL-01…10 |
 | `[L-M3]` | QA-AMEND-02, 03, 07, 12, 14 |
@@ -2397,13 +2417,13 @@ grep -cF '(negative)' /tmp/h    #  77
 | **DC-19** `comment.read` / `comment.mark_all_read` | QA-HUB-05 |
 | **DC-20** `closing.voice_alert_toggled` | QA-VOICE-06 |
 | **DC-21** `closing.confirmed` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04 |
-| **DC-22** `closing.confirm_rejected` | QA-CONFIRM-07, 08, 11, 13, QA-AMEND-10 |
+| **DC-22** `closing.confirm_rejected` | QA-CONFIRM-07, 08, 11, 13, QA-AMEND-10, QA-AMEND-16 |
 | **DC-23** `closing.snapshot_created` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-12 |
 | **DC-24** `closing.daily_shipping_status_updated` — **retired** (`[PD-71]`) | Absence asserted by QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-08, QA-AMEND-09 |
 | **DC-25** `closing.report_exported` | QA-CONFIRM-14, QA-HIST-07 |
 | **DC-26** `closing.amend_started` | QA-AMEND-07, QA-AMEND-14 (negative) |
 | **DC-27** `closing.amend_rejected` | QA-AMEND-12, QA-AMEND-14 |
-| **DC-28** `closing.amended` | QA-AMEND-09, QA-AMEND-08 (negative) |
+| **DC-28** `closing.amended` | QA-AMEND-09, QA-AMEND-16, QA-AMEND-08 (negative) |
 | **DC-29** `closing.amend_cancelled` | QA-AMEND-13 |
 
 ### 8.18 Edge-case traceability (every `[E-n]` has an asserting scenario)
@@ -2451,7 +2471,7 @@ All **86** edge cases map to at least one scenario, and every cell below names *
 | E-37 | QA-CONFIRM-16, QA-PERSIST-04 | E-76 | QA-S0-10 |
 | E-38 | QA-PERSIST-08 | E-77 | QA-SCAN-17 |
 | E-39 | QA-VOICE-07 | E-78 | QA-M1-14 |
-| E-79 | QA-AMEND-12 | E-83 | QA-AMEND-15 |
+| E-79 | QA-AMEND-12 | E-83 | QA-AMEND-15, QA-AMEND-16 |
 | E-80 | QA-AMEND-13 | E-84 | QA-AMEND-10 |
 | E-81 | QA-AMEND-13 | E-85 | QA-AMEND-11 |
 | E-82 | QA-AMEND-14 | E-86 | QA-AMEND-12 |
@@ -2572,11 +2592,12 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **Remediation — M3b §2.2 silent-N/A gap.** Mandatory items 9 (line-based location filter), 10 (audit-mode-only visibility) and 11 (JIT residual stock) were coded **n** for closing but stated nowhere. Three explicit out-of-scope rows added; `G-14` and JIT now appear in this spec by name | **normalization** | §9.1 |
 | 2026-08-03 | **Remediation — M2 adversarial QA run (68/68 `[WF]` scenarios executed, 405 assertions).** Three expected strings were wrong because nested *functional* descendants pollute `textContent` the way `.dot` does (`header button.x`, `.badge-n`, `.paneheader small`, `.avatar`): fixed to `starts with`, and R2b now lists all four. §8.0 gained normative assertion verbs (R6b), a state-activation rule (R9) and a PD-shorthand rule (R10); four unassertable clauses (QA-S0-01 heading selector, QA-HIST-03 highlight, QA-CHROME-02 `p.sub`, QA-CHROME-04 "23") were made executable | QA | §8.0, QA-S0-01, QA-DEL-01, QA-HUB-01/02, QA-HIST-03, QA-CHROME-02/04 |
 | 2026-08-03 | **Remediation — M1 coverage audit.** §8.18's "every `[E-n]` has an asserting scenario" was false for six edge cases whose mapped scenario asserted something else (E-37/52/60/66/74/77) plus a partial (E-51). Seven `[ADMIN]` scenarios added (QA-SCAN-17 · QA-VERDICT-15/16 · QA-COUNT-13 · QA-TARGET-14 · QA-CONFIRM-16 · QA-HIST-11), plus QA-HUB-09 and QA-M1-14 from the cross-page fixes. §8.16 key lists corrected (E-35 belongs to QA-SCAN only; E-74 to QA-HIST; `[L-S4-1..3]` enumerated), §8.0's traceability pointers un-shifted (§8.17/§8.18), and U-a extended to the Confirm button's `79`. Scenario count 168 → 177, negative share 40.5% → 40.1% | QA | §8, §2.3, §3.9 |
-| 2026-08-03 | **Audit pass — QA rebuilt to a runnable contract.** §8.0 now fixes the execution environment (reset discipline, `.dot`-stripping text normalization, attribute-based selection because of `[WF-12]`, a speech-synthesis stub, row addressing, page-global demo state). One assertion in the earlier draft could not pass on the live wireframe — the 10-column header check read `#6` and `Closing Verdict5` because annotation dots sit inside those `<th>` cells; it is now normalized (QA-VERDICT-05). Scenario count 125 → 168, negative share 36.8% → 40.5%, and every `[E-n]` gained a traceability row (§8.18) | QA | §8 |
+| 2026-08-03 | **Audit pass — QA rebuilt to a runnable contract.** §8.0 now fixes the execution environment (reset discipline, `.dot`-stripping text normalization, attribute-based selection because of `[WF-12]`, a speech-synthesis stub, row addressing, page-global demo state). One assertion in the earlier draft could not pass on the live wireframe — the 10-column header check read `#6` and `Closing Verdict5` because annotation dots sit inside those `th` cells; it is now normalized (QA-VERDICT-05). Scenario count 125 → 168, negative share 36.8% → 40.5%, and every `[E-n]` gained a traceability row (§8.18) | QA | §8 |
 
 | 2026-08-03 | **REVERSAL — `[PD-74]` RESOLVED by owner: Amend Closing.** Owner contract (verbatim intent): "수정 누르면 마감하던 게 쭉 뜨고, 맨 위 수동 숫자를 하나 올리면 된다." Each confirmed Closing History row gains `[Amend]` → M3 confirm ("Amend the closing for {date}? The confirmed record stays until you re-confirm.") → **amendment mode** (the day's full confirmed scan list loaded, amber "AMENDING — {date} closing (confirmed {ok}/{target})" banner, editable manual target, live scan input) → exact-match **Re-confirm Closing** updates the record **in place** with an "Amended" badge (version · actor · timestamp); Closing History itself carries the correction. §3.23's "no reopen/amend affordance" negative row removed (this row records the reversal); `[PD-70]`/`[PD-73]` immutability upheld — same session reopened, one row per date, v{n} snapshots never mutated | **reversal / owner decision** | §3.24, §3.25, `[L-SH-2]`, `[L-M3]`, `[BR-39]`–`[BR-42]`, DC-26…DC-29, E-79…E-86, QA-AMEND-01…15 |
 | 2026-08-03 | **Wireframe defect batch applied (owner-approved), same pass as the Amend build**: `[WF-4]` "(M2)" → "the Closing History page" · `[WF-5]` State 1 legend #2 reworded to the C-10 net truth · `[WF-7]` Cancel Closing confirm dialog added (`#m-cancel`, §3.11 copy, no legend dot) · `[WF-8]` Start validation red toasts added (empty / non-whole-number) · `[WF-12]` duplicate wf-tab removed (a "Modal: Amend Closing" tab added, `.wf-tab` stays 10). QA-S0-02, QA-TARGET-04, QA-CHROME-03/04, QA-HIST-10 and R3/R8/R10 updated to the fixed wireframe; `[WF-15]` deliberately **not** applied (corpus-wide `[G-7]` precondition, §2.3). Verified by Playwright against the edited file (70 checks, 0 fail, 0 pageerror) | wireframe fix | §2.1, §2.2, §2.3, §3.1, §3.3, §3.11, §3.14, §3.17, §8 |
 | 2026-08-03 | **REVERSAL — `[PD-71]` RESOLVED by owner: the SS Daily Shipping Status spreadsheet is retired entirely.** No sheet integration exists — the former §6.4 contract (auto-update on confirm, idempotency, failure surfacing) is void, and the admin's **Closing History** (daily snapshots + per-day CSV) replaces the sheet wholesale. Fallout, IDs kept per convention: `[BR-11]` retired · `[BR-32]` sheet clause struck · DC-24 retired (never emitted; absence QA-asserted) · E-38 rewritten as an absence case · DQ-6 void · wireframe copy corrected (gate note, State 1 legend #8, State 4 toast subtext "Closing record saved · replaces the retired Daily Shipping Status sheet", "(sheet retired 2026-08-03)" on the report banner and its legend, amend copy) · QA-CONFIRM-01/04/05/10/16, QA-PERSIST-04/08, QA-AMEND-09 updated | **reversal / owner decision / removal** | §1.1, §3.9, §3.17, §3.18, §3.24, §3.25, `[BR-11]`, `[BR-32]`, `[BR-40]`, DC-24, §6.1, §6.4, E-37/E-38, §8, §9 |
+| 2026-08-03 | **Clarification — the re-confirm's server-revalidation scope.** §3.24's "identical to §3.9" was read as re-running §3.9's live order-status re-check over **every** OK row, which would reject every amendment whose parcels had already shipped — structurally impossible for the past-date correction the flow exists for (E-83) and for the owner's canonical case. Scope now stated: counts and target over the whole amended list; the live status re-check over the rows **added in this amendment** only; v{n} snapshot rows keep their certified verdict (`[BR-42]`). No rule changed — the check set and the rejection semantics are as written. `[BR-40]` and E-83 carry the same scope; QA-AMEND-16 (`[ADMIN]`) added to assert both branches; census 192 → 193 | **clarification / QA** | §3.24, `[BR-40]`, `[BR-29]`, E-83, DC-22, DC-28, §8.0, §8.15b, §8.16, §8.17, §8.18 |
 | 2026-08-03 | **Spec v1.3 bookkeeping.** Legend units 22 → **24** (Closing History dot 2 = `[L-SH-2]`, modal dot M3 = `[L-M3]`); business rules → `[BR-42]`; events → DC-29; edge cases 78 → **86** (§7.7); QA scenarios 177 → **192** (74 `[WF]` · 118 `[ADMIN]` · 77 negative, 40.1%) via block 8.15b QA-AMEND (lettered so §8.16–§8.18 pointers stay stable); `[PD-74]` removed from §9.2; DQ-13 added | rule / QA | §2.1, §4, §5, §7, §8, §9 |
 
 **Nothing above has been silently dropped.** Where a feature was removed, §3.23 carries an explicit "must NOT exist" entry pointing back at the row that removed it; where a decision was reversed (Closing History modal → page), both directions are recorded here and the fossil that survives in the wireframe is named.

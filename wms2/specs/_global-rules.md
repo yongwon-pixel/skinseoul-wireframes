@@ -1,6 +1,6 @@
 # WMS 2.0 — Global Rules (`_global-rules`)
 
-Version 1.2 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
+Version 1.3 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
 
 Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed; remaining `[PD-n]` tags are register-adopted provisional defaults.
 
@@ -79,11 +79,13 @@ Inbound / Outbound / and every confirming action must be double-click safe: clie
 **Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead. **CONFIRMED 2026-08-03 (owner, PD-7).**
 
 ## [G-10] Multiple tracking numbers per inbound request
-One inbound request may register several tracking numbers (split shipments). **Every** registered number matches in View Orders and enters the internal-inbound screen (State 6); partial arrivals accumulate against the same request until fully received. **CONFIRMED 2026-08-03.**
+One inbound request may register several tracking numbers (split shipments). Every number registered on a **matching-active** request matches in View Orders and enters the internal-inbound screen (State 6); partial arrivals accumulate against the same request until fully received. **CONFIRMED 2026-08-03.**
+**Cancellation deactivates matching.** When a request is cancelled [G-11], matching is switched off for **every** number registered on it, atomically with the cancellation. A later scan of such a number therefore does **not** open State 6 — it resolves like any unknown barcode and falls to the unrecognized pool, where a person decides what the arrived goods are. A cancelled request must never be able to swallow a live scan. **CONFIRMED 2026-08-03 (owner).**
 An inbound tracking number is **unique system-wide** — registering one that already exists on another inbound request is blocked. Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**
 
 ## [G-11] Inbound request lifecycle
-`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`.
+`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`, plus the terminal branch `REQUESTED → CANCELLED` (grey).
+**CANCELLED** is a **terminal, desk-written** state: it can only be reached from `REQUESTED` (never once stock has been received against the request), it cannot be un-cancelled, the row is kept for audit, and it deactivates View Orders tracking matching [G-10]. **CONFIRMED 2026-08-03 (owner, PD-79).**
 Expected-quantity edits are allowed with a **mandatory reason** — exact enum: "Damaged/defective — cannot accept" / "Supplier qty change" / "Other (memo)". Editing recomputes remaining quantity and the full-confirm gate, auto-posts a comment on the request, and notifies the requester [G-7]. Expected-qty edits originate **only** in View Orders M6; the Inbound Request list displays the resulting history.
 Arrivals with no matching request route to the shared unrecognized pool (Unrecognized Tracking), not to an ad-hoc registration path.
 
@@ -103,6 +105,9 @@ Cross-page references are real links, not decoration — e.g. View Orders State 
 ## [G-15] Permissions (v1)
 v1 ships a **single admin role**: no role gating on any screen, every mutating action records the actor [G-8]. A role/permission model is a post-v1 owner decision. **CONFIRMED 2026-08-03 (owner, PD-1: everyone may perform every action; who-did-it logging is mandatory)** — this rule exists because six screens independently raised the same question.
 
+## [G-16] Time zone
+All timestamps render in **KST (Asia/Seoul)** on every screen and in every printed artefact — the warehouse is in Korea and staff reconcile against paper and carrier portals, both of which are wall-clock KST. Storage may be UTC; the rendering contract is KST.
+A rendered time that omits its zone is KST by definition — never browser-local, never any other warehouse-local zone. **CONFIRMED 2026-08-03 (owner)** — this rule exists because two specs had independently declared different warehouse-local zones (KST vs SGT) with no arbiter above them.
 ---
 
 ## Cross-page event names (canonical — byte-identical wherever used)
@@ -112,7 +117,7 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 ## Slack routing (all confirmed 2026-08-03 unless noted)
 | Trigger | Channel | Payload |
 |---|---|---|
-| Unrecognized barcode sent to the Missing Tracking List | `#unrecognized-tracking` | tracking no., product, qty, memo, registrant, suspected orders |
+| Unrecognized barcode sent to the Missing Tracking List | `#unrecognized-tracking` + **@mention of every suspected PIC** (once per person, even when several of their orders match) | tracking no., product, qty, memo, registrant, suspected orders |
 | Morning check — inbound request without tracking no. (WHOLESALE · SMART BUY) | `#wholesale-ops` | Inbound No., supplier, requested-by, age |
 | Morning check — inbound request without tracking no. (PARTNERSHIP) | `#partnership-kr` | same |
 | Comment @mention (any screen) | `#fulfillment-admin-comments` (`C0BMGEWM5QA`) | entity no., text, time, author, @mentioned user, deep link |
@@ -130,3 +135,4 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 | 1.1 | 2026-08-03 | Owner decisions applied: PD-1→[G-15], PD-2→[G-3a], PD-3→[G-7], PD-5→[G-2], PD-7→[G-9], PD-8→[G-10] now **CONFIRMED**; tags removed. |
 | 1.1 | 2026-08-03 | [G-13] amended per **PD-51**: v1 renders "sample set" only on internal invoices and picking labels — no sample type/quantity breakdown until sample types exist. |
 | 1.1 | 2026-08-03 | Slack section: **Failed-dispatch retry queue** clause added per **PD-4** (exponential backoff, persisted results, admin-log flag after N retries, background-only in v1). |
+| 1.3 | 2026-08-03 | Owner decisions from the pre-handoff review: **[G-10]** matching is deactivated by cancellation (a cancelled request never swallows a live scan) · **[G-11]** `CANCELLED` terminal branch added · Slack routing: unrecognized registration **@mentions suspected PICs** · new **[G-16] Time zone = KST**, published because two specs had declared different warehouse-local zones with no arbiter. |

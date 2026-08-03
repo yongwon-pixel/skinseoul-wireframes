@@ -44,6 +44,7 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 ### 3.3 Item table columns
 `No · 상품명 · 사이즈 · 로케이션 · 수량` — **column headers are Korean** (the invoice is a warehouse-floor document; continuity with the current prints) **[CONFIRMED 2026-08-03]**.
 - **상품명** — Korean product name (label content is data and stays Korean `[G-6]`).
+  - **Overflow (name wider than the column):** the cell renders on **one line only**, clipped at the column edge with a trailing ellipsis (`…`) — this is a **display** truncation; it never wraps to a second line and the underlying data is never shortened to fit, per the same doctrine `view-orders` `[E-77]` assigns to this template ("only the physical label template truncates, never the stored data"). *(added 2026-08-03)*
 - **사이즈** — from the Order page line-items **Size** column (e.g. `50ml`). *(added 2026-08-03)*
 - **로케이션** — the SKU's registered warehouse location at print time (mono bold, e.g. `A-01-07`); products without one (JIT sourcing etc.) show `—`. *(added 2026-08-03)*
 - **수량** — bold, larger than body text (mispick prevention).
@@ -68,6 +69,8 @@ Measured glyph heights on the photographed labels, at the wireframe's 1mm = 5px 
 | Footer | ≈ 2.7mm | 13.5px |
 
 **Floor:** the unified format must never render body text smaller than the current DELEO internal invoice (≈3.6mm). Capacity at these sizes ≈ 9 item rows per page.
+
+**Rows per page is derived at render time, not a fixed constant. *(added 2026-08-03)*** Pagination computes the count as *(usable body height) ÷ (rendered row height)* — usable body height = the printed sheet height (§3.1) minus the §3.1 margins and the fixed §3.2 furniture (top corner block, table header, and the bottom `합계` / `계속 →` row); rendered row height follows from the type sizes in this section. The `≈ 9` above is the **measured outcome** at the current sizes and margins, quoted as a reference value — it is not a number to hard-code, and any change to type size, margin, or fixed furniture changes it. Whatever count the calculation yields is what the §3.2 multi-page rule and the bottom-right page `n/m` report.
 
 ## 4. Data sources
 Order number & barcode = the order record · 사이즈 = line-items Size · 로케이션 = SKU's registered location at print time (one location per SKU `[G-14]`) · quantities & totals = order line quantities + sample assignment.

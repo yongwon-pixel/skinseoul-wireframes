@@ -14,8 +14,11 @@ Grading follows the CURRENT spec's §8.0 execution protocol literally:
   rule 4  - page reload between scenarios.
 
 Verdicts: PASS / FAIL / ERROR (runner exception).
-QA-S6-07 is the spec-declared expected failure (defect WF-1) — its FAIL is the
-intended signal and is filed against the wireframe, never against the spec.
+There are no expected failures: all 136 [WF] scenarios are expected to PASS.
+(History: QA-S6-07 was the one spec-declared expected failure, defect WF-1, the
+carrier clause in the State 6b banner. The wireframe was fixed on 2026-08-03 and
+the banner now reads "Received Date 07-26 14:02 · Carrier is not recorded", so a
+FAIL here is now a genuine regression, not an intended signal. See §2.4 / §8.0.)
 
 Run:  python3 qa-view-orders.py [--json out.json]
 """
@@ -989,8 +992,10 @@ return __mk(texts.length===2&&texts[0]==='Close'&&texts[1]==='Confirm'&&closed,
   `(spec never names the footer element; used .foot) buttons=${JSON.stringify(texts)} closedByBackdrop=${closed}`);
 """
 
-JS["QA-M1-06"] = r"""
+JS["QA-M1-10"] = r"""
 // New in spec v1.3 (owner-requested M1 restock location).
+// Renumbered 2026-08-03: first issued as QA-M1-06, which collided with the
+// pre-existing QA-M1-06 [ADMIN] [E-26]. See view-orders.md §8.14.
 __qa.tab('Modal: Cancel Inbound');
 const m=document.querySelector('#m-cancel');
 const txt=__qa.nq(__qa.norm(__qa.clean(m)));
@@ -1138,7 +1143,7 @@ return __mk2(e.lit&&rest, e.cleaned&&rest,
 JS["QA-M2-11"] = r"""
 __qa.tab('Modal: Send to Missing Tracking List');
 const m=document.querySelector('#m-unrec2');
-const want=__qa.nq('On send, the #unrecognized-tracking channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) → shown in the unrecognized pool on the Missing Tracking List page.');
+const want=__qa.nq('On send, the #unrecognized-tracking channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) and @mentions every suspected PIC (once per person) so handlers are pushed, not polled → shown in the unrecognized pool on the Missing Tracking List page.');
 const els=[...m.querySelectorAll('*')].map(e=>__qa.nq(__qa.norm(__qa.clean(e))));
 const hit=els.find(t=>t===want);
 const near=els.filter(t=>t.startsWith('On send,')).sort((a,b)=>a.length-b.length)[0];
@@ -1794,7 +1799,7 @@ ORDER = [
     "QA-S6-01", "QA-S6-02", "QA-S6-03", "QA-S6-04", "QA-S6-05", "QA-S6-06", "QA-S6-07", "QA-S6-08", "QA-S6-09",
     "QA-S6-10", "QA-S6-11", "QA-S6-12", "QA-S6-13", "QA-S6-14", "QA-S6-15", "QA-S6-16", "QA-S6-17", "QA-S6-18",
     "QA-S6-19", "QA-S6-20", "QA-S6-21",
-    "QA-M1-01", "QA-M1-02", "QA-M1-03", "QA-M1-04", "QA-M1-06",
+    "QA-M1-01", "QA-M1-02", "QA-M1-03", "QA-M1-04", "QA-M1-10",
     "QA-M2-01", "QA-M2-02", "QA-M2-03", "QA-M2-04", "QA-M2-05", "QA-M2-06", "QA-M2-07", "QA-M2-08", "QA-M2-09",
     "QA-M2-10", "QA-M2-11", "QA-M2-12",
     "QA-M4-01", "QA-M4-02", "QA-M4-03", "QA-M4-04", "QA-M4-05", "QA-M4-06", "QA-M4-07",

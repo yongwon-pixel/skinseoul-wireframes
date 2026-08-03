@@ -270,14 +270,14 @@ One page shows four different time formats. That is **as-live and deliberate**; 
 |---|---|---|---|
 | `[L-F8]` `Order Date` | `YYYY-MM-DD SGT` (`2026-06-30 SGT`) | SGT, printed | WooCommerce |
 | `[L-F8]` `Order Created At` | `DD/MM/YYYY HH:mm:ss SGT` (`30/06/2026 19:55:28 SGT`) | SGT, printed | WooCommerce |
-| `[L-3]` Actor Log `Time` | `MM-DD HH:mm` (`07-01 09:32`), year omitted | **warehouse local (SGT)**, not printed | persisted event |
-| `[L-1]` comment `time` | `MM-DD HH:mm`; `Just now` for an in-session append | warehouse local | persisted event |
-| `[L-7]` hub item `time` | relative (`10:42`, `Yesterday`) | warehouse local | persisted event |
+| `[L-3]` Actor Log `Time` | `MM-DD HH:mm` (`07-01 09:32`), year omitted | **KST (Asia/Seoul)** `[G-16]`, not printed | persisted event |
+| `[L-1]` comment `time` | `MM-DD HH:mm`; `Just now` for an in-session append | KST `[G-16]` | persisted event |
+| `[L-7]` hub item `time` | relative (`10:42`, `Yesterday`) | KST `[G-16]` | persisted event |
 | `[L-F12]` SHIPMENT DETAILS `Created At` / `Updated At` | `M/D/YYYY, h:mm:ss AM/PM` | carrier feed locale | carrier |
 | `[L-6]` TRACKING HISTORY | two explicit columns, `Time (local)` and `UTC` | both, labelled | carrier |
 | `[L-6]` sync marker | `(synced M/D/YYYY, h:mm:ss AM/PM)` | carrier feed locale | `DC-23` |
 
-**Invariant:** every persisted event stores UTC **and** the display timezone (§5 envelope). The UI never infers a zone from the browser, and a rendered time that omits its zone (Actor Log, comments) is warehouse local by definition, never browser local. An operator in another timezone sees warehouse time `[E-89]`.
+**Invariant:** every persisted event stores UTC **and** the display timezone (§5 envelope). The UI never infers a zone from the browser, and a rendered time that omits its zone (Actor Log, comments) is **KST (Asia/Seoul)** by definition, never browser local. An operator in another timezone sees KST `[E-89]`. **Owner-confirmed 2026-08-03:** the warehouse-local zone is KST — published as `[G-16]` after this page and Inventory had independently declared different zones (SGT vs KST) with no arbiter above them. `Order Date` / `Order Created At` keep their printed `SGT` suffix because those are **WooCommerce source values shown verbatim**, not warehouse-local renders.
 
 ---
 
@@ -389,7 +389,7 @@ A row in edit mode (`tr.row-edit`) shows neither: its Actions cell holds `✓` a
 
 **Ordering.** Newest first. Wireframe demo rows, newest→oldest: `07-01 09:32 OUTBOUND All (4 SKU) 4 Dean –` · `07-01 09:10 INBOUND 100012534 1 Miranti –` · `07-01 08:58 INBOUND 100043697 1 Miranti –` · `06-30 20:15 CANCEL INBOUND (Restock) 100005104 1 Dean Corrected duplicate inbound`. (These rows are a grammar sample, not a consistent history — §2.5 B.)
 
-**Time format** is `MM-DD HH:mm` in warehouse local time §3.0.3. The full timestamp lives on the event and in the export.
+**Time format** is `MM-DD HH:mm` in KST `[G-16]` §3.0.3. The full timestamp lives on the event and in the export.
 
 **Operator column** renders the actor's display name at the time of the event, resolved from the persisted `actor` id. A user removed from the directory afterwards still renders their historical name — never `Unknown`, never blank `[E-88]`.
 
@@ -752,6 +752,9 @@ When a hold reason was captured `[PD-20 · OWNER-PENDING]`, it is rendered in pl
 **`[L-F14]` + Add Line Item.**
 - **Blocked after outbound.** Post-shipment line changes desynchronize the shipped contents from the record `[PD-25 · OWNER-PENDING]` `[BR-18]` `[E-25]`. The button renders disabled with the reason; an attempt persists `DC-9` with `reason_code=order_outbounded`.
 - Otherwise: pick a SKU + qty → persist `DC-16 line_item.added` (SKU, qty, initial values, `inbound_status=PENDING`, actor, ts) → the row appends as `PENDING`, `Total Quantity` increments, the Outbound gate re-evaluates → green toast `Line item added`.
+- **SKU source — the product catalog.** The picker resolves SKUs against the same product master that `[L-11]`'s bold brand prefix reads from `[E-45]`, that `Latest Inventory Count` resolves against `[L-10]`, and that the catalog-drift rules are written about `[E-62]` `[E-91]`.
+- **`Product Name`, `Product Name KR` and `Size` are copied onto the order record at add time and read from the order record thereafter** — never re-resolved against the catalog. This is the same historical-truth rule every other line obeys: a later merge, retirement or deletion of the product never rewrites a stored name or size `[E-62]` `[E-91]`. None of the three is editable here `[BR-25]` `[L-12]`.
+- **`Subtotal` and `Total` are storefront-owned commerce values** — this page neither computes nor edits them `[BR-25]` §6.5 — and they render in the order's own currency with its code, never as a converted figure `[BR-48]` `[E-68]`. The only figure an add recomputes on this page is `Total Quantity`, a derived display and never a stored counter `[L-F15]`.
 
 **`[L-F15]` Total Quantity.** Renders `Total Quantity: {sum of line qty}` (wireframe: `4`). Recomputed on every add/delete/edit; a derived display, never a stored counter.
 
@@ -842,7 +845,7 @@ IDs are page-scoped and stable. `DC-35` appears in group D and `DC-36`/`DC-37` i
 | **DC-4** | `order.cancelled` | `[L-F5]` ✕ Cancel Order | `previous_status`, `line_count`, `confirm_acknowledged=true` | status badge |
 | **DC-5** | `order.cloned` | `[L-F4]` ⧉ Clone Order | `source_order_id → new_order_id`, `copied_fields[]` (lines, billing, shipping), `excluded_fields[]` | toast link to the new order |
 | **DC-6** | `order.pic_changed` | `[L-5]` ✎ Edit | `old_pic_user_id/name → new_pic_user_id/name` | PIC field |
-| **DC-7** | `order.address_edited` | `[L-F9]` ✎ | `scope=billing\|shipping`, `field_diff{field:{old,new}}` | address panel |
+| **DC-7** | `order.address_edited` | `[L-F9]` ✎ | `scope=billing / shipping`, `field_diff{field:{old,new}}` | address panel |
 | **DC-8** | `order.reset` | `[L-F11]` Reset Order | `cleared_snapshot{tracking_number, provider_order_id, label_ref, shipment_status …}` old→new, `confirm_acknowledged=true`, `queued_print_jobs[]` (not recalled, `[E-84]`) | Fulfillment Tracking block |
 | **DC-9** | `order.action_rejected` | any guard-blocked attempt `[BR-47]` | `attempted_action`, `reason_code` ∈ {`inbounded_lines_present`, `order_outbounded`, `line_inbounded`, `status_blocks_outbound`, `hold_blocks_outbound`, `no_lines`, `stale_entity`, `no_label`, `order_cancelled`, `no_carrier`}, `entity_ref` | red toast / disabled-reason text |
 
@@ -860,7 +863,7 @@ IDs are page-scoped and stable. `DC-35` appears in group D and `DC-36`/`DC-37` i
 | **DC-15** | `line_item.deleted` | `[L-M3]` Delete | **full line snapshot — every field of the line record** (all 18 rendered columns plus ids/timestamps) `[BR-42]`, `line_id`, `sku`, `qty`, `inbound_status_at_delete=PENDING` | row disappears |
 | **DC-16** | `line_item.added` | `[L-F14]` + Add Line Item | `line_id`, `sku`, `qty`, `initial_values{}`, `inbound_status=PENDING` | row appends |
 | **DC-17** | `line_item.wc_recalculated` | variation-pack recalculation | `wc_original{sku, qty}` → `recalculated{sku, qty}`, `actor_type=system`. **Both copies retained permanently** | `*` values in SKU/Qty cells |
-| **DC-18** | `line_item.tracking_written` | cross-page: an unrecognized-pool match resolved onto this order | `line_id`, `sku`, `tracking_number`, `resolver`, `source_screen=tracking-missing\|view-orders`, `qty_mismatch` note when present `[PD-65 · OWNER-PENDING]` | Tracking Number cell + auto-comment |
+| **DC-18** | `line_item.tracking_written` | cross-page: an unrecognized-pool match resolved onto this order | `line_id`, `sku`, `tracking_number`, `resolver`, `source_screen=tracking-missing / view-orders`, `qty_mismatch` note when present `[PD-65 · OWNER-PENDING]` | Tracking Number cell + auto-comment |
 
 #### C. Order fulfillment & inventory
 
@@ -1035,7 +1038,7 @@ Page deltas only; the instant-print doctrine itself is `[G-4]`.
 
 ### 6.5 System boundaries
 
-- **WooCommerce.** Commerce fields (`Product Name`, `Product Name KR`, `Size`, `Qty`, `Subtotal`, `Total`, order totals, addresses at source) originate in WooCommerce. This page edits only the 5 agent-tracking fields `[BR-25]`, plus addresses, status and PIC. `↗ View in WP` is the escape hatch to the storefront admin; WP-side behavior is out of scope (§9.1). **Whether a line delete or add propagates back to WooCommerce must be settled before build** — either answer is acceptable, an undefined answer creates a silent divergence (§9.4 D-10).
+- **WooCommerce.** Commerce fields (`Product Name`, `Product Name KR`, `Size`, `Qty`, `Subtotal`, `Total`, order totals, addresses at source) originate in WooCommerce. This page edits only the 5 agent-tracking fields `[BR-25]`, plus addresses, status and PIC. `↗ View in WP` is the escape hatch to the storefront admin; WP-side behavior is out of scope (§9.1). **Whether a line delete or add propagates back to WooCommerce must be settled before build** — either answer is acceptable, an undefined answer creates a silent divergence (§9.4 D-10). **The direction contract itself is stated nowhere in the input documents** — what else is written outward, whether inbound changes arrive by webhook or poll, and which side wins a simultaneous change are registered together as §9.4 D-21 and may not be assumed.
 - **Carrier tracking sync.** Inbound-only from the carrier/aggregator, persisted as `DC-23`; this page never pushes tracking events outward. `✎ Change Tracking #` changes the number the sync follows, not the carrier's data.
 - **Inventory.** Consumes `DC-21`; `Latest Inventory Count` reads the current balance `[L-10]`. Inventory's M4 release path can reverse the same reservation this page's Cancel Inbound reverses `[PD-45 · OWNER-PENDING]` — the server must guarantee one reversal per line, the second attempt being a stale-entity rejection, not a second movement.
 - **Purchasing agent (🤖).** Writes `DC-14` into the 5 tracking fields; its writes are human-overridable and its `actor_type` is permanent `[BR-27]`.
@@ -1108,7 +1111,7 @@ Every case states the **expected behavior**, not a question. Where a case has no
 
 | ID | Situation | Expected behavior |
 |---|---|---|
-| **E-27** | Submit an empty or whitespace-only comment | No-op: no server call, no event, no toast, textarea keeps focus `NE-12`. (The wireframe already guards this: `const txt=(ta.value||'').trim(); if(!txt) return;`) |
+| **E-27** | Submit an empty or whitespace-only comment | No-op: no server call, no event, no toast, textarea keeps focus `NE-12`. (The wireframe already guards this: `const txt=(ta.value /  / '').trim(); if(!txt) return;`) |
 | **E-28** | `@mention` of a name that is not a system user | The comment posts; the token stays plain text in the body; it is **not** added to `mentions[]`; no Slack message is sent. The unresolved token is recorded on `DC-26.unresolved_mention_tokens[]` so bad-mention frequency is measurable. |
 | **E-29** | Slack delivery fails | The comment is already committed and visible. Delivery is retried; every attempt result persists on `DC-27`. The UI is never blocked and nothing is rolled back `[PD-4 · OWNER-PENDING]` `[BR-38]`. |
 | **E-30** | A very long comment, or one containing HTML/script characters | Stored verbatim; **escaped on render** in the thread, the hub list and search results (escape before highlight). Long bodies wrap; they are never truncated in storage. A max length, if any, is dev-time (§9.4 D-13). |
@@ -2199,7 +2202,7 @@ Every scenario in this block is `[ADMIN]`: each needs a server to fail against. 
 | QA-HUB | 12 | 8 | 4 | 3 | 7 |
 | QA-INB | 18 | 5 | 13 | 7 | 14 |
 | QA-OUT | 13 | 3 | 10 | 9 | 12 |
-| QA-STA | 12 | 5 | 7 | 5 | 10 |
+| QA-STA | 12 | 6 | 6 | 5 | 10 |
 | QA-EDIT | 12 | 5 | 7 | 7 | 10 |
 | QA-DEL | 10 | 6 | 4 | 5 | 6 |
 | QA-PRT | 8 | 2 | 6 | 6 | 6 |
@@ -2207,7 +2210,7 @@ Every scenario in this block is `[ADMIN]`: each needs a server to fail against. 
 | QA-SUB | 20 | 8 | 12 | 12 | 13 |
 | QA-NET | 5 | 0 | 5 | 5 | 5 |
 | QA-DC | 9 | 0 | 9 | 3 | 7 |
-| **Total** | **161** | **68** | **93** | **79 (49.1%)** | **118 (73.3%)** |
+| **Total** | **161** | **69** | **92** | **79 (49.1%)** | **118 (73.3%)** |
 
 A scenario counts as negative when it asserts that something must **not** happen. The stricter **heading** count (`· NEGATIVE` in the scenario title) is **49.1%** (79 of 161); counting every scenario that carries at least one negative Then-clause gives **73.3%** (118 of 161). Both are far above the 25% floor required by `_review.md` §3.4.
 
@@ -2340,6 +2343,7 @@ These are **not** owner questions and are not tracked as PDs. The spec states a 
 | D-18 | **Carrier tracking-sync cadence and scheduling owner** `[L-6]` `[DC-23]` — how often a sync runs and who schedules it is specified nowhere in the input documents (raised as `order-detail.A` OQ-11, only half of which reached D-12) | Cadence is free **provided it is observable in `DC-23`**: the `(synced …)` marker must always reflect the last **successful** sync, a failed sync keeps the previous timestamp and persists its failure result, and a fabricated time is never displayed `[E-43]`. The feed stays inbound-only §6.5 |
 | D-19 | **Self-mention Slack suppression** `[L-1]` step 9 `[E-60]` — whether a human's `@self` in a free-text comment notifies the author. `[PD-16]` decides only the match-pipeline auto-comment; no owner decision covers this case | **Default: suppress**, recorded as `DC-27.suppressed_reason=self_mention`, by analogy with the resolver == registrant suppression. The comment itself always posts normally. If the owner later registers the question, `[L-1]` step 9, `[E-60]` and `QA-CMT-10` take the tag together |
 | D-20 | **`No label yet` guard style** `[E-40]` `[L-13]` `[L-F7]` — disabled-with-reason vs an error toast when Print / View Label has no label, and the same question on a cancelled order `[E-85]`. Raised as an owner question (`order-detail.B` Q-A5) with no register entry | **Default: disabled with the reason rendered next to the control**, consistent with `[BR-46]` and with `[E-7]`'s "a disabled control teaches the precondition". A forced request still persists `DC-9` so the guard is measured `[BR-47]` |
+| D-21 | **WooCommerce sync direction contract** §6.5 — three questions no input document answers: (a) which admin-side changes are written **outward** to WooCommerce (this page edits the 5 agent-tracking fields `[BR-25]` plus addresses, status and PIC; whether any of them propagates is unstated — the line add / delete case is D-10), (b) whether inbound WooCommerce changes arrive by **webhook or poll**, and (c) which side **wins** when the same order changes on both sides in the same window. Raised in the 2026-08-03 pre-handoff review with no register entry | **No default is stated and none may be invented here.** `[BR-37]`'s optimistic-version → 409 rule governs two operators on **this** system's record `[E-21]` `[E-58]` `[DC-37]`; it is not asserted as the admin ↔ WooCommerce rule. Like D-10 this must be settled before build — an undefined answer creates a silent divergence between the two systems |
 
 ### 9.5 Wireframe work implied by this spec (backlog — not to be applied during spec writing)
 

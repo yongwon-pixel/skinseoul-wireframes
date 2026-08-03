@@ -130,7 +130,7 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 | `[L-S1-12]` | Supplier required | §3.1.12 |
 | `[L-S1-14]` | Comments hub (top right) | §3.1.13 |
 | `[L-S1-15]` | Reduced side margins — one-screen form | §3.1.14 |
-| `[L-S1-16]` | In-admin page tabs [New Request \| Request List] | §3.1.15 |
+| `[L-S1-16]` | In-admin page tabs [New Request / Request List] | §3.1.15 |
 | `[L-S1-F]` | State 1 off-screen footer rule block | §3.1.16 |
 | `[L-S2-1]` | Direct routes get the same auto Inbound No. | §3.2.1 |
 | `[L-S2-2]` | Same product-entry spec; Unit Cost 0 typed directly | §3.2.2 |
@@ -417,7 +417,7 @@ Three normative rules printed under the State 1 legend. They are binding except 
 
 #### 3.2.3 `[L-S2-F]` State 2 off-screen footer rules
 
-**(a) Status has exactly three stages:** `REQUESTED → PARTIAL → INBOUNDED`. `SHIPPED` was retired 2026-07-27 → `[L-R4]`; `PARTIAL` was added 2026-08-02. **Declared delta (2026-08-03):** this footer sentence describes the **receive pipeline**, which still has exactly three stages; the `PD-79` resolution added `CANCELLED` as a **terminal branch off `REQUESTED`** (§3.3.12, `BR-10`), written from the Request List's Cancel action — never from this form, and never by the receive flow. No receive-side status may be set from this page [G-11].
+**(a) Status has exactly three stages:** `REQUESTED → PARTIAL → INBOUNDED`. `SHIPPED` was retired 2026-07-27 → `[L-R4]`; `PARTIAL` was added 2026-08-02. **No longer a delta — folded into `[G-11]` v1.3 (owner, 2026-08-03):** this footer sentence describes the **receive pipeline**, which still has exactly three stages; `CANCELLED` is a **terminal branch off `REQUESTED`** (§3.3.12, `BR-10`), written from the Request List's Cancel action — never from this form, and never by the receive flow. `[G-11]` now carries the branch itself, and `[G-10]` carries the matching-deactivation rule this page's `BR-34` relies on, so View Orders and this page no longer disagree on what a cancelled request's tracking number does. No receive-side status may be set from this page.
 
 **(b) Tracking timing.** If the tracking number is already known, enter it now and View Orders matching activates the moment the request registers. Otherwise leave it blank and add it later from the Request List via `[L-M1]`.
 
@@ -702,7 +702,7 @@ Purple note: `Cancelling posts an auto-comment with the reason and Slack-notifie
 
 | Field | Type | Required | Contract |
 |---|---|---|---|
-| `Reason *` | select (`#mcReason`) | Yes | Exactly three options, byte-accurate: `Purchase cancelled` · `Wrong entry` · `Other`. Persisted values: `purchase_cancelled` \| `wrong_entry` \| `other` |
+| `Reason *` | select (`#mcReason`) | Yes | Exactly three options, byte-accurate: `Purchase cancelled` · `Wrong entry` · `Other`. Persisted values: `purchase_cancelled` / `wrong_entry` / `other` |
 | `Memo` | text (`#mcMemo`) | **Only when reason = `Other`** | Label qualifier: `— required when reason is Other`. Placeholder: `Why is this request being cancelled?`. An `Other` cancellation with a blank/whitespace-only memo is blocked with an inline error (`[E-100]`). For the other two reasons the memo is optional context |
 
 **Buttons.** `Keep request` (secondary — closes with **no** server call, no event, §5.4) and `Confirm cancellation` (destructive, red-outline).
@@ -867,26 +867,26 @@ Shared cross-page event names are **byte-identical** to the canonical list in `_
 
 | ID | Event | Trigger | Actor | Payload (beyond actor + ts) | Surfaced |
 |---|---|---|---|---|---|
-| **DC-1** | `inbound_request.created` | `Register Inbound Request` succeeds | requester | `inbound_no`; `route` ∈ `SMART_BUY\|WHOLESALE\|PARTNERSHIP\|OTHER`; `other_channel_text` (required iff `OTHER`); `lines[]{sku, brand, product_name, order_qty, unit_cost_krw, jit_price_krw\|null, catalog_snapshot_at}`; `supplier`; `tracking_nos[]` (0..n at creation); `expected_arrival\|null`; `memo\|null`; `source` ∈ `manual\|from_unrecognized`; `idempotency_key` | Request List row + toast `[L-F1]` |
+| **DC-1** | `inbound_request.created` | `Register Inbound Request` succeeds | requester | `inbound_no`; `route` ∈ `SMART_BUY / WHOLESALE / PARTNERSHIP / OTHER`; `other_channel_text` (required iff `OTHER`); `lines[]{sku, brand, product_name, order_qty, unit_cost_krw, jit_price_krw / null, catalog_snapshot_at}`; `supplier`; `tracking_nos[]` (0..n at creation); `expected_arrival / null`; `memo / null`; `source` ∈ `manual / from_unrecognized`; `idempotency_key` | Request List row + toast `[L-F1]` |
 | **DC-2** | `inbound_no.allocated` | Server sequence allocation inside registration | system | `inbound_no`, `date_bucket`, `sequence_n`, `request_id` | none (silent) |
-| **DC-3** | `tracking_no.added` | Number saved from the creation form, M1, or bulk | actor who saved | `request_id`, `tracking_no` (normalised), `raw_input`, `source` ∈ `create_form\|M1\|bulk`, `batch_id\|null` | Tracking No column `[L-S3-4]` |
-| **DC-4** | `tracking_no.removed` | Permitted deletion/edit of a saved number `[PD-81 · OWNER-PENDING]` | actor | `request_id`, `old_value`, `new_value\|null`, `reason`, `had_matches=false` | Tracking No column; confirm + toast `[PD-5 · OWNER-PENDING]` |
+| **DC-3** | `tracking_no.added` | Number saved from the creation form, M1, or bulk | actor who saved | `request_id`, `tracking_no` (normalised), `raw_input`, `source` ∈ `create_form / M1 / bulk`, `batch_id / null` | Tracking No column `[L-S3-4]` |
+| **DC-4** | `tracking_no.removed` | Permitted deletion/edit of a saved number `[PD-81 · OWNER-PENDING]` | actor | `request_id`, `old_value`, `new_value / null`, `reason`, `had_matches=false` | Tracking No column; confirm + toast `[PD-5 · OWNER-PENDING]` |
 | **DC-5** | `tracking_no.bulk_added` | `Bulk add tracking numbers` completes | actor | `batch_id`, `request_ids[]`, per-request `numbers[]`, `excluded_request_ids[]` + exclusion reason | Bulk result toast |
 | **DC-6** | `tracking_match.activated` | Atomic with each number's save | system | `request_id`, `tracking_no`, `activated_at` | Note `{n} tracking numbers — all matching active` |
 | **DC-10** | `comment.posted` | `Post` in a row panel or the hub | author | `entity_type=inbound_request`, `inbound_no`, `text`, `mentions[]`, `unresolved_mention_tokens[]` | Panel + hub `[L-F2]` `[L-S1-14]` |
-| **DC-11** | `comment.auto_posted` (`source=system`) | Memo materialisation at registration; expected-qty edit; unrecognized match confirmed; request edited; request cancelled (both 2026-08-03) | system (on behalf of the causing actor) | `inbound_no`, `text`, `trigger` ∈ `memo_materialization\|expected_qty_edit\|unrecognized_match_confirmed\|request_edited\|request_cancelled`, `caused_by_event_id` | Comment thread |
+| **DC-11** | `comment.auto_posted` (`source=system`) | Memo materialisation at registration; expected-qty edit; unrecognized match confirmed; request edited; request cancelled (both 2026-08-03) | system (on behalf of the causing actor) | `inbound_no`, `text`, `trigger` ∈ `memo_materialization / expected_qty_edit / unrecognized_match_confirmed / request_edited / request_cancelled`, `caused_by_event_id` | Comment thread |
 | **DC-24** | `inbound_request.edited` | Edit-mode save commits with ≥ 1 changed field (`[L-S3-11]`) | editor | `inbound_no` (unchanged, `BR-33`), `diff[]{field, old, new}` — request-level fields and line-level adds/removes/changes, `idempotency_key` | Updated row + toast; auto-comment via `DC-11` (`trigger=request_edited`) |
-| **DC-25** | `inbound_request.cancelled` | `Confirm cancellation` in M2 (`[L-M2]`) | canceller | `inbound_no`, `reason` ∈ `purchase_cancelled\|wrong_entry\|other`, `reason_memo\|null` (required iff `other`), `deactivated_tracking_nos[]`, `idempotency_key` | Gray `CANCELLED` pill + reason note + toast; auto-comment via `DC-11` (`trigger=request_cancelled`) |
+| **DC-25** | `inbound_request.cancelled` | `Confirm cancellation` in M2 (`[L-M2]`) | canceller | `inbound_no`, `reason` ∈ `purchase_cancelled / wrong_entry / other`, `reason_memo / null` (required iff `other`), `deactivated_tracking_nos[]`, `idempotency_key` | Gray `CANCELLED` pill + reason note + toast; auto-comment via `DC-11` (`trigger=request_cancelled`) |
 | **DC-12** | `comment.starred` / `comment.unstarred` | `★` toggle in the hub | user | `comment_id`, per-user saved state | `★ Saved` tab |
 | **DC-13** | `comment.read` / `comment.mark_all_read` | Opening a mention; `Mark all read` | user | `comment_ids[]` | Unread badge |
 | **DC-17** | `comment.mention_notified` | A resolved `@mention` is dispatched | system | `comment_id`, `mentioned_user`, `channel`, `deep_link` | none (drives §6.1 row 4) |
 | **DC-14** | `morning_check.executed` | Daily no-tracking sweep runs | system (scheduler) | `run_date`, `flagged[]{inbound_no, route, supplier, requested_by, age_hours, channel}` (`channel=unrouted` for `OTHER`, `BR-31`), `per_channel_counts`, `slack_message_ts[]`, `suppressed_duplicate_run` | none (silent-failure guard) |
-| **DC-15** | `slack_notification.sent` | Every outbound Slack dispatch from this page | system | `trigger_event_id`, `channel`, `payload_hash`, `result` ∈ `ok\|failed`, `attempt_n`, `error` | none |
+| **DC-15** | `slack_notification.sent` | Every outbound Slack dispatch from this page | system | `trigger_event_id`, `channel`, `payload_hash`, `result` ∈ `ok / failed`, `attempt_n`, `error` | none |
 | **DC-18** | `inbound_request.registration_rejected` | Server-side validation rejects a registration | requester | `reason_codes[]`, `field_errors[]`, submitted payload snapshot | Inline errors; no success toast |
-| **DC-19** | `tracking_no.duplicate_blocked` | A save is blocked by `BR-15` | actor | `attempted_number`, `owning_inbound_no`, `attempt_source` ∈ `create_form\|M1\|bulk` | Inline error |
+| **DC-19** | `tracking_no.duplicate_blocked` | A save is blocked by `BR-15` | actor | `attempted_number`, `owning_inbound_no`, `attempt_source` ∈ `create_form / M1 / bulk` | Inline error |
 | **DC-22** | `inbound_request.stale_conflict_rejected` | Optimistic version check fails (`PD-6` / `PD-7`) | actor | `request_id`, `client_version`, `server_version`, `attempted_action` | Non-green toast + row reload |
-| **DC-23** | `inbound_request.idempotent_replay_suppressed` | A duplicate submit is absorbed by the idempotency key [G-9] | actor | `idempotency_key`, `original_event_id`, `action` ∈ `create\|m1_save\|bulk_add` | none |
-| **DC-16** | `inbound_request.viewed_via_deeplink` | Page loaded with `#reqlist` / `#s3` or an entity deep link | user | `entry_source`, `target_inbound_no\|null` | none — **dev-optional telemetry**, not doctrine-mandatory |
+| **DC-23** | `inbound_request.idempotent_replay_suppressed` | A duplicate submit is absorbed by the idempotency key [G-9] | actor | `idempotency_key`, `original_event_id`, `action` ∈ `create / m1_save / bulk_add` | none |
+| **DC-16** | `inbound_request.viewed_via_deeplink` | Page loaded with `#reqlist` / `#s3` or an entity deep link | user | `entry_source`, `target_inbound_no / null` | none — **dev-optional telemetry**, not doctrine-mandatory |
 | **DC-20** | `inbound_request.sheet_scraped` | Procurement Hub sheet pull reads the Request List | system (integration job) | `run_ts`, `row_count`, `inbound_nos[]` or a range descriptor, `result` | none — contract stated now, mapping design deferred (§9.1) |
 
 ### 5.2 Events written elsewhere, displayed here (read-only on this page)
@@ -896,7 +896,7 @@ These are **not** this page's writes, but this page is their primary display sur
 | ID | Event | Written by | Payload | Surfaced here |
 |---|---|---|---|---|
 | **DC-7** | `inbound_request.status_changed` | View Orders State 6 (scan flow) | `request_id`, `old_status` → `new_status`, `received_so_far`, `expected_total`, `causing_scan_event_id`, operator | Status pill `[L-S3-5]`, chips `[L-S3-1]` |
-| **DC-8** | `inbound_request.expected_qty_edited` | View Orders M6 | `request_id`, `line_id`, `old_qty` → `new_qty`, `reason` ∈ `damaged_defective\|supplier_qty_change\|other`, `reason_memo\|null`, editor | `✎ 300→180 (damaged)` in the Qty cell, per the `BR-30` token map |
+| **DC-8** | `inbound_request.expected_qty_edited` | View Orders M6 | `request_id`, `line_id`, `old_qty` → `new_qty`, `reason` ∈ `damaged_defective / supplier_qty_change / other`, `reason_memo / null`, editor | `✎ 300→180 (damaged)` in the Qty cell, per the `BR-30` token map |
 | **DC-9** | `inbound_request.received_date_recorded` | View Orders State 6 at full receipt | `request_id`, `received_at` (= scan time). **No carrier field** `[PD-9 · OWNER-PENDING]` | Received Date column `[L-S3-10]` |
 | **DC-21** | `unrecognized_pool.linked_to_request` | Unrecognized Tracking removal with reason `routed to inbound request` `[PD-64 · OWNER-PENDING]` | `pool_item_id`, `inbound_no`, `tracking_no`, resolver | Provenance on `DC-1` (`source=from_unrecognized`); closes the recovery loop (`BR-19`) |
 
@@ -2147,7 +2147,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-07-09 | WMS 2.0 wireframe batch scoped; `inbound-request` created as screen 9 | Screen exists | commit `1bbba3a` |
 | 2026-07-13 | Notion section **I. Inbound Request** added to scope: a single gateway for all sourcing routes, tracking number entered later, View Orders linkage. Section J (Procurement Hub) split off as a separate layer | `BR-1`, `[L-S1-1]` | Planning ledger 2026-07-09, §Notion scope |
 | 2026-07-13 | Sourcing-route badges standardised as **black bold, colorless text** matching View Orders; the label `Comments` standardised everywhere | `[L-S3-3]`, `BR-22` | Ledger, View Orders v20 |
-| 2026-07-23 | **Sheet-parity redesign.** In-page tabs `[New Request \| Request List]` added | `[L-S1-16]` | commit `592d583` |
+| 2026-07-23 | **Sheet-parity redesign.** In-page tabs `[New Request / Request List]` added | `[L-S1-16]` | commit `592d583` |
 | 2026-07-23 | **PO matching panel scrapped** → Inbound No. auto-assigned `YYYYMMDDNNNN` (`0001`–`9999`/day), PH sheet column A scheme | `BR-3`, `[L-R8]` | commit `15cdc2e` |
 | 2026-07-23 | Product picked by SKU No. / Product Name search; **`Size` field removed**, quantity only | `[L-S1-6]`, `[L-R7]` | commit `15cdc2e` |
 | 2026-07-23 | **Unit Cost required + FOC checkbox** (locking the field to ₩0) introduced; JIT Price optional for **Smart Buy · Wholesale only**; Supplier required | `BR-5`, `BR-6`, `BR-7` | commit `15cdc2e` |

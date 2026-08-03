@@ -2,7 +2,7 @@
 
 > **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
-Slug: `order-management` · Spec version 1.2 · 2026-08-03
+Slug: `order-management` · Spec version 1.3 · 2026-08-03
 Wireframe (SST): `wms2/order-management/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-management/
 Global rules: `_global-rules` (cited as `[G-n]`; page deltas only — rule bodies are never restated in this document).
 Companion registers: `_plans/_provisional-decisions.md` (PD register) · `_plans/_wireframe-fixes.md` (WF register) · `_plans/_review.md` (adjudications C-1…C-12, writing conventions §3).
@@ -105,17 +105,18 @@ The page has **one screen state** (the dashboard) plus three modals and one drop
 
 **Registered defects that touch this page: none.** None of WF-1…WF-14 is on `order-management`. `_wireframe-fixes` §E names this page twice, and both entries are honoured here: legend 3's missing dot is an intentional artifact (§2.2), and "order-management preview data is static" is a demo limitation, not a bug.
 
-Seven further artifacts were found while auditing the HTML against the decided behaviour. They are now **registered** in `_wireframe-fixes` **§F** (appended 2026-08-03), and they keep the `· proposed` suffix in their IDs because that suffix is their register status — the wireframe-edit pass has not yet adjudicated them, and no wireframe edit may be applied while specs are being written (§9.2). The spec below states the correct behaviour regardless; QA scenarios that observe the current (wrong) behaviour are labelled as defect-documentation.
+Seven further artifacts were found while auditing the HTML against the decided behaviour. They were **registered** in `_wireframe-fixes` **§F** (appended 2026-08-03) and have since been **APPLIED to the wireframe by the owner-approved wireframe-edit pass on 2026-08-03** — the register records each of the seven as `APPLIED 2026-08-03`, and the live drawing now implements all seven fixes. They keep the `· proposed` suffix inside their ID token only because **IDs are never renumbered or re-tokenised once shipped specs cite them** (`_wireframe-fixes` §F collision warning); the suffix is no longer a status claim. Each bullet below records the defect as found **and** what landed. The spec text stated the correct behaviour throughout, so no requirement moved; the QA scenarios that observed the pre-fix behaviour have been **re-baselined onto the fixed behaviour** (v1.3) and are no longer defect-documentation.
 
-- **[WF-15 · proposed]** M1 preview table: the collapse row `⋯ +8 more rows` uses `colspan="6"` while the table has **7** `<th>` (`Recipient · Country · SKU · Product Name · Qty · Campaign · Carrier (auto)`), so the row under-spans by one cell. Fix: `colspan="7"`. Verified by direct count of the `<thead>` row at line 329 against line 334. Documented by QA-IMP-35.
-- **[WF-16 · proposed]** M2 footer button `Start Assignment (ON)` carries `data-close` but **no toast handler** and no `id` — it closes the modal silently. This contradicts `[G-2]`, which `_review` C-6 rules wins over wireframe omissions. Fix: add an `id` and the toast defined in §3.6.5. Documented by QA-SMP-30.
-- **[WF-17 · proposed]** M3 footer button `Cancel Selected Periods` (`#sampCancelBtn`) fires its toast unconditionally — including when zero checkboxes are checked — and there is no confirm step. Fix: disable at zero selection and add the confirm dialog defined in §3.7.5 `[PD-5 · OWNER-PENDING]`. Documented by QA-SMP-31.
-- **[WF-18 · proposed]** The two confirming actions create **two independent toast nodes** (`#gtoast` from `#mktConfirm`, `#gtoast2` from `#sampCancelBtn`), so two toasts can occupy the same fixed position simultaneously. Fix: a single toast slot (replace) or an explicit stack. See [E-62]; documented by QA-GBL-09.
-- **[WF-19 · proposed]** In M2 the `forever (no end date)` checkbox ships **checked** while the `End date` and `Time` inputs remain enabled and editable, which contradicts the specified mechanic (`forever` wins; end fields cleared and disabled — §3.6.3, [E-23]). Fix: disable and clear the end fields while `forever` is checked. Documented by QA-SMP-33.
-- **[WF-20 · proposed]** No modal responds to the `Esc` key — there is no `keydown` listener anywhere in the file. `Esc` is a specified dismissal path (§3.2.6, [E-97]). Fix: add `Esc` dismissal to all three overlays. Documented by QA-GBL-10.
-- **[WF-21 · proposed]** The Comments hub does not close on an outside click, yet the code carries the guards written for that behaviour (`onclick="event.stopPropagation()"` on `.csearch`, `e.stopPropagation()` on the hub button, the tab buttons and the stars). The `document`-level close handler those guards protect against was never added, so the guards are dead code and the hub can only be closed by clicking its own trigger again. Fix: add the outside-click (and `Esc`) close. Documented by QA-CMT-20.
+- **[WF-15 · proposed]** M1 preview table: the collapse row `⋯ +8 more rows` used `colspan="6"` while the table has **7** `<th>` (`Recipient · Country · SKU · Product Name · Qty · Campaign · Carrier (auto)`), so the row under-spanned by one cell. Fix: `colspan="7"`. **APPLIED 2026-08-03** — the collapse cell now carries `colspan="7"`. Asserted by QA-IMP-35.
+- **[WF-16 · proposed]** M2 footer button `Start Assignment (ON)` carried `data-close` but **no toast handler** and no `id` — it closed the modal silently. This contradicted `[G-2]`, which `_review` C-6 rules wins over wireframe omissions. Fix: add an `id` and the toast defined in §3.6.5. **APPLIED 2026-08-03** — button id `sampStartBtn`; green toast node `#gtoast3` carrying the §3.6.5 byte-exact copy (`✓ Sample assignment started` plus the target-dependent subtext). Asserted by QA-SMP-30.
+- **[WF-17 · proposed]** M3 footer button `Cancel Selected Periods` (`#sampCancelBtn`) fired its toast unconditionally — including when zero checkboxes were checked — and there was no confirm step. Fix: disable at zero selection and add the confirm dialog defined in §3.7.5 `[PD-5 · OWNER-PENDING]`. **APPLIED 2026-08-03** — the button is disabled at zero selection, and a click at non-zero selection opens the confirm overlay `#m-sampcancel-confirm` (`Cancel {n} assignment period(s)?` / `Keep periods` / `Cancel periods`); the green toast now fires only after `#sampConfirmGo`. Asserted by QA-SMP-31 (zero selection) and QA-SMP-19 (the confirm-then-toast path).
+- **[WF-18 · proposed]** The two confirming actions created **two independent toast nodes** (`#gtoast` from `#mktConfirm`, `#gtoast2` from `#sampCancelBtn`), so two toasts could occupy the same fixed position simultaneously. Fix: a single toast slot (replace) or an explicit stack. See [E-62]. **APPLIED 2026-08-03** — the explicit-stack option: per-action nodes are kept (`#gtoast` / `#gtoast2` / `#gtoast3`, so toast identity stays assertable) and a shared `stackToasts()` repositions every visible toast down the right edge from `top:16px` in `offsetHeight + 8 px` steps, so no two ever overlap. Asserted by QA-GBL-09.
+- **[WF-19 · proposed]** In M2 the `forever (no end date)` checkbox ships **checked** while the `End date` and `Time` inputs remained enabled and editable, which contradicted the specified mechanic (`forever` wins; end fields cleared and disabled — §3.6.3, [E-23]). Fix: disable and clear the end fields while `forever` is checked. **APPLIED 2026-08-03** — `#sampEndDate` / `#sampEndTime` are cleared and `disabled` while `#sampForever` is checked, synced on load and on every change. Asserted by QA-SMP-33.
+- **[WF-20 · proposed]** No modal responded to the `Esc` key — there was no `keydown` listener anywhere in the file. `Esc` is a specified dismissal path (§3.2.6, [E-97]). Fix: add `Esc` dismissal to all three overlays. **APPLIED 2026-08-03** — a `document` `keydown` listener closes the topmost `.overlay.open` (all four overlays, including the confirm overlay added by WF-17) and, when no overlay is open, the Comments hub. Asserted by QA-GBL-10.
+- **[WF-21 · proposed]** The Comments hub did not close on an outside click, yet the code carried the guards written for that behaviour (`onclick="event.stopPropagation()"` on `.csearch`, `e.stopPropagation()` on the hub button, the tab buttons and the stars). The `document`-level close handler those guards protect against was never added, so the guards were dead code and the hub could only be closed by clicking its own trigger again. Fix: add the outside-click (and `Esc`) close. **APPLIED 2026-08-03** — a `document`-level click handler closes every `.inboxdd.open` unless the click landed inside `.inboxdd` (`e.target.closest('.inboxdd')`), which makes the pre-existing guards live rather than dead; `Esc` is covered by WF-20. Asserted by QA-CMT-20.
 
-**Known demo limitations that are NOT defects** and must be tagged `[ADMIN]` in QA rather than filed as bugs (`_wireframe-fixes` §E): the M1 preview data is static and the dropzone parses nothing, `#mktConfirm` toasts regardless of validation state, `#sampCancelBtn` toasts regardless of selection, filter-bar and action-row controls are inert, `Mark all read` has no handler, and the order list table is absent from the mock entirely.
+**Known demo limitations that are NOT defects** and must be tagged `[ADMIN]` in QA rather than filed as bugs (`_wireframe-fixes` §E): the M1 preview data is static and the dropzone parses nothing, `#mktConfirm` toasts regardless of validation state, filter-bar and action-row controls are inert, `Mark all read` has no handler, and the order list table is absent from the mock entirely.
+*(Through v1.2 this list also carried "`#sampCancelBtn` toasts regardless of selection". That is no longer true — `[WF-17 · proposed]` was applied on 2026-08-03 and the button is now gated and confirmed. The entry is recorded here as history, not as a live limitation.)*
 
 ---
 
@@ -174,7 +175,7 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
 - **Accepted input:** `.xlsx` only. `.csv`, `.xls`, and files renamed to `.xlsx` that fail to parse as XLSX are rejected inline and no rows are parsed ([E-1]).
 - **Effect:** the file is uploaded and parsed server-side. Parsing produces a **draft batch** with a per-row result set: parsed values, row-level errors with reasons, and an advisory carrier resolution per row (§3.3). Only the first worksheet is read; formula cells are read as cached values ([E-70]). Field values are trimmed of leading/trailing whitespace before validation, and a value that is only whitespace is treated as missing ([E-68]).
 - **Parse contract — what is *not* validated here:** free-text fields are stored verbatim and are never measured against a carrier's field limits. A Recipient or Address longer than the destination carrier will accept still imports ([E-78]), and a Contact number without a country dialling code still imports ([E-79]); carrier-format validation belongs to the label/export pipeline, not to this parse. Row and byte limits ([E-16]) and template-schema matching ([E-17]) are the two file-level rejections that happen before any row is parsed.
-- **Preview render (byte-exact format):** a bold header line `Preview — {filename} · {n} rows parsed · {e} errors` (demo: `Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors`), followed by a table with headers `Recipient` · `Country` · `SKU` · `Product Name` · `Qty` · `Campaign` · `Carrier (auto)`. Long files collapse the middle with a single row `⋯ +{m} more rows` (demo: `⋯ +8 more rows`) spanning **all seven** columns ([WF-15 · proposed] under-spans it at six).
+- **Preview render (byte-exact format):** a bold header line `Preview — {filename} · {n} rows parsed · {e} errors` (demo: `Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors`), followed by a table with headers `Recipient` · `Country` · `SKU` · `Product Name` · `Qty` · `Campaign` · `Carrier (auto)`. Long files collapse the middle with a single row `⋯ +{m} more rows` (demo: `⋯ +8 more rows`) spanning **all seven** columns (the wireframe under-spanned it at six until [WF-15 · proposed] was applied 2026-08-03; it now renders `colspan="7"`).
 - **Product Name rendering:** the brand is bold-prefixed per `[G-6]` — demo rows render `**Dr.Jart+** Cicapair Gentle Cleansing Foam`, `**Dr.Jart+** Cicapair Sleepair Mask`, `**innisfree** Green Tea Seed Hyaluronic Serum`. Product Name is resolved from the SKU by the system; it is not a template column, and a value supplied in an extra column of that name is ignored in favour of the system value ([E-72]).
 - **Row errors:** every failing row is counted in `{e}` and shown with its reason. The blocking row validations are exactly five: a missing required field ([E-3]), an **unknown SKU** not present in the catalog ([E-4]), an invalid quantity ([E-5]), an **invalid or unsupported country code** ([E-6]), and a value that fails coercion ([E-69]). [E-6] is a *country* error and is distinct from an unconnected *carrier*, which never blocks ([E-7]). A file with `{e} > 0` **cannot be confirmed** — the whole file is blocked, not partially imported (BR-12, `[PD-57 · OWNER-PENDING]`, [E-19]).
 - **Persists:** `[DC-2] import.file_uploaded` on receipt (actor, timestamp, filename, byte size, SHA-256 hash, parse outcome) then `[DC-3] import.file_parsed` (draft batch id, row count, error count, per-row parse result, per-row **advisory** carrier result, parser/template version). Both persist **even if the operator abandons the modal** — an abandoned upload is evidence of an attempt `[G-8]`.
@@ -206,7 +207,7 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
 
 #### 3.2.6 Abandoning the modal
 
-Closing via `✕`, `Cancel`, `Esc`, or a click on the overlay backdrop discards the staged draft batch: **no orders are created** ([E-13]). `[DC-2]` and `[DC-3]` remain persisted, and `[DC-8] import.batch_abandoned` is written with the draft batch id and the reason (`user_closed` / `session_lost`). The same discard path covers an *involuntary* abandonment — a closed tab or a lost browser session mid-upload orphans the staged draft, which is reaped with reason `session_lost` and creates nothing ([E-55]). Uploaded source-file retention is specified in §5.5. The wireframe implements `✕`, `Cancel` and backdrop but **not** `Esc` ([WF-20 · proposed], [E-97]).
+Closing via `✕`, `Cancel`, `Esc`, or a click on the overlay backdrop discards the staged draft batch: **no orders are created** ([E-13]). `[DC-2]` and `[DC-3]` remain persisted, and `[DC-8] import.batch_abandoned` is written with the draft batch id and the reason (`user_closed` / `session_lost`). The same discard path covers an *involuntary* abandonment — a closed tab or a lost browser session mid-upload orphans the staged draft, which is reaped with reason `session_lost` and creates nothing ([E-55]). Uploaded source-file retention is specified in §5.5. The wireframe implements all four paths: `✕`, `Cancel`, backdrop, and — since [WF-20 · proposed] was applied 2026-08-03 — `Esc`, which closes the topmost open overlay ([E-97]).
 
 #### 3.2.7 Modal note (byte-exact, must be present)
 
@@ -279,7 +280,7 @@ All four datetime fields are entered, evaluated and displayed in the admin's sin
 #### 3.6.3 Validation
 
 - Start date **and** start time are required. Missing either → `Start Assignment (ON)` disabled, inline message `Enter a start date and time.`
-- `forever` checked → the end date and end time fields are **cleared and disabled**; `forever` wins over any previously typed end value ([E-23]). The wireframe leaves them enabled ([WF-19 · proposed]). The exact mechanic (clear-on-check vs. disable-and-ignore) is a developer decision (§9.3).
+- `forever` checked → the end date and end time fields are **cleared and disabled**; `forever` wins over any previously typed end value ([E-23]). The wireframe left them enabled until [WF-19 · proposed] was applied 2026-08-03; it now clears **and** disables both, synced on load and on change. The exact mechanic (clear-on-check vs. disable-and-ignore) remains a developer decision (§9.3) — the wireframe demonstrates the recommended default, it does not narrow the decision.
 - `forever` unchecked → both end fields are required ([E-54]) and the end datetime must be **strictly later** than the start datetime; otherwise the button is disabled with `End must be later than start.` ([E-22], [E-82]).
 - Start **and** end both already in the past → blocked with `A period that has already ended cannot be created.` No already-`Ended` period may be minted ([E-83]).
 - A start datetime in the future is valid and produces a `Scheduled` period ([E-53]).
@@ -309,7 +310,7 @@ There is **no sample-type selector in this modal and none may be added** (BR-6).
   - Selections above the configured batch ceiling are processed asynchronously and the toast reports the queued count; the ceiling is a developer decision ([E-86], §9.3).
 - **What an assigned set prints (dual view, BR-8 `[G-13]`):** every order that receives a set is subject to the same split — carrier-facing data appends only `(+ sample set)` to the **last** product name, while the internal invoice and picking artifacts render a single **"sample set"** line — v1: "sample set" only, no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03) ([E-34], `[PD-36 · OWNER-PENDING]`). This page decides the split; the divergence itself is asserted against the consuming specs (§6.5).
 - **Idempotency:** double-click safe `[G-9]` — one period, one assignment pass ([E-44] covers the network-failure variant: no partial or ghost period).
-- **Feedback — the toast this modal must show.** The wireframe omits it ([WF-16 · proposed]); `[G-2]` and `_review` C-6 require it:
+- **Feedback — the toast this modal must show.** The wireframe omitted it until [WF-16 · proposed] was applied 2026-08-03; it now ships it as node `#gtoast3` on `#sampStartBtn`. `[G-2]` and `_review` C-6 require it:
   - Title (byte-exact): `✓ Sample assignment started`
   - Subtext, target = all-new (byte-exact template): `All new sales orders from {start} → {end|forever} · exactly 1 sample set per order`
   - Subtext, target = selected (byte-exact template): `{a} orders assigned · {s} skipped (already assigned) · {m} skipped (not eligible)`
@@ -371,12 +372,12 @@ The wireframe demo shows only `Active` and `Ended`. The complete vocabulary the 
 #### 3.7.5 `Cancel Selected Periods` — effect
 
 - **Copy (byte-exact):** footer buttons `Close` (grey, `data-close`) and `Cancel Selected Periods` (red `--red` `#DC3545`, `#sampCancelBtn`).
-- **Enabled when:** at least one `Scheduled` or `Active` row is checked. At zero selection the button is **disabled** ([E-28]) — the wireframe fires regardless ([WF-17 · proposed]).
+- **Enabled when:** at least one `Scheduled` or `Active` row is checked. At zero selection the button is **disabled** ([E-28]) — the wireframe fired regardless until [WF-17 · proposed] was applied 2026-08-03; it now disables the button at zero selection and re-syncs on every checkbox change.
 - **Confirm step** `[PD-5 · OWNER-PENDING]`: clicking opens a confirm dialog before anything is written —
   - Title (byte-exact): `Cancel {n} assignment period(s)?`
   - Body (byte-exact): `New assignments stop immediately. Orders already assigned keep their sample set.`
   - Buttons: `Keep periods` (grey, dismisses) and `Cancel periods` (red, proceeds).
-  - Rationale for adding a step the wireframe lacks: cancelling a `forever` period silently switches off a company-wide campaign; `_review` C-6 rules that wireframe omissions are gaps, not decisions. This is the only added confirm step on this page. (PD-5's register entry lists TM/CL/OD/INV; this page extends the same doctrine to period cancellation — reversing PD-5 removes this confirm step and leaves the toast.)
+  - Rationale for adding a step the wireframe lacked when this clause was written: cancelling a `forever` period silently switches off a company-wide campaign; `_review` C-6 rules that wireframe omissions are gaps, not decisions. This is the only added confirm step on this page. The wireframe caught up on 2026-08-03 ([WF-17 · proposed] applied) and now builds it as the overlay `#m-sampcancel-confirm`, whose confirming button is `#sampConfirmGo`. (PD-5's register entry lists TM/CL/OD/INV; this page extends the same doctrine to period cancellation — reversing PD-5 removes this confirm step and leaves the toast.)
 - **Effect:** each selected period's status moves `Scheduled|Active → Cancelled`. New matching stops **immediately** — an order created one second later receives no set ([E-66]). Orders already assigned are **not** touched: no unassignment events are emitted and their sample sets remain (BR-9, BR-19). A period another operator cancelled first is reported and skipped rather than double-written `[PD-6 · OWNER-PENDING]` `[PD-7 · OWNER-PENDING]` ([E-47]).
 - **Idempotency:** double-click safe `[G-9]` — one cancellation per period ([E-29]).
 - **Feedback:** green toast `[G-2]`, byte-exact:
@@ -450,7 +451,7 @@ The hub is the shared cross-screen pattern defined in `[G-7]`; only page deltas 
 
 - **Trigger (byte-exact):** nav button `💬 Comments` with a red unread badge (`.badge-n`, demo value `3`), `[data-open="inbox1"]` → `#inbox1`. Clicking the trigger again closes the panel.
 - **Panel:** 370 px dropdown anchored top-right of the nav (`top:44px; right:150px`).
-- **Dismissal:** the panel closes on an outside click and on `Esc`. The wireframe implements neither, although the guards written for outside-click dismissal are present as dead code ([WF-21 · proposed], [E-97]).
+- **Dismissal:** the panel closes on an outside click and on `Esc`. The wireframe implemented neither — although the guards written for outside-click dismissal were present as dead code — until [WF-21 · proposed] and [WF-20 · proposed] were applied 2026-08-03. It now closes on both: a `document`-level click handler closes `.inboxdd.open` unless the click landed inside `.inboxdd`, which makes those guards live, and the `Esc` handler closes the hub when no overlay is open ([E-97]).
 - **Search row (byte-exact placeholder):** `🔍 Search all comments — order no. · author · text`. Typing hides the tab strip and renders a results pane; clearing restores the previously active tab. Result header (byte-exact): `{n} results · newest first · click to open the order`. Matches are wrapped in `<mark>` (purple, `font-weight:700`) and the query is escaped before rendering ([E-48]). Empty state (byte-exact): `No matching comments` ([E-38]).
 - **Tabs (byte-exact):** `@ Mentions` (with an inline count badge, demo `3`) and `★ Saved`.
   - Mentions pane header: `Comments mentioning me · Click to open the order` with the right-aligned action `Mark all read`.
@@ -509,7 +510,7 @@ Byte-exact: checkbox `Select all` · selection counter `2 selected` (purple bold
 
 - Element: `.gtoast`, fixed at `top:16px; right:16px`, `z-index:200`, green `--green` `#198754`, white bold 13.5 px, with an optional `<small>` subtext line at 11.5 px / 90 % opacity. `z-index:200` sits above `.overlay`'s `z-index:80`, so a toast is never clipped by an open modal ([E-95]).
 - Colour semantics on this page follow `[G-2]` unchanged; the wireframe implements only the success case.
-- Auto-dismiss (wireframe: 2 600 ms). Duration, stacking-vs-replacement, and exact failure copy are developer decisions (§9.3). The wireframe creates two independent nodes (`#gtoast`, `#gtoast2`), so two toasts can overlap; the product must use a single slot or an explicit stack ([E-62], [WF-18 · proposed]).
+- Auto-dismiss (wireframe: 2 600 ms). Duration, stacking-vs-replacement, and exact failure copy are developer decisions (§9.3). The wireframe created two independent nodes (`#gtoast`, `#gtoast2`) that could overlap at the same fixed coordinates; the product must use a single slot or an explicit stack ([E-62]). [WF-18 · proposed] was applied 2026-08-03 and the wireframe now demonstrates the **explicit-stack** branch: three per-action nodes (`#gtoast` / `#gtoast2` / `#gtoast3`) repositioned by a shared `stackToasts()` from `top:16px` downward in `offsetHeight + 8 px` steps, so visible toasts never overlap. That is a demonstration of one permitted branch, not a narrowing of the §9.3 decision — single-slot replacement remains equally allowed.
 - The `[G-2]` refresh exception named for RTO Bulk Outbound does not apply to any action on this page.
 
 ---
@@ -582,23 +583,25 @@ Doctrine: `[G-8]`. Event names use the canonical lowercase `entity.action` form;
 | **DC-3** | `import.file_parsed` | system (on behalf of actor) | draft batch | `uploaded → parsed` | row count `{n}`, error count `{e}`, per-row parse result (field values + error reason), per-row **advisory** carrier resolution, parser/template version | Preview header + table |
 | **DC-4** | `import.duplicate_file_warned` | system | draft batch | — | matching confirmed batch id, its confirm timestamp, file hash | duplicate dialog |
 | **DC-5** | `import.duplicate_file_overridden` | operator | draft batch | `warned → override_accepted` | prior batch id, reason `operator_override` | — |
-| **DC-6** | `import.batch_confirmed` | operator | import batch | `draft → confirmed` | batch id, source filename + hash, order count `{n}`, order type (`preset|custom` + value), PIC (`user_ref|free_text` + value), carriers-assigned count, unresolved count, idempotency key | green toast |
+| **DC-6** | `import.batch_confirmed` | operator | import batch | `draft → confirmed` | batch id, source filename + hash, order count `{n}`, order type (`preset / custom` + value), PIC (`user_ref / free_text` + value), carriers-assigned count, unresolved count, idempotency key | green toast |
 | **DC-7** | `import.batch_rejected` | system | draft batch | `parsed → rejected` | reason (`stale_draft`, `ambiguous_carrier_mapping`, `server_error`, `validation_failed`, `session_expired`), field detail | red toast |
 | **DC-8** | `import.batch_abandoned` | operator/system | draft batch | `parsed → abandoned` | reason (`user_closed`, `session_lost`), staged filename | none |
 | **DC-9** | `order.created` ×n | operator (batch actor) | order | `null → MKT-#####` | recipient, contact, address, country, SKU, qty, product-name snapshot, campaign, order type, batch id, order class `marketing` | new list rows |
 | **DC-10** | `order.carrier_assigned` ×n | system | order | `null → {carrier}` | country, mapping version, resolution timestamp | preview cell (green) |
 | **DC-11** | `order.carrier_unresolved` ×n | system | order | `null → carrier_unresolved` | country, reason (`no_connected_carrier` / `connection_disabled`) | preview cell (amber) + toast subtext |
-| **DC-12** | `order.pic_assigned` ×n | operator | order | `null → {pic}` | pic type (`user_ref|free_text`), value, batch id | PIC column |
+| **DC-12** | `order.pic_assigned` ×n | operator | order | `null → {pic}` | pic type (`user_ref / free_text`), value, batch id | PIC column |
+
+**Declared gap — `[DC-9]` carries no monetary field.** The payload above is complete as specified, and it names no price, order value or currency. That is consistent with the input side: the import template's seven columns are fixed by the dev team and contain no such column either (§3.2.1), so an operator cannot supply one. What an imported `MKT-` order's amount field holds — if it has one at all — is **not decided anywhere in this spec, in `_global-rules`, or in the input documents**, and no default is invented here. Registered as the open question **`[OQ-1]`** in §9.1. Nothing on this page depends on the answer; the payload line is added to `[DC-9]` when the question is answered, and `[DC-9]` keeps its ID when that happens.
 
 ### 5.2 Sample-assignment chain
 
 | ID | Event | Actor | Entity | Old → New | Payload | UI |
 |---|---|---|---|---|---|---|
-| **DC-13** | `sample.period_created` | operator | assignment period | `null → Scheduled|Active` | target type (`all_new_in_period` / `selected_orders` + order-id list + count), start datetime, end datetime or `forever = true`, operating timezone (BR-31), idempotency key | M3 row + toast |
+| **DC-13** | `sample.period_created` | operator | assignment period | `null → Scheduled / Active` | target type (`all_new_in_period` / `selected_orders` + order-id list + count), start datetime, end datetime or `forever = true`, operating timezone (BR-31), idempotency key | M3 row + toast |
 | **DC-14** | `sample.assigned_to_order` ×a | system (attributed to the period's creator) | order | `sample_set = none → assigned` | period id, assignment timestamp, assignment reason (`period_match` / `explicit_selection`) | internal invoice / picking artifacts (other specs) |
 | **DC-15** | `sample.assignment_deduped` ×s | system | order | — (no change) | order id, suppressed period id, winning period id | toast subtext count |
 | **DC-16** | `sample.assignment_skipped_ineligible` ×m | system | order | — (no change) | order id, period id, reason (`marketing_order` (BR-17) / `order_cancelled` / `order_outbounded`) | toast subtext count |
-| **DC-17** | `sample.period_cancelled` | operator | assignment period | `Scheduled|Active → Cancelled` | period id, target snapshot, cancel timestamp, confirm-dialog acknowledgement | M3 status + toast |
+| **DC-17** | `sample.period_cancelled` | operator | assignment period | `Scheduled / Active → Cancelled` | period id, target snapshot, cancel timestamp, confirm-dialog acknowledgement | M3 status + toast |
 | **DC-18** | `sample.period_ended` | system (scheduler) | assignment period | `Active → Ended` | period id, end datetime reached | M3 status |
 | **DC-29** | `sample.period_started` | system (scheduler) | assignment period | `Scheduled → Active` | period id, start datetime reached | M3 status |
 
@@ -609,7 +612,7 @@ Doctrine: `[G-8]`. Event names use the canonical lowercase `entity.action` form;
 | ID | Event | Actor | Entity | Old → New | Payload | UI |
 |---|---|---|---|---|---|---|
 | **DC-19** | `comment.posted` | operator | order / inbound request / pool item | `null → comment` | text, `@mentions[]` | hub rows — **originates off-page**; listed because the hub is a view over it `[G-8]` |
-| **DC-20** | `comment.mention_notified` | system | comment | `queued → delivered|failed` | channel `#fulfillment-admin-comments` (`C0BMGEWM5QA`), Slack ts, mentioned user, delivery outcome, retry count | none — **originates off-page** |
+| **DC-20** | `comment.mention_notified` | system | comment | `queued → delivered / failed` | channel `#fulfillment-admin-comments` (`C0BMGEWM5QA`), Slack ts, mentioned user, delivery outcome, retry count | none — **originates off-page** |
 | **DC-21** | `comment.starred` | operator | comment | `unstarred → starred` | comment id | `★` fills amber `--star` `#F59E0B` |
 | **DC-22** | `comment.unstarred` | operator | comment | `starred → unstarred` | comment id | `★` returns to grey; row leaves the Saved tab |
 | **DC-23** | `comment.read` | operator | comment | `unread → read` | comment id | `.unread` tint removed; badge decrements |
@@ -804,12 +807,12 @@ IDs are page-scoped and stable, and are never renumbered. **E-1…E-45** preserv
 |---|---|---|
 | **E-21** | `[L-M2]` opened with 0 orders selected | `Selected orders only (0)` radio disabled; `All new orders in this period` remains selectable |
 | **E-22** | End datetime earlier than start datetime | `Start Assignment (ON)` disabled; inline `End must be later than start.` |
-| **E-23** | `forever` checked while end fields hold values | `forever` wins; end fields cleared and disabled. The wireframe leaves them enabled ([WF-19 · proposed]). Exact mechanic is a developer decision |
+| **E-23** | `forever` checked while end fields hold values | `forever` wins; end fields cleared and disabled. The wireframe left them enabled until [WF-19 · proposed] was applied 2026-08-03; it now clears and disables both. Exact mechanic is a developer decision |
 | **E-24** | Two overlapping Active periods both match a new order | Exactly **one** sample set (BR-7). The suppressed match persists as `[DC-15]`. Which period is recorded as the assigner is a developer decision (first match by start datetime recommended) |
 | **E-25** | Backdated start datetime | **Not retroactive** — only orders created after the ON action, inside the window, receive a set (BR-15) |
 | **E-26** | Period ends while an assigned order is still unshipped | The order keeps its sample set (BR-19); assignment binds at creation time, not at outbound |
 | **E-27** | `Ended` (or `Cancelled`) period row | **No checkbox element at all**; cannot be selected or cancelled; record only |
-| **E-28** | `Cancel Selected Periods` clicked with 0 rows checked | Button is disabled, so no action occurs. (The wireframe fires regardless — [WF-17 · proposed]) |
+| **E-28** | `Cancel Selected Periods` clicked with 0 rows checked | Button is disabled, so no action occurs. (The wireframe fired regardless until [WF-17 · proposed] was applied 2026-08-03; it now disables the button at zero selection) |
 | **E-29** | Double-click on `Cancel Selected Periods` | Single cancellation per period `[G-9]`; the repeat is recorded `[DC-28]` |
 | **E-30** | Cancelling an Active period | New matching stops immediately; already-assigned orders keep their sets; **no** unassignment event is emitted (BR-9, BR-19) |
 | **E-31** | An order is cancelled or refunded after a sample was assigned | The assignment record persists on the order; sample handling on internal documents follows the order's lifecycle. No `sample.unassigned` event |
@@ -853,14 +856,14 @@ IDs are page-scoped and stable, and are never renumbered. **E-1…E-45** preserv
 | **E-49** | Comments-hub click-through to an order cancelled after the comment was written | Opens the order in its cancelled state; the comment history is intact (append-only, BR-23) |
 | **E-50** | Slack channel archived or renamed at dispatch time | The comment commits; dispatch persists as failed with the channel id; retry policy is a developer decision |
 | **E-57** | Filter and pagination state after an import | Preserved — the operator's current view is not reset `[G-2]` |
-| **E-62** | Two confirming actions in quick succession (import confirm, then period cancel) | A single toast slot replaces, or an explicit stack renders both. The wireframe's two independent nodes ([WF-18 · proposed]) must not be reproduced. Policy is a developer decision |
+| **E-62** | Two confirming actions in quick succession (import confirm, then period cancel) | A single toast slot replaces, or an explicit stack renders both. The wireframe's overlapping independent nodes ([WF-18 · proposed], applied 2026-08-03) must not be reproduced — the drawing now stacks them explicitly via `stackToasts()`. Policy is a developer decision |
 | **E-64** | Unread mention count above 99 | Badge renders `99+` |
 | **E-92** | A hub row whose entity is an inbound request or an unrecognized-pool item | Routed to that entity's own screen; a resolved pool item opens the matched order instead `[PD-67 · OWNER-PENDING]` (BR-32). The hub never renders a dead row |
 | **E-93** | A system user is created whose display name equals an existing free-text PIC string | Existing orders keep the free-text PIC; no retroactive resolution and no silent re-linking (E-59) |
 | **E-94** | Two browser tabs of this page are open and one confirms an import | The other tab's list is stale until its next fetch. No cross-tab push is required in v1; a stale tab must never write from its stale state (BR-26 revalidation catches it) |
 | **E-95** | A toast fires while a modal is open | The toast renders above the overlay (`z-index:200` vs `80`) and is not clipped |
 | **E-96** | Viewport narrower than the layout minimum (mock 1240 px, table 1180 px) | The page scrolls horizontally. No responsive collapse is specified for v1 and none may be invented |
-| **E-97** | `Esc` pressed while a modal or the Comments hub is open | Dismisses it as a non-confirming close; nothing is created. The wireframe implements no `Esc` handling ([WF-20 · proposed], [WF-21 · proposed]) |
+| **E-97** | `Esc` pressed while a modal or the Comments hub is open | Dismisses it as a non-confirming close; nothing is created. The wireframe implemented no `Esc` handling until [WF-20 · proposed] / [WF-21 · proposed] were applied 2026-08-03; it now closes the topmost open overlay, or the Comments hub when no overlay is open |
 | **E-98** | Keyboard-only operation of a modal | Opening moves focus into the modal, focus is trapped while it is open, and closing returns focus to the trigger. Exact implementation is a developer decision |
 | **E-99** | Session expires while the Comments hub is open | The hub renders an unauthenticated state and prompts re-authentication rather than showing an empty list and a zero badge — a silent zero would read as "no mentions" |
 | **E-100** | The default filter matches no orders | The list shows its empty state, the count reads `0 orders`, and `⬆ Import`, `Sample Assignment ON` and `Cancel Sample Assignment` all stay enabled |
@@ -878,22 +881,24 @@ IDs are page-scoped and stable, and are never renumbered. **E-1…E-45** preserv
 **Standing harness rules for `[WF]` scenarios:**
 
 1. **Reload detection.** Before the first action of a scenario, set `window.__qaSentinel = 'om'`. "The page did not reload" means `window.__qaSentinel === 'om'` still holds after the action. Do **not** use navigation-entry counts — a reload destroys the script context and the count would be re-created.
-2. **Toast identity.** The wireframe injects two separate nodes: `#gtoast` (created by `#mktConfirm`) and `#gtoast2` (created by `#sampCancelBtn`). Assert the node named in the scenario. "A toast is visible" means the node exists and `getComputedStyle(node).display !== 'none'`; it is hidden again ~2 600 ms after the click, so assert within that window.
+2. **Toast identity.** The wireframe injects three separate nodes, one per confirming action: `#gtoast` (created by `#mktConfirm`), `#gtoast2` (created by `#sampConfirmGo`, the confirm-dialog button behind `#sampCancelBtn`) and `#gtoast3` (created by `#sampStartBtn`). `#gtoast3` and the `#sampConfirmGo` indirection arrived with the 2026-08-03 wireframe-edit pass ([WF-16 · proposed], [WF-17 · proposed]); through v1.2 this rule named only the first two. Assert the node named in the scenario. "A toast is visible" means the node exists and `getComputedStyle(node).display !== 'none'`; it is hidden again ~2 600 ms after the click, so assert within that window. Nodes are created lazily on first use, so `document.querySelectorAll('.gtoast')` counts only actions that have already fired. A shared `stackToasts()` places the first visible toast at `top:16px` and each subsequent one `offsetHeight + 8 px` below it ([WF-18 · proposed]), so a `top` assertion is only stable for the **first** visible toast.
 3. **Colour assertions** use `getComputedStyle(...).color` / `.backgroundColor` in `rgb()` form. Reference values on this page: green `--green` `#198754` = `rgb(25, 135, 84)` · amber `--amber` `#B45309` = `rgb(180, 83, 9)` · purple `--mkt` `#7C3AED` = `rgb(124, 58, 237)` · star `--star` `#F59E0B` = `rgb(245, 158, 11)`.
-4. **Modal state.** "Modal X is open" means `document.getElementById(X).classList.contains('open')`. Close a modal between scenarios by clicking its `[data-close]` control; the wireframe does not respond to `Esc` ([WF-20 · proposed]).
+4. **Modal state.** "Modal X is open" means `document.getElementById(X).classList.contains('open')`. Close a modal between scenarios by clicking its `[data-close]` control, or by pressing `Esc`, which closes the **topmost** open overlay — through v1.2 this rule said the wireframe does not respond to `Esc`, which stopped being true when [WF-20 · proposed] was applied 2026-08-03. There are now **four** overlays: `#m-import`, `#m-sampleon`, `#m-sampleoff` and the confirm overlay `#m-sampcancel-confirm` added by [WF-17 · proposed]. Because `Esc` unwinds one layer at a time, a scenario that opens the confirm overlay on top of `#m-sampleoff` needs two `Esc` presses, or a `[data-close]` click per layer, to return to a clean state.
 5. **Text assertions are byte-exact**, including `·` (U+00B7), `—` (U+2014), `→` (U+2192), `✓`, `⬆`, `⬇`, `⧉`, `▦`, `✎`, `★`, `💬`, `📄`, `⋯`, and the preserved misspelling `Outbonded`. Byte-exactness is applied to the node's text **after** exactly three declared normalisations, and after no others:
    - **(5a) `<br>` → one space.** Four `.navlink` spans and other two-line labels carry a `<br>`, which `textContent` drops without substituting anything. Join across `<br>` with a single space before comparing (QA-LST-12).
    - **(5b) `<label>` text is trimmed.** Where an `<input>` precedes its text inside a `<label>`, the DOM carries a leading space. Leading and trailing whitespace is stripped from `<label>` text before comparison; all other text is compared unstripped (QA-SMP-02, QA-SMP-03, QA-LST-07).
    - **(5c) A trailing `.dot` annotation is excluded.** `[WF]` runs execute with annotations shown, so any element carrying class `anno` also contains a `<span class="dot">` whose text is the legend marker. Read such an element's own text (`firstChild.textContent`, or `textContent` with every descendant `.dot` removed) before comparing (QA-IMP-12, QA-LST-01).
    Colours quoted from a **stylesheet rule** (`cssRules[].cssText`) are re-serialised by the CSSOM: an authored `#EBE1FF` comes back as `rgb(235, 225, 255)`. Either form satisfies a stylesheet-rule assertion; computed-style assertions remain `rgb()`-only per rule 3.
 6. **"Identical content"** — where a scenario asserts that a modal opened from the `.wf-bar` has content identical to the same modal opened from the page (QA-IMP-02, QA-SMP-28, QA-SMP-29), the comparison basis is `document.getElementById(id).querySelector('.modal').innerHTML` string equality between the two entry paths. No other basis is permitted.
-7. **`[WF-n · proposed]`** — the seven defect ids `[WF-15 · proposed]` … `[WF-21 · proposed]` are registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03). The `· proposed` suffix is their register status, not a claim that they are absent from the backlog: it means the wireframe-edit pass has not yet adjudicated them, and no wireframe edit may be applied while specs are being written (§9.2). A runner cross-checking the backlog will find all seven in §F. `WF-1` … `WF-14` remain unrelated to this page (§2.4).
+7. **`[WF-n · proposed]`** — the seven defect ids `[WF-15 · proposed]` … `[WF-21 · proposed]` are registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03) and are recorded there as **`APPLIED 2026-08-03`**; the owner-approved wireframe-edit pass shipped all seven to `wms2/order-management/index.html` the same day. Through v1.2 this rule read the `· proposed` suffix as a live status meaning "not yet adjudicated, and no wireframe edit may be applied while specs are being written". That reading is **superseded**: the suffix is now nothing but a frozen part of the ID token, kept because shipped specs cite the full token and IDs are never renumbered or re-tokenised (`_wireframe-fixes` §F collision warning — a bare `WF-15` is ambiguous across three files, so always key on the full token **plus** the named file). A runner must therefore expect the **fixed** behaviour on the live wireframe; the eight scenarios that documented the pre-fix behaviour (QA-IMP-35 · QA-SMP-19 / 30 / 31 / 33 · QA-CMT-20 · QA-GBL-09 / 10) were re-baselined onto it in v1.3, keeping their ids. `WF-1` … `WF-14` remain unrelated to this page (§2.4).
 
-**Wireframe demo limitations that force an `[ADMIN]` tag** (`_wireframe-fixes` §E, §2.4): the M1 preview is static and the dropzone parses nothing; `#mktConfirm` toasts regardless of validation; `#sampCancelBtn` toasts regardless of selection; `Start Assignment (ON)` never toasts; filter-bar and action-row controls are inert; `Mark all read` has no handler; the order list table is absent from the mock.
+**Wireframe demo limitations that force an `[ADMIN]` tag** (`_wireframe-fixes` §E, §2.4): the M1 preview is static and the dropzone parses nothing; `#mktConfirm` toasts regardless of validation; filter-bar and action-row controls are inert; `Mark all read` has no handler; the order list table is absent from the mock.
+*(Through v1.2 this list also carried "`#sampCancelBtn` toasts regardless of selection" and "`Start Assignment (ON)` never toasts". Both stopped being true on 2026-08-03 when [WF-17 · proposed] and [WF-16 · proposed] were applied. They are kept here as history. **No scenario is retagged as a result:** QA-SMP-06 and QA-SMP-21 stay `[ADMIN]` because each also asserts a persisted event, which the mock cannot show either way, and the newly observable halves are asserted by the re-baselined QA-SMP-30 and QA-SMP-31 `[WF]`.)*
 
 **Edge cases intentionally left unasserted (declared, not silent).** Two of the 100 `[E-n]` ids carry no QA scenario **by design**, because each resolves to a `§9.3` developer decision with no fixed observable: **`[E-9]`** (within-file duplicate `recipient + SKU` rows — the recommended default is "allow silently", so there is no assertable artifact either way until dev picks a warning) and **`[E-42]`** (a user without write access — v1 adds no gating at all `[G-15]` `[PD-1 · OWNER-PENDING]`, so the only assertable v1 behaviour is QA-GBL-05's "no action is refused for role reasons", which is already covered). Every other `[E-1]` … `[E-100]` id is named in at least one scenario body.
 
-**Counts: 171 scenarios — 77 [WF], 94 [ADMIN]. Negative tests: 77 (45.0 %), well above the 25 % floor.** Negative scenarios are marked **(neg)**. Per block: IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18. Every `[DC-n]` in §5 has at least one asserting Then-clause (matrix §8.6).
+**Counts: 171 scenarios — 77 [WF], 94 [ADMIN]. Negative tests: 73 (42.7 %), well above the 25 % floor.** Negative scenarios are marked **(neg)**. Per block: IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18. Every `[DC-n]` in §5 has at least one asserting Then-clause (matrix §8.6).
+*(v1.3 delta: the negative count moved 77 → 73 and the share 45.0 % → 42.7 %. No scenario was added, removed, renumbered or retagged; the four that changed class — QA-IMP-35, QA-SMP-30, QA-CMT-20, QA-GBL-10 — were `(neg)` only because they documented a wireframe defect, and re-baselining them onto the applied fix (§8.0 rule 7) turned each into a positive assertion. QA-SMP-19 stayed positive; QA-SMP-31, QA-SMP-33 and QA-GBL-09 stayed `(neg)` because their re-baselined form still asserts a guard or an absence. Scenario total, `[WF]` / `[ADMIN]` split and per-block totals are unchanged.)*
 
 ### 8.1 Block IMP — Marketing Order Import `[L-1]` `[L-M1]` `[L-M1b]`
 
@@ -1084,11 +1089,12 @@ Given a filter set is applied
 When I click `⬇ Export` and then `⬇ Yun Export`
 Then `[DC-26] orders.exported` and `[DC-27] orders.yun_exported` each persist with the filter context and the row count, and neither shows a toast (§3.13).
 
-**QA-IMP-35 [WF] (neg)** — Preview collapse row under-spans the table — documents [WF-15 · proposed]
+**QA-IMP-35 [WF]** — Preview collapse row spans the full table — re-baselined on [WF-15 · proposed], applied 2026-08-03
 Given `#m-import` is open
 When I read `#m-import tbody td[colspan]`
-Then exactly one such cell exists, its text is `⋯ +8 more rows`, and its `colspan` attribute is `6` while `#m-import thead th` has length `7`
-And this mismatch is the defect: the product must render `colspan="7"` so the collapse row spans the full table (§3.2.4).
+Then exactly one such cell exists, its text is `⋯ +8 more rows`, and its `colspan` attribute is `7`, equal to the length of `#m-import thead th`
+And the collapse row therefore spans the full table (§3.2.4).
+*(Through v1.2 this scenario was a `(neg)` defect-documentation test asserting `colspan="6"` against 7 headers. The wireframe-edit pass applied `colspan="7"` on 2026-08-03, so the assertion was re-baselined onto the fixed value and the scenario is no longer negative. The id is unchanged.)*
 
 **QA-IMP-36 [WF]** — Preview row arithmetic matches the header count
 Given `#m-import` is open
@@ -1264,7 +1270,7 @@ Given `#m-sampleon` is open with target `All new orders in this period`, start `
 When I click `Start Assignment (ON)`
 Then the modal closes and a green toast reads `✓ Sample assignment started` with subtext `All new sales orders from 2026-07-23 10:00 → forever · exactly 1 sample set per order`
 And `[DC-13] sample.period_created` persists with `target_type=all_new_in_period`, the start datetime, `forever=true`, the operating timezone (BR-31) and an idempotency key.
-(The live wireframe shows **no** toast here — [WF-16 · proposed] — which is why this is `[ADMIN]`; QA-SMP-30 documents the current behaviour.)
+(Through v1.2 the live wireframe showed **no** toast here — [WF-16 · proposed] — which was the stated reason for the `[ADMIN]` tag. The toast was applied on 2026-08-03 and the wireframe now renders exactly these two strings, asserted by the re-baselined QA-SMP-30 `[WF]`. This scenario keeps its `[ADMIN]` tag on its second clause: `[DC-13]` persistence cannot be observed in the mock.)
 
 **QA-SMP-07 [ADMIN] (neg)** — End earlier than start blocks `[E-22]`
 Given `#m-sampleon` is open with target `All new orders in this period`
@@ -1330,13 +1336,14 @@ Given `#m-sampleoff` is open
 When I read `#m-sampleoff .note`
 Then it reads exactly `Multiple assignment periods may exist — select the period(s) to cancel, then confirm. Ended periods are for record only (cannot be cancelled). Cancellation immediately stops new assignments for that period (already-assigned orders are kept).`
 
-**QA-SMP-19 [WF]** — Cancel toast text and no reload
+**QA-SMP-19 [WF]** — Confirm dialog precedes the cancel toast; text and no reload — re-baselined on [WF-17 · proposed], applied 2026-08-03
 Given `#m-sampleoff` is open with row 1's checkbox checked (its default state) and `window.__qaSentinel = 'om'`
 When I click `#sampCancelBtn` (label `Cancel Selected Periods`, red)
-Then `#m-sampleoff` loses class `open`
+Then `#m-sampleoff` still has class `open`, no node with id `gtoast2` exists yet, and the confirm overlay `#m-sampcancel-confirm` gains class `open` with its `header` first text node reading `Cancel 1 assignment period(s)?` (the count follows the selection, §3.7.5)
+And when I then click `#sampConfirmGo` (label `Cancel periods`, red), both `#m-sampcancel-confirm` and `#m-sampleoff` lose class `open`
 And `#gtoast2` is visible with first text node `✓ Assignment period cancelled` and `<small>` reading `New assignments stopped for the selected period · already-assigned orders kept`
 And `window.__qaSentinel === 'om'`.
-(In the real admin the confirm dialog of QA-SMP-20 precedes this toast.)
+*(Through v1.2 the wireframe fired the toast straight off `#sampCancelBtn` with no confirm step, and this scenario asserted that shorter path with the note "in the real admin the confirm dialog of QA-SMP-20 precedes this toast". The wireframe-edit pass built the confirm step on 2026-08-03, so the `[WF]` path now matches the specified one. QA-SMP-20 stays `[ADMIN]`: it additionally asserts the `[DC-17]` writes and the `Keep periods` no-write branch, which the mock cannot show.)*
 
 **QA-SMP-20 [ADMIN]** — Confirm step before cancelling `[PD-5 · OWNER-PENDING]`
 Given `#m-sampleoff` is open with 2 Active periods checked
@@ -1344,12 +1351,13 @@ When I click `Cancel Selected Periods`
 Then a dialog titled `Cancel 2 assignment period(s)?` appears with body `New assignments stop immediately. Orders already assigned keep their sample set.` and buttons `Keep periods` and `Cancel periods`
 And choosing `Keep periods` writes nothing — zero `[DC-17]`
 And choosing `Cancel periods` writes one `[DC-17]` per period and then shows the QA-SMP-19 toast (BR-25).
+(The dialog and both buttons are now built in the wireframe too — [WF-17 · proposed], applied 2026-08-03, overlay `#m-sampcancel-confirm`; this scenario stays `[ADMIN]` for the `[DC-17]` write assertions, which the mock cannot show.)
 
 **QA-SMP-21 [ADMIN] (neg)** — Zero selection disables cancel `[E-28]`
 Given `#m-sampleoff` is open with no checkboxes checked
 When I attempt to click `Cancel Selected Periods`
 Then it is disabled, and the attempted click produces no dialog, no toast and no event.
-(The live wireframe fires the toast regardless — [WF-17 · proposed]; QA-SMP-31 documents that.)
+(The live wireframe fired the toast regardless until [WF-17 · proposed] was applied 2026-08-03; the observable half is now asserted on the wireframe by QA-SMP-31. This scenario stays `[ADMIN]` for the "no event" clause.)
 
 **QA-SMP-22 [ADMIN] (neg)** — Double-click cancels once `[E-29]` `[DC-28]`
 Given the confirm dialog is open with 2 periods selected
@@ -1391,33 +1399,36 @@ Given the live wireframe is loaded
 When I click `.wf-bar button[data-modal="m-sampleoff"]` (label `Modal: Cancel Sample Assignment`)
 Then `#m-sampleoff` has class `open`, and `document.getElementById('m-sampleoff').querySelector('.modal').innerHTML` is string-identical to the value the same expression returns after opening via the action-row button of QA-SMP-15 (§8.0 rule 6) — so the assertions of QA-SMP-16 hold unchanged from this entry point.
 
-**QA-SMP-30 [WF] (neg)** — `Start Assignment (ON)` is silent on the wireframe — documents [WF-16 · proposed]
-Given `#m-sampleon` is open and no `.gtoast` node exists
-When I click the green footer button `Start Assignment (ON)` (`#m-sampleon .foot button.btn-green`)
-Then `#m-sampleon` loses class `open` **and** `document.querySelectorAll('.gtoast').length === 0` — no toast is shown
-And this silence is the defect: `[G-2]` and `_review` C-6 require the toast specified in QA-SMP-06, and the button also lacks an `id` to bind it to.
+**QA-SMP-30 [WF]** — `Start Assignment (ON)` shows the specified toast — re-baselined on [WF-16 · proposed], applied 2026-08-03
+Given `#m-sampleon` is open in its default state (target `All new orders in this period`, start `2026-07-23` `10:00`, `forever` checked) and no `.gtoast` node exists
+When I click the green footer button `Start Assignment (ON)` (`#m-sampleon .foot button.btn-green`, which now carries `id="sampStartBtn"`)
+Then `#m-sampleon` loses class `open` **and** `#gtoast3` exists, carries class `gtoast`, and is visible
+And its first text node reads `✓ Sample assignment started` and its `<small>` reads `All new sales orders from 2026-07-23 10:00 → forever · exactly 1 sample set per order` — the byte-exact copy `[G-2]` and `_review` C-6 require (§3.6.5, the same strings QA-SMP-06 asserts against the real admin).
+*(Through v1.2 this was a `(neg)` defect-documentation test asserting that the button closed the modal silently and had no `id`. Both halves were fixed on 2026-08-03, so the assertion was re-baselined onto the shipped toast and the scenario is no longer negative. The id is unchanged.)*
 
-**QA-SMP-31 [WF] (neg)** — Cancel toasts at zero selection on the wireframe — documents [WF-17 · proposed]
+**QA-SMP-31 [WF] (neg)** — Zero selection disables cancel on the wireframe — re-baselined on [WF-17 · proposed], applied 2026-08-03
 Given `#m-sampleoff` is open and I uncheck row 1's checkbox so that zero checkboxes are checked
-When I click `#sampCancelBtn`
-Then `#sampCancelBtn` is **not** disabled, no confirm dialog appears, and `#gtoast2` is shown anyway
-And this is the defect: per §3.7.5 the button must be disabled at zero selection ([E-28]) and must raise the confirm dialog of QA-SMP-20 `[PD-5 · OWNER-PENDING]`.
+When I attempt to click `#sampCancelBtn`
+Then `#sampCancelBtn.disabled === true`, `#m-sampcancel-confirm` does **not** gain class `open`, and no `#gtoast2` node is created
+And re-checking row 1 re-enables the button, so the gate tracks the selection rather than the page load ([E-28], §3.7.5; the confirm dialog itself is asserted by QA-SMP-19 and, with its writes, by QA-SMP-20 `[PD-5 · OWNER-PENDING]`).
+*(Through v1.2 this scenario documented the opposite — the button was not disabled, no dialog appeared, and the toast fired anyway. The gate and the dialog were both applied on 2026-08-03, so the assertion was re-baselined onto them. It stays `(neg)`: it still asserts that a blocked action produces nothing. The id is unchanged.)*
 
 **QA-SMP-32 [WF]** — M3 default checkbox states
 Given `#m-sampleoff` is open
 When I read the checkboxes
 Then row 1's checkbox is `checked`, row 2's is not, and row 3 has none — a total of exactly 2 checkbox elements in the table body.
 
-**QA-SMP-33 [WF] (neg)** — `forever` does not disable the end fields — documents [WF-19 · proposed]
-Given `#m-sampleon` is open and the `forever (no end date)` checkbox is `checked`
-When I inspect the `End date` and `Time` inputs
-Then neither is `disabled` and both accept typed input
-And this is the defect: §3.6.3 requires `forever` to clear and disable them ([E-23]).
+**QA-SMP-33 [WF] (neg)** — `forever` clears and disables the end fields — re-baselined on [WF-19 · proposed], applied 2026-08-03
+Given `#m-sampleon` is open and the `forever (no end date)` checkbox (`#sampForever`) is `checked`, its shipped default
+When I inspect the `End date` and `Time` inputs (`#sampEndDate`, `#sampEndTime`)
+Then both are `disabled` and both `value` strings are empty, so neither accepts typed input
+And unchecking `#sampForever` re-enables both, while re-checking it clears and disables them again — the sync runs on load and on every change, so `forever` wins over any previously typed end value (§3.6.3, [E-23]).
+*(Through v1.2 this scenario documented the opposite — both fields shipped enabled and editable while `forever` was checked. The fix was applied on 2026-08-03 and the assertion was re-baselined onto it. It stays `(neg)`: it asserts a guarded, input-refusing state, in the same shape as QA-SMP-21. The id is unchanged.)*
 
 **QA-SMP-34 [WF]** — Cancel toast uses its own node
-Given I have clicked `#sampCancelBtn` at least once
+Given I have completed at least one cancellation — `#sampCancelBtn` with a period checked, then `#sampConfirmGo` (the confirm step added 2026-08-03 by [WF-17 · proposed]; clicking `#sampCancelBtn` alone no longer creates a toast)
 When I inspect the document
-Then a node with id `gtoast2` exists carrying class `gtoast`, and the import toast (if it was fired) is a separate node with id `gtoast` — the two actions do not share a slot ([WF-18 · proposed], [E-62]).
+Then a node with id `gtoast2` exists carrying class `gtoast`, and the import toast (if it was fired) is a separate node with id `gtoast`, as is the sample-start toast `gtoast3` — the three actions do not share a slot ([WF-18 · proposed], [E-62]).
 
 **QA-SMP-35 [ADMIN] (neg)** — Zero-length period blocked `[E-82]`
 Given `#m-sampleon` is open with a start date and time entered
@@ -1704,11 +1715,12 @@ Given `#inbox1` is open on `@ Mentions`
 When I read the three rows
 Then all three carry class `unread`, they reference `Order MKT-40233`, `Order MKT-40218` and `Order 421771`, and only the `MKT-40218` row's `★` carries class `on` — matching the single row in the `★ Saved` pane.
 
-**QA-CMT-20 [WF] (neg)** — The hub does not close on an outside click — documents [WF-21 · proposed]
+**QA-CMT-20 [WF]** — The hub closes on an outside click — re-baselined on [WF-21 · proposed], applied 2026-08-03
 Given `#inbox1` is open
 When I click on `.pagepad` (anywhere outside the dropdown)
-Then `#inbox1` still has class `open`
-And this is the defect: the file already carries the `stopPropagation` guards written for outside-click dismissal (`.csearch` `onclick`, the tab buttons, the stars) but no `document`-level close handler exists. Per §3.10 the product must close the hub on an outside click and on `Esc` ([E-97]).
+Then `#inbox1` loses class `open`
+And a click **inside** the panel — for example on `#inbox1 .csearch input` or on a tab button — leaves it open, because the `document`-level handler bails on `e.target.closest('.inboxdd')` and the pre-existing `stopPropagation` guards (`.csearch` `onclick`, the hub trigger, the tab buttons, the stars) are now live rather than dead code (§3.10, [E-97]).
+*(Through v1.2 this was a `(neg)` defect-documentation test asserting that the panel survived an outside click while carrying guards for a handler that did not exist. The handler was added on 2026-08-03, so the assertion was re-baselined onto it and the scenario is no longer negative. The id is unchanged.)*
 
 **QA-CMT-21 [WF]** — Corpus mixes marketing and sales entities
 Given `#inbox1` is open
@@ -1774,17 +1786,21 @@ Given I am signed in on the Order Management Dashboard
 When I confirm an import and then start and cancel a sample period
 Then no Slack message is dispatched to any channel for these actions, no dispatch event is persisted other than for comment mentions, and in particular nothing reaches `#unrecognized-tracking`, `#wholesale-ops` or `#partnership-kr`.
 
-**QA-GBL-09 [WF] (neg)** — Two independent toast nodes — documents [WF-18 · proposed] `[E-62]`
+**QA-GBL-09 [WF] (neg)** — Concurrent toasts are stacked, never overlaid — re-baselined on [WF-18 · proposed], applied 2026-08-03
 Given the live wireframe is loaded
-When I click `#mktConfirm` and then, within the 2 600 ms window, open `#m-sampleoff` and click `#sampCancelBtn`
-Then `document.querySelectorAll('.gtoast').length === 2` — ids `gtoast` and `gtoast2` — both `display: block` at the same fixed coordinates, so they overlap
-And this is the defect: per `[L-F5]` the product must use a single toast slot or an explicit stack.
+When I click `#mktConfirm` and then, within the 2 600 ms window, open `#m-sampleoff`, click `#sampCancelBtn` and confirm with `#sampConfirmGo`
+Then `document.querySelectorAll('.gtoast').length === 2` — ids `gtoast` and `gtoast2` — and both compute `display: block`
+And they do **not** overlap: `stackToasts()` places the first visible node at `top: 16px` and each later one at `previous.top + previous.offsetHeight + 8px` (in the demo copy that is `16px` and `86px`), so their bounding boxes never intersect while both are visible — the explicit-stack branch `[L-F5]` permits, in place of a single replacing slot `[E-62]`.
+*(Through v1.2 this scenario documented the defect: two independent nodes pinned to the same fixed coordinates. The stack was applied on 2026-08-03 and the assertion was re-baselined onto it. It stays `(neg)`: it asserts an absence — that no two toasts occupy the same space. The id is unchanged. The `86px` figure is the demo-copy measurement, not a contract; the contract is the offset formula.)*
 
-**QA-GBL-10 [WF] (neg)** — `Esc` does not dismiss anything — documents [WF-20 · proposed] `[E-97]`
+**QA-GBL-10 [WF]** — `Esc` dismisses the topmost overlay, else the Comments hub — re-baselined on [WF-20 · proposed], applied 2026-08-03
 Given `#m-import` is open
 When I dispatch a `keydown` event with `key: 'Escape'` on `document`
-Then `#m-import` still has class `open`; the same holds for `#m-sampleon`, `#m-sampleoff` and `#inbox1`
-And this is the defect: §3.2.6 and §3.10 specify `Esc` as a dismissal path. There is no `keydown` listener anywhere in the file.
+Then `#m-import` loses class `open`, and the same holds one at a time for `#m-sampleon`, `#m-sampleoff` and the confirm overlay `#m-sampcancel-confirm`
+And with `#m-sampcancel-confirm` open on top of `#m-sampleoff`, one `Escape` closes only the confirm overlay and a second closes `#m-sampleoff` — the handler unwinds the **topmost** `.overlay.open` per press (§8.0 rule 4)
+And with no overlay open and `#inbox1` open, one `Escape` closes `#inbox1`
+And no dismissal creates anything: `document.querySelectorAll('.gtoast').length` is unchanged throughout (§3.2.6, §3.10, [E-97]).
+*(Through v1.2 this was a `(neg)` defect-documentation test asserting that no `keydown` listener existed anywhere in the file. The listener was added on 2026-08-03, so the assertion was re-baselined onto it and the scenario is no longer negative. The id is unchanged.)*
 
 **QA-GBL-11 [WF] (neg)** — Wireframe-only chrome inventory (must not ship)
 Given the live wireframe is loaded
@@ -1886,6 +1902,12 @@ Owner questions that **do** have a provisional default are not repeated here —
 | **BR-33** | `Selected orders only` resolves its order set **at submit time**, not at modal-open time; the open-time `{n}` is a label only | It changes *which orders get sampled* when the list moves behind the modal. The alternative (freeze the set at open) is defensible and would make [E-84] and QA-SMP-37 assert the opposite | If reversed to open-time freeze: §3.4, §3.6.5, [E-84], QA-SMP-37 and `[DC-13]`'s order-id-list semantics all invert |
 | **BR-34** | Loading the page mutates nothing — no event on page load or initial fetch | `[G-8]` scopes capture to operator-initiated actions, but "was this screen opened" is a plausible audit ask that no input document rules on | If reversed: add a page-view event to §5 and delete §5.4 item 12 and QA-LST-16 |
 
+**Open question raised by the 2026-08-03 pre-handoff review (not in the PD register; no PD id issued).** Numbered `OQ-n` in the form the sibling specs use (`stock-status`, `ready-to-outbound`, `view-orders`). It is listed here rather than in §9.2 because §9.2 of this document is the *out-of-scope* list, and this is an undecided question, not a delegation.
+
+| ID | Question | Why it is not decided | Blocking |
+|---|---|---|---|
+| **`[OQ-1]`** | **What monetary amount, if any, does an order created by the Marketing Order Import carry?** The template's seven columns are fixed by the dev team and include **no price, value or currency field** (§3.2.1), so the operator cannot supply one, and `[DC-9] order.created` names no monetary field either (§5.1). Nothing states what the created order's amount holds — zero, null, a catalogue-derived figure, or no such field at all. | No input document, no `_global-rules` clause and no owner decision addresses it, and no default is written here on purpose: these orders are **non-sales** orders (§1.1) kept settlement-separate from sales orders (BR-2, BR-17), so picking a number would be inventing a finance and customs policy this spec has no basis for. | **Nothing on this page** — no control, gate, validation, event or QA scenario reads an amount, and every §3 behaviour is specifiable without one. It blocks the **downstream** readers of an amount: carrier export / customs declaration on physically shipped parcels, and finance settlement separation. Whoever answers it owns the resulting payload line on `[DC-9]`, which keeps its ID. |
+
 ### 9.2 Explicitly out of scope for this spec
 
 - **Label and invoice layouts** — the physical rendering of `(+ sample set)` on carrier-facing data and of the sample lines on internal invoice/picking artifacts is **Phase 3-1**, to be discussed with the owner after Phase 3. This spec specifies the *behaviour* (BR-8), never the layout.
@@ -1897,7 +1919,7 @@ Owner questions that **do** have a provisional default are not repeated here —
 - **RBAC / role matrix** — post-v1 owner decision `[G-15]` `[PD-1 · OWNER-PENDING]`.
 - **JIT and JIT residual stock** (mandatory-inclusion item 11, stated explicitly rather than left silent — see §6.7) — **JIT never appears on this screen.** No JIT sourcing route is selectable here, and no residual-stock figure is computed, displayed, filtered, exported or reported here. JIT is not a requestable inbound route `[G-5]`, and residual-stock handling is owned by the `stock-status` spec. Nothing on this page may surface a residual figure by analogy with the order table's route badges.
 - **Line-based location filtering and audit-mode-only visibility** (mandatory items 9 and 10) — no line-item view, no location concept and no audit mode exists here `[G-14]`; owned by `stock-status` and `view-orders` (§6.7).
-- **Wireframe edits** — `[WF-15 · proposed]` … `[WF-21 · proposed]`, registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03), are backlog items for a separate wireframe-edit pass, deployed via `/wf-deploy order-management`; they must not be applied while specs are being written. The `· proposed` suffix is their register status, not an indication that they are missing from the register (§8.0 rule 7).
+- **Wireframe edits** — `[WF-15 · proposed]` … `[WF-21 · proposed]`, registered in `_plans/_wireframe-fixes.md` **§F** (appended 2026-08-03), were backlog items for a separate wireframe-edit pass, deployed via `/wf-deploy order-management`, and were **not** to be applied while specs were being written. That pass ran on 2026-08-03 under owner approval: the register records all seven as `APPLIED 2026-08-03` and the live drawing carries them. This bullet is kept as the record of the sequencing rule, which still binds any *future* wireframe edit raised by this spec. The `· proposed` suffix is now only a frozen part of the ID token — IDs are never renumbered once cited (§8.0 rule 7, §2.4).
 
 ### 9.3 Decisions delegated to development (a default is stated; these are NOT owner questions)
 
@@ -1962,13 +1984,14 @@ Every decision that shaped this screen, dated, including reversals and removals.
 | 2026-08-03 | Program-wide item 16: **Carrier is not auto-recorded on inbound**, and no Carrier column is added (`_review` C-1, `[PD-9]`) | Does not apply to this page (no inbound surface); recorded so the *import-side* carrier auto-assignment (BR-3) is never confused with it | BR-3 note |
 | 2026-08-03 | `_global-rules` v1.0 published; `[G-15]` establishes a **single admin role for v1** `[PD-1 · OWNER-PENDING]` | No control on this page is role-gated; every mutation records the actor | BR-22 |
 | 2026-08-03 | `_review` **C-5**: the `[G-3a]` send sound is defined by button class, not by page `[PD-2 · OWNER-PENDING]` | This page has **no** outbound-class button, so no sound applies. Stated so the audit is closed, not silent | BR-28, §6.6, QA-GBL-13 |
-| 2026-08-03 | `_review` **C-6**: `[G-2]` beats wireframe omissions | Produces the sample-period-start toast the wireframe lacks ([WF-16 · proposed]) and the cancel confirm step ([WF-17 · proposed], `[PD-5 · OWNER-PENDING]`) | §3.6.5, §3.7.5, BR-25 |
+| 2026-08-03 | `_review` **C-6**: `[G-2]` beats wireframe omissions | Produces the sample-period-start toast the wireframe lacked ([WF-16 · proposed]) and the cancel confirm step ([WF-17 · proposed], `[PD-5 · OWNER-PENDING]`). Both were applied to the wireframe later the same day, so the drawing and the spec now agree | §3.6.5, §3.7.5, BR-25 |
 | 2026-08-03 | **No print surface on this page** `[G-4]`; print consequences of `[G-13]` land on other specs' artifacts | Stated explicitly so the mandatory-inclusion audit closes rather than going silent | BR-29, §6.5, QA-LST-05 |
 | 2026-08-03 | PD register adopted for this page: import blocks the whole file on any error (PD-57); duplicate file warns rather than blocks (PD-58); no batch revert (PD-54); periods are not retroactive (PD-52); `Selected orders only` assigns immediately (PD-53); periods match sales orders only (PD-56); merging MKT with sales is blocked (PD-59) | All tagged `[PD-n · OWNER-PENDING]` in the sentences where they appear | BR-12…BR-18 |
 | 2026-08-03 | PD-51 and PD-55 recorded as **NO-DEFAULT** | The sample-set definition source, and the unblocking path for `carrier_unresolved` orders, are not decided and no behaviour is specified for them | §9.1 |
 | 2026-08-03 | Spec v1.0 authored | 9 legend units → 10 spec keys + 5 furniture keys; 30 business rules; 28 data-capture events; 66 edge cases; 94 QA scenarios | superseded by v1.1 |
 | 2026-08-03 | **Spec v1.1 — audit and finalisation pass.** Legend units re-counted directly from the HTML (9 units / 9 rendered dots, confirmed). Added `[L-F6]` (global nav shell) so the furniture count is 6 and the spec-addressable total is 16. Added BR-31 (single operating timezone), BR-32 (cross-entity comment corpus, `[PD-67 · OWNER-PENDING]`), BR-33 (selection resolved at submit), BR-34 (page load mutates nothing). Added `[DC-29] sample.period_started`. Extended edge cases to E-100. Rewrote §8 to 153 scenarios with an executable harness contract (§8.0). Proposed four further wireframe defects, [WF-18] … [WF-21]. Removed three inadvertent restatements of `[G-2]`, `[G-7]` and `[G-15]` rule bodies and replaced them with page deltas. Recorded the three PDs applied beyond their register page list (§9.1) | Nothing from v1.0 was dropped; all v1.0 IDs keep their meanings | superseded by v1.2 |
-| 2026-08-03 | **Spec v1.2 — remediation pass against three independent verification reports** (coverage audit M1, adversarial QA execution M2, cross-page + review audit M3a/M3b). **QA:** the five scenarios that could not pass as worded were repaired — QA-GBL-14's unscoped focus clause (which contradicted QA-IMP-06/09) is now scanner-scoped; QA-IMP-12 accounts for the `M1b` annotation dot inside the annotated `<th>`; QA-LST-12 accounts for the `<br>` inside the four `.navlink` spans; QA-CMT-05 asserts `.empty` / `.it` / `.paneheader` separately instead of the whole pane; QA-CMT-21 takes the concrete input `4`. §8.0 gained normalisation rules 5a–5c, an "identical content" definition (rule 6) and the `· proposed` definition (rule 7); QA-CMT-02 gained a geometric right-alignment probe, QA-IMP-11 a deterministic selector, QA-LST-02 the CSSOM colour form, QA-IMP-19 the `.note.mkt` artifact reference (and lost its unreachable Korean token). **Coverage:** 18 scenarios added (QA-IMP-53…62, QA-SMP-44…50, QA-CMT-24) so every previously uncovered edge case is asserted; `[E-9]` and `[E-42]` are declared intentionally unasserted in §8.0 with reasons. 42 scenarios gained an explicit `When` clause per `_review` §3.4. §8.6's three over-claiming cells were repaired. `[E-4]`, `[E-6]`, `[E-31]`, `[E-34]`, `[E-55]`, `[E-78]`, `[E-79]` gained the §3 back-reference from the clause they constrain. **Cross-page:** §6.7 added (explicit N/A for mandatory items 9/10/11, closing the JIT-residual silent cell); §3.10 declares the one Comments-hub string divergence and why the wireframe wins; §5 declares the `[DC-28]` shared-concept name divergence; §3.8 flags the stale View Orders hold cross-reference; §6.3 pins the directory deep-link form. **Registers:** `[WF-15 · proposed]`…`[WF-21 · proposed]` appended to `_wireframe-fixes` §F; `[G-7]`'s body removed from §6.1 and from this log; BR-31/33/34 surfaced in §9.1 as spec-level defaults awaiting owner sign-off; `[PD-9]`'s status as a non-applicable cross-reference stated in §9.1. **Counts recomputed:** 171 QA scenarios (77 `[WF]` / 94 `[ADMIN]`), 77 negatives = 45.0 %, per block IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18 | No ID renumbered, no rule reversed, no behaviour changed. Every v1.1 ID keeps its meaning | this document |
+| 2026-08-03 | **Spec v1.2 — remediation pass against three independent verification reports** (coverage audit M1, adversarial QA execution M2, cross-page + review audit M3a/M3b). **QA:** the five scenarios that could not pass as worded were repaired — QA-GBL-14's unscoped focus clause (which contradicted QA-IMP-06/09) is now scanner-scoped; QA-IMP-12 accounts for the `M1b` annotation dot inside the annotated `th`; QA-LST-12 accounts for the `<br>` inside the four `.navlink` spans; QA-CMT-05 asserts `.empty` / `.it` / `.paneheader` separately instead of the whole pane; QA-CMT-21 takes the concrete input `4`. §8.0 gained normalisation rules 5a–5c, an "identical content" definition (rule 6) and the `· proposed` definition (rule 7); QA-CMT-02 gained a geometric right-alignment probe, QA-IMP-11 a deterministic selector, QA-LST-02 the CSSOM colour form, QA-IMP-19 the `.note.mkt` artifact reference (and lost its unreachable Korean token). **Coverage:** 18 scenarios added (QA-IMP-53…62, QA-SMP-44…50, QA-CMT-24) so every previously uncovered edge case is asserted; `[E-9]` and `[E-42]` are declared intentionally unasserted in §8.0 with reasons. 42 scenarios gained an explicit `When` clause per `_review` §3.4. §8.6's three over-claiming cells were repaired. `[E-4]`, `[E-6]`, `[E-31]`, `[E-34]`, `[E-55]`, `[E-78]`, `[E-79]` gained the §3 back-reference from the clause they constrain. **Cross-page:** §6.7 added (explicit N/A for mandatory items 9/10/11, closing the JIT-residual silent cell); §3.10 declares the one Comments-hub string divergence and why the wireframe wins; §5 declares the `[DC-28]` shared-concept name divergence; §3.8 flags the stale View Orders hold cross-reference; §6.3 pins the directory deep-link form. **Registers:** `[WF-15 · proposed]`…`[WF-21 · proposed]` appended to `_wireframe-fixes` §F; `[G-7]`'s body removed from §6.1 and from this log; BR-31/33/34 surfaced in §9.1 as spec-level defaults awaiting owner sign-off; `[PD-9]`'s status as a non-applicable cross-reference stated in §9.1. **Counts recomputed:** 171 QA scenarios (77 `[WF]` / 94 `[ADMIN]`), 77 negatives = 45.0 %, per block IMP 62 · SMP 50 · LST 17 · CMT 24 · GBL 18 | No ID renumbered, no rule reversed, no behaviour changed. Every v1.1 ID keeps its meaning | superseded by v1.3 |
+| 2026-08-03 | **Spec v1.3 — re-baseline against the applied wireframe fixes, plus one declared gap.** The owner-approved wireframe-edit pass applied `[WF-15 · proposed]` … `[WF-21 · proposed]` to `wms2/order-management/index.html` on 2026-08-03 (register: `APPLIED 2026-08-03` on all seven), but this spec still described and asserted the **pre-fix** drawing, so a `[WF]` QA run failed eight scenarios against a wireframe that was already correct. **Re-baselined onto the fixed behaviour, ids unchanged:** QA-IMP-35 (`colspan="7"`), QA-SMP-19 (confirm overlay `#m-sampcancel-confirm` → `#sampConfirmGo` → toast), QA-SMP-30 (`#sampStartBtn` → `#gtoast3` with the §3.6.5 copy), QA-SMP-31 (button disabled at zero selection), QA-SMP-33 (`forever` clears **and** disables the end fields), QA-CMT-20 (outside click closes the hub), QA-GBL-09 (`stackToasts()` — visible toasts never overlap), QA-GBL-10 (`Esc` closes the topmost overlay, else the hub). **Status corrected, not deleted:** §2.4 now records each defect as found *and* what landed; §8.0 rule 7 retires the "not yet adjudicated / do not apply" reading of the `· proposed` suffix (it is now only a frozen ID token — `_wireframe-fixes` §F forbids renumbering); rule 4 documents the four-overlay `Esc` unwind; rule 2 adds the third toast node `#gtoast3` and the stack offsets; the two now-fixed items are struck from the `[ADMIN]`-forcing demo-limitation lists with their history kept. **Adjacent staleness repaired:** §3.2.4, §3.2.6, §3.6.3, §3.6.5, §3.7.5, §3.10, §3.15, [E-23], [E-28], [E-62], [E-97], QA-SMP-06, QA-SMP-20, QA-SMP-21, QA-SMP-34 and §9.2's wireframe-edit bullet. **Declared gap:** `[OQ-1]` registers that no monetary amount is defined for an imported `MKT-` order — the template has no price column (§3.2.1) and `[DC-9]` names no monetary field (§5.1); no default is invented, and the payload line is owed once the question is answered. **Counts recomputed:** 171 QA scenarios (77 `[WF]` / 94 `[ADMIN]`) unchanged; negatives 77 → **73 = 42.7 %** because four defect-documentation tests became positive assertions; per-block totals unchanged | No ID renumbered, no scenario added or removed, no scenario retagged `[WF]`↔`[ADMIN]`, no rule reversed, no product requirement changed — every §3 clause already specified the fixed behaviour. Every v1.2 ID keeps its meaning | this document |
 
 ### Reversal chains (recorded verbatim so nobody re-litigates them)
 

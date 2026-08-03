@@ -260,7 +260,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <div class="wf-bar">
   <h1>WMS 2.0 · View Orders Wireframe</h1>
-  <span class="hint">v21 — Switch states with the tabs · Purple numbers = change annotations</span>
+  <span class="hint">v22 — Switch states with the tabs · Purple numbers = change annotations</span>
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s0">0 · Waiting (Before Scan)</button>
     <button class="wf-tab" data-state="s1">1 · Scan Result (Last Item Remaining)</button>
@@ -568,7 +568,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">22</span><span><b>Print Return Labels</b> (bottom right; work states 1·1b·2·3) — when wrong/damaged items are found during scanning, select products → modal (M4): pick or type a carrier + optional size·qty → prints carrier name · product name (KR) · size · qty on label stock, attached to the supplier-return box. A separate concept from Customer Return mode (State 4, customer→us) <span class="ref">— C</span></span></li>
     <li><span class="n">20</span><span>Products without a barcode show an <b>always-visible input in the Barcode column</b> (all states) — an entered value is saved to the product master and recognized from the next scan. e.g. 미감수 브라이트 클렌징 티슈 <span class="ref">— C Search</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): single-item orders auto-print the label the moment the barcode is scanned — only for orders with no inbound history; Existing Inventory stock does not count as inbound history (B). Scanning an unrecognized barcode opens the <b>order-number lookup popup (M2)</b> — on a successful order-number match the tracking number is registered on the spot (rescan is then recognized); with no order number / failed match, send to the Missing Tracking List (M2b) (F — see the modal tabs above). Confirming a match writes the tracking number directly onto that order's product line — rescanning the same barcode then resolves normally (see Unrecognized Tracking M1). <b>Scanning the tracking number of an Inbound Request (I) switches to the dedicated Internal Inbound screen, not a customer-order screen</b> — stock-intake flow (no Outbound); see the <b>[6 · Internal Inbound]</b> tab above.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): single-item orders auto-print the label the moment the barcode is scanned — only for orders with no inbound history; Existing Inventory stock does not count as inbound history (B). Scanning an unrecognized barcode opens the <b>order-number lookup popup (M2)</b> — on a successful order-number match the tracking number is registered on the spot (rescan is then recognized); with no order number / failed match, send to the Missing Tracking List (M2b) (F — see the modal tabs above). Confirming a match writes the tracking number directly onto that order's product line — rescanning the same barcode then resolves normally (see Unrecognized Tracking M1). <b>Scanning the tracking number of an Inbound Request (I) switches to the dedicated Internal Inbound screen, not a customer-order screen</b> — stock-intake flow (no Outbound); see the <b>[6 · Internal Inbound]</b> tab above. <b>Exception (2026-08-03):</b> a number registered on a <b>CANCELLED</b> request no longer matches — matching is deactivated with the cancellation, so the scan falls to the unrecognized pool (M2b) like any unknown barcode and a person decides what the arrived goods are; a dead request must never swallow a live scan.</p>
 </div>
 </section>
 
@@ -1528,7 +1528,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <b style="color:var(--ink)">Memo (Optional)</b>
         <textarea class="mtextarea" placeholder="e.g. Box label damaged, looks like a 1+1 set — shown in the Missing Tracking List and the Slack alert"></textarea>
       </div>
-      <div class="note">On send, the <b>#unrecognized-tracking</b> channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) → shown in the unrecognized pool on the Missing Tracking List page.</div>
+      <div class="note">On send, the <b>#unrecognized-tracking</b> channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) <b>and @mentions every suspected PIC</b> (once per person) so handlers are pushed, not polled → shown in the unrecognized pool on the Missing Tracking List page.</div>
     </div>
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>No</button>
