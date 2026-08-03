@@ -1732,12 +1732,18 @@ Per `_review.md` §3 convention 8, this section lists **only**: (a) what this sc
 
 ### 9.2 Open questions — NO-DEFAULT (owner)
 
-Only two NO-DEFAULT register entries are **owned by** this page — **both were owner-decided on 2026-08-03** and are recorded below with their answers. (A third NO-DEFAULT entry, `[PD-71]` — the Daily Shipping Status sheet mapping — is cited in §6.3 as context but is **owned by `closing.md`**, and no behavior on this page rests on it; PD-71 remains open.)
+Three NO-DEFAULT items are **owned by** this page: OQ-1 and OQ-2 were **owner-decided on 2026-08-03** and are recorded below with their answers; **OQ-3 (added 2026-08-04) is open** and is the order-level half of `stock-status.md`'s `OQ-2`. (A third NO-DEFAULT entry, `[PD-71]` — the Daily Shipping Status sheet mapping — is cited in §6.3 as context but is **owned by `closing.md`**, and no behavior on this page rests on it; PD-71 remains open.)
 
 **OQ-1 — Where is "WHICH sample and HOW MANY" defined, and by whom?** `[PD-51]` — **RESOLVED, OWNER-DECIDED 2026-08-03**
 - **The answer.** v1 makes no sample distinction: internal invoice and picking artifacts render **"sample set" only** — no sample type, no per-type quantity. Distinguishing which sample and how many is follow-up work for the moment sample types are introduced. [G-13] was amended accordingly (`_global-rules.md` v1.1).
 - **Effect on this page.** The picking list's sample line reads "sample set" [BR-21]; wireframe fix **WF-9** (adding sample rows to M1) is no longer gated on a definition source — only owner approval of `[PD-36]` remains. QA-E-20 unblocks once PD-36 lands. Snapshot and unknown-location behavior [E-66] [E-31] unchanged.
 - **Owner:** decided by the product owner 2026-08-03. **Also affects:** `order-management.md`, `order-detail.md`, `shipping-label` (Phase 3-1).
+
+**OQ-3 — How is an *order* classified as JIT when its lines carry different sourcing routes?** — **OPEN (raised 2026-08-04 by the final readiness audit)**
+- **The question.** §3.7 `[L-7]` conditions the JIT badge and tint on "**the order's** sourcing route is JIT", and the JIT view tab filters on the same predicate. But a sourcing route is a **line-level** fact (`[G-5]`; `inbound-request.md`: "Route is request-level, not row-level"), so an order whose lines mix JIT and non-JIT rows has no defined classification. Candidates: any-line-is-JIT / all-lines-are-JIT / a stored order-level attribute set at import.
+- **Why it is not decided here.** This is the **order-level half of the same unresolved axis** as `stock-status.md` `OQ-2` (which single route a multi-route SKU row resolves to). Both are schema decisions about where the route lives and how many-to-one collapses; answering one without the other would fork the model. Nothing in this spec set fixes either, so no behavior is invented here.
+- **Blocking.** `[L-7]` badge/tint, the JIT view tab's result set, and the sort order that places JIT-complete rows last.
+- **Owner:** owner + development, together with `stock-status.md` `OQ-2` — **needed before the data model is fixed**, because a later change forces a re-model rather than a re-render.
 
 **OQ-2 — "Not connected — contact the Fulfillment Center" orders: what unblocks them, and who owns it?** `[PD-55]` — **RESOLVED, OWNER-DECIDED 2026-08-03**
 - **The answer.** Unblocking is **manual coordination — contact the fulfillment person in charge via Slack**. v1 ships no in-admin release/carrier-assignment UI and no automated Slack route.
