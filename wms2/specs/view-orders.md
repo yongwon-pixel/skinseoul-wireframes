@@ -2,9 +2,9 @@
 
 > **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
-**Page slug:** `view-orders` · **Wireframe SST:** `wms2/view-orders/index.html` (v20, 1,847 lines)
+**Page slug:** `view-orders` · **Wireframe SST:** `wms2/view-orders/index.html` (v21, 1,854 lines)
 **Live wireframe:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/view-orders/
-**Spec version:** 1.2 (verification remediation) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1
+**Spec version:** 1.3 (owner review — M1 restock location) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1
 **Global rules:** `_global-rules.md` v1.0 — cited as `[G-n]`; this document states **page deltas only** and never restates a rule body.
 **Provisional decisions:** `_plans/_provisional-decisions.md` — behaviors resting on an unapproved decision are tagged `[PD-n · OWNER-PENDING]` in the sentence where they appear.
 **Known wireframe defects:** `_plans/_wireframe-fixes.md` — this spec describes the **correct** behavior; where the shipped wireframe text disagrees, the defect is named inline (`WF-n`).
@@ -485,7 +485,7 @@ This one footer carries three rules; they are sub-keyed `[L-S1-Fa]`, `[L-S1-Fb]`
 
 #### `[L-S6-5]` Reconciliation table
 
-- **Behavior:** columns `SKU No. · Brand · Product Name · Expected Qty · Received Qty · Location · Status`. SKU, Brand and Product Name come **straight from the Inbound Request** (they mirror the Procurement Hub sheet's columns) and are not re-derived from the catalog, so the operator compares like with like. Row tints: `.row-done` (green) when received == expected, `.row-part` (amber) while in progress. Status pill: `✓ INBOUNDED` (`.tag-done`) or `In progress · {n} remaining` (`.tag-part`).
+- **Behavior:** the table is **request-scoped, never parcel-scoped**: it always lists **every SKU line of the inbound request**, regardless of which of the request's (possibly several `[G-10]`) tracking numbers was scanned to enter this screen — the operator sees the whole request's progress, and a parcel that contains only one of the SKUs still shows all lines. Columns `SKU No. · Brand · Product Name · Expected Qty · Received Qty · Location · Status`. SKU, Brand and Product Name come **straight from the Inbound Request** (they mirror the Procurement Hub sheet's columns) and are not re-derived from the catalog, so the operator compares like with like. Row tints: `.row-done` (green) when received == expected, `.row-part` (amber) while in progress. Status pill: `✓ INBOUNDED` (`.tag-done`) or `In progress · {n} remaining` (`.tag-part`).
 - **There is no Carrier column and no Carrier field anywhere on this screen** `[BR-24]`.
 
 #### `[L-S6-6]` `Received Qty` is directly editable
@@ -552,13 +552,14 @@ Unlike States 1–5, **this screen has no Outbound of any kind**. There is no bu
 - **Fields:**
   1. `1. Restock this inventory?` — radio `Yes — restock` (default) / `No`.
   2. `2. Restock Qty` — number, **default = the quantity that was inbounded**, editable, with the helper `Default = qty that was inbounded (editable) · disabled when "No" is selected`. Selecting `No` **disables and clears** the field; selecting `Yes` restores the previous value.
-  3. `3. Memo (Optional)` — textarea, placeholder `Cancellation reason or notes — also recorded in the order's Comments history`.
+  3. `3. Location (Optional)` — text input `#restockLoc`, helper `Default = the SKU's registered location (editable · updates the SKU's location) · required if the SKU has none · disabled when "No" is selected`. **Default = the SKU's registered location**, auto-filled and editable; an edit relocates the SKU — one location per SKU `[G-14]` — and persists `old → new`. Selecting `No` **disables and clears** the field (same toggle as Restock Qty); `Yes` restores the previous value. The field is optional **only while the SKU already has a location**: for a SKU with no registered location (typically JIT residual stock entering the warehouse for the first time — the modal's own use case) the field is **required** and `Confirm` stays disabled until one is entered, because stock may not enter Inventory location-less `[BR-58]` `[E-94]` (added 2026-08-03, owner).
+  4. `4. Memo (Optional)` — textarea, placeholder `Cancellation reason or notes — also recorded in the order's Comments history`.
 - **Note block (normative):** `The SKU's Reserved Quantity → Available updates automatically.` Use cases named on screen: `mid-order cancellation, or a JIT order placed by mistake when warehouse stock exists` — the latter is the origin of the **JIT residual stock** that Inventory must display (cross-page).
 - **Footer:** `Close` (`.btn-line`) and `Confirm` (`.btn-blue`).
-- **Validation:** restock qty may be **lower** than the inbounded qty (partial damage) and is accepted `[E-27]`. Restock qty **above** the inbounded qty is rejected `[E-52]`. Restock qty **`0` while `Yes — restock` is selected** is blocked — zero restock is expressed by selecting `No`, so that the two paths never produce two different records of the same decision `[E-93]`. With `No` selected, no stock is added and the reservation is released.
+- **Validation:** restock qty may be **lower** than the inbounded qty (partial damage) and is accepted `[E-27]`. Restock qty **above** the inbounded qty is rejected `[E-52]`. A location already occupied by a **different** SKU is rejected with an error naming the occupying SKU — one location holds one SKU, same rule as `[L-S6-7]` `[PD-46 · OWNER-PENDING]`; a value that does not parse as a location code is rejected inline. Restock qty **`0` while `Yes — restock` is selected** is blocked — zero restock is expressed by selecting `No`, so that the two paths never produce two different records of the same decision `[E-93]`. With `No` selected, no stock is added and the reservation is released.
 - **The under-restock remainder is an inventory event, never a memo `[BR-57]`:** when restock qty < inbounded qty, the difference is **auto-recorded as an inventory adjustment** `ADJUST(−remainder)` carrying the same memo, in the same transaction as the cancel `[PD-49 · OWNER-PENDING]`. The memo explains the adjustment; it is not the accounting record for it. A memo string is not a stock event and cannot satisfy `[G-8]`, so leaving the difference memo-only would silently drop units from the ledger. This matches Inventory's M4 release path, which books the identical adjustment for the identical physical fact — the server must produce **one** reversal and **one** remainder adjustment per line no matter which screen raised it (§9.5 CP-1).
-- **Server:** `cancel item inbound` with `{restock: bool, qty, memo}`; idempotent per line + version. The remainder adjustment shares the cancel's idempotency key — a retry never books it twice.
-- **Persists:** `[DC-11]` — order, SKU, cancelled qty, restock yes/no, restock qty, memo, actor, ts, and the stock delta `Reserved → Available` old→new. An under-restock additionally persists `[DC-39]` with `origin=cancel_inbound_remainder` and `qty_delta = −(inbounded − restocked)`. The memo is **dual-persisted**: into the Actor Log row's Memo cell and into the order's comment history `[G-7]`.
+- **Server:** `cancel item inbound` with `{restock: bool, qty, location, memo}`; idempotent per line + version. The remainder adjustment shares the cancel's idempotency key — a retry never books it twice.
+- **Persists:** `[DC-11]` — order, SKU, cancelled qty, restock yes/no, restock qty, restock location `old → new` (null old = first assignment), memo, actor, ts, and the stock delta `Reserved → Available` old→new. An under-restock additionally persists `[DC-39]` with `origin=cancel_inbound_remainder` and `qty_delta = −(inbounded − restocked)`. The memo is **dual-persisted**: into the Actor Log row's Memo cell and into the order's comment history `[G-7]`.
 - **Feedback:** green toast; line returns to `PENDING`; Actor Log gains `INBOUND Cancelled (Restocked)`.
 
 ### 3.11 `[L-M2]` Modal — Unrecognized barcode (order-number lookup)
@@ -741,6 +742,7 @@ Every rule carries a rationale and a decision date. Rules that reverse an earlie
 | **BR-55** | A bulk action returns per-line results. A batch in which some lines failed is reported as **partial**, naming the failing lines; the successful lines are not rolled back. | An unqualified "success" toast over a partial batch is how stock silently goes missing. | 2026-08-03 |
 | **BR-56** | State 6's `Received Qty` input stays editable at every stage, including after a SKU reaches its expected quantity. | An over-count discovered one row later must be correctable without cancelling the whole receipt. | 2026-08-03 (demo limitation **L-14**) |
 | **BR-57** | A **cancel-inbound under-restock books its remainder as an inventory adjustment** — `ADJUST(−remainder)` with the same memo, in the same transaction and under the same idempotency key as the cancel `[DC-39]` `origin=cancel_inbound_remainder`. A memo never accounts for stock. Restock qty `0` with `Yes` selected is blocked; `No` is the zero path. | Spec v1.1 said the difference was "accounted for by the memo", which is not an event and loses the units from the ledger — a `[G-8]` violation, and a divergence from Inventory's M4 release path, which books the same adjustment for the same physical fact. | 2026-08-03 (cross-page audit) `[PD-49 · OWNER-PENDING]` |
+| **BR-58** | **Restocked stock never enters Inventory location-less.** M1 pre-fills the SKU's registered location (editable — an edit relocates the SKU, one location per SKU `[G-14]`); when the SKU has no registered location, a location is **required** and `Confirm` stays disabled until one is entered. | Same doctrine as State 6's `[L-S6-7]` gate `[PD-13 · OWNER-PENDING]`: a JIT-residual restock is warehouse stock being born, and stock without a position cannot be picked. | 2026-08-03 (owner) |
 
 ---
 
@@ -775,7 +777,7 @@ Every event carries this envelope unless stated otherwise: `event_id` · `actor_
 | **DC-8** ⓒ | `order.outbounded` | order | `order_id`, `sku_set[]`, `total_qty`, `trigger` ∈ {manual, combined_last_item, bulk_all_remaining} | — |
 | **DC-9** ⓒ | `order.status_changed` | order | `order_id`, `reason` ∈ {outbound, cancel_outbound, external} | `processing → prepare shipment` / `prepare shipment → processing` |
 | **DC-10** | `order.outbound_suppressed_hold` | order | `order_id`, `hold_requester`, `hold_reason`, `inbound_completed_at` | — |
-| **DC-11** | `item.inbound_cancelled` | order line | `order_id`, `sku`, `cancelled_qty`, `restock` ∈ {true,false}, `restock_qty`, `memo` | line `INBOUNDED → PENDING`; stock `Reserved {n} → Available {m}` |
+| **DC-11** | `item.inbound_cancelled` | order line | `order_id`, `sku`, `cancelled_qty`, `restock` ∈ {true,false}, `restock_qty`, `restock_location` old→new, `memo` | line `INBOUNDED → PENDING`; stock `Reserved {n} → Available {m}` |
 | **DC-12** | `order.outbound_cancelled` | order | `order_id` | (emits `[DC-9]`) |
 | **DC-13** | `idempotency.duplicate_rejected` | any | `original_event_id`, `idempotency_key`, `action`, `arrival_delta_ms` | — |
 | **DC-44** | `order.mutation_rejected` | order / line | `attempted_action`, `reason` ∈ {on_hold, status_forbids_outbound, already_outbounded, line_locked_after_outbound, stale_version, no_lines, session_expired}, `server_state_snapshot` | — |
@@ -964,7 +966,7 @@ Label **layout and content design** — what is physically on the DELEO A4 picki
 
 ## 7. Edge Cases & Error States
 
-IDs are page-scoped and stable, and are **never renumbered**. Where two candidates merged, both IDs are kept on the merged entry. `E-1 … E-65` are unchanged from spec v1.0; `E-66 … E-92` were added by the audit pass to close failure modes the first draft named only implicitly; `E-93` was added by the 2026-08-03 cross-page remediation.
+IDs are page-scoped and stable, and are **never renumbered**. Where two candidates merged, both IDs are kept on the merged entry. `E-1 … E-65` are unchanged from spec v1.0; `E-66 … E-92` were added by the audit pass to close failure modes the first draft named only implicitly; `E-93` was added by the 2026-08-03 cross-page remediation; `E-94` by the 2026-08-03 owner review (M1 restock location).
 
 **Inventory: 93 IDs across 92 entries** (`E-18 = E-51` is one merged entry carrying two IDs).
 
@@ -1010,7 +1012,7 @@ IDs are page-scoped and stable, and are **never renumbered**. Where two candidat
 | **E-23** | M6 edits expected 300 → 120 with 120 already received | Remaining recomputes to 0 and `Confirm Full Inbound` becomes **enabled** — but does **not** auto-confirm; a human presses it `[BR-22]` `[PD-84 · OWNER-PENDING]`. |
 | **E-24** | M6 new expected qty **below** the already-received qty (e.g. 120 received, edit to 100) | **Hard block** with inline validation `New expected qty cannot be lower than the received qty (120)`. Nothing saved `[PD-14 · OWNER-PENDING]`. |
 | **E-25** | M6 saved with no reason selected | `Save Qty Edit` blocked; the reason select is marked required; no event, no comment, no Slack. |
-| **E-26** | M1 cancel with `No` selected | The restock qty field is disabled **and cleared**; no stock is added; the reservation is released; `[DC-11].restock=false` with `restock_qty` null. |
+| **E-26** | M1 cancel with `No` selected | The restock qty **and location** fields are disabled **and cleared**; no stock is added; the reservation is released; `[DC-11].restock=false` with `restock_qty` and `restock_location` null. |
 | **E-27** | M1 restock qty edited **below** the inbounded qty (partial damage) | **Allowed**, and the shortfall is **booked, not narrated**: the restocked units return to Available, and the remainder is auto-recorded in the same transaction as an inventory adjustment `ADJUST(−remainder)` carrying the same memo — `[DC-39]` with `origin=cancel_inbound_remainder` `[BR-57]` `[PD-49 · OWNER-PENDING]`. The memo is still dual-persisted `[L-M1]`, but it explains the adjustment rather than replacing it; units never leave the ledger with only a memo behind them `[G-8]`. |
 | **E-52** | M1 restock qty edited **above** the inbounded qty | Rejected inline — restocking more than was taken creates phantom stock. |
 | **E-28** | M3 with every line at qty 0 | Button reads `Confirm Restock (0)` and is **disabled**; nothing to restock. |
@@ -1023,6 +1025,7 @@ IDs are page-scoped and stable, and are **never renumbered**. Where two candidat
 | **E-80** | M6 sets the new expected qty to `0` | Rejected inline. Removing a line from a request is an Inbound Request operation, not a quantity edit `[BR-22]`. |
 | **E-92** | `Received Qty` is corrected downward on a SKU that already reached its expected qty (row was `.row-done`) | **Allowed.** The row leaves `.row-done`, its status returns to `In progress · {n} remaining`, the SKU-done tile decrements, and `Confirm Full Inbound` re-disables `[BR-56]`. Persists `[DC-32]`. |
 | **E-93** | M1 restock qty set to `0` while `Yes — restock` is selected | **Blocked** inline with `Select "No" to cancel without restocking`; `Confirm` stays disabled. `Yes + 0` and `No` would otherwise record the same physical decision two different ways — one with `restock=true, restock_qty=0`, one with `restock=false` — and no later reader could tell them apart `[BR-57]`. Nothing is persisted except the rejection. |
+| **E-94** | M1 restock on a SKU with **no registered location** (JIT residual entering warehouse stock for the first time) | The location field renders empty with no default; `Confirm` stays **disabled** until a location is entered `[BR-58]`. Entering one assigns the SKU's location (`old=null → new`) inside the same `[DC-11]` transaction. A location occupied by a different SKU is rejected naming the occupier `[PD-46 · OWNER-PENDING]`. |
 
 ### 7.3 Gating and state guards
 
@@ -1614,8 +1617,14 @@ Given `#m-cancel` is open, Then the qty helper text is exactly `Default = qty th
 **QA-M1-04 [WF]** `[L-M1]`
 Given `#m-cancel` is open, Then `#m-cancel .foot` (rule 7c) has exactly two buttons with texts `Close` and `Confirm`; clicking the `.overlay` backdrop also closes it.
 
+**QA-M1-06 [WF]** `[L-M1]` `[BR-58]`
+Given `#m-cancel` is open, Then a field labelled exactly `3. Location (Optional)` sits between `2. Restock Qty` and `4. Memo (Optional)`, `#restockLoc` has value `B-01-4`, and its helper text is exactly `Default = the SKU's registered location (editable · updates the SKU's location) · required if the SKU has none · disabled when "No" is selected`. When I check `input[name="restock"][value="no"]` and dispatch `change`, Then `#restockLoc.disabled === true` and `#restockLoc.value === ''`; re-checking `Yes — restock` restores `B-01-4`.
+
+**QA-M1-07 [ADMIN]** `[E-94]` `[BR-58]` — *negative*
+Given a Cancel Inbound on a SKU with **no registered location**, When the modal opens with `Yes — restock` selected, Then the location field is empty with no default and `Confirm` is disabled; entering a location occupied by a different SKU is rejected naming the occupying SKU; entering a free location enables `Confirm`, and on confirm `[DC-11]` carries `restock_location old=null → new` in the same transaction as the stock delta.
+
 **QA-M1-05 [ADMIN]** `[DC-11]` `[DC-39]`
-When `Confirm` is pressed with restock `Yes` and qty `2`, Then `item.inbound_cancelled` persists with cancelled qty, `restock=true`, restock qty, memo, actor and timestamp, plus the stock delta `Reserved → Available` old→new; `inventory.stock_applied` persists with `origin=cancel_inbound_restock`; the line returns to `PENDING`; the Actor Log gains `INBOUND Cancelled (Restocked)`; the memo also appears as an order comment `[DC-23]`.
+When `Confirm` is pressed with restock `Yes` and qty `2`, Then `item.inbound_cancelled` persists with cancelled qty, `restock=true`, restock qty, restock location `old → new`, memo, actor and timestamp, plus the stock delta `Reserved → Available` old→new; `inventory.stock_applied` persists with `origin=cancel_inbound_restock`; the line returns to `PENDING`; the Actor Log gains `INBOUND Cancelled (Restocked)`; the memo also appears as an order comment `[DC-23]`.
 
 **QA-M1-06 [ADMIN]** `[E-26]` — *negative*
 When restock `No` is confirmed, Then no stock is added, the reservation is released, and `[DC-11].restock=false` with a null restock qty.
@@ -1986,13 +1995,13 @@ Given the admin's State 5, Then the hold-origin statement names **OMS / Order De
 
 | Metric | Value |
 |---|---|
-| Total scenarios | **277** |
-| `[WF]` (runnable on the live wireframe today) | **135** |
-| `[ADMIN]` (real-admin only) | **142** |
+| Total scenarios | **279** |
+| `[WF]` (runnable on the live wireframe today) | **136** |
+| `[ADMIN]` (real-admin only) | **143** |
 | — of which DEFERRED | **0** — QA-CV-22 was un-deferred when the owner answered `[PD-66]` (2026-08-03) |
-| Explicitly tagged negative / failure-path scenarios | **91 (32.9 %)** — above the 25 % floor |
+| Explicitly tagged negative / failure-path scenarios | **92 (33.0 %)** — above the 25 % floor |
 
-135 `[WF]` + 142 `[ADMIN]` = 277; the DEFERRED row is one of the 142, not a third tier.
+136 `[WF]` + 143 `[ADMIN]` = 279; the DEFERRED row is one of the 143, not a third tier. (v1.3 delta: QA-M1-06 [WF] and QA-M1-07 [ADMIN, negative] added for the owner-requested M1 restock location.)
 
 **Coverage guarantee (machine-checked against this document):**
 
@@ -2122,6 +2131,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-07-09 | Reduced side padding so every column and button fits one screen | `[L-S1-4]` | active |
 | 2026-07-09 | Single-item orders **auto-print on scan**, only when the order has no inbound history | `[L-S1-Fa]` `[BR-14]` | active |
 | 2026-07-13 | **v20**: sourcing-route badges, **Hold State 5**, return last-mile lookup, Comments wording unified + ★ save + top-right Mentions/Saved hub | `[L-S1-3]` `[L-S1-6]` `[L-S1-19]` `[L-S4-5]` `[L-S5-1..3]` | active |
+| 2026-08-03 | **v21**: M1 Cancel Inbound gains `3. Location (Optional)` — pre-filled with the SKU's registered location, required when the SKU has none (owner request) | `[L-M1]` `[BR-58]` `[E-94]` `[DC-11]` | active |
 | 2026-07-13 | Coupang small QR arrives as `[V1]{barcode}` and **must match the barcode after the prefix** | `[BR-2]` | active |
 | 2026-07-13 | **No `returned` status exists**; returns are detected by scanning the last-mile barcode, not by status | `[L-S4-6]` `[BR-12]`; §9.4-8 | active |
 | 2026-07-13 | Sourcing routes extended to **4** (SMART BUY / JIT / WHOLESALE / PARTNERSHIP) as part of the I + J scope expansion | `[L-S1-6]` `[G-5]` | active |
@@ -2220,7 +2230,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 - **Legend units covered: 69** — 58 wireframe dots (independently counted from `wms2/view-orders/index.html`: 50 state dots + 8 modal dots) + 3 off-screen footer blocks (`[L-S1-F]`, `[L-S5-F]`, `[L-S6-F]`) + 8 page-furniture units (`[L-F1]`…`[L-F8]`). Numbering quirks declared in §2.1: State 1 runs 1–20 **and** 22 (dot 21 lives in State 1b); State 4 legend entries 3 and 4 have no on-screen dot; legend numbers repeat per state, so every key is state-qualified; `[L-S1-F]`'s sub-keys `[L-S1-Fa]`/`[L-S1-Fb]`/`[L-S1-Fc]` are addressing, not units.
 - **Business rules: BR-1 … BR-57**, each with rationale and date (BR-51…BR-56 added by the audit pass; BR-57 by the cross-page remediation).
 - **Data-capture events: DC-1 … DC-47**, no gaps, plus 10 declared NON-events and per-class retention/export terms.
-- **Edge cases: E-1 … E-93** across 92 entries (`E-18 = E-51` merged, both IDs retained per the never-renumber rule; `[E-6]`'s divergence from the plan's E-6 is documented in §7's preamble rather than repaired by renumbering, which the same rule forbids).
+- **Edge cases: E-1 … E-94** across 93 entries (`E-18 = E-51` merged, both IDs retained per the never-renumber rule; `[E-6]`'s divergence from the plan's E-6 is documented in §7's preamble rather than repaired by renumbering, which the same rule forbids).
 - **QA scenarios: 277** — 135 `[WF]` / 142 `[ADMIN]`; QA-CV-22, formerly DEFERRED, was un-deferred when `[PD-66]` was owner-decided (2026-08-03); 91 negatives (32.9 %). Coverage: 0 uncovered legend units, 0 uncovered DC events, 0 uncovered edge cases, 0 uncovered business rules.
 - **Provisional decisions relied upon: 33** — the 32 of §9.2 plus `PD-49` (the cancel-inbound remainder adjustment, `[BR-57]`), adopted by the 2026-08-03 remediation.
 - **Wireframe defects named: WF-1, WF-3, WF-13, WF-VO-1**; 15 demo limitations declared (§2.3 L-1…L-15), of which L-2/L-8/L-9/L-10/L-11/L-12/L-13/L-14/L-15 are candidates for the `_wireframe-fixes` backlog.

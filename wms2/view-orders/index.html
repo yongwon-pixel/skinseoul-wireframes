@@ -260,7 +260,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <div class="wf-bar">
   <h1>WMS 2.0 · View Orders Wireframe</h1>
-  <span class="hint">v20 — Switch states with the tabs · Purple numbers = change annotations</span>
+  <span class="hint">v21 — Switch states with the tabs · Purple numbers = change annotations</span>
   <div class="wf-tabs">
     <button class="wf-tab on" data-state="s0">0 · Waiting (Before Scan)</button>
     <button class="wf-tab" data-state="s1">1 · Scan Result (Last Item Remaining)</button>
@@ -835,7 +835,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>State 2 — Changes: All Inbounded</h3>
   <ol>
     <li><span class="n">1</span><span>Outbound button activates (green) once every item is inbounded — label is "Outbound" <span class="ref">— C Behavior</span></span></li>
-    <li><span class="n">2</span><span>Clicking Cancel Inbound → restock popup (confirm via button) <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">2</span><span>Clicking Cancel Inbound → restock popup (qty · optional restock location · memo, confirm via button) <span class="ref">— C Behavior</span></span></li>
   </ol>
 </div>
 </section>
@@ -1451,8 +1451,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <b style="color:var(--ink)">2. Restock Qty</b>
         <input value="2" id="restockQty"> <span class="mut">Default = qty that was inbounded (editable) · disabled when "No" is selected</span>
       </div>
+      <div class="qrow">
+        <b style="color:var(--ink)">3. Location (Optional)</b>
+        <input value="B-01-4" id="restockLoc"> <span class="mut">Default = the SKU's registered location (editable · updates the SKU's location) · required if the SKU has none · disabled when "No" is selected</span>
+      </div>
       <div style="margin-top:14px">
-        <b style="color:var(--ink)">3. Memo (Optional)</b>
+        <b style="color:var(--ink)">4. Memo (Optional)</b>
         <textarea class="mtextarea" placeholder="Cancellation reason or notes — also recorded in the order's Comments history"></textarea>
       </div>
       <div class="note">The SKU's <b>Reserved Quantity → Available</b> updates automatically.<br>Use cases: mid-order cancellation, or a JIT order placed by mistake when warehouse stock exists.</div>
@@ -1755,11 +1759,14 @@ document.getElementById('annoToggle').addEventListener('click',function(){
 
 /* Cancel Inbound modal — selecting "No" disables restock qty + clears the value */
 const rq=document.getElementById('restockQty');
+const rl=document.getElementById('restockLoc');
 document.querySelectorAll('input[name="restock"]').forEach(r=>{
   r.addEventListener('change',()=>{
     const no=document.querySelector('input[name="restock"][value="no"]').checked;
-    if(no){rq.dataset.prev=rq.value;rq.value='';rq.disabled=true;}
-    else{rq.disabled=false;rq.value=rq.dataset.prev||'2';}
+    if(no){rq.dataset.prev=rq.value;rq.value='';rq.disabled=true;
+           rl.dataset.prev=rl.value;rl.value='';rl.disabled=true;}
+    else{rq.disabled=false;rq.value=rq.dataset.prev||'2';
+         rl.disabled=false;rl.value=rl.dataset.prev||'B-01-4';}
   });
 });
 
