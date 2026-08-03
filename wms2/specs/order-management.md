@@ -1,6 +1,6 @@
 # Order Management Dashboard — Screen Specification
 
-> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
 Slug: `order-management` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-management/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-management/

@@ -1,6 +1,6 @@
 # Inbound Request — Screen Specification
 
-> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
 Slug: `inbound-request` · Wireframe SST: `wms2/inbound-request/index.html` (965 lines, v1) · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/
 Spec version 1.3 · 2026-08-03 (feature pass over v1.2 — owner resolved `PD-79`: post-registration **Edit** and **Cancel**; wireframe defects **WF-2** / **WF-11** applied to the SST in the same commit) · Companion: `_global-rules.md` (cited as `[G-n]`), `_plans/_provisional-decisions.md` (cited as `[PD-n · OWNER-PENDING]`), `_plans/_wireframe-fixes.md` (cited as `WF-n`), `_plans/_review.md` (adjudications `C-n`, conventions §3).

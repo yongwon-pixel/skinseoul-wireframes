@@ -1,7 +1,7 @@
 # Provisional Decisions Register — WMS 2.0 Specs
 
 > **STATUS: 12 decided 2026-08-03 (PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79) · rest provisional.**
-> Every decision below was made by the spec team so P3-3 could write unambiguous specs while the owner was unavailable. Entries carrying an **OWNER-DECIDED 2026-08-03** line below are now owner-approved; every other entry remains provisional. Provisional entries are written into the specs as normal behavior tagged `[PD-n · OWNER-PENDING]`; reversing one means editing the tagged sentences on the listed pages and nothing else. For the decided ten, any remaining inline `OWNER-PENDING` tag is superseded by this register.
+> Every decision below was made by the spec team so P3-3 could write unambiguous specs while the owner was unavailable. Entries carrying an **OWNER-DECIDED 2026-08-03** line below are now owner-approved; every other entry remains provisional. Provisional entries are written into the specs as normal behavior tagged `[PD-n · OWNER-PENDING]`; reversing one means editing the tagged sentences on the listed pages and nothing else. For decided entries, any remaining inline `OWNER-PENDING` tag is superseded by this register.
 > Entries marked **NO-DEFAULT** were NOT decided — they appear in the specs' §9 Open Questions only, with no behavior specified.
 
 Source: all 16 P3-1 plans (OWNER open questions, deduplicated). Supervisor rulings in `_supervisor-state.md` are applied as-is (PD-9 carrier, PD-10/PD-11-class "proposal" items adopted provisionally). Format: **question · provisional decision · rationale · affected pages**.
@@ -46,6 +46,7 @@ Pages: TM (✕), CL (Cancel Closing, delete row), OD (M3), INV (M4).
 Provisional: **Server revalidates at confirm; on mismatch it rejects with a red toast and refreshes the affected view. No partial writes.**
 Rationale: identical shape independently proposed by 5 plans.
 Pages: VO, OD, RTO, INV, TM, CL.
+**OWNER-DECIDED 2026-08-03**: Provisional confirmed — server revalidates at confirm; mismatch → red-toast reject + view refresh; no partial writes. This closes the last item from the owner decision round; PD-1~8 are now all decided.
 
 **[PD-7] Two operators edit the same entity concurrently.**
 Provisional: **Optimistic version check → 409 → reload the row + non-green toast. Counting flows (State 6 receive, closing scans) merge server-side instead.**

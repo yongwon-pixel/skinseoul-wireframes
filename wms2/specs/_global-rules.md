@@ -2,7 +2,7 @@
 
 Version 1.1 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
 
-Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling.
+Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed; remaining `[PD-n]` tags are register-adopted provisional defaults.
 
 ---
 

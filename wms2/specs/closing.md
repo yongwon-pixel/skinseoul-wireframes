@@ -1,6 +1,6 @@
 # Closing — Screen Specification (WMS 2.0)
 
-> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 remains provisional. (PD-71 and PD-74 are already folded into this spec's body — v1.3.)
+> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. (PD-71 and PD-74 are already folded into this spec's body — v1.3.)
 
 Page slug: `closing` · Spec version 1.3 · 2026-08-03 (v1.0 authored · v1.1 audited and completed · v1.2 remediated against the M1 coverage audit, the M2 adversarial QA run, and the M3a/M3b cross-page findings · v1.3 **Amend Closing** added per the owner's PD-74 decision, and the owner-approved wireframe defect batch `[WF-4]`/`[WF-5]`/`[WF-7]`/`[WF-8]`/`[WF-12]` applied to the wireframe)
 Wireframe (SST): `wms2/closing/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/closing/
