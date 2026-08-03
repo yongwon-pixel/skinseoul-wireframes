@@ -1,8 +1,10 @@
 # RV — Independent re-verification of the `closing.md` remediation
 
-Re-verifier role: independent — did not author the spec, the m1/m2/m3 findings, or the remediation. Date: 2026-08-03.
-Spec under test: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md` (v1.2, 2,388 lines; HEAD baseline v1.1 = 2,219 lines, diff +303/−67 confined to the spec — `wms2/closing/index.html` has **zero diff** against HEAD, confirming no wireframe edits were smuggled in).
-Every count below was re-derived by my own extraction scripts; every QA verdict comes from my own Playwright runner (`scratchpad/rv2_qa_closing.py`), written from the current spec text only.
+Re-verifier role: independent — did not author the spec, the m1/m2/m3 findings, or the remediation. Date: 2026-08-03 (second pass; a prior rv-closing.md existed in this directory and was **not trusted** — every count, quote and QA verdict below was re-derived from scratch with fresh extraction scripts and a fresh Playwright runner. The prior file's conclusions were independently reproduced, which corroborates them, but the evidence here is my own).
+
+- Spec under test: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md` (v1.2, 2,388 lines)
+- Wireframe: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/closing/index.html` (909 lines)
+- My runner: `scratchpad/rv3_qa_closing.py` · results: `scratchpad/rv3_qa_results.json` (Playwright · headless chromium · 1440×900 · R1/R2/R2b/R3/R4/R5/R6b/R9 implemented from v1.2 §8.0 as written)
 
 ---
 
@@ -10,93 +12,95 @@ Every count below was re-derived by my own extraction scripts; every QA verdict 
 
 | Claim (spec v1.2 / remediator) | My extraction | Verdict |
 |---|---|---|
-| 177 QA scenarios | 177 `**QA-` headers | **TRUE** |
-| 68 `[WF]` / 109 `[ADMIN]` | 68 / 109, 0 double-tagged, 0 untagged | **TRUE** |
+| 177 QA scenarios | 177 `**QA-` header lines | **TRUE** |
+| 68 `[WF]` / 109 `[ADMIN]`, 0 untagged | 68 / 109 / 0 | **TRUE** |
 | 71 negative (40.1%) | 71 → 40.11% | **TRUE** |
-| 0 duplicate IDs, 0 numbering gaps | 177 unique IDs; every block continuous 1..max | **TRUE** |
-| §8.16 per-block rows sum to totals | all 15 rows match my per-block (WF, ADMIN, Total, Neg) tallies exactly; columns sum 68/109/177/71 | **TRUE** |
-| E-1…E-78 continuous, all mapped | 78 ids, no holes; §7 defines all 78 as table rows; §8.18 two-column table maps all 78 | **TRUE** |
-| BR-1…BR-38 continuous | 38 ids, no holes (BR-38 new) | **TRUE** |
-| DC-1…DC-25, each with ≥1 asserting scenario | 25 ids; every §8.17 row names ≥1 QA id | **TRUE** |
-| §8.18 cells name scenario IDs only | 0 `§`/`DQ-` pointers inside mapping cells (both appear once, in the preamble prose stating the rule) | **TRUE** |
-| All cited QA ids exist | 0 ghost citations (every `QA-*-n` in the file resolves to a defined header) | **TRUE** |
-| 22 legend units + 4 furniture keys | 22 `### 3.x [L-…]` anchors; DOM re-count 19 `.legend ol > li` + 2 modal dots + 1 `#s1 .legend > p` = 22 (QA-CHROME-04 re-run) | **TRUE** |
-| 17 distinct `· OWNER-PENDING` PDs, PD-71/74 never tagged | 17 distinct {1–8, 68–70, 72, 73, 75–78}; 71 and 74 absent, §9.2-only | **TRUE** |
+| 0 duplicate IDs, 0 numbering gaps | 177 unique; all 15 blocks continuous 1..max (S0 11, SCAN 17, VERDICT 16, UNKNOWN 7, DUP 10, VOICE 9, COUNT 13, TARGET 14, M1 14, DEL 10, CONFIRM 16, HIST 11, HUB 9, PERSIST 14, CHROME 6) | **TRUE** |
+| §8.16 per-block rows sum to totals | all 15 rows match my per-block (WF, ADMIN, Total, Negative) tallies cell-for-cell; columns sum 68/109/177/71 | **TRUE** |
+| E-1…E-78 continuous, all mapped in §8.18 | 78 ids, no holes; §8.18's two-column table maps all 78; every mapping cell names only scenario IDs (0 `§`/`DQ-` pointers inside cells), every cited ID resolves to a defined header | **TRUE** |
+| BR-1…BR-38 continuous | 38 ids, no holes (BR-38 new, l.798) | **TRUE** |
+| DC-1…DC-25, each with ≥1 asserting scenario | 25 §8.17 rows, every row cites ≥1 existing scenario (shorthand `QA-SCAN-03, 05, …` expands to existing IDs) | **TRUE** |
+| 22 legend units + 4 furniture keys | §2.1 declares 22 = 19 `.legend ol > li` + 2 modal dots + 1 `#s1 .legend > p`; my DOM re-count in the QA-CHROME-04 run returns exactly 19/2/1 | **TRUE** |
+| 17 distinct `· OWNER-PENDING` tags; PD-71/74 never tagged | 17 distinct {1–8, 68–70, 72, 73, 75–78}; PD-71/PD-74 carry the tag 0 times and live only in §9.2 | **TRUE** |
+
+**Counts verdict: every count the remediator and the spec assert about the file reproduces exactly.**
 
 ---
 
 ## 2. Resolution table
 
-### m1-closing.md (MAJOR + minors)
+### m1-closing.md (1 MAJOR, 0 BLOCKER; minors included for completeness)
 
-| Defect | Status | Evidence (quoted from v1.2) |
+| Defect | Status | Evidence (current file) |
 |---|---|---|
-| **M1-1 MAJOR** — §8.18 claim false for E-37/52/60/66/74/77 (+ E-51 partial) | **RESOLVED** | 7 new `[ADMIN]` scenarios exist with on-point assertions: QA-CONFIRM-16 (l.1896) "When the client retries with the **same idempotency key** / Then exactly **one** … (**DC-21**) … (**DC-23**) … (**DC-24**)"; QA-VERDICT-15 (l.1380) "`Items` cell renders exactly `0`"; QA-COUNT-13 (l.1593) "**400** scan rows … the append never steals focus"; QA-VERDICT-16 (l.1386) "`MKT-` prefix … no prefix-based exclusion"; QA-HIST-11 (l.1960) "opens in a **new browsing context** and the closing tab is **not** navigated"; QA-SCAN-17 (l.1299) "submit is **deferred to `compositionend`** … no partial string"; QA-TARGET-14 (l.1673) covers E-51's "processed normally" clause. §8.18 rows remapped to them; all 78 E-ids covered; block totals/grand total/negative share updated consistently (verified column-wise). |
-| M1-2 minor — §8.0 traceability pointers off by one | **RESOLVED** | §8.0: "§8.17 proves every event in §5.1 … and §8.18 does the same for every `[E-n]`." |
-| M1-3 minor — U-a under-scopes the `79` | **RESOLVED** | §2.3 U-a: "**The same `79` also appears in the Confirm Closing button label** (`index.html:397`) … demo data, not a worked example"; §3.9 (l.429): "> **Not a worked example.** That `79` is the same bad demo datum … formula in §3.5 gives `remaining = 81`". |
-| M1-4 minor — malformed `[L-S4-1..3]` | **RESOLVED** (note) | §8.11 heading and §8.16 row now enumerate `[L-S4-1]` `[L-S4-2]` `[L-S4-3]`. Sole surviving occurrence is the §11 changelog row (l.2385) quoting the old form in backticks *as the thing that was fixed* — historical reference, but a naive mechanical key-checker will still flag it. |
-| M1-5 minor — PD citations in §8 lack `· OWNER-PENDING` | **RESOLVED** | Fixed via the audit's option 2: new **R10** — "A `[PD-n]` in a QA heading points at the behavior's defining sentence in §3 or §7, which carries the full `[PD-n · OWNER-PENDING]` tag … `[PD-71]` and `[PD-74]` are NO-DEFAULT (§9.2) and are never asserted". |
-| M1-6 minor — §1.3 restates [G-1] body | **RESOLVED** | §1.3 now: "Hence the three [G-1] invariants, which this page inherits unchanged (deltas in §3.2)." (The pre-existing "page-local expression of [G-1]" at l.514 is unchanged from v1.1 and was not flagged by m1 — not a regression.) |
-| M1-7 minor — §8.16 vs §8.18 key-list disagreement (E-35 / E-74) | **RESOLVED** | §8.16 QA-PERSIST row: "E-30…34/36/38/41/53/59/62/71" (E-35 excluded, with the rationale spelled out below the table); QA-HIST row now carries E-74. |
+| **M1-1 MAJOR** — §8.18 claim "every `[E-n]` has an asserting scenario" false for E-37/52/60/66/74/77 + E-51 partial | **RESOLVED** | Seven new `[ADMIN]` scenarios exist with on-point assertions: QA-CONFIRM-16 (l.1896) "When the client retries with the **same idempotency key** · Then exactly **one** `closing.confirmed` (**DC-21**), exactly **one** … (**DC-23**) and exactly **one** … (**DC-24**)"; QA-VERDICT-15 (l.1380) "`Items` cell renders exactly `0` (not `–`, not blank)"; QA-COUNT-13 (l.1593) "**400** scan rows … the append never steals focus … if paginated, the **latest** page"; QA-VERDICT-16 (l.1386) "`MKT-` prefix … no prefix-based exclusion"; QA-HIST-11 (l.1960) "opens in a **new browsing context** and the closing tab is **not** navigated"; QA-SCAN-17 (l.1299) "submit is **deferred to `compositionend`** … no partial string … no **DC-7** for any partial prefix"; QA-TARGET-14 (l.1673) "scan … processed normally … counters recompute against the **saved** target `84`" (E-51's missing clauses). §8.18 remaps those rows to the new IDs and its preamble names each repair; block totals, grand total (168→177) and negative share (40.5%→40.1%) updated consistently (§1 above). |
+| M1-2 minor — §8.0 pointers off by one | **RESOLVED** | §8.0 "Reading a scenario": "§8.17 proves every event in §5.1 has at least one asserting scenario and §8.18 does the same for every `[E-n]`." |
+| M1-3 minor — U-a under-scopes the `79` | **RESOLVED** | §2.3 U-a (l.110): "**The same `79` also appears in the Confirm Closing button label** (`index.html:397` …) … **demo data, not a worked example** of the label formula"; §3.9 (l.429): "> **Not a worked example.** … the formula in §3.5 gives `remaining = 81` … `remaining` is **never** `target − ok − warnings`". |
+| M1-4 minor — malformed `[L-S4-1..3]` | **RESOLVED** (note) | §8.11 heading (l.1821) and the §8.16 QA-CONFIRM row now enumerate `[L-S4-1]` `[L-S4-2]` `[L-S4-3]`. Sole survival of the composite is the §11 changelog row (l.2385) quoting it in backticks *as the retired form* — historical, but a naive key-checker must whitelist §11. |
+| M1-5 minor — PD citations in §8 lack `· OWNER-PENDING` | **RESOLVED** | New **R10** (l.1140), the audit's option 2: "A `[PD-n]` in a QA heading points at the behavior's defining sentence in §3 or §7, which carries the full tag … **`[PD-71]` and `[PD-74]` are NO-DEFAULT (§9.2) and are never asserted by any scenario**." |
+| M1-6 minor — §1.3 restates the [G-1] body | **RESOLVED** | §1.3 now: "Hence the three [G-1] invariants, which this page inherits unchanged (deltas in §3.2)." |
+| M1-7 minor — §8.16 vs §8.18 disagree on E-35 / E-74 ownership | **RESOLVED** | §8.16 QA-PERSIST row: "E-30…34/36/38/41/53/59/62/71" (E-35 excluded; rationale sentence under the table: "`E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range"); QA-HIST row now carries E-74. |
 
-### m2-closing.md (3 FAILs + ambiguous clauses F2–F9)
+### m2-closing.md (3 FAIL; 0 whole-scenario AMBIGUOUS; 0 UNRUNNABLE; F2–F9 clause fixes)
 
 | Item | Status | Evidence |
 |---|---|---|
-| **F1 / QA-DEL-01 FAIL** | **RESOLVED** | Now: "its `header` R2-normalized text **starts with** "Delete Scan Row" (the header's `✕` close button is nested inside it — R2b; same shape as QA-M1-02)". Re-run: **PASS**. |
-| **F1 / QA-HUB-01 FAIL ×2** | **RESOLVED** | Both clauses now `starts with` with R2b callouts ("💬 Comments" / "Comments where I'm tagged"); v1.2 adds the honest tiering clause "these two pane strings are stale demo copy `[WF-15]`; the canonical `[G-7]` strings are asserted in QA-HUB-09". Re-run: **PASS**. |
-| **F1 / QA-HUB-02 FAIL** | **RESOLVED** | "`.paneheader` R2-normalized text **starts with** "Comments I saved"". Re-run: **PASS**. |
-| F2 — assertion verbs unbound | **RESOLVED** | New **R6b** fixes `reads`/`reads exactly`/`is exactly` = strict equality, `starts with`, `contains`, `yields N`, plus "Never relax `reads` to *contains*". |
-| F3 — nested controls beyond `.dot` | **RESOLVED** | New **R2b** table lists all four polluters incl. the latent `span.user`/`.avatar` ("YYongwon Ryu") and sanctions an extended strip-helper. |
-| F4 — QA-CHROME-04 "23" unverifiable | **RESOLVED** | Scenario now gives the three DOM counts (19+2+1=22), asserts `.wf-tab` = 10 and `[data-modal]` = 3, and derives 23 only as the named trap. Re-run: **PASS** (all counts as stated). |
-| F5 — state activation undefined | **RESOLVED** | New **R9**: "to activate a state, click its `.wf-tab[data-state="sX"]`; to open a modal … `.wf-tab[data-modal="m-…"]`". |
-| F6 — `p.sub` not unique | **RESOLVED** | QA-CHROME-02: "the **first** `p.sub` — address it as `#sX .pagepad > p.sub:first-of-type`". Re-run: **PASS** across all 7 states. |
-| F7 — S0-01 "card heading" selector-less | **RESOLVED** | Exact filter expression given, with match-count-of-1 requirement. Re-run: **PASS**. |
-| F8 — HIST-03 "green highlight" unassertable | **RESOLVED** | "inline `style` attribute is exactly `background:var(--green-soft)`, and its computed `background-color` differs from every other data row's". Re-run: **PASS**. |
-| F9 — §8.18 non-scenario pointers | **RESOLVED** | Absorbed by M1-1; mapping cells are scenario-only (verified mechanically). |
+| **QA-DEL-01 FAIL** ("Delete Scan Row" vs `"Delete Scan Row✕"`) | **RESOLVED** | Spec now: "its `header` R2-normalized text **starts with** "Delete Scan Row" (the header's `✕` close button is nested inside it — R2b; same shape as QA-M1-02)". My re-run: **PASS** (header normalizes to `"Delete Scan Row✕"`, starts-with holds; `#scandelInfo` byte-exact `"#3 · YT2618100710184356"`). |
+| **QA-HUB-01 FAIL ×2** (button `"💬 Comments2"`, pane header + `Mark all read`) | **RESOLVED** | Both clauses now `starts with`, each with the R2b callout naming the nested `.badge-n` / `<small>`; plus the new tiering clause "these two pane strings are stale demo copy `[WF-15]`; the canonical `[G-7]` strings are asserted in QA-HUB-09". My re-run: **PASS** (badge `"2"`, 3 entity labels, first two `unread` all hold). |
+| **QA-HUB-02 FAIL** (saved pane header) | **RESOLVED** | "`.paneheader` R2-normalized text **starts with** "Comments I saved"". My re-run: **PASS** (tab `on`, saved visible, mentions hidden, exactly one entry `"Order 413498"`). |
+| F2 — `reads`/`reads exactly` verb ambiguity | **RESOLVED** | New **R6b** (l.1127) binds every verb: strict equality for `reads`/`reads exactly`/`is exactly`/byte-exact, `startsWith`, substring for `contains`, `yields N` = count; "Never relax `reads` to *contains* … a mismatch is a FAIL to be reported, not normalized away." |
+| F3 — nested controls beyond `.dot` | **RESOLVED** | New **R2b** (l.1100) tables all four polluters incl. the latent `span.user`/`.avatar` (`"YYongwon Ryu"`) and sanctions the extended strip-helper as equivalent. |
+| F4 — QA-CHROME-04's "23" unverifiable | **RESOLVED** | Scenario now derives 22 from three named DOM counts (19+2+1), asserts `.wf-tab` = 10 and `.wf-tab[data-modal]` = 3, and reconstructs 23 only as the named trap (19+1+3). My re-run: **PASS** — every count assertable as written. |
+| F5 — state activation undefined | **RESOLVED** | New **R9** (l.1138): click `.wf-tab[data-state="sX"]` / `.wf-tab[data-modal="m-…"]`; `[ADMIN]` equivalent stated. |
+| F6 — `p.sub` not unique | **RESOLVED** | QA-CHROME-02: "the **first** `p.sub` — address it as `#sX .pagepad > p.sub:first-of-type`" + the reason (second `p.sub` = "Scan list …" caption). My re-run: **PASS** in all 7 states, and the second `p.sub` exists in s1/s2/s2b/s3 exactly as the spec states. |
+| F7 — QA-S0-01 "card heading" selector-less | **RESOLVED** | Exact filter expression with a match-count-of-1 requirement now in the scenario. My re-run: **PASS** (count === 1). |
+| F8 — QA-HIST-03 "green highlight" unassertable | **RESOLVED** | "its inline `style` attribute is exactly `background:var(--green-soft)`, and its computed `background-color` differs from every other data row's … (the other four carry no inline background)". My re-run: **PASS**. |
+| F9 — §8.18 non-scenario pointers (E-60/74/77 rows) | **RESOLVED** | Absorbed by M1-1; mechanically verified — 0 `§`/`DQ-` tokens inside mapping cells. |
 
-### m3a / m3b (spot-checked against remediator claims)
+### m3a / m3b items the remediator claims (spot-checked)
 
 | Item | Status | Evidence |
 |---|---|---|
-| D2 — closing bypasses the inbound-completeness outbound gate | **RESOLVED** | New **BR-38** (l.798) "every line is `INBOUNDED`… in addition to the Zero Packing attestation"; §3.21 predicate list (l.675 `AND not order.cancelled` block); E-78 row (l.1037); QA-M1-14 asserts the disabled button + reason string + no DC-13/14/11. |
-| D3 — `Cancelled` treated as a status | **RESOLVED** | §3.6 (l.318): "**`Cancelled` is not an order status.** The vocabulary is exactly the 8 WooCommerce statuses … a separate flag"; verdict matrix renders underlying status + `Cancelled` marker; QA-VERDICT-07 asserts "never the literal `cancelled`" in DC-7; the PD-76 register-title mismatch is explicitly flagged for the owner rather than silently patched. |
-| D7 — hub copy divergence | **RESOLVED (closing side)** | §3.8 (l.399–401) canonical `[G-7]` strings vs wireframe strings in a two-column table; QA-HUB-01/02 tier the wireframe strings `[WF]`, QA-HUB-09 asserts the canonical `[ADMIN]` strings. Corpus-wide string unification remains open in `_wireframe-fixes.md` (correctly marked "conditional and corpus-wide — do not edit this page alone"). |
-| D11 — `[G-3a]`/PD-2 scope | **NOT RESOLVED — out of file scope (accepted)** | Requires amending `_global-rules.md`/PD register. closing.md already carries the by-class application + owner tension + reversal impact (§3.21 step 5, l.688; §6.6 table l.958). Nothing further is fixable from this file. |
-| D13 (`[GD-n]` declared), D16 (deep link `../order-detail/#{order_id}`), D19 (status value↔label register note l.372), D20 (`[G-3a]` citation form l.134) | **RESOLVED** | Each verified present at the quoted location. |
-| M3b §2.2 — silent-N/A rows | **RESOLVED** | §9.1 carries the 3 new rows (location filter `[G-14]`, audit-mode-only visibility, JIT residual stock) plus the closing sentence naming M3b §2.2 as the reason. |
-| `[WF-15]` registration | **RESOLVED** | Present in `_wireframe-fixes.md` §D (l.140, closing entry) and in closing.md §2.3 (l.106). |
+| D2 — closing bypassed the inbound-completeness outbound gate | **RESOLVED** | **BR-38** (l.798): "enabled only when the order has ≥1 line, **every line is `INBOUNDED`**, the status is `processing`, and the order is not cancelled — in addition to the Zero Packing attestation"; §3.21 step 2 carries the gate + reason string; E-78 row (l.1037); QA-M1-14 (l.1757) asserts disabled button, reason, "no **DC-13**, no **DC-14**, no **DC-11**", and names VO `BR-9` / OD L-9 parity. |
+| D3 — `Cancelled` treated as a ninth status | **RESOLVED** | §3.6: "**`Cancelled` is not an order status.** The vocabulary is exactly the 8 WooCommerce statuses … cancellation is a separate flag"; verdict-matrix row renders underlying status + `Cancelled` marker; BR-20 restated in flag terms; QA-VERDICT-07 (l.1344) asserts DC-7 `order_status_at_scan` is "never the literal `cancelled`"; the PD-76 register-title mismatch is explicitly flagged for the owner, not silently patched. |
+| D7 — Comments-hub copy divergence | **RESOLVED (closing side)** | §3.8 canonical-vs-wireframe two-column string table with `[WF]`/`[ADMIN]` tiering; QA-HUB-01/02 assert wireframe strings, QA-HUB-09 (l.2020) asserts canonical strings; `[WF-15]` registered in §2.3 (l.106) and in `_wireframe-fixes.md` §D (l.140). |
+| D11 — `[G-3a]`/PD-2 scope conflict | **NOT RESOLVED — out of file scope (accepted)** | Fixing it requires `_global-rules.md`/PD-register edits. closing.md already carries the by-class application, the owner tension spelled out, and the reversal impact (§3.21 step 5, §6.6) — nothing further is fixable from this file, matching the remediator's claim. |
+| D13 / D16 / D19 / D20 | **RESOLVED** | D13: §3.0 (l.133) declares `[GD-n]` resolvable via `_plans/_review.md` §4 with rule text carried inline. D16: §6.3 + QA-HIST-11 use the directory form `../order-detail/#{order_id}`, "never `../order-detail/index.html#…`". D19: §3.7 (l.359–370) value↔label mapping stated once, values in `DC-*` payloads. D20: §3.0 (l.134) fixes the `[G-3a]`/`[G-3b]` citation form. |
+| M3b §2.2 — silent-N/A rows | **RESOLVED** | §9.1 carries the 3 new rows (line-based location filter `[G-14]` · audit-mode-only visibility · JIT residual stock) plus the closing sentence naming M3b §2.2 as the trigger. |
+
+**Tally: 1 MAJOR resolved · 3 M2 FAILs resolved · 8 clause/rule fixes (F2–F9) resolved · 6 m1 minors resolved · 7 m3a/m3b items resolved · 1 accepted out-of-scope (D11) · 0 partial · 0 unresolved-in-scope · 0 regressed.**
 
 ---
 
-## 3. QA re-run (Playwright, chromium headless 1440×900)
+## 3. QA re-run (my own runner, written from v1.2 §8 only)
 
-Runner: `/private/tmp/claude-501/-Users-yongwon-yongwon-sync/635405b8-dea2-4665-89c5-efd98bf60282/scratchpad/rv2_qa_closing.py` · Results JSON: `rv2_qa_results.json` (same dir).
-Target: `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/closing/index.html`.
-18 `[WF]` scenarios, prioritising every prior FAIL and every prior ambiguous clause. R2/R2b/R4/R5/R6b/R9 implemented as written in v1.2 §8.0.
+17 `[WF]` scenarios — every prior FAIL, every prior ambiguous-clause scenario, plus a 10-scenario regression sample. Runner: `scratchpad/rv3_qa_closing.py`.
 
 | Scenario | Prior (m2) | RV verdict |
 |---|---|---|
-| QA-DEL-01 | **FAIL** | **PASS** (header `starts with` holds; `#scandelInfo` byte-exact) |
-| QA-HUB-01 | **FAIL** (2 clauses) | **PASS** (both `starts with` clauses hold; badge, 3 labels, unread flags hold) |
+| QA-DEL-01 | **FAIL** | **PASS** |
+| QA-HUB-01 | **FAIL** (2 clauses) | **PASS** |
 | QA-HUB-02 | **FAIL** | **PASS** |
-| QA-CHROME-04 | PASS ⚠ (unassertable clause) | **PASS** — every count assertable as written (2 dup tabs, 19+2+1=22, `.wf-tab`=10, `[data-modal]`=3) |
-| QA-CHROME-02 | PASS ⚠ | **PASS** — `p.sub:first-of-type` unique in all 7 states |
-| QA-S0-01 | PASS ⚠ | **PASS** — heading filter matches exactly 1 element |
-| QA-HIST-03 | PASS ⚠ | **PASS** — inline style token byte-exact; computed bg differs from all 4 other rows |
-| QA-S0-02 / QA-S0-03 / QA-SCAN-01 / QA-VERDICT-01 / QA-VERDICT-02 / QA-COUNT-01 / QA-CONFIRM-01 / QA-M1-02 / QA-HUB-03 / QA-VOICE-01 / QA-TARGET-04 | PASS | **PASS** (regression sample — all held, incl. byte-exact strings, `en-US` utterances ×3 states, star toggle, cancel-to-s0) |
+| QA-CHROME-04 | PASS ⚠ | **PASS** — all counts assertable as written (2/19/2/1/10/3) |
+| QA-CHROME-02 | PASS ⚠ | **PASS** — `:first-of-type` unique in all 7 states |
+| QA-S0-01 | PASS ⚠ | **PASS** — heading filter matches exactly 1 |
+| QA-HIST-03 | PASS ⚠ | **PASS** — inline token byte-exact, computed bg unique |
+| QA-M1-02 · QA-COUNT-01 · QA-CONFIRM-01 · QA-SCAN-01 · QA-VERDICT-05 · QA-VOICE-01 (×3 states, `en-US`) · QA-HUB-03 · QA-TARGET-04 · QA-DEL-03 · QA-S0-02 | PASS | **PASS** (all byte-exact strings, raw-`textContent` R2-necessity check `"#6"`/`"Closing Verdict5"`, star toggle, cancel-to-s0, no-renumber delete all held) |
 
-**18 / 18 PASS · 0 FAIL · 0 AMBIGUOUS · 0 UNRUNNABLE.** No scenario required improvisation beyond the spec text; the two runner defects encountered during development (wrong column index, header row picked from the thead-less `logtbl`) were my own selector errors, corrected against the page, not spec gaps.
+**17 / 17 PASS · 0 FAIL · 0 AMBIGUOUS · 0 UNRUNNABLE.** One interim failure during development was my own selector bug (I read the history table's header `<tr>` as a data row — `.logtbl` has no `<thead>`); the spec's wording "the first **data** row" is unambiguous and the page carries `style="background:var(--green-soft)"` on the true first data row (`index.html`, `07-13 (today)` row), so this was runner error, not a spec or page defect.
 
 ---
 
 ## 4. Regression check
 
-- **Legend coverage:** intact — 22 anchors in §3, 22 DOM units re-counted, §8.16 unit table lists all 22 + `[L-F1]`…`[L-F4]`, and the new scenarios were added to the unit rows (e.g. `[L-S1-6]` now lists QA-HIST-11).
-- **No ID renumbering:** E-37/52/60/66/74/77/78 conditions in §7 match the m1-quoted conditions verbatim in meaning; E/BR/DC ranges continuous; QA blocks extend at the tail only (…-15/-16/-17 style), no reuse of existing numbers.
-- **No new global-rule restatements:** §1.3 fixed; remaining [G-1] mentions are citation-plus-delta form; l.514 phrasing pre-exists in v1.1 (verified via `git show HEAD`).
-- **Wireframe untouched:** `git diff` for `wms2/closing/index.html` is empty — the M2 FAILs were fixed in the spec, exactly as attributed.
-- **Notes (non-blocking):** (1) changelog l.2385 quotes the retired `[L-S4-1..3]` composite in backticks — historical reference; a naive key-existence checker must whitelist §11. (2) QA-HUB-01/02 now assert wireframe strings that are simultaneously declared stale (`[WF-15]`) — intentional two-tier design, but when the corpus-wide `[G-7]` string unification lands, these two `[WF]` scenarios and the wireframe must change in the same pass.
+- **Legend coverage intact:** §2.1 still declares 22 units with the same 19+2+1 recipe; DOM re-count matches; §8.16's unit table lists all 22 + `[L-F1]`…`[L-F4]` with ≥1 scenario each, and new scenarios were folded into the unit rows (e.g. `[L-S1-6]` gained QA-HIST-11, `[L-S1-8]` gained QA-CONFIRM-16).
+- **No ID renumbering:** E-1…78 / BR-1…38 / DC-1…25 all continuous; QA blocks extended at the tail only (…-14/-15/-16/-17); §7 preamble documents E-78 as the sole addition; sequence-number and gap explanations unchanged.
+- **No new global-rule restatements:** §1.3 fixed; §3.8's canonical-string table is *new page-corpus content* (the strings), not a restatement of the [G-7] body — `_global-rules.md` [G-7] defines hub behavior, not these strings.
+- **Wireframe untouched by the remediation:** `git status` clean; last commit touching `wms2/closing/index.html` (d09fe79, 02:03) predates the audits, while `closing.md` was committed at 09:51 — the M2 FAILs were fixed spec-side only, exactly as attributed.
+- **Notes (non-blocking):**
+  1. Changelog l.2385 quotes the retired `[L-S4-1..3]` composite in backticks — a mechanical key-checker must whitelist §11.
+  2. `_wireframe-fixes.md` (l.167–169) records a **number collision**: three concurrent passes each claimed a bare `WF-15`; closing's entry must always be keyed as "`[WF-15]` closing", never by the bare number.
+  3. The same file's l.169 **factually disputes** the "four-page majority" provenance for the unstar hint: `order-management` actually renders `Unstar to remove from list` (no "the"), corpus split 2/2/2/1 — so QA-HUB-09's canonical string `"Unstar to remove from the list"` rests on a disputed majority claim, and the six canonical hub strings still need publishing into `_global-rules.md` [G-7] before any wireframe edit. Cross-file coordination work; closing's `[WF]`/`[ADMIN]` tiering itself is sound.
 
 ---
 
@@ -104,4 +108,4 @@ Target: `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wm
 
 **READY-WITH-NOTES.**
 
-The single MAJOR (false §8.18 traceability claim) and all three M2 FAILs are genuinely fixed and empirically re-verified; every count the spec asserts about itself reproduces exactly; the QA corpus is now runnable clean (18/18 on the adversarially-chosen sample, including every previously failing or ambiguous scenario) with the verb/normalization/activation rules (R2b/R6b/R9/R10) closing the silent-divergence hazards m2 identified. The notes: (a) D11 (PD-2/[G-3a] scope) and the `[G-7]` canonical-string unification are **cross-file** work that this spec correctly stages but cannot complete — they must land in `_global-rules.md`/`_provisional-decisions.md` and a corpus-wide pass respectively; (b) the two cosmetic items in §4 above. Nothing in this file blocks handing `closing.md` v1.2 to developers or to a QA agent.
+The single MAJOR (false §8.18 traceability claim) and all three M2 FAILs are genuinely fixed and empirically re-verified with an independently written runner; every count the spec asserts about itself reproduces exactly; the QA corpus runs clean (17/17 on the adversarially chosen sample, including every previously failing or ambiguous scenario) under the new R2b/R6b/R9/R10 rules, which close m2's silent-divergence hazards. The notes: (a) D11 and the [G-7] canonical-string unification (including the disputed unstar-hint majority) are **cross-file** work this spec correctly stages but cannot complete — they must land in `_global-rules.md` / `_provisional-decisions.md` and a corpus-wide pass; (b) two cosmetic tooling caveats (§4 notes 1–2). Nothing in this file blocks handing `closing.md` v1.2 to developers or a QA agent.

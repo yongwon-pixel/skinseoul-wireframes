@@ -1,94 +1,89 @@
 # RV — Re-verification of the Remediation: `tracking-missing.md` (spec v1.2)
 
-**Method:** independent re-verification. The auditor neither wrote the spec nor performed the remediation. Every count was re-derived by scripted extraction over the edited spec; every defect fix was checked against the current file text; QA scenarios were re-executed with a freshly written Playwright suite (`file://…/wms2/tracking-missing/index.html`, Chromium 1280×800, not the m2 script).
-**Date:** 2026-08-03. **Wireframe integrity:** `wms2/tracking-missing/index.html` is unchanged since commit `8beb374` (predates all three verifications) — only the spec was edited, as required.
+**Method:** independent re-verification. The auditor neither wrote the spec, nor performed the remediation, nor reused the m2 runner. Counts were re-derived with fresh scripted extraction over the edited spec; every m1 MAJOR/BLOCKER and every m2 FAIL/AMBIGUOUS/UNRUNNABLE was checked against the current file text; 20 `[WF]` QA scenarios were re-executed with a freshly written Playwright suite against `file:///…/wms2/tracking-missing/index.html` (headless Chromium, 1280×800).
+**Date:** 2026-08-03. **Scripts:** scratchpad `rv_tm_counts.py` / `rv_tm_counts2.py` / `rv_tm_qa.py` (+ 2 targeted re-runs). Wireframe untouched — only the spec was edited, as the remediation claims.
 
 ---
 
-## 1. Count re-derivation (scripted, not trusted)
+## 1. Count re-derivation (Q1)
 
-| Claim (spec §8.0 / remediator) | Re-derived | Match |
+| Claim (spec §8.0 / remediator) | Independently re-derived | Match |
 |---|---|---|
-| 168 scenarios | 168 | ✓ |
-| 66 `[WF]` / 102 `[ADMIN]` | 66 / 102 | ✓ |
-| 61 negatives = 36.3 % | 61 = 36.3 % | ✓ |
-| Per-block totals LOAD 12 · ROW 16 · SUS 13 · M1 13 · MATCH 10 · XDEL 12 · CMT 15 · FURN 10 · NEG 15 · VAL 12 · EMPTY 6 · XPG 9 · DATA 13 · A11Y 5 · WFQ 7 | identical, sum 168 | ✓ |
-| Per-block `[WF]` 11·9·5·9·5·3·7·5·1·0·2·0·0·2·7 | identical, sum 66 | ✓ |
-| Per-block neg 4·4·4·3·0·3·3·3·15·10·2·4·3·0·3 | identical, sum 61 | ✓ |
-| Duplicate QA IDs: zero | zero | ✓ |
-| QA-VAL-10 the only BLOCKED, inside the 168/102 | confirmed | ✓ |
-| DC-1…28, BR-1…44, E-1…72, N-1…12 — no gaps, no renumbering | all four ranges continuous, max = declared max, nothing beyond | ✓ |
-| §8.18 cites no non-existent QA ID | 75 distinct QA IDs cited, phantom = 0 | ✓ |
-| Every `[E-n]` except `[E-4]` referenced in §8 | only E-4 uncited in scenario bodies (declared exception) | ✓ (one token nit — RV-2) |
+| 168 scenarios | 168 definition lines (`**QA-… [WF\|ADMIN]**`) | YES |
+| 66 `[WF]` : 102 `[ADMIN]` | 66 : 102 | YES |
+| 61 negatives = 36.3 % (≥ 25 % floor) | 61 = 36.3 % | YES |
+| Per-block totals `12·16·13·13·10·12·15·10·15·12·6·9·13·5·7 = 168` | identical, block by block | YES |
+| Per-block `[WF]` `11·9·5·9·5·3·7·5·1·0·2·0·0·2·7 = 66` | identical | YES |
+| Per-block negatives `4·4·4·3·0·3·3·3·15·10·2·4·3·0·3 = 61` | identical | YES |
+| Zero duplicate QA IDs | zero | YES |
+| DC 28 · BR 44 · E 72 · N 12 — no gaps, unchanged | DC 1–28, BR 1–44, E 1–72 continuous; N 1–12 (N-2/N-11 defined unbracketed in the §5.2 table, all 12 present) | YES |
+| §8.18 cites no non-existent QA ID | phantom QA citations in §8.18 = 0; whole-document phantom = 0 | YES |
+| Every `[E-n]` except `[E-4]` carries ≥ 1 Then-clause | scenario bodies (§8.1–§8.15) cite 71 of 72; the only uncited is **E-4**, the declared exception | YES (one token nit → §4 note 1) |
 
-## 2. Resolution table
+The WF-count movement is exactly the remediation's arithmetic: 67 → 66 = −1 (QA-NEG-03 → `[ADMIN]`) −1 (QA-XPG-05 → `[ADMIN]`) +1 (QA-WFQ-07 new).
+
+## 2. Resolution table (Q2)
 
 ### m1 defects
 
-| ID | Sev | Verdict | Evidence (current file) |
+| ID | Sev | Verdict | Evidence (quoted from the current file) |
 |---|---|---|---|
-| D-1 | BLOCKER | **RESOLVED** | §3.3 now carries a two-surface rendering table + dated delta: "the badge contract lands on M1's `Channel` cell only; the pool cell's route is muted running text (`--ink-3`, non-bold)… **Decided 2026-08-03**", with reversal impact stated. `[BR-15]` rewritten to the same two-surface delta. QA-SUS-02 and QA-SUS-05 are now mutually consistent (both assert `.mut` gray on the pool cell); both **PASS** in the re-run. Decision-log row present. |
-| D-2 | MAJOR | **RESOLVED** | QA-NEG-03 re-tagged `[ADMIN]` with the reason in its body; counterpart QA-WFQ-07 added (re-run **PASS**: 2 rows remain, counters read `1`); §2.4.10 added incl. the `finishMatch()`-guards/`.xdel`-doesn't asymmetry; WF-NEW-D filed in §2.5 **and** appended to `_wireframe-fixes.md` §B (verified at lines 70–77 with cross-references both ways). |
-| D-3 | MAJOR | **RESOLVED** | §8.18 E→QA map exists with 72 rows; scripted check: every E-1…72 except E-4 is cited by ≥1 scenario body; E-4 is the declared exception with the view-orders pointer. 16 new scenarios present (ROW-13…16, SUS-13, M1-13, XDEL-12, CMT-14/15, FURN-09/10, NEG-14/15, VAL-12, XPG-09, DATA-13). |
-| D-4 | MINOR | **RESOLVED** | QA-NEG-02 now cites `[DC-10]`, `[DC-11]`, `[DC-12]`; QA-VAL-05 now cites `[DC-13]`. §8.16 rows agree. |
-| D-5 | MINOR | **RESOLVED** | `[BR-19]` opens "Page-level extension of `[PD-8]`, declared as such" with a delete-path if the owner declines; `[L-1]` column 1 defines the pool item's namespace ("stored with the namespace the scan originated in") and names the `[E-33]` blind spot ("the namespace check is silent there by design"); §9.1 carries the PD-8 note. |
-| D-6 | MINOR | **RESOLVED** | BR-23 reduced to the two key shapes; BR-27 framed as a page extension (memo immutability); BR-34 is a negative registry entry; BR-15 is the delta table pointer. Reading-contract item 1 reworded to "restates a global rule body **only where the page narrows or extends it**". |
-| D-7 | MINOR | **PARTIAL (accepted alternative)** | No `GD-11` was raised — `_global-rules.md`/`_review.md` are outside the remediator's write scope. Instead `[BR-44]` is reclassified "Candidate global amendment, stated locally under protest", marked do-not-copy, and reading-contract item 7 inventories all three such locals. The cross-page divergence risk D-7 named remains open until the global amendment lands; the page-side statement is the best available containment. |
-| D-8 | MINOR | **RESOLVED** | §9.3 renders `[PD-51 · OWNER-PENDING]`; §9.1's cross-referenced list now contains PD-51 (5 entries) and the 16+5+1=22 arithmetic is stated. |
-| D-9 | MINOR | **RESOLVED** | QA-XPG-05 re-tagged `[ADMIN]` with the three-of-four-clauses reason in its body; §8.0 now states "Every `[WF]` scenario in this document runs against that one URL". No `[WF-XPG]` marker invented (correct — `_review.md` §3.4 binds tags to two values). |
-| D-10 | MINOR | **RESOLVED** | §8.0 reads "Of these, **one** (QA-VAL-10) is `BLOCKED` … counted inside the 168 and inside the 102 `[ADMIN]`". |
+| D-1 | BLOCKER | **RESOLVED** | §3.3 now has a two-surface rendering table and a dated delta: *"Route label rendering — declared page delta on `[G-5]` (decided 2026-08-03)"* … *"the badge contract lands on M1's `Channel` cell only; the pool cell's route is muted running text (`--ink-3`, non-bold), and the never-a-pill prohibition holds on both"*, with reversal impact spelled out ("change the format line… split the `.mut` span… re-tag QA-SUS-05's colour clause `[ADMIN]`"). `[BR-15]` rewritten to the same two-surface delta ("**Page delta on `[G-5]`, two surfaces**… pool-cell delta 2026-08-03"). QA-SUS-02 and QA-SUS-05 are now mutually consistent (both assert `rgb(126, 124, 131)` on the pool cell; QA-M1-10 keeps the ink badge). Both **PASS** in the live re-run. Decision-log rows present. |
+| D-2 | MAJOR | **RESOLVED** | QA-NEG-03 is `[ADMIN] (neg)` with the reason inline: *"the wireframe cannot exhibit this — its `.xdel` handler removes one row but runs `poolDec()` twice (defect `WF-NEW-D`, §2.4.10)"*. Counterpart QA-WFQ-07 `[WF]` added and **PASSes live** (rows 2, counters `1`/`1`). §2.4 limitation 10 added, naming the `finishMatch()`-guards/`.xdel`-doesn't asymmetry verbatim. WF-NEW-D filed in §2.5 **and** appended to `_wireframe-fixes.md` §B (line 70, `[WF-NEW-D · tracking-missing]`). |
+| D-3 | MAJOR | **RESOLVED** | §8.18 "Edge-case → QA coverage map" exists with all 72 rows; scripted check: every `[E-n]` except the declared `[E-4]` is cited by ≥ 1 scenario body. The previously-orphaned dangerous case `[E-26]` now has QA-NEG-14 (*"step 4 comment post or step 5 Slack dispatch then fails, Then the match is **not** rolled back"*); E-58→QA-FURN-10, E-29→QA-VAL-12, E-30→QA-ROW-13, E-33→QA-M1-13/QA-ROW-15, E-44→QA-ROW-14, E-45→QA-ROW-15/16 etc. all land. |
+| D-4 | MINOR | **RESOLVED** | QA-NEG-02 body now cites `[DC-10]`; QA-VAL-05 now cites `[DC-13]` (scripted: True/True). Decision-log row names m1 D-4. |
+| D-5 | MINOR | **RESOLVED** | `[BR-19]`: *"**Page-level extension of `[PD-8]`, declared as such.** … The extension is **not** register-backed — if the owner declines it, delete this rule, `[E-11]`, QA-VAL-03 and step 1's `tracking_in_use` check"*. `[L-1]` column 1 now defines the namespace (*"stored with the namespace the scan originated in — `outbound` for a customer parcel, `inbound` for an unrequested supplier arrival"*) and names the `[E-33]` blind spot (*"the namespace check is silent there by design, so `[E-33]`'s only defence remains the memo"*). |
+| D-6 | MINOR | **RESOLVED** | Reading-contract item 1 reworded: *"restates a global rule body **only where the page narrows or extends it**, and in that case the delta, its rationale, and its date are named"*. BR-23 trimmed to the two key shapes, BR-27 framed as *"Page extension of `[G-7]`'s append-only property"*, BR-34 as *"Stated as a negative registry entry, not as a restatement"*, BR-15 as the §3.3 delta pointer. |
+| D-7 | MINOR | **NOT RESOLVED as prescribed — reasoned alternative, accepted** | No `GD-11` was raised (out of the remediator's write scope: `_global-rules.md`/`_review.md` binding). Instead `[BR-44]` is *"**Candidate global amendment, stated locally under protest**… **Do not copy this row into another spec**… deletes this row the day the global text lands"*, and reading-contract item 7 lists all three such locals (BR-44, §5.1 event-name note, §3.6 hub strings). The divergence risk is contained, not eliminated; the follow-up belongs to the global-rules owner. |
+| D-8 | MINOR | **RESOLVED** | §9.3 row now reads `[PD-51 · OWNER-PENDING]` with "NO-DEFAULT and owned by order-management / RTO / order-detail, cross-referenced from here only"; §9.1 cross-referenced list now includes PD-51 (5 entries) and the PD arithmetic (16 + 5 + PD-66 = 22) is stated and checks out. |
+| D-9 | MINOR | **RESOLVED** | QA-XPG-05 re-tagged `[ADMIN] (neg)` with the reason inline (three of four clauses are server/Slack state; trigger on another page). §8.0 `[WF]` definition hardened: *"**Every `[WF]` scenario in this document runs against that one URL** — no `[WF]` scenario targets another page's wireframe."* No `[WF-XPG]` tag invented — consistent with `_review.md` §3.4's two-tag scheme. |
+| D-10 | MINOR | **RESOLVED** | §8.0: *"Of these, **one** (QA-VAL-10) is `BLOCKED` and carries no verdict; it is counted inside the 168 and inside the 102 `[ADMIN]`."* No 152/169 reconciliation trap remains. |
 
-### m2 findings (FAIL / AMBIGUOUS / UNRUNNABLE)
+### m2 FAIL / AMBIGUOUS / UNRUNNABLE
 
-| ID | Was | Verdict | Evidence |
+| ID | m2 verdict | Verdict now | Evidence |
 |---|---|---|---|
-| F1 (QA-LOAD-04) | FAIL | **RESOLVED** | §8.0 rule 1 (strip `.dot` before every text comparison) + amended scenario text. Re-run: **PASS** — 12 headers exact after strip. |
-| F2 (QA-M1-01) | FAIL | **RESOLVED** | Scenario now asserts the header's **leading text node** (§8.0 rule 5). Re-run: **PASS** — leading text node `Review & Match — Unrecognized Product`, `button.x[data-close]` = `✕`. |
-| F3 (QA-NEG-03) | FAIL | **RESOLVED** | See D-2. QA-NEG-01 (the guarded sibling) re-run **PASS**; QA-WFQ-07 re-run **PASS**. |
-| F4 (QA-SUS-05) | AMBIGUOUS | **RESOLVED** | Scenario now names the exact element set ("the **four** trailing `span.mut` … ×2 and ×2"), exact computed values, and warns the `.tag-*` sweep passes vacuously. Re-run: **PASS** — 4 elements, all `rgba(0,0,0,0)` / `none` / `0px` / `rgb(126,124,131)`. |
-| F5 (QA-XPG-05) | UNRUNNABLE | **RESOLVED** | Re-tagged `[ADMIN]`; the Closing-side clause is delegated to the closing spec. See D-9. |
-| m2 §5/§6 secondary | — | **RESOLVED** | §8.0 rules 2 (`table.tbl` ×2), 3 (nested `.mockwrap`), 4 (`.it` positional), 6 (CDP probe) all present; QA-NEG-01 quantified (one display cycle, 6 s bound — re-run PASS); QA-ROW-08 CDP fallback stated. QA-EMPTY-01's quantification is the one item that went wrong — see RV-1. |
+| F1 QA-LOAD-04 | FAIL | **RESOLVED** | §8.0 rule 1 (*"Annotation dots are stripped before any text comparison"*) + scenario amended (*"each taken with its `.dot` annotation child removed… Without the strip the raw texts are `Product Name4`…"*). Re-run: **PASS** — stripped headers match the 12 exactly. |
+| F2 QA-M1-01 | FAIL | **RESOLVED** | Scenario now asserts the *"`<header>`'s **leading text node**"* and declares the full `textContent` is `Review & Match — Unrecognized Product✕` (§8.0 rule 5). Re-run: **PASS** (leading text node exact, `button.x[data-close]` present). |
+| F3 QA-NEG-03 | FAIL | **RESOLVED** | = m1 D-2 above. QA-NEG-03 `[ADMIN]`; QA-WFQ-07 **PASSes live** with the exact divergence the spec states (1 row removed, counters read `1`). |
+| F4 QA-SUS-05 | AMBIGUOUS | **RESOLVED** | Scenario now names *"the **four** trailing `span.mut` elements in the pool's `Suspected Orders (Auto-matched)` cells"* with exact computed values (`rgba(0, 0, 0, 0)` / `border none` / `padding 0px` / `rgb(126, 124, 131)`) and warns the badge form lives in M1 only. Re-run: **PASS** on all 4 elements — no reading ambiguity left; a `.tag-*` sweep would indeed pass vacuously on the main page, and the spec now says so. |
+| F5 QA-XPG-05 | UNRUNNABLE | **RESOLVED** | = m1 D-9 above. Out of the `[WF]` tier entirely; the closing-side half is delegated to the closing spec. |
+| m2 §5/§6-6 shared selectors | secondary | **RESOLVED (one residual nit)** | §8.0 rules 2–4 now cover `table.tbl` ×2, nested `.mockwrap` (both must be scrolled), positional `.it`. Residual: see §4 note 2. |
+| m2 §6-7 soft assertions | secondary | **RESOLVED** | QA-EMPTY-01 quantified (*"inner `.mockwrap` bounding-box height **> 300 px**, `<thead>` still rendered with its 12 `<th>`, `#poolCountBottom` below the `<thead>`"*); QA-NEG-01's toast cycle got a measurable definition (continuously `flex` then `none`, no return within 6 s — re-run **PASS**); listener probes routed through §8.0 rule 6 (CDP; not-run, never FAIL, without it). |
 
-### m3a / m3b items claimed
+**Remediator's two "not fixed, with reason" items** (m1 D-7 / m3a global-rules halves; m3b silent-N/A rows): both verified as described — the alternatives are recorded page-side (reading-contract items 6–7, §2.5 register-citation warning naming WF-9→WF-10, §2.6 rows 9/10/11 explicit `n`) and the refusals are scope-correct, not evasions.
 
-| Item | Verdict | Evidence |
+**Register appends:** `_wireframe-fixes.md` §B carries `[WF-NEW-D · tracking-missing]` (line 70) and `[WF-NEW-E · tracking-missing]` (line 79), each cross-citing the spec, with the number-collision note explaining why the IDs are page-scoped letters (three concurrent passes claimed WF-15/16). Verified in the register file itself.
+
+## 3. QA re-run (Q3)
+
+20 `[WF]` scenarios executed (priority: every previously non-PASS scenario, plus a regression sample). Fresh Playwright suite; §8.0 reset (full reload) before each.
+
+| Scenario | Verdict | Note |
 |---|---|---|
-| m3a D7 (hub pane strings) | **RESOLVED** | WF-NEW-E filed in §2.5 + `_wireframe-fixes.md` §B (lines 79–85); §3.6 string table `[WF]`/`[ADMIN]`; QA-CMT-03/05 assert wireframe strings (re-run **PASS**), QA-CMT-15 asserts canonical strings `[ADMIN]`. `[G-7]` amendment itself is out of scope, stated as pending. |
-| m3a D13 (GD-n resolution) | **RESOLVED** | Reading-contract item 6. |
-| m3a D14 (event-name scope) | **RESOLVED** | §5.1 scope note with the four shared-concept rows; global amendment halves recorded as pending. |
-| m3a D16 (deep-link form) | **RESOLVED** | §6.2 normalized to `../{slug}/#{anchor}`; the only `index.html` strings left in the spec are the SST file path references. |
-| m3b 5.3 (WF-9 vs WF-10) | **RESOLVED** | §2.5 register-citation warning present; spec cites WF-10 throughout. |
-| Register appends | **VERIFIED** | `_wireframe-fixes.md` §B carries `[WF-NEW-D · tracking-missing]` and `[WF-NEW-E · tracking-missing]` with the number-collision rationale (the file's own ⚑ note confirms WF-15 was claimed three times concurrently — page-scoped IDs were the right call). |
+| QA-LOAD-04, QA-M1-01, QA-SUS-05 | **PASS** | the three previously FAIL/AMBIGUOUS — all clean under the amended text |
+| QA-WFQ-07 (new) | **PASS** | rows 2 · `#poolCount`/`#poolCountBottom` = `1`/`1`, exactly as pinned |
+| QA-LOAD-01, -05, -06, -07 | **PASS** | baseline, counters, removed-features negative, legend 6 li / 7 dots |
+| QA-SUS-02, QA-M1-10 | **PASS** | both halves of the reconciled `[G-5]` delta hold live |
+| QA-MATCH-02, -03, QA-XDEL-01 | **PASS** | happy-path removal + counters |
+| QA-NEG-01 | **PASS** | double-dispatch guarded; exactly one toast cycle (flex → none, no return ≤ 6 s) |
+| QA-WFQ-03, QA-WFQ-06 | **PASS** | no dialog/toast on `✕`; annotation toggle both directions |
+| QA-CMT-03, QA-CMT-05 | **PASS** | positional `.it` (4 items / 3 unread); Saved tab (1 item, `Unrecognized pool`) |
+| QA-EMPTY-05 | **PASS** | Cancel / header `✕` / backdrop — all three close with zero side effects |
+| QA-A11Y-01 | **PASS** | tab order `Review & Match` → `.xdel` |
 
-## 3. QA re-run (28 `[WF]` scenarios, fresh Playwright suite)
+**20 / 20 PASS · 0 FAIL · 0 AMBIGUOUS.** Four interim failures during the run were all traced to this auditor's own harness (Playwright locator re-resolution between dispatches; `:first-of-type` matching both tables; counting the closed modal's hidden dot) — none is a spec or wireframe fault; all four scenarios pass under a correct reading of the spec text. QA-NEG-03 and QA-XPG-05 were confirmed absent from the `[WF]` tier.
 
-Previously failed/ambiguous scenarios prioritised. **27 PASS · 1 FAIL · 0 AMBIGUOUS.**
+## 4. Regression check (Q4) — none found, two cosmetic notes
 
-PASS: QA-LOAD-04, QA-LOAD-05, QA-LOAD-07, QA-SUS-02, QA-SUS-05, QA-M1-01, QA-M1-09, QA-M1-10, QA-MATCH-01…05, QA-NEG-01, QA-WFQ-07, QA-XDEL-01, QA-XDEL-03, QA-EMPTY-05, QA-CMT-03, QA-CMT-05, QA-CMT-06, QA-CMT-11, QA-A11Y-05, QA-WFQ-01, QA-WFQ-02, QA-WFQ-03, QA-WFQ-04.
+- **Legend coverage intact:** §8.17 still maps all **13** declared units (`L-0…L-5, L-M1, L-M2, L-F1…F3, L-S1-Fa/Fb`).
+- **No ID renumbering:** all 66 scenario IDs from the m2 run still exist under their original IDs; DC/BR/E/N ranges continuous at the same maxima; new scenarios only append (ROW-13…16, NEG-14/15, WFQ-07, CMT-12…15, …).
+- **No new global-rule body restatements:** the four flagged BRs were trimmed, not expanded; the three deliberate local statements are declared in reading-contract item 7 with do-not-copy markers.
+- Note 1 (cosmetic): **E-16**'s literal `[E-16]` citation inside §8 sits only in the §8.6 block heading; the §8.18 row (`E-16 → QA-XDEL-04, QA-WFQ-03`) is semantically accurate — those two scenarios assert exactly the `[ADMIN]` dialog and `[WF]` no-dialog halves E-16's own row prescribes — but neither body carries the token. Harmless; a future sweep keyed on scenario bodies will flag it.
+- Note 2 (cosmetic): §8.0 rule 2's example selector `table.tbl:first-of-type` does not implement its own prose. Both tables are `:first-of-type` within their respective parents, so the literal selector matches rows in **both** (empirically: 17 `<th>`, 12 + 5). The prose ("`table.tbl` means the **first** — the pool table") is unambiguous and is what every scenario's wording relies on; only the illustrative selector string is a CSS footgun. Suggested one-word fix at leisure: address the pool table as `document.querySelectorAll('table.tbl')[0]` or scope by ancestor.
 
-FAIL: **QA-EMPTY-01** — see RV-1.
-
-Methodological note that validates §8.0's hardening: the auditor's first pass coded 4 scenarios (NEG-01, WFQ-07, XDEL-01, EMPTY-05) with an unscoped `table.tbl tbody tr` selector and got false FAILs from the modal's candidate rows — exactly the trap §8.0 rule 2 documents. Re-coding per the rule turned all four into clean PASSes. The rules are load-bearing and correct.
-
-## 4. Regression checks
-
-- **Legend coverage:** intact — §2.1 still declares 7+6=13 units, §8.17 maps all 13; wireframe re-verified 7 `.dot` / 6 legend `<li>`.
-- **ID renumbering:** none — DC/BR/E/N ranges continuous to their declared maxima; all m2-era QA IDs still exist with the same semantics; new scenarios were appended at block ends only.
-- **Global-rule restatement:** none reintroduced — BR-15/23/27/34 are delta-only; BR-44 is quarantined as a candidate amendment; reading contract items 1/6/7 are internally consistent.
-- **Wireframe untouched:** `index.html` unchanged since `8beb374`; no spec fix leaked into the SST.
-
-## 5. New findings from this pass
-
-### RV-1 — QA-EMPTY-01's quantification anchors the wrong `.mockwrap` — deterministic false FAIL · the one remaining defect
-
-§8.11: *"the **inner** `.mockwrap`'s bounding-box height is **> 300 px**"*. §8.0 rule 3 defines inner = the 1457 px table wrapper. That element wraps **only the pool table**, and with the tbody emptied it collapses to **42 px** (measured); the element that stays at **520 px** is the **outer** `.mockwrap`. m2's original proxy measured the outer (`mockH: 520`); the remediation transcribed the threshold onto the wrong element. As written, this `[WF]` scenario fails on the live wireframe every time — the exact false-FAIL class the spec exists to prevent. The other two clauses (12 `<th>` rendered; `#poolCountBottom` below `<thead>`) pass. **Fix: one word — "inner" → "outer" (or "the outer `.mockwrap`'s height > 300 px and the pool `<thead>` still rendered").**
-
-### RV-2 — §8.18's E-16 row credits scenarios that do not cite the ID · MINOR (map-token nit)
-
-The map's preamble says rows were re-derived by searching §8 for each ID, but E-16's row credits QA-XDEL-04 / QA-WFQ-03, whose bodies cite `[PD-60]`/`WF-6`, not `[E-16]`; the token appears only in block 8.6's heading. Coverage is substantively real (both scenarios assert exactly E-16's content — accidental-✕ protection and its wireframe gap), so this is the D-4 class at map-integrity level, not a hole. Fix: add `[E-16]` to either scenario body, or note the heading-level citation in the map row.
-
-## 6. Verdict
+## 5. Verdict
 
 **READY-WITH-NOTES.**
 
-All 10 m1 defects and all 5 m2 findings are resolved (D-7 by a documented, reasonable alternative pending the out-of-scope global amendment). Counts reproduce exactly from the file; no ID was renumbered; no regression found in legend coverage, PD discipline, or rule hygiene; the register appends are in place with a sound collision rationale. Two notes stand between this and unqualified READY: **RV-1** (a one-word fix to QA-EMPTY-01, without which one `[WF]` scenario false-FAILs deterministically) and **RV-2** (a map-token cosmetic). Neither blocks implementation; RV-1 should be fixed before the QA suite is run unattended.
+All 1 BLOCKER + 2 MAJOR from m1 and all 5 non-PASS items from m2 are genuinely resolved in the current file, with live re-run evidence; the two items the remediator declined to fix are scope-correct refusals with the alternative recorded page-side. Counts, tier splits, the negative floor, and both coverage maps reproduce exactly under independent extraction. The two residual notes are cosmetic (a citation-token placement and an illustrative selector string) and neither can produce a false QA verdict under the spec's prose. Remaining external dependencies — the `[G-2]`/`GD` promotion (BR-44), the `[G-7]` hub-string amendment (WF-NEW-E), and the `[PD-66]` owner ruling (QA-VAL-10 BLOCKED) — are tracked outside this spec by design and do not gate implementation of this page.
