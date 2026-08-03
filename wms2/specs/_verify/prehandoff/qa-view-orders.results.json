@@ -1,0 +1,718 @@
+[
+ {
+  "v": "PASS",
+  "ev": "active=s0 tabOn=\"0 · Waiting (Before Scan)\" h2=\"WMS - View Orders\" sub=\"Search Orders\" value=\"\" placeholderMatch=true",
+  "byte": true,
+  "id": "QA-S0-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s0 .seg=null elementsContaining\"Matched field\"=[]",
+  "id": "QA-S0-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "hasWaitingForScan=true hasScanSentence=true dashedPanel=true ordercard=null literal=\"Scan a tracking/product barcode or type a number to switch to that order's screen instantly 2 ▸ Expected Inbound 4 — 2 with tracking \"",
+  "id": "QA-S0-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "btn-blue in #s0 .searchrow with text \"🔍 Search\" -> found; buttons in searchrow=[\"🔍 Search\"]",
+  "id": "QA-S0-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "visible=true toggleText=\"▸ Expected Inbound 4 — 2 with tracking · 1 Partial Inbound\" expected=\"▸ Expected Inbound 4 — 2 with tracking · 1 Partial Inbound\" inexpTable.style.display=\"none\"",
+  "byte": true,
+  "id": "QA-S0-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "afterClick visible=true arrow▾=true rowCount=4 firstCells=[\"202608020001\",\"202607120001\",\"202608020002\",\"202608010004\"] want=[\"202608020001\",\"202607120001\",\"202608020002\",\"202608010004\"] | afterSecondClick display=\"none\" arrow▸=true",
+  "id": "QA-S0-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "headers=[\"Inbound No.\",\"Sourcing Route\",\"Supplier\",\"Items\",\"Tracking No\",\"Status\"] want=[\"Inbound No.\",\"Sourcing Route\",\"Supplier\",\"Items\",\"Tracking No\",\"Status\"] row2.tag-wholesale=\"WHOLESALE\" supplier비엠유통=true row2.tag-part=\"PARTIAL 620/800\" row3.TrackingNo=\"—\" row4.TrackingNo=\"—\"",
+  "id": "QA-S0-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "checked=26 nonTransparent=[]",
+  "id": "QA-S0-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "activeState=s6 #s0.hasClass('on')=false",
+  "id": "QA-S0-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "sortedToTop=true clickRow=true fullList=true",
+  "id": "QA-S0-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s1 .search-input input value=\"10323775316153\" expected=\"10323775316153\"",
+  "id": "QA-SC-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "got={\"s1b\":\"10323775317888\",\"s2\":\"10323775316153\",\"s3\":\"10323775316153\",\"s4\":\"10322198837710\",\"s5\":\"10324880021991\",\"s6\":\"10325661220417\"} want={\"s1b\":\"10323775317888\",\"s2\":\"10323775316153\",\"s3\":\"10323775316153\",\"s4\":\"10322198837710\",\"s5\":\"10324880021991\",\"s6\":\"10325661220417\"}",
+  "id": "QA-SC-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "value=\"\" placeholder=\"Scan a tracking barcode — continue with the next one\" expectedPlaceholder=\"Scan a tracking barcode — continue with the next one\"",
+  "id": "QA-SC-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "s0..s6 identical=true s6b differs=true s6b=\"Scan a tracking barcode — continue with the next one\"",
+  "id": "QA-SC-17"
+ },
+ {
+  "v": "PASS",
+  "ev": "row-hit count=1 skuCell literal=\"1000051045\" dotStripped=\"100005104\" tag-pending=\"PENDING\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S1-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "row-hit buttons literal=[\"Inbound + Outbound8\"] dotStripped=[\"Inbound + Outbound\"] class=\"btn btn-green btn-sm anno\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S1-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "row-hit buttons=[\"Inbound\"] ordercard Outbound class=\"btn btn-gray btn-sm\"",
+  "id": "QA-S1-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "pendingRows=2 skus=[\"100005104\",\"100038120\"]",
+  "id": "QA-S1-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "bulkbar buttons=[\"Bulk Inbound (Selected)\",\"Inbound + Outbound All Remaining\"] .cnt=\"1 selected · Processing all triggers auto Outbound (Hold orders: Inbound only)\" expected=\"1 selected · Processing all triggers auto Outbound (Hold orders: Inbound only)\"",
+  "byte": true,
+  "id": "QA-S1-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "actual=\"2 not yet inbounded — processing all triggers auto Outbound (Hold orders: Inbound only)\" expected=\"2 not yet inbounded — processing all triggers auto Outbound (Hold orders: Inbound only)\"",
+  "byte": true,
+  "id": "QA-S1-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "bulkbar present per state={\"s1\":true,\"s1b\":true,\"s2\":true,\"s3\":true,\"s4\":true,\"s5\":true}",
+  "id": "QA-S1-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "dotStripped={\"s0\":\"no .ordercard\",\"s1\":[\"Outbound\"],\"s1b\":[\"Outbound\"],\"s2\":[\"Outbound\"],\"s3\":[\"✓ Outbounded\"],\"s4\":[],\"s5\":[\"Outbound\"],\"s6\":\"no .ordercard\",\"s6b\":\"no .ordercard\"} DeleoOutsideLegend=[] DeleoInLegendOnly(allowed)=[\"s1:1\"]",
+  "literalAlsoHeld": false,
+  "id": "QA-S1-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "routeBadges=[\"SMART BUY\",\"JIT (Coupang)\",\"WHOLESALE\",\"PARTNERSHIP\",null,null,null,null] pendingRowRoutes=[\"JIT (Coupang)\"]",
+  "id": "QA-S1-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "PENDING+non-JIT rows=[]",
+  "id": "QA-S1-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "qty spans=[{\"t\":\"1\",\"cls\":\"qty\",\"row\":\"100040311IMG COSRX Pomegranate & Collage\"},{\"t\":\"1\",\"cls\":\"qty\",\"row\":\"100005104IMG Dr.Jart+ Pore Remedy Renewi\"},{\"t\":\"1\",\"cls\":\"qty\",\"row\":\"100024743IMG The Face Shop Rice Water Br\"},{\"t\":\"2\",\"cls\":\"qty qty-warn\",\"row\":\"100038120IMG Medicube Zero Pore Pad 2.0,\"}] twoOK=true onesOK=true",
+  "id": "QA-S1-12"
+ },
+ {
+  "v": "PASS",
+  "ev": "literal={\"s1\":[\"\",\"SKU\",\"Image\",\"Product Name18\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route6\",\"Location17\",\"Actions\"],\"s1b\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s2\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s3\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s4\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s5\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"]} dotStripped={\"s1\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s1b\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s2\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s3\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s4\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"],\"s5\":[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"]} want=[\"\",\"SKU\",\"Image\",\"Product Name\",\"Product Name KR\",\"Size\",\"Qty\",\"Barcode\",\"Inbound Order No\",\"Tracking No\",\"Inbound Status\",\"Sourcing Route\",\"Location\",\"Actions\"]",
+  "literalAlsoHeld": false,
+  "id": "QA-S1-13"
+ },
+ {
+  "v": "PASS",
+  "ev": "scopedTo #s1 table.tbl (spec's bare \"#s1 tbody\" also matches the .logtbl). rows=[{\"cls\":\"(none)\",\"sku\":\"100040311\",\"loc\":\"–\"},{\"cls\":\"row-hit\",\"sku\":\"100005104\",\"loc\":\"–\"},{\"cls\":\"row-exist\",\"sku\":\"100024743\",\"loc\":\"A-03-2\"},{\"cls\":\"(none)\",\"sku\":\"100038120\",\"loc\":\"–\"}]",
+  "id": "QA-S1-14"
+ },
+ {
+  "v": "PASS",
+  "ev": "rows=[{\"enB\":\"COSRX\",\"krB\":\"COSRX\",\"krTxt\":\"COSRX 석류 엔 콜라겐 볼륨탄력 크림\"},{\"enB\":\"Dr.Jart+\",\"krB\":\"Dr.Jart+\",\"krTxt\":\"Dr.Jart+ 포어레미디 리뉴잉 폼 클렌저\"},{\"enB\":\"The Face Shop\",\"krB\":\"The Face Shop\",\"krTxt\":\"The Face Shop 미감수 브라이트 클렌징 티슈\"},{\"enB\":\"Medicube\",\"krB\":\"Medicube\",\"krTxt\":\"Medicube 제로 모공 패드 2.0 (1+1)\"}] requiredBrands=[\"COSRX\",\"Dr.Jart+\",\"The Face Shop\",\"Medicube\"]",
+  "id": "QA-S1-15"
+ },
+ {
+  "v": "PASS",
+  "ev": "{\"s1\":{\"bcinPlaceholders\":[\"Enter barcode\"],\"row100024743HasBcin\":true,\"barcodeCellsWithoutInput\":[\"✓ 8801051283860\",\"✓ 8809571501234\",\"✓ 8809894261234\"]},\"s1b\":{\"bcinPlaceholders\":[\"Enter barcode\"],\"row100024743HasBcin\":true,\"barcodeCellsWithoutInput\":[\"✓ 8801051283860\",\"✓ 8809571501234\",\"–\"]},\"s2\":{\"bcinPlaceholders\":[\"Enter barcode\"],\"row100024743HasBcin\":true,\"barcodeCellsWithoutInput\":[\"✓ 8801051283860\",\"✓ 8809571501234\",\"✓ 8809894261234\"]},\"s3\":{\"bcinPlaceholders\":[\"Enter barcode\"],\"row100024743HasBcin\":true,\"barcodeCellsWithoutInput\":[\"✓ 8801051283860\",\"✓ 8809571501234\",\"✓ 8809894261234\"]}} | NOTE: State 1b has a third variant ('–' = no barcode, no input) that the scenario does not describe.",
+  "id": "QA-S1-16"
+ },
+ {
+  "v": "PASS",
+  "ev": "afterInput visible=1 text='Save'; afterEnter text='✓ Saved' class='flsave ok'; visibleAfter~1.1s=0; navigationEntries=1",
+  "id": "QA-S1-17"
+ },
+ {
+  "v": "PASS",
+  "ev": "shelf input original value=\"3\" set to \"3\"; visible button.flsave count=0",
+  "id": "QA-S1-18"
+ },
+ {
+  "v": "PASS",
+  "ev": "heading=\"Inbound / Outbound Log\" found=true headers=[\"Time\",\"Action\",\"SKU\",\"Qty\",\"Worker\",\"Memo\"] dataRows(td-bearing)=3 bare \"tbody tr\" count=4 (header row lives INSIDE tbody) memos=[\"–\",\"1 box damaged — restocked, needs inspection\",\"–\"]",
+  "id": "QA-S1-19"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s1b .logsec = null (spec: this WF result documents demo limitation L-4)",
+  "id": "QA-S1-20"
+ },
+ {
+  "v": "PASS",
+  "ev": "scoped rows=4 (bare \"#s2 tbody tr\"=9, documented rule-5 over-count) tags=[\"INBOUNDED\",\"INBOUNDED\",\"INBOUNDED\",\"INBOUNDED\"] Outbound class=\"btn btn-green btn-sm anno\"",
+  "id": "QA-S2-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "buttons=[{\"t\":\"Bulk Inbound (Selected)\",\"c\":\"btn btn-gray btn-sm\"},{\"t\":\"Inbound + Outbound All Remaining\",\"c\":\"btn btn-gray btn-sm\"}] .cnt=\"Nothing left to bulk-process — all items inbounded\" expected=\"Nothing left to bulk-process — all items inbounded\"",
+  "byte": true,
+  "id": "QA-S2-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "literal button match=false (row button textContent=\"Cancel Inbound2\") open=true header literal=\"Cancel Inbound — 100038120✕\" dotAndCloseStripped=\"Cancel Inbound — 100038120\" expected=\"Cancel Inbound — 100038120\" tbodyUnchanged=true",
+  "literalAlsoHeld": false,
+  "id": "QA-S2-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "openAfterClose=false tbodyByteIdentical=true",
+  "id": "QA-S2-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "ordercard buttons literal=[\"🖨 Print\",\"Save\",\"✓ Outbounded1\",\"Cancel Outbound2\",\"💬 Comments 2\"] dotStripped=[\"🖨 Print\",\"Save\",\"✓ Outbounded\",\"Cancel Outbound\",\"💬 Comments 2\"] class=\"btn btn-gray btn-sm anno\" pill=\"Prepare Shipment\"/status st-prepare",
+  "literalAlsoHeld": false,
+  "id": "QA-S3-01"
+ },
+ {
+  "v": "PASS",
+  "literalAlsoHeld": false,
+  "ev": "button rule6b match=True (dot-stripped buttons=['🖨 Print', 'Save', '✓ Outbounded', 'Cancel Outbound', '💬 Comments 2']); dialogs=['Status rollback: prepare shipment → processing'] expected='Status rollback: prepare shipment → processing'",
+  "id": "QA-S3-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "literal=[{\"t\":\"Cancel Inbound4\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true}] dotStripped=[{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true}] tbody .btn-red-line=0",
+  "literalAlsoHeld": false,
+  "id": "QA-S3-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "toastTexts=[\"✓ Inbound complete — 100040311No refresh · ready for the next scan15\",\"✓ Outbound complete — Order 413865Status: prepare shipment3\",\"✓ Inbound complete — Inbound No. 202607120001Inventory updated · Request list INBOUNDED · \",\"✓ Tracking No 10323100835644 matched and registeredOrder 414230 · Dr.Jart+ 포어레미디 폼 — resca\"] small=\"Status: prepare shipment\"",
+  "byte": true,
+  "id": "QA-S3-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "dataRows(td-bearing)=5 bare \"tbody tr\"=6 newest=[\"07-09 11:47\",\"OUTBOUND\",\"All (4 SKU)\",\"5\",\"Dean\",\"–\"]",
+  "id": "QA-S3-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "lead=\"⟲ Customer Return Order\" bodyLiteral=\"A returned tracking barcode was scanned — Order 412990 · Tracking 10322198837710 1\" bodyDotStripped=\"A returned tracking barcode was scanned — Order 412990 · Tracking 10322198837710\" expected=\"A returned tracking barcode was scanned — Order 412990 · Tracking 10322198837710\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S4-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "statusPills=[\"refunded\"]",
+  "id": "QA-S4-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s4 .ordercard buttons=[\"Save\",\"💬 Comments 1\"]",
+  "id": "QA-S4-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "buttons=[{\"t\":\"Bulk Inbound (Selected)\",\"c\":\"btn btn-gray btn-sm\"},{\"t\":\"Inbound + Outbound All Remaining\",\"c\":\"btn btn-gray btn-sm\"},{\"t\":\"Restock Selected to Warehouse (3)\",\"c\":\"btn btn-green\"}] .cnt=\"Opens the restock confirmation modal — confirm qty · location · memo per item, then process in bulk\" expected=\"Opens the restock confirmation modal — confirm qty · location · memo per item, then process in bulk\"",
+  "byte": true,
+  "id": "QA-S4-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "rowButtons=[{\"t\":\"Cancel Inbound → Add Stock\",\"c\":\"btn btn-red-line btn-sm\"},{\"t\":\"Cancel Inbound → Add Stock\",\"c\":\"btn btn-red-line btn-sm\"},{\"t\":\"Cancel Inbound → Add Stock\",\"c\":\"btn btn-red-line btn-sm\"}] counter=\"Found 3 item(s) in this order · Found 1 order(s)\"",
+  "id": "QA-S4-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "open=true header literal=\"Warehouse Restock — Order 412990✕\" (contains the ✕ close button) stripped=\"Warehouse Restock — Order 412990\" expected=\"Warehouse Restock — Order 412990\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S4-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "leadParagraphFound=true headers=[\"Product\",\"Ordered Qty\",\"Restock Qty\",\"Location\"] want=[\"Product\",\"Ordered Qty\",\"Restock Qty\",\"Location\"] bodyRows=3 | nearestLead=\"Confirm the products, quantities, and locations to restock. Products with existing stock get their current location auto-filled. Restock qty defaults to 0 — enter only the qty actually returned (0 = excluded). ProductOrdered QtyRestock QtyL\"",
+  "id": "QA-S4-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "rows=[{\"name\":\"Beauty of Joseon Glow Serum, 30ml\",\"qty\":\"1\",\"loc\":\"A-03-2\",\"locPh\":\"\",\"locNeed\":false},{\"name\":\"Medicube Zero Pore Pad 2.0, 1+1\",\"qty\":\"1\",\"loc\":\"B-01-4\",\"locPh\":\"\",\"locNeed\":false},{\"name\":\"Anua Heartleaf 77% Soothing Toner, 250ml\",\"qty\":\"0\",\"loc\":\"\",\"locPh\":\"required\",\"locNeed\":true}] modalButtons=[\"✕\",\"Cancel\",\"Confirm Restock (2)\"]",
+  "id": "QA-S4-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "amber1=true amber2=true blueNote=true | modalText=\"M3 Warehouse Restock — Order 412990✕ Confirm the products, quantities, and locations to restock. Products with existing stock get their current location auto-filled. Restock qty defaults to 0 — enter only the qty actually returned (0 = excluded). ProductOrdered QtyRestock QtyLocation Beauty of Joseon Glow Serum, 30ml1 Medicube Zero Pore Pad 2.0, 1+12 Anua Heartleaf 77% Soothing Toner, 250ml1 M3b M\"",
+  "id": "QA-S4-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "textarea.mtextarea=true placeholder=\"Return reason · condition (visible damage etc.) · notes — also recorded in the order's Comments history and the inbound log\"",
+  "id": "QA-S4-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "lead=\"⏸ Hold Shipment\" bodyLiteral=\"CS team put this order on Hold per customer request (address change) — Order 414102 · Requested by Sara(CS) 07-13 09:20 1\" bodyDotStripped=\"CS team put this order on Hold per customer request (address change) — Order 414102 · Requested by Sara(CS) 07-13 09:20\" expected=\"CS team put this order on Hold per customer request (address change) — Order 414102 · Requested by Sara(CS) 07-13 09:20\" pill=\"On Hold\"/status st-hold",
+  "literalAlsoHeld": false,
+  "id": "QA-S5-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "ordercard buttons literal=[\"🖨 Print\",\"Save\",\"Outbound2\",\"💬 Comments 1\"] dotStripped=[\"🖨 Print\",\"Save\",\"Outbound\",\"💬 Comments 1\"] class=\"btn btn-gray btn-sm anno\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S5-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "BulkInbound class=\"btn btn-green-line btn-sm\" AllRemaining class=\"btn btn-gray btn-sm\" .cnt=\"Hold order — Inbound allowed, Outbound blocked (ship after Hold release)\" expected=\"Hold order — Inbound allowed, Outbound blocked (ship after Hold release)\"",
+  "byte": true,
+  "id": "QA-S5-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "rows=[[],[\"07-13 09:20\",\"HOLD Applied\",\"All\",\"–\",\"Sara (CS)\",\"Customer address change request — shipment held\"],[\"07-13 08:55\",\"INBOUND\",\"100040311\",\"1\",\"Miranti\",\"–\"]]",
+  "id": "QA-S5-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s5 .ordercard buttons=[\"🖨 Print\",\"Save\",\"Outbound2\",\"💬 Comments 1\"]",
+  "id": "QA-S5-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "matches=[]",
+  "id": "QA-S5-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "big=\"📦 Internal Inbound — Inbound Request\" warnline=\"Not a customer order · Goes into Inventory · No Outbound step\" kv=\"Inbound No. 202607120001 Channel WHOLESALE Supplier 비엠유통 Requested by Dean · 07-12 Expected arrival 07-18 View in Inbound Request List →\" missingFromKv=[]",
+  "byte": true,
+  "id": "QA-S6-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "text=\"View in Inbound Request List →\" href=\"../inbound-request/index.html#reqlist\"",
+  "id": "QA-S6-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "tileCount=4 tiles=[{\"txt\":\"Expected Qty (Total)800\",\"cls\":\"tile\"},{\"txt\":\"Received (scanned)620\",\"cls\":\"tile ok\"},{\"txt\":\"Remaining180\",\"cls\":\"tile warn\"},{\"txt\":\"SKU2 SKUs (1 done)\",\"cls\":\"tile\"}]",
+  "id": "QA-S6-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "literal=\"4 Now scan product barcodes — each scan adds +1 to that product's received qty (continuous scanning · cursor auto-return · warning sound for products not in the request)\" dotStripped=\"Now scan product barcodes — each scan adds +1 to that product's received qty (continuous scanning · cursor auto-return · warning sound for products not in the request)\" expected=\"Now scan product barcodes — each scan adds +1 to that product's received qty (continuous scanning · cursor auto-return · warning sound for products not in the request)\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S6-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "headers literal=[\"SKU No.\",\"Brand\",\"Product Name\",\"Expected Qty9\",\"Received Qty6\",\"Location7\",\"Status\"] dotStripped=[\"SKU No.\",\"Brand\",\"Product Name\",\"Expected Qty\",\"Received Qty\",\"Location\",\"Status\"] want=[\"SKU No.\",\"Brand\",\"Product Name\",\"Expected Qty\",\"Received Qty\",\"Location\",\"Status\"] rowsOK=true",
+  "literalAlsoHeld": false,
+  "id": "QA-S6-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "th/label containing \"Carrier\"=[]",
+  "id": "QA-S6-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "#s6b .donebanner text=\"1 ✓ Full Inbound Complete — Inbound No. 202607120001 Received 800 / 800 (2 SKUs) Inventory updated (A-05-11 · B-02-07) Inbound Request List switched to INBOUNDED Received Date 07-26 14:02 · Carrier is not recorded\" containsCarrierClause=false",
+  "expectedKnownFail": true,
+  "id": "QA-S6-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "confirmBtn=\"btn btn-gray\" partialBtn=\"btn btn-line\" allS6Buttons(rule6b)=[\"💬 Comments2\",\"Logout\",\"@ Mentions 2\",\"★ Saved\",\"★\",\"★\",\"★\",\"🔍 Search\",\"✎\",\"Save\",\"✎\",\"Save\",\"Confirm Full Inbound (180 remaining)\",\"Save Partial Inbound\"]",
+  "id": "QA-S6-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "exactMatchFound=true nearest=\"On confirm: reflected in Inventory (Current Stocks) · Inbound Request List switches to INBOUNDED · Received Date recorded automatically\" expected=\"On confirm: reflected in Inventory (Current Stocks) · Inbound Request List switches to INBOUNDED · Received Date recorded automatically\"",
+  "id": "QA-S6-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "visible button.flsave count=0 (spec expects 0 — L-13: handler bound only to .shelf input and .locin, never .qtyin)",
+  "id": "QA-S6-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "locinValues=[\"A-05-11\",\"B-02-07\"] flsaveVisibleAfterInput=1",
+  "id": "QA-S6-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "qedit[1] rowContainsSKU100052124=true header literal=\"Edit Expected Qty — Inbound No. 202607120002✕\" stripped=\"Edit Expected Qty — Inbound No. 202607120002\" inputs=[\"120\"] helperFound=true options=[\"Damaged/defective — cannot accept\",\"Supplier qty change\",\"Other\"]",
+  "literalAlsoHeld": false,
+  "id": "QA-S6-12"
+ },
+ {
+  "v": "PASS",
+  "ev": "optionCount=3 options=[\"Damaged/defective — cannot accept\",\"Supplier qty change\",\"Other\"]",
+  "id": "QA-S6-13"
+ },
+ {
+  "v": "PASS",
+  "ev": "textarea=\"1 box damaged — 180 units rejected, returned to supplier\" quotedFragments(case-sensitive)=[{\"q\":\"Confirm Full Inbound enabled\",\"found\":true},{\"q\":\"auto-posted as a Comment on this Inbound Request\",\"found\":true},{\"q\":\"the requester (@Dean) gets a Slack alert\",\"found\":true},{\"q\":\"The request list qty cell shows the edit history (300→120).\",\"found\":true}] footButtons=[\"Cancel\",\"Save Qty Edit\"] | actualSentence=\"The request list qty cell shows the edit history (300→120).\"",
+  "id": "QA-S6-14"
+ },
+ {
+  "v": "PASS",
+  "ev": "header literal=\"Save Partial Inbound — Inbound No. 202607120001✕\" stripped=\"Save Partial Inbound — Inbound No. 202607120001\" leadFound=true perSkuLineFound=true options=[\"Split shipment — remainder arriving later\",\"Short delivery (needs supplier confirmation)\",\"Partially damaged — will be returned to supplier\"]",
+  "literalAlsoHeld": false,
+  "id": "QA-S6-15"
+ },
+ {
+  "v": "PASS",
+  "ev": "notes={inv:true,partial:true,stages:true,rescan:true} placeholder=\"e.g. Remaining 180 units arriving Friday — also recorded in the request's Comments\" buttons=[\"✕\",\"Cancel\",\"Save Partial Inbound\"]",
+  "id": "QA-S6-16"
+ },
+ {
+  "v": "PASS",
+  "ev": "big=\"✓ Full Inbound Complete — Inbound No. 202607120001\" kv=\"Received 800 / 800 (2 SKUs) Inventory updated (A-05-11 · B-02-07) Inbound Request List switched to INBOUNDED Received Date 07-26 14:02 · Carrier is not recorded\" missing=[]",
+  "byte": true,
+  "id": "QA-S6-17"
+ },
+ {
+  "v": "PASS",
+  "ev": "rows=[{\"cls\":\"row-done\",\"done\":true,\"tag\":\"✓ INBOUNDED\",\"cells\":[\"100052117\",\"Round Lab\",\"1025 Dokdo Toner, 200ml\",\"500\",\"500\",\"A-05-11\",\"✓ INBOUNDED\"]},{\"cls\":\"row-done\",\"done\":true,\"tag\":\"✓ INBOUNDED\",\"cells\":[\"100052124\",\"Round Lab\",\"1025 Dokdo Cleanser, 150ml\",\"300\",\"300\",\"B-02-07\",\"✓ INBOUNDED\"]}] inputsInTbody=0",
+  "id": "QA-S6-18"
+ },
+ {
+  "v": "PASS",
+  "ev": "literal=\"2 Cursor returns to the search box immediately on completion — scan the next tracking number with no refresh. This stock is visible in Inventory (Current Stocks) with its locations.\" dotStripped=\"Cursor returns to the search box immediately on completion — scan the next tracking number with no refresh. This stock is visible in Inventory (Current Stocks) with its locations.\" expected=\"Cursor returns to the search box immediately on completion — scan the next tracking number with no refresh. This stock is visible in Inventory (Current Stocks) with its locations.\"",
+  "literalAlsoHeld": false,
+  "id": "QA-S6-19"
+ },
+ {
+  "v": "PASS",
+  "ev": "violations=[]",
+  "id": "QA-S6-20"
+ },
+ {
+  "v": "PASS",
+  "ev": "toasts=[\"✓ Inbound complete — 100040311No refresh · ready for the next scan15\",\"✓ Outbound complete — Order 413865Status: prepare shipment3\",\"✓ Inbound complete — Inbound No. 202607120001Inventory updated · Request list INBOUNDED · ready for the next t\",\"✓ Tracking No 10323100835644 matched and registeredOrder 414230 · Dr.Jart+ 포어레미디 폼 — rescanning the same barco\"] sub=\"Inventory updated · Request list INBOUNDED · ready for the next tracking scan\"",
+  "byte": true,
+  "id": "QA-S6-21"
+ },
+ {
+  "v": "PASS",
+  "ev": "header literal=\"Cancel Inbound — 100038120✕\" stripped=\"Cancel Inbound — 100038120\" yesChecked=true restockQty=\"2\" noteFound=true",
+  "literalAlsoHeld": false,
+  "id": "QA-M1-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "afterNo={\"disabled\":true,\"value\":\"\"} afterYes={\"disabled\":false,\"value\":\"2\"}",
+  "id": "QA-M1-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "helperFound=true memoPlaceholder=\"Cancellation reason or notes — also recorded in the order's Comments history\" useCaseFound=true",
+  "id": "QA-M1-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "(spec never names the footer element; used .foot) buttons=[\"Close\",\"Confirm\"] closedByBackdrop=true",
+  "id": "QA-M1-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "fieldOrder(2→3→4)=true #restockLoc initial=\"B-01-4\" helperFound=true afterNo={\"disabled\":true,\"value\":\"\"} afterYes={\"disabled\":false,\"value\":\"B-01-4\"}",
+  "id": "QA-M1-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "header literal=\"Barcode Not Recognized✕\" stripped=\"Barcode Not Recognized\" leadFound=true instructionFound=true unrecNo=\"12101316464794\"",
+  "literalAlsoHeld": false,
+  "id": "QA-M2-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "visible=true rows=2 headers=[\"Image\",\"Product Name\",\"Order\",\"Qty\",\"Tracking No\",\"\"] want=[\"Image\",\"Product Name\",\"Order\",\"Qty\",\"Tracking No\",\"\"] row1Cells=[\"IMG\",\"Dr.Jart+ Pore Remedy Renewing Foam Cleanser, 150mlDr.Jart+ — 포어레미디 리뉴잉 폼 클렌저\",\"414230\",\"1\",\"10323100835644\",\"Match Tracking No\"] unrecNoneHidden=true",
+  "id": "QA-M2-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "exactNoteFound=true nearest=\"Clicking match registers the tracking number on that line and closes this window — rescanning the same barcode is then recognized normally.\"",
+  "id": "QA-M2-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "btnText='Match Tracking No' modalOpenAfter=False toastVisible=True toastText='✓ Tracking No 10323100835644 matched and registeredOrder 414230 · Dr.Jart+ 포어레미디 폼 — rescanning the same barcode is now recognized' sub='Order 414230 · Dr.Jart+ 포어레미디 폼 — rescanning the same barcode is now recognized' visibleAfter4.3s=False",
+  "id": "QA-M2-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "unrecFoundHidden=true unrecNoneVisible=true unrecNoneText=\"No products match the entered order number (possible typo or a number from another channel). Send it to the Missing Tracking List. Send to Missing Tracking List\"",
+  "id": "QA-M2-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "m-unrec.open=false m-unrec2.open=true unrecCarriedVisible=true unrecCarriedNo=\"99999999999999\"",
+  "id": "QA-M2-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "m-unrec2.open=true #unrecCarried style.display=\"none\" computed=\"none\"",
+  "id": "QA-M2-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "input[type=file]=0 forbiddenWordHits=[]",
+  "id": "QA-M2-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "(spec never names the footer element; used .foot) footButtons=[\"No order number\",\"Cancel\"] demoHintExact=true",
+  "id": "QA-M2-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "header literal=\"Send to Missing Tracking List✕\" stripped=\"Send to Missing Tracking List\" checks={\"lead\":true,\"prompt\":true,\"autoVal\":\"glow ser\",\"optCount\":3,\"firstSel\":true,\"firstHasEN\":true,\"firstHasKR\":true,\"qtyInputValues\":[\"glow ser\",\"1\"],\"memoPh\":\"e.g. Box label damaged, looks like a 1+1 set — shown in the Missing Tracking List and the Slack alert\",\"memoPhMatches\":true} firstOpt=\"Beauty of Joseon — Glow Serum : Propolis + Niacinamide, 30ml Beauty of Joseon — 프로폴리스 나이아신아마이드 글로우 세럼\"",
+  "literalAlsoHeld": false,
+  "id": "QA-M2-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "exactNoteFound=true (quote-shape-normalized both sides) nearest=\"On send, the #unrecognized-tracking channel gets an \"Unrecognized product added\" alert (product name · barcode · qty · memo · order number if lookup failed) → shown in the unrecognized pool on the Missing Tracking List page.\"",
+  "id": "QA-M2-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "gtoastVisible=True text='✓ Sent to Missing Tracking ListPIC notified via #unrecognized-tracking · No refresh' sub='PIC notified via #unrecognized-tracking · No refresh' m-unrec2.open=False visibleAfter2.8s=False navigationEntries=1",
+  "id": "QA-M2-12"
+ },
+ {
+  "v": "PASS",
+  "ev": "header literal=\"Print Return Labels — 2 Selected Products (Supplier Return)✕\" stripped=\"Print Return Labels — 2 Selected Products (Supplier Return)\" chips=[\"CJ대한통운\",\"롯데택배\",\"한진택배\",\"우체국택배\",\"로젠택배\",\"✎ Custom\"] onChips=[\"CJ대한통운\"]",
+  "literalAlsoHeld": false,
+  "id": "QA-M4-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "headers=[\"Product Name KR\",\"Size (optional)\",\"Qty (optional)\"] want=[\"Product Name KR\",\"Size (optional)\",\"Qty (optional)\"] rows=[{\"brand\":\"Dr.Jart+\",\"name\":\"Dr.Jart+ 포어레미디 리뉴잉 폼 클렌저\",\"inputs\":[\"150ml\",\"1\"]},{\"brand\":\"Medicube\",\"name\":\"Medicube 제로 모공 패드 2.0\",\"inputs\":[\"\",\"2\"]}]",
+  "id": "QA-M4-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "#rlPreviewCarrier=\"CJ대한통운\" line1Exact=true line2Exact=true previewLines=[\"Dr.Jart+ 포어레미디 리뉴잉 폼 클렌저 Medicube 제로 모공 패드 2.0\",\"Dr.Jart+ 포어레미디 리뉴잉 폼 클렌저\",\"Dr.Jart+ 포어레미디 리뉴잉 폼 클렌저\",\"Medicube 제로 모공 패드 2.0\"]",
+  "id": "QA-M4-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "rlCustomRowVisible=true activeElementIsCustomInput=true previewAfterChipClick=\"Carrier name\" onChips=[\"✎ Custom\"] previewAfterTyping=\"대신택배\"",
+  "id": "QA-M4-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "row2 sizeInput value=\"\" placeholder=\"omitted if empty\" noteExact=true nearestNote=\"Use case: during inbound scanning, return items to the supplier (e.g. Coupang seller) when wrong/damaged items are found. Printing puts carrier name + product name (KR) + size + qty on the label — size/qty omitted if empty; attach it to the\"",
+  "id": "QA-M4-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "(spec never names the footer element; used .foot) footButtons=[\"Cancel\",\"🖨 Print\"]",
+  "id": "QA-M4-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "presentIn={\"s1\":true,\"s1b\":true,\"s2\":true,\"s3\":true} presentInStatesThatShouldNotHaveIt={\"s4\":false,\"s5\":false,\"s6\":false,\"s6b\":false} clickOpensM4=true",
+  "id": "QA-M4-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "visible=true cItemCount=2 firstAuthorHasDean=true span.at=\"@Yongwon\" composerPlaceholder=\"Write a comment — @name sends an automatic Slack alert (order no · text · time · author)\" buttons=[\"★\",\"★\",\"Post\"]",
+  "id": "QA-C-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "badge=\"2\" visibleBefore=true afterClick1=false afterClick2=true",
+  "id": "QA-C-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "open=true tabTexts=[\"@ Mentions 3\",\"3\",\"★ Saved\"] paneheader=\"Comments mentioning me · Click to open the order Mark all read\" HUB1=true HUB4=true",
+  "id": "QA-C-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "mentions-pane .it=4 unread=3 orders=[\"413865\",\"413712\",\"413650\",\"413501\"]",
+  "id": "QA-C-04"
+ },
+ {
+  "v": "PASS",
+  "ev": "mentionsHidden=true savedVisible=true entries=2 orders=[\"413712\",\"412990\"] starClasses=[\"star on\",\"star on\"] paneheader=\"Saved comments · Click to open the order Unstar to remove from the list\"",
+  "id": "QA-C-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "tabsHidden=true headerFound=true marks=[\"restock\",\"restock\"] visibleResultOrders=[\"413650\",\"412990\"]",
+  "id": "QA-C-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "panelText=\"@ Mentions 3 ★ Saved Comments mentioning me · Click to open the order Mark all read Order 413865 · Dean: \"@Yongwon Only 1 of 2 JIT items has arrived. Please check\"10:42★ Order 413712 · Miranti: \"@Yongwon Please take extr\"",
+  "id": "QA-C-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "tabsVisible=true previouslyActivePaneShown=true",
+  "id": "QA-C-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "class before=\"star\" afterClick1=\"star on\" afterClick2=\"star\"",
+  "id": "QA-C-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "badge=\"2\" hasReq1=true hasReq2=true HUB1=true paneHeader=\"Comments mentioning me · Click to open the order Mark all read Inbound 202607120001 \"",
+  "id": "QA-C-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "perState={\"s0\":\"🔍 Search all comments — order no. · author · text\",\"s1\":\"🔍 Search all comments — order no. · author · text\",\"s1b\":\"🔍 Search all comments — order no. · author · text\",\"s2\":\"🔍 Search all comments — order no. · author · text\",\"s3\":\"🔍 Search all comments — order no. · author · text\",\"s4\":\"🔍 Search all comments — order no. · author · text\",\"s5\":\"🔍 Search all comments — order no. · author · text\"} want=\"🔍 Search all comments — order no. · author · text\"",
+  "id": "QA-C-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "collapsed=true header=\"📡 Live Barcode Feed 4▾\" badge4Found=true ulHidden=true footerHidden=true",
+  "id": "QA-LG-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "collapsedRemoved=true .x=\"–\" liCount=4 footerText=\"Max 20 on screen · full history in backendExport by date\" footerButtons=[\"Export by date\"]",
+  "id": "QA-LG-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "#scanfloat visible per state (getClientRects) = {\"s1b\":false,\"s2\":false,\"s3\":false,\"s4\":false,\"s5\":false,\"s6\":false,\"s6b\":false}; it lives inside #s1 so it hides with the state (documents demo limitation L-3)",
+  "id": "QA-LG-03"
+ },
+ {
+  "v": "PASS",
+  "ev": "toasts=[\"✓ Inbound complete — 100040311No refresh · ready for the next scan15\"] sub=\"No refresh · ready for the next scan\"",
+  "byte": true,
+  "id": "QA-GL-01"
+ },
+ {
+  "v": "PASS",
+  "ev": "fnDecl=true selectionRule=true addEventListener=true | nearby=[\"function sndOutbound(){\",\"    const ac = sndOutbound.ac || (sndOutbound.ac = new (window.AudioContext||window.webkitAudioContext)());\",\"/.test(tx)){ b.addEventListener('click',sndOutbound); }\"]",
+  "id": "QA-GL-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "{\"s1\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true},\"s1b\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true},\"s2\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true},\"s3\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true},\"s4\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true},\"s5\":{\"bodyScrollWidth\":1280,\"clientWidth\":1280,\"ok\":true}}",
+  "id": "QA-GL-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "navMissing=[] h2=\"WMS - View Orders\" subs=[\"Search Orders\",\"Search Results\"]",
+  "byte": true,
+  "id": "QA-GL-13"
+ },
+ {
+  "v": "PASS",
+  "ev": "orderIdFound=true pill=\"Processing\" totalQty=true s6.ordercard=null s6b.ordercard=null",
+  "id": "QA-GL-14"
+ },
+ {
+  "v": "PASS",
+  "ev": "input[type=file]=0 .seg=null violations=[]",
+  "id": "QA-NG-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "allHrefs=[\"../inbound-request/index.html#reqlist\"] offending=[]",
+  "id": "QA-NG-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "carvedOutG12Anchors=1 violations=[] navigating onclick=[]",
+  "id": "QA-NG-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "{\"s1\":true,\"s1b\":true,\"s2\":true,\"s3\":true,\"s5\":true,\"s4\":false}",
+  "id": "QA-CV-02"
+ },
+ {
+  "v": "PASS",
+  "ev": "s1 headerCheckbox=true s1 rows=[{\"has\":true,\"checked\":false,\"hit\":false},{\"has\":true,\"checked\":true,\"hit\":true},{\"has\":true,\"checked\":false,\"hit\":false},{\"has\":true,\"checked\":false,\"hit\":false}] s4 headerChecked=true s4 rowChecked=[true,true,true]",
+  "id": "QA-CV-05"
+ },
+ {
+  "v": "PASS",
+  "ev": "{\"s1\":{\"counter\":\"Found 4 item(s) in this order · Found 1 order(s)\",\"rows\":4},\"s5\":{\"counter\":\"Found 2 item(s) in this order · Found 1 order(s)\",\"rows\":2}}",
+  "id": "QA-CV-06"
+ },
+ {
+  "v": "PASS",
+  "ev": "missingVerbatimRules=[]",
+  "id": "QA-CV-07"
+ },
+ {
+  "v": "PASS",
+  "ev": "exactParagraphFound=true nearest=\"The Hold itself is applied via the \"Hold Shipment\" button in OMS/Order detail or Order Management (CS team). View Orders only displays the resulting status and blocks outbound.\"",
+  "id": "QA-CV-08"
+ },
+ {
+  "v": "PASS",
+  "ev": "missing=[]",
+  "id": "QA-CV-09"
+ },
+ {
+  "v": "PASS",
+  "ev": "found=true | s6 legend excerpt=\"tock intake) at the view level. An inbound request may have multiple tracking numbers registered (split shipments) — every registered number matches and enters this screen (2026-08-03) — I + C Search 2Internal Inbound banner \"",
+  "id": "QA-CV-10"
+ },
+ {
+  "v": "PASS",
+  "ev": "sentence(i)=true sentence(ii)=true searchValue=\"10322198837710\"",
+  "id": "QA-CV-11"
+ },
+ {
+  "v": "PASS",
+  "ev": "printReturnLabels=true rowButtons literal=[{\"t\":\"Cancel Inbound4\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true}] dotStripped=[{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true},{\"t\":\"Cancel Inbound\",\"g\":true}]",
+  "literalAlsoHeld": false,
+  "id": "QA-CV-12"
+ },
+ {
+  "v": "PASS",
+  "ev": "checked=25 jitMixedCaseSeen=6 violations=[]",
+  "id": "QA-CV-18"
+ },
+ {
+  "v": "PASS",
+  "ev": "no-annoAdded=true dotsHidden=true legendsHidden=true textAfter=\"Show annotations\" restored=true textRestored=\"Hide annotations\"",
+  "id": "QA-CV-20"
+ }
+]
