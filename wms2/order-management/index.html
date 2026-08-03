@@ -146,6 +146,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
   padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
 .gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+/* WF-17 (2026-08-03): disabled state for confirming buttons (zero-selection guard) */
+.btn[disabled]{opacity:.45;cursor:not-allowed}
 </style>
 
 <div class="wf-bar">
@@ -258,16 +260,16 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <b style="color:var(--ink)">Assignment Period</b>
       <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
-        <input value="2026-07-23" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input value="10:00" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <input id="sampStartDate" value="2026-07-23" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input id="sampStartTime" value="10:00" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
         <span style="color:var(--ink-3)">~</span>
-        <input placeholder="End date" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input placeholder="Time" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
-        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked> forever (no end date)</label>
+        <input id="sampEndDate" placeholder="End date" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input id="sampEndTime" placeholder="Time" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked id="sampForever"> forever (no end date)</label>
       </div>
       <div class="note">Sample <b>product type is not selected</b> — when ON, "(+ sample set)" is auto-appended to the last product name of target orders and a sample-set row is added at the bottom of the invoice (defined in G). Multiple overlapping periods can be registered — but even with overlapping periods, <b>exactly 1 sample set per order</b> (no duplicate assignment).</div>
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Cancel</button>
-      <button class="btn btn-green btn-sm" data-close>Start Assignment (ON)</button>
+      <button class="btn btn-green btn-sm" data-close id="sampStartBtn">Start Assignment (ON)</button>
     </div>
   </div>
 </div>
@@ -290,7 +292,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Close</button>
-      <button class="btn btn-sm" style="background:var(--red);color:#fff" data-close id="sampCancelBtn">Cancel Selected Periods</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" id="sampCancelBtn">Cancel Selected Periods</button>
     </div>
   </div>
 </div>
@@ -331,7 +333,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
             <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
             <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
-            <tr><td colspan="6" style="text-align:center;color:var(--ink-3)">⋯ +8 more rows</td></tr>
+            <tr><td colspan="7" style="text-align:center;color:var(--ink-3)">⋯ +8 more rows</td></tr>
           <tr><td>Lucia Ramos</td><td>PE</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--amber);font-weight:700">Not connected — contact the Fulfillment Center</td></tr>
           </tbody>
         </table>
@@ -341,6 +343,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Cancel</button>
       <button class="btn btn-mkt btn-sm" data-close id="mktConfirm">Confirm Import (12 orders)</button>
+    </div>
+  </div>
+</div>
+
+<!-- WF-17 (2026-08-03): confirm dialog before period cancellation — spec §3.7.5 [PD-5] -->
+<div class="overlay" id="m-sampcancel-confirm">
+  <div class="modal" style="max-width:430px">
+    <header id="sampConfirmTitle">Cancel 1 assignment period(s)?<button class="x" data-close>✕</button></header>
+    <div class="body" style="font-size:13px;color:var(--ink-2)">New assignments stop immediately. Orders already assigned keep their sample set.</div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Keep periods</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" id="sampConfirmGo">Cancel periods</button>
     </div>
   </div>
 </div>
@@ -416,20 +430,78 @@ function cSearch(inp){
 const pcb=document.getElementById('picCustomBtn');
 if(pcb){pcb.addEventListener('click',()=>{const x=document.getElementById('picCustomIn');
   const show=x.style.display==='none'; x.style.display=show?'inline-block':'none'; if(show)x.focus();});}
+/* WF-18 (2026-08-03): explicit toast stack — concurrent toasts keep their own nodes but never overlap */
+function stackToasts(){
+  let y=16;
+  document.querySelectorAll('.gtoast').forEach(t=>{
+    if(t.style.display==='block'){t.style.top=y+'px';y+=t.offsetHeight+8;}
+  });
+}
+function showToast(id,html){
+  let t=document.getElementById(id);
+  if(!t){t=document.createElement('div');t.id=id;t.className='gtoast';document.body.appendChild(t);}
+  t.innerHTML=html;
+  t.style.display='block';stackToasts();
+  clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none';stackToasts();},2600);
+}
 const mc=document.getElementById('mktConfirm');
 if(mc){mc.addEventListener('click',()=>{
-  let t=document.getElementById('gtoast');
-  if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
-    t.innerHTML='✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center</small>';
-    document.body.appendChild(t);}
-  t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
+  showToast('gtoast','✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center</small>');});}
 
-/* 2026-08-03: cancel confirmation toast (global rule — confirm actions toast top-right) */
+/* WF-16 (2026-08-03): Start Assignment (ON) — green confirmation toast per spec §3.6.5 [G-2] */
+const ssb=document.getElementById('sampStartBtn');
+if(ssb){ssb.addEventListener('click',()=>{
+  const allNew=document.querySelector('#m-sampleon input[name="samptarget"]').checked;
+  let sub;
+  if(allNew){
+    const sd=document.getElementById('sampStartDate').value,st=document.getElementById('sampStartTime').value;
+    const fv=document.getElementById('sampForever').checked;
+    const ed=document.getElementById('sampEndDate').value,et=document.getElementById('sampEndTime').value;
+    sub='All new sales orders from '+sd+' '+st+' → '+(fv?'forever':(ed+' '+et).trim())+' · exactly 1 sample set per order';
+  }else{
+    sub='2 orders assigned · 0 skipped (already assigned) · 0 skipped (not eligible)';
+  }
+  showToast('gtoast3','✓ Sample assignment started<small>'+sub+'</small>');
+});}
+
+/* WF-19 (2026-08-03): forever wins — end fields cleared and disabled while checked (spec §3.6.3 [E-23]) */
+const sfv=document.getElementById('sampForever');
+if(sfv){
+  const eD=document.getElementById('sampEndDate'),eT=document.getElementById('sampEndTime');
+  const syncF=()=>{if(sfv.checked){eD.value='';eT.value='';}eD.disabled=sfv.checked;eT.disabled=sfv.checked;};
+  sfv.addEventListener('change',syncF); syncF();
+}
+
+/* WF-17 (2026-08-03): Cancel Selected Periods — disabled at zero selection + confirm step before cancellation [PD-5];
+   the green toast (unchanged copy) now fires only after "Cancel periods" confirms */
 const scb=document.getElementById('sampCancelBtn');
-if(scb){scb.addEventListener('click',()=>{
-  let t=document.getElementById('gtoast2');
-  if(!t){t=document.createElement('div');t.id='gtoast2';t.className='gtoast';
-    t.innerHTML='✓ Assignment period cancelled<small>New assignments stopped for the selected period · already-assigned orders kept</small>';
-    document.body.appendChild(t);}
-  t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
+if(scb){
+  const boxes=[...document.querySelectorAll('#m-sampleoff tbody input[type="checkbox"]')];
+  const sync=()=>{scb.disabled=!boxes.some(b=>b.checked);};
+  boxes.forEach(b=>b.addEventListener('change',sync)); sync();
+  scb.addEventListener('click',()=>{
+    const n=boxes.filter(b=>b.checked).length;
+    if(!n) return;
+    document.getElementById('sampConfirmTitle').childNodes[0].textContent='Cancel '+n+' assignment period(s)?';
+    document.getElementById('m-sampcancel-confirm').classList.add('open');
+  });
+  document.getElementById('sampConfirmGo').addEventListener('click',()=>{
+    document.getElementById('m-sampcancel-confirm').classList.remove('open');
+    document.getElementById('m-sampleoff').classList.remove('open');
+    showToast('gtoast2','✓ Assignment period cancelled<small>New assignments stopped for the selected period · already-assigned orders kept</small>');
+  });
+}
+
+/* WF-20 (2026-08-03): Esc dismisses the topmost open overlay, else the Comments hub [E-97] */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape') return;
+  const open=document.querySelectorAll('.overlay.open');
+  if(open.length){open[open.length-1].classList.remove('open');return;}
+  document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));
+});
+/* WF-21 (2026-08-03): outside click closes the Comments hub — the live handler the existing stopPropagation guards were written for */
+document.addEventListener('click',e=>{
+  if(e.target.closest('.inboxdd')) return;
+  document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));
+});
 </script>

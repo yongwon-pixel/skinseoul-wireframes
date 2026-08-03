@@ -298,7 +298,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
     <!-- ===== Inbound Form ===== -->
     <div class="pane" id="p-inbound">
-      <div class="form-note">Record a warehouse inbound directly, without a specific order (return restock · manual inbound). Location auto-applies the SKU's single registered location. For order-linked inbound, use Request Inbound on View Orders / the order detail.</div>
+      <div class="form-note">Record a warehouse inbound directly, without a specific order (return restock · manual inbound). Location auto-applies the SKU's single registered location. For order-linked inbound, use the row Inbound buttons on View Orders or Order Detail.</div>
       <div class="formgrid">
         <div class="fld"><label>SKU *</label><input placeholder="100004819"></div>
         <div class="fld"><label>Quantity *</label><input type="number" placeholder="0"></div>
@@ -387,6 +387,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">8</span><span>Stock History Events — Type/Status rendered as badges, Pending confirm rows highlighted + filter chips (All/Confirmed/Pending) <span class="ref">— E</span></span></li>
     <li><span class="n">9</span><span>History pagination — resolves the live screen's "More data available (pagination not implemented)" <span class="ref">— E</span></span></li>
     <li><span class="n">16</span><span>Top-right Comments hub — <b>shared across all screens</b>, includes all-comments search <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">17</span><span><b>Past Audit Logs modal</b> — the body of legend 15, now annotated with its own dot so the legend↔modal map is 1:1 self-evident (added 2026-08-03, WF-14) <span class="ref">— E "monthly audits are logged"</span></span></li>
+    <li><span class="n">18</span><span><b>06-30 ADJUST detail modal</b> — a second instance of the M2 session-detail pattern, opened from the 2026-06-30 row of Past Audit Logs; own dot added 2026-08-03 (WF-14) <span class="ref">— E</span></span></li>
   </ol>
   <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · Export Stock Status · Search dropdown · Inbound/Outbound forms · event columns (Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor) stay as on the live screen. Data uses the Madecassol Cream (100004819) example.</p>
 </div>
@@ -464,7 +466,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <!-- Modal: Past Audit Logs (session list) -->
 <div class="overlay" id="m-auditlog">
-  <div class="modal" style="max-width:760px">
+  <div class="modal anno" style="max-width:760px">
+    <span class="dot" style="top:-11px;left:-11px">17</span>
     <header>Past Audit Logs — monthly session records<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl">
@@ -483,7 +486,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 
 <!-- Modal: audit session detail (2026-06) -->
 <div class="overlay" id="m-adjlog6">
-  <div class="modal" style="max-width:760px">
+  <div class="modal anno" style="max-width:760px">
+    <span class="dot" style="top:-11px;left:-11px">18</span>
     <header>2026-06-30 Stock Audit — 5 ADJUST events (Auditor: Dean, confirmed 17:05)<button class="x" data-close>✕</button></header>
     <div class="body">
       <table class="tbl" style="font-size:12.5px">
@@ -518,7 +522,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         </tbody>
       </table>
       <div class="note" style="background:var(--amber-soft);margin-top:10px">⚠ <b>Reserved shortage check</b> — if any SKU's counted qty is below Reserved (allocated orders), the affected order list appears here and confirmation is disabled until reviewed. None in this audit.</div>
-      <div class="note">Total stock loss: <b style="color:var(--amber)">+₩46,260</b> (target 0) · the 3 new additions are not losses — on confirm, Current Stocks · Available update immediately; monthly audit logs retained.</div>
+      <div class="note">Total stock loss: <b style="color:var(--amber)">+₩46,260</b> (target 0) · the 1 new addition is not a loss — on confirm, Current Stocks · Available update immediately; monthly audit logs retained.</div>
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Cancel</button>

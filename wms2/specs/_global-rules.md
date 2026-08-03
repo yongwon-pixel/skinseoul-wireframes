@@ -1,8 +1,8 @@
 # WMS 2.0 — Global Rules (`_global-rules`)
 
-Version 1.0 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
+Version 1.1 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
 
-Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact.
+Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling.
 
 ---
 
@@ -17,10 +17,11 @@ Page deltas may add local behavior (e.g. Closing disables the input before the c
 ## [G-2] No refresh + confirmation toast
 - No full-page refresh after any action. **Sole designed exception:** RTO Bulk Outbound refreshes after completion (2026-07-09 decision, deliberately kept).
 - **Every confirming action** — register, confirm, cancel, send, save, remove/delete — shows a top-right toast stating what happened. Green for success, red for failure. Removal/deletion confirmations count as confirming actions [GD-5].
+- **Every removal/deletion-class (destructive) action takes a confirm dialog, plus a reason where the flow already carries a reason field, plus the toast.** **CONFIRMED 2026-08-03 (owner, PD-5).**
 **CONFIRMED 2026-08-03 (owner emphasis, applies across all 8 screens).**
 
 ## [G-3] Audio feedback
-(a) **Send sound** — outbound-class buttons play a short synthesized rising sweep (Web Audio, no external files). Scope: every outbound-class button on every page — View Orders (Outbound, Inbound + Outbound, bulk), RTO (Bulk Outbound), Order Detail (Outbound), Inventory (− Record Outbound). `[PD-2 · OWNER-PENDING]`
+(a) **Send sound** — outbound-class buttons play a short synthesized rising sweep (Web Audio, no external files). Scope: every outbound-class button on every page — View Orders (Outbound, Inbound + Outbound, bulk), RTO (Bulk Outbound), Order Detail (Outbound), Inventory (− Record Outbound). **CONFIRMED 2026-08-03 (owner, PD-2).**
 (b) **Voice alert** — Closing scan warnings speak "Please check this order" (`en-US` TTS) so staff hear problems without watching the screen. **CONFIRMED 2026-07-23.**
 (c) View Orders State 6 wrong-product scan uses a **distinct warning tone**, not the send sound and not TTS (page delta).
 
@@ -42,7 +43,7 @@ Infrastructure failures (agent offline, printer unreachable) surface as a red to
 - Korean product names, Korean carrier names (CJ대한통운 등), Korean supplier/company names, and printed label content are **data**: they stay Korean inside an English UI and are never translated.
 
 ## [G-7] Comments system
-- Per-entity comment history accumulates in admin — this is a deliberate AI-training and audit asset; comments are **append-only** (no edit/delete) `[PD-3 · OWNER-PENDING]`.
+- Per-entity comment history accumulates in admin — this is a deliberate AI-training and audit asset; comments are **append-only** (no edit/delete). **CONFIRMED 2026-08-03 (owner, PD-3).**
 - `@mention` notifies the mentioned person through Slack: **#fulfillment-admin-comments** (`C0BMGEWM5QA`) — the message body @mentions the person, so Slack raises a personal notification while the channel doubles as a team-visible archive. Payload: entity no., comment text, time, author, mentioned user, deep link. **CONFIRMED by owner 2026-08-03.**
 - System auto-comments (expected-qty edit, unrecognized match-confirm) use the same pipeline with `source=system`.
 - Commentable entity types include orders **and** inbound requests **and** unrecognized-pool items.
@@ -55,9 +56,11 @@ Specs may declare explicit **NON-events** — ephemeral client-local state such 
 
 ## [G-9] Idempotency
 Inbound / Outbound / and every confirming action must be double-click safe: client-side debounce **and** a server-side idempotency key. A known current-admin bug processes double clicks twice — this must be fixed, not reproduced. Key format and debounce window are developer decisions.
+**Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead. **CONFIRMED 2026-08-03 (owner, PD-7).**
 
 ## [G-10] Multiple tracking numbers per inbound request
 One inbound request may register several tracking numbers (split shipments). **Every** registered number matches in View Orders and enters the internal-inbound screen (State 6); partial arrivals accumulate against the same request until fully received. **CONFIRMED 2026-08-03.**
+An inbound tracking number is **unique system-wide** — registering one that already exists on another inbound request is blocked. Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**
 
 ## [G-11] Inbound request lifecycle
 `REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`.
@@ -70,7 +73,7 @@ Cross-page references are real links, not decoration — e.g. View Orders State 
 ## [G-13] Sample assignment (Order Management is the primary home)
 - Simple **ON/OFF** with multiple, possibly overlapping assignment periods (2026-07-23 redesign; reconfirmed 2026-08-03). No sample-type selection.
 - **Exactly one sample set per order**, even when periods overlap — no double assignment.
-- **Dual view:** carrier-facing data appends only "(+ sample set)" to the last product name (tax handling). Internal invoice and picking artifacts show **which** sample and **how many** `[PD-36 · OWNER-PENDING]` for the picking list specifically.
+- **v1 makes no sample distinction** — internal invoices and picking labels also render **"sample set" only**: no sample type, no per-type quantity. Carrier-facing data appends only "(+ sample set)" to the last product name (tax handling), so in v1 the carrier-facing and internal renderings differ only in placement. Distinguishing WHICH sample and HOW MANY is follow-up work for the moment sample types are introduced. **CONFIRMED 2026-08-03 (owner, PD-51)** — this supersedes the earlier "which sample and how many" internal-artifact requirement; whether the picking list carries a sample-set line at all remains `[PD-36 · OWNER-PENDING]` (if it does, the line reads "sample set").
 
 ## [G-14] Location scheme
 - One location per SKU. Whether two SKUs may share one location is `[PD-46 · OWNER-PENDING]` (provisional: 1:1, i.e. a location holds one SKU).
@@ -78,7 +81,7 @@ Cross-page references are real links, not decoration — e.g. View Orders State 
 - Audit-mode-only UI (counted qty, diff, loss columns, the loss summary, the unregistered-product row) stays hidden until Stock Audit is started. **CONFIRMED 2026-08-03.**
 
 ## [G-15] Permissions (v1)
-v1 ships a **single admin role**: no role gating on any screen, every mutating action records the actor [G-8]. A role/permission model is a post-v1 owner decision. `[PD-1 · OWNER-PENDING]` — this rule exists because six screens independently raised the same question.
+v1 ships a **single admin role**: no role gating on any screen, every mutating action records the actor [G-8]. A role/permission model is a post-v1 owner decision. **CONFIRMED 2026-08-03 (owner, PD-1: everyone may perform every action; who-did-it logging is mandatory)** — this rule exists because six screens independently raised the same question.
 
 ---
 
@@ -96,4 +99,13 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 | Expected-qty edit (auto-comment) | `#fulfillment-admin-comments` + @requester | old→new qty, reason, editor |
 | Unrecognized match confirmed (auto-comment) | `#fulfillment-admin-comments` + @registrant | tracking no., matched product line, resolver |
 
-Slack dispatch failures are retried and persisted [G-8]; retry policy is a developer decision.
+**Failed-dispatch retry queue** — a failed Slack dispatch never blocks or rolls back the primary action; the failure is queued in a background retry queue and re-sent automatically with exponential backoff. Every dispatch result is persisted [G-8]. An item still undelivered after N retries (N = developer decision) is flagged in the admin notification log. No dedicated queue screen in v1. **CONFIRMED 2026-08-03 (owner, PD-4).**
+
+---
+
+## Change history
+| Version | Date | Changes |
+|---|---|---|
+| 1.1 | 2026-08-03 | Owner decisions applied: PD-1→[G-15], PD-2→[G-3a], PD-3→[G-7], PD-5→[G-2], PD-7→[G-9], PD-8→[G-10] now **CONFIRMED**; tags removed. |
+| 1.1 | 2026-08-03 | [G-13] amended per **PD-51**: v1 renders "sample set" only on internal invoices and picking labels — no sample type/quantity breakdown until sample types exist. |
+| 1.1 | 2026-08-03 | Slack section: **Failed-dispatch retry queue** clause added per **PD-4** (exponential backoff, persisted results, admin-log flag after N retries, background-only in v1). |

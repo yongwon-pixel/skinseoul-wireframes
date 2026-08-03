@@ -58,76 +58,25 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pagepad{padding:18px 16px 0}   /* C: reduced side margins */
 .pagepad h2{font-size:27px;margin:6px 0 2px}
 .pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
-.seg{display:flex;border:1px solid var(--ink);border-radius:7px;overflow:hidden}
-.seg button{border:none;background:var(--page);color:var(--ink);padding:8px 14px;font-size:13.5px;border-right:1px solid var(--ink)}
-.seg button:last-child{border-right:none}
-.seg button.on{background:var(--ink);color:var(--page);font-weight:600}
 .btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
 .btn-green{background:var(--green);color:#fff}
-.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
-.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
-.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-red{background:var(--red);color:#fff}
 .btn-sm{padding:5px 11px;font-size:12.5px}
-.shelf{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:7px;
-  padding:4px 12px;background:var(--page)}
-.shelf label{font-size:12.5px;font-weight:700;color:var(--ink-2)}
-.shelf input{width:74px;border:1px solid var(--line-strong);border-radius:5px;padding:5px 8px;font-size:14px;
-  background:var(--page);color:var(--ink);text-align:center;font-weight:700}
-/* order header card */
-.ordercard{margin-top:16px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:14px 18px;
-  display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--line)}
-.ordercard .kv{font-size:13.5px;color:var(--ink-2)} .ordercard .kv b{color:var(--ink)}
-.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
-.st-processing{background:var(--green-soft);color:var(--green)}
-.st-prepare{background:var(--blue-soft);color:var(--blue)}
-.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
-.st-missing{background:var(--red-soft);color:var(--red);border:1px solid var(--red)}
-.chip-return{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
-.comment-btn{position:relative;margin-left:auto}
 /* table */
 .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
 .tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
 .tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
 .tbl .num{font-variant-numeric:tabular-nums}
 .row-hit td{background:var(--hl);border-top:2px solid var(--hl-line);border-bottom:2px solid var(--hl-line)}
-.row-exist td{background:color-mix(in srgb,var(--blue-soft) 55%,var(--page))}
-.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
-.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
-  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
-.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.tag-pending{background:#FFC107;color:#3D2E00}
-.tag-inbounded{background:var(--green);color:#fff}
-.tag-exist{background:var(--blue);color:#fff}
-/* 4 sourcing-route badges — plain bold black text only, no color (the route assigned in Inbound Request I is matched via the invoice number and displayed · same notation convention as View Orders) */
-.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
-.route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
-.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
-.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+/* sourcing-route badge — plain bold black text only, no color (same notation convention as View Orders) */
+.tag-jit{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
 .mut{color:var(--ink-3);font-size:12.5px}
-.bar-under{text-decoration:underline;text-underline-offset:2px;font-weight:800}
-/* comment panel — same grammar as Operator Comments on the Order page */
-.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
-.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
-.cpanel .c-item:last-of-type{border-bottom:none}
-.cpanel .who{font-weight:700;white-space:nowrap}
-.cpanel .at{color:var(--blue);font-weight:700}
-.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
-.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
-.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
 /* ★ save (bookmark) toggle — shared by Mentions/Saved */
 .star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
 .star.on{color:var(--star)}
-/* actor log */
-.logsec{margin-top:26px}
-.logsec h4{font-size:14px;margin:0 0 8px}
-.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
-.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
-.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
-.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
 .btn[disabled]{opacity:.4;pointer-events:none}
 /* toast */
 .toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
@@ -142,15 +91,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
 .modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
 .modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
-.modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
-.modal .qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
 .note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
-.auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
-.auto input{width:100%;border:none;padding:9px 12px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
-.auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
-.auto .opt.sel{background:var(--blue-soft);font-weight:600}
-.auto .opt small{color:var(--ink-3)}
 .mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+/* ── removal confirm modal fields (M2 — PD-5/PD-60 owner-confirmed 2026-08-03) ── */
+.rlabel{display:block;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rsel{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13.5px;color:var(--ink);background:var(--page)}
+.rerr{display:none;margin-top:5px;font-size:12px;color:var(--red);font-weight:600}
 /* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
 .inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
   border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
@@ -165,7 +111,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .inboxdd .it .body{flex:1}
 .inboxdd .it b{color:var(--ink)}
 .inboxdd .it time{color:var(--ink-3);font-size:11px}
-.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
 .state{display:none}
 .state.on{display:block}
 /* ── tracking-missing only (minimal new classes) ───── */
@@ -175,33 +120,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .poolhead b{color:var(--amber);font-size:14.5px}
 .poolhead .cnt{font-size:12.5px;color:var(--ink-2)}
 .poolhead .sp{flex:1}
-/* Slack-notified marker — gray tones instead of purple (purple is annotation-only) */
-.slack-pill{display:inline-flex;align-items:center;gap:5px;background:var(--canvas);color:var(--ink-2);
-  border:1px solid var(--line-strong);border-radius:99px;padding:2px 9px;font-size:11px;font-weight:700}
-.slack-pill.done{background:var(--green-soft);color:var(--green);border-color:var(--green)}
-/* wait-time chip */
-.wait{display:inline-block;border-radius:5px;padding:2px 8px;font-size:11.5px;font-weight:700;background:var(--green-soft);color:var(--green)}
-.wait.warn{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
-.wait.over{background:var(--red-soft);color:var(--red);border:1px solid var(--red)}
-/* inline tracking-number input */
-.trk{width:160px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 9px;font-size:13px;
-  font-variant-numeric:tabular-nums;background:var(--page);color:var(--ink);outline:none}
-.trk::placeholder{color:var(--ink-3);font-weight:400}
-.trk.filled{border-color:var(--green);background:color-mix(in srgb,var(--green-soft) 45%,var(--page))}
-/* PIC avatar (group header) */
-.picava{display:inline-flex;width:28px;height:28px;border-radius:99px;background:var(--ss-purple);color:#fff;
-  align-items:center;justify-content:center;font-size:12.5px;font-weight:700;box-shadow:0 0 0 3px var(--ss-purple-50)}
-.picname{font-size:15px;font-weight:800;color:var(--ink)}
-.cntchip{display:inline-flex;align-items:center;background:var(--red-soft);color:var(--red);border:1px solid var(--red);
-  border-radius:99px;padding:2px 10px;font-size:12px;font-weight:700}
-.grp-gap{height:8px}
-/* match-candidate highlight (pool item ↔ PIC order link hint) */
 </style>
 <div class="wf-bar">
   <h1>WMS 2.0 · Unrecognized Tracking Wireframe</h1>
-  <span class="hint">v2 — simplified around the unrecognized pool · purple numbers = new/changed annotations</span>
+  <span class="hint">v3 — ✕ removal now confirms with a reason (2026-08-03) · purple numbers = new/changed annotations</span>
   <div class="wf-tabs">
     <button class="wf-tab" data-modal="m-match">Modal: Match Review (M1)</button>
+    <button class="wf-tab" data-modal="m-remove">Modal: Remove Confirm (M2)</button>
     <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
@@ -224,14 +149,14 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <button data-tab="saved">★ Saved</button>
       </div>
       <div class="tabpane" data-pane="mentions">
-        <div class="paneheader">Comments mentioning me <small>Mark all read</small></div>
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
         <div class="it unread"><div class="body"><b>Order 414190</b> · Dean: "@Yongwon This Coupang order still has no tracking number after 12 hours. Needs re-checking"<br><time>10:05</time></div><button class="star" title="Save">★</button></div>
         <div class="it unread"><div class="body"><b>Unrecognized pool</b> · Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"<br><time>10:12</time></div><button class="star on" title="Saved">★</button></div>
         <div class="it unread"><div class="body"><b>Order 414102</b> · Harshit: "@Yongwon This is my order. Tracking entered"<br><time>09:50</time></div><button class="star" title="Save">★</button></div>
         <div class="it"><div class="body"><b>Order 413998</b> · Miranti: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
       </div>
       <div class="tabpane" data-pane="saved" style="display:none">
-        <div class="paneheader">Saved comments <small>Unstar to remove from the list</small></div>
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
         <div class="it"><div class="body"><b>Unrecognized pool</b> · Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"<br><time>10:12</time></div><button class="star on" title="Unsave">★</button></div>
       </div>
     </div>
@@ -299,12 +224,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">0</span><span>New admin page — replaces the manual process of setting orders without a tracking number aside. Coupang creates the order number instantly but generates the tracking number later → unrecognized / unentered items are collected and tracked here <span class="ref">— F Tracking Automation</span></span></li>
     <li><span class="n">1</span><span><b>Unrecognized product pool</b> — aggregates physical products sent via the View Orders barcode-recognition-failure popup, highlighted in yellow. The <b>last-mile tracking number collected at scan time is shown to the left of the order number</b>. The order number (Coupang purchase) is mostly "–" — lookup-matched items are resolved at the registration step and never reach the pool. Each item shows brand, product name, size, barcode, quantity, and memo <span class="ref">— F Flow 5</span></span></li>
     <li><span class="n">2</span><span><b>Suspected orders (auto-matched)</b> — via barcode→product comparison, candidates are shown <b>only when an order containing this product exists and that order is in the Processing stage</b>, <b>multiple possible</b>. Mostly JIT orders from non-Coupang channels such as Naver and the official mall (Coupang items are filtered out by the order-number lookup). On registration, the automatic #unrecognized-tracking notification also @mentions the suspected PICs → handlers only need to come and confirm <span class="ref">— 2026-07-23 UX inversion</span></span></li>
-    <li><span class="n">3</span><span><b>"Review &amp; Match" button → match modal (M1)</b> — click a candidate <b>product line</b> to match (matched to a product line, not order-level). The candidate list covers every "contains the product + Processing" order, so there is <b>no separate PIC search</b> (if it is not here, the data is wrong — manual-search fallback removed 2026-07-23). On confirm, the <b>tracking number is registered to that product line</b>, the item is removed from the pool, and a comment is automatically posted to the order's Comments (<b>@mentions the registrant</b> "Matched to the order" → Slack notification). Row <b style="color:var(--red)">✕</b> on the right removes it from the list (clean-up for mis-registrations and no-action items) <span class="ref">— F Flow 2·5</span></span></li>
+    <li><span class="n">3</span><span><b>"Review &amp; Match" button → match modal (M1)</b> — click a candidate <b>product line</b> to match (matched to a product line, not order-level). The candidate list covers every "contains the product + Processing" order, so there is <b>no separate PIC search</b> (if it is not here, the data is wrong — manual-search fallback removed 2026-07-23). On confirm, the <b>tracking number is registered to that product line</b>, the item is removed from the pool, and a comment is automatically posted to the order's Comments (<b>@mentions the registrant</b> "Matched to the order" → Slack notification). Row <b style="color:var(--red)">✕</b> on the right now opens the <b>removal confirm modal (M2)</b>: a mandatory reason (Registered by mistake / Routed to inbound request + Inbound No. / No action needed / Other + memo) → soft-delete with reason·actor·time recorded, a green "✓ Removed from pool" toast, and an auto-comment on the pool item <span class="ref">— PD-5/PD-60 owner-confirmed 2026-08-03 · F Flow 2·5</span></span></li>
     <li><span class="n">4</span><span>Brand name always shown at the front of Product Name (inherits View Orders decision B) <span class="ref">— B</span></span></li>
     <li><span class="n">5</span><span>Comments — top-right hub ([@ Mentions]+[★ Saved]+search across all comments · newest first). @mentions trigger automatic Slack notifications; clicking a comment opens the order page <span class="ref">— 0. UI 1+2</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 simplification decision:</b> removed the per-PIC group tables, bulk-action bar, Slack-notified column, resolved log, unified search bar, and the in-page register button and modal. Registration has a single entry point — the View Orders popup — and notifications are sent automatically. <b>Matching UX inversion:</b> handlers searching for their own name per product (old) → the system presents suspected orders and handlers first, and handlers only confirm (new). Since candidates are the full set of "contains the product + Processing" orders, the manual-search fallback was removed as well (2026-07-23).</p>
-  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">Flow summary: (1) View Orders barcode recognition fails → <b>order-number lookup popup</b> → (2a) match succeeds → the tracking number is matched and registered on the spot (never enters this list; rescanning recognizes it normally) / (2b) no order number or match fails → send-to-unrecognized modal (English product-name autocomplete · quantity · memo) → (3) automatic #unrecognized-tracking notification (suspected PICs @mentioned) → (4) shown in this page's unrecognized pool together with the tracking number and suspected orders ("contains the product + Processing" condition, multiple possible) → (5) the responsible PIC reviews &amp; matches via "Review &amp; Match" (M1) → removed from the pool + the registrant is @mentioned via a comment automatically posted to the order's Comments. See the View Orders wireframe for the registration popup mock. <b>(Confirmed 2026-08-02) Unrequested inbound shipments also use this pool</b> — when the invoice scan of arrived stock matches neither a customer order nor an inbound request, it is sent to unrecognized the same way. After the owner creates an inbound request, enters the invoice number, and removes the row from the pool (✕), rescanning enters the View Orders internal-inbound screen (State 6) normally. Leaving a "suspected inbound stock" note in the registration memo speeds up routing to the owner.</p></div>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 simplification decision:</b> removed the per-PIC group tables, bulk-action bar, Slack-notified column, resolved log, unified search bar, and the in-page register button and modal. Registration has a single entry point — the View Orders popup — and notifications are sent automatically. <b>Matching UX inversion:</b> handlers searching for their own name per product (old) → the system presents suspected orders and handlers first, and handlers only confirm (new). Since candidates are the full set of "contains the product + Processing" orders, the manual-search fallback was removed as well (2026-07-23). <b>(2026-08-03)</b> the one-click ✕ removal was replaced by the confirm modal M2 per the owner-confirmed rule that every destructive action gets a confirm step, a reason, and a toast (PD-5/PD-60); the dead v1 CSS/JS leftovers of the 2026-07-23 simplification were also deleted (WF-10).</p>
+  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">Flow summary: (1) View Orders barcode recognition fails → <b>order-number lookup popup</b> → (2a) match succeeds → the tracking number is matched and registered on the spot (never enters this list; rescanning recognizes it normally) / (2b) no order number or match fails → send-to-unrecognized modal (English product-name autocomplete · quantity · memo) → (3) automatic #unrecognized-tracking notification (suspected PICs @mentioned) → (4) shown in this page's unrecognized pool together with the tracking number and suspected orders ("contains the product + Processing" condition, multiple possible) → (5) the responsible PIC reviews &amp; matches via "Review &amp; Match" (M1) → removed from the pool + the registrant is @mentioned via a comment automatically posted to the order's Comments. See the View Orders wireframe for the registration popup mock. <b>(Confirmed 2026-08-02) Unrequested inbound shipments also use this pool</b> — when the invoice scan of arrived stock matches neither a customer order nor an inbound request, it is sent to unrecognized the same way. After the owner creates an inbound request, enters the invoice number, and removes the row from the pool (✕ → removal confirm modal M2, reason "Routed to inbound request" + Inbound No. — 2026-08-03), rescanning enters the View Orders internal-inbound screen (State 6) normally. Leaving a "suspected inbound stock" note in the registration memo speeds up routing to the owner.</p></div>
 </section>
 
 <!-- Modal: Review & Match (confirm & match the suspected product line) -->
@@ -335,13 +260,48 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
+<!-- Modal: Remove Confirm (M2) — PD-5/PD-60 owner-confirmed 2026-08-03, closes WF-6 -->
+<div class="overlay" id="m-remove">
+  <div class="modal anno" style="max-width:480px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Remove this item from the pool?<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div id="rmSummary" style="background:var(--hl);border:1px solid var(--hl-line);border-radius:8px;padding:10px 12px;font-size:13px"></div>
+      <label class="rlabel" for="rmReason">Reason <span style="color:var(--red)">*</span></label>
+      <select class="rsel" id="rmReason">
+        <option value="">Select a reason…</option>
+        <option>Registered by mistake</option>
+        <option>Routed to inbound request</option>
+        <option>No action needed</option>
+        <option>Other</option>
+      </select>
+      <div id="rmInboundWrap" style="display:none">
+        <label class="rlabel" for="rmInbound">Inbound No. <span class="mut" style="font-weight:400">(optional — links the removal to the inbound request)</span></label>
+        <input class="rsel num" id="rmInbound" placeholder="YYYYMMDDNNNN" maxlength="12" inputmode="numeric">
+        <div class="rerr" id="rmInboundErr">Inbound No. must be 12 digits (YYYYMMDDNNNN)</div>
+      </div>
+      <label class="rlabel" for="rmMemo">Memo <span class="mut" style="font-weight:400">(optional · required for "Other")</span></label>
+      <textarea class="mtextarea" id="rmMemo" placeholder="Why is this item leaving the pool?"></textarea>
+      <div class="note">On confirm — the item is <b>soft-deleted</b> from the pool with <b>reason · actor · time</b> recorded permanently, a comment is auto-posted on the pool item, and a green <b>"✓ Removed from pool"</b> toast confirms it. Comments already on the item survive the removal.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-red btn-sm" id="rmConfirm" disabled>Remove from pool</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="matchToast" style="display:none;position:fixed;top:18px;right:18px">
   <span>✓ Matched to Order 414230 · COSRX Snail 96</span><small>Tracking 10323100841207 registered · removed from pool · @Miranti notified via Slack</small>
 </div>
 
 <script>
 document.querySelectorAll('[data-modal]').forEach(b=>{
-  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.dataset.modal==='m-remove') prepRemove(document.querySelector('.mock table.tbl tbody tr'));
+    document.getElementById(b.dataset.modal).classList.add('open');
+  });
 });
 document.querySelectorAll('[data-close]').forEach(b=>{
   b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
@@ -373,36 +333,90 @@ document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
 document.querySelectorAll('.star').forEach(s=>{
   s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
 });
-/* illustration: enable the Resolved button once a tracking number is entered */
-document.querySelectorAll('.trk').forEach(inp=>{
-  const sync=()=>{
-    const btn=inp.closest('tr').querySelector('.btn-gray, .btn-green');
-    if(!btn) return;
-    if(inp.value.trim()){inp.classList.add('filled');btn.classList.remove('btn-gray');btn.classList.add('btn-green');}
-    else{inp.classList.remove('filled');btn.classList.remove('btn-green');btn.classList.add('btn-gray');}
-  };
-  inp.addEventListener('input',sync);
-});
-/* Review & Match — suspected product-line match demo + row ✕ removal */
+/* shared toast (match + removal reuse #matchToast) */
+let toastTimer=null;
+function showToast(main,sub){
+  const t=document.getElementById('matchToast');
+  t.textContent='';
+  const sp=document.createElement('span');sp.textContent=main;
+  const sm=document.createElement('small');sm.textContent=sub;
+  t.appendChild(sp);t.appendChild(sm);
+  t.style.display='flex';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.style.display='none';},4000);
+}
+/* pool counters — always derived alongside the rendered rows */
 function poolDec(){
   const n=Math.max(0,parseInt(document.getElementById('poolCount').textContent)-1);
   document.getElementById('poolCount').textContent=n;
   document.getElementById('poolCountBottom').textContent=n;
 }
+/* Review & Match — suspected product-line match demo */
 function finishMatch(){
   document.getElementById('m-match').classList.remove('open');
   const row=document.getElementById('poolrow1');
   if(row){row.remove();poolDec();}
-  const t=document.getElementById('matchToast');
-  t.style.display='flex';
-  setTimeout(()=>{t.style.display='none';},4000);
+  showToast('✓ Matched to Order 414230 · COSRX Snail 96',
+    'Tracking 10323100841207 registered · removed from pool · @Miranti notified via Slack');
 }
+document.querySelectorAll('.pmatch').forEach(b=>b.addEventListener('click',finishMatch));
+/* Row ✕ → removal confirm modal (M2). One-click removal retired 2026-08-03 (WF-6). */
+let rmRow=null;
+function prepRemove(row){
+  rmRow=row;
+  const sum=document.getElementById('rmSummary');
+  if(row){
+    const c=row.cells;
+    const memo=c[7].textContent.trim();
+    sum.innerHTML=c[2].innerHTML;
+    const meta=document.createElement('span');
+    meta.className='mut';meta.style.fontSize='12px';
+    meta.textContent='Tracking '+c[0].textContent+' · Qty '+c[6].textContent+' · Registered by: '+c[8].textContent+' ('+'Center'+') '+c[9].textContent+(memo!=='–'?' · Memo "'+memo+'"':'');
+    sum.appendChild(document.createElement('br'));
+    sum.appendChild(meta);
+  }else{
+    sum.innerHTML='<span class="mut">No pool item selected (demo entry)</span>';
+  }
+  document.getElementById('rmReason').value='';
+  document.getElementById('rmInbound').value='';
+  document.getElementById('rmMemo').value='';
+  document.getElementById('rmInboundWrap').style.display='none';
+  document.getElementById('rmInboundErr').style.display='none';
+  syncRemove();
+}
+function syncRemove(){
+  const reason=document.getElementById('rmReason').value;
+  const inb=document.getElementById('rmInbound').value.trim();
+  const memo=document.getElementById('rmMemo').value.trim();
+  const inbOk=reason!=='Routed to inbound request'||inb===''||/^\d{12}$/.test(inb);
+  document.getElementById('rmInboundErr').style.display=inbOk?'none':'block';
+  const memoOk=reason!=='Other'||memo!=='';
+  document.getElementById('rmConfirm').disabled=!(reason&&inbOk&&memoOk);
+}
+document.getElementById('rmReason').addEventListener('change',()=>{
+  document.getElementById('rmInboundWrap').style.display=
+    document.getElementById('rmReason').value==='Routed to inbound request'?'block':'none';
+  syncRemove();
+});
+document.getElementById('rmInbound').addEventListener('input',syncRemove);
+document.getElementById('rmMemo').addEventListener('input',syncRemove);
 document.querySelectorAll('.xdel').forEach(b=>b.addEventListener('click',e=>{
   e.stopPropagation();
-  b.closest('tr').remove();
-  poolDec();
+  prepRemove(b.closest('tr'));
+  document.getElementById('m-remove').classList.add('open');
 }));
-document.querySelectorAll('.pmatch').forEach(b=>b.addEventListener('click',finishMatch));
+document.getElementById('rmConfirm').addEventListener('click',()=>{
+  document.getElementById('m-remove').classList.remove('open');
+  /* guard: decrement only when a rendered row was actually removed (WF-NEW-D fix) */
+  if(rmRow&&rmRow.isConnected){
+    const prod=rmRow.cells[2].textContent.trim();
+    const trk=rmRow.cells[0].textContent.trim();
+    const reason=document.getElementById('rmReason').value;
+    rmRow.remove();poolDec();
+    showToast('✓ Removed from pool · '+prod,'Reason: '+reason+' · Tracking '+trk);
+  }
+  rmRow=null;
+});
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';

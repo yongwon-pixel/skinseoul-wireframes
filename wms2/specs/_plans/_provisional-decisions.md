@@ -1,7 +1,7 @@
 # Provisional Decisions Register — WMS 2.0 Specs
 
-> **ALL PROVISIONAL — owner review pending 2026-08-03.**
-> Every decision below was made by the spec team so P3-3 could write unambiguous specs while the owner was unavailable. None is owner-approved. Each is written into the specs as normal behavior tagged `[PD-n · OWNER-PENDING]`; reversing one means editing the tagged sentences on the listed pages and nothing else.
+> **STATUS: 12 decided 2026-08-03 (PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79) · rest provisional.**
+> Every decision below was made by the spec team so P3-3 could write unambiguous specs while the owner was unavailable. Entries carrying an **OWNER-DECIDED 2026-08-03** line below are now owner-approved; every other entry remains provisional. Provisional entries are written into the specs as normal behavior tagged `[PD-n · OWNER-PENDING]`; reversing one means editing the tagged sentences on the listed pages and nothing else. For the decided ten, any remaining inline `OWNER-PENDING` tag is superseded by this register.
 > Entries marked **NO-DEFAULT** were NOT decided — they appear in the specs' §9 Open Questions only, with no behavior specified.
 
 Source: all 16 P3-1 plans (OWNER open questions, deduplicated). Supervisor rulings in `_supervisor-state.md` are applied as-is (PD-9 carrier, PD-10/PD-11-class "proposal" items adopted provisionally). Format: **question · provisional decision · rationale · affected pages**.
@@ -16,26 +16,31 @@ Page codes: VO=view-orders · OD=order-detail · RTO=ready-to-outbound · INV=st
 Provisional: **v1 ships a single admin role. No role gating on any screen; every mutating action records the actor [G-8]. A role matrix is a post-v1 owner decision.**
 Rationale: no role model exists in any input document, and inventing per-page gates would create eight inconsistent models.
 Pages: all 8 (RTO OQ-B6 · INV Q8 · CL OQ-O3 · TM Q6 · IR O-5/OQ-3 · OM Q-D5).
+**OWNER-DECIDED 2026-08-03**: Provisional confirmed — everyone may perform every action; no role gating in v1. Mandatory counterpart: every action logs WHO did it (actor capture, [G-8]). [G-15] moves to CONFIRMED.
 
 **[PD-2] Does the [G-3a] send sound apply beyond View Orders / RTO?**
 Provisional: **Yes — every outbound-class button on every page plays it** (VO outbound family, RTO Bulk Outbound, OD Outbound, INV "− Record Outbound").
 Rationale: G-3(a) is written by button class, not by page; the mandatory-item list names examples, not scope.
 Pages: VO, RTO, OD, INV (OD OQ-2/Q-A6 · INV 3b-7).
+**OWNER-DECIDED 2026-08-03**: Provisional confirmed — the send sound plays on every outbound-class button on every page. [G-3a] moves to CONFIRMED.
 
 **[PD-3] Can comments be edited or deleted?**
 Provisional: **No — append-only, permanent. Corrections are posted as new comments.**
 Rationale: [G-7] declares comments an AI-training asset; mutability would silently rewrite the corpus.
 Pages: all 8 (OD OQ-5).
+**OWNER-DECIDED 2026-08-03**: Recommendation accepted — comments are append-only and permanent; no edit, no delete. [G-7] append-only clause moves to CONFIRMED.
 
 **[PD-4] What happens when a Slack notification fails?**
 Provisional: **The primary action always commits. Delivery failure is persisted and retried; it never blocks the UI and never rolls anything back.**
 Rationale: notification is a side effect, not part of the transaction (all four raising plans reached the same shape).
 Pages: all 8 (VO E-40 · OD E-29 · TM E-26 · RTO E-16).
+**OWNER-DECIDED 2026-08-03**: Failed dispatches accumulate in a queue and are auto-resent. Spec requirement: exponential-backoff automatic retry on failure + dispatch results persisted [G-8] + items exceeding N retries are flagged in the admin notification log. No dedicated screen in v1 — this is a background queue. A "Failed-dispatch retry queue" clause is added to the `_global-rules` Slack section.
 
 **[PD-5] Do removals/deletions need a confirmation and a toast?**
 Provisional: **Yes — every destructive action gets a confirm step, a reason where a reason enum already exists in the flow, and a [G-2] toast.**
 Rationale: [G-2] (owner emphasis 2026-08-03) says EVERY confirming action toasts; wireframe omissions are gaps, not decisions.
 Pages: TM (✕), CL (Cancel Closing, delete row), OD (M3), INV (M4).
+**OWNER-DECIDED 2026-08-03**: Provisional confirmed — every removal/deletion-class action gets a confirm dialog + a reason (where the flow already carries a reason) + a toast. Reflected in [G-2].
 
 **[PD-6] Stale entity at confirm time (candidate left Processing, order outbounded elsewhere, reservation already released).**
 Provisional: **Server revalidates at confirm; on mismatch it rejects with a red toast and refreshes the affected view. No partial writes.**
@@ -46,11 +51,13 @@ Pages: VO, OD, RTO, INV, TM, CL.
 Provisional: **Optimistic version check → 409 → reload the row + non-green toast. Counting flows (State 6 receive, closing scans) merge server-side instead.**
 Rationale: last-write-wins would silently destroy field data; merge is correct only where the value is a running total.
 Pages: all 8 (OD Q-B2 · INV E-7 · CL E-32 · IR E-39).
+**OWNER-DECIDED 2026-08-03**: Provisional confirmed as recommended — optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side.
 
 **[PD-8] Tracking-number uniqueness across the system.**
 Provisional: **An inbound tracking number is unique system-wide; registering one that already exists on another inbound request is blocked. Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6).**
 Rationale: View Orders matching integrity depends on a single owner per number; the two namespaces never resolve to the same screen.
 Pages: IR (O-3/OQ-4), VO (E-22 class), TM.
+**OWNER-DECIDED 2026-08-03**: YES — an inbound tracking number is unique system-wide; registering a duplicate is blocked. Inbound/outbound namespaces stay separate, and View Orders resolution keeps inbound-request precedence.
 
 ---
 
@@ -285,6 +292,7 @@ Pages: INV (E-30).
 **[PD-51] Where is "WHICH sample and HOW MANY" configured, and by whom? — NO-DEFAULT**
 The Sample Assignment ON flow deliberately has no sample-type selection, but [G-13] requires the internal invoice and picking label to show the sample kind and quantity. No input document names the source of that definition. **Not decided — specs state the dual-view output requirement and list the definition source as an open question.**
 Pages: OM (OQ-1), RTO, OD.
+**OWNER-DECIDED 2026-08-03**: v1 makes no sample distinction — internal invoices and picking labels also render **"sample set" only** (no sample type, no per-type quantity). Distinguishing WHICH sample and HOW MANY is follow-up work for the moment sample types are introduced. [G-13]'s "which sample and how many" requirement is amended accordingly.
 
 **[PD-52] Sample ON with a backdated start datetime — retroactive?**
 Provisional: **Not retroactive. Only orders created after the ON action (and inside the window) receive a set.**
@@ -304,6 +312,7 @@ Pages: OM (OQ-4), OD.
 **[PD-55] "Not connected — contact the Fulfillment Center" orders: what unblocks them, and who owns it? — NO-DEFAULT**
 The order is created and appears in RTO, but no screen offers a manual carrier assignment and no Slack route exists for the follow-up. Deciding this would invent both a UI affordance and an owner. **Not decided — specs state the flagged state and its persistence, and list the unblocking path as an open question.**
 Pages: OM (OQ-5/Q-O6), RTO.
+**OWNER-DECIDED 2026-08-03**: Unblocking is **manual coordination — contact the fulfillment person in charge via Slack**. v1 ships no in-admin release/carrier-assignment UI.
 
 **[PD-56] Does an active sample period also match MKT- marketing orders?**
 Provisional: **No — sales orders only.**
@@ -362,6 +371,7 @@ Pages: TM (Q2/E-12).
 **[PD-66] Can an item enter the pool with NO tracking number (label destroyed)? — NO-DEFAULT**
 If allowed, "match" has nothing to write onto the product line, which breaks the rescan-resolves loop that the whole flow depends on. Deciding either way changes the registration contract on View Orders. **Not decided — specs state the dependency and list it as an open question.**
 Pages: TM (Q5/E-3), VO (M2b).
+**OWNER-DECIDED 2026-08-03**: The case does not exist — either a tracking number or an order number is always present. The current registration contract (an identifier is required) stands.
 
 **[PD-67] Comments-hub entries whose entity is "Unrecognized pool" — where does a click go?**
 Provisional: **Opens the tracking-missing page focused on that pool row; if the item is already resolved, it opens the matched order instead.**
@@ -389,6 +399,7 @@ Pages: CL (OQ-O4/OQ-2/OQ-8/E-42/E-45).
 
 **[PD-71] Daily Shipping Status auto-update contract — which sheet and column mapping? — NO-DEFAULT**
 The target artifact ("SS Daily Shipping Status") is external and not described in any input. **Not decided — specs state that confirmation triggers the update, that failure must surface and never invalidate the closing, and list the mapping as an open question.**
+**OWNER-DECIDED 2026-08-03**: The sheet is retired entirely — no integration; admin Closing History replaces it. (Fallout folded into `closing.md` v1.3: §6.4 rewritten, `[BR-11]`/DC-24/E-38/DQ-6 retired with IDs kept, wireframe copy corrected.)
 Pages: CL (OQ-O5/E-38).
 
 **[PD-72] Should closing confirmation (or unresolved warnings at end of day) notify Slack?**
@@ -401,9 +412,10 @@ Provisional: **Yes — the scan input is disabled in State 4.**
 Rationale: a confirmed closing is an immutable record; live input on it would produce scans belonging to no session.
 Pages: CL (OQ-1/E-10).
 
-**[PD-74] Correction path when an extra parcel is found AFTER confirmation — NO-DEFAULT**
-No reopen/amend affordance exists anywhere in the wireframe, and inventing one changes the immutability model chosen in PD-73/PD-70. **Not decided — specs state the lock and list the correction path as an open question.**
+**[PD-74] Correction path when an extra parcel is found AFTER confirmation — RESOLVED by owner 2026-08-03**
+Owner decision: **Amend Closing** — each confirmed Closing History row carries [Amend]; a confirm dialog ("Amend the closing for {date}? The confirmed record stays until you re-confirm.") opens amendment mode with the day's full confirmed scan list loaded, the manual target editable and the scan input live; an exact-match **Re-confirm** updates the record in place (one row per date, version + "Amended" badge with actor·timestamp) and re-fires Daily Shipping Status. Immutability model preserved: the same session reopens (`CONFIRMED → AMENDING`), PD-70/PD-73 stand outside an amendment, and every prior snapshot version survives. Specced in `closing.md` §3.24/§3.25 (`[BR-39]`–`[BR-42]`, DC-26…DC-29, E-79…E-86, QA-AMEND); wireframe carries the flow (shist [Amend] + M3 + amber AMENDING banner).
 Pages: CL (OQ-1).
+**OWNER-DECIDED 2026-08-03**: Post-confirmation correction is **allowed**. A separate agent is implementing the feature; this register records the decision only.
 
 **[PD-75] The original OK row of a duplicate pair is deleted (M2) — is the surviving duplicate re-judged?**
 Provisional: **No auto-re-judgment.** The operator deletes the duplicate row and rescans.
@@ -432,6 +444,7 @@ Pages: CL (OQ-7/E-41).
 **[PD-79] Post-registration correction / cancellation of a request — NO-DEFAULT**
 The wireframe has no edit, cancel, or void affordance; only tracking additions, View Orders qty edits, and comments. A wrong SKU/route/supplier, or a purchase cancelled before dispatch, has no defined path. Adding a cancel/void status is a new feature with its own Slack/comment trail. **Not decided — specs state the current immutability and list this as an open question.**
 Pages: IR (O-1/OQ-1).
+**OWNER-DECIDED 2026-08-03**: Post-registration correction/cancellation is **allowed**. A separate agent is implementing the feature; this register records the decision only.
 
 **[PD-80] OTHER route downstream rendering (G-5 says exactly 4 routes).**
 Provisional: **OTHER renders as black bold "OTHER ({channel name})" wherever routes are shown** (Request List, View Orders scan badge, Inventory route filter), and the free-text channel is carried into the Procurement Hub sheet.

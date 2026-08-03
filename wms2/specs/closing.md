@@ -1,10 +1,12 @@
 # Closing — Screen Specification (WMS 2.0)
 
-Page slug: `closing` · Spec version 1.2 · 2026-08-03 (v1.0 authored · v1.1 audited and completed · v1.2 remediated against the M1 coverage audit, the M2 adversarial QA run, and the M3a/M3b cross-page findings)
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 remains provisional. (PD-71 and PD-74 are already folded into this spec's body — v1.3.)
+
+Page slug: `closing` · Spec version 1.3 · 2026-08-03 (v1.0 authored · v1.1 audited and completed · v1.2 remediated against the M1 coverage audit, the M2 adversarial QA run, and the M3a/M3b cross-page findings · v1.3 **Amend Closing** added per the owner's PD-74 decision, and the owner-approved wireframe defect batch `[WF-4]`/`[WF-5]`/`[WF-7]`/`[WF-8]`/`[WF-12]` applied to the wireframe)
 Wireframe (SST): `wms2/closing/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/closing/
 Global rules: `_global-rules` (cited as `[G-n]`; this spec writes page deltas only and never restates a rule body).
 Provisional decisions: `_provisional-decisions.md` (cited inline as `[PD-n · OWNER-PENDING]`).
-Wireframe defects: `_wireframe-fixes.md` (cited as `[WF-n]`). Where the wireframe text is stale, this spec states the **correct** behavior and names the defect; it never specs the stale text.
+Wireframe defects: `_wireframe-fixes.md` (cited as `[WF-n]`). Where the wireframe text is stale, this spec states the **correct** behavior and names the defect; it never specs the stale text. **`[WF-4]` `[WF-5]` `[WF-7]` `[WF-8]` `[WF-12]` were applied to the wireframe on 2026-08-03** (owner-approved batch — §2.3); `[WF-15]` remains open (corpus-wide `[G-7]` fix).
 
 ---
 
@@ -12,7 +14,7 @@ Wireframe defects: `_wireframe-fixes.md` (cited as `[WF-n]`). Where the wirefram
 
 ### 1.1 What the screen is
 
-Closing is the end-of-day reconciliation between **what physically leaves the warehouse** and **what the system believes left**. After packing is finished and before the carrier collects, an operator counts the packed parcels by hand, enters that number, then scans the carrier-handover tracking barcode on every parcel exactly once. Each scan is judged instantly against the order's status. Closing is confirmed only when the count of OK scans matches the hand count exactly and no warning is outstanding.
+Closing is the end-of-day reconciliation between **what physically leaves the warehouse** and **what the system believes left**. After packing is finished and before the carrier collects, an operator counts the packed parcels by hand, enters that number, then scans the carrier-handover tracking barcode on every parcel exactly once. Each scan is judged instantly against the order's status. Closing is confirmed only when the count of OK scans matches the hand count exactly and no warning is outstanding. A confirmed day can later be corrected through **Amend Closing** from the Closing History page (§3.24, owner decision 2026-08-03 resolving `[PD-74]`).
 
 It replaces a spreadsheet ritual that exists today:
 1. paste the day's tracking numbers into Excel and run a conditional-format duplicate check on column A,
@@ -20,7 +22,7 @@ It replaces a spreadsheet ritual that exists today:
 3. walk to Zero Packing to verify packing for anything suspicious (step 6 of the current process),
 4. copy/paste the day's totals into the **SS Daily Shipping Status** sheet, stripping formulas on the way.
 
-Steps 1–2 become the scan verdict, step 3 becomes modal M1, step 4 becomes the confirm-time auto-update plus a CSV export.
+Steps 1–2 become the scan verdict, step 3 becomes modal M1, and step 4 is **retired outright** — the owner retired the sheet itself on 2026-08-03 (`[PD-71]` resolved): the admin's **Closing History** (daily snapshots + per-day CSV) replaces the SS Daily Shipping Status spreadsheet wholesale, and no sheet integration exists.
 
 ### 1.2 Users
 
@@ -55,19 +57,19 @@ Late afternoon / early evening (mock data: 18:02 start → 18:52 confirm), after
 
 ### 2.1 Declared legend-unit count
 
-This page carries **22 legend units**: **21 numbered annotation dots** + **1 off-screen normative behavior block** (the State 1 legend footer paragraph, keyed `[L-S1-F]`).
+This page carries **24 legend units**: **23 numbered annotation dots** + **1 off-screen normative behavior block** (the State 1 legend footer paragraph, keyed `[L-S1-F]`).
 
-Distribution: State 0 → 1 · State 1 → 11 (+1 off-screen block) · State 2 → 1 · State 2b → 1 · State 3 → 1 · State 4 → 3 · Closing History → 1 · M1 → 1 · M2 → 1.
+Distribution: State 0 → 1 · State 1 → 11 (+1 off-screen block) · State 2 → 1 · State 2b → 1 · State 3 → 1 · State 4 → 3 · Closing History → 2 · M1 → 1 · M2 → 1 · M3 → 1.
 
-**How to reproduce the count** (so a coverage checker and this spec never disagree): count `.legend ol > li` elements per `section` (1 + 11 + 1 + 1 + 1 + 3 + 1 = 19), add the two modal dots `#m-process .dot` ("M1") and `#m-scandel .dot` ("M2") → 21, then add the single `.legend > p` normative paragraph inside `#s1`'s legend → 22. Do **not** count `.wf-tab` buttons (see the `[WF-12]` trap below) and do not count `.dot` elements in the mock (they are 1:1 with the `<li>` items they annotate, except that `#s1`'s dot 9 sits on `.pagepad` and dot 5 on a `<th>`).
+**How to reproduce the count** (so a coverage checker and this spec never disagree): count `.legend ol > li` elements per `section` (1 + 11 + 1 + 1 + 1 + 3 + 2 = 20), add the three modal dots `#m-process .dot` ("M1"), `#m-scandel .dot` ("M2") and `#m-amend .dot` ("M3") → 23, then add the single `.legend > p` normative paragraph inside `#s1`'s legend → 24. Do **not** count `.wf-tab` buttons and do not count `.dot` elements in the mock (they are 1:1 with the `<li>` items they annotate, except that `#s1`'s dot 9 sits on `.pagepad`, dot 5 on a `<th>`, and Closing History's dot 2 on the history table's action-column `<th>`). The `#m-cancel` confirm dialog (the `[WF-7]` fix) carries **no dot on purpose** — it is specified under `[L-S1-10]` (§3.11), not as a separate legend unit.
 
 **Numbering notes (so a coverage check does not flag phantom holes):**
-- There are **no gaps** in this page's dot numbering. State 1 runs 1–11 continuously; every other state carries a single dot numbered 1; the two modals are dotted `M1` and `M2`.
+- There are **no gaps** in this page's dot numbering. State 1 runs 1–11 continuously; every other state carries a single dot numbered 1 **except Closing History, which carries dots 1–2**; the three modals are dotted `M1`, `M2` and `M3`.
 - The number `1` legitimately appears once per state — dots are numbered per state, not per page.
-- The wireframe's `wf-bar` lists the tab **"Modal: Process Processing Order" twice** (lines ~215 and ~217). This is demo chrome duplication `[WF-12]`, **not** a 23rd unit. A naive tab-counting coverage check will over-count by one, and a QA agent selecting a tab by its text will match two nodes — always select by `[data-state]` / `[data-modal]` (§8.0 R3).
+- The wireframe's `wf-bar` formerly listed the tab **"Modal: Process Processing Order" twice** — demo chrome duplication `[WF-12]`, **fixed 2026-08-03** (the duplicate tab was removed; a "Modal: Amend Closing" tab was added in the same pass, so `.wf-tab` still counts 10). Tab texts are now unique, but QA still selects by `[data-state]` / `[data-modal]` (§8.0 R3), and a unit count must never be derived from `.wf-tab` (QA-CHROME-04).
 - Scan-list sequence numbers in the mock data jump between states (State 1 shows #1–#5, State 2b shows #5 and #7, State 3 shows #2 and #6). This is deliberate demo continuity across a single imagined session, not a numbering gap.
 
-Four additional keys cover page furniture that carries **no legend dot**. They are specified in §3 but are explicitly **not part of the 22**:
+Four additional keys cover page furniture that carries **no legend dot**. They are specified in §3 but are explicitly **not part of the 24**:
 
 | Key | Furniture |
 |---|---|
@@ -88,9 +90,10 @@ Live URL for every row: https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 | 4 | Warning · Unknown Order | `#s2b` | `.wf-tab[data-state="s2b"]` (auto-plays the voice) | `2b · Warning · Unknown Order` | `[L-S2b-1]` | §3.15 |
 | 5 | Warning · Duplicate Scan | `#s3` | `.wf-tab[data-state="s3"]` (auto-plays the voice) | `3 · Warning · Duplicate Scan` | `[L-S3-1]` | §3.16 |
 | 6 | Closing Complete | `#s4` | `.wf-tab[data-state="s4"]` | `4 · Closing Complete` | `[L-S4-1]`, `[L-S4-2]`, `[L-S4-3]` | §3.17–§3.19 |
-| 7 | Closing History (page) | `#shist` | `.wf-tab[data-state="shist"]`; or the in-page tab `[data-goto="shist"]` labelled `Closing History`, present in every closing state | `5 · Closing History (page)` | `[L-SH-1]` | §3.20 |
-| 8 | Modal — Process Processing Order | `#m-process` | `[data-modal="m-process"]`: the wf-bar tab (listed twice), **or** the in-row button "Process this order" in `#s1` row #4 and `#s2` row #4 | `Modal: Process Processing Order` (×2 — `[WF-12]`) | `[L-M1]` | §3.21 |
+| 7 | Closing History (page) | `#shist` | `.wf-tab[data-state="shist"]`; or the in-page tab `[data-goto="shist"]` labelled `Closing History`, present in every closing state | `5 · Closing History (page)` | `[L-SH-1]`, `[L-SH-2]` | §3.20, §3.24 |
+| 8 | Modal — Process Processing Order | `#m-process` | `[data-modal="m-process"]`: the wf-bar tab, **or** the in-row button "Process this order" in `#s1` row #4 and `#s2` row #4 | `Modal: Process Processing Order` | `[L-M1]` | §3.21 |
 | 9 | Modal — Delete Scan Row | `#m-scandel` | `[data-modal="m-scandel"]` wf-bar tab, **or** the per-row `button.scandel` (title "Delete scan row", label "✕") in any scan list | `Modal: Delete Scan Row` | `[L-M2]` | §3.22 |
+| 10 | Modal — Amend Closing | `#m-amend` | `[data-modal="m-amend"]` wf-bar tab, **or** the per-row `[Amend]` button (`button.amendbtn`) in `#shist` | `Modal: Amend Closing` | `[L-M3]` | §3.25 |
 
 In the shipping admin, states 1–6 are not tabs — they are the same page rendering the live session; the wf-bar exists only to let a reviewer jump between the possible renderings `[L-F4]`.
 
@@ -98,12 +101,14 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 
 | Defect | Where | Correct behavior specced in |
 |---|---|---|
-| `[WF-4]` State 4 legend #1 says the snapshot is saved to Closing History "(M2)" — a fossil of the pre-2026-07-23 modal; M2 is now the Delete Scan Row modal | `#s4` legend | §3.17 — the snapshot is saved to the **Closing History page** (`#shist`) |
-| `[WF-5]` State 1 legend #2 says the large panel "is used only in warning states", contradicting the 2026-07-23 removal of the large warning panel | `#s1` legend #2 | §3.3 / §3.14 — **no large red panel exists anywhere**; the only large panel is State 4's green completion status |
-| `[WF-7]` `#closeCancel` cancels immediately with no confirmation, although the legend says cancelling discards scan records | `#s1` banner | §3.11 — a confirm dialog is mandatory `[PD-5 · OWNER-PENDING]` |
-| `[WF-8]` `#startBtn0` silently no-ops on empty/invalid input | `#s0` | §3.1 — explicit validation error (adjudication C-6) |
-| `[WF-12]` duplicated "Modal: Process Processing Order" wf-bar tab | wf-bar | §2.1 — chrome only |
-| `[WF-15]` Comments hub pane headers and the unstar hint diverge from the cross-page `[G-7]` contract ("Comments where I'm tagged" / "Comments I saved" / "Unstar to remove from this list") | `#inbox1` `.paneheader` | §3.8 — the canonical `[G-7]` strings are specified there; the wireframe strings are asserted only as `[WF]` demo copy |
+| `[WF-4]` **(fixed 2026-08-03)** State 4 legend #1 said the snapshot is saved to Closing History "(M2)" — a fossil of the pre-2026-07-23 modal; M2 is the Delete Scan Row modal | `#s4` legend | §3.17 — the snapshot is saved to the **Closing History page** (`#shist`); the legend now says exactly that |
+| `[WF-5]` **(fixed 2026-08-03)** State 1 legend #2 said the large panel "is used only in warning states", contradicting the 2026-07-23 removal of the large warning panel | `#s1` legend #2 | §3.3 / §3.14 — **no large red panel exists anywhere**; the only large panel is State 4's green completion status; the legend now says exactly that |
+| `[WF-7]` **(fixed 2026-08-03)** `#closeCancel` cancelled immediately with no confirmation | `#s1` banner | §3.11 — the confirm dialog `[PD-5 · OWNER-PENDING]` now exists in the wireframe as `#m-cancel` with the §3.11 copy |
+| `[WF-8]` **(fixed 2026-08-03)** `#startBtn0` silently no-oped on empty/invalid input | `#s0` | §3.1 — the wireframe now raises the explicit red validation toasts (adjudication C-6); the >9999 advisory confirm remains `[ADMIN]`-only |
+| `[WF-12]` **(fixed 2026-08-03)** duplicated "Modal: Process Processing Order" wf-bar tab | wf-bar | §2.1 — chrome only; the duplicate tab was removed |
+| `[WF-15]` **(open — do not fix unilaterally)** Comments hub pane headers and the unstar hint diverge from the cross-page `[G-7]` contract ("Comments where I'm tagged" / "Comments I saved" / "Unstar to remove from this list") | `#inbox1` `.paneheader` | §3.8 — the canonical `[G-7]` strings are specified there; the wireframe strings are asserted only as `[WF]` demo copy. Deliberately **excluded** from the 2026-08-03 fix batch: the register conditions this fix on `[G-7]` first publishing the six canonical strings, then editing all eight wireframes in one pass — editing closing alone would fork the QA suites |
+
+The five `(fixed 2026-08-03)` rows were applied to `wms2/closing/index.html` in the owner-approved wireframe-edit batch of 2026-08-03 (same pass that built the Amend flow); the rows are kept for provenance, and the affected `[WF]` QA scenarios (QA-S0-02, QA-TARGET-04, QA-CHROME-03/04) now assert the fixed behavior.
 
 **Unregistered wireframe divergences found while auditing this spec** (not yet in `_wireframe-fixes.md`; listed so QA classifies them as demo artifacts, not implementation targets):
 
@@ -132,7 +137,7 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 - All rendered times and all date boundaries use the **warehouse's single operating timezone** (`[BR-36]`); storage timezone is a developer decision.
 - **`[GD-n]` citation form.** `[GD-n]` is a *global-rule delta* — an amendment already folded into `_global-rules.md` v1.0. The delta log itself is `_plans/_review.md` §4 (`GD-1`…`GD-10`); it is not part of the shipped 8-spec + `_global-rules` corpus, so every `[GD-n]` in this spec is written with the resulting rule text beside it and the ID is a provenance pointer only. This page cites `[GD-5]` (§10) and `[GD-9]` (§3.18, §6.5).
 - **Sub-rule citation form.** `[G-3]`'s branches are cited as `[G-3a]` / `[G-3b]` / `[G-3c]` throughout this spec (never `[G-3](a)`), so a mechanical `[G-n]` grep resolves.
-- **Foreign keys are never bracketed.** A `[L-…]` in square brackets is always one of **this** page's 22 legend units plus the 4 furniture keys (§2.1, §2.2), so a mechanical key-existence check over this file cannot produce a phantom. Another spec's key is written unbracketed with its file — `order-detail.md` L-9, `view-orders.md` L-S4-6 — and another spec's business rule is written with its page code (VO `BR-9`, OD `BR-12`), never as a bare `[BR-n]`, which on this page always means a closing rule from §4.
+- **Foreign keys are never bracketed.** A `[L-…]` in square brackets is always one of **this** page's 24 legend units plus the 4 furniture keys (§2.1, §2.2), so a mechanical key-existence check over this file cannot produce a phantom. Another spec's key is written unbracketed with its file — `order-detail.md` L-9, `view-orders.md` L-S4-6 — and another spec's business rule is written with its page code (VO `BR-9`, OD `BR-12`), never as a bare `[BR-n]`, which on this page always means a closing rule from §4.
 
 ### 3.0.1 Page furniture
 
@@ -159,7 +164,7 @@ In the shipping admin, states 1–6 are not tabs — they are the same page rend
 
 **Nothing else is exposed** — no scan input, no tiles, no progress bar, no scan list, no Confirm button (simplification of 2026-07-23). This is deliberate: the screen has exactly one possible action, so "enter the number first" needs no instruction.
 
-**Validation** (`[WF-8]` — the wireframe silently no-ops; adjudication C-6 makes the error explicit):
+**Validation** (`[WF-8]`, fixed in the wireframe 2026-08-03 — adjudication C-6 made the error explicit; the wireframe now implements the first two rows as red toasts):
 
 | Input | Result |
 |---|---|
@@ -181,7 +186,7 @@ A target of `0` is rejected on purpose (`[BR-34]`): a day on which nothing shipp
 
 **Persisted.** DC-1 `closing.session_started`.
 
-**Wireframe behavior for QA.** `#startBtn0` calls `.wf-tab[data-state="s1"].click()` only when `#targetIn0.value.trim()` is non-empty; otherwise it returns silently — assert the silent no-op as `[WF]` and the toast as `[ADMIN]`. Note the demo accepts any non-empty string, including `abc`; validation is `[ADMIN]`.
+**Wireframe behavior for QA** (post-`[WF-8]`-fix, 2026-08-03). `#startBtn0` now validates before advancing: an empty/whitespace value raises the red toast "✕ Enter the hand-counted parcel count first"; a non-integer, `0`, negative, decimal or signed value raises "✕ The count must be a whole number of 1 or more"; only an unsigned integer ≥ 1 calls `.wf-tab[data-state="s1"].click()`. The demo toasts render as `.toast.err` inside `#s0 .mock` and self-remove after ~2.6 s. The >9999 advisory confirm and the server-side rejections remain `[ADMIN]` (QA-S0-05/09).
 
 ---
 
@@ -200,7 +205,7 @@ Nothing else submits. A read that arrives with no terminator stays in the field 
 
 **Closing deltas to [G-1]** (the three [G-1] invariants are untouched):
 - **Disabled before the session starts.** The input is `disabled` in State 0 and while the session is `IDLE`. Keyboard-wedge input while disabled goes nowhere and records nothing (E-9).
-- **Disabled after confirmation** `[PD-73 · OWNER-PENDING]`. A confirmed closing is an immutable record (§3.17, U-b).
+- **Disabled after confirmation** `[PD-73 · OWNER-PENDING]`. A confirmed closing is an immutable record (§3.17, U-b) — re-armed only inside an amendment session (§3.24).
 - **Focus returns with the whole value selected** after every verdict, so the next scan overwrites it.
 - **Click-anywhere refocus:** a click on any non-interactive part of the page returns focus to the scan input and selects its content — with the exclusions in `[L-S1-F]`.
 
@@ -236,7 +241,7 @@ Wireframe example, byte-exact: **"✓ #5 Outbounded"** / "Order 413540 · Tracki
 
 **Silent by design** — no sound on OK `[G-3b]` (§3.4).
 
-**No large panel.** The large OK panel was removed on 2026-07-23 (Dean): only warnings need recognition from a distance. State 1 legend #2 still claims the large panel is "used only in warning states", which is stale — the large warning panel was itself removed the same day. **Net truth: no large red panel exists anywhere on this page; the only large panel is State 4's green completion status** `[WF-5]`, adjudication C-10.
+**No large panel.** The large OK panel was removed on 2026-07-23 (Dean): only warnings need recognition from a distance. **Net truth: no large red panel exists anywhere on this page; the only large panel is State 4's green completion status** (adjudication C-10). State 1 legend #2 used to claim the large panel is "used only in warning states" — stale text corrected in the wireframe on 2026-08-03 (`[WF-5]` fixed); the legend now states the net truth.
 
 **No modal, no focus steal, no scroll jump** on an OK scan. The operator is not looking at the screen; anything that moves focus breaks the loop.
 
@@ -437,10 +442,10 @@ confirm_enabled = (ok_count == target) AND (outstanding_warnings == 0)
 **On click.**
 1. Client debounce; `closing.confirm(session_id, target_at_press, idempotency_key)` [G-9]. Exactly one closing record can exist per session even under a double click or a retried request (E-31, E-37).
 2. **Server revalidates** the whole gate against live state before writing `[PD-6 · OWNER-PENDING]`: counts recomputed server-side, the target compared with `target_at_press` (so an edit that landed mid-flight cannot be confirmed against a stale number, E-73), and every OK row's order re-checked for a status that changed since the scan. On mismatch the confirm is **rejected** — red toast **(spec-authored)** "✕ Cannot confirm — {reason}" (e.g. "order 413540 is no longer Prepare Shipment"), the affected rows are re-judged and re-rendered in place, no partial write occurs, and DC-22 `closing.confirm_rejected` is persisted.
-3. On success: session → `CONFIRMED`; an immutable snapshot is written (DC-23); the Daily Shipping Status update is triggered (§6.4); the screen re-renders as State 4 **without a page refresh** [G-2].
-4. Green toast (byte-exact from the wireframe): "✓ Today's closing confirmed — 84/84 orders" / "Daily Shipping Status auto-updated" → generalized: "✓ Today's closing confirmed — {ok}/{target} orders" / "Daily Shipping Status auto-updated".
+3. On success: session → `CONFIRMED`; an immutable snapshot is written (DC-23); Closing History gains the day's row (§3.20) — **there is no external sheet write** (`[PD-71]` resolved 2026-08-03, §6.4); the screen re-renders as State 4 **without a page refresh** [G-2].
+4. Green toast (byte-exact from the wireframe): "✓ Today's closing confirmed — 84/84 orders" / "Closing record saved · replaces the retired Daily Shipping Status sheet" → generalized: "✓ Today's closing confirmed — {ok}/{target} orders" / same subtext.
 
-**Persisted.** DC-21 `closing.confirmed`, DC-23 `closing.snapshot_created`, DC-24 `closing.daily_shipping_status_updated`, DC-22 on rejection.
+**Persisted.** DC-21 `closing.confirmed`, DC-23 `closing.snapshot_created`, DC-22 on rejection. (DC-24 is retired — §5.1.)
 
 ---
 
@@ -470,9 +475,9 @@ The starter's name and start time are shown because the confirmer is often not t
 
 **Persisted.** DC-3 `closing.target_edited` with `old_qty → new_qty`. The old value is captured even though the UI shows only the new one — this is exactly the kind of silent-capture the data doctrine [G-8] exists for: "the target was quietly raised at 18:49" is the signal an auditor needs.
 
-**Cancel Closing.** `[✕ Cancel Closing]` is destructive and therefore takes a confirm step `[PD-5 · OWNER-PENDING]` — the wireframe cancels immediately, which is defect `[WF-7]`.
+**Cancel Closing.** `[✕ Cancel Closing]` is destructive and therefore takes a confirm step `[PD-5 · OWNER-PENDING]` — `[WF-7]` fixed 2026-08-03: the wireframe now opens the dialog (`#m-cancel`) with the copy below (the demo renders the scan-count clause with its five mock rows, "5 scans will be removed from this session.").
 
-Confirm dialog **(spec-authored copy)**:
+Confirm dialog (copy now shipped in the wireframe):
 > **Cancel today's closing?**
 > {n} scans will be removed from this session. The scan records are kept in the audit log and can be reviewed later, but the session will restart from the count entry.
 > [ Keep scanning ] [ Yes — cancel closing ]
@@ -521,7 +526,7 @@ The State 1 legend footer is a normative paragraph, not decoration. Every clause
 
 **Render.** Red-tinted row (`.row-bad`), Order Status pill `Processing`, Closing Verdict pill **`⚠ Not outbounded`**, and in the Notes column the button **`Process this order`** (red outline) which opens M1. The voice speaks "Please check this order" if the toggle is ON. A red toast **(spec-authored)**: "⚠ Not outbounded — {tracking}" / "Order {order_id} · {status}".
 
-**Resolution happens in the list.** The large warning panel and the separate action banner were removed on 2026-07-23: verifying and handling in the row is enough, and it keeps the operator inside the scan loop. `[WF-5]` records that State 1 legend #2 still contradicts this.
+**Resolution happens in the list.** The large warning panel and the separate action banner were removed on 2026-07-23: verifying and handling in the row is enough, and it keeps the operator inside the scan loop. (`[WF-5]` — the State 1 legend text that contradicted this was corrected 2026-08-03.)
 
 **Counting.** The row counts as an outstanding warning and does not count toward OK. Resolving it via M1 re-judges the row in place to `✓ Outbounded` (green tint), decrements outstanding warnings, and increments OK — **without changing the sequence number and without a page refresh**.
 
@@ -573,16 +578,16 @@ A closing unknown **never** routes to `#unrecognized-tracking` and never creates
 **Trigger.** A successful `closing.confirm` (§3.9). This state is never reached automatically.
 
 **Render.**
-- Green toast: "✓ Today's closing confirmed — 84/84 orders" / "Daily Shipping Status auto-updated".
+- Green toast: "✓ Today's closing confirmed — 84/84 orders" / "Closing record saved · replaces the retired Daily Shipping Status sheet".
 - The **only large panel on the page**: `.bigstatus.bs-ok`, `✓` glyph, headline "Today's closing complete — all orders verified", meta line "Manual count {target} = OK scans {ok}, an **exact match** · {warnings} warnings · closing confirmed {YYYY-MM-DD HH:mm} ({confirmer})" (wireframe mock: "closing confirmed 2026-07-13 18:52 (Yongwon)"), and a right-hand block "Warnings **0** / Remaining scans 0".
 - Tiles: target · OK · **`Warnings (resolved)`** · Remaining scans (all four, with the relabelled third tile).
 - Progress bar at 100% green; `.proglab`: "Closing progress 100% — OK {ok}/{target} exact match + 0 warnings → closing confirmed · today's record saved to Closing History".
 - The target banner's `[↺ Edit count]` and `[✕ Cancel Closing]` are **gone** — a confirmed closing is immutable.
 - **The scan input is disabled** `[PD-73 · OWNER-PENDING]`. The wireframe renders an enabled-looking input (U-b); the shipping behavior is disabled, because a live input on a confirmed closing would produce scans belonging to no session. A wedge scan against a confirmed closing is rejected server-side and persisted as DC-8 `closing.scan_rejected` with a red toast **(spec-authored)** "✕ Today's closing is confirmed — scanning is closed".
 
-**Snapshot.** On confirmation an immutable snapshot is written and appears as today's row on the **Closing History page** — State 4 legend #1 still says "(M2)", a fossil of the pre-2026-07-23 history modal, and M2 is now the Delete Scan Row modal, so the reference points at the wrong artifact entirely `[WF-4]`.
+**Snapshot.** On confirmation an immutable snapshot is written and appears as today's row on the **Closing History page**. (State 4 legend #1 used to say "(M2)" — a fossil of the pre-2026-07-23 history modal, pointing at the wrong artifact; corrected to "the Closing History page" on 2026-08-03, `[WF-4]` fixed.)
 
-**Immutability and the one-session-per-day rule** `[PD-70 · OWNER-PENDING]`: after confirmation no second session may be started on the same calendar date; History carries exactly one row per date. The **correction path for a parcel found after confirmation is a NO-DEFAULT open question** `[PD-74]` (§9) — this spec deliberately specifies no reopen/amend affordance.
+**Immutability and the one-session-per-day rule** `[PD-70 · OWNER-PENDING]`: after confirmation no second session may be started on the same calendar date; History carries exactly one row per date. The **correction path for a parcel found after confirmation is Amend Closing** (§3.24) — decided by the owner on 2026-08-03, resolving `[PD-74]`. Amendment reopens the **same** session from Closing History (`CONFIRMED → AMENDING`), so `[PD-70]` is upheld: never a second session, never a second row — the record is updated in place on re-confirm (`[BR-39]`–`[BR-42]`). Outside an amendment the lock stands exactly as written above.
 
 **Session date attribution** `[PD-78 · OWNER-PENDING]`: a session started 23:50 and confirmed 00:10 belongs to the **start date** — the target count and the parcels are the start date's work (E-41). A session left open across a date boundary must be confirmed or cancelled before the next date's closing can start (`[BR-35]`, E-72), and a browser tab still showing a confirmed State 4 the next morning revalidates on its next interaction and can never write into the closed session (E-53).
 
@@ -592,7 +597,7 @@ A closing unknown **never** routes to `#unrecognized-tracking` and never creates
 
 ### 3.18 `[L-S4-2]` — Closing Report (CSV)
 
-**Rendering.** A green banner: "Closing Report" · "Exports today's closing result — replaces the manual copy/paste and formula-stripping into **SS Daily Shipping Status**. A snapshot is saved automatically on closing confirmation." · button **"Download Closing Report (CSV)"**.
+**Rendering.** A green banner: "Closing Report" · "Exports today's closing result — replaces the manual copy/paste and formula-stripping into **SS Daily Shipping Status** (sheet retired 2026-08-03). A snapshot is saved automatically on closing confirmation." · button **"Download Closing Report (CSV)"**. The "(sheet retired 2026-08-03)" clause records the `[PD-71]` owner decision: the sheet no longer exists to be filled — this CSV **is** the downstream artifact.
 
 **Behavior.** Clicking downloads the day's closing report as a CSV file, immediately, with no dialog. The snapshot itself is created at confirmation time (§3.17); the button re-renders that snapshot and never recomputes from live data — a report downloaded a week later must be byte-identical to one downloaded at 18:52.
 
@@ -637,13 +642,15 @@ A closing unknown **never** routes to `#unrecognized-tracking` and never creates
 | `Match` | always `✓ Match` (`[BR-10]`) |
 | `Closed By` | the confirmer |
 | `Confirmed At` | `hh:mm` (may be past midnight for a session that crossed the date boundary, E-41) |
-| action | button `CSV` — downloads that day's full report (§3.18) |
+| action | buttons `CSV` — downloads that day's full report (§3.18) — and `Amend` (`button.amendbtn`) — opens M3 to start an amendment of that date (§3.24, `[L-SH-2]`) |
+
+**Amended rows.** A row whose closing has been amended (§3.24) carries an **"Amended v{n}" badge** under its Date cell — amber pill, text `Amended v{n} · {amending actor} · {re-confirm MM-DD hh:mm}` (wireframe demo on the 07-12 row: "Amended v2 · Dean · 07-13 09:12"). The row's numbers always show the **latest** confirmed version; earlier versions stay reproducible (`[BR-42]`). While an amendment is open the row instead carries an "Amendment in progress" marker and keeps the v{n} numbers (E-80); rendering of that marker is a developer decision (DQ-13).
 
 **Footer note** (byte-exact): "Closing cannot be confirmed while mismatched, so records are always saved as "Match" — mismatch causes (missed scans · over-scans · unresolved warnings) must be resolved before confirmation."
 
 **What History does not show.** Days with no closing simply have no row — gaps are legitimate and must never be back-filled with fabricated rows (E-43), and a zero-shipment day is one of those gaps (`[BR-34]`, E-76). Cancelled sessions are retained server-side [G-8] but are **not displayed** `[PD-70 · OWNER-PENDING]` (E-45). There is exactly one row per date.
 
-**Empty state** (first use, E-44): **(spec-authored)** "No closing records yet — the first confirmed closing will appear here." No CSV buttons are rendered.
+**Empty state** (first use, E-44): **(spec-authored)** "No closing records yet — the first confirmed closing will appear here." No CSV buttons and no Amend buttons are rendered.
 
 **Retention.** Indefinite. Every historical row must remain reproducible as a CSV forever (§5.4).
 
@@ -735,8 +742,7 @@ Each line is a decision, not an omission. A developer reading a stale document m
 | **Auto-confirm on match** | the match only enables the button; a human must press it | 2026-07-23 |
 | **Auto-re-judgment of a duplicate whose original was deleted** | `[PD-75 · OWNER-PENDING]` — rescan instead | 2026-08-03 |
 | **Auto-re-judgment of an unknown row whose order later appears** | same doctrine (`[BR-22]`, E-57) — rescan instead | 2026-08-03 |
-| **A reopen / amend affordance after confirmation** | NO-DEFAULT `[PD-74]`; the lock is deliberate, the correction path is an open question | 2026-08-03 |
-| **A second closing session on a confirmed date** | `[PD-70 · OWNER-PENDING]` | 2026-08-03 |
+| **A second closing session on a confirmed date** | `[PD-70 · OWNER-PENDING]` — Amend Closing (§3.24) reopens the **same** session, it never creates a second one. (The former "no reopen/amend affordance" row was removed 2026-08-03 when the owner resolved `[PD-74]` — reversal recorded in §10) | 2026-08-03 |
 | **Cross-day duplicate detection** | dedupe is session-scoped (`[BR-37]`); a parcel from a previous day surfaces through its order status, not through a duplicate pill | 2026-08-03 |
 | **Per-order counting** (one order = one unit) | the target is a parcel count, so counting is per scan (`[BR-33]`) | 2026-08-03 |
 | **A closing with target 0** | a day with no parcels is simply not closed (`[BR-34]`) | 2026-08-03 |
@@ -749,6 +755,59 @@ Each line is a decision, not an omission. A developer reading a stale document m
 | **Sample-set assignment UI** | Order Management is the primary home [G-13]; closing has no sample surface | 2026-07-23 |
 | **A "comment on the closing session" affordance** | comments target orders only (§3.8) | 2026-08-03 |
 | **Wireframe chrome** (`wf-bar`, state tabs, `#annoToggle`, `.dot`, `.legend`) | review scaffolding `[L-F4]` | 2026-08-03 |
+
+---
+
+### 3.24 `[L-SH-2]` — Amend Closing (amendment mode)
+
+> New unit, added 2026-08-03. Owner decision resolving `[PD-74]`, verbatim intent: "수정 누르면 마감하던 게 쭉 뜨고, 맨 위 수동 숫자를 하나 올리면 된다" — press Amend, the closing you confirmed comes back up in full, raise the manual number at the top by one, scan the parcel, re-confirm.
+
+**Entry.** Every **confirmed** row on the Closing History page carries an `[Amend]` button (`button.amendbtn`) beside `CSV`. Clicking it opens the M3 confirm dialog (§3.25). Confirming transitions that date's session `CONFIRMED → AMENDING` and opens **amendment mode**.
+
+**Amendment mode rendering.** The closing screen renders exactly like an `IN_PROGRESS` session (State 1 grammar), with three deltas:
+
+1. **Amber banner** pinned above the target banner, byte-exact from the wireframe: **"AMENDING — {date} closing (confirmed {ok}/{target})"**, plus the explanatory sentence "The confirmed record stays until you re-confirm — raise the target, scan the found parcel, and press **Re-confirm Closing** (exact match + 0 warnings required)" and the button **"✕ Exit amendment"**.
+2. **The day's full confirmed scan list is loaded** — every row with its original sequence number, scan time, verdict, worker and notes. Sequence numbering continues from the confirmed session's last number (`[BR-17]` — never renumbered).
+3. The Confirm button renders as **"Re-confirm Closing"** with the same blocker-label grammar as §3.9 (e.g. "Re-confirm Closing (1 remaining)").
+
+Everything else behaves as in a live session: the target banner with `[↺ Edit count]` (validation per §3.1, DC-3 on save), the scan input **re-armed** with the full [G-1] protocol, the verdict engine of §3.6 unchanged, M1/M2 available on rows, tiles and gate recomputing live. **Dedupe covers the loaded confirmed rows** — rescanning an already-counted parcel is a `duplicate` warning, so the count can never be inflated by scanning the same box twice (E-85; this is the core protection of the flow).
+
+**The typical amendment** is exactly the owner's sentence: edit the target 84 → 85, scan the found parcel (OK, +1), gate satisfied at 85/85 · 0 warnings, press Re-confirm.
+
+**Re-confirm.** `closing.reconfirm(session_id, target_at_press, idempotency_key)` — gate, server revalidation, double-click safety and rejection semantics are **identical to §3.9** (`[BR-3]`/`[BR-4]`/`[BR-29]` apply unchanged; rejections persist DC-22). On success:
+
+- the session returns to `CONFIRMED`, now at **version v{n+1}**;
+- the History row is updated **in place** — same date, same single row (`[PD-70]` upheld), latest numbers, plus the **"Amended v{n+1}" badge** (version · actor · timestamp — §3.20);
+- a **new immutable snapshot version** is written (DC-23; the v{n} snapshot is never touched, `[BR-42]`);
+- **Closing History itself carries the correction** — there is no external sheet write (`[PD-71]` resolved 2026-08-03, §6.4): the row's figures update in place and the new snapshot version serves the CSV;
+- green toast **(spec-authored)**: "✓ Closing amended — {ok}/{target} orders (v{n+1})" / "Closing History updated in place";
+- the screen renders State 4 for that date with the amended meta.
+- **Persisted:** DC-28 `closing.amended` with `old_target → new_target`, the added/removed scan rows, actor, timestamp and both snapshot ids.
+
+**Exit without re-confirm.** `[✕ Exit amendment]` (or any abandonment) never touches the record: the confirmed v{n} record stays authoritative — the owner's contract is literal: *the confirmed record stays until you re-confirm*. An explicit exit discards the working changes from the record, retains any added scan rows in the audit log [G-8], returns the session to `CONFIRMED` v{n}, and persists DC-29 (E-81). Leaving the page, a crash or a device switch does **not** exit: the `AMENDING` state persists server-side exactly like an in-progress session (`[BR-8]`), and reopening Closing resumes it (E-80).
+
+**Guards** (`[BR-41]`): an amendment cannot start while any session on any date is `IN_PROGRESS` or `AMENDING` — red toast **(spec-authored)** "✕ Another closing is open — confirm or cancel it first", DC-27 (E-79). Symmetrically, a new date's closing cannot start while an amendment is open (DC-2 `reason=amendment_open`, E-86). A second `[Amend]` on a date already `AMENDING` loads the existing amendment instead of forking one (DC-27 `reason=already_amending`, E-82 — mirror of E-55).
+
+**Wireframe demo scope for QA.** The demo implements: the per-row `[Amend]` buttons, M3 with the byte-exact owner copy, entry into State 1 with the amber banner (date and confirmed-count interpolated per row), the target pre-raised by one (84 → 85), the live scan input, the "Re-confirm Closing (1 remaining)" label, and `[✕ Exit amendment]` restoring the resting demo state. Loading the day's real scan rows, the re-confirm write chain, the badge update and every guard are `[ADMIN]` (QA-AMEND-07…15). The static "Amended v2 · Dean · 07-13 09:12" badge on the 07-12 row is a rendering demo of the post-amend state, not a simulation.
+
+---
+
+### 3.25 `[L-M3]` — Modal: Amend Closing
+
+**Trigger.** A `[Amend]` button on a confirmed Closing History row (§3.24), or the wf-bar tab `[data-modal="m-amend"]` (chrome, `[L-F4]`).
+
+**Header.** "Amend Closing — {date}" (wireframe: "Amend Closing — 07-13"), with an `✕` close control.
+
+**Body.**
+- Bold question, byte-exact (owner copy, 2026-08-03): **"Amend the closing for {date}? The confirmed record stays until you re-confirm."**
+- Context line: "Confirmed {ok}/{target} · {hh:mm} ({confirmer})" (wireframe: "Confirmed 84/84 · 18:52 (Yongwon)").
+- Blue note: "Amendment mode reloads the day's confirmed scan list with the scan input active. Raise the manual target (e.g. 84 → 85), scan the found parcel, and press **Re-confirm Closing** — the record is updated **in place** with an **Amended** badge (version · actor · timestamp). Closing History itself is the system of record — the retired Daily Shipping Status sheet needs no update."
+
+**Footer.** `[Keep the record]` (secondary) and `[Amend — open the closing]` (blue primary).
+
+**On `[Amend — open the closing]`.** `closing.startAmend(session_id, idempotency_key)` [G-9] → the `[BR-41]` guard is evaluated server-side; on pass, `CONFIRMED → AMENDING`, DC-26 persisted, and the screen enters amendment mode (§3.24) with no page refresh [G-2]. On guard failure: red toast (§3.24), DC-27, the modal closes, the record untouched.
+
+**Close paths.** `[Keep the record]`, the header `✕`, and a backdrop click all dismiss with **zero** side effects — no state change, no event (a dismissed M3 is a NON-event, §5.3). Confirmed-record immutability is not affected by opening and closing this dialog any number of times.
 
 ---
 
@@ -768,7 +827,7 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-8** | **Closing progress is stored server-side.** Refresh, navigation, crash, or a switch of device restores target, scan list, counters and warnings. Nothing clears until confirmation or an explicit cancel/restart. | Shift handovers and walks to Zero Packing happen mid-closing daily; a client-only session would lose an hour of scanning. | 2026-08-03 (behavior paragraph, `[L-S1-F]`) |
 | **BR-9** | **Pre-start gating**: the scan input and every progress affordance are hidden/disabled until the manual count is entered. | Makes "enter the number first" structurally true rather than instructional; a scan before a target has nothing to be judged against. | 2026-07-23 |
 | **BR-10** | Closing History rows are **always "Match"** by construction — a mismatch cannot be confirmed. | The column is retained as an explicit invariant, so an auditor reading History knows a blank day means "not closed", never "closed badly". | 2026-07-23 |
-| **BR-11** | Confirmation **auto-updates SS Daily Shipping Status**; a failure surfaces and never invalidates the closing. | Replaces the manual copy/paste + formula-stripping step; the closing record is the source of truth and must not depend on an external sheet being reachable. | 2026-07-23 · failure semantics 2026-08-03 |
+| **BR-11** | **RETIRED 2026-08-03** (`[PD-71]` owner decision). Originally: confirmation auto-updates SS Daily Shipping Status. The sheet is **retired entirely — no sheet integration exists**; the admin's Closing History (daily snapshots §3.20 + per-day CSV §3.18) is the system of record and replaces the sheet wholesale. | The ID is kept (never renumber). Any downstream need the sheet served is covered by the per-day CSV export. | 2026-07-23 · failure semantics 2026-08-03 · **retired 2026-08-03 (owner)** |
 | **BR-12** | Scan-row deletion always goes through the M2 confirm modal, is a **soft delete**, and the full original payload is retained in the backend forever. | The `✕` sits next to the primary action at scan speed; and a deleted scan is evidence about a physical parcel. | 2026-07-23 · confirm/toast `[PD-5 · OWNER-PENDING]` 2026-08-03 |
 | **BR-13** | Voice alerts are **ON by default**; only warnings speak; the utterance is fixed `"Please check this order"` (`en-US`); a Test button exists and plays regardless of the toggle; OK scans are silent. | The operator's eyes are on parcels, not the monitor. A fixed short phrase is recognizable at distance; templating it with a tracking number would make it unparseable. | 2026-07-23 · phrase/locale confirmed 2026-08-03 [G-3b] |
 | **BR-14** | The target may be **edited** and the session **cancelled** at any time while `IN_PROGRESS`, from the target banner, which is present in every in-progress rendering. | The hand count is fallible; forcing a cancel-and-restart to fix a typo would discard real scans. | 2026-07-23 · banner-everywhere clause 2026-08-03 (U-j) |
@@ -789,13 +848,17 @@ Page-scoped, stable IDs. Global rules are cited, never restated. "Date" is the d
 | **BR-29** | The server **revalidates the whole gate at confirm time** against live order state and against the target the operator saw; on any mismatch it rejects with a red toast, re-judges the affected rows, and writes nothing partial. | Between the scan and the press, another operator can move an order or change the target; confirming against a stale client would certify a shipment that did not happen. | `[PD-6 · OWNER-PENDING]`, 2026-08-03 |
 | **BR-30** | Concurrent operators are handled by **server-side merge** for the counting flow (sequence assignment, counters, row list) and by an optimistic version check for single-value edits (target, session state), which returns a 409 and reloads. | Closing is a running total across two stations, so merge is correct there; last-write-wins on the target would silently destroy a colleague's correction. | `[PD-7 · OWNER-PENDING]`, 2026-08-03 |
 | **BR-31** | **No Slack route** fires from closing confirmation, mismatch, or unresolved warnings in v1. The only Slack traffic from this page is the [G-7] comment @mention route. | Inventing a channel would create an unowned alert stream that nobody has agreed to read. | `[PD-72 · OWNER-PENDING]`, 2026-08-03 |
-| **BR-32** | Slack or sheet delivery failures **never roll back** the primary action; they are persisted and retried. | Notification and reporting are side effects, not part of the transaction. | `[PD-4 · OWNER-PENDING]`, 2026-08-03 |
+| **BR-32** | Slack delivery failures **never roll back** the primary action; they are persisted and retried. (The rule's former "or sheet" clause is void since the sheet's retirement — `[PD-71]`, 2026-08-03.) | Notification is a side effect, not part of the transaction. | `[PD-4 · OWNER-PENDING]`, 2026-08-03 · sheet clause retired 2026-08-03 |
 | **BR-33** | **The unit of the count is a parcel, not an order.** Each OK scan contributes exactly 1 to `ok_count`: an order split across two tracking numbers contributes 2, and a combined box carrying two orders contributes 1 (one OK + one duplicate). | The target is a hand count of boxes, so the system side must count boxes too, or the exact-match gate would be unachievable on any day with a split or combined shipment. | 2026-08-03 (spec-authored; derived from `[BR-2]`/`[BR-5]`) |
 | **BR-34** | A closing cannot be started with a target of 0. A day on which nothing shipped is simply **not closed** and has no Closing History row. | There is nothing to reconcile; and a missing row already means "not closed" (`[BR-10]`), so no new representation is needed. | 2026-08-03 (spec-authored) |
 | **BR-35** | A session left `IN_PROGRESS` on an earlier date **blocks** starting a closing for a new date; the operator must confirm or cancel the open session first, and the client opens it automatically. | One-session-per-date (`[PD-70]`) plus start-date attribution (`[PD-78]`) are only coherent if an abandoned session is resolved rather than orphaned; two open sessions would make "today's closing" ambiguous. | 2026-08-03 (spec-authored) |
 | **BR-36** | Every rendered time, every date boundary and every "same calendar day" test uses the **warehouse's single operating timezone**; all persisted timestamps are server timestamps. | Two stations, one clock: a browser-local timestamp would let two operators disagree about the order of scans and about which day a 23:58 parcel belongs to. | 2026-08-03 (spec-authored; with E-59) |
 | **BR-37** | Duplicate detection is scoped to the **current session only**. There is no cross-day duplicate check. | Yesterday's parcel is caught by its order status (`Shipped`/`Completed` → warning), which is the more informative signal; a cross-day index would also flag legitimate carrier number reuse. | 2026-08-03 (spec-authored) |
 | **BR-38** | **M1 obeys the global outbound predicate.** `[Process Outbound → resolve warning]` is enabled only when the order has ≥1 line, **every line is `INBOUNDED`**, the status is `processing`, and the order is not cancelled — in addition to the Zero Packing attestation. A `Processing` order with any `PENDING` line stays `⚠ Not outbounded`, with the button disabled and the shortfall named. | M1 emits the canonical `order.outbounded` (DC-14). View Orders `BR-9` and `order-detail.md` L-9 both state the outbound gate as **iff every line is INBOUNDED**, with no page exception; a closing-only side door would ship an order whose goods were never received and would make the two other specs' "iff" false. | 2026-08-03 (cross-page defect M3a-D2; before this, closing's gate was Zero Packing alone) |
+| **BR-39** | **Amendment entry.** Every confirmed Closing History row carries `[Amend]`. Amending always passes through the M3 confirm dialog (`[PD-5]` class) and transitions that date's **existing** session `CONFIRMED → AMENDING`, loading the full confirmed scan list with original sequence numbers. The confirmed record (v{n}) remains the authoritative History row until re-confirm — "the confirmed record stays until you re-confirm" is a verbatim owner requirement. | Owner decision 2026-08-03 (resolves `[PD-74]`): the correction path for a parcel found after confirmation reuses the closing screen and its whole verdict machinery, instead of inventing a parallel edit UI that could bypass the scan discipline. | 2026-08-03 (owner) |
+| **BR-40** | **Re-confirm gate = the confirm gate.** `[Re-confirm Closing]` obeys `[BR-3]`/`[BR-4]`/`[BR-29]` unchanged: exact match against the amended target, 0 outstanding warnings, a human press, full server revalidation. Success updates the record **in place** — same date, same single History row (`[PD-70]` upheld), version v{n}→v{n+1}, an "Amended" badge carrying version · actor · timestamp. Closing History itself carries the correction — no external sheet write exists (`[PD-71]`). | An amendment that could confirm with a looser gate would make the amended record weaker than the original; and a second row per date would break `[BR-10]`'s "one row per date" reading of History. | 2026-08-03 (owner) |
+| **BR-41** | **Single working context.** An amendment cannot start while any session on any date is `IN_PROGRESS` or `AMENDING`; a new date's closing cannot start while an amendment is open (extends `[BR-35]`). A second `[Amend]` on a date already `AMENDING` loads the existing amendment, never a fork. | Two open working sessions would make "the closing being worked on" ambiguous for every scan arriving from a wedge — the same ambiguity `[BR-35]` exists to prevent. | 2026-08-03 (spec-authored; derived from `[BR-35]`/`[PD-70]`) |
+| **BR-42** | **Amendment audit.** The pre-amend snapshot is never mutated: every re-confirm writes a **new** immutable snapshot version, and every version stays reproducible as CSV forever. Exiting an amendment discards the working changes from the record but retains any added scan rows in the audit log; entry, re-confirm, rejection and exit all persist (DC-26…DC-29). History's CSV serves the latest version; surfacing earlier versions is a developer decision (DQ-13). | An amendment is precisely the situation an auditor will ask about ("why does the sheet say 85 when it said 84 on the day?") — the answer must be reconstructible from data alone [G-8]. | 2026-08-03 (spec-authored) |
 
 ---
 
@@ -834,8 +897,12 @@ Names follow the canonical cross-page vocabulary where one exists (`order.status
 | **DC-21** | `closing.confirmed` | `[L-S1-8]` Confirm succeeds | confirmer | session | `confirmed_at`, `confirmer`, `target`, `ok_count`, `warnings_raised`, `warnings_resolved`, `match=true`, `snapshot_id`, `starter`, `started_at`, `session_duration` | Yes — State 4 + toast |
 | **DC-22** | `closing.confirm_rejected` | server revalidation fails at confirm (`[BR-29]`) | attempting confirmer | session | `reason`, `offending_order_ids[]`, `server_ok_count`, `server_outstanding_warnings`, `client_ok_count`, `target_at_press` vs `server_target` (to diagnose drift) | Red toast + rows re-judged |
 | **DC-23** | `closing.snapshot_created` | immediately after DC-21, inside the same transaction | system | session | `snapshot_id`, immutable copy of the **full scan list** (including deleted rows), the counters, the target-edit history, and the warning ledger. This is what every later CSV re-renders | Yes — History row |
-| **DC-24** | `closing.daily_shipping_status_updated` | the SS Daily Shipping Status write triggered by DC-21, and every retry | system (`triggered_by` = DC-21) | external sheet/BI target | `closing_date`, `target_system`, `values_written`, `outcome ∈ {success, failure}`, `error`, `attempt`, `retried_at`, `manual_retry_by` when re-triggered by a human | Toast; on failure a persistent error affordance (§6.4) |
+| **DC-24** | `closing.daily_shipping_status_updated` — **RETIRED 2026-08-03** (`[PD-71]` owner decision: the sheet is retired entirely, no integration exists, and this event is **never emitted**; the ID is kept — never renumber) | — | — | — | — | Never surfaced — QA asserts its **absence** (QA-CONFIRM-10/16, QA-PERSIST-08) |
 | **DC-25** | `closing.report_exported` | `[L-S4-2]` CSV button or a History row's `CSV` button | downloader | session / date | `source ∈ {state4_button, history_row_csv}`, `closing_date`, `exported_at`, `row_count`, `includes_deleted=true` | No (silent) |
+| **DC-26** | `closing.amend_started` | `[L-M3]` "Amend — open the closing" succeeds (`CONFIRMED → AMENDING`) | amending actor | closing session (date) | `session_id`, `closing_date`, `base_version` (the v{n} being amended), `base_target`, `base_ok_count`, `amend_started_at` | Yes — amber AMENDING banner + History "Amendment in progress" marker |
+| **DC-27** | `closing.amend_rejected` | the `[BR-41]` guard refuses an amend start | attempting actor | date | `reason ∈ {another_session_open, already_amending}`, blocking `session_id`/date | Red toast only (on `already_amending` the existing amendment is loaded) |
+| **DC-28** | `closing.amended` | `[L-SH-2]` Re-confirm Closing succeeds | re-confirming actor | session | `old_target → new_target`, `added_scan_seqs[]`, `removed_scan_seqs[]`, `old_ok_count → new_ok_count`, `version` (v{n+1}), `previous_snapshot_id → new_snapshot_id`, `amended_at`, actor. The named owner contract event — old/new target · added scans · actor · timestamp [G-8] | Yes — updated History row + "Amended v{n+1}" badge + green toast |
+| **DC-29** | `closing.amend_cancelled` | `[✕ Exit amendment]`, explicit abandonment of an amendment | exiting actor | session | `base_version` restored, `discarded_scan_seqs[]` (retained in the audit log), `exited_at` | Toast, then the record renders as v{n} again |
 
 ### 5.2 Notes on modelling
 
@@ -857,7 +924,7 @@ Stated explicitly so nobody gold-plates the event stream, and so QA does not fai
 - The `[G-3a]` send sound playback on M1 (the action itself persists as DC-13/DC-14).
 - wf-bar state switches and in-page tab switches (`Closing` ⇄ `Closing History`).
 - Opening/closing the Comments hub, switching its Mentions/Saved tabs, typing in comment search.
-- Opening a modal, and dismissing M1 or M2 with `Close` / `✕` / backdrop (no action taken).
+- Opening a modal, and dismissing M1, M2 or M3 with `Close` / `Keep the record` / `✕` / backdrop (no action taken).
 - Entering target-edit mode without saving; abandoning an edit.
 - Clicking an Order ID deep link.
 - Hover, scroll, column resize, the annotation toggle.
@@ -871,6 +938,7 @@ Stated explicitly so nobody gold-plates the event stream, and so QA does not fai
 - **Deleted scan rows are retained forever** with their full payload (`[BR-12]`, verbatim owner requirement "Deletion history is kept in the backend").
 - **Cancelled sessions are retained** with their scan rows, even though they never appear in Closing History.
 - **Every historical date must remain reproducible as a CSV forever**, byte-identical to the day it was confirmed, because it is rendered from the immutable snapshot (DC-23) and not from live data.
+- **Amended days retain every snapshot version** (`[BR-42]`): the v1 snapshot survives the v2 re-confirm untouched; the History CSV serves the latest version, and earlier versions remain queryable (DQ-13).
 - The CSV export includes deleted rows with their disposition, per the wireframe's own footer ("all rows stored in the backend (fully included in the closing report export)"). Column order, encoding and filename convention are developer decisions (DQ-5).
 - Comment history from this page accumulates on the **order** entity and inherits [G-7] retention.
 
@@ -895,7 +963,7 @@ System auto-comments raised here (DC-16, `source=system`) travel the same pipeli
 | Unknown-order scan (State 2b) | **none** — and specifically **NOT** `#unrecognized-tracking` | That channel serves the View Orders product-barcode pool. A closing unknown is a carrier tracking number absent from the system — a disjoint flow (`[BR-23]`, §3.15) |
 | Closing confirmed | **none** in v1 | `[PD-72 · OWNER-PENDING]` — inventing a channel would create an unowned alert stream |
 | Mismatch / unresolved warnings at end of day | **none** in v1 | same |
-| Daily Shipping Status update failure | **none** — surfaced in-UI only (§6.4) | the operator who confirmed is the person who can act; a channel would notify people with no lever |
+| Daily Shipping Status update failure | **none** — nothing exists to fail: the sheet was retired 2026-08-03 (`[PD-71]`, §6.4) | superseded row, kept so the non-route's history stays legible |
 
 **Delivery failure** `[PD-4 · OWNER-PENDING]`: the primary action (the comment, the status change, the confirmation) always commits. A failed Slack dispatch is persisted (DC-17 with `delivery_status=failure`) and retried; it never blocks the UI and never rolls anything back. Retry policy is a developer decision.
 
@@ -927,20 +995,17 @@ Cross-page references on this page are real links, never decoration:
 
 Closing has **no** inbound-request deep link (no `#reqlist` equivalent) — nothing on this page references the inbound flow.
 
-### 6.4 Sheet / BI handoff — SS Daily Shipping Status
+### 6.4 Sheet / BI handoff — **none** (Daily Shipping Status retired)
 
-**Contract.** A successful `closing.confirm` (DC-21) triggers an automatic write to the **SS Daily Shipping Status** artifact, replacing today's manual copy/paste with formula-stripping (`[BR-11]`).
+**Owner decision, 2026-08-03 (`[PD-71]` resolved):** the **SS Daily Shipping Status spreadsheet is retired entirely**. There is **no automatic sheet update, no sheet target, and no column mapping** — the integration this section used to specify does not exist. The admin's **Closing History** (daily snapshots, §3.20) is the system of record for the day's shipping figures, and the **per-day CSV export** (§3.18) covers any downstream need the sheet used to serve.
 
-**The exact target sheet and the column mapping are a NO-DEFAULT open question** `[PD-71]` — the artifact is external and is not described in any input document. This spec therefore fixes only the properties the mapping must satisfy, and §9 carries the question:
+Consequences that QA and developers must treat as normative:
 
-1. The write is triggered by confirmation, never by a scan, and never by opening the page.
-2. The write is **idempotent** per closing date: a retry after a partial or uncertain failure must not double-append a day (E-37).
-3. **Failure never invalidates the closing.** The session stays `CONFIRMED`; the snapshot stands; the History row appears regardless (E-38).
-4. Failure is **visible and persistent**: a red toast **(spec-authored)** "✕ Daily Shipping Status not updated" / "Closing is confirmed — retry from the Closing Report banner", **plus** an error strip that survives the toast inside the State 4 Closing Report banner, carrying a re-trigger control. The exact affordance and the retry/queue policy are developer decisions (DQ-6).
-5. Every attempt, success and failure persists as DC-24, including a human-initiated retry (`manual_retry_by`).
-6. The confirmation toast may only claim "Daily Shipping Status auto-updated" **after** the write succeeds; if the write is still in flight, the toast subtext reads **(spec-authored)** "Updating Daily Shipping Status…" and is replaced by the outcome. A green toast must never assert an update that did not happen.
-
-**CSV is the other half of this handoff** (§3.18): State 4's "Download Closing Report (CSV)" and each History row's `CSV` button produce the same snapshot-derived file, so the sheet can always be reconstructed by hand if the integration is down.
+1. Confirmation (§3.9) and amendment re-confirm (§3.24) write the closing record and its snapshot — **nothing else**. No external write is triggered by any action on this page.
+2. **DC-24 is retired and never emitted** (§5.1); QA asserts its absence (QA-CONFIRM-10/16, QA-PERSIST-08).
+3. The failure machinery this section used to define (retry queue, persistent error strip, "✕ Daily Shipping Status not updated" toast, `manual_retry_by`) is **void** — there is nothing to fail. E-38 and DQ-6 are superseded accordingly (IDs kept, never renumbered).
+4. The confirmation toast subtext reads "Closing record saved · replaces the retired Daily Shipping Status sheet" — it asserts the record, never a sheet write.
+5. Reversal impact if the owner ever revives a sheet handoff: reinstate the v1.2 §6.4 contract (trigger on confirm, idempotent per date, failure never invalidates, failure surfaces persistently, every attempt persists as DC-24) — the invariants were deliberately preserved in this spec's git history.
 
 ### 6.5 Print pipeline [G-4]
 
@@ -965,9 +1030,9 @@ Synthesis parameters, the TTS voice fallback chain and AudioContext resume handl
 
 ## 7. Edge Cases & Error States
 
-IDs are page-scoped and stable. E-1…E-50 are the original planning assignments and keep their numbers wherever they appear; E-51…E-77 were added while writing and auditing this spec, and **E-78** was added during the 2026-08-03 remediation pass (`[BR-38]`). Gaps in reading order (E-50 appearing inside §7.1, E-41 inside §7.2) are original assignments and are **not** renumbered. Every ID is mapped to at least one asserting QA scenario in §8.18.
+IDs are page-scoped and stable. E-1…E-50 are the original planning assignments and keep their numbers wherever they appear; E-51…E-77 were added while writing and auditing this spec, **E-78** was added during the 2026-08-03 remediation pass (`[BR-38]`), and **E-79…E-86** were added with the Amend Closing flow (§7.7, PD-74 owner decision 2026-08-03). Gaps in reading order (E-50 appearing inside §7.1, E-41 inside §7.2) are original assignments and are **not** renumbered. Every ID is mapped to at least one asserting QA scenario in §8.18.
 
-**Total: 78 edge cases.**
+**Total: 86 edge cases.**
 
 ### 7.1 Scan input & verdict
 
@@ -982,7 +1047,7 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | **E-7** | Third and subsequent scans of the same tracking | Each repeat is its own warning row; every one references the **first** scan of that tracking `#n`, never the previous duplicate. |
 | **E-8** | Duplicate whose original OK row was deleted | The surviving duplicate is **not** auto-re-judged `[PD-75 · OWNER-PENDING]`; the operator deletes it and rescans the parcel (`[BR-22]`). |
 | **E-9** | Scan attempted in State 0 (session not started) | The input is `disabled`; wedge input goes nowhere; nothing is recorded. If a request nonetheless reaches the server, it is rejected with `reason=no_active_session` (DC-8). |
-| **E-10** | Scan attempted after Confirm Closing | Input is disabled `[PD-73 · OWNER-PENDING]`; a request reaching the server is rejected with `reason=session_confirmed`, red toast "✕ Today's closing is confirmed — scanning is closed", DC-8. The correction path for a genuinely missed parcel is a NO-DEFAULT open question `[PD-74]` (§9). |
+| **E-10** | Scan attempted after Confirm Closing | Input is disabled `[PD-73 · OWNER-PENDING]`; a request reaching the server is rejected with `reason=session_confirmed`, red toast "✕ Today's closing is confirmed — scanning is closed", DC-8. The correction path for a genuinely missed parcel is **Amend Closing** (§3.24, `[PD-74]` resolved 2026-08-03) — never a scan against the locked session. |
 | **E-11** | Over-scan — `ok_count` exceeds the target (the 85th parcel) | Mismatch: Confirm re-disables, label "Confirm Closing ({n} over target)", `.proglab` states the over-scan. Resolution: `[↺ Edit count]` to the true number, or delete the extra rows. Nothing is auto-corrected. |
 | **E-12** | Scanner artifacts — trailing CR/LF/Tab, leading/trailing spaces, mixed case | Normalized before lookup; both the raw and the normalized string persist (DC-7). Exact rules are a developer decision (DQ-1). |
 | **E-13** | Wrong identifier scanned — product EAN (`8809…`), Order ID, Deleo number, or an **inbound-request** tracking number | `unknown` verdict. This page matches customer-order (outbound) carrier tracking numbers only; inbound tracking is a separate namespace `[PD-8 · OWNER-PENDING]` and never resolves here. There is no unified search on this page. |
@@ -1004,12 +1069,12 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 
 | ID | Condition | Expected behavior |
 |---|---|---|
-| **E-15** | Target input is `0`, negative, decimal, non-numeric, or absurd | Start blocked with a visible error (§3.1). Absurd-but-possible values (>9999) get an advisory confirm, never a hard block. The wireframe silently no-ops — defect `[WF-8]`. |
-| **E-16** | Start Closing with an empty input | Blocked; red toast "✕ Enter the hand-counted parcel count first". Wireframe: silent return `[WF-8]`. |
+| **E-15** | Target input is `0`, negative, decimal, non-numeric, or absurd | Start blocked with a visible error (§3.1). Absurd-but-possible values (>9999) get an advisory confirm, never a hard block. The wireframe now raises the red toast too (`[WF-8]` fixed 2026-08-03); the advisory confirm stays `[ADMIN]`. |
+| **E-16** | Start Closing with an empty input | Blocked; red toast "✕ Enter the hand-counted parcel count first" — implemented in both the wireframe (`[WF-8]` fixed 2026-08-03) and the admin. |
 | **E-17** | Target edited below the current OK count (OK 10 → target 8) | Instant over-scan mismatch; Confirm re-disables with "Confirm Closing (2 over target)"; no scan rows are touched. |
 | **E-18** | Target edited to exactly the OK count with 0 outstanding warnings | Confirm enables immediately, with no new scan. This is a legitimate correction of a miscount — and it is exactly why DC-3 captures `ok_count_at_edit`. |
 | **E-19** | Edit-count Save with an invalid value | Rejected; the previous target is preserved; the field stays in edit mode; red toast; DC-4. |
-| **E-20** | Cancel Closing with scans present | Confirm dialog required (§3.11) — wireframe cancels immediately, defect `[WF-7]`. Scan rows are **retained server-side** `[PD-70 · OWNER-PENDING]`; only the session resets. |
+| **E-20** | Cancel Closing with scans present | Confirm dialog required (§3.11) — now implemented in the wireframe as `#m-cancel` (`[WF-7]` fixed 2026-08-03). Scan rows are **retained server-side** `[PD-70 · OWNER-PENDING]`; only the session resets. |
 | **E-21** | Cancel Closing with zero scans | The dialog is still shown (with the count clause omitted). "Cancel always asks" must be unconditional. |
 | **E-41** | Session spans midnight (start 23:50, confirm 00:10) | The snapshot belongs to the **start** date `[PD-78 · OWNER-PENDING]`; History shows one row on the start date; the `Confirmed At` value may be past midnight. |
 | **E-42** | A second closing session attempted on a date that is already confirmed | Blocked `[PD-70 · OWNER-PENDING]`: red toast "✕ Today's closing is already confirmed"; DC-2 with `reason=already_confirmed`. |
@@ -1042,7 +1107,7 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | ID | Condition | Expected behavior |
 |---|---|---|
 | **E-30** | Two stations scan the same tracking within the same second | Server arbitrates order: exactly one `ok` and one `duplicate`; both feeds render the same two rows with the same sequence numbers `[PD-7 · OWNER-PENDING]`. |
-| **E-31** | Two operators press Confirm simultaneously | Exactly one closing record, one snapshot, one sheet update [G-9]; the loser receives the confirmed state, not an error dialog. |
+| **E-31** | Two operators press Confirm simultaneously | Exactly one closing record and one snapshot [G-9] (and no sheet write — the sheet is retired, `[PD-71]`); the loser receives the confirmed state, not an error dialog. |
 | **E-32** | Operator A edits the target while B is scanning | The gate is recomputed once on one consistent server state; no lost update; B's in-flight scan is unaffected. Optimistic version check on the target value (`[BR-30]`). |
 | **E-33** | The same session open on two devices | Shared server state; both show identical sequence numbers, rows and counters within the sync latency budget (developer decision, DQ-4). Neither device may assign a sequence number the other has used. |
 | **E-34** | A cancels the session while B is mid-scan | B's next scan is rejected with `reason=session_cancelled` (DC-8) and an explicit red toast **(spec-authored)** "✕ This closing was cancelled by {actor} — start a new closing". It must **never** silently create a new session. |
@@ -1054,8 +1119,8 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 |---|---|---|
 | **E-35** | Network failure mid-scan (no response) | The retry carries the same `scan_id`, so it can never double-append (`[G-9]`). The UI shows an **unconfirmed** row state, never a fake OK (`[BR-26]`); DC-9 is persisted so a "lost scan" is diagnosable against a physical parcel. |
 | **E-36** | Refresh / navigate away / crash / device switch mid-session | Full state restored — target, scan list with original sequence numbers, counters, warnings, gate (`[BR-8]`). Nothing clears. |
-| **E-37** | Network failure on Confirm | Retry with the same idempotency key produces exactly one closing record and one sheet update; if the first attempt actually succeeded, the retry returns the confirmed state. |
-| **E-38** | Daily Shipping Status update fails after the closing was confirmed | Closing stays confirmed; the History row exists; a red toast plus a persistent error affordance with a re-trigger appear (§6.4); every attempt persists as DC-24. |
+| **E-37** | Network failure on Confirm | Retry with the same idempotency key produces exactly one closing record; if the first attempt actually succeeded, the retry returns the confirmed state. |
+| **E-38** | ~~Daily Shipping Status update fails after confirmation~~ — **retired, superseded by decision** (`[PD-71]`, 2026-08-03): the sheet no longer exists, so there is nothing to fail | The ID is kept (never renumber) and now asserts the **absence**: confirmation and re-confirm perform **no** external sheet write; the History row and the CSV are the only outputs (QA-PERSIST-08). |
 | **E-39** | TTS unavailable (no voices installed, unsupported browser, muted device) | Visual warnings unaffected; no JS error; `🔊 Test voice` degrades gracefully (no crash, no infinite spinner). Consider surfacing an inline hint that audio is unavailable — copy is a developer decision. |
 | **E-40** | CSV download fails, or the day has zero scans | Either a well-formed file (headers, zero data rows) or an explicit red error. **Never a silent empty success.** |
 | **E-49** | Printer offline | **N/A on this page** — there is no print surface `[PD-68 · OWNER-PENDING]`. Recorded explicitly so QA does not invent a printer scenario here. CSV ≠ print. |
@@ -1076,6 +1141,19 @@ IDs are page-scoped and stable. E-1…E-50 are the original planning assignments
 | **E-61** | Voice toggle state on a shared station between two operators | Governed by the DQ-3 persistence scope; regardless of scope the toggle **defaults to ON at the start of every session**, so a colleague's OFF never silently carries into a new day. |
 | **E-62** | An `@mention` in an M1 memo naming a user who no longer exists / has no Slack account | The comment still posts and the status change still commits `[PD-4 · OWNER-PENDING]`; the mention delivery is recorded as a failure in DC-17 and retried per policy. Nothing about the closing is rolled back. |
 | **E-74** | An operator clicks an Order ID deep link mid-session | The order opens in a **new tab**; the closing tab keeps its scan input, its focus and its session. Even if the operator navigates the closing tab away, the session survives server-side (`[BR-8]`) — the new-tab rule exists to protect the scan rhythm, not the data. |
+
+### 7.7 Amendment (added 2026-08-03, `[L-SH-2]`/`[L-M3]`)
+
+| ID | Condition | Expected behavior |
+|---|---|---|
+| **E-79** | `[Amend]` pressed while another date's session is `IN_PROGRESS`, or while some other amendment is open | Blocked (`[BR-41]`): red toast "✕ Another closing is open — confirm or cancel it first", DC-27 `reason=another_session_open`. The confirmed record is untouched. |
+| **E-80** | The operator leaves the page, the browser crashes, or the device switches **mid-amendment** | The `AMENDING` state persists server-side exactly like an in-progress session (`[BR-8]`); reopening Closing resumes the amendment. History keeps showing the confirmed v{n} record with an "Amendment in progress" marker (DQ-13) — never the half-finished working state. |
+| **E-81** | `[✕ Exit amendment]` without re-confirming | The working changes are discarded from the record; any added scan rows are retained in the audit log [G-8]; the session returns to `CONFIRMED` v{n}; History is unchanged; DC-29. "The confirmed record stays until you re-confirm" holds literally. |
+| **E-82** | Two operators press `[Amend]` on the same date, or one double-clicks it | Exactly one `AMENDING` state exists [G-9]; the second entry **loads the existing amendment** (mirror of E-55), DC-27 `reason=already_amending`. Never two working copies of one day. |
+| **E-83** | Amending a **past** date (not today's row) | Allowed — the amber banner names the amended date so the operator can never confuse it with today's work. The History row stays on its original date (`[BR-19]` unchanged); the amend timestamp lives in the badge, not in the Date column. |
+| **E-84** | Re-confirm attempted with a mismatch or an outstanding warning | Identical to §3.9: the button is disabled with the blocker label ("Re-confirm Closing ({n} remaining / {n} warnings / {n} over target)"); a forced request is rejected server-side with DC-22 and no version increment. |
+| **E-85** | A parcel already counted in the confirmed list is scanned again during the amendment | `duplicate` warning — the dedupe scope covers the loaded confirmed rows (§3.24). The count can never be inflated by rescanning an already-counted box; the operator deletes the duplicate row (M2) before re-confirming. |
+| **E-86** | A new date's closing is started while an amendment is open | Blocked (`[BR-41]`, extension of `[BR-35]`): red toast, DC-2 `reason=amendment_open`; the client opens the amendment so the operator resolves it first. |
 
 ---
 
@@ -1108,7 +1186,7 @@ Clicking `#annoToggle` only sets `display:none` on the dots — it does **not** 
 
 An extended helper is acceptable and equivalent: `c.querySelectorAll('.dot, .badge-n, .paneheader small, header button.x, .avatar').forEach(d => d.remove())`. If you use it, the four rows above become plain equality against the string without the descendant.
 
-**R3 — Address states and modals by attribute, never by tab text.** `Modal: Process Processing Order` appears **twice** in the `wf-bar` (`[WF-12]`), so a text selector matches two nodes. Use `.wf-tab[data-state="s2b"]`, `.wf-tab[data-modal="m-process"]`, `section#s2b`, `#m-process`.
+**R3 — Address states and modals by attribute, never by tab text.** Use `.wf-tab[data-state="s2b"]`, `.wf-tab[data-modal="m-process"]`, `section#s2b`, `#m-process`, `#m-amend`. (`[WF-12]`'s duplicated "Modal: Process Processing Order" tab was removed 2026-08-03, so tab texts are now unique — the attribute rule stands anyway, because label text is demo chrome and may change.)
 
 **R4 — Instrument speech before the page's script runs** (required for every QA-VOICE scenario). Inject on document start:
 ```js
@@ -1133,15 +1211,15 @@ Where a clause names no verb it is strict equality. Never relax `reads` to *cont
 
 **R7 — Page-global demo state.** `voiceOn` is a single page-level variable shared by all states (U-g), so a toggle set in State 1 governs the auto-play of States 2/2b/3. `lastState` is only updated by `[data-goto]` clicks, never by `wf-bar` tabs. `delRow` is reset after each M2 confirm.
 
-**R8 — Known demo limitations that are NOT bugs.** Assert the demo behavior in `[WF]`, the correct behavior in `[ADMIN]`: tiles do not recompute after a row deletion; `#startBtn0` no-ops silently on empty input `[WF-8]` and accepts any non-empty string including `abc`; `#closeCancel` cancels without a dialog `[WF-7]`; State 1's "Remaining scans" tile reads 79 instead of 81 (U-a); State 4's scan input looks enabled (U-b); the Comments hub has no search (U-c) and is wired only in State 1 (U-e); the voice controls are wired only in State 1 (U-g); Order ID cells are not links (U-f); States 2/2b/3 render a muted target line instead of the full banner (U-j).
+**R8 — Known demo limitations that are NOT bugs.** Assert the demo behavior in `[WF]`, the correct behavior in `[ADMIN]`: tiles do not recompute after a row deletion; State 1's "Remaining scans" tile reads 79 instead of 81 (U-a); State 4's scan input looks enabled (U-b); the Comments hub has no search (U-c) and is wired only in State 1 (U-e); the voice controls are wired only in State 1 (U-g); Order ID cells are not links (U-f); States 2/2b/3 render a muted target line instead of the full banner (U-j). The Amend demo mutates page state (`#amendBanner`, `#targetIn1`, `#confirmBtn1`) — `[✕ Exit amendment]` restores it, and QA-AMEND-04/05 are *(destructive — reload after)*. **No longer limitations** (fixed 2026-08-03): `#startBtn0` now raises red validation toasts (`[WF-8]`, QA-S0-02) and `#closeCancel` now opens the `#m-cancel` dialog (`[WF-7]`, QA-TARGET-04).
 
 **R9 — Activating a state or a modal.** Every scenario's Given names a section or a modal but not the route to it. Unless the scenario says otherwise: **to activate a state, click its `.wf-tab[data-state="sX"]`; to open a modal outside its per-row entry point, click `.wf-tab[data-modal="m-…"]`.** Both are wireframe chrome (`[L-F4]`) and exist only to reach a rendering a reviewer could not otherwise produce — never treat them as shipping affordances. In `[ADMIN]` scenarios the equivalent Given is "the live session is in that state"; there is no tab.
 
-**R10 — PD citations in scenario headings are shorthand.** A `[PD-n]` in a QA heading points at the behavior's defining sentence in §3 or §7, which carries the full `[PD-n · OWNER-PENDING]` tag. The scenario asserts the provisionally-adopted behavior, which is the behavior to build until the owner rules. **`[PD-71]` and `[PD-74]` are NO-DEFAULT (§9.2) and are never asserted by any scenario** — if a heading cites a PD, that PD has a provisional default.
+**R10 — PD citations in scenario headings are shorthand.** A `[PD-n]` in a QA heading points at the behavior's defining sentence in §3 or §7, which carries the full `[PD-n · OWNER-PENDING]` tag. The scenario asserts the provisionally-adopted behavior, which is the behavior to build until the owner rules. **No NO-DEFAULT questions remain** (§9.2): `[PD-71]` was resolved 2026-08-03 (the sheet is retired — asserted as an *absence* by QA-CONFIRM-10/16 and QA-PERSIST-08) and `[PD-74]` was resolved 2026-08-03 (the Amend flow, asserted by the QA-AMEND block).
 
 **Reading a scenario.** Every Then-clause is an assertion. Where a scenario asserts a persisted event it names the `DC-n` id; §8.17 proves every event in §5.1 has at least one asserting scenario and §8.18 does the same for every `[E-n]`.
 
-**Totals: 177 scenarios — 68 `[WF]` · 109 `[ADMIN]` · 71 negative tests (40.1%).**
+**Totals: 192 scenarios — 74 `[WF]` · 118 `[ADMIN]` · 77 negative tests (40.1%).**
 
 ---
 
@@ -1154,12 +1232,14 @@ Where a clause names no verb it is strict equality. Never relax `reads` to *cont
 - And exactly one element matches `[...document.querySelectorAll('#s0 .pagepad div')].filter(e => t(e) === "① Today's Outbound Target (manual count)")` — that element is the card heading (the wireframe styles it inline, so there is no class to address; assert by exact R2 text and by a match count of 1)
 - And `#targetIn0` exists with placeholder "Hand-counted qty" and `value === ""`, followed by the literal text "orders" and the button `#startBtn0` labelled "Start Closing"
 
-**QA-S0-02 `[WF]` (negative)** — Start is blocked with an empty count `[E-16]`
+**QA-S0-02 `[WF]` (negative)** — Start is blocked with an explicit error on empty/invalid input `[E-15]` `[E-16]` (`[WF-8]` fixed 2026-08-03)
 - Given `section#s0` is active and `#targetIn0.value` is `""`
 - When `#startBtn0` is clicked
-- Then `section#s0` still has class `on` and `section#s1` does **not**
-- And no `.scanbig` element exists inside the active section
-- And no toast element appears (the demo is silent — `[WF-8]`; the shipping error is QA-S0-05)
+- Then `section#s0` still has class `on` and `section#s1` does **not**, and no `.scanbig` element exists inside the active section
+- And a red toast (`#s0 .toast.err`) reads "✕ Enter the hand-counted parcel count first" (the toast self-removes after ~2.6 s; assert immediately)
+- When `#targetIn0.value` is set to `abc` (repeat with `0`) and `#startBtn0` is clicked
+- Then `section#s0` still has class `on` and the newest red toast reads "✕ The count must be a whole number of 1 or more" (toasts prepend — the newest is the **first** `.toast.err` in the DOM)
+- And the >9999 advisory confirm and the server-side rejections remain `[ADMIN]` (QA-S0-05/09)
 
 **QA-S0-03 `[WF]`** — Start with a value enters the in-progress screen *(destructive — reload after)*
 - Given `#targetIn0.value` is set to `84`
@@ -1616,11 +1696,16 @@ All scenarios in this block require the R4 instrumentation.
 - When `#targetEdit` (now "Save") is clicked
 - Then `#targetIn1` is `disabled` again and the button text returns to "↺ Edit count"
 
-**QA-TARGET-04 `[WF]` (negative)** — the wireframe cancels without a dialog (documents `[WF-7]`) *(destructive — reload after)*
+**QA-TARGET-04 `[WF]` (negative)** — Cancel Closing takes the confirm dialog (`[WF-7]` fixed 2026-08-03) *(destructive — reload after)*
 - Given `section#s1` is active
 - When `#closeCancel` is clicked
-- Then `section#s0` becomes active immediately, `section#s1` loses class `on`, and **no** `.overlay.open` element exists at any point
-- And this is a known wireframe gap: the shipping behavior requires the dialog (QA-TARGET-05)
+- Then `#m-cancel` gains class `open` and `section#s1` **keeps** class `on` — nothing cancels yet
+- And the modal `header` R2-normalized text **starts with** "Cancel today's closing?" (R2b — the `✕` close button is nested), its body `b` reads "5 scans will be removed from this session.", and its footer buttons read "Keep scanning" and "Yes — cancel closing"
+- When "Keep scanning" is clicked
+- Then `#m-cancel` loses class `open` and `section#s1` still has class `on` — a true no-op
+- When `#closeCancel` is clicked again and "Yes — cancel closing" (`#cancelYes`) is clicked
+- Then `#m-cancel` closes and `section#s0` becomes active
+- And the server-side semantics (toast, DC-5, retained rows) remain `[ADMIN]` (QA-TARGET-05/08)
 
 **QA-TARGET-05 `[ADMIN]`** — Cancel Closing requires confirmation `[E-20]` `[PD-5]`
 - When "✕ Cancel Closing" is pressed with 37 scans present
@@ -1823,7 +1908,7 @@ All scenarios in this block require the R4 instrumentation.
 **QA-CONFIRM-01 `[WF]`** — the disabled button carries the blockers
 - Given `section#s1` is active
 - Then `#s1 .clsbanner.done` contains a `b` element reading "Confirm Closing" and a button whose R2-normalized text is exactly "Confirm Closing (79 remaining · 2 warnings)"
-- And the banner text contains "no auto-confirm; closing happens only when this button is pressed." and "an over-scan makes it a mismatch and disables the button again" and "auto-updates Daily Shipping Status"
+- And the banner text contains "no auto-confirm; closing happens only when this button is pressed." and "an over-scan makes it a mismatch and disables the button again" and "the admin's Closing History replaces the retired Daily Shipping Status spreadsheet" (`[PD-71]` copy, 2026-08-03)
 
 **QA-CONFIRM-02 `[WF]`** — the button renders as disabled
 - Then that button carries class `btn-gray` (the wireframe's disabled treatment, `cursor:not-allowed`)
@@ -1837,11 +1922,11 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-CONFIRM-04 `[WF]`** — the confirmation toast copy
 - Given `section#s4` is active
-- Then `#s4 .toast` contains "✓ Today's closing confirmed — 84/84 orders" and its `small` reads "Daily Shipping Status auto-updated"
+- Then `#s4 .toast` contains "✓ Today's closing confirmed — 84/84 orders" and its `small` reads "Closing record saved · replaces the retired Daily Shipping Status sheet"
 - And `#s4 .toast` does not carry class `err`
 
 **QA-CONFIRM-05 `[WF]`** — the Closing Report banner, and no print affordance `[BR-24]`
-- Then `#s4 .clsbanner.done` contains a `b` element reading "Closing Report", the text "replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status", and a button labelled "Download Closing Report (CSV)"
+- Then `#s4 .clsbanner.done` contains a `b` element reading "Closing Report", the text "replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status (sheet retired 2026-08-03)", and a button labelled "Download Closing Report (CSV)"
 - And no element anywhere in the document has text containing "Print" and no `button` exists whose normalized text is "Print"
 
 **QA-CONFIRM-06 `[WF]`** — the Warning Resolution Summary and the State 4 tiles
@@ -1866,8 +1951,8 @@ All scenarios in this block require the R4 instrumentation.
 - When Confirm is pressed once
 - Then `closing.confirmed` (**DC-21**) exists with the confirmer, `target=84`, `ok_count=84`, `warnings_raised`, `warnings_resolved`, `match=true` and a `snapshot_id`
 - And `closing.snapshot_created` (**DC-23**) exists containing the full scan list including deleted rows
-- And `closing.daily_shipping_status_updated` (**DC-24**) exists with an outcome
-- And the green toast reads "✓ Today's closing confirmed — 84/84 orders" / "Daily Shipping Status auto-updated"
+- And **no** `closing.daily_shipping_status_updated` (**DC-24**) event exists — the sheet integration is retired (`[PD-71]`, §6.4)
+- And the green toast reads "✓ Today's closing confirmed — 84/84 orders" / "Closing record saved · replaces the retired Daily Shipping Status sheet"
 - And a History row for today appears with `84 · 84 · {raised}→{resolved} · ✓ Match`
 - And the screen re-renders as State 4 with no page reload
 
@@ -1896,9 +1981,9 @@ All scenarios in this block require the R4 instrumentation.
 **QA-CONFIRM-16 `[ADMIN]` (negative)** — a retried Confirm cannot double-write `[E-37]` `[G-9]`
 - Given target 84, OK 84, 0 outstanding warnings, and a `closing.confirm` request whose **response is lost** after the server committed it (network drop, not a server error)
 - When the client retries with the **same idempotency key**
-- Then exactly **one** `closing.confirmed` (**DC-21**), exactly **one** `closing.snapshot_created` (**DC-23**) and exactly **one** `closing.daily_shipping_status_updated` (**DC-24**) exist for that date
+- Then exactly **one** `closing.confirmed` (**DC-21**) and exactly **one** `closing.snapshot_created` (**DC-23**) exist for that date, and **zero** `closing.daily_shipping_status_updated` (**DC-24**) events — the sheet is retired (`[PD-71]`)
 - And the retry returns the **confirmed state** — State 4, not an error dialog and not a second confirmation toast
-- And Closing History shows exactly one row for the date, and the SS Daily Shipping Status target carries exactly one appended day (§6.4 clause 2)
+- And Closing History shows exactly one row for the date
 - Given instead the first attempt never reached the server, when the retry is sent with the same key, then exactly one of each event is written and the outcome is identical — the caller cannot tell the two cases apart
 
 **QA-CONFIRM-15 `[WF]` (negative)** — State 4 exposes no session controls
@@ -1954,8 +2039,8 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-HIST-10 `[WF]`** — every demo row is a Match
 - Given `section#shist` is active
-- Then the table has 5 data rows dated `07-13 (today)`, `07-12`, `07-11`, `07-10`, `07-09`
-- And every row's Match cell reads "✓ Match", every row's OK Scans equals its Outbound Target, and every row carries a "CSV" button
+- Then the table has 5 data rows whose Date cells **start with** `07-13 (today)`, `07-12`, `07-11`, `07-10`, `07-09` (the 07-12 Date cell also carries the Amended badge — QA-AMEND-06)
+- And every row's Match cell reads "✓ Match", every row's OK Scans equals its Outbound Target, and every row carries a "CSV" button and an "Amend" button (QA-AMEND-01)
 
 **QA-HIST-11 `[ADMIN]`** — an Order ID deep link opens a new tab and the session survives `[E-74]` `[G-12]` `[DQ-11]`
 - Given an `IN_PROGRESS` session with 40 rows and focus in the scan input
@@ -2045,7 +2130,7 @@ All scenarios in this block require the R4 instrumentation.
 
 **QA-PERSIST-04 `[ADMIN]` (negative)** — simultaneous confirms `[E-31]`
 - When two operators press Confirm at the same instant
-- Then exactly one **DC-21**, one **DC-23** and one **DC-24** exist; the second operator is shown the confirmed state, not an error dialog
+- Then exactly one **DC-21** and one **DC-23** exist (and zero **DC-24** — the sheet is retired, `[PD-71]`); the second operator is shown the confirmed state, not an error dialog
 
 **QA-PERSIST-05 `[ADMIN]`** — target edit during scanning `[E-32]`
 - When A edits the target while B is scanning
@@ -2060,11 +2145,11 @@ All scenarios in this block require the R4 instrumentation.
 - When B's next scan is submitted
 - Then it is rejected with `closing.scan_rejected` (**DC-8**, `reason=session_cancelled`), a red toast reads "✕ This closing was cancelled by {actor} — start a new closing", and **no** new session is silently created
 
-**QA-PERSIST-08 `[ADMIN]` (negative)** — sheet failure never invalidates the closing `[E-38]`
-- Given the Daily Shipping Status write fails after a successful confirmation
-- Then the session remains `CONFIRMED`, the History row exists, and the CSV is downloadable
-- And a red toast reads "✕ Daily Shipping Status not updated" / "Closing is confirmed — retry from the Closing Report banner", the error affordance persists after the toast expires, and **DC-24** exists with `outcome=failure`
-- When the update is re-triggered and succeeds, a further **DC-24** exists with `outcome=success` and `manual_retry_by` set
+**QA-PERSIST-08 `[ADMIN]` (negative)** — no sheet write ever occurs `[E-38]` `[PD-71]` (rewritten 2026-08-03; the sheet-failure scenario is retired with the sheet)
+- Given a closing is confirmed, and later amended and re-confirmed (§3.24)
+- Then **zero** `closing.daily_shipping_status_updated` (**DC-24**) events exist for the date, and no outbound request to any external sheet/BI target was made by either action
+- And the History row plus the per-day CSV are the only outputs — the session stays `CONFIRMED`, the CSV is downloadable
+- And the retired failure copy ("✕ Daily Shipping Status not updated", the error strip, a re-trigger control) appears nowhere in the admin
 
 **QA-PERSIST-09 `[ADMIN]`** — a session across midnight `[E-41]` `[PD-78]`
 - Given a session started 23:50 and confirmed 00:10
@@ -2112,12 +2197,12 @@ All scenarios in this block require the R4 instrumentation.
 - Given `section#s1` is active
 - Then `#s1 .toast` contains a `span` reading "✓ Outbound confirmed — YT2618100710108810" and a `small` reading "Ready for the next barcode scan"
 - And `#s4 .toast` follows the same two-part shape
-- And no `.toast.err` element exists in the demo (red toasts are `[ADMIN]` copy defined in §3)
+- And no `.toast.err` element exists on a fresh load (the only demo red toasts are the transient `#s0` validation toasts of the `[WF-8]` fix, QA-S0-02; every other red toast is `[ADMIN]` copy defined in §3)
 
-**QA-CHROME-04 `[WF]` (negative)** — the wf-bar duplicate tab must not be counted as a unit `[WF-12]`
-- Then `document.querySelectorAll('.wf-tab[data-modal="m-process"]')` yields **2** elements with identical text "Modal: Process Processing Order"
-- And the legend-unit count is computed **only** from the DOM units, not from tabs: `document.querySelectorAll('.legend ol > li')` yields **19**, `document.querySelectorAll('#m-process .dot, #m-scandel .dot')` yields **2**, and `document.querySelectorAll('#s1 .legend > p')` yields **1** — total **22**, matching §2.1
-- And the same page yields `document.querySelectorAll('.wf-tab').length === 10` and `document.querySelectorAll('.wf-tab[data-modal]').length === 3`, so a checker that substitutes the three *modal tabs* for the two *modal dots* reaches 19 + 1 + 3 = **23** and over-counts by one — that substitution is the error `[WF-12]` produces, and it is the only route to 23. Assert 22 from the three DOM counts above; never derive a unit count from `.wf-tab`.
+**QA-CHROME-04 `[WF]` (negative)** — the legend-unit count derives from DOM units, never from tabs (`[WF-12]` fixed 2026-08-03)
+- Then `document.querySelectorAll('.wf-tab[data-modal="m-process"]')` yields **1** element (the `[WF-12]` duplicate was removed)
+- And the legend-unit count is computed **only** from the DOM units, not from tabs: `document.querySelectorAll('.legend ol > li')` yields **20**, `document.querySelectorAll('#m-process .dot, #m-scandel .dot, #m-amend .dot')` yields **3**, and `document.querySelectorAll('#s1 .legend > p')` yields **1** — total **24**, matching §2.1
+- And the same page yields `document.querySelectorAll('.wf-tab').length === 10` and `document.querySelectorAll('.wf-tab[data-modal]').length === 3` — tabs are chrome (`[L-F4]`); never derive a unit count from `.wf-tab` (`#m-cancel` deliberately has no dot and no tab-based proxy, §2.1)
 
 **QA-CHROME-05 `[ADMIN]` (negative)** — no wireframe chrome ships `[L-F4]`
 - Given the shipping admin closing page
@@ -2128,6 +2213,97 @@ All scenarios in this block require the R4 instrumentation.
 - Given `section#s1` is active at a viewport of 1440×900
 - Then `document.body.scrollWidth <= document.body.clientWidth` (the page body does not scroll horizontally; only `.mockwrap` may)
 - And all 10 `thead th` cells are rendered, none is `display:none`, and the longest tracking cell text (`YT2618100710184356`, 18 chars) is fully present in the DOM with no ellipsis character
+
+---
+
+### 8.15b QA-AMEND — Amend Closing `[L-SH-2]` `[L-M3]` (added 2026-08-03; numbered 8.15b so §8.16–§8.18 pointers stay stable)
+
+**QA-AMEND-01 `[WF]`** — every History row carries an Amend button
+- Given `section#shist` is active
+- Then each of the 5 data rows contains a `button.amendbtn` labelled "Amend" beside its "CSV" button (5 in total), and each carries `data-date` / `data-meta` attributes
+
+**QA-AMEND-02 `[WF]`** — M3 opens with the owner's byte-exact copy
+- Given `section#shist` is active
+- When the today row's `button.amendbtn[data-date="07-13"]` is clicked
+- Then `#m-amend` gains class `open`, its `header` R2-normalized text **starts with** "Amend Closing — 07-13" (R2b — the `✕` close button is nested), and its `.dot` reads "M3"
+- And its body `b` reads exactly "Amend the closing for 07-13? The confirmed record stays until you re-confirm."
+- And `#amendMeta` reads "Confirmed 84/84 · 18:52 (Yongwon)", and the footer buttons read "Keep the record" and "Amend — open the closing"
+
+**QA-AMEND-03 `[WF]` (negative)** — Keep the record is a true no-op
+- Given `#m-amend` is open for `07-13`
+- When "Keep the record" is clicked (repeat with the header `✕`, and with a click on the `#m-amend` overlay itself)
+- Then `#m-amend` loses class `open`, `section#shist` still has class `on`, `#amendBanner`'s computed `display` is `none`, and the 07-13 row is unchanged
+
+**QA-AMEND-04 `[WF]`** — entering amendment mode *(destructive — reload after)*
+- Given `#m-amend` is open for `07-13`
+- When "Amend — open the closing" (`#amendYes`) is clicked
+- Then `#m-amend` closes and `section#s1` becomes active
+- And `#amendBanner` is visible (computed `display: flex`) with `#amendBannerB` reading exactly "AMENDING — 07-13 closing (confirmed 84/84)" and the button "✕ Exit amendment" present
+- And `#targetIn1` has value `85` (the demo pre-raises the target by one), the `#s1` scan input is **not** `disabled`, and `#confirmBtn1` reads exactly "Re-confirm Closing (1 remaining)"
+- And repeating the flow from the `07-11` row renders "AMENDING — 07-11 closing (confirmed 78/78)" with `#targetIn1` value `79` — the banner and target interpolate per row
+
+**QA-AMEND-05 `[WF]`** — Exit amendment restores the resting demo state *(destructive — reload after)*
+- Given amendment mode is active per QA-AMEND-04
+- When "✕ Exit amendment" (`#amendExit`) is clicked
+- Then `section#shist` becomes active, `#amendBanner`'s computed `display` is `none`, `#targetIn1` is back to `84`, and `#confirmBtn1` reads exactly "Confirm Closing (79 remaining · 2 warnings)" (the QA-CONFIRM-01 resting string)
+
+**QA-AMEND-06 `[WF]`** — the Amended badge demo
+- Given `section#shist` is active
+- Then exactly one `.amended-badge` exists, inside the `07-12` row's Date cell, reading exactly "Amended v2 · Dean · 07-13 09:12"
+- And no other row carries a badge, and the badge does not alter the row's inline background (QA-HIST-03's highlight contract is untouched)
+
+**QA-AMEND-07 `[ADMIN]`** — amend start persists and loads the confirmed list
+- Given the closing for a date is `CONFIRMED` (v1, target 84, OK 84) and no other session is open
+- When Amend is confirmed through M3
+- Then a `closing.amend_started` event (**DC-26**) exists with the `session_id`, `base_version=1`, `base_target=84`, `base_ok_count=84` and the acting user
+- And the closing screen renders every confirmed scan row with its **original** sequence number, scan time, verdict, worker and notes; the amber banner reads "AMENDING — {date} closing (confirmed 84/84)"; the target banner, `[↺ Edit count]`, the armed scan input and the "Re-confirm Closing" button are present
+
+**QA-AMEND-08 `[ADMIN]` (negative)** — the confirmed record stays until re-confirm
+- Given an amendment is open with a target edit and an extra scan already made
+- Then Closing History still shows the v1 numbers (84 · 84) with an "Amendment in progress" marker, and the date's CSV still reproduces the v1 snapshot byte-identically
+- And no `closing.amended` event exists yet
+
+**QA-AMEND-09 `[ADMIN]`** — a full amendment writes the owner-contract chain
+- Given amendment mode on a v1 = 84/84 day
+- When the target is edited 84 → 85 (**DC-3** with `old_qty=84 → new_qty=85`), the found parcel is scanned (**DC-7**, `verdict=ok` — OK 85), and "Re-confirm Closing" is pressed once
+- Then a `closing.amended` event (**DC-28**) exists with `old_target=84 → new_target=85`, the added scan's sequence in `added_scan_seqs`, `version=2`, both snapshot ids, the actor and the timestamp
+- And a **new** snapshot (**DC-23**, v2) exists while the v1 snapshot is unchanged; **DC-22** does not exist; **no DC-24** exists (the sheet is retired — `[PD-71]`, the History row itself carries the corrected figures)
+- And the History row for the date now reads 85 · 85 · `✓ Match` — still **exactly one row** — with the badge "Amended v2 · {actor} · {timestamp}"
+- And a green toast reads "✓ Closing amended — 85/85 orders (v2)" / "Closing History updated in place"
+
+**QA-AMEND-10 `[ADMIN]` (negative)** — the re-confirm gate holds `[E-84]` `[BR-40]`
+- Given amendment mode with target 85 and OK 84, or with an outstanding warning
+- Then "Re-confirm Closing" is disabled with the §3.9 blocker-label grammar ("Re-confirm Closing (1 remaining)" / "… (1 warnings)" / "… (1 over target)")
+- And a forced request is rejected server-side with **DC-22** and no version increment, and History still shows v1
+
+**QA-AMEND-11 `[ADMIN]` (negative)** — an already-counted parcel cannot inflate the count `[E-85]`
+- Given amendment mode with the confirmed scan list loaded
+- When a tracking number already on a non-deleted confirmed row is scanned
+- Then the verdict is `duplicate` (red row, voice, **DC-7** with `duplicate_of_seq` pointing at the confirmed row), `ok_count` does not change, and the gate stays blocked until the duplicate row is deleted (M2)
+
+**QA-AMEND-12 `[ADMIN]` (negative)** — single working context `[E-79]` `[E-86]` `[BR-41]`
+- Given a session on any date is `IN_PROGRESS`
+- When `[Amend]` is confirmed on any History row
+- Then the amend is rejected: red toast "✕ Another closing is open — confirm or cancel it first", **DC-27** with `reason=another_session_open`, and the record is untouched
+- Given instead an amendment is open
+- When a new date's closing Start is pressed
+- Then it is rejected with **DC-2** `reason=amendment_open` and the client opens the amendment
+
+**QA-AMEND-13 `[ADMIN]`** — persistence and exit `[E-80]` `[E-81]`
+- Given an amendment is open with one added scan
+- When the browser crashes and the page is reopened
+- Then the `AMENDING` state resumes with the added scan intact (`[BR-8]`)
+- When "✕ Exit amendment" is then confirmed
+- Then a `closing.amend_cancelled` event (**DC-29**) exists with the discarded scan's sequence, the session returns to `CONFIRMED` v1, History is unchanged, and the discarded scan row remains queryable in the audit log
+
+**QA-AMEND-14 `[ADMIN]` (negative)** — double Amend never forks `[E-82]` `[G-9]`
+- Given operator A holds an open amendment on a date
+- When operator B confirms `[Amend]` on the same date (or A double-clicks the M3 primary)
+- Then exactly one `AMENDING` state exists; B is loaded into A's amendment; **DC-27** exists with `reason=already_amending`; no second **DC-26** is written for a new context
+
+**QA-AMEND-15 `[ADMIN]`** — amending a past date `[E-83]` `[BR-42]`
+- Given the 07-11 row (v1 = 78/78) is amended to 79/79 three days later
+- Then the History row stays on **07-11** (`[BR-19]`), its badge carries the amend timestamp, and both snapshots remain reproducible: the v1 CSV byte-identical to the original day, the v2 CSV reflecting the amendment (latest served by the row's CSV button, earlier versions per DQ-13)
 
 ---
 
@@ -2149,19 +2325,20 @@ All scenarios in this block require the R4 instrumentation.
 | QA-HIST | `[L-SH-1]`, `[L-S1-11]`, E-43/44/45/74 | 6 | 5 | 11 | 3 |
 | QA-HUB | `[L-S1-7]`, E-47/75 | 4 | 5 | 9 | 2 |
 | QA-PERSIST | `[L-S1-F]`, E-30…34/36/38/41/53/59/62/71 | 0 | 14 | 14 | 7 |
+| QA-AMEND | `[L-SH-2]`, `[L-M3]`, E-79…86 | 6 | 9 | 15 | 6 |
 | QA-CHROME | `[L-F1]`…`[L-F4]`, `[L-S1-9]`, E-50 | 5 | 1 | 6 | 2 |
-| **Total** | | **68** | **109** | **177** | **71 (40.1%)** |
+| **Total** | | **74** | **118** | **192** | **77 (40.1%)** |
 
 **How to reproduce the totals** (count **scenario-header lines only** — `[WF]`, `[ADMIN]` and `(negative)` all recur in §8 prose and in the traceability tables, so an unfiltered `grep -c` over §8 over-counts):
 ```sh
 awk '/^## 8\. QA Acceptance/,/^## 9\. Out of Scope/' closing.md | grep -E '^\*\*QA-' > /tmp/h
-wc -l < /tmp/h                  # 177
-grep -cF '`[WF]`'    /tmp/h     #  68
-grep -cF '`[ADMIN]`' /tmp/h     # 109
-grep -cF '(negative)' /tmp/h    #  71
-``` Every block row above sums column-wise to those four figures (68 + 109 = 177; 71 ÷ 177 = 40.1%). `E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range, which is why that range is written out rather than as `E-30…38`.
+wc -l < /tmp/h                  # 192
+grep -cF '`[WF]`'    /tmp/h     #  74
+grep -cF '`[ADMIN]`' /tmp/h     # 118
+grep -cF '(negative)' /tmp/h    #  77
+``` Every block row above sums column-wise to those four figures (74 + 118 = 192; 77 ÷ 192 = 40.1%). `E-35` is owned by **QA-SCAN** (QA-SCAN-10) and is deliberately absent from QA-PERSIST's range, which is why that range is written out rather than as `E-30…38`.
 
-**Legend-unit coverage — all 22 units plus the 4 furniture keys have at least one asserting scenario:**
+**Legend-unit coverage — all 24 units plus the 4 furniture keys have at least one asserting scenario:**
 
 | Unit | Asserted by |
 |---|---|
@@ -2185,8 +2362,10 @@ grep -cF '(negative)' /tmp/h    #  71
 | `[L-S4-2]` | QA-CONFIRM-05, QA-CONFIRM-14, QA-HIST-07 |
 | `[L-S4-3]` | QA-CONFIRM-06, QA-DUP-08 |
 | `[L-SH-1]` | QA-HIST-01…11 |
+| `[L-SH-2]` | QA-AMEND-01, 04…15 |
 | `[L-M1]` | QA-M1-01…14 |
 | `[L-M2]` | QA-DEL-01…10 |
+| `[L-M3]` | QA-AMEND-02, 03, 07, 12, 14 |
 | `[L-F1]` | QA-CHROME-01 |
 | `[L-F2]` | QA-CHROME-02 |
 | `[L-F3]` | QA-CHROME-03, QA-VERDICT-09, QA-CONFIRM-04 |
@@ -2198,7 +2377,7 @@ grep -cF '(negative)' /tmp/h    #  71
 |---|---|
 | **DC-1** `closing.session_started` | QA-S0-06, QA-S0-09 |
 | **DC-2** `closing.start_rejected` | QA-S0-07, QA-S0-08, QA-S0-11, QA-PERSIST-10 |
-| **DC-3** `closing.target_edited` | QA-TARGET-07, QA-TARGET-10, QA-TARGET-14 |
+| **DC-3** `closing.target_edited` | QA-TARGET-07, QA-TARGET-10, QA-TARGET-14, QA-AMEND-09 |
 | **DC-4** `closing.target_edit_rejected` | QA-TARGET-06 |
 | **DC-5** `closing.session_cancelled` | QA-TARGET-08 |
 | **DC-6** `closing.session_restarted` | QA-TARGET-08 |
@@ -2217,14 +2396,18 @@ grep -cF '(negative)' /tmp/h    #  71
 | **DC-19** `comment.read` / `comment.mark_all_read` | QA-HUB-05 |
 | **DC-20** `closing.voice_alert_toggled` | QA-VOICE-06 |
 | **DC-21** `closing.confirmed` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04 |
-| **DC-22** `closing.confirm_rejected` | QA-CONFIRM-07, 08, 11, 13 |
+| **DC-22** `closing.confirm_rejected` | QA-CONFIRM-07, 08, 11, 13, QA-AMEND-10 |
 | **DC-23** `closing.snapshot_created` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-12 |
-| **DC-24** `closing.daily_shipping_status_updated` | QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-08 |
+| **DC-24** `closing.daily_shipping_status_updated` — **retired** (`[PD-71]`) | Absence asserted by QA-CONFIRM-10, QA-CONFIRM-16, QA-PERSIST-04, QA-PERSIST-08, QA-AMEND-09 |
 | **DC-25** `closing.report_exported` | QA-CONFIRM-14, QA-HIST-07 |
+| **DC-26** `closing.amend_started` | QA-AMEND-07, QA-AMEND-14 (negative) |
+| **DC-27** `closing.amend_rejected` | QA-AMEND-12, QA-AMEND-14 |
+| **DC-28** `closing.amended` | QA-AMEND-09, QA-AMEND-08 (negative) |
+| **DC-29** `closing.amend_cancelled` | QA-AMEND-13 |
 
 ### 8.18 Edge-case traceability (every `[E-n]` has an asserting scenario)
 
-All **78** edge cases map to at least one scenario, and every cell below names **only scenario IDs** — no `§`-pointers and no `DQ-n` pointers, which are documentation, not assertions. Six rows were repaired in the 2026-08-03 remediation pass, where the mapped scenario existed but asserted something else: E-37 (was QA-PERSIST-04, which tests *simultaneous* confirms = E-31 — now QA-CONFIRM-16 tests retry-after-timeout), E-52 (was QA-VERDICT-06, which asserts no item count — now QA-VERDICT-15), E-60 (was QA-COUNT-12, which deletes rows — now QA-COUNT-13), E-66 (was QA-VERDICT-07, which asserts statuses, never marketing orders — now QA-VERDICT-16), E-74 (was QA-HUB-08, which asserts hub focus, never links — now QA-HIST-11), E-77 (was QA-SCAN-15, which asserts terminators, never composition — now QA-SCAN-17). E-51's mapping moved from QA-TARGET-02 (which only unlocks the field) to QA-TARGET-14, which asserts the scan-during-edit behavior itself.
+All **86** edge cases map to at least one scenario, and every cell below names **only scenario IDs** — no `§`-pointers and no `DQ-n` pointers, which are documentation, not assertions. Six rows were repaired in the 2026-08-03 remediation pass, where the mapped scenario existed but asserted something else: E-37 (was QA-PERSIST-04, which tests *simultaneous* confirms = E-31 — now QA-CONFIRM-16 tests retry-after-timeout), E-52 (was QA-VERDICT-06, which asserts no item count — now QA-VERDICT-15), E-60 (was QA-COUNT-12, which deletes rows — now QA-COUNT-13), E-66 (was QA-VERDICT-07, which asserts statuses, never marketing orders — now QA-VERDICT-16), E-74 (was QA-HUB-08, which asserts hub focus, never links — now QA-HIST-11), E-77 (was QA-SCAN-15, which asserts terminators, never composition — now QA-SCAN-17). E-51's mapping moved from QA-TARGET-02 (which only unlocks the field) to QA-TARGET-14, which asserts the scan-during-edit behavior itself.
 
 | E | Asserted by | E | Asserted by |
 |---|---|---|---|
@@ -2267,6 +2450,10 @@ All **78** edge cases map to at least one scenario, and every cell below names *
 | E-37 | QA-CONFIRM-16, QA-PERSIST-04 | E-76 | QA-S0-10 |
 | E-38 | QA-PERSIST-08 | E-77 | QA-SCAN-17 |
 | E-39 | QA-VOICE-07 | E-78 | QA-M1-14 |
+| E-79 | QA-AMEND-12 | E-83 | QA-AMEND-15 |
+| E-80 | QA-AMEND-13 | E-84 | QA-AMEND-10 |
+| E-81 | QA-AMEND-13 | E-85 | QA-AMEND-11 |
+| E-82 | QA-AMEND-14 | E-86 | QA-AMEND-12 |
 
 ---
 
@@ -2296,10 +2483,10 @@ The three rows above were added 2026-08-03 after the mandatory-inclusion audit f
 
 ### 9.2 Owner questions with **no default** (behavior deliberately unspecified)
 
-| Ref | Question | Blocking status |
-|---|---|---|
-| **`[PD-71]`** | **Daily Shipping Status auto-update contract** — which exact sheet/system does `closing.confirmed` write to, and what is the column mapping? The artifact ("SS Daily Shipping Status") is external and is described in no input document. This spec fixes only the invariants (trigger, idempotency per date, failure never invalidates the closing, failure must surface persistently, every attempt persists — §6.4). | **Blocks implementation of the handoff only.** Everything else on the page can be built and shipped; the closing record and the CSV are complete without it. Owner: Yongwon. |
-| **`[PD-74]`** | **Correction path when an extra parcel is found after confirmation.** No reopen/amend affordance exists anywhere in the wireframe, and inventing one would change the immutability model chosen in `[PD-73]`/`[PD-70]`. This spec specifies the lock and nothing else. | **Non-blocking for v1** — the current answer is "the day is closed; handle the parcel as tomorrow's work or off-system". Owner decision needed before any reopen feature is designed. |
+**None remain.** Both of this page's former NO-DEFAULT questions were resolved by the owner on 2026-08-03:
+
+- **`[PD-71]`** (Daily Shipping Status auto-update contract) — resolved by **retiring the sheet entirely**: no integration exists; the admin's Closing History is the system of record and the per-day CSV covers downstream needs (§6.4). Nothing blocks implementation.
+- **`[PD-74]`** (correction path after confirmation) — resolved as **Amend Closing**, specified in §3.24/§3.25 with `[BR-39]`–`[BR-42]`. See §10 for both decision rows.
 
 ### 9.3 Developer decisions (state a default, mark dev-owned — not owner questions)
 
@@ -2310,13 +2497,14 @@ The three rows above were added 2026-08-03 after the mandatory-inclusion audit f
 | **DQ-3** | Voice-toggle persistence scope (localStorage per device vs user profile) | Either is acceptable; ON at the start of every session regardless (`[BR-13]`, E-61) |
 | **DQ-4** | Multi-operator live-sync transport (polling vs WebSocket/SSE) and acceptable propagation latency for rows and counters; TTS cancel-and-speak vs queue | Server is authoritative for sequence and counters (`[BR-30]`); the wireframe demonstrates cancel-and-speak |
 | **DQ-5** | CSV format: column order, encoding (UTF-8 with BOM recommended so Korean opens correctly in Excel), filename convention, deleted-row flag column | Deleted rows are **included** with a disposition flag (§3.18, §5.4) |
-| **DQ-6** | Daily Shipping Status failure handling: retry/queue policy, the exact persistent error affordance and its re-trigger control, error copy | The closing record stands regardless; the failure must remain visible after the toast expires (§6.4) |
+| **DQ-6** | ~~Daily Shipping Status failure handling~~ — **retired 2026-08-03** with the sheet (`[PD-71]`); ID kept, never renumbered | Void — no sheet write exists to fail (§6.4) |
 | **DQ-7** | Spec-side normalization of wireframe fossils — no behavior change | `[WF-4]` "(M2)" → Closing History page; `[WF-5]` State 1 legend #2; `[WF-12]` duplicated wf-tab; plus the unregistered divergences U-a…U-j (§2.3) |
 | **DQ-8** | TTS voice-selection fallback chain and zero-voice behavior | Wireframe chain: `Samantha` → any `en-US` → browser default; zero voices must degrade silently (E-39) |
 | **DQ-9** | Scan-list scale handling beyond a few hundred rows (pagination vs virtualization) | If paginated, the latest page is the default during an active session (E-60) |
 | **DQ-10** | Toast duration and stacking policy; idempotency key format and TTL; how a rejected duplicate request surfaces | Global appendix items — consistent across all 8 screens |
 | **DQ-11** | The deep-link route for an Order ID and the new-tab mechanism (`target="_blank"` vs scripted open) | Real link, opened in a new tab while a session is `IN_PROGRESS` (§6.3, E-74) |
 | **DQ-12** | Storage timezone and the exact rendering conversion | One warehouse operating timezone for all rendering and all date boundaries; server timestamps only (`[BR-36]`, E-59, E-71) |
+| **DQ-13** | Amendment surfaces: how earlier snapshot versions of an amended day are exposed (the row's CSV serves the latest — v1 access UI is dev-owned), the exact rendering of the History "Amendment in progress" marker, and the amend idempotency key format | The version data model itself is fixed by `[BR-42]` (every version immutable and reproducible); only the surfacing is dev-owned (§3.20, §3.24, E-80) |
 
 ---
 
@@ -2384,5 +2572,10 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **Remediation — M2 adversarial QA run (68/68 `[WF]` scenarios executed, 405 assertions).** Three expected strings were wrong because nested *functional* descendants pollute `textContent` the way `.dot` does (`header button.x`, `.badge-n`, `.paneheader small`, `.avatar`): fixed to `starts with`, and R2b now lists all four. §8.0 gained normative assertion verbs (R6b), a state-activation rule (R9) and a PD-shorthand rule (R10); four unassertable clauses (QA-S0-01 heading selector, QA-HIST-03 highlight, QA-CHROME-02 `p.sub`, QA-CHROME-04 "23") were made executable | QA | §8.0, QA-S0-01, QA-DEL-01, QA-HUB-01/02, QA-HIST-03, QA-CHROME-02/04 |
 | 2026-08-03 | **Remediation — M1 coverage audit.** §8.18's "every `[E-n]` has an asserting scenario" was false for six edge cases whose mapped scenario asserted something else (E-37/52/60/66/74/77) plus a partial (E-51). Seven `[ADMIN]` scenarios added (QA-SCAN-17 · QA-VERDICT-15/16 · QA-COUNT-13 · QA-TARGET-14 · QA-CONFIRM-16 · QA-HIST-11), plus QA-HUB-09 and QA-M1-14 from the cross-page fixes. §8.16 key lists corrected (E-35 belongs to QA-SCAN only; E-74 to QA-HIST; `[L-S4-1..3]` enumerated), §8.0's traceability pointers un-shifted (§8.17/§8.18), and U-a extended to the Confirm button's `79`. Scenario count 168 → 177, negative share 40.5% → 40.1% | QA | §8, §2.3, §3.9 |
 | 2026-08-03 | **Audit pass — QA rebuilt to a runnable contract.** §8.0 now fixes the execution environment (reset discipline, `.dot`-stripping text normalization, attribute-based selection because of `[WF-12]`, a speech-synthesis stub, row addressing, page-global demo state). One assertion in the earlier draft could not pass on the live wireframe — the 10-column header check read `#6` and `Closing Verdict5` because annotation dots sit inside those `<th>` cells; it is now normalized (QA-VERDICT-05). Scenario count 125 → 168, negative share 36.8% → 40.5%, and every `[E-n]` gained a traceability row (§8.18) | QA | §8 |
+
+| 2026-08-03 | **REVERSAL — `[PD-74]` RESOLVED by owner: Amend Closing.** Owner contract (verbatim intent): "수정 누르면 마감하던 게 쭉 뜨고, 맨 위 수동 숫자를 하나 올리면 된다." Each confirmed Closing History row gains `[Amend]` → M3 confirm ("Amend the closing for {date}? The confirmed record stays until you re-confirm.") → **amendment mode** (the day's full confirmed scan list loaded, amber "AMENDING — {date} closing (confirmed {ok}/{target})" banner, editable manual target, live scan input) → exact-match **Re-confirm Closing** updates the record **in place** with an "Amended" badge (version · actor · timestamp); Closing History itself carries the correction. §3.23's "no reopen/amend affordance" negative row removed (this row records the reversal); `[PD-70]`/`[PD-73]` immutability upheld — same session reopened, one row per date, v{n} snapshots never mutated | **reversal / owner decision** | §3.24, §3.25, `[L-SH-2]`, `[L-M3]`, `[BR-39]`–`[BR-42]`, DC-26…DC-29, E-79…E-86, QA-AMEND-01…15 |
+| 2026-08-03 | **Wireframe defect batch applied (owner-approved), same pass as the Amend build**: `[WF-4]` "(M2)" → "the Closing History page" · `[WF-5]` State 1 legend #2 reworded to the C-10 net truth · `[WF-7]` Cancel Closing confirm dialog added (`#m-cancel`, §3.11 copy, no legend dot) · `[WF-8]` Start validation red toasts added (empty / non-whole-number) · `[WF-12]` duplicate wf-tab removed (a "Modal: Amend Closing" tab added, `.wf-tab` stays 10). QA-S0-02, QA-TARGET-04, QA-CHROME-03/04, QA-HIST-10 and R3/R8/R10 updated to the fixed wireframe; `[WF-15]` deliberately **not** applied (corpus-wide `[G-7]` precondition, §2.3). Verified by Playwright against the edited file (70 checks, 0 fail, 0 pageerror) | wireframe fix | §2.1, §2.2, §2.3, §3.1, §3.3, §3.11, §3.14, §3.17, §8 |
+| 2026-08-03 | **REVERSAL — `[PD-71]` RESOLVED by owner: the SS Daily Shipping Status spreadsheet is retired entirely.** No sheet integration exists — the former §6.4 contract (auto-update on confirm, idempotency, failure surfacing) is void, and the admin's **Closing History** (daily snapshots + per-day CSV) replaces the sheet wholesale. Fallout, IDs kept per convention: `[BR-11]` retired · `[BR-32]` sheet clause struck · DC-24 retired (never emitted; absence QA-asserted) · E-38 rewritten as an absence case · DQ-6 void · wireframe copy corrected (gate note, State 1 legend #8, State 4 toast subtext "Closing record saved · replaces the retired Daily Shipping Status sheet", "(sheet retired 2026-08-03)" on the report banner and its legend, amend copy) · QA-CONFIRM-01/04/05/10/16, QA-PERSIST-04/08, QA-AMEND-09 updated | **reversal / owner decision / removal** | §1.1, §3.9, §3.17, §3.18, §3.24, §3.25, `[BR-11]`, `[BR-32]`, `[BR-40]`, DC-24, §6.1, §6.4, E-37/E-38, §8, §9 |
+| 2026-08-03 | **Spec v1.3 bookkeeping.** Legend units 22 → **24** (Closing History dot 2 = `[L-SH-2]`, modal dot M3 = `[L-M3]`); business rules → `[BR-42]`; events → DC-29; edge cases 78 → **86** (§7.7); QA scenarios 177 → **192** (74 `[WF]` · 118 `[ADMIN]` · 77 negative, 40.1%) via block 8.15b QA-AMEND (lettered so §8.16–§8.18 pointers stay stable); `[PD-74]` removed from §9.2; DQ-13 added | rule / QA | §2.1, §4, §5, §7, §8, §9 |
 
 **Nothing above has been silently dropped.** Where a feature was removed, §3.23 carries an explicit "must NOT exist" entry pointing back at the row that removed it; where a decision was reversed (Closing History modal → page), both directions are recorded here and the fossil that survives in the wireframe is named.

@@ -87,10 +87,15 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
 /* sourcing route badges — black bold text only, no colors (same convention as View Orders) */
 .tag-smartbuy,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
-/* 3 request status badges — REQUESTED / PARTIAL / INBOUNDED (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02) */
+/* request status badges — REQUESTED / PARTIAL / INBOUNDED (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02) + CANCELLED terminal (added 2026-08-03, gray — row kept for audit) */
 .tag-requested{background:#FFC107;color:#3D2E00}
 .tag-partial{background:#F76707;color:#fff}
 .tag-inbounded{background:var(--green);color:#fff}
+.tag-cancelled{background:var(--ink-3);color:#fff}
+/* edit-mode banner on the New Request form (Edit action, added 2026-08-03) */
+.editbanner{display:none;margin-top:12px;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:8px;padding:10px 14px;align-items:center;gap:10px;font-size:13px}
+.editbanner.on{display:flex}
+.editbanner b{color:var(--amber)}
 .route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
 .mut{color:var(--ink-3);font-size:12.5px}
 .vo-link{color:var(--ss-purple);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--ss-purple)}
@@ -261,6 +266,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button data-state-jump="s3">Request List</button>
     </div><span class="dot" style="top:-11px;left:150px">16</span></div>
 
+    <!-- Edit mode banner (PD-79 resolved 2026-08-03) — shown when a REQUESTED request is opened via ✎ Edit in the Request List -->
+    <div class="editbanner" id="editBanner">
+      <b>Editing request 202607130003</b>
+      <span class="mut">— form prefilled with the request's saved values · saving logs every changed field (old → new) as an auto-comment and notifies the requester on Slack · the Inbound No. never changes</span>
+      <button class="btn btn-line btn-sm" id="editExit" style="margin-left:auto">Exit edit mode</button>
+    </div>
+
     <div class="formcard anno">
       <span class="dot" style="top:-11px;left:-10px">1</span>
 
@@ -393,7 +405,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">15</span><span>Reduced side margins — the whole form fits on one screen without scrolling <span class="ref">— C screen conventions</span></span></li>
     <li><span class="n">16</span><span><b>New page tabs [New Request | Request List]</b> (added 2026-07-23) — in-admin tabs switching between the request form and the request list (separate from the wireframe's purple state tabs). Pick a route and submit in New Request; view by status and add tracking numbers in Request List <span class="ref">— I Inbound Request</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): Received Date and Carrier are recorded automatically at inbound and <b>shown in the Request List</b> (not form inputs); tracking numbers are added later in the admin. <b>The Request List is the data the Google Sheet (Procurement Hub) will later scrape as-is</b> — sheet integration design happens separately as the last step (agreed 2026-07-23). All labels standardized to "Comments" (never a localized label).</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): Received Date is recorded automatically at inbound and <b>shown in the Request List</b> (not a form input) — automatic Carrier recording is not supported and there is no Carrier column (confirmed 2026-08-03); tracking numbers are added later in the admin. <b>The Request List is the data the Google Sheet (Procurement Hub) will later scrape as-is</b> — sheet integration design happens separately as the last step (agreed 2026-07-23). All labels standardized to "Comments" (never a localized label).</p>
 </div>
 </section>
 
@@ -537,10 +549,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ New Inbound Request</button>
       <div class="filterchips anno" style="margin-top:0">
         <span class="dot" style="top:-11px;left:-10px">1</span>
-        <button class="chip on">All 12</button>
+        <button class="chip on">All 13</button>
         <button class="chip"><span class="tag tag-requested" style="margin-right:5px">REQUESTED</span> 8</button>
         <button class="chip"><span class="tag tag-partial" style="margin-right:5px">PARTIAL</span> 1</button>
         <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">INBOUNDED</span> 3</button>
+        <button class="chip"><span class="tag tag-cancelled" style="margin-right:5px">CANCELLED</span> 1</button>
       </div>
     </div>
 
@@ -570,7 +583,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
           <td><span class="tag tag-requested">REQUESTED</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button></td>
+          <td class="anno"><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button><span class="dot" style="top:-12px;right:-8px">11</span></td>
         </tr>
         <tr>
           <td><input type="checkbox" checked></td>
@@ -584,7 +597,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Dean</td>
           <td><span class="tag tag-requested">REQUESTED</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button></td>
         </tr>
         <!-- REQUESTED + tracking entered (View Orders matching active) -->
         <tr>
@@ -599,7 +612,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Miranti</td>
           <td><span class="tag tag-requested">REQUESTED</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button></td>
         </tr>
         <tr>
           <td><input type="checkbox"></td>
@@ -613,7 +626,22 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num" style="color:var(--ink-3)">–</td>
           <td>Yongwon</td>
           <td><span class="tag tag-partial">PARTIAL 120/180</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock already received against this request — a PARTIAL request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock already received against this request — a PARTIAL request can't be cancelled">Cancel</button></td>
+        </tr>
+        <!-- CANCELLED (cancelled from this screen before any stock movement — row kept for audit, added 2026-08-03) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607110006</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Torriden</b> Dive-In Low Molecular Hyaluronic Acid Serum, 50ml</td>
+          <td class="num">100047332</td>
+          <td class="num">150</td>
+          <td class="num" style="color:var(--ink-3)">– <span class="route-note">Tracking matching deactivated</span></td>
+          <td class="num">07-13</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Miranti</td>
+          <td class="anno"><span class="tag tag-cancelled">CANCELLED</span> <span class="route-note">Purchase cancelled · 07-12</span><span class="dot" style="top:-12px;right:-8px">12</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Request cancelled — terminal">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Request cancelled — terminal">Cancel</button></td>
         </tr>
         <!-- INBOUNDED (auto-switched by View Orders scan) -->
         <tr>
@@ -628,7 +656,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">07-11 14:22</td>
           <td>Dean</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock has already moved — an INBOUNDED request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock has already moved — an INBOUNDED request can't be cancelled">Cancel</button></td>
         </tr>
         <tr>
           <td><input type="checkbox"></td>
@@ -642,11 +670,11 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <td class="num">07-09 10:05</td>
           <td>Yongwon</td>
           <td><span class="tag tag-inbounded">INBOUNDED</span></td>
-          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock has already moved — an INBOUNDED request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock has already moved — an INBOUNDED request can't be cancelled">Cancel</button></td>
         </tr>
       </tbody>
     </table>
-    <p class="mut" style="margin-top:14px">Showing 6 of 12 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3</p>
+    <p class="mut" style="margin-top:14px">Showing 7 of 13 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3 · CANCELLED 1</p>
 
     <div class="note purple anno" style="max-width:none">
       <span class="dot" style="top:-11px;left:-10px">9</span>
@@ -667,6 +695,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">8</span><span>INBOUNDED = auto-switched by a View Orders scan inbound (the separate link modal and result link were removed 2026-08-03 — the status badge is enough) <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">9</span><span>Inbound automation note — INBOUNDED transitions happen from View Orders scans, not from this screen; scans surface the sourcing route badge <span class="ref">— I + C View Orders</span></span></li>
     <li><span class="n">10</span><span><b>Received Date column</b> — the View Orders scan time is recorded automatically on INBOUNDED (maps to the sheet's Received Date column); not-yet-inbounded rows show "–". Automatic Carrier recording is not supported — no Carrier column (confirmed 2026-08-03) <span class="ref">— sheet integration</span></span></li>
+    <li><span class="n">11</span><span><b>✎ Edit / Cancel row actions (added 2026-08-03 — owner decision, PD-79 resolved)</b> — available on <b>REQUESTED requests only</b>. <b>Edit</b> opens the New Request form prefilled with the request's saved values in edit mode ("Editing request {Inbound No.}" banner); the Inbound No. never changes; saving logs every changed field (old → new) as an auto-comment and Slack-notifies the requester. <b>Cancel</b> opens confirmation modal M2 with a mandatory reason (Purchase cancelled / Wrong entry / Other + memo). On PARTIAL / INBOUNDED requests both buttons are <b>disabled with a tooltip</b> — stock has already moved <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">12</span><span><b>CANCELLED status (added 2026-08-03)</b> — terminal; the only transition is REQUESTED → CANCELLED, written from this screen (receive-side statuses stay scan-only). The row is <b>kept in the list for audit</b> (gray badge + reason note), View Orders tracking matching is deactivated, the request is excluded from the morning no-tracking check and from bulk tracking adds, and a <b>CANCELLED filter chip</b> is added <span class="ref">— I Inbound Request</span></span></li>
   </ol>
 </div>
 </section>
@@ -698,8 +728,34 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div>
 
-<!-- ══════════════ MODAL : View Orders link info (removed) ══════════════ -->
-
+<!-- ══════════════ MODAL : Cancel Inbound Request (added 2026-08-03 — PD-79 resolved) ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Cancel Inbound Request — <span id="mcNo">202607130003</span><button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">This cancels the request before any stock movement.</b>
+      <p class="mut" style="margin:8px 0 0">Allowed only while the request is still <span class="tag tag-requested">REQUESTED</span> — once goods start arriving (PARTIAL / INBOUNDED) it can no longer be cancelled. The row is <b>kept in the Request List as CANCELLED</b> for audit, and <b>View Orders tracking matching is deactivated</b> for every registered number.</p>
+      <div class="fld" style="margin-top:12px">
+        <label>Reason <span style="color:var(--red)">*</span></label>
+        <select id="mcReason">
+          <option>Purchase cancelled</option>
+          <option>Wrong entry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fld" style="margin-top:10px">
+        <label>Memo <span style="font-weight:400;color:var(--ink-3)">— required when reason is Other</span></label>
+        <input id="mcMemo" placeholder="Why is this request being cancelled?">
+      </div>
+      <div class="note purple">Cancelling posts an <b>auto-comment</b> with the reason and <b>Slack-notifies the requester</b> (@mention) — the same comment-mention pipeline as every other request comment.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep request</button>
+      <button class="btn btn-red-line btn-sm" id="mcConfirm">Confirm cancellation</button>
+    </div>
+  </div>
+</div>
 
 <script>
 document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
@@ -801,7 +857,12 @@ function gtoastShow(html){
 document.querySelectorAll('button').forEach(b=>{
   if(b.textContent.trim()==='Register Inbound Request'){
     b.addEventListener('click',()=>{
-      gtoastShow('✓ Inbound request registered<small>Inbound No. auto-assigned · added to the Request List · No refresh</small>');
+      if(editingNo){
+        gtoastShow('✓ Inbound request updated — '+editingNo+'<small>Changed fields logged as an auto-comment (old → new) · Requester notified on Slack · No refresh</small>');
+        editModeOff();
+      }else{
+        gtoastShow('✓ Inbound request registered<small>Inbound No. auto-assigned · added to the Request List · No refresh</small>');
+      }
     });
   }
 });
@@ -846,5 +907,59 @@ document.querySelectorAll('.comment-btn').forEach(btn=>{
     panel.innerHTML='<td colspan="'+cols+'" style="padding:10px 14px">'+inner+'<div class="cwrite"><input placeholder="Write a comment — @name tags trigger a Slack alert"><button class="btn btn-blue btn-sm">Post</button></div></td>';
     tr.after(panel);
   });
+});
+
+/* 2026-08-03 additions (PD-79 resolved): ✎ Edit → New Request form in edit mode · Cancel → M2 confirm modal → CANCELLED */
+let editingNo=null, cancelTargetRow=null;
+function editModeOff(){
+  editingNo=null;
+  const bn=document.getElementById('editBanner');
+  if(bn) bn.classList.remove('on');
+}
+document.querySelectorAll('.req-edit').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.disabled) return;
+    const tr=b.closest('tr'); if(!tr) return;
+    editingNo=((tr.querySelector('td:nth-child(2)')||{}).textContent||'').trim();
+    const tab=document.querySelector('.wf-tab[data-state="s1"]'); if(tab) tab.click();
+    const bn=document.getElementById('editBanner');
+    if(bn){ bn.querySelector('b').textContent='Editing request '+editingNo; bn.classList.add('on'); }
+  });
+});
+const editExit=document.getElementById('editExit');
+if(editExit) editExit.addEventListener('click',editModeOff);
+document.querySelectorAll('.req-cancel').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.disabled) return;
+    cancelTargetRow=b.closest('tr'); if(!cancelTargetRow) return;
+    const no=((cancelTargetRow.querySelector('td:nth-child(2)')||{}).textContent||'').trim();
+    document.getElementById('mcNo').textContent=no;
+    document.getElementById('m-cancel').classList.add('open');
+  });
+});
+const mcConfirm=document.getElementById('mcConfirm');
+if(mcConfirm) mcConfirm.addEventListener('click',()=>{
+  if(cancelTargetRow){
+    const reason=document.getElementById('mcReason').value;
+    const st=cancelTargetRow.querySelector('td:nth-child(11)');
+    if(st) st.innerHTML='<span class="tag tag-cancelled">CANCELLED</span> <span class="route-note">'+reason+' · just now</span>';
+    cancelTargetRow.querySelectorAll('.req-edit,.req-cancel').forEach(x=>{
+      x.disabled=true; x.classList.remove('btn-line','btn-red-line'); x.classList.add('btn-gray');
+      x.title='Request cancelled — terminal';
+    });
+    const tcell=cancelTargetRow.querySelector('td:nth-child(7)');
+    if(tcell){
+      const at=tcell.querySelector('[data-modal]');
+      if(at){ at.remove(); tcell.insertAdjacentHTML('afterbegin','<span class="num" style="color:var(--ink-3)">–</span> '); }
+      const note=tcell.querySelector('.route-note');
+      if(note) note.textContent='Tracking matching deactivated';
+      else tcell.insertAdjacentHTML('beforeend',' <span class="route-note">Tracking matching deactivated</span>');
+    }
+    cancelTargetRow=null;
+  }
+  document.getElementById('m-cancel').classList.remove('open');
+  gtoastShow('✓ Inbound request cancelled<small>Row kept in the list for audit · Tracking matching deactivated · No refresh</small>');
 });
 </script>

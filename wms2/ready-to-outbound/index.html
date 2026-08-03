@@ -358,6 +358,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
           <tr><td><b>A-03-02</b></td><td class="num">100039420</td><td>마데카 크림 타이트닝</td><td>1</td><td>422165</td></tr>
           <tr><td><b>B-01-07</b></td><td class="num">100035912</td><td>세라마이드 아토 컨센트레이트 크림</td><td>1</td><td>422176</td></tr>
           <tr><td><b>B-02-11</b></td><td class="num">100013286</td><td>마데카 크림 타임 리버스</td><td>1</td><td>422165</td></tr>
+          <!-- WF-9 (2026-08-03): sample-set picking line per [G-13]/[BR-21] — PD-51 v1 keeps the single label "sample set" -->
+          <tr style="background:var(--amber-soft)"><td><span class="locpill" style="border-color:var(--amber-line);background:var(--page);color:var(--amber)">Sample</span></td><td class="num">—</td><td style="color:var(--amber);font-weight:700">sample set</td><td><b>×1</b></td><td>422165</td></tr>
         </tbody>
       </table>
       <div class="note"><b>Sorted by location (ascending)</b> (A-02-13 → B-01-07 → Shelf 3) — pick everything in one pass along the route. Printing: no refresh · selection kept; progress bar, then a top-right completion toast.</div>
@@ -404,10 +406,12 @@ document.querySelectorAll('.bulk-run').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const fill=document.getElementById('pfill'), label=document.getElementById('pbarLabel');
     const name=btn.dataset.label; let p=0;
+    const mode=(name==='Bulk Outbound')?'refreshes after completion':'No refresh · selection kept';
     fill.style.width='0%';
+    /* RTO-WFX-9 (2026-08-03): write the label synchronously so the first ~250 ms never shows the previous run's mode string */
+    label.childNodes[0].textContent=name+' in progress — 0% · '+mode+' · toast on completion';
     const t=setInterval(()=>{
       p+=20; fill.style.width=Math.min(p,100)+'%';
-      const mode=(name==='Bulk Outbound')?'refreshes after completion':'No refresh · selection kept';
       label.childNodes[0].textContent=name+' in progress — '+Math.min(p,100)+'% · '+mode+' · toast on completion';
       if(p>=100){clearInterval(t);
         const toast=document.getElementById('toast');

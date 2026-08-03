@@ -1,5 +1,7 @@
 # Order Management Dashboard — Screen Specification
 
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+
 Slug: `order-management` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-management/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-management/
 Global rules: `_global-rules` (cited as `[G-n]`; page deltas only — rule bodies are never restated in this document).
@@ -222,7 +224,7 @@ The spelling `Outbonded` is the live admin's and is preserved verbatim (`_wirefr
 - **Connected country:** the cell renders the carrier name in **green bold** (`--green` `#198754`, `font-weight:700`). Demo: every `GB` row shows `YunExpress`.
 - **Unconnected country:** the cell renders, in **amber bold** (`--amber` `#B45309`, `font-weight:700`), the byte-exact string `Not connected — contact the Fulfillment Center`. Demo: the `PE` row (recipient `Lucia Ramos`). The order is still created and carries a persistent `carrier_unresolved` flag; `Confirm Import` stays enabled (BR-20, [E-7]). A file where **every** row is unconnected is still confirmable ([E-8]). A country whose mapping exists but whose carrier connection is **disabled** at confirm time is treated identically, with reason `connection_disabled` ([E-80]).
 - **Ambiguous mapping:** if configuration yields more than one connected carrier for a country, the confirm fails with a red toast naming the country and **no** orders are created (atomicity, BR-12). This is a configuration error, not an operator error ([E-52]).
-- **Downstream:** what unblocks a `carrier_unresolved` order for outbound, and who owns that follow-up, is **not decided** — `[PD-55]` is NO-DEFAULT. This spec states the flagged state and its persistence only (§9.1).
+- **Downstream:** unblocking a `carrier_unresolved` order is **manual coordination — contact the fulfillment person in charge via Slack** (`[PD-55]` owner-decided 2026-08-03). v1 ships no in-admin release/carrier-assignment UI; this spec states the flagged state and its persistence (§9.1).
 - **Persists:** `[DC-10] order.carrier_assigned` (`old = null → new = {carrier}`, mapping version) or `[DC-11] order.carrier_unresolved` (`country`, `reason = no_connected_carrier | connection_disabled`) per order.
 
 ---
@@ -287,7 +289,7 @@ All four datetime fields are entered, evaluated and displayed in the admin's sin
 
 `Sample product type is not selected — when ON, "(+ sample set)" is auto-appended to the last product name of target orders and a sample-set row is added at the bottom of the invoice (defined in G). Multiple overlapping periods can be registered — but even with overlapping periods, exactly 1 sample set per order (no duplicate assignment).`
 
-There is **no sample-type selector in this modal and none may be added** (BR-6). Where "which sample and how many" is defined — the value that `[G-13]` requires the internal invoice and picking artifacts to print — is **not decided**: `[PD-51]` is NO-DEFAULT (§9.1).
+There is **no sample-type selector in this modal and none may be added** (BR-6). The internal-artifact content question is **decided**: v1 makes no sample distinction — internal invoice and picking artifacts print **"sample set" only**, no sample type and no per-type quantity (`[PD-51]` owner-decided 2026-08-03; "which sample and how many" becomes relevant only when sample types are introduced — §9.1, resolved).
 
 #### 3.6.5 `Start Assignment (ON)` — effect
 
@@ -305,7 +307,7 @@ There is **no sample-type selector in this modal and none may be added** (BR-6).
   - Selected orders that are `MKT-`, cancelled, or otherwise ineligible are skipped and counted separately ([DC-16], [E-85]).
   - If the resolved selection is empty at submit time, the submit is blocked with `No eligible orders are selected.` and nothing is created ([E-84]).
   - Selections above the configured batch ceiling are processed asynchronously and the toast reports the queued count; the ceiling is a developer decision ([E-86], §9.3).
-- **What an assigned set prints (dual view, BR-8 `[G-13]`):** every order that receives a set is subject to the same split — carrier-facing data appends only `(+ sample set)` to the **last** product name, while the internal invoice and picking artifacts state **which** sample and **how many** ([E-34], `[PD-36 · OWNER-PENDING]`). This page decides the split; the divergence itself is asserted against the consuming specs (§6.5).
+- **What an assigned set prints (dual view, BR-8 `[G-13]`):** every order that receives a set is subject to the same split — carrier-facing data appends only `(+ sample set)` to the **last** product name, while the internal invoice and picking artifacts render a single **"sample set"** line — v1: "sample set" only, no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03) ([E-34], `[PD-36 · OWNER-PENDING]`). This page decides the split; the divergence itself is asserted against the consuming specs (§6.5).
 - **Idempotency:** double-click safe `[G-9]` — one period, one assignment pass ([E-44] covers the network-failure variant: no partial or ghost period).
 - **Feedback — the toast this modal must show.** The wireframe omits it ([WF-16 · proposed]); `[G-2]` and `_review` C-6 require it:
   - Title (byte-exact): `✓ Sample assignment started`
@@ -535,7 +537,7 @@ Every rule carries its rationale and decision date. Reversals appear in §10. Ru
 | **BR-5** | **Order Type = `Influencer Seeding` preset plus free-text custom.** | New campaign shapes appear faster than an enum can be maintained (e.g. "Pop-up event giveaway"). | 2026-07-23 |
 | **BR-6** | **Sample assignment is a simple ON/OFF with no sample-type selection.** No product picker may be added to `[L-M2]`. | The decision the operator is qualified to make is *whether* samples ship in this period, not *which* SKU the warehouse packs. Removing the choice removes an error class. | 2026-07-23 redesign, reconfirmed 2026-08-03 |
 | **BR-7** | **Exactly one sample set per order**, even when overlapping periods match it. | Two sets on one order is a physical packing error and a settlement error; overlaps are explicitly allowed, so the dedup guard must live in the assignment logic. | 2026-08-03 |
-| **BR-8** | **Dual view** `[G-13]`. Carrier-facing data appends only `(+ sample set)` to the last product name. Internal invoice and picking artifacts state **which** sample and **how many** `[PD-36 · OWNER-PENDING]` / `[PD-27 · OWNER-PENDING]`. | Tax handling on the carrier-facing document, versus a warehouse picker who physically cannot pick an unnamed sample. Label layout itself is Phase 3-1 (§9.2). | 2026-08-03 |
+| **BR-8** | **Dual view** `[G-13]`. Carrier-facing data appends only `(+ sample set)` to the last product name. Internal invoice and picking artifacts render **"sample set" only** in v1 — no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03) `[PD-36 · OWNER-PENDING]` / `[PD-27 · OWNER-PENDING]`. | Tax handling on the carrier-facing document, versus a warehouse picker who physically cannot pick an unnamed sample. Label layout itself is Phase 3-1 (§9.2). | 2026-08-03 |
 | **BR-9** | **Cancelling a period stops new assignments only.** Orders already assigned keep their sets. | Picking lists already printed must stay true; retroactively stripping a sample would make the paper and the parcel disagree. | 2026-07-23 (wireframe note), reconfirmed 2026-08-03 |
 | **BR-10** | **Bulk Hold Shipment must not exist on this screen.** Hold is `Change Status → on-hold` on Order Detail. | A hold is a per-order exception decision; a list-level bulk hold applies it without the context it requires. | 2026-08-03 (review round) |
 | **BR-11** | **The order list table is a no-change contract** against the live admin, including the `▦ Columns` toggle, sorting, and pagination. | Re-specifying an unchanged surface invites accidental redesign during implementation. | 2026-08-03 |
@@ -673,7 +675,7 @@ Exactly **one** confirmed route fires from this page.
 Naming them closes the audit rather than leaving silence:
 
 - **Import confirmed** → no Slack route. Not invented here; `_slack-routing` classifies further routes as "decide per feature at dev time".
-- **`carrier_unresolved` row created** → no Slack route, and no owner is defined. `[PD-55]` is NO-DEFAULT (§9.1).
+- **`carrier_unresolved` row created** → no automated Slack route; the follow-up is manual Slack contact with the fulfillment person in charge (`[PD-55]` owner-decided 2026-08-03, §9.1).
 - **Sample period created / cancelled** → no Slack route in v1.
 - **#unrecognized-tracking**, **#wholesale-ops**, **#partnership-kr** → these three confirmed routes belong to other screens and never fire from Order Management. (`_slack-routing` defines a channel ID only for the comments channel; the other three are named without IDs there.)
 
@@ -705,7 +707,7 @@ The wireframe implements none of these as `href`s (the order table is omitted an
 
 ### 6.5 Print pipeline `[G-4]`
 
-**This page has no print surface.** There is no Print button, no auto-print, and no `print.job_result` event (BR-29). The instant carrier-agnostic print requirement lands on View Orders, Ready-to-Outbound, and Order Detail. The one print-adjacent decision made *here* is the sample dual-view (BR-8, `[G-13]`): the carrier-facing document receives only the appended `(+ sample set)` string, while internal invoice and picking artifacts must print **which** sample and **how many** `[PD-36 · OWNER-PENDING]`. The divergence between the two views is [E-34], and because this page is `[G-13]`'s primary home (§6.6) the check is owned here and asserted by QA-SMP-46 as a cross-reference against the consuming specs (`order-detail` display, `ready-to-outbound` picking list). Label and invoice layouts are Phase 3-1 and are not specified in this document (§9.2).
+**This page has no print surface.** There is no Print button, no auto-print, and no `print.job_result` event (BR-29). The instant carrier-agnostic print requirement lands on View Orders, Ready-to-Outbound, and Order Detail. The one print-adjacent decision made *here* is the sample dual-view (BR-8, `[G-13]`): the carrier-facing document receives only the appended `(+ sample set)` string, while internal invoice and picking artifacts print a single **"sample set"** line — v1: "sample set" only, no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03) `[PD-36 · OWNER-PENDING]`. The divergence between the two views is [E-34], and because this page is `[G-13]`'s primary home (§6.6) the check is owned here and asserted by QA-SMP-46 as a cross-reference against the consuming specs (`order-detail` display, `ready-to-outbound` picking list). Label and invoice layouts are Phase 3-1 and are not specified in this document (§9.2).
 
 ### 6.6 Global-rule applicability grid (closes the mandatory-inclusion audit)
 
@@ -813,7 +815,7 @@ IDs are page-scoped and stable, and are never renumbered. **E-1…E-45** preserv
 | **E-31** | An order is cancelled or refunded after a sample was assigned | The assignment record persists on the order; sample handling on internal documents follows the order's lifecycle. No `sample.unassigned` event |
 | **E-32** | Two operators create overlapping ON periods concurrently | Both periods persist; the exactly-one-set invariant (E-24) still holds for every matched order |
 | **E-33** | `Selected orders only` where a selected order already holds a set | Skipped, not double-assigned; counted in the toast subtext as `{s} skipped (already assigned)`; `[DC-15]` |
-| **E-34** | Dual-view divergence check | Carrier-facing data shows only `(+ sample set)` appended to the **last** product name; internal invoice and picking artifacts show sample type and quantity `[G-13]` `[PD-36 · OWNER-PENDING]`. Verified on the consuming specs (cross-reference) |
+| **E-34** | Dual-view divergence check | Carrier-facing data shows only `(+ sample set)` appended to the **last** product name; internal invoice and picking artifacts show a **"sample set"** line (v1: no type/qty breakdown, `[PD-51]` owner-decided 2026-08-03) `[G-13]` `[PD-36 · OWNER-PENDING]`. Verified on the consuming specs (cross-reference) |
 | **E-35** | An active period would match an `MKT-` marketing order | **Not matched** — sales orders only (BR-17). Counted as `{m} skipped (not eligible)`; `[DC-16]` reason `marketing_order` |
 | **E-44** | Network failure mid `Start Assignment (ON)` | No partial or ghost period; retry with the same idempotency key is safe |
 | **E-46** | A new period is created with parameters identical to an existing Active period | Allowed — overlaps are explicitly permitted. Both periods exist; the exactly-one-set invariant still holds |
@@ -1477,7 +1479,7 @@ Then the `[DC-14] sample.assigned_to_order` record persists on each order unchan
 Given an order holds exactly one sample set, and this page is `[G-13]`'s primary home (§6.6)
 When I read the carrier-facing document produced for that order and the internal invoice and picking artifacts produced for the same order
 Then the carrier-facing document shows **only** `(+ sample set)` appended to the **last** product name, and names no sample product and no sample quantity anywhere
-And the internal invoice and the picking artifacts **do** state which sample and how many `[PD-36 · OWNER-PENDING]`
+And the internal invoice and the picking artifacts **do** carry the "sample set" line (v1: "sample set" only, no type/qty breakdown — `[PD-51]` owner-decided 2026-08-03) `[PD-36 · OWNER-PENDING]`
 And the two views therefore diverge by design; the consuming contracts are the `order-detail` spec (display) and the `ready-to-outbound` spec (picking list), which this scenario cross-references rather than restates (§6.5).
 
 **QA-SMP-47 [ADMIN] (neg)** — Network failure mid `Start Assignment (ON)` `[E-44]` `[DC-13]`
@@ -1861,8 +1863,8 @@ Every cell below was re-checked against the cited scenario's **body**: a scenari
 
 | ID | Question | Why it is not decided | Blocking |
 |---|---|---|---|
-| **`[PD-51]`** | The Sample Assignment ON flow deliberately has no sample-type selection (BR-6), yet `[G-13]` requires the internal invoice and picking artifacts to state **which** sample and **how many**. **Where is that definition configured, and by whom** — a Fulfillment Center standing setting, an admin screen, or per campaign? | No input document names a source for the sample-set definition. Inventing one would create both a UI affordance and an owner. | Blocks the internal-invoice and picking-list *content* (and therefore `_wireframe-fixes` WF-9, which is conditional on it). Does **not** block any flow on this page |
-| **`[PD-55]`** | Orders flagged `Not connected — contact the Fulfillment Center` are created and appear in RTO. **What unblocks them for outbound, and who owns the follow-up?** | No screen offers a manual carrier assignment and no Slack route exists for the handoff. Deciding it invents both an affordance and an owner. | Blocks the recovery path only. This spec states the flagged state and its persistence (`[DC-11]`, [E-7], [E-80]) |
+| **`[PD-51]`** | **RESOLVED — OWNER-DECIDED 2026-08-03.** Where is the sample-set definition configured? Answer: v1 makes no sample distinction — internal invoice and picking artifacts print **"sample set" only** (no type, no per-type quantity); a definition source becomes necessary only when sample types are introduced (follow-up work). `[G-13]` amended in `_global-rules.md` v1.1. | (was: no input document named a source for the sample-set definition) | Nothing on this page. Unblocks the internal-invoice and picking-list *content*; `_wireframe-fixes` WF-9 now waits on `[PD-36]` only |
+| **`[PD-55]`** | **RESOLVED — OWNER-DECIDED 2026-08-03.** What unblocks a `Not connected — contact the Fulfillment Center` order, and who owns the follow-up? Answer: **manual coordination — contact the fulfillment person in charge via Slack**; v1 ships no in-admin release/carrier-assignment UI and no automated Slack route. | (was: no screen offered a manual carrier assignment and no Slack route existed) | Nothing — the recovery path is defined as manual; the flagged state and its persistence stand (`[DC-11]`, [E-7], [E-80]) |
 
 Owner questions that **do** have a provisional default are not repeated here — they live in `_provisional-decisions.md` and are tagged `[PD-n · OWNER-PENDING]` inline where the behaviour appears. This page's **behaviour-bearing** PD dependencies are **PD-1, PD-2, PD-3, PD-4, PD-5, PD-6, PD-7, PD-20, PD-22, PD-27, PD-28, PD-35, PD-36, PD-52, PD-53, PD-54, PD-56, PD-57, PD-58, PD-59, PD-63, PD-67, PD-80** (23), plus the two NO-DEFAULT entries above. One further PD id appears in this document without being a dependency: **`[PD-9]`** is cited once, untagged, in §10's 2026-08-03 "Program-wide item 16" row purely as a **non-applicable cross-reference** — it exists to stop a reader confusing inbound-side carrier auto-record (not supported) with this page's import-side carrier auto-assignment (BR-3). Reversing PD-9 changes nothing here. A `[PD-n` token extraction over this document therefore yields 26 distinct ids: 23 + 2 NO-DEFAULT + PD-9.
 

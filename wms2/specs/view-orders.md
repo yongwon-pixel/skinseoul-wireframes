@@ -1,5 +1,7 @@
 # View Orders — Screen Specification
 
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+
 **Page slug:** `view-orders` · **Wireframe SST:** `wms2/view-orders/index.html` (v20, 1,847 lines)
 **Live wireframe:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/view-orders/
 **Spec version:** 1.2 (verification remediation) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1
@@ -583,7 +585,7 @@ Unlike States 1–5, **this screen has no Outbound of any kind**. There is no bu
   - `Memo (Optional)` — textarea, placeholder `e.g. Box label damaged, looks like a 1+1 set — shown in the Missing Tracking List and the Slack alert`.
 - **On-screen contract:** `On send, the #unrecognized-tracking channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) → shown in the unrecognized pool on the Missing Tracking List page.`
 - **On `Send to Missing Tracking List`:** the item enters the shared unrecognized pool, the modal closes, and a green fixed toast (`#gtoast`) shows `✓ Sent to Missing Tracking List` with sub-line `PIC notified via #unrecognized-tracking · No refresh`.
-- **Open question:** whether an item may enter the pool with **no tracking number at all** (destroyed label) is **not decided** — see §9.2, `[PD-66]`.
+- **Decided (`[PD-66]`, owner 2026-08-03):** the no-identifier case does not exist — either a tracking number or an order number is always present. The registration contract stands: an identifier is required, and M2b never accepts a pool entry without one (see §9.2 OQ-1, resolved).
 - **Persists:** `[DC-42]` (barcode, chosen product, qty, memo, carried failed order no., registrant, ts, suspected orders computed downstream), `[DC-43]` Slack dispatch result.
 - **Failure:** a Slack failure never blocks the send — the pool entry commits, the failure is persisted and retried `[PD-4 · OWNER-PENDING]` `[E-40]`.
 
@@ -1073,7 +1075,7 @@ IDs are page-scoped and stable, and are **never renumbered**. Where two candidat
 | **E-60** | An order arrives with 0 line items | The table renders empty with `Found 0 item(s) in this order · Found 1 order(s)`; `Outbound` stays disabled — `[BR-9]` requires ≥1 line, so "all lines INBOUNDED" being vacuously true is not enough. |
 | **E-61** | A single-item order that already has inbound history is scanned again | **No auto-print.** `[DC-30]` records `decision=skipped` with `has_inbound_history=true` `[BR-14]`. |
 | **E-62** | A single-item order fulfilled entirely from Existing Inventory is scanned for the first time | **Auto-print fires** — existing inventory is not inbound history `[BR-14]`. `[DC-30]` records `existing_inventory_lines=1, has_inbound_history=false, decision=printed`. |
-| **E-63** | An unrecognized-pool item has **no** tracking number (label destroyed) | **Not decided** — see §9.2 OQ-1 `[PD-66]`. If allowed, "match" has nothing to write onto the product line, which breaks the rescan-resolves loop `[BR-27]` depends on. No behavior is specified here. |
+| **E-63** | An unrecognized-pool item has **no** tracking number (label destroyed) | **Decided — the case does not exist** (`[PD-66]` owner-decided 2026-08-03): either a tracking number or an order number is always present, so the identifier-required registration contract stands. Registration without an identifier is rejected by M2b validation; the rescan-resolves loop `[BR-27]` depends on is preserved. |
 | **E-64** | The same tracking number is registered on two different inbound requests | Prevented upstream at Inbound Request save `[PD-82 · OWNER-PENDING]`; if it ever occurs, this page's resolution is non-deterministic and must fail loudly with a candidate list rather than pick one `[BR-45]`. |
 | **E-65** | An operator opens a modal and closes it without confirming | Nothing persists (§5.9-5). The single exception is M2, whose opening persists `[DC-4]`. |
 | **E-73** | A Comments-hub search matches more results than one page holds | Results are paged or virtualized and the header states the true total (`{n} results · newest first · click to open the order page`). The hub never silently truncates. Page size is a developer decision. |
@@ -1974,8 +1976,8 @@ When I click `#annoToggle`, Then `body` gains class `no-anno`, every `.dot` and 
 **QA-CV-21 [ADMIN]** — *negative*
 Given the admin's View Orders page, Then no annotation dots, no legend block and no `Hide annotations` control exist.
 
-**QA-CV-22 [ADMIN] — DEFERRED** `[E-63]` `[PD-66]`
-Whether an item may enter the unrecognized pool with **no tracking number** is undecided (§9.2 OQ-1). **No assertion exists until the owner answers.** This row exists so the gap is visible in coverage reports rather than silently absent. It carries the `[ADMIN]` tier tag so a tag-driven runner neither skips it silently nor errors on an untagged row (`_review.md` §2c-5 permits only `[WF]` / `[ADMIN]`); the `— DEFERRED` marker is what tells the runner not to execute it.
+**QA-CV-22 [ADMIN]** `[E-63]` `[PD-66]` *(formerly DEFERRED — un-deferred when the owner answered `[PD-66]` on 2026-08-03)*
+The owner decided the no-identifier case does not exist: either a tracking number or an order number is always present, and the identifier-required registration contract stands. Assertion: Given the M2b registration form with both the tracking-number and order-number fields empty, Then registration is refused with a validation error, no pool row is created, and no event persists.
 
 **QA-CV-23 [ADMIN]** `[L-S5-F]` `[BR-50]` (the `[WF]` half is QA-CV-08)
 Given the admin's State 5, Then the hold-origin statement names **OMS / Order Detail only** and does **not** name Order Management as a place Hold is applied or released; and no apply-hold or release-hold control exists anywhere on this page. Order Management removed every hold control on 2026-08-03 (`order-management` `BR-10`, §3.8), so a sentence sending an operator there sends them to a button that does not exist.
@@ -1987,7 +1989,7 @@ Given the admin's State 5, Then the hold-origin statement names **OMS / Order De
 | Total scenarios | **277** |
 | `[WF]` (runnable on the live wireframe today) | **135** |
 | `[ADMIN]` (real-admin only) | **142** |
-| — of which DEFERRED (blocked on `[PD-66]`, tagged `[ADMIN]`, carries no assertion) | **1** (QA-CV-22) |
+| — of which DEFERRED | **0** — QA-CV-22 was un-deferred when the owner answered `[PD-66]` (2026-08-03) |
 | Explicitly tagged negative / failure-path scenarios | **91 (32.9 %)** — above the 25 % floor |
 
 135 `[WF]` + 142 `[ADMIN]` = 277; the DEFERRED row is one of the 142, not a third tier.
@@ -2026,10 +2028,10 @@ Given the admin's State 5, Then the hold-origin statement names **OMS / Order De
 
 | ID | Question | Why it is not decided here | Blocking |
 |---|---|---|---|
-| **OQ-1** `[PD-66]` `[E-63]` | May an item enter the unrecognized pool with **no tracking number at all** (label destroyed)? | If allowed, "match" has nothing to write onto the order's product line, which breaks the rescan-resolves loop that `[BR-27]` and the whole M2 flow depend on. Deciding either way changes the registration contract of M2b on this page. **No behavior is specified.** | M2b validation; tracking-missing pool schema; QA-CV-22 stays DEFERRED until answered |
+| **OQ-1** `[PD-66]` `[E-63]` | **RESOLVED — OWNER-DECIDED 2026-08-03.** May an item enter the unrecognized pool with **no tracking number at all** (label destroyed)? Answer: **the case does not exist** — either a tracking number or an order number is always present; the identifier-required registration contract of M2b stands unchanged. | (was: an identifier-less pool item would break the rescan-resolves loop `[BR-27]` and the M2 flow depend on) | Nothing — QA-CV-22 is un-deferred |
 | **OQ-2** | Should the **Live Barcode Feed export** be restricted, approved, or merely logged as a data-egress event? | The feed carries a full scan history including operator identity, so an export is personal-activity data leaving the system. No input document addresses export governance. The spec persists the export as `[DC-47]` and states no restriction, because inventing an approval flow would invent an owner for it. | `Export by date` implementation; retention policy |
 
-Owner questions that **do** have a provisional default are **not** repeated here — they live in the PD register and are tagged inline in §3/§4/§5/§7 where the behavior appears. This page rests on **33** of them: `PD-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 29, 41, 46, 49, 63, 67, 80, 82, 84, 86`, plus `PD-66` (NO-DEFAULT, above) — **33 PDs in total**. Reversing any one means editing only the sentences carrying its tag on this page.
+Owner questions that **do** have a provisional default are **not** repeated here — they live in the PD register and are tagged inline in §3/§4/§5/§7 where the behavior appears. This page rests on **33** of them: `PD-1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 29, 41, 46, 49, 63, 67, 80, 82, 84, 86`, plus `PD-66` (owner-decided 2026-08-03, above) — **33 PDs in total**. Reversing any one means editing only the sentences carrying its tag on this page.
 
 > **Delta from spec v1.0:** v1.0 cited 30 PDs. The audit added `PD-26` (Order Detail's parity `Cancel Outbound`, cross-referenced at `[L-S3-2]`) and `PD-41` (Inventory is display-only for PENDING; State 6 is the sole confirm path, `[BR-52]`), both of which name View Orders in the PD register but were absent from the draft.
 
@@ -2219,8 +2221,8 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 - **Business rules: BR-1 … BR-57**, each with rationale and date (BR-51…BR-56 added by the audit pass; BR-57 by the cross-page remediation).
 - **Data-capture events: DC-1 … DC-47**, no gaps, plus 10 declared NON-events and per-class retention/export terms.
 - **Edge cases: E-1 … E-93** across 92 entries (`E-18 = E-51` merged, both IDs retained per the never-renumber rule; `[E-6]`'s divergence from the plan's E-6 is documented in §7's preamble rather than repaired by renumbering, which the same rule forbids).
-- **QA scenarios: 277** — 135 `[WF]` / 142 `[ADMIN]`, one of the `[ADMIN]` rows being the DEFERRED QA-CV-22; 91 negatives (32.9 %). Coverage: 0 uncovered legend units, 0 uncovered DC events, 0 uncovered edge cases, 0 uncovered business rules.
+- **QA scenarios: 277** — 135 `[WF]` / 142 `[ADMIN]`; QA-CV-22, formerly DEFERRED, was un-deferred when `[PD-66]` was owner-decided (2026-08-03); 91 negatives (32.9 %). Coverage: 0 uncovered legend units, 0 uncovered DC events, 0 uncovered edge cases, 0 uncovered business rules.
 - **Provisional decisions relied upon: 33** — the 32 of §9.2 plus `PD-49` (the cancel-inbound remainder adjustment, `[BR-57]`), adopted by the 2026-08-03 remediation.
 - **Wireframe defects named: WF-1, WF-3, WF-13, WF-VO-1**; 15 demo limitations declared (§2.3 L-1…L-15), of which L-2/L-8/L-9/L-10/L-11/L-12/L-13/L-14/L-15 are candidates for the `_wireframe-fixes` backlog.
-- **Owner-pending gaps: 2** — §9.2 OQ-1 (`PD-66`, pool entry without a tracking number) and OQ-2 (feed-export governance).
+- **Owner-pending gaps: 1** — §9.2 OQ-2 (feed-export governance). OQ-1 (`PD-66`, pool entry without a tracking number) was owner-decided 2026-08-03: the case does not exist, identifier required.
 - **Cross-page disagreements: 9** — §9.5 CP-1…CP-9. Three were resolved on this page (CP-1, CP-3, CP-6 — plus CP-8's internal normalization); the rest are stated with this page's position and the fix assigned to `_global-rules` or the disagreeing spec.

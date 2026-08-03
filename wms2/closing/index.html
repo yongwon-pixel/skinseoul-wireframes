@@ -200,6 +200,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .clsbanner.done{background:var(--green-soft);border:1px solid var(--green)}
 .clsbanner.done b{color:var(--green)}
 .clsbanner .btn{margin-left:auto}
+
+/* amend closing (PD-74 owner decision, 2026-08-03) */
+.amended-badge{display:inline-block;background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line);
+  border-radius:6px;padding:1px 8px;font-size:11px;font-weight:800;white-space:nowrap;margin-top:3px}
 </style>
 
 <div class="wf-bar">
@@ -214,8 +218,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-state="s4">4 · Closing Complete</button>
     <button class="wf-tab" data-modal="m-process">Modal: Process Processing Order</button>
     <button class="wf-tab" data-state="shist">5 · Closing History (page)</button>
-    <button class="wf-tab" data-modal="m-process">Modal: Process Processing Order</button>
     <button class="wf-tab" data-modal="m-scandel">Modal: Delete Scan Row</button>
+    <button class="wf-tab" data-modal="m-amend">Modal: Amend Closing</button>
     <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
@@ -303,6 +307,12 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <button class="on">Closing</button>
       <button data-goto="shist">Closing History</button>
     </div><span class="dot" style="top:-11px;right:-9px">11</span></div>
+
+    <div class="clsbanner warn" id="amendBanner" style="display:none;margin:0 0 12px">
+      <b id="amendBannerB">AMENDING — 07-13 closing (confirmed 84/84)</b>
+      <span>The confirmed record stays until you re-confirm — raise the target, scan the found parcel, and press <b>Re-confirm Closing</b> (exact match + 0 warnings required)</span>
+      <button class="btn btn-line btn-sm" id="amendExit">✕ Exit amendment</button>
+    </div>
 
     <div class="clsbanner info anno" style="margin:0 0 12px">
       <span class="dot" style="top:-11px;left:-10px">10</span>
@@ -393,8 +403,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="clsbanner done anno" style="margin-top:20px">
       <span class="dot" style="top:-11px;left:-10px">8</span>
       <b>Confirm Closing</b>
-      <span>This button is <b>only enabled</b> once the OK-scan count <b>exactly matches today's manually entered outbound target (84)</b> with 0 warnings — <b>no auto-confirm; closing happens only when this button is pressed.</b> The scan input stays active even after the match (e.g. an 85th parcel turns up after counting 84) — an over-scan makes it a mismatch and disables the button again → edit the count (↺) or clear the extra scans, then confirm. Confirming saves the closing record + auto-updates <b>Daily Shipping Status</b></span>
-      <button class="btn btn-gray btn-sm">Confirm Closing (79 remaining · 2 warnings)</button>
+      <span>This button is <b>only enabled</b> once the OK-scan count <b>exactly matches today's manually entered outbound target (84)</b> with 0 warnings — <b>no auto-confirm; closing happens only when this button is pressed.</b> The scan input stays active even after the match (e.g. an 85th parcel turns up after counting 84) — an over-scan makes it a mismatch and disables the button again → edit the count (↺) or clear the extra scans, then confirm. Confirming saves the closing record — the admin's <b>Closing History</b> replaces the retired Daily Shipping Status spreadsheet</span>
+      <button class="btn btn-gray btn-sm" id="confirmBtn1">Confirm Closing (79 remaining · 2 warnings)</button>
     </div>
 
   </div>
@@ -406,13 +416,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>State 1 Changes — OK Scan (outbounded)</h3>
   <ol>
     <li><span class="n">1</span><span>Closing-dedicated large barcode scan input — scan the <b>carrier-handover tracking number</b> of today's packed orders to verify (e.g. YUN Express uses the YT prefix — YT2618100710108810). Outbound status is judged the instant it is scanned. The scanner's <b>auto-Enter submits → verdict → focus returns with all text selected</b>, repeating for continuous scanning. <b>Scanner protocol</b>: a barcode scanner types the number followed by an automatic Enter. During continuous scanning the cursor must always stay in this scan input, and the page must <b>never refresh</b> between scans — every scan lands in this same input with no extra clicks (shared with View Orders scan protocol) <span class="ref">— F Closing</span></span></li>
-    <li><span class="n">2</span><span>OK-scan confirmation = <b>compact one-line bar</b> (green: sequence · order · tracking · status · time · worker). <b>The large colored panel is used only in warning states (red)</b> — only warnings need recognition from a distance, so the large OK panel was removed (2026-07-23) <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">2</span><span>OK-scan confirmation = <b>compact one-line bar</b> (green: sequence · order · tracking · status · time · worker). <b>A large panel appears only on the State 4 completion screen</b> — the large OK and warning panels were both removed (2026-07-23); warnings are read in the row, announced by the voice alert <span class="ref">— F Dean · reworded 2026-08-03</span></span></li>
     <li><span class="n">3</span><span>Voice alert toggle (on by default) — plays "Please check this order" automatically on warnings, so warnings register without watching the screen during fast scanning. A Test voice button is provided <span class="ref">— F Dean</span></span></li>
     <li><span class="n">4</span><span>Closing progress counts — outbound target (<b>manually entered value</b>) / OK / warnings / remaining scans + a progress bar (green OK · red warning segments) <span class="ref">— F Closing</span></span></li>
     <li><span class="n">5</span><span>OK scan = <b>only orders whose status is Prepare Shipment</b> → green "Outbounded". Every other status (Processing etc.) is a warning (replaces the current closing step "check whether it was outbound-processed") <span class="ref">— F Closing</span></span></li>
     <li><span class="n">6</span><span>Scan list — OK (green tint) / warning (red tint) rows, <b>leftmost # = scan sequence # (line number)</b>. Duplicate warnings <b>state which scans collide by #</b> (e.g. #3 ↔ #2). Sorted lowest to highest, new scans append at the bottom. The <b style="color:var(--red)">✕</b> on the right of each row = delete scan row (confirm modal "Remove this scan? Yes / No") — for clearing mis-scans and unknown orders; deleted rows are excluded from the counts (M2) <span class="ref">— F Closing</span></span></li>
     <li><span class="n">7</span><span>Comments hub in the top bar — @Mentions + Saved + full comment search (newest first), aggregating the communication trail of closing exceptions <span class="ref">— 0. UI 2</span></span></li>
-    <li><span class="n">8</span><span>Confirm Closing button — enabled only when <b>OK-scan count = the manually entered outbound target (exact match; over-scan is also a mismatch) + 0 warnings</b>. <b>Enabled ≠ auto-confirmed; closing requires the click</b> (scanning stays possible after the match — finding an extra disables it again). Confirming saves the closing record + auto-updates Daily Shipping Status (replaces the manual spreadsheet update) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">8</span><span>Confirm Closing button — enabled only when <b>OK-scan count = the manually entered outbound target (exact match; over-scan is also a mismatch) + 0 warnings</b>. <b>Enabled ≠ auto-confirmed; closing requires the click</b> (scanning stays possible after the match — finding an extra disables it again). Confirming saves the closing record — the admin's Closing History replaces the retired Daily Shipping Status spreadsheet (owner decision 2026-08-03) <span class="ref">— F Closing</span></span></li>
     <li><span class="n">9</span><span>Reduced side margins — every column + status fits on one screen without scrolling <span class="ref">— C Screen (common)</span></span></li>
     <li><span class="n">10</span><span><b>Today's outbound target manual count</b> — the value entered at closing start (State 0) is shown locked. <b>[↺ Edit count]</b> edits the target; <b>[✕ Cancel Closing]</b> cancels today's closing session (returns to the pre-start screen; discarding scan records requires confirmation). The baseline is the physical count, not a system figure <span class="ref">— F Closing</span></span></li>
     <li><span class="n">11</span><span><b>Top menu [Closing | Closing History]</b> — Closing History switches to a <b>separate page</b> (not a modal): daily snapshots · CSV export. See the "5 · Closing History" tab above for details <span class="ref">— F Closing</span></span></li>
@@ -640,7 +650,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <!-- ══════════════ STATE 4 : Closing Complete ══════════════ -->
 <section class="state" id="s4">
 <div class="mockwrap"><div class="mock anno">
-  <div class="toast"><span>✓ Today's closing confirmed — 84/84 orders</span><small>Daily Shipping Status auto-updated</small></div>
+  <div class="toast"><span>✓ Today's closing confirmed — 84/84 orders</span><small>Closing record saved · replaces the retired Daily Shipping Status sheet</small></div>
   <div class="nav">
     <span class="brand">SkinSeoul</span>
     <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
@@ -688,7 +698,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="clsbanner done anno">
       <span class="dot" style="top:-11px;left:-10px">2</span>
       <b>Closing Report</b>
-      <span>Exports today's closing result — replaces the manual copy/paste and formula-stripping into <b>SS Daily Shipping Status</b>. A snapshot is saved automatically on closing confirmation.</span>
+      <span>Exports today's closing result — replaces the manual copy/paste and formula-stripping into <b>SS Daily Shipping Status</b> (sheet retired 2026-08-03). A snapshot is saved automatically on closing confirmation.</span>
       <button class="btn btn-green-line btn-sm">Download Closing Report (CSV)</button>
     </div>
 
@@ -703,8 +713,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 <div class="legend">
   <h3>State 4 Changes — Closing Complete</h3>
   <ol>
-    <li><span class="n">1</span><span>This screen requires <b>pressing [Confirm Closing]</b> while OK scans are an <b>exact match</b> with the manual count target and warnings are 0 — no auto-closing (room to find extra parcels even after the match). Confirmation time and confirmer are recorded. On confirmation today's snapshot is saved to Closing History (M2) <span class="ref">— F Closing</span></span></li>
-    <li><span class="n">2</span><span>Closing report export (CSV) — replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status <span class="ref">— F Closing (current process)</span></span></li>
+    <li><span class="n">1</span><span>This screen requires <b>pressing [Confirm Closing]</b> while OK scans are an <b>exact match</b> with the manual count target and warnings are 0 — no auto-closing (room to find extra parcels even after the match). Confirmation time and confirmer are recorded. On confirmation today's snapshot is saved to the Closing History page <span class="ref">— F Closing · corrected 2026-08-03</span></span></li>
+    <li><span class="n">2</span><span>Closing report export (CSV) — replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status (sheet retired 2026-08-03) <span class="ref">— F Closing (current process)</span></span></li>
     <li><span class="n">3</span><span>Warning resolution summary — aggregates today's Processing/duplicate warnings and their resolutions <span class="ref">— F Dean</span></span></li>
   </ol>
 </div>
@@ -730,13 +740,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     </div><span class="dot" style="top:-11px;left:120px">1</span></div>
 
     <p class="mut" style="margin:0 0 10px">Daily snapshots saved automatically on closing confirmation — an audit trail of outbound target (manual count) · OK scans · warning resolution · confirmer</p>
-    <table class="logtbl" style="font-size:13px">
-      <tr><th>Date</th><th>Outbound Target (manual)</th><th>OK Scans</th><th>Warnings (raised→resolved)</th><th>Match</th><th>Closed By</th><th>Confirmed At</th><th></th></tr>
-      <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (today)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-12</td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
-      <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button></td></tr>
+    <table class="logtbl anno" style="font-size:13px">
+      <tr><th>Date</th><th>Outbound Target (manual)</th><th>OK Scans</th><th>Warnings (raised→resolved)</th><th>Match</th><th>Closed By</th><th>Confirmed At</th><th><span class="dot" style="top:-13px;right:-8px">2</span></th></tr>
+      <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (today)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-13" data-meta="84/84 · 18:52 (Yongwon)">Amend</button></td></tr>
+      <tr><td class="num">07-12<br><span class="amended-badge">Amended v2 · Dean · 07-13 09:12</span></td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-12" data-meta="91/91 · 19:02 (Dean)">Amend</button></td></tr>
+      <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-11" data-meta="78/78 · 18:47 (Miranti)">Amend</button></td></tr>
+      <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-10" data-meta="103/103 · 19:15 (Dean)">Amend</button></td></tr>
+      <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-09" data-meta="88/88 · 18:58 (Miranti)">Amend</button></td></tr>
     </table>
     <p class="mut" style="margin-top:10px">Closing cannot be confirmed while mismatched, so records are always saved as "Match" — mismatch causes (missed scans · over-scans · unresolved warnings) must be resolved before confirmation.</p>
   </div>
@@ -745,6 +755,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <h3>Closing History — New Annotations</h3>
   <ol>
     <li><span class="n">1</span><span><b>Closing History is a separate page</b> — switched via the top tabs [Closing | Closing History] (not a modal; converted 2026-07-23). Daily snapshot: date · outbound target (manual) · OK scans · warnings raised→resolved · match · closed by · confirmed at. <b>The per-day CSV button on each closing date's row downloads that day's closing report individually (full scan list included)</b>. Pressing the "Closing" tab returns to the closing screen you were viewing <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">2</span><span><b>Amend (per-row)</b> — reopens that date's confirmed closing for correction (owner decision 2026-08-03, resolves PD-74). Clicking [Amend] asks <b>"Amend the closing for {date}? The confirmed record stays until you re-confirm."</b> (M3). Confirming opens <b>Amendment mode</b>: the closing screen loads the day's confirmed scan list in full under an amber <b>"AMENDING — {date} closing (confirmed 84/84)"</b> banner, the manual target stays editable (84 → 85) and the scan input is active. Scanning the found parcel to an exact 85/85 match with 0 warnings enables <b>[Re-confirm Closing]</b> — the record updates <b>in place</b> (never a second row, one row per date preserved) with an <b>"Amended" badge</b> (version · actor · timestamp; see the 07-12 row) — Closing History itself is the system of record (the Daily Shipping Status sheet was retired 2026-08-03), and a green toast confirms. Exiting amendment keeps the confirmed record untouched <span class="ref">— added 2026-08-03</span></span></li>
   </ol>
 </div>
 </section>
@@ -786,6 +797,38 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <div class="foot">
       <button class="btn btn-line btn-sm" data-close>No</button>
       <button class="btn btn-sm" id="scandelYes" style="background:var(--red);color:#fff">Yes — remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Amend Closing confirmation (PD-74 owner decision, 2026-08-03) ══════════════ -->
+<div class="overlay" id="m-amend">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>Amend Closing — <span id="amendDateHdr">07-13</span><button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Amend the closing for <span id="amendDateBody">07-13</span>? The confirmed record stays until you re-confirm.</b>
+      <p class="mut" id="amendMeta" style="margin:8px 0 0">Confirmed 84/84 · 18:52 (Yongwon)</p>
+      <div class="note">Amendment mode reloads the day's confirmed scan list with the scan input active. Raise the manual target (e.g. 84 → 85), scan the found parcel, and press <b>Re-confirm Closing</b> — the record is updated <b>in place</b> with an <b>Amended</b> badge (version · actor · timestamp). Closing History itself is the system of record — the retired Daily Shipping Status sheet needs no update.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep the record</button>
+      <button class="btn btn-blue btn-sm" id="amendYes">Amend — open the closing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Cancel Closing confirmation (WF-7 fix, 2026-08-03) ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal">
+    <header>Cancel today's closing?<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">5 scans will be removed from this session.</b>
+      <p class="mut" style="margin:8px 0 0">The scan records are kept in the audit log and can be reviewed later, but the session will restart from the count entry.</p>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep scanning</button>
+      <button class="btn btn-sm" id="cancelYes" style="background:var(--red);color:#fff">Yes — cancel closing</button>
     </div>
   </div>
 </div>
@@ -865,9 +908,19 @@ const vtest=document.getElementById('voiceTest');
 if(vtest) vtest.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;});
 document.querySelectorAll('.sim-voice').forEach(b=>b.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;}));
 
-/* State 0 — manual count input + Start Closing → switch to in-progress screen (State 1) demo */
+/* State 0 — manual count input + Start Closing → switch to in-progress screen (State 1) demo.
+   WF-8 fix (2026-08-03): empty/invalid input now raises an explicit red validation toast. */
+function s0toast(msg){
+  const m=document.querySelector('#s0 .mock');
+  const t=document.createElement('div');
+  t.className='toast err';
+  const s=document.createElement('span'); s.textContent=msg; t.appendChild(s);
+  m.prepend(t); setTimeout(()=>t.remove(),2600);
+}
 document.getElementById('startBtn0').addEventListener('click',()=>{
-  if(!document.getElementById('targetIn0').value.trim()) return;
+  const v=document.getElementById('targetIn0').value.trim();
+  if(!v){s0toast('✕ Enter the hand-counted parcel count first');return;}
+  if(!/^\d+$/.test(v)||parseInt(v,10)<1){s0toast('✕ The count must be a whole number of 1 or more');return;}
   document.querySelector('.wf-tab[data-state="s1"]').click();
 });
 /* scan row ✕ — delete after confirm modal */
@@ -889,7 +942,14 @@ document.getElementById('targetEdit').addEventListener('click',()=>{
   if(i.disabled){i.disabled=false;i.focus();i.select();b.textContent='Save';}
   else{i.disabled=true;b.textContent='↺ Edit count';}
 });
-document.getElementById('closeCancel').addEventListener('click',()=>{showState('s0');});
+/* WF-7 fix (2026-08-03): Cancel Closing now takes a confirm dialog before returning to State 0 */
+document.getElementById('closeCancel').addEventListener('click',()=>{
+  document.getElementById('m-cancel').classList.add('open');
+});
+document.getElementById('cancelYes').addEventListener('click',()=>{
+  document.getElementById('m-cancel').classList.remove('open');
+  showState('s0');
+});
 /* Closing History page switch — top tabs */
 let lastState='s0';
 function showState(id){
@@ -902,6 +962,32 @@ document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',(
   if(b.dataset.goto==='back'){showState(lastState);}
   else{const cur=document.querySelector('.state.on');if(cur&&cur.id!=='shist')lastState=cur.id;showState(b.dataset.goto);}
 }));
+/* ── Amend Closing (PD-74 owner decision, 2026-08-03) ──
+   shist row [Amend] → M3 confirm → Amendment mode demo:
+   State 1 + amber AMENDING banner + target raised by 1 + Re-confirm label. Exit restores. */
+let amendDate='07-13', amendMeta='84/84 · 18:52 (Yongwon)';
+document.querySelectorAll('.amendbtn').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  amendDate=b.dataset.date; amendMeta=b.dataset.meta;
+  document.getElementById('amendDateHdr').textContent=amendDate;
+  document.getElementById('amendDateBody').textContent=amendDate;
+  document.getElementById('amendMeta').textContent='Confirmed '+amendMeta;
+  document.getElementById('m-amend').classList.add('open');
+}));
+document.getElementById('amendYes').addEventListener('click',()=>{
+  document.getElementById('m-amend').classList.remove('open');
+  showState('s1');
+  document.getElementById('amendBannerB').textContent='AMENDING — '+amendDate+' closing (confirmed '+amendMeta.split(' · ')[0]+')';
+  document.getElementById('amendBanner').style.display='flex';
+  document.getElementById('targetIn1').value=String(parseInt(amendMeta,10)+1);
+  document.getElementById('confirmBtn1').textContent='Re-confirm Closing (1 remaining)';
+});
+document.getElementById('amendExit').addEventListener('click',()=>{
+  document.getElementById('amendBanner').style.display='none';
+  document.getElementById('targetIn1').value='84';
+  document.getElementById('confirmBtn1').textContent='Confirm Closing (79 remaining · 2 warnings)';
+  showState('shist');
+});
 document.getElementById('annoToggle').addEventListener('click',function(){
   document.body.classList.toggle('no-anno');
   this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';

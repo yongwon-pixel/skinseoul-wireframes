@@ -1,5 +1,7 @@
 # Order Detail — Screen Specification (WMS 2.0)
 
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+
 Page slug: `order-detail` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-detail/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-detail/
 Global rules: `_global-rules.md` (cited as `[G-n]`). This document writes **page deltas only** and never restates a global rule body.
@@ -144,7 +146,7 @@ Three furniture keys are specified inside the legend entry they physically belon
 **A. Registered wireframe defects touching this page**
 
 - **`[WF-3]` (cross-page).** View Orders State 3 legend #4 still carries the "(proposal)" qualifier on "Cancel Inbound disabled after Outbound". That rule is adopted `[PD-10 · OWNER-PENDING]` and **binds Order Detail too** — see `[BR-14]`. Spec and QA use the adopted rule; the "proposal" wording is stale text and must not be specced.
-- **`[OD-WFX-1 · proposed]` (this page, registered 2026-08-03).** The Change Status dropdown **does not close on an outside click**: `order-detail/index.html` has no document-level click handler (the modal has one — `overlay.addEventListener('click', …)` — the dropdown does not). The specified behavior is unchanged and correct: clicking elsewhere closes the dropdown with no status change `[L-8]` step 1 `[E-46]` `NE-2`. Until the drawing is patched, the assertion is not runnable against the wireframe, so `QA-STA-4` is tagged `[ADMIN]` — **this is a missing wireframe affordance, not a spec change and not a bug to file against the spec**. Backlog entry in §9.5; register entry in `_wireframe-fixes.md` §I.
+- **`[OD-WFX-1 · proposed]` (this page, registered 2026-08-03).** The Change Status dropdown **does not close on an outside click**: `order-detail/index.html` has no document-level click handler (the modal has one — `overlay.addEventListener('click', …)` — the dropdown does not). The specified behavior is unchanged and correct: clicking elsewhere closes the dropdown with no status change `[L-8]` step 1 `[E-46]` `NE-2`. **APPLIED 2026-08-03** — the wireframe now closes both dropdowns on an outside click (modal-backdrop pattern, trigger toggle unchanged); `QA-STA-4` is back at `[WF]` tier and passes against the drawing.
 
 No other `_wireframe-fixes` entry (WF-1, WF-2, WF-4 … WF-14) targets `wms2/order-detail/index.html`.
 
@@ -587,7 +589,7 @@ Re-adding any of them is a regression. A developer reading an old capture will f
 
 **`Inbound Status`** renders exactly `INBOUNDED` (`.tag.tag-inbounded`, green solid) or `PENDING` (`.tag.tag-pending`, amber). **These two values are the whole vocabulary — there is no `OUTBOUNDED` line status** `[BR-50]`. Outbound is order-level `[BR-4]`: it moves the *order* to `prepare-shipment` and writes `DC-19` + `DC-21`, and it touches no line-level inbound state, which is exactly why Cancel Outbound `[BR-19]` needs no line-state reversal. RTO's Bulk Outbound spec writes `INBOUNDED → OUTBOUNDED` per line; if that write reaches the same record, every row here renders an unmapped status. Open as `[X-4]` — until it is adjudicated, a third tag must not be added to this contract.
 
-**Sample-set display.** When Order Management has assigned a sample set to this order, the internal view shows **which** sample and **how many** in the line-items area `[G-13]` `[PD-27 · OWNER-PENDING]` `[BR-34]`. The carrier-facing `(+ sample set)` appending is a label/export concern and does **not** change what this page displays. The source that defines which sample and how many is an unresolved owner question `[PD-51 · NO-DEFAULT]` (§9.2) — the display requirement stands regardless of where the definition comes from. Order Detail **never edits** the assignment `[E-57]`.
+**Sample-set display.** When Order Management has assigned a sample set to this order, the internal view shows the assigned **"sample set"** in the line-items area `[G-13]` `[PD-27 · OWNER-PENDING]` `[BR-34]` — **v1: "sample set" only**, no sample type and no per-type quantity (`[PD-51]` owner-decided 2026-08-03; distinguishing which sample and how many is follow-up work for when sample types are introduced). The carrier-facing `(+ sample set)` appending is a label/export concern and does **not** change what this page displays. Order Detail **never edits** the assignment `[E-57]`.
 
 **Catalog drift.** A line whose SKU was merged, retired or deleted from the catalog after the order was placed keeps its historical SKU and names — the order record is historical truth. `Latest Inventory Count` resolves against the surviving SKU where a mapping exists, otherwise renders `–` with a muted `SKU retired` marker. The line is never auto-rewritten `[E-62]` `[E-91]`.
 
@@ -796,7 +798,7 @@ Every rule carries a rationale and a decision date. Global rules are cited, neve
 | **BR-31** | **This page has no refresh exception**, and every confirming action's success string is fixed in §3.0.2. | Page delta on `[G-2]`: refreshing loses the operator's scroll position in an 18-column horizontally scrolled table and their place in the thread; fixed strings make the toast an assertable contract rather than a developer's improvisation. | 2026-08-03 |
 | **BR-32** | **Suppressed duplicate submissions are persisted (`DC-36`).** | Page delta on `[G-9]`: this page is where the live double-click bug was found, so the fix must be provable with data, not asserted. | 2026-07-21 (bug logged), telemetry added 2026-08-03 |
 | **BR-33** | **No control on this page is role-gated in v1; every mutation records the actor.** | `[G-15]` `[PD-1 · OWNER-PENDING]` — six screens independently raised the same question; eight ad-hoc models would be worse than one deferred decision. | 2026-08-03 |
-| **BR-34** | **The internal view shows which sample set and how many** when Order Management assigned one; the carrier-facing "(+ sample set)" appending is a label concern and does not change this display. Order Detail never edits the assignment. | `[G-13]` dual view. Order Detail is an internal screen; hiding the sample makes a customer dispute unresolvable. `[PD-27 · OWNER-PENDING]` | 2026-08-03 |
+| **BR-34** | **The internal view shows the assigned "sample set"** when Order Management assigned one — v1 renders **"sample set" only**, with no type/quantity breakdown (`[PD-51]` owner-decided 2026-08-03); the carrier-facing "(+ sample set)" appending is a label concern and does not change this display. Order Detail never edits the assignment. | `[G-13]` dual view. Order Detail is an internal screen; hiding the sample makes a customer dispute unresolvable. `[PD-27 · OWNER-PENDING]` | 2026-08-03 |
 | **BR-35** | **Order Detail is a receiving surface for unrecognized matching, never a resolution surface.** A confirmed match elsewhere writes the tracking number onto this order's product line and posts an auto-comment @registrant; there is no match UI here. | One match pipeline, one audit trail, regardless of which screen resolved it. `[PD-16 · OWNER-PENDING]` | 2026-07-23, reconfirmed 2026-08-03 |
 | **BR-36** | **The Actor Log is a view over persisted events, never the only copy.** | `[G-8]`. A UI-only log is lost on the first schema change and cannot be queried for disputes. | 2026-07-14 |
 | **BR-37** | **The server revalidates at confirm; stale entities are rejected with a red toast and no partial write. Concurrent edits use an optimistic version check → 409 → reload + non-green toast.** | Last-write-wins silently destroys field data. `[PD-6 · OWNER-PENDING]` `[PD-7 · OWNER-PENDING]` | 2026-08-03 |
@@ -922,7 +924,7 @@ Stated so a coverage audit does not look for them here:
 |---|---|---|
 | tracking-missing / View Orders M2 — match confirmed | the purchase tracking number is written onto the matched product line; an auto-comment appears in the thread @mentioning the registrant (suppressed when resolver == registrant) | `DC-18` + `DC-32` (`origin=unrecognized_match_confirmed`) `[PD-16 · OWNER-PENDING]` |
 | View Orders M6 — expected-qty edit on a related inbound request | **no** line-item change on this order; the auto-comment lands on the **inbound request**, not here | — (explicit non-landing; stated to prevent a false expectation) |
-| Order Management — sample set assigned | the assigned sample and quantity render in the line-items area | display only, no event `[BR-34]` |
+| Order Management — sample set assigned | the assigned "sample set" renders in the line-items area (v1: "sample set" only, no type/qty breakdown — `[PD-51]` owner-decided 2026-08-03) | display only, no event `[BR-34]` |
 | Inventory M4 — reservation released on a line of this order `[PD-45 · OWNER-PENDING]` | the line returns to `PENDING` and `Latest Inventory Count` refreshes | `DC-21` written by Inventory; Order Detail renders the result and must not write a second movement |
 
 ### 5.4 Explicit NON-events (16)
@@ -1150,7 +1152,7 @@ Every case states the **expected behavior**, not a question. Where a case has no
 | **E-53** | PIC edit where the target user has been deactivated | Deactivated users are not selectable in the picker. If the order's stored PIC was deactivated after assignment, the historical name still renders with a muted `(inactive)` marker. |
 | **E-54** | Address edit with an invalid country / postcode for the carrier | Save is blocked with an inline field-level error; nothing is persisted, no toast. Validation rules follow the carrier's requirements. |
 | **E-56** | Arriving via a deep link to an order that has been cancelled, deleted, or never existed | An explicit not-found / cancelled state, never a blank page or a JS error. Cancelled orders render read-only with their history intact and still accept comments `[E-79]`. |
-| **E-57** | Order Management has assigned a sample set to this order | The line-items area shows **which** sample and **how many** `[G-13]` `[PD-27 · OWNER-PENDING]`. The carrier-facing `(+ sample set)` string is a label concern and does not appear as a line item here. Order Detail never edits the assignment. The definition source is an open question `[PD-51 · NO-DEFAULT]`. |
+| **E-57** | Order Management has assigned a sample set to this order | The line-items area shows the assigned **"sample set"** `[G-13]` `[PD-27 · OWNER-PENDING]` — **v1: "sample set" only**, no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03; differentiation is follow-up work for when sample types exist). The carrier-facing `(+ sample set)` string is a label concern and does not appear as a line item here. Order Detail never edits the assignment. |
 | **E-59** | Clicking a cell whose value is `–` (Order Number, CP Link) | Nothing happens — `–` is plain text, never a link. No `DC-33`. |
 | **E-65** | The Actor Log has more events than the display cap | Ordering stays newest-first and the cap is explicit (`showing latest {N}`), with the full history reachable through `↻ Audit History`. Pagination mechanics are dev-time. **Truncation must never be silent.** |
 | **E-68** | Currency and locale rendering | Order totals render in the order's own currency with its code (`AUD 129.8`, `AUD 13.11`); product costs render in the purchase currency (`₩17,100`). This page performs **no** FX conversion and must not display a converted figure `[BR-48]`. |
@@ -1638,7 +1640,7 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 - **When** I click `#st-hold button[data-open="statusddH"]`
 - **Then** `#statusddH` is visible, its `on-hold` item carries class `on`, and its `processing` item does **not** · NEGATIVE.
 
-**QA-STA-4 `[L-8]` `[E-46]` `[OD-WFX-1 · proposed]` — clicking outside closes the dropdown with no change. · NEGATIVE [ADMIN]**
+**QA-STA-4 `[L-8]` `[E-46]` — clicking outside closes the dropdown with no change. · NEGATIVE [WF]** *(re-tiered from `[ADMIN]` on 2026-08-03: `[OD-WFX-1]` was applied to the wireframe — outside-click close now exists.)*
 - **Given** `#statusdd` is open
 - **When** I click the page background
 - **Then** the dropdown is no longer visible, the status badge still reads `Processing`, and no toast appears. *(No event — `NE-2`.)*
@@ -1937,10 +1939,10 @@ Scenarios marked **· NEGATIVE** assert that something must *not* happen.
 
 **QA-REN-16 `[L-10]` `[E-57]` `[BR-34]` `[PD-27 · OWNER-PENDING]` — an assigned sample set is displayed, never edited here. · NEGATIVE [ADMIN]**
 - **Given** Order Management has assigned a sample set to this order
-- **Then** the line-items area shows **which** sample and **how many**
+- **Then** the line-items area shows the assigned **"sample set"** (v1: "sample set" only — no type/qty breakdown, `[PD-51]` owner-decided 2026-08-03)
 - **And** the page exposes **no** control to add, change or remove the assignment, and emits **no** `order.sample_assignment_changed` event §5.2
 - **And** the carrier-facing string `(+ sample set)` does **not** appear as a line item on this page
-- *(The source that defines which sample and how many is `[PD-51 · NO-DEFAULT]`; until it is answered this scenario is executable only for the "no control exists" half.)*
+- *(`[PD-51]` was owner-decided 2026-08-03 — v1 renders "sample set" only, so this scenario is now fully executable.)*
 
 **QA-REN-17 `[L-4]` `[E-44]` `[E-59]` — absent agent-tracking values render `–` and are not links. · NEGATIVE [WF]**
 - **Given** state `1 · Processing` and the row with SKU `100005088` (the `WHOLESALE` line)
@@ -2209,9 +2211,9 @@ Every scenario in this block is `[ADMIN]`: each needs a server to fail against. 
 
 A scenario counts as negative when it asserts that something must **not** happen. The stricter **heading** count (`· NEGATIVE` in the scenario title) is **49.1%** (79 of 161); counting every scenario that carries at least one negative Then-clause gives **73.3%** (118 of 161). Both are far above the 25% floor required by `_review.md` §3.4.
 
-`[WF]` share is **42.2%** (68 of 161). Every `[WF]` scenario is executable today against the live wireframe with the selectors and strings given; every `[ADMIN]` scenario is written so it becomes executable unchanged the day the real admin exists.
+`[WF]` share is **42.9%** (69 of 161). Every `[WF]` scenario is executable today against the live wireframe with the selectors and strings given; every `[ADMIN]` scenario is written so it becomes executable unchanged the day the real admin exists.
 
-**v1.2 delta, for anyone diffing against v1.0/v1.1 counts:** 14 scenarios were added to close the `[E-n]` coverage gap (`QA-INB-17`, `QA-INB-18`, `QA-CMT-16`, `QA-OUT-13`, `QA-REN-17`–`QA-REN-20`, `QA-SUB-20`, `QA-NET-1`–`QA-NET-5`) and one existing scenario, `QA-STA-4`, moved from `[WF]` to `[ADMIN]` because the wireframe lacks the outside-click handler `[OD-WFX-1 · proposed]`. `[WF]` therefore stays at 68 (−1 retagged, +1 new: `QA-REN-17`) while `[ADMIN]` rises 79 → 93. No scenario was renumbered and none was deleted.
+**v1.2 delta, for anyone diffing against v1.0/v1.1 counts:** 14 scenarios were added to close the `[E-n]` coverage gap (`QA-INB-17`, `QA-INB-18`, `QA-CMT-16`, `QA-OUT-13`, `QA-REN-17`–`QA-REN-20`, `QA-SUB-20`, `QA-NET-1`–`QA-NET-5`) and one existing scenario, `QA-STA-4`, moved from `[WF]` to `[ADMIN]` because the wireframe lacks the outside-click handler `[OD-WFX-1 · proposed]`. `[WF]` therefore stays at 68 (−1 retagged, +1 new: `QA-REN-17`) while `[ADMIN]` rises 79 → 93. No scenario was renumbered and none was deleted. **v1.3 delta (2026-08-03):** `[OD-WFX-1]` was applied to the wireframe, so `QA-STA-4` returned to `[WF]` — final split **69 `[WF]` / 92 `[ADMIN]`** (total unchanged at 161).
 
 ### 8.2 Data-capture → QA coverage map
 
@@ -2265,7 +2267,7 @@ Run in this order; each group leaves the page in a known state and the next grou
 |---|---|---|
 | **`E-69`** | It is an **org-policy statement** ("an operator without fulfillment training opens the page"), not a behavior the page performs. Its one machine-checkable consequence — that nothing is role-gated in v1 — **is** asserted. | `QA-SUB-20` asserts the no-role-gating half `[G-15]` `[BR-33]`. |
 | **`E-30`** *(partially)* | The max-comment-length half is explicitly dev-time (§9.4 D-13); asserting a number here would invent one. | The escaping half is asserted by `QA-CMT-13` and `QA-HUB-7`. |
-| **`E-57`** *(partially)* | The "which sample and how many" half has **no defined source** `[PD-51 · NO-DEFAULT]`; a scenario asserting rendered values would specify behavior the owner has not decided. | `QA-REN-16` asserts the executable half — that no assignment control exists here and no `order.sample_assignment_changed` is emitted. |
+| **`E-57`** *(resolved)* | `[PD-51]` was owner-decided 2026-08-03: v1 renders **"sample set" only** (no type/qty breakdown), so the rendered value is now assertable. | `QA-REN-16` asserts both halves — the "sample set" rendering, and that no assignment control exists here and no `order.sample_assignment_changed` is emitted. |
 | **`E-86`** *(partially)* | What *unblocks* a carrier-less order is undecided `[PD-55 · NO-DEFAULT]`. | `QA-OUT-11` asserts the block, the visible reason, `reason_code=no_carrier` and the absence of any assignment control. |
 
 The three `· partially` rows are not coverage gaps: in each, the unasserted half is a `NO-DEFAULT` owner question or a declared dev-time choice, and asserting it would contradict §9.2 / §9.4.
@@ -2302,7 +2304,7 @@ These have **no** specified behavior and none may be invented. One is owned by t
 
 | ID | Question | Owned by this page? | Blocking status here |
 |---|---|---|---|
-| **`[PD-51 · NO-DEFAULT]`** | **Where is "which sample set and how many" defined, and by whom?** Order Management's sample flow is a deliberate ON/OFF with no sample-type selection, yet `[G-13]` requires internal artifacts — including this page's line-items area `[PD-27]` — to show the sample kind and quantity. No input document names the source of that definition. Deciding it would invent both a UI affordance and an owner. | **Yes** (display requirement lands here) | **Non-blocking for build start, blocking for the sample display.** `[L-10]` states the display requirement; the values it renders have no defined source until this is answered. Order Detail can ship without sample display and gain it later without any other change. `QA-REN-16` is executable today only for its "no control exists" half. |
+| **`[PD-51]`** | **RESOLVED — OWNER-DECIDED 2026-08-03.** Where is "which sample set and how many" defined? Answer: v1 makes no sample distinction — internal artifacts, including this page's line-items area `[PD-27]`, render **"sample set" only** (no type, no per-type quantity); a definition source becomes necessary only when sample types are introduced (follow-up work). | **Yes** (display requirement lands here) | **Resolved.** `[L-10]`'s display requirement is now fully specified — the rendered value is the "sample set" marker. `QA-REN-16` is fully executable. |
 | **`[PD-55 · NO-DEFAULT]`** | **"Not connected — contact the Fulfillment Center" orders: what unblocks them, and who owns it?** The order is created and appears in RTO, but no screen offers a manual carrier assignment and no Slack route exists for the follow-up. | No — raised on Order Management / RTO | Order Detail must **display** the state and block Outbound and Print against it `[E-86]` `[L-9]`. It invents no assignment affordance. `QA-OUT-11` asserts the block and the absence of a control. |
 | **`[PD-74 · NO-DEFAULT]`** | **Correction path when an extra parcel is found AFTER a closing is confirmed.** No reopen/amend affordance exists anywhere, and inventing one changes the immutability model. | No — Closing | Order Detail's Cancel Outbound is allowed at the data layer even after a closing scan, and the divergence is made visible rather than silent `[E-52]`. Reconciling the closing side is out of scope. |
 | **`[PD-71 · NO-DEFAULT]`** | **Daily Shipping Status sheet — which sheet and column mapping.** | No — Closing | Stated only as a non-origin in §6.4, so an integration audit does not look for a sheet write here. |
@@ -2345,7 +2347,7 @@ Handled by the wireframe-edit pass after P3-3/P3-4, deployed via `/wf-deploy ord
 
 - The **Cancel Outbound** control `[BR-19]` `[PD-26 · OWNER-PENDING]` is specified but not drawn. It replaces `📦 Outbound` in the footer once the order is outbounded.
 - The **disabled-with-reason** renderings are specified but not drawn: `Cancel Inbound` after outbound `[E-10]`, `+ Add Line Item` after outbound `[E-25]`, `🖨 Print` / `View Label` with no label `[E-40]` or on a cancelled order `[E-85]`, `Delete` on an inbounded line `[E-22]`, `📦 Outbound` and `🖨 Print` on a carrier-less order `[E-86]`, `Bulk Inbound Selected Items` with zero selection `[E-7]`.
-- The **sample-set display** `[PD-27 · OWNER-PENDING]` is specified but not drawn, and is gated on `[PD-51 · NO-DEFAULT]`.
+- The **sample-set display** `[PD-27 · OWNER-PENDING]` is specified but not drawn; its content is settled — v1 renders "sample set" only (`[PD-51]` owner-decided 2026-08-03).
 - The **hold-reason input** on the status change `[PD-20 · OWNER-PENDING]` and its rendering inside the banner are specified but not drawn.
 - The **Actor Log empty state** `[E-42]` and the explicit **truncation marker** `[E-65]` are specified but not drawn.
 - **Demo-data correction (candidate, not registered in `_wireframe-fixes`):** the three Actor Log inconsistencies in §2.5 B — the `OUTBOUND` row on an order rendered `Processing` with Outbound still enabled; the `CANCEL INBOUND` with no later re-inbound on a row rendering `INBOUNDED`; and State 2 carrying the same `OUTBOUND` row while a line is `PENDING`. All three are illustrative, none is a behavioral statement.
@@ -2447,4 +2449,4 @@ Recorded so nobody re-implements them from a stale capture or an old document `[
 
 ---
 
-*End of specification. 15 legend units + 17 page-furniture units = 32 specified units · 50 business rules · 37 persisted events + 16 non-events · 92 edge cases · 161 QA scenarios (68 `[WF]` · 93 `[ADMIN]`) · 9 open cross-page conflicts `[X-1]`–`[X-9]`.*
+*End of specification. 15 legend units + 17 page-furniture units = 32 specified units · 50 business rules · 37 persisted events + 16 non-events · 92 edge cases · 161 QA scenarios (69 `[WF]` · 92 `[ADMIN]`) · 9 open cross-page conflicts `[X-1]`–`[X-9]`.*

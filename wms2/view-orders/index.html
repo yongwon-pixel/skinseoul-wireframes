@@ -561,7 +561,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">13</span><span>Actor Log — records time · action · SKU · qty · worker · memo (when written in e.g. the cancel modal); shown at the bottom across States 1–5 <span class="ref">— C Log</span></span></li>
     <li><span class="n">14</span><span>Clicking anywhere on the page + right after an Inbound/Outbound action → search box auto-focuses (select-all), ready for the next barcode. <b>Behavior only, no on-screen text</b> <span class="ref">— C Search</span></span></li>
     <li><span class="n">15</span><span>No refresh after processing — only a top-right success/failure toast. <b>Protocol common to all states</b> (the toast is illustrated in only some states). Outbound-family buttons (Outbound · Inbound + Outbound · bulk) play a <b>send sound</b> on click (added 2026-08-03) — lets workers confirm acceptance by ear during continuous scanning without watching the screen <span class="ref">— C Search</span></span></li>
-    <li><span class="n">16</span><span>Bottom-left floating panel — live barcode feed, collapsed by default (click to expand), shows at most 10–20 on screen (full history kept in backend), export by date <span class="ref">— C Log</span></span></li>
+    <li><span class="n">16</span><span>Bottom-left floating panel — live barcode feed, collapsed by default (click to expand), shows at most 20 rows on screen (full history kept in backend), export by date <span class="ref">— C Log</span></span></li>
     <li><span class="n">17</span><span>Location column — right of Sourcing Route; shows the current location of warehouse-stored (Existing Inventory) products. Common to States 1–5 <span class="ref">— B/E linkage</span></span></li>
     <li><span class="n">18</span><span>Brand name always shown at the front of Product Name — products missing the brand need the product-name logic fixed <span class="ref">— B</span></span></li>
     <li><span class="n">19</span><span>Results-area Comments panel — <b>expanded by default</b> (collapsible via the Comments button); each comment's ★ saves it → aggregated in the top-right Comments hub's Saved tab <span class="ref">— 0. UI 1+2</span></span></li>
@@ -980,7 +980,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">1</span><span>After outbound the button becomes "✓ Outbounded" and is unclickable (gray, disabled) <span class="ref">— user request</span></span></li>
     <li><span class="n">2</span><span>Cancel Outbound button — cancelling rolls the order status back from prepare shipment → processing <span class="ref">— C Behavior</span></span></li>
     <li><span class="n">3</span><span>Toast after completion with no refresh → scan the next barcode right away <span class="ref">— C Search</span></span></li>
-    <li><span class="n">4</span><span>Individual Cancel Inbound disabled after outbound — to revert, Cancel Outbound first (prevents out-of-order state) <span class="ref">— proposal</span></span></li>
+    <li><span class="n">4</span><span>Individual Cancel Inbound disabled after outbound — to revert, Cancel Outbound first (prevents out-of-order state) <span class="ref">— adopted provisionally (2026-08-03, owner review pending)</span></span></li>
   </ol>
 </div>
 </section>
@@ -1398,7 +1398,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <span>Received <b>800 / 800</b> (2 SKUs)</span>
         <span>Inventory <b>updated</b> (A-05-11 · B-02-07)</span>
         <span>Inbound Request List switched to <b>INBOUNDED</b></span>
-        <span>Received Date <b>07-26 14:02</b> · Carrier recorded automatically</span>
+        <span>Received Date <b>07-26 14:02</b> · Carrier is not recorded</span>
       </div>
     </div>
 

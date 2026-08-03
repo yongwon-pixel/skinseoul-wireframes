@@ -14,6 +14,7 @@ File: `wms2/view-orders/index.html` · State 6b (`s6b`) completion banner.
 Contradicts the State 6 legend footer and the 2026-08-03 decision that automatic Carrier recording is NOT supported (`_review.md` C-1, PD-9).
 Fix: remove the carrier clause from the banner. Keep the rest (exact-match result, locations, INBOUNDED, Received Date). Suggested text: "… · Received Date recorded automatically · Carrier is not recorded".
 Raised by: view-orders.A Q2 / view-orders.B OQ-4 / supervisor memo.
+**APPLIED 2026-08-03** — banner clause replaced with the spec's exact wording `Carrier is not recorded` (view-orders.md §3.9 `[L-S6b-1]`).
 
 **[WF-2] inbound-request — State 1 legend footer says "Received Date + Carrier are recorded automatically".**
 File: `wms2/inbound-request/index.html` · State 1 footer behavior paragraph (rule a).
@@ -26,14 +27,15 @@ File: `wms2/view-orders/index.html` · State 3 legend #4 (Cancel Inbound disable
 Now adopted as a rule (PD-10, supervisor ruling on proposal-state items).
 Fix: remove the "(proposal)" qualifier once the owner confirms PD-10.
 Raised by: view-orders.A Q1 / view-orders.B OQ-8.
+**APPLIED 2026-08-03** — PD-10 is provisionally adopted, so the qualifier reads `— adopted provisionally (2026-08-03, owner review pending)` rather than being removed outright.
 
-**[WF-4] closing — State 4 legend references "(M2)" for closing history.**
+**[WF-4] closing — State 4 legend references "(M2)" for closing history.** ✅ **Applied 2026-08-03** (closing wireframe edit pass, owner-approved batch; Playwright-verified).
 File: `wms2/closing/index.html` · State 4 legend #1.
 Fossil from the pre-2026-07-23 design when history was a modal; history is now a separate page (`shist`), and M2 is the Delete Scan Row modal — so the reference is not just stale, it points at the wrong modal.
 Fix: replace "(M2)" with "Closing History page".
 Raised by: closing.A OQ-D6 / closing.B DQ-7.
 
-**[WF-5] closing — State 1 legend #2 contradicts the removal of the large warning panel.**
+**[WF-5] closing — State 1 legend #2 contradicts the removal of the large warning panel.** ✅ **Applied 2026-08-03** (same pass as WF-4).
 File: `wms2/closing/index.html` · State 1 legend #2 ("the large panel is used only in warning states") vs State 2 legend ("large warning panel + action banner removed 2026-07-23").
 Net truth: no large red panel remains; the only large panel is State 4's green completion status.
 Fix: reword State 1 legend #2 to "large panel appears only on the State 4 completion screen".
@@ -49,13 +51,13 @@ File: `wms2/tracking-missing/index.html` · `.xdel` button in each pool row.
 Fix (per PD-60): add a confirm dialog + mandatory reason select (mis-registration / routed to inbound request / no action needed; the second option takes an Inbound No. field per PD-64) + green toast.
 Raised by: tracking-missing.A Q1 / tracking-missing.B Q1 + E-16.
 
-**[WF-7] closing — Cancel Closing has no confirmation dialog.**
+**[WF-7] closing — Cancel Closing has no confirmation dialog.** ✅ **Applied 2026-08-03** (`#m-cancel` with the `closing.md` §3.11 copy).
 File: `wms2/closing/index.html` · State 1 target banner, `✕ Cancel Closing`.
 The legend says cancelling "discards scan records", but the wireframe cancels immediately.
 Fix: add the confirm dialog (copy to come from the spec) before returning to State 0.
 Raised by: closing.B L-1.10 ("dialog NOT in wireframe — spec must define copy").
 
-**[WF-8] closing — Start Closing with an empty/invalid count silently no-ops.**
+**[WF-8] closing — Start Closing with an empty/invalid count silently no-ops.** ✅ **Applied 2026-08-03** (red toasts, §3.1 copy; >9999 advisory stays [ADMIN]).
 File: `wms2/closing/index.html` · `#startBtn0` / `#targetIn0`.
 No error copy, no visual feedback — indistinguishable from a broken button.
 Fix: add an inline/red-toast validation error for empty, 0, negative, and non-integer input.
@@ -66,6 +68,7 @@ File: `wms2/ready-to-outbound/index.html` · `#m-pick` `.picktbl`.
 [G-13] requires internal picking artifacts to show WHICH sample and HOW MANY (PD-36).
 Fix: **conditional on owner approval of PD-36 and on PD-51 (the sample-set definition source) being answered** — add sample rows to the picking table. Do not add until both land.
 Raised by: ready-to-outbound.A Q3 / ready-to-outbound.B OQ-B5 + E-28.
+**APPLIED 2026-08-03** — owner approved the pass; per PD-51 v1 single label, one amber-tinted `sample set ×1` row added to `#m-pick` (order 422165, no-location marker pill). Spec QA (QA-M1 row count 4, QA-E-20 blocked-negative) needs re-baselining spec-side.
 
 **[WF-NEW-D · tracking-missing] — `.xdel` double-click removes one row but decrements both counters twice.**
 *(Page-scoped ID on purpose: the next free numeric ID was claimed concurrently by the closing, ready-to-outbound and order-management passes. This is the same defect the `tracking-missing.md` spec cites as `WF-NEW-D`, so the two references resolve to each other.)*
@@ -90,6 +93,7 @@ File: `wms2/ready-to-outbound/index.html` · `.bulk-run` click handler (approx. 
 The handler sets `fill.style.width='0%'` **synchronously** on click, but assigns `label.childNodes[0].textContent` only inside the 250 ms `setInterval` callback. For the opening ~250 ms of every run the label therefore still carries the *previous* action's copy — on a fresh load, the idle demo copy `Bulk Print Labels in progress — 3/5 (60%) · No refresh · selection kept · toast on completion`. Measured on 2026-08-03: 7 of 38 in-flight samples of a Bulk Outbound run read the print mode string, and 6 of 38 samples of the following print run read `refreshes after completion`. [BR-8]/`[L-5]` make the mode string a contract ("this is how the operator learns, mid-run, whether their selection is about to disappear"), so a crossed-over mode string is wrong from the first frame, not just from the first tick.
 Fix: write the label once immediately before `setInterval` starts, mirroring the existing synchronous `fill.style.width='0%'` line.
 Raised by: `_verify/m2-ready-to-outbound.md` S-2 (adversarial QA execution, 2026-08-03). Until it lands, `ready-to-outbound.md` §8.0 carries a reading rule bounding every "during the run" assertion to the first tick onward.
+**APPLIED 2026-08-03** — label now written synchronously (`0%` + correct mode string) before `setInterval` starts, mirroring the `fill.style.width='0%'` line.
 
 ---
 
@@ -108,7 +112,7 @@ The modal was removed 2026-08-03; the commented block remains.
 Fix: delete the comment block so coverage checks and future readers don't resurrect it.
 Raised by: inbound-request.A (removed-modal entry).
 
-**[WF-12] closing — wf-bar lists "Modal: Process Processing Order" twice.**
+**[WF-12] closing — wf-bar lists "Modal: Process Processing Order" twice.** ✅ **Applied 2026-08-03** (duplicate removed; a "Modal: Amend Closing" tab was added in the same pass, `.wf-tab` stays 10).
 File: `wms2/closing/index.html` · wf-tab bar (approx. lines 215 and 217).
 Demo chrome duplication; would be double-counted by a naive coverage check.
 Fix: remove the duplicate tab.
@@ -123,6 +127,7 @@ File: `wms2/view-orders/index.html` · State 1 legend #16.
 Ambiguous for QA assertions; the spec must fix one number.
 Fix: pick a single value (20 recommended) in both the legend and the spec.
 Raised by: view-orders.A (dev question) / view-orders.B DQ-3.
+**APPLIED 2026-08-03** — legend #16 now reads `shows at most 20 rows on screen`, matching `[BR-37]` (exactly 20) and the panel footer.
 
 **[WF-VO-1] view-orders — Comments-hub copy is the corpus-minority form on six strings.**
 > Page-scoped ID on purpose: three concurrent remediation passes each claimed `WF-15` in this file, so this entry uses the page-scoped form (precedent: `[RTO-WFX-n]`). It is cited as `WF-VO-1` throughout `view-orders.md`.
@@ -136,6 +141,7 @@ File: `wms2/stock-status/index.html` · `m-auditlog` (Past Audit Logs list — c
 Not a coverage gap (both plans account for them), but a legend annotation would make the 1:1 map self-evident.
 Fix (optional): annotate both in the legend, or leave and rely on the spec's §2 note.
 Raised by: stock-status.A / stock-status.B (§1 inventory notes).
+**APPLIED 2026-08-03** — both modals annotated with new dots **17** (`m-auditlog`) and **18** (`m-adjlog6`) plus matching legend entries; no existing number reused.
 
 **[WF-15] closing — Comments hub copy diverges from the cross-page `[G-7]` contract.**
 File: `wms2/closing/index.html` · `#inbox1` `.paneheader` in both panes.
@@ -172,36 +178,43 @@ Recorded so a later agent doesn't treat an intentional artifact as a defect.
 The collapse row `⋯ +8 more rows` uses `colspan="6"` while the preview `<thead>` has **7** `<th>` (`Recipient · Country · SKU · Product Name · Qty · Campaign · Carrier (auto)`).
 Fix: `colspan="7"`.
 Documented by QA-IMP-35; spec §3.2.4.
+**APPLIED 2026-08-03** — `colspan="7"`.
 
 **[WF-16 · proposed] order-management — M2 `Start Assignment (ON)` closes silently.**
 The footer button carries `data-close` but has **no `id`** and **no toast handler**, so a confirming action produces no confirmation. Contradicts `[G-2]`, which `_review.md` C-6 rules wins over wireframe omissions.
 Fix: add an `id` and the green toast defined in the spec's §3.6.5.
 Documented by QA-SMP-30; behaviour asserted by QA-SMP-06.
+**APPLIED 2026-08-03** — button id `sampStartBtn`; green toast per §3.6.5 byte-exact copy (`✓ Sample assignment started` + target-dependent subtext), node `#gtoast3`.
 
 **[WF-17 · proposed] order-management — M3 `Cancel Selected Periods` fires at zero selection and has no confirm step.**
 `#sampCancelBtn` toasts unconditionally, including when no checkbox is checked, and no confirm dialog precedes a cancellation that can switch off a company-wide `forever` campaign.
 Fix: disable at zero selection, and add the confirm dialog defined in the spec's §3.7.5 (`[PD-5 · OWNER-PENDING]`).
 Documented by QA-SMP-31; behaviour asserted by QA-SMP-20 / QA-SMP-21.
+**APPLIED 2026-08-03** — disabled at zero selection; confirm dialog `#m-sampcancel-confirm` per §3.7.5 byte-exact copy (`Cancel {n} assignment period(s)?` / `Keep periods` / `Cancel periods`); the green toast now fires only after confirmation.
 
 **[WF-18 · proposed] order-management — two independent toast nodes can overlap.**
 `#mktConfirm` creates `#gtoast` and `#sampCancelBtn` creates `#gtoast2`, both fixed at `top:16px; right:16px`, so two toasts can occupy the same coordinates simultaneously.
 Fix: one toast slot (replace) or an explicit stack.
 Documented by QA-GBL-09; spec `[L-F5]`, [E-62].
+**APPLIED 2026-08-03** — explicit-stack option: per-action nodes (`#gtoast`/`#gtoast2`/`#gtoast3`) kept for QA identity, shared `stackToasts()` repositions visible toasts so they never overlap.
 
 **[WF-19 · proposed] order-management — M2 `forever` leaves the end fields enabled.**
 The `forever (no end date)` checkbox ships **checked** while `End date` and `Time` remain enabled and editable, contradicting the specified mechanic (`forever` wins; end fields cleared and disabled).
 Fix: clear **and** disable the end fields while `forever` is checked.
 Documented by QA-SMP-33; spec §3.6.3, [E-23].
+**APPLIED 2026-08-03** — end fields (`#sampEndDate`/`#sampEndTime`) cleared and disabled while `#sampForever` is checked, synced on load and on change.
 
 **[WF-20 · proposed] order-management — no modal responds to `Esc`.**
 There is no `keydown` listener anywhere in the file, yet `Esc` is a specified dismissal path.
 Fix: add `Esc` dismissal to all three overlays.
 Documented by QA-GBL-10; spec §3.2.6, [E-97].
+**APPLIED 2026-08-03** — `keydown` handler: Esc closes the topmost open overlay (all four, including the new WF-17 confirm), else the Comments hub.
 
 **[WF-21 · proposed] order-management — the Comments hub does not close on an outside click, and carries dead guards for the behaviour.**
 `onclick="event.stopPropagation()"` on `.csearch` and `e.stopPropagation()` on the hub button, the tab buttons and the stars were written to protect a `document`-level close handler that was never added. The guards are dead code and the hub can only be closed by clicking its own trigger again.
 Fix: add the outside-click close (and `Esc`, with WF-20).
 Documented by QA-CMT-20; spec §3.10, [E-97].
+**APPLIED 2026-08-03** — document-level outside-click close added (guarded by `closest('.inboxdd')`, so the formerly dead `stopPropagation` guards are now live); Esc covered with WF-20.
 
 ---
 
@@ -231,6 +244,7 @@ The note reads `Total stock loss: +₩46,260 (target 0) · the 3 new additions a
 Risk if left: the sentence is a byte-exact `[WF]` QA contract, so a developer either hard-codes `3` or infers the wrong formula (adjustments + additions). `stock-status.md` §3.13 specifies the templatised form `the {n} new addition(s) are not losses`.
 Fix: change `the 3 new additions are not losses` → `the 1 new addition is not a loss`, and update `stock-status.md` `QA-AUD-23`'s expected string in the same commit (`QA-AUD-44` already carries the `[ADMIN]`-tier contract and needs no change).
 Raised by: adversarial QA execution of `stock-status.md` §8 (2026-08-03, item 5) · specced position in `stock-status.md` §3.13, QA-AUD-23, QA-AUD-44.
+**APPLIED 2026-08-03** — wireframe note now reads `the 1 new addition is not a loss`; the same-commit `QA-AUD-23` string update is owed spec-side (spec files were outside this pass's file mandate).
 
 **[INV-WFX-2 · proposed] stock-status — Inbound Form note points at the retired control "Request Inbound".**
 File: `wms2/stock-status/index.html` · `#p-inbound` `.form-note`.
@@ -238,6 +252,7 @@ Final sentence reads `For order-linked inbound, use Request Inbound on View Orde
 Risk if left: the note is a byte-exact `[WF]` QA contract, so the retired name propagates into the build and the note sends an operator to a button that does not exist — the exact failure `BR-4` was written to prevent.
 Fix: replace the final sentence with `For order-linked inbound, use the row Inbound buttons on View Orders or Order Detail.`, and update `stock-status.md` `QA-FRM-03` in the same commit (`QA-FRM-20` already carries the `[ADMIN]`-tier corrected copy and the negative assertion, and needs no change).
 Raised by: M3a cross-page verification D9 (2026-08-03) · specced position in `stock-status.md` §3.18, QA-FRM-03, QA-FRM-20.
+**APPLIED 2026-08-03** — final sentence replaced with the corrected copy exactly as specified; `QA-FRM-03` update owed spec-side (outside this pass's file mandate).
 
 ---
 
@@ -252,3 +267,4 @@ This is a **missing affordance, not stale text**: the specified behavior is corr
 Risk if left: `QA-STA-4` was tagged `[WF]` and fails against a wireframe that is otherwise behaving as drawn, so an unaided QA agent files a false bug. It has therefore been retagged `[ADMIN]` in `order-detail.md` §8 with the tier reason stated inline, and the page's §2.5 A now lists this entry — previously that section asserted that no `_wireframe-fixes` entry targets this file.
 Fix: add an outside-click handler that closes the open dropdown (both `#statusdd` and `#statusddH`) without changing the status, mirroring the modal's backdrop pattern. In the same commit, flip `QA-STA-4` back to `[WF]` in `order-detail.md` §8 (the scenario body needs no edit), restore it to §8.3's step-4 run list, and update the §8.1 counts (`[WF]` 68 → 69, `[ADMIN]` 93 → 92).
 Raised by: `_verify/m2-order-detail.md` F-4 (adversarial QA execution, 2026-08-03) · specced position in `order-detail.md` §2.5 A, §9.5, `[L-8]`, `[E-46]`, QA-STA-4.
+**APPLIED 2026-08-03** — document-level outside-click handler closes `#statusdd`/`#statusddH` with no status change (mirrors the modal backdrop pattern; trigger toggle intact). The same-commit `QA-STA-4` retag `[ADMIN]`→`[WF]` and §8.1 count updates are owed spec-side (outside this pass's file mandate).

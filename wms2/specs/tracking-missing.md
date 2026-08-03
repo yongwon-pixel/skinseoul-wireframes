@@ -1,12 +1,14 @@
 # Unrecognized Tracking — Screen Specification
 
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+
 **Slug:** `tracking-missing` · **Wireframe (SST):** `wms2/tracking-missing/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/tracking-missing/
-**Spec version:** 1.2 (remediation pass — three independent verifications applied) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1 · **Global rules:** `_global-rules.md` v1.0
+**Spec version:** 1.3 (PD-5/PD-60 owner confirmation + the 2026-08-03 wireframe pass — WF-6 · WF-NEW-D · WF-NEW-E · WF-10/WF-NEW-C applied) · **Written:** 2026-08-03 · **Template:** `_inputs/spec-template.md` v1 · **Global rules:** `_global-rules.md` v1.0
 **Companion registers:** `_plans/_provisional-decisions.md` (PD) · `_plans/_wireframe-fixes.md` (WF) · `_plans/_review.md` (C-1…C-12, §3 conventions, §4 GD-1…GD-10)
 
 > **Reading contract.**
 > 1. Every `[G-n]` is a citation to `_global-rules.md` v1.0. This document restates a global rule body **only where the page narrows or extends it**, and in that case the delta, its rationale, and its date are named in the same sentence. Everywhere else it cites and adds the page delta only.
-> 2. Every behavior resting on a provisional decision is tagged `[PD-n · OWNER-PENDING]` **in the sentence where it appears**, including inside QA scenarios. Reversing a PD means editing only the tagged sentences and nothing else.
+> 2. Every behavior resting on a provisional decision is tagged `[PD-n · OWNER-PENDING]` **in the sentence where it appears**, including inside QA scenarios. Reversing a PD means editing only the tagged sentences and nothing else. Once the owner rules, the tag becomes `[PD-n · CONFIRMED {date}]` and the behavior stops being reversible-by-tag — on this page that is `[PD-5]` and `[PD-60]` (2026-08-03).
 > 3. Where the wireframe is stale, wrong, or missing an affordance, this spec states the **correct** behavior and names the defect (`WF-n`). The wireframe text is never specced as-is.
 > 4. IDs `[L-*]`, `[BR-n]`, `[DC-n]`, `[N-n]`, `[E-n]` are page-scoped and **never renumbered**. Merged entries keep both IDs.
 > 5. Quoted UI strings are byte-accurate to the wireframe unless marked *(spec-authored)*.
@@ -58,7 +60,7 @@ That push-not-poll property is the reason for three otherwise surprising design 
 | Bench staff and their memos speak Korean; brands are recognized faster than product names | Brand bold-prefixing applies to **both** name columns on this page — the page delta over `[G-6]` is *which surfaces* it covers, not the rule `[BR-14]` |
 | 1+1 sets arrive as one physical unit with qty 2 (the `medicube` row) | Qty mismatch at match time is **allowed**, not blocked — the difference is recorded, not litigated `[PD-65 · OWNER-PENDING]` |
 | The pool row is a yellow-highlighted block (`.row-hit`, `--hl #FFFBD6` with a `--hl-line #F59E0B` border) readable across a desk | The highlight is a spec requirement, not decoration — it is how an operator confirms at a glance that a row is unresolved `[L-1]`, `[BR-36]` |
-| The destructive **✕** sits directly beside the primary blue **Review & Match** button, both `.btn-sm` at ~28 px height | A one-click destructive action at that distance is a mis-tap hazard → a confirm dialog with a mandatory reason and a toast is required `[PD-60 · OWNER-PENDING]`, `WF-6` |
+| The destructive **✕** sits directly beside the primary blue **Review & Match** button, both `.btn-sm` at ~28 px height | A one-click destructive action at that distance is a mis-tap hazard → a confirm dialog with a mandatory reason and a toast is required `[PD-60 · CONFIRMED 2026-08-03]` (owner confirmation of `[PD-5]`); wireframe gap `WF-6` **fixed 2026-08-03** — the wireframe now ships the M2 confirm modal |
 | Nobody watches this page; items rot silently since the 2026-07-23 removal of wait-time chips | A once-daily aging digest restores the age signal without re-adding UI `[PD-61 · OWNER-PENDING]` |
 | A resolver may be interrupted mid-decision and return with a stale screen | The server revalidates every precondition at confirm; nothing is trusted from the client's snapshot `[BR-21]`, `[PD-6 · OWNER-PENDING]` |
 
@@ -75,9 +77,9 @@ That push-not-poll property is the reason for three otherwise surprising design 
 
 ### 2.1 Declared unit count (for coverage checking)
 
-- **Legend units: 7.** Dots `0 · 1 · 2 · 3 · 4 · 5` plus modal `M1`. Independently verified against the HTML: seven `.dot` elements, six `<li>` legend entries (0–5), one modal dot (`M1`).
-- **Numbering gaps: none.** Dots run 0–5 consecutively; there is no vacated number and no dot without a legend entry.
-- **Non-legend spec units: 6.** Two off-screen normative footer blocks (`[L-S1-Fa]`, `[L-S1-Fb]` — the two `<p>` paragraphs after the legend `<ol>`), three page-furniture units (`[L-F1]`…`[L-F3]`), and one spec-added modal (`[L-M2]`) that does not exist in the wireframe and is mandated by `[PD-60 · OWNER-PENDING]` / `WF-6`.
+- **Legend units: 8.** Dots `0 · 1 · 2 · 3 · 4 · 5` plus modals `M1` and `M2` (M2 added 2026-08-03 by the wireframe pass that closed `WF-6`). Independently verified against the HTML: eight `.dot` elements, six `<li>` legend entries (0–5), two modal dots (`M1`, `M2`).
+- **Numbering gaps: none.** Dots run 0–5 consecutively; there is no vacated number and no dot without a legend entry (M2 is described inside legend entry 3, mirroring how M1 is).
+- **Non-legend spec units: 5.** Two off-screen normative footer blocks (`[L-S1-Fa]`, `[L-S1-Fb]` — the two `<p>` paragraphs after the legend `<ol>`) and three page-furniture units (`[L-F1]`…`[L-F3]`). *(Until 2026-08-03 `[L-M2]` was a sixth, spec-added unit mandated by `[PD-60]` / `WF-6`; the wireframe now ships it, so it counts as a legend unit above.)*
 - **Total spec units: 13.** All 13 appear in §3.
 
 This page is **single-state**, so legend keys use the plain `[L-{n}]` form per `_review.md` §3.1. The off-screen footer paragraphs use `[L-S1-F{a|b}]` because the page's only state is `#s1` and the footer holds two distinct rule blocks.
@@ -93,7 +95,7 @@ This page is **single-state**, so legend keys use the plain `[L-{n}]` form per `
 | `[L-4]` | Brand-prefixed product naming ("Product Name" header) | Default view. Dot 4 is on the "Product Name" header cell. | §3.5 |
 | `[L-5]` | Comments hub — `💬 Comments` button + `#inbox1` dropdown ([@ Mentions] / [★ Saved] / full-text search) | Top nav bar. Dot 5 sits left of the button. Click the button to open `#inbox1`. | §3.6 |
 | `[L-M1]` | Modal "Review & Match — Unrecognized Product" (`#m-match`) | Two paths: any row's **Review & Match** button, **or** the purple wf-bar demo button labelled "Modal: Match Review (M1)". | §3.7 |
-| `[L-M2]` | Modal "Remove from list" (confirm + reason) — **spec-added, absent from the wireframe** | Not reachable in the wireframe (`WF-6`). In the admin: the row's **✕** button. | §3.8 |
+| `[L-M2]` | Modal "Remove this item from the pool?" (`#m-remove`, confirm + reason) — **wireframe-implemented 2026-08-03, closing `WF-6`** | Two paths: any row's **✕** button, **or** the purple wf-bar demo button labelled "Modal: Remove Confirm (M2)". In the admin: the row's **✕** only. | §3.8 |
 | `[L-F1]` | Toast surface (`#matchToast`, `position:fixed; top:18px; right:18px`, 4000 ms) | Fires after a match confirm. | §3.9 |
 | `[L-F2]` | Bottom count line: `Unrecognized pool · <span id="poolCountBottom">3</span> items` | Below the table. | §3.10 |
 | `[L-F3]` | Top nav bar + Comments unread badge (`.badge-n` = "3") | Always visible. | §3.11 |
@@ -104,8 +106,8 @@ This page is **single-state**, so legend keys use the plain `[L-{n}]` form per `
 
 The following exist only to make the static wireframe demonstrable and **must not be built**:
 
-- The purple `.wf-bar` (title `WMS 2.0 · Unrecognized Tracking Wireframe`, hint `v2 — simplified around the unrecognized pool · purple numbers = new/changed annotations`).
-- The wf-bar button `Modal: Match Review (M1)` — a demo shortcut. In the admin, M1 opens only from a row.
+- The purple `.wf-bar` (title `WMS 2.0 · Unrecognized Tracking Wireframe`, hint `v3 — ✕ removal now confirms with a reason (2026-08-03) · purple numbers = new/changed annotations`).
+- The wf-bar buttons `Modal: Match Review (M1)` and `Modal: Remove Confirm (M2)` — demo shortcuts. In the admin, M1 and M2 open only from a row.
 - The `Hide annotations` toggle (`#annoToggle`) and all `.dot` / `.legend` markup.
 
 ### 2.4 Known wireframe demo limitations (QA must NOT file these as bugs)
@@ -113,7 +115,7 @@ The following exist only to make the static wireframe demonstrable and **must no
 Tag these `[ADMIN]` when asserting the correct behavior; the current behavior is asserted separately as `[WF]` in block **WFQ** (§8.15) so that an automated agent never reports a false failure.
 
 1. **`finishMatch()` is hard-wired to row 1.** Clicking **Review & Match** on any of the three rows opens `#m-match` populated with row 1's COSRX item, and confirming removes `#poolrow1` regardless of which row was clicked. The admin must open M1 **scoped to the clicked row** and remove **that** row.
-2. **`.xdel` removes the row immediately with no dialog and no toast.** This is the `WF-6` gap, not the specified behavior — see `[L-M2]` and `[PD-60 · OWNER-PENDING]`.
+2. **RESOLVED 2026-08-03.** ~~`.xdel` removes the row immediately with no dialog and no toast.~~ The `WF-6` gap was closed by the wireframe pass: `.xdel` now opens the M2 confirm modal, and removal happens only on its confirm — see `[L-M2]` and `[PD-60 · CONFIRMED 2026-08-03]`.
 3. **Candidate order numbers are styled blue and bold but are not anchors.** The file contains **zero** `<a>` elements. `[G-12]` requires real links — see `[BR-37]` and defect **WF-NEW-B**.
 4. **The Comments hub dropdown has no search input** even though `[L-5]`'s legend text mandates "search across all comments". The 2026-07-29 global comment-search rollout (commit `8e5abeb`) never reached this page's markup — see defect **WF-NEW-A**.
 5. **No empty-pool state is drawn.** Removing all three rows leaves an empty `<tbody>` and no guidance text.
@@ -121,19 +123,21 @@ Tag these `[ADMIN]` when asserting the correct behavior; the current behavior is
 7. **`finishMatch()` decrements only if `#poolrow1` still exists.** If row 1 was already removed with `.xdel`, a subsequent `Match to this product` click still shows `#matchToast` but leaves the counters unchanged. In the admin, a confirmed match always decrements for the row it actually closed.
 8. **`#inbox1` does not close on an outside click or on `Esc`.** The only handler is the toggle on the `💬 Comments` button. The admin must close it on both `[BR-40]`.
 9. **`#poolrow1` is the only row carrying an `id`.** The admin assigns `id="poolrow-{pool_item_id}"` to every row so deep links can target one.
-10. **`.xdel` is not double-click safe: two clicks remove one row but decrement both counters twice.** The handler is `b.closest('tr').remove(); poolDec();` with no guard. After the first click the `<tr>` is detached, but the button is still its descendant, so `b.closest('tr')` still resolves, `.remove()` silently no-ops, and `poolDec()` runs a second time — counters go `3 → 2 → 1` while **two** rows remain rendered, breaking `[BR-33]`'s three-way invariant inside the wireframe. This is defect **WF-NEW-D**. Note the asymmetry that makes it easy to miss: the sibling handler `finishMatch()` *does* guard (`const row=document.getElementById('poolrow1'); if(row){…}`), which is the only reason QA-NEG-01 is safe to run as `[WF]` while QA-NEG-03 is not. Current behavior is asserted by QA-WFQ-07; the correct behavior is asserted by QA-NEG-03 `[ADMIN]`.
+10. **RESOLVED 2026-08-03 (defect `WF-NEW-D`).** ~~`.xdel` was not double-click safe: two clicks removed one row but decremented both counters twice~~ — the unguarded `b.closest('tr').remove(); poolDec();` handler was replaced in the wireframe pass. `.xdel` now only opens M2 (a second click is a no-op while the overlay is open), and the M2 confirm handler mirrors `finishMatch()`'s guard: it captures the row first and calls `poolDec()` only when the row was actually attached (`rmRow.isConnected`), so counters always equal rendered rows `[BR-33]`, `[BR-41]`. Fixed behavior is asserted by QA-WFQ-07 (rewritten); the server-side idempotency half remains QA-NEG-03 `[ADMIN]`.
 
 ### 2.5 New wireframe defects found while writing this spec
 
 Not present in `_wireframe-fixes.md` (WF-1…WF-14) when this spec was first written; filed here for the wireframe-edit pass. **WF-NEW-D and WF-NEW-E have since been appended to `_wireframe-fixes.md` §B so the wireframe pass is driven off the register, not off this spec.** Deploy rule: any wireframe edit goes out through `/wf-deploy tracking-missing`, never by editing the published copy.
 
+> **2026-08-03 wireframe pass applied (local edit, deploy pending).** The register-backed items — `WF-6` (M2 confirm modal), `WF-NEW-D` (removal guard), `WF-NEW-E` (canonical hub pane headers), and `WF-10` + `WF-NEW-C` (dead v1 CSS/JS deleted; `.toast.err` retained, `.mtextarea` retained because M2's memo field now uses it, `.tag-jit` retained for M1's Channel badges) — are now **fixed in the local wireframe** and verified by an automated Playwright run (58 assertions, 0 pageerror). **`WF-NEW-A` (hub search input) and `WF-NEW-B` (order-number anchors) remain open** — they are not register §B rows and were out of that pass's scope. The three-channel deploy (`/wf-deploy tracking-missing`) has not run yet.
+
 > **Register-citation warning.** `_review.md` §2a's tracking-missing Notes cell cites this page's dead-code cleanup as **`WF-9`**. That is wrong: `WF-9` is *ready-to-outbound — picking list modal has no sample-set lines*. The correct entry for this page's v1 CSS/JS leftovers is **`WF-10`** (confirmed against `_wireframe-fixes.md`; raised as m3b finding 5.3). Every citation in **this** document uses `WF-10`. A wireframe-edit pass driven off `_review.md` rather than off `_wireframe-fixes.md` will search the wrong file and leave the real leftovers in place.
 
 - **[WF-NEW-A] — Comments hub is missing the full-text search input.** File: `wms2/tracking-missing/index.html`, `#inbox1`. Legend 5 and `[G-7]` both require search across all comments; the markup ships only the two tabs. Every other page carrying the hub got the search input in commit `8e5abeb` (2026-07-29). Fix: add the search input to `#inbox1`.
 - **[WF-NEW-B] — Candidate order numbers are not links.** Verified: the file contains **0** `<a>` elements. Selectors: the `Suspected Orders` cells in all three pool rows, and the `Order` column in `#m-match`. `[G-12]` states cross-page references are real links. Fix: wrap in an anchor to the order.
-- **[WF-NEW-D] — `.xdel` double-click double-decrements both counters.** File: `wms2/tracking-missing/index.html`, lines 400–404. `document.querySelectorAll('.xdel').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); b.closest('tr').remove(); poolDec();}))` — no guard, no debounce. A second click within the debounce window resolves `b.closest('tr')` on the already-detached row, `.remove()` no-ops, and `poolDec()` fires again: one row removed, counters decremented twice (§2.4.10). `[G-9]` requires double-click safety and `[BR-33]`/`[BR-41]` require the counters to track rendered rows. Fix: mirror `finishMatch()`'s guard — capture the row first and only call `poolDec()` when the row was actually attached. **Also filed in `_wireframe-fixes.md` §B.**
-- **[WF-NEW-E] — Comments-hub pane headers diverge from the corpus-canonical strings.** File: `wms2/tracking-missing/index.html`, `#inbox1` `.paneheader` (lines 227 and 234). This page ships `Comments mentioning me` and `Saved comments`; four of the eight pages ship `Comments mentioning me · Click to open the order` and `Saved comments · Click to open the order`. `[G-7]` states the hub is the same on every screen but does not yet publish the pane strings as byte-exact contract, so the divergence is invisible to a single-page reader and is asserted byte-exactly by six different QA suites (cross-page defect m3a D7). Fix: adopt the four-page-majority strings here, and publish the six hub strings in `[G-7]`. Until `[G-7]` carries them, §3.6 states the admin string and QA asserts both tiers. **Also filed in `_wireframe-fixes.md` §B.**
-- **[WF-NEW-C] — Dead CSS beyond `WF-10`'s list.** `WF-10` names `.trk`, `.shelf`, `.wait`, `.slack-pill`, `.picava`, `.picname`, `.cntchip`, `.logsec` and the trk-input script block. Additionally unused in the rendered DOM: `.ordercard`, `.seg`, `.bulkbar`, `.cpanel`, `.logtbl`, `.act-in/.act-out/.act-cancel`, `.auto`, `.mtextarea`, `.qty`, `.qty-warn`, `.tag-pending`, `.tag-inbounded`, `.tag-exist`, `.tag-smartbuy`, `.tag-wholesale`, `.tag-partnership`, `.route-note`, `.row-exist`, `.thumb`, `.grp-gap`, `.status`, `.st-processing/.st-prepare/.st-hold/.st-missing`, `.chip-return`, `.comment-btn`, `.btn-green-line`, `.btn-red-line`, `.btn-gray`, `.bar-under`, `.modal .qrow`, `.inboxdd .empty`. **Do not delete `.toast.err`** — it is unused in the wireframe but is the specified failure variant (§3.9). Fix: delete together with `WF-10`.
+- **[WF-NEW-D] — FIXED 2026-08-03.** `.xdel` double-click double-decremented both counters (unguarded `b.closest('tr').remove(); poolDec();`, §2.4.10). The wireframe pass replaced the handler: `.xdel` now opens M2, and the confirm handler captures the row and calls `poolDec()` only when `rmRow.isConnected` — the `finishMatch()` guard, mirrored as the register prescribed. **Also filed in `_wireframe-fixes.md` §B.**
+- **[WF-NEW-E] — FIXED 2026-08-03 (this page's half).** The `#inbox1` pane headers now ship the four-page-majority strings `Comments mentioning me · Click to open the order` / `Saved comments · Click to open the order`; `Mark all read` and `Unstar to remove from the list` were already canonical and are unchanged. QA-CMT-03 / QA-CMT-05 are re-baselined to the canonical strings and §3.6's `[WF]`-vs-`[ADMIN]` table is collapsed. The corpus-wide half — publishing the six hub strings in `[G-7]` — remains open (cross-page defect m3a D7). **Also filed in `_wireframe-fixes.md` §B.**
+- **[WF-NEW-C] — FIXED 2026-08-03, together with `WF-10`** (both deleted in the wireframe pass; `.toast.err` kept as specified, and `.mtextarea` was removed from the dead list because M2's memo field now uses it). Original filing: `WF-10` names `.trk`, `.shelf`, `.wait`, `.slack-pill`, `.picava`, `.picname`, `.cntchip`, `.logsec` and the trk-input script block. Additionally unused in the rendered DOM: `.ordercard`, `.seg`, `.bulkbar`, `.cpanel`, `.logtbl`, `.act-in/.act-out/.act-cancel`, `.auto`, `.mtextarea`, `.qty`, `.qty-warn`, `.tag-pending`, `.tag-inbounded`, `.tag-exist`, `.tag-smartbuy`, `.tag-wholesale`, `.tag-partnership`, `.route-note`, `.row-exist`, `.thumb`, `.grp-gap`, `.status`, `.st-processing/.st-prepare/.st-hold/.st-missing`, `.chip-return`, `.comment-btn`, `.btn-green-line`, `.btn-red-line`, `.btn-gray`, `.bar-under`, `.modal .qrow`, `.inboxdd .empty`. **Do not delete `.toast.err`** — it is unused in the wireframe but is the specified failure variant (§3.9). Fix: delete together with `WF-10`.
 
 ### 2.6 Mandatory-inclusion map (the 12 owner-flagged items)
 
@@ -310,7 +314,7 @@ Two independent controls in one `white-space:nowrap` cell.
 - **Purpose:** cleanup for **mis-registrations**, **no-action items**, and the **unrequested-inbound handoff** step `[BR-8]`, `[BR-11]`.
 - **Enabled condition:** always enabled while the item is `OPEN`.
 - **Trigger:** click, or `Enter`/`Space` when focused.
-- **Specified effect (differs from the wireframe):** opens the confirm modal `[L-M2]` — it does **not** remove the row directly. The wireframe's immediate removal is gap `WF-6`; `[G-2]` with `[GD-5]`, `[G-8]`, and the `[G-11]` reason precedent all point the same way `[PD-60 · OWNER-PENDING]`, `[PD-5 · OWNER-PENDING]`.
+- **Effect (wireframe and spec agree since 2026-08-03):** opens the confirm modal `[L-M2]` — it does **not** remove the row directly. The wireframe's former immediate removal was gap `WF-6`, closed by the 2026-08-03 wireframe pass; `[G-2]` with `[GD-5]`, `[G-8]`, and the `[G-11]` reason precedent all pointed the same way, and the owner confirmed the rule `[PD-60 · CONFIRMED 2026-08-03]`, `[PD-5 · CONFIRMED 2026-08-03]`.
 - **Removal is always a soft delete.** Status `OPEN → REMOVED`; the full row snapshot is persisted permanently `[DC-14]`. Nothing on this page is ever hard-deleted `[G-8]`.
 - **Idempotency:** double-click is debounced client-side and rejected server-side by an idempotency key `[G-9]`; the suppressed second attempt is logged `[DC-16]`.
 
@@ -351,16 +355,16 @@ Cited by reference to `[G-7]`; only page deltas are specified here.
 
 **Tabs.** `@ Mentions` (with an inline count badge, `3` in the wireframe) and `★ Saved`.
 
-**Pane headers — page delta pending a `[G-7]` amendment (cross-page defect m3a D7).** `[G-7]` states the hub is identical on all eight screens but does not yet publish the pane strings as byte-exact contract, and the eight wireframes have drifted. The corpus-canonical strings — the four-page majority (`order-detail`, `order-management`, `ready-to-outbound`, `stock-status`) — are the ones the admin must ship:
+**Pane headers — canonical since the 2026-08-03 wireframe pass (`WF-NEW-E` fixed on this page).** The wireframe now ships the corpus-canonical four-page-majority strings, so the `[WF]` and `[ADMIN]` tiers assert the same values:
 
-| Element | Wireframe on this page (current, `[WF]`) | Admin string (canonical, `[ADMIN]`) |
-|---|---|---|
-| Mentions pane header | `Comments mentioning me` | `Comments mentioning me · Click to open the order` |
-| Saved pane header | `Saved comments` | `Saved comments · Click to open the order` |
-| Unstar hint | `Unstar to remove from the list` | `Unstar to remove from the list` — **already canonical, do not change** |
-| Read-all action | `Mark all read` | `Mark all read` — **already canonical, do not change** |
+| Element | String (wireframe = admin) |
+|---|---|
+| Mentions pane header | `Comments mentioning me · Click to open the order` |
+| Saved pane header | `Saved comments · Click to open the order` |
+| Unstar hint | `Unstar to remove from the list` |
+| Read-all action | `Mark all read` |
 
-The two divergent headers are wireframe defect `WF-NEW-E`. QA asserts the current strings under `[WF]` (QA-CMT-03, QA-CMT-05) and the canonical strings under `[ADMIN]` (QA-CMT-15) so neither tier produces a false failure. When `[G-7]` is amended to publish the six hub strings, that text supersedes this table and this block is deleted. `Mark all read` is right-aligned and blue.
+QA-CMT-03 / QA-CMT-05 (`[WF]`) are re-baselined to these strings and QA-CMT-15 (`[ADMIN]`) is unchanged. The corpus-wide half of `WF-NEW-E` — publishing the six hub strings in `[G-7]` as byte-exact contract so the other divergent pages can converge — remains open (cross-page defect m3a D7); when that amendment lands, the global text supersedes this table. `Mark all read` is right-aligned and blue.
 
 **Badge semantics.** `.badge-n` on the button = **unread mention count**, not item count. The wireframe correctly shows badge `3` against 4 rendered mention items (three `.unread`, one read) — intended, not a defect. Counts above 99 render `99+` while the persisted count stays exact `[E-55]`.
 
@@ -432,36 +436,38 @@ The memo fragment is never hidden, collapsed, or truncated — it is the registr
 
 None mutates the pool item, posts a comment, or emits any event beyond the already-persisted `[DC-7]` open snapshot `[N-7]`. On close, focus returns to the `Review & Match` button that opened the modal `[BR-40]`, `[E-62]`.
 
-### 3.8 `[L-M2]` — Modal "Remove from list" *(spec-added; not in the wireframe)*
+### 3.8 `[L-M2]` — Modal "Remove this item from the pool?" (`#m-remove`)
 
-Mandated by `[PD-60 · OWNER-PENDING]` and `[PD-5 · OWNER-PENDING]`; wireframe gap `WF-6`. All copy in this section is **spec-authored** and must be tagged `[ADMIN]` in QA.
+Mandated by `[PD-60 · CONFIRMED 2026-08-03]` and `[PD-5 · CONFIRMED 2026-08-03]` (owner confirmation: **every** removal/deletion gets a confirm dialog and a toast); former wireframe gap `WF-6`, **closed 2026-08-03** — the wireframe now ships this modal, and the quoted copy below is byte-accurate to it. The reason list is the owner-confirmed enum (`Registered by mistake` / `No action needed` / `Other` + memo) **plus** `Routed to inbound request`, retained so `[PD-64 · OWNER-PENDING]`'s structured Inbound No. capture and the `[BR-11]` unrequested-inbound route stay mountable.
 
-**Trigger.** The row's `✕`.
+**Trigger.** The row's `✕` (in the wireframe, also the wf-bar demo button `Modal: Remove Confirm (M2)` — chrome, §2.3).
 
-**Header.** `Remove from list`.
+**Header.** `Remove this item from the pool?` *(owner-confirmed string)*.
 
 **Body.**
-1. A one-line item summary identical in field order to `[L-M1]`'s card: brand-bold product name, then `Barcode {n} · Tracking {n} · {qty} unit(s) · Registered by: {name} ({center}) {MM-DD HH:mm}`. The memo, when present, is shown in full.
-2. **Reason** — a required `<select>`, default unselected (`Select a reason…`). Options, exactly and in this order:
-   - `Mis-registration`
+1. An item summary card (`#rmSummary`, yellow `--hl` / `--hl-line`, mirroring `[L-M1]`'s card) scoped to the clicked row: brand-bold product name, then a `.mut` line `Tracking {n} · Qty {n} · Registered by: {name} (Center) {MM-DD HH:mm}`; the `· Memo "{text}"` fragment is appended when a memo exists and shown in full, omitted when the memo is `–`.
+2. **Reason** — a required `<select>` (`#rmReason`), default unselected (`Select a reason…`). Options, exactly and in this order:
+   - `Registered by mistake`
    - `Routed to inbound request`
    - `No action needed`
-3. **Inbound No.** — a text input that appears **only** when reason == `Routed to inbound request`. Format `YYYYMMDDNNNN` (the Inbound Request auto-numbering scheme). Validated for format when filled. It is **not** mandatory and its absence does **not** block removal `[PD-64 · OWNER-PENDING]`.
-4. **Memo** — optional free text, persisted with the removal event.
+   - `Other`
+3. **Inbound No.** — a text input (`#rmInbound`, placeholder `YYYYMMDDNNNN`) that appears **only** when reason == `Routed to inbound request`. Format `YYYYMMDDNNNN` (the Inbound Request auto-numbering scheme). Validated for format when filled. It is **not** mandatory and its absence does **not** block removal `[PD-64 · OWNER-PENDING]`.
+4. **Memo** — free text (`#rmMemo`, `.mtextarea`), persisted with the removal event. Optional for every reason **except `Other`, where it is required** (the owner enum is "Other + memo": an `Other` removal without a stated why would defeat `[G-8]`'s purpose).
 
-**Footer.** `Cancel` (`btn btn-line btn-sm`) · `Remove from list` (`btn`, red, destructive styling).
+**Footer.** `Cancel` (`btn btn-line btn-sm`) · `Remove from pool` (`#rmConfirm`, `btn btn-red btn-sm`, destructive styling).
 
-**Validation.** `Remove from list` stays disabled until a reason is selected. Selecting `Routed to inbound request` and typing a malformed Inbound No. shows inline `Inbound No. must be 12 digits (YYYYMMDDNNNN)` and disables the button until corrected or cleared. **Existence of the referenced request is not a gate** `[E-35]`, `[E-70]`.
+**Validation.** `Remove from pool` stays disabled until a reason is selected. Selecting `Routed to inbound request` and typing a malformed Inbound No. shows inline `Inbound No. must be 12 digits (YYYYMMDDNNNN)` and disables the button until corrected or cleared. Selecting `Other` disables the button until the memo is non-empty. **Existence of the referenced request is not a gate** `[E-35]`, `[E-70]`.
 
 **On confirm.**
-- Server: soft-delete — status `OPEN → REMOVED`, persisting actor, timestamp, reason, optional Inbound No., optional memo, and the **full row snapshot** `[DC-14]`, `[G-8]`.
+- Server: soft-delete — status `OPEN → REMOVED`, persisting actor, timestamp, reason, optional Inbound No., memo, and the **full row snapshot** `[DC-14]`, `[G-8]`.
 - When an Inbound No. was supplied, a reciprocal link is written on the inbound request so the Inbound Request page can show provenance `[DC-15]`.
-- Client: modal closes, the row is removed, both counts decrement, the remaining rows' candidate cells recompute `[BR-38]`, and a **green toast** fires *(spec-authored)*: `✓ Removed from pool · {product}` with sub-line `Reason: {reason} · Tracking {trk}`.
+- **A comment is auto-posted on the pool item entity** (`source=system`, `[G-7]` — pool items are first-class commentable): `Removed from pool — {reason}` plus the Inbound No. and memo when present `[DC-29]` *(spec-authored body)*. It carries **no @mention**, so no Slack dispatch fires — consistent with §6.1's "no Slack route for removals". The removal is thereby readable in the Comments hub without querying events.
+- Client: modal closes, the row is removed, both counts decrement, the remaining rows' candidate cells recompute `[BR-38]`, and a **green toast** fires `[L-F1]`: `✓ Removed from pool · {product}` with sub-line `Reason: {reason} · Tracking {trk}` *(wireframe-implemented; the lead string `✓ Removed from pool` is the owner-confirmed copy)*.
 - **No full-page refresh** `[G-2]`.
-- Idempotency key = `pool_item_id + "remove"`; duplicates suppressed and logged `[DC-16]`, `[G-9]`.
+- Idempotency key = `pool_item_id + "remove"`; duplicates suppressed and logged `[DC-16]`, `[G-9]`. The wireframe's confirm handler carries the client half of this guard: it decrements only when the captured row was still attached (`WF-NEW-D` fix, §2.4.10).
 - Comments already attached to the item survive the soft delete `[E-60]`.
 
-**On cancel.** Zero side effects; declared non-event `[N-6]`. Focus returns to the `✕` that opened it `[BR-40]`.
+**On cancel.** Zero side effects; declared non-event `[N-6]`. Focus returns to the `✕` that opened it `[BR-40]`. All three wireframe close paths (`Cancel`, header `✕`, overlay backdrop) leave the pool and both counters untouched; the admin adds `Esc` (§3.14).
 
 **No hard guard on ordering.** Removing an item whose memo says `suspected inbound stock` before the inbound request actually exists is **not** blocked. The expected order of operations (create request → enter invoice no. → remove → rescan) stays procedural, and the structured Inbound No. field is what makes an out-of-order removal auditable and recoverable `[PD-64 · OWNER-PENDING]`, `[E-17]`.
 
@@ -474,7 +480,7 @@ Mandated by `[PD-60 · OWNER-PENDING]` and `[PD-5 · OWNER-PENDING]`; wireframe 
   - line 1: `✓ Matched to Order 414230 · COSRX Snail 96`
   - line 2: `Tracking 10323100841207 registered · removed from pool · @Miranti notified via Slack`
   - Admin form: `✓ Matched to Order {order_no} · {short product name}` / `Tracking {tracking_no} registered · removed from pool · @{registrant} notified via Slack`.
-- **Removal success text** *(spec-authored, §3.8)*.
+- **Removal success text** (§3.8, wireframe-implemented 2026-08-03): line 1 `✓ Removed from pool · {product}`, line 2 `Reason: {reason} · Tracking {tracking_no}`. In the wireframe both actions share the single `#matchToast` element and the script writes the per-action content before showing it; the static markup keeps the match strings as its baseline.
 - **Duration:** 4000 ms then hidden (`setTimeout` in `finishMatch()`). Auto-dismiss is not click-blocking — the toast is `position:fixed` in a corner and never overlays the table's Action column `[E-23]`.
 - **Stacking:** two confirming actions within the window must not silently overwrite each other mid-read; both texts must be readable. Stack-vs-queue is a developer decision (§9.2 D-4) `[E-22]`.
 - **Announcement:** the toast region is an ARIA live region so a keyboard-only operator is not required to watch the corner *(spec-authored page delta on `[G-2]`)* `[E-62]`.
@@ -559,7 +565,7 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 | **BR-6** | **Registration auto-notifies `#unrecognized-tracking` and @mentions the suspected PICs.** No human triggers this notification. | The pool works only because it is push-driven; a notification anyone has to remember to send is a notification that does not happen. | 2026-07-23 (inversion); channel CONFIRMED 2026-08-03 |
 | **BR-7** | **Match confirm auto-posts a comment on the order @mentioning the REGISTRANT** (not the resolver, not the PIC). | Closes the loop back to the warehouse bench: the person holding the parcel learns it is now claimable. | 2026-08-03 |
 | **BR-8** | **✕ removal is a soft delete.** Status becomes `REMOVED`; the full row snapshot and the actor are persisted permanently. Nothing on this page is ever hard-deleted. | The pool view is reconstructible from events `[G-8]`; mis-registrations are exactly the case where the record matters most. | button 2026-07-23; doctrine 2026-08-03 |
-| **BR-9** | **Removal requires a confirm dialog, a mandatory reason, and a success toast** `[PD-60 · OWNER-PENDING]`. | `[G-2]` with `[GD-5]`, plus `[G-8]`'s "why" requirement and the `[G-11]` reason precedent. The button sits beside the primary action at speed (§1.4). | 2026-08-03 (adjudication C-6) |
+| **BR-9** | **Removal requires a confirm dialog, a mandatory reason, and a success toast** `[PD-60 · CONFIRMED 2026-08-03]`, `[PD-5 · CONFIRMED 2026-08-03]`. Confirmed reason labels: `Registered by mistake` / `Routed to inbound request` / `No action needed` / `Other` (+ mandatory memo for `Other`). Removal also auto-posts a comment on the pool item `[DC-29]`. | `[G-2]` with `[GD-5]`, plus `[G-8]`'s "why" requirement and the `[G-11]` reason precedent. The button sits beside the primary action at speed (§1.4). | 2026-08-03 (adjudication C-6) → **owner-confirmed + wireframe-implemented 2026-08-03** |
 | **BR-10** | **Reason `Routed to inbound request` captures a structured Inbound No.** on the removal event; it is prompted, not enforced `[PD-64 · OWNER-PENDING]`. | The memo convention is unqueryable. A structured link makes the recovery loop auditable without a hard guard that would strand out-of-order work. | 2026-08-03 |
 | **BR-11** | **Unrequested inbound shipments reuse this pool.** A separate temporary registration path was rejected by the owner. | One holding area, one set of eyes. A second path would duplicate the notification, the audit trail, and the failure modes. | 2026-08-02 |
 | **BR-12** | **Order No is the Coupang purchase order number** (`12101316464794` format) and is **normally `–`.** A present value is display-only context and never affects candidate computation. | Lookup-matched items are resolved upstream and never reach the pool; a number that reached the pool is by definition one the lookup rejected, so trusting it would re-import the error. | 2026-07-23 |
@@ -606,9 +612,9 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 
 **Baseline fields on every event** (omitted from the rows below to avoid repetition): `event_id`, `event_name`, `occurred_at` (UTC, rendered KST), `actor_id` + `actor_display_name` (or `system`), `source_screen` (`tracking-missing` | `view-orders` | `system`), `pool_item_id`, `idempotency_key` where the event is a confirming action, `request_id` for tracing.
 
-### 5.1 Persisted events (28)
+### 5.1 Persisted events (29)
 
-`[DC-27]` and `[DC-28]` are grouped by meaning rather than by number; the numbering is stable and never renumbered.
+`[DC-27]`, `[DC-28]` and `[DC-29]` are grouped by meaning rather than by number; the numbering is stable and never renumbered.
 
 > **Event-name scope note (cross-page defect m3a D14).** The ten canonical cross-page names fixed by `_global-rules.md` are used byte-identically here: `comment.posted`, `comment.mention_notified`, `comment.starred` / `comment.unstarred`, `comment.read` / `comment.mark_all_read`, `comment.auto_posted`. Every **other** name below is a page-scoped `entity.action` name per `_review.md` §3.3. Four of them express concepts that other specs also name, with different strings, and **no canonical name exists for those concepts yet**:
 >
@@ -654,9 +660,10 @@ Every rule carries a rationale and a decision date. Reversals appear in §10. Gl
 
 | ID | Event name | Actor | Trigger | Old → New / payload | UI-visible? |
 |---|---|---|---|---|---|
-| **DC-14** | `unrecognized_item.removed` | Operator | Confirm in `[L-M2]` | `status: OPEN → REMOVED`; `{reason: mis_registration \| routed_to_inbound_request \| no_action_needed [PD-60 · OWNER-PENDING], inbound_no (nullable) [PD-64 · OWNER-PENDING], memo (nullable), full_row_snapshot{all 12 column values + candidate set at removal}, removed_by, removed_at}` | Yes — row disappears + toast |
+| **DC-14** | `unrecognized_item.removed` | Operator | Confirm in `[L-M2]` | `status: OPEN → REMOVED`; `{reason: registered_by_mistake \| routed_to_inbound_request \| no_action_needed \| other [PD-60 · CONFIRMED 2026-08-03], inbound_no (nullable) [PD-64 · OWNER-PENDING], memo (nullable; required when reason = other), full_row_snapshot{all 12 column values + candidate set at removal}, removed_by, removed_at}` | Yes — row disappears + toast |
 | **DC-15** | `inbound_request.pool_linkback` | System | `[DC-14]` with `reason = routed_to_inbound_request` and a supplied Inbound No. | On the **inbound request** entity: `{inbound_no, pool_item_id, product_id, qty, tracking_no, linked_at, resolves: bool}` — the reciprocal record that lets the Inbound Request page show provenance. `resolves:false` when the Inbound No. does not exist or covers a different product `[E-70]` | Yes — on the Inbound Request page |
 | **DC-16** | `unrecognized_item.removal_duplicate_suppressed` | System | A second removal confirm under a consumed idempotency key | `{idempotency_key, attempted_by, attempted_at, original_event_id}` | **Silent** `[G-9]`, `[E-18]` |
+| **DC-29** | `comment.auto_posted` *(canonical)* | System on behalf of the operator, `source = system` | Confirm in `[L-M2]`, immediately after `[DC-14]` (added by the 2026-08-03 owner confirmation of `[PD-5]`) | `{entity_type: unrecognized_item, entity_id: pool_item_id, body: "Removed from pool — {reason}" + optional " · Inbound No. {n}" + optional " · {memo}" (spec-authored), mentions: [] , backlink: removal_event_id}` — **no @mention**, so no `[DC-11]` dispatch fires (§6.1: no Slack route for removals) | Yes — the pool item's comments (hub entity label `Unrecognized pool`) |
 
 #### Group E — Cross-page closure
 
@@ -741,7 +748,7 @@ Payload fields are verbatim from the routing table in `_global-rules.md` (all ro
 
 **Explicitly NOT this page's routes:**
 - `#wholesale-ops` and `#partnership-kr` — the morning no-tracking checks belong to the Inbound Request page.
-- **No Slack route exists for removals** `[DC-14]`. Removing a mis-registration is a cleanup action, not an event anyone needs pushed; creating a channel for it would produce an unowned alert stream. The record lives in the audit trail.
+- **No Slack route exists for removals** `[DC-14]`. Removing a mis-registration is a cleanup action, not an event anyone needs pushed; creating a channel for it would produce an unowned alert stream. The record lives in the audit trail — and, since the 2026-08-03 `[PD-5]` confirmation, in a mention-free auto-comment on the pool item `[DC-29]`, which is a hub-readable record, not a Slack dispatch.
 - Closing confirmations do not route here, and Closing's "unknown order" warning never produces a `#unrecognized-tracking` message `[BR-32]`.
 
 **Failure handling.** Row 1 firing is **not** part of the intake transaction: if Slack is down the pool row still exists and is still resolvable from the page `[PD-4 · OWNER-PENDING]`, `[E-39]`. The same holds for rows 2–4. Failures are persisted `[DC-4]` / `[DC-11]` / `[DC-19]`, retried `[DC-24]`, and dead-lettered when the budget is exhausted `[DC-28]`, `[BR-42]`. Retry policy is a developer decision.
@@ -832,7 +839,7 @@ IDs are page-scoped and stable. `[E-1]`…`[E-31]` preserve the Lens-B plan numb
 
 | ID | Case | Expected behavior |
 |---|---|---|
-| **E-16** | Accidental `✕` tap | Prevented by the confirm dialog `[L-M2]` with a mandatory reason `[PD-60 · OWNER-PENDING]`. **The wireframe today removes immediately with no dialog and no toast** — gap `WF-6`; QA asserts current behavior under `[WF]` and specified behavior under `[ADMIN]`, and files neither as a bug. In every case the removal event captures the **full row snapshot** `[DC-14]`, `[G-8]` |
+| **E-16** | Accidental `✕` tap | Prevented by the confirm dialog `[L-M2]` with a mandatory reason `[PD-60 · CONFIRMED 2026-08-03]`. **The wireframe ships the dialog since the 2026-08-03 pass that closed `WF-6`** — the `[WF]` tier now asserts the modal chain directly (QA-XDEL-01…03, QA-WFQ-03). In every case the removal event captures the **full row snapshot** `[DC-14]`, `[G-8]` |
 | **E-17** | Unrequested-inbound route — `✕` pressed **before** the inbound request and invoice number exist | **Allowed, not blocked.** The order of operations stays procedural `[PD-64 · OWNER-PENDING]`. The removal is soft, so the item is recoverable from `[DC-14]`; a later correction is a comment on the inbound request `[BR-27]`. No hard guard is added |
 | **E-18** | `✕` on a row another user has just matched | Mirror of `[E-8]`: server rejects, the row disappears on refresh, counts stay consistent. A duplicate removal under a consumed key is suppressed and logged `[DC-16]` |
 | **E-35** | Removal reason `Routed to inbound request` with a non-existent, malformed, or already-INBOUNDED Inbound No. | Format is validated inline (`YYYYMMDDNNNN`). **Existence is not a hard gate:** a malformed value blocks the button; a well-formed but unknown value is accepted and recorded with `[DC-15]` `resolves:false`. An already-INBOUNDED request is accepted too — adding tracking numbers to it is separately blocked on the Inbound Request page `[PD-85 · OWNER-PENDING]`, so this page must not pretend the link resolved |
@@ -909,9 +916,9 @@ IDs are page-scoped and stable. `[E-1]`…`[E-31]` preserve the Lens-B plan numb
 
 **Reset procedure for [WF] runs.** The wireframe holds no state. **Reload the page** to restore the baseline. Every `[WF]` scenario assumes the baseline below unless it explicitly continues a previous one.
 
-**Baseline (post-reload).** `#poolCount` reads `3`; `#poolCountBottom` reads `3`; three `.row-hit` rows exist; the first is `#poolrow1`; `#m-match` does not have class `open`; `#inbox1` does not have class `open`; `#matchToast` has `display:none`; annotations are visible.
+**Baseline (post-reload).** `#poolCount` reads `3`; `#poolCountBottom` reads `3`; three `.row-hit` rows exist; the first is `#poolrow1`; `#m-match` does not have class `open`; `#m-remove` does not have class `open`; `#inbox1` does not have class `open`; `#matchToast` has `display:none`; annotations are visible.
 
-**Selector conventions.** IDs are used verbatim (`#poolCount`, `#poolCountBottom`, `#poolrow1`, `#m-match`, `#matchToast`, `#inbox1`, `#annoToggle`). Buttons are addressed by exact accessible text where possible (`Review & Match`, `Match to this product`, `Cancel`, `Mark all read`) and by class where the label is a glyph (`.xdel`, `.star`, `.x`).
+**Selector conventions.** IDs are used verbatim (`#poolCount`, `#poolCountBottom`, `#poolrow1`, `#m-match`, `#m-remove`, `#rmSummary`, `#rmReason`, `#rmInbound`, `#rmInboundErr`, `#rmMemo`, `#rmConfirm`, `#matchToast`, `#inbox1`, `#annoToggle`). Buttons are addressed by exact accessible text where possible (`Review & Match`, `Match to this product`, `Cancel`, `Remove from pool`, `Mark all read`) and by class where the label is a glyph (`.xdel`, `.star`, `.x`).
 
 Six mechanical rules that a text assertion in this section depends on. They apply to **every** scenario below unless the scenario says otherwise:
 
@@ -922,7 +929,7 @@ Six mechanical rules that a text assertion in this section depends on. They appl
 5. **"Exactly" means the named node's own text**, not its subtree, whenever the scenario says so explicitly (e.g. QA-M1-01's leading text node). Where a scenario says "contains", containment is asserted.
 6. **Event-listener assertions need a CDP probe.** Any clause of the form "no click handler is bound" is unverifiable from the DOM; run `DOMDebugger.getEventListeners` over the named elements. Where CDP is unavailable, assert only the observable half the scenario names and record the listener clause as not-run — never as FAIL.
 
-**Totals: 168 scenarios — 66 [WF], 102 [ADMIN]. Negative scenarios: 61 (36.3%), above the 25% floor.** Of these, **one** (QA-VAL-10) is `BLOCKED` and carries no verdict; it is counted inside the 168 and inside the 102 `[ADMIN]`.
+**Totals: 168 scenarios — 66 [WF], 102 [ADMIN]. Negative scenarios: 61 (36.3%), above the 25% floor.** Of these, **one** (QA-VAL-10) is `BLOCKED` and carries no verdict; it is counted inside the 168 and inside the 102 `[ADMIN]`. *(Re-counted after the 2026-08-03 re-baselining: the WF-6/WF-NEW-D/WF-NEW-E fixes rewrote scenario bodies — QA-XDEL-01…03, QA-WFQ-02/03/07, QA-CMT-03/05, QA-LOAD-07/09/11/12, QA-EMPTY-01, QA-VAL-06, QA-XDEL-04/06, QA-NEG-03's note, QA-DATA-09 — but no scenario was added, retired, re-tiered, or re-tagged, so every total and per-block count below is unchanged.)*
 Per-block counts: LOAD 12 · ROW 16 · SUS 13 · M1 13 · MATCH 10 · XDEL 12 · CMT 15 · FURN 10 · NEG 15 · VAL 12 · EMPTY 6 · XPG 9 · DATA 13 · A11Y 5 · WFQ 7 = 168.
 Per-block `[WF]`: LOAD 11 · ROW 9 · SUS 5 · M1 9 · MATCH 5 · XDEL 3 · CMT 7 · FURN 5 · NEG 1 · VAL 0 · EMPTY 2 · XPG 0 · DATA 0 · A11Y 2 · WFQ 7 = 66.
 Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CMT 3 · FURN 3 · NEG 15 · VAL 10 · EMPTY 2 · XPG 4 · DATA 3 · A11Y 0 · WFQ 3 = 61.
@@ -941,17 +948,17 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 **QA-LOAD-06 [WF] (neg)** — Given the page is loaded, Then no element matching `.searchbar`, `.pager`, `.bulkbar`, `.picava`, `.picname`, `.cntchip`, `.wait`, `.slack-pill`, `.logsec`, or `input[type=checkbox]` is **rendered** anywhere in the page body — the 2026-07-23 removals must not exist `[L-S1-Fa]`. (Unused CSS **class definitions** are permitted in the wireframe file; the assertion is on rendered DOM.)
 
-**QA-LOAD-07 [WF]** — Given the page is loaded, Then the `.legend ol` contains exactly **6** `<li>` elements whose `.n` badges read `0`, `1`, `2`, `3`, `4`, `5` in order, And exactly **7** elements with class `dot` exist in the document (the six page dots plus the `M1` dot inside `#m-match`) — the page's declared legend-unit count (§2.1).
+**QA-LOAD-07 [WF]** — Given the page is loaded, Then the `.legend ol` contains exactly **6** `<li>` elements whose `.n` badges read `0`, `1`, `2`, `3`, `4`, `5` in order, And exactly **8** elements with class `dot` exist in the document (the six page dots plus the `M1` dot inside `#m-match` and the `M2` dot inside `#m-remove`) — the page's declared legend-unit count (§2.1, updated 2026-08-03).
 
 **QA-LOAD-08 [WF]** — Given the page is loaded, Then exactly **2** `<p>` paragraphs follow the legend `<ol>`, the first containing `2026-07-23 simplification decision:` `[L-S1-Fa]` and the second containing `(Confirmed 2026-08-02) Unrequested inbound shipments also use this pool` `[L-S1-Fb]`.
 
-**QA-LOAD-09 [WF] (neg)** — Given the page is loaded, Then **zero** `<input>` elements are rendered anywhere in the document — no scan input `[BR-30]`, no unified search bar `[BR-16]`, no in-page register form `[BR-1]`, and no inline tracking-number field. *(Verified property of the current file; the admin adds exactly one input, the Comments-hub search `[L-5]`, and nothing else.)*
+**QA-LOAD-09 [WF] (neg)** — Given the page is loaded, Then **zero** `<input>` elements are rendered anywhere in the document **outside `#m-remove`** — no scan input `[BR-30]`, no unified search bar `[BR-16]`, no in-page register form `[BR-1]`, and no inline tracking-number field. `#m-remove` ships exactly **one** `<input>` (`#rmInbound`, hidden until reason = `Routed to inbound request`, §3.8). *(Updated 2026-08-03; the admin additionally adds exactly one more input, the Comments-hub search `[L-5]`, and nothing else.)*
 
 **QA-LOAD-10 [WF] (neg)** — Given the page is loaded, Then no rendered element has text `Print`, no `<audio>` element exists, no script constructs an `AudioContext`, And the only elements carrying class `btn-green` are the two `Match to this product` buttons inside `#m-match` — this page has no print surface `[BR-31]` and no outbound-class button `[G-3]`, §2.6 rows 3–4.
 
-**QA-LOAD-11 [WF]** — Given the page is loaded, Then `.wf-bar h1` reads `WMS 2.0 · Unrecognized Tracking Wireframe`, a `.wf-tab` button reads `Modal: Match Review (M1)`, and `#annoToggle` reads `Hide annotations` — demo chrome (§2.3).
+**QA-LOAD-11 [WF]** — Given the page is loaded, Then `.wf-bar h1` reads `WMS 2.0 · Unrecognized Tracking Wireframe`, a `.wf-tab` button reads `Modal: Match Review (M1)`, another reads `Modal: Remove Confirm (M2)`, and `#annoToggle` reads `Hide annotations` — demo chrome (§2.3).
 
-**QA-LOAD-12 [ADMIN] (neg)** — Given the production admin page, Then no `.wf-bar`, no `.dot`, no `.legend`, and no button labelled `Modal: Match Review (M1)` exists; `[L-M1]` opens **only** from a row's `Review & Match` (§2.3, `[N-4]`).
+**QA-LOAD-12 [ADMIN] (neg)** — Given the production admin page, Then no `.wf-bar`, no `.dot`, no `.legend`, and no button labelled `Modal: Match Review (M1)` or `Modal: Remove Confirm (M2)` exists; `[L-M1]` opens **only** from a row's `Review & Match` and `[L-M2]` **only** from a row's `✕` (§2.3, `[N-4]`).
 
 ### 8.2 Block ROW — pool row content (`[L-1]`, `[L-4]`)
 
@@ -1067,17 +1074,17 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 ### 8.6 Block XDEL — removal (`[L-3]`, `[L-M2]`, `[E-16]`)
 
-**QA-XDEL-01 [WF]** — Given the baseline, When I click the `✕` button (`.xdel`, `title="Remove from list"`) in the second pool row (Anua toner, tracking `10323100838455`), Then that row is absent from the DOM And `#poolCount` and `#poolCountBottom` both read `2`. *(Current wireframe behavior: no dialog, no toast — §2.4.2 / `WF-6`.)*
+**QA-XDEL-01 [WF]** — Given the baseline, When I click the `✕` button (`.xdel`, `title="Remove from list"`) in the second pool row (Anua toner, tracking `10323100838455`), Then `#m-remove` gains class `open`, its `<header>`'s leading text node is exactly `Remove this item from the pool?`, `#rmSummary` contains `Anua` and `10323100838455` (and no `Memo` fragment — that row's memo is `–`), `#rmConfirm` is disabled, And **no row has been removed**: three rows remain and both counters still read `3` `[L-M2]`, `[PD-60 · CONFIRMED 2026-08-03]`. When I then select `Registered by mistake` and click `Remove from pool`, Then that row is absent from the DOM, `#poolCount` and `#poolCountBottom` both read `2`, And `#matchToast` shows `✓ Removed from pool · Anua Heartleaf 77% Soothing Toner, 250ml` with sub-line `Reason: Registered by mistake · Tracking 10323100838455`. *(Rewritten 2026-08-03 — the pre-fix body asserted the `WF-6` one-click removal.)*
 
-**QA-XDEL-02 [WF]** — Continuing QA-XDEL-01, Then no `.overlay.open` appeared at any point And `#matchToast` remained `display:none`. *(Asserts the gap explicitly so the `[ADMIN]` counterpart is unambiguous.)*
+**QA-XDEL-02 [WF]** — Given `#m-remove` is open from a row's `✕` with a reason selected, When I click `Cancel` (and, separately, the header `✕`, and a click on the overlay backdrop), Then the modal closes, all three rows remain, both counters still read `3`, And `#matchToast` remained `display:none` throughout `[E-36]`, `[N-6]`. *(Rewritten 2026-08-03 — the pre-fix body asserted the absence of any dialog.)*
 
-**QA-XDEL-03 [WF]** — Given the baseline, When I click `.xdel` on each of the three rows in turn, Then after the third removal `#poolCount` and `#poolCountBottom` both read `0` And neither renders a negative value `[E-20]`.
+**QA-XDEL-03 [WF]** — Given the baseline, When I remove each of the three rows in turn via `✕` → reason `No action needed` → `Remove from pool`, Then after the third removal `#poolCount` and `#poolCountBottom` both read `0` And neither renders a negative value `[E-20]`.
 
-**QA-XDEL-04 [ADMIN]** — Given the admin, When I click `✕` on a pool row, Then a modal titled `Remove from list` opens, its confirm button (`Remove from list`) is **disabled**, and a required reason `<select>` shows `Select a reason…` with exactly the options `Mis-registration`, `Routed to inbound request`, `No action needed`, in that order `[PD-60 · OWNER-PENDING]`, `[L-M2]`.
+**QA-XDEL-04 [ADMIN]** — Given the admin, When I click `✕` on a pool row, Then a modal titled `Remove this item from the pool?` opens, its confirm button (`Remove from pool`) is **disabled**, and a required reason `<select>` shows `Select a reason…` with exactly the options `Registered by mistake`, `Routed to inbound request`, `No action needed`, `Other`, in that order `[PD-60 · CONFIRMED 2026-08-03]`, `[L-M2]`. *(The wireframe now demonstrates the same chain — QA-XDEL-01; this row binds the admin.)*
 
 **QA-XDEL-05 [ADMIN] (neg)** — Given the removal modal is open, When I select `Routed to inbound request`, Then an `Inbound No.` text input appears; When I type `2026080` and attempt to confirm, Then the confirm button stays disabled and the inline message `Inbound No. must be 12 digits (YYYYMMDDNNNN)` is shown `[E-35]`; When I correct it to `202608030001`, Then the confirm button becomes enabled `[PD-64 · OWNER-PENDING]`.
 
-**QA-XDEL-06 [ADMIN]** — Given the removal modal with reason `Mis-registration` selected, When I confirm, Then the row disappears with **no page reload** `[G-2]`, `[BR-34]`; And a green toast reads `✓ Removed from pool · {product}` with sub-line `Reason: Mis-registration · Tracking {trk}`; And `[DC-14]` persists `status: OPEN → REMOVED` with actor, timestamp, reason, and the **full row snapshot** of all 12 column values `[G-8]`, `[PD-60 · OWNER-PENDING]`.
+**QA-XDEL-06 [ADMIN]** — Given the removal modal with reason `Registered by mistake` selected, When I confirm, Then the row disappears with **no page reload** `[G-2]`, `[BR-34]`; And a green toast reads `✓ Removed from pool · {product}` with sub-line `Reason: Registered by mistake · Tracking {trk}`; And `[DC-14]` persists `status: OPEN → REMOVED` with actor, timestamp, reason, and the **full row snapshot** of all 12 column values `[G-8]`, `[PD-60 · CONFIRMED 2026-08-03]`; And a system comment `Removed from pool — Registered by mistake` is auto-posted on the pool item entity `[DC-29]` with **no** @mention and **no** Slack dispatch (§6.1).
 
 **QA-XDEL-07 [ADMIN]** — Given a removal confirmed with reason `Routed to inbound request` and Inbound No. `202608030001`, Then `[DC-14]` carries `inbound_no: "202608030001"` And `[DC-15]` writes a reciprocal linkback on inbound request `202608030001` carrying `pool_item_id`, product, qty, and tracking no., with `resolves: true` `[PD-64 · OWNER-PENDING]`.
 
@@ -1097,11 +1104,11 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 **QA-CMT-02 [WF]** — Given the baseline, When I click the `💬 Comments` button, Then `#inbox1` gains class `open` And its tabs read `@ Mentions` (with an inline badge `3`) and `★ Saved`.
 
-**QA-CMT-03 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the pane header reads `Comments mentioning me` with a right-aligned `Mark all read` And the pane contains exactly 4 `.it` items **addressed positionally** (§8.0 rule 4 — `.paneheader` is also a `<div>`), of which exactly 3 carry class `unread` — the badge counts unread mentions, not items (§3.6). *(The header string is the wireframe's; the admin ships the canonical `· Click to open the order` suffix — defect `WF-NEW-E`, asserted by QA-CMT-15.)*
+**QA-CMT-03 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the pane header reads `Comments mentioning me · Click to open the order` with a right-aligned `Mark all read` And the pane contains exactly 4 `.it` items **addressed positionally** (§8.0 rule 4 — `.paneheader` is also a `<div>`), of which exactly 3 carry class `unread` — the badge counts unread mentions, not items (§3.6). *(Re-baselined 2026-08-03: `WF-NEW-E` fixed, the wireframe now ships the canonical string QA-CMT-15 asserts for the admin.)*
 
 **QA-CMT-04 [WF]** — Given `#inbox1` is open on the Mentions tab, Then the second item's entity label is exactly `Unrecognized pool` (not an order number) And its body contains `Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"` with time `10:12` `[L-5]`.
 
-**QA-CMT-05 [WF]** — Given `#inbox1` is open, When I click the `★ Saved` tab, Then the mentions pane is hidden and the saved pane is shown, with header `Saved comments` / `Unstar to remove from the list` And exactly 1 item, whose entity label is `Unrecognized pool`. *(`Saved comments` is the wireframe's string — defect `WF-NEW-E`; `Unstar to remove from the list` is already the canonical one and must not be changed. Admin strings: QA-CMT-15.)*
+**QA-CMT-05 [WF]** — Given `#inbox1` is open, When I click the `★ Saved` tab, Then the mentions pane is hidden and the saved pane is shown, with header `Saved comments · Click to open the order` / `Unstar to remove from the list` And exactly 1 item, whose entity label is `Unrecognized pool`. *(Re-baselined 2026-08-03: `WF-NEW-E` fixed; both strings now match the canonical admin strings of QA-CMT-15.)*
 
 **QA-CMT-06 [WF]** — Given `#inbox1` is open on the Mentions tab, When I click the `.star` button on the **first `.it` item in document order** (§8.0 rule 4), Then that button gains class `on`; When I click it again, Then it loses class `on`.
 
@@ -1121,7 +1128,7 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 **QA-CMT-14 [ADMIN]** — Given the admin's Comments hub holds an entry whose entity label is exactly `Unrecognized pool`, When I click it **while that pool item is still `OPEN`**, Then this page opens scrolled to `#poolrow-{pool_item_id}` with that row focused; When the same entry is clicked **after** the item reached `MATCHED`, Then the **matched order** opens instead; When it is clicked after the item reached `REMOVED`, Then a read-only historical view of the removed item opens — in no case is a dead link or a 404 produced `[E-31]`, `[E-60]`, `[BR-29]`, `[PD-67 · OWNER-PENDING]`.
 
-**QA-CMT-15 [ADMIN]** — Given the admin's Comments hub is open, Then the Mentions pane header reads exactly `Comments mentioning me · Click to open the order` And the Saved pane header reads exactly `Saved comments · Click to open the order` — the corpus-canonical strings, §3.6 — And the unstar hint reads `Unstar to remove from the list` And the read-all action reads `Mark all read`. *(The `[WF]` counterparts QA-CMT-03 / QA-CMT-05 assert the wireframe's shorter headers, which are defect `WF-NEW-E`; both tiers are correct as written and neither may be filed as a bug against the other.)*
+**QA-CMT-15 [ADMIN]** — Given the admin's Comments hub is open, Then the Mentions pane header reads exactly `Comments mentioning me · Click to open the order` And the Saved pane header reads exactly `Saved comments · Click to open the order` — the corpus-canonical strings, §3.6 — And the unstar hint reads `Unstar to remove from the list` And the read-all action reads `Mark all read`. *(Since the 2026-08-03 `WF-NEW-E` fix the `[WF]` counterparts QA-CMT-03 / QA-CMT-05 assert the same strings — the two tiers no longer diverge on this page.)*
 
 ### 8.8 Block FURN — furniture, toasts, and no-refresh (`[L-F1]`, `[L-F2]`, `[L-F3]`)
 
@@ -1147,11 +1154,11 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 ### 8.9 Block NEG — idempotency and concurrency (all negative)
 
-**QA-NEG-01 [WF] (neg)** — Given `#m-match` is open from `#poolrow1` and `#poolCount` reads `3`, When I dispatch two `click` events on the same `Match to this product` button within 200 ms, Then exactly one pool row is removed And `#poolCount` reads `2` (never `1`) And **exactly one `#matchToast` display cycle occurs**, measured as: `#matchToast` computed `display` is `flex` continuously from the first dispatch until it becomes `none`, and it does not return to `flex` again within 6 s of the first dispatch `[E-9]`, `[G-9]`. *(This scenario is safe as `[WF]` only because `finishMatch()` guards with `const row=document.getElementById('poolrow1'); if(row){…}`. Its sibling `.xdel` handler has no such guard — see QA-NEG-03 and QA-WFQ-07.)*
+**QA-NEG-01 [WF] (neg)** — Given `#m-match` is open from `#poolrow1` and `#poolCount` reads `3`, When I dispatch two `click` events on the same `Match to this product` button within 200 ms, Then exactly one pool row is removed And `#poolCount` reads `2` (never `1`) And **exactly one `#matchToast` display cycle occurs**, measured as: `#matchToast` computed `display` is `flex` continuously from the first dispatch until it becomes `none`, and it does not return to `flex` again within 6 s of the first dispatch `[E-9]`, `[G-9]`. *(`finishMatch()` guards with `const row=document.getElementById('poolrow1'); if(row){…}`; since 2026-08-03 the removal confirm handler carries the mirrored guard — see QA-NEG-03 and QA-WFQ-07.)*
 
 **QA-NEG-02 [ADMIN] (neg)** — Continuing QA-NEG-01 in the admin, Then the order has exactly **one** `Matched the unrecognized product` system comment `[DC-10]` And exactly **one** message reached `#fulfillment-admin-comments` (`C0BMGEWM5QA`) `[DC-11]` And `[DC-12]` records the suppressed second attempt under the shared idempotency key `pool_item_id + line_id` `[BR-23]`.
 
-**QA-NEG-03 [ADMIN] (neg)** — Given the admin, When I dispatch two `click` events on the same `✕` within 200 ms and confirm the resulting `[L-M2]` once, Then exactly one row is removed And both counters decrement by exactly 1 And the counters still equal the rendered row count `[G-9]`, `[BR-33]`, `[BR-41]`. **`[ADMIN]`, not `[WF]`:** the wireframe cannot exhibit this — its `.xdel` handler removes one row but runs `poolDec()` twice (defect `WF-NEW-D`, §2.4.10). The current behavior is asserted by QA-WFQ-07 so an automated agent produces a stable PASS there instead of a false FAIL here.
+**QA-NEG-03 [ADMIN] (neg)** — Given the admin, When I dispatch two `click` events on the same `✕` within 200 ms and confirm the resulting `[L-M2]` once, Then exactly one row is removed And both counters decrement by exactly 1 And the counters still equal the rendered row count `[G-9]`, `[BR-33]`, `[BR-41]`. **Kept `[ADMIN]`** for the server-side idempotency-key half; since the 2026-08-03 `WF-NEW-D` fix the wireframe exhibits the same client behavior, asserted by QA-WFQ-07 (rewritten).
 
 **QA-NEG-04 [ADMIN] (neg)** — Given two browser sessions both have `[L-M1]` open for the same pool item, When session A confirms and then session B confirms, Then B's confirm is rejected with a red toast naming "already matched", B's list refreshes, and no second line write, comment, or Slack message occurs `[E-7]`, `[PD-7 · OWNER-PENDING]`; And `[DC-13]` records `reason: item_not_open` with B's actor.
 
@@ -1189,7 +1196,7 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 **QA-VAL-05 [ADMIN] (neg)** — Given a pool item that is already `REMOVED`, When a stale client confirms a match on it, Then the server rejects with `item_not_open`, the client reloads, and both counts re-sync `[E-43]`, `[BR-33]`; And `[DC-13]` persists with `reason: item_not_open` and the rejecting actor.
 
-**QA-VAL-06 [ADMIN] (neg)** — Given `[L-M2]` is open with no reason selected, Then the `Remove from list` button is disabled and no removal is possible `[PD-60 · OWNER-PENDING]`, `[BR-9]`.
+**QA-VAL-06 [ADMIN] (neg)** — Given `[L-M2]` is open with no reason selected, Then the `Remove from pool` button is disabled and no removal is possible; And with reason `Other` selected and an empty memo, it stays disabled until a memo is entered (owner enum "Other + memo", §3.8) `[PD-60 · CONFIRMED 2026-08-03]`, `[BR-9]`.
 
 **QA-VAL-07 [ADMIN] (neg)** — Given a candidate order whose PIC is unassigned, Then the candidate still renders (with `–` in the PIC slot) and is **not** excluded from the set `[E-34]`, `[BR-3]`; And the registration Slack `[DC-4]` mentions only the PICs that exist.
 
@@ -1205,7 +1212,7 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 ### 8.11 Block EMPTY — empty and error states
 
-**QA-EMPTY-01 [WF]** — Given all three rows have been removed via `.xdel` (one click each — **not** two; see QA-WFQ-07), Then `#poolCount` and `#poolCountBottom` both read `0`, And `.poolhead` is still rendered with a bounding-box height > 0, And the layout has not collapsed, measured as: the inner `.mockwrap`'s bounding-box height is **> 300 px**, the pool table's `<thead>` is still rendered with its 12 `<th>`, and `#poolCountBottom`'s bounding box lies **below** the table's `<thead>` `[E-19]`.
+**QA-EMPTY-01 [WF]** — Given all three rows have been removed via `✕` → `[L-M2]` confirm (reason `No action needed`, one confirm each), Then `#poolCount` and `#poolCountBottom` both read `0`, And `.poolhead` is still rendered with a bounding-box height > 0, And the layout has not collapsed, measured as: the inner `.mockwrap`'s bounding-box height is **> 300 px**, the pool table's `<thead>` is still rendered with its 12 `<th>`, and `#poolCountBottom`'s bounding box lies **below** the table's `<thead>` `[E-19]`.
 
 **QA-EMPTY-02 [ADMIN]** — Given a pool with zero open items, Then the table renders the empty-state row `No unrecognized items. Products sent from View Orders after a barcode recognition failure appear here.` And `.poolhead` reads `⚠ Unrecognized product pool · 0 items` `[E-19]`, §3.2.4.
 
@@ -1255,7 +1262,7 @@ Per-block negatives: LOAD 4 · ROW 4 · SUS 4 · M1 3 · MATCH 0 · XDEL 3 · CM
 
 **QA-DATA-08 [ADMIN] (neg)** — Given a registrant with no Slack mapping, When a match auto-comment is posted, Then the comment posts with a plain-text name, the flow does not fail, and `[DC-26]` is persisted `[E-27]`, `[E-71]`.
 
-**QA-DATA-09 [ADMIN]** — Given 20 removals across the three reasons, Then the removal-reason distribution is computable from `[DC-14]` alone `[BR-35]`.
+**QA-DATA-09 [ADMIN]** — Given 20 removals across the four reasons, Then the removal-reason distribution is computable from `[DC-14]` alone `[BR-35]`.
 
 **QA-DATA-10 [ADMIN]** — Given 5 removals with reason `Routed to inbound request`, Then unrequested-inbound volume is computable from `[DC-15]` alone `[BR-35]`.
 
@@ -1283,9 +1290,9 @@ These record the live wireframe's behavior so an automated agent produces a stab
 
 **QA-WFQ-01 [WF]** — Given the baseline, When I click `Review & Match` on the **second** row, Then `#m-match` opens showing **row 1's** COSRX item (`Tracking 10323100841207`). *(§2.4.1 — correct behavior asserted by QA-M1-08.)*
 
-**QA-WFQ-02 [WF]** — Given the baseline, When I remove `#poolrow1` with `.xdel` and then open `#m-match` and click `Match to this product`, Then `#matchToast` appears but `#poolCount` stays at `2` (no further decrement). *(§2.4.7 — correct behavior asserted by QA-MATCH-03 and QA-XDEL-06.)*
+**QA-WFQ-02 [WF]** — Given the baseline, When I remove `#poolrow1` via `✕` → `[L-M2]` confirm (reason `Registered by mistake`) and then open `#m-match` from the wf-bar demo button and click `Match to this product`, Then `#matchToast` appears (showing the match text) but `#poolCount` stays at `2` (no further decrement — `finishMatch()` is hard-wired to the already-removed `#poolrow1`). *(§2.4.7 — correct behavior asserted by QA-MATCH-03 and QA-XDEL-06.)*
 
-**QA-WFQ-03 [WF] (neg)** — Given the baseline, When I click any `.xdel`, Then no dialog opens, no reason is requested, and no toast appears. *(§2.4.2 / `WF-6` — correct behavior asserted by QA-XDEL-04 and QA-XDEL-06.)*
+**QA-WFQ-03 [WF] (neg)** — Given the baseline, When I click any `.xdel`, Then `#m-remove` opens, **no row is removed**, both counters still read `3`, and no toast appears until `Remove from pool` is confirmed. *(Rewritten 2026-08-03 — the pre-fix body asserted the `WF-6` quirk "no dialog, no reason, no toast", which the wireframe pass resolved; the admin contract remains QA-XDEL-04 / QA-XDEL-06.)*
 
 **QA-WFQ-04 [WF] (neg)** — Given the baseline, Then the document contains **zero** `<a>` elements; every candidate order number is a `<span>`. *(`WF-NEW-B` — correct behavior asserted by `[BR-37]` and §6.2.)*
 
@@ -1293,7 +1300,7 @@ These record the live wireframe's behavior so an automated agent produces a stab
 
 **QA-WFQ-06 [WF]** — Given the baseline, When I click `#annoToggle`, Then `body` gains class `no-anno`, every `.dot` and `.legend` is hidden, and the button text becomes `Show annotations`; clicking again restores both. *(Demo chrome, §2.3; must not exist in the admin — QA-LOAD-12.)*
 
-**QA-WFQ-07 [WF]** — Given the baseline (`#poolCount` reads `3`), When I dispatch two `click` events on the **same** `.xdel` within 200 ms, Then exactly **one** row is removed (2 `<tr>` remain in the pool `<tbody>`) but `#poolCount` and `#poolCountBottom` both read **`1`**, not `2` — the counters and the rendered row count diverge. *(Defect `WF-NEW-D`, §2.4.10: `b.closest('tr')` still resolves on the detached row, so `.remove()` no-ops and `poolDec()` fires twice. Correct behavior asserted by QA-NEG-03 `[ADMIN]`. Do **not** file this as a bug from this section — it is already filed, in §2.5 and in `_wireframe-fixes.md`.)*
+**QA-WFQ-07 [WF]** — Given the baseline (`#poolCount` reads `3`), When I dispatch two `click` events on the **same** `.xdel` within 200 ms, Then exactly **one** `#m-remove` overlay is open and **no** row has been removed; When I then select a reason and dispatch two `click` events on `Remove from pool`, Then exactly **one** row is removed, exactly one toast cycle occurs, And `#poolCount` and `#poolCountBottom` both read **`2`**, equal to the rendered row count. *(Rewritten 2026-08-03 — the pre-fix body asserted defect `WF-NEW-D`'s double-decrement, resolved by the guarded confirm handler (§2.4.10). The server-side half remains QA-NEG-03 `[ADMIN]`.)*
 
 ### 8.16 DC → QA coverage map
 
@@ -1319,6 +1326,7 @@ Each cell was re-derived from the scenario bodies: a scenario is credited **only
 | DC-12 | QA-NEG-02 | DC-26 | QA-DATA-08 |
 | DC-13 | QA-VAL-01, QA-VAL-02, QA-VAL-03, QA-VAL-05, QA-NEG-04, QA-NEG-09, QA-NEG-10, QA-NEG-11, QA-NEG-15 | DC-27 | QA-MATCH-10, QA-XPG-04, QA-DATA-01 |
 | DC-14 | QA-XDEL-06, QA-XDEL-07, QA-XDEL-08, QA-DATA-09, QA-XDEL-12, QA-VAL-12 | DC-28 | QA-NEG-13 |
+| DC-29 | QA-XDEL-06 | | |
 
 Non-events `[N-1]`…`[N-12]` are asserted collectively by **QA-DATA-05**, with `[N-4]` additionally by QA-M1-02 / QA-LOAD-12, `[N-3]` by QA-CMT-12, and `[N-6]`/`[N-10]` by QA-XDEL-12.
 
@@ -1333,7 +1341,7 @@ Non-events `[N-1]`…`[N-12]` are asserted collectively by **QA-DATA-05**, with 
 | `[L-4]` | QA-ROW-02, QA-ROW-03, QA-ROW-04, QA-ROW-14, QA-ROW-16, QA-M1-03, QA-M1-06 |
 | `[L-5]` | QA-CMT-01…15 |
 | `[L-M1]` | QA-M1-01…13, QA-EMPTY-05 |
-| `[L-M2]` | QA-XDEL-04…12, QA-VAL-06, QA-VAL-11 |
+| `[L-M2]` | QA-XDEL-01…12, QA-WFQ-03, QA-WFQ-07, QA-VAL-06, QA-VAL-11 |
 | `[L-F1]` | QA-MATCH-04, QA-MATCH-05, QA-FURN-02, QA-FURN-05, QA-FURN-06, QA-FURN-09, QA-A11Y-04 |
 | `[L-F2]` | QA-FURN-01, QA-LOAD-05, QA-MATCH-03 |
 | `[L-F3]` | QA-FURN-04, QA-CMT-01, QA-CMT-13 |
@@ -1400,7 +1408,7 @@ Per `_review.md` §3.8 this section carries **only** NO-DEFAULT owner questions,
 - **QA consequence:** **QA-VAL-10** is reported as `BLOCKED`. An implementation must escalate rather than pick a behavior.
 - **Owner:** SkinSeoul Director (Yongwon). **Blocks:** the View Orders M2b validation rule and this page's column-1 nullability.
 
-**Provisional decisions carried by this page** (behavior IS specified; listed for the owner's review pass, not re-opened here): PD-1, PD-3, PD-4, PD-5, PD-6, PD-7, PD-8, PD-16, PD-60, PD-61, PD-62, PD-63, PD-64, PD-65, PD-67, PD-80 — **16 entries**. Cross-referenced only: PD-2 (cannot land — no outbound button), PD-22 (Order Detail), **PD-51 (Order Management — the sample-definition source; NO-DEFAULT, cited in §9.3)**, PD-68 (Closing), PD-85 (Inbound Request) — **5 entries**. Total distinct PDs cited by this document: **21 carried or cross-referenced**, plus `[PD-66]` above, which is neither carried nor cross-referenced but **owned** by this page as its one NO-DEFAULT question — **22 in all**.
+**Provisional decisions carried by this page** (behavior IS specified; listed for the owner's review pass, not re-opened here): PD-1, PD-3, PD-4, PD-6, PD-7, PD-8, PD-16, PD-61, PD-62, PD-63, PD-64, PD-65, PD-67, PD-80 — **14 entries still OWNER-PENDING**. **Owner-CONFIRMED 2026-08-03: PD-5 and PD-60** (removal confirm + reason + toast; reflected in `[L-M2]`, `[BR-9]`, `[DC-14]`, `[DC-29]`, and the wireframe's M2 modal — no longer reversible-by-tag, so their inline tags read `· CONFIRMED 2026-08-03`). Cross-referenced only: PD-2 (cannot land — no outbound button), PD-22 (Order Detail), **PD-51 (Order Management — the sample-definition source; NO-DEFAULT, cited in §9.3)**, PD-68 (Closing), PD-85 (Inbound Request) — **5 entries**. Total distinct PDs cited by this document: **21 carried or cross-referenced** (14 pending + 2 confirmed + 5 cross-referenced), plus `[PD-66]` above, which is neither carried nor cross-referenced but **owned** by this page as its one NO-DEFAULT question — **22 in all**.
 
 > **Note on `[PD-8]`.** It is listed as *carried* because this page adopts its namespace model. The order-line uniqueness rule in `[BR-19]` is a **page-level extension** of `[PD-8]`, not part of the register entry; it is flagged as such in `[BR-19]` and reverses independently.
 
@@ -1481,7 +1489,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **`[G-2]` owner emphasis:** every confirming action toasts; no programmatic full-page refresh except the named RTO exception | owner | `[BR-34]`, `[L-F1]` |
 | 2026-08-03 | **`[G-1]` scanner protocol** reaffirmed for every scan surface | owner | N/A here; stated as `[BR-30]` rather than omitted |
 | 2026-08-03 | **`[G-4]` instant carrier-agnostic print** reaffirmed | owner | N/A here; stated as `[BR-31]`, §6.5 |
-| 2026-08-03 | **Adjudication C-6:** `[G-2]` beats wireframe omissions. The ✕ removal gets a confirm dialog, a mandatory reason, and a toast → `[PD-60 · OWNER-PENDING]`, wireframe gap `WF-6` | `_review.md` §1 C-6; `[GD-5]` | **Reversal:** 2026-07-23 one-click removal → 2026-08-03 confirm + reason + toast. `[BR-9]`, `[L-M2]` |
+| 2026-08-03 | **Adjudication C-6:** `[G-2]` beats wireframe omissions. The ✕ removal gets a confirm dialog, a mandatory reason, and a toast → `[PD-60]` (provisional at the time; confirmed later the same day — see the v1.3 rows below), wireframe gap `WF-6` | `_review.md` §1 C-6; `[GD-5]` | **Reversal:** 2026-07-23 one-click removal → 2026-08-03 confirm + reason + toast. `[BR-9]`, `[L-M2]` |
 | 2026-08-03 | `[PD-64]`: the removal reason "Routed to inbound request" captures a **structured Inbound No.**, with no hard guard blocking removal without it | PD register | `[BR-10]`, `[DC-14]`, `[DC-15]`, `[E-35]`, `[E-70]` |
 | 2026-08-03 | `[PD-65]`: **qty mismatch at match time is allowed** and recorded, not blocked | PD register | `[BR-17]`, `[E-12]`, `[E-66]` |
 | 2026-08-03 | `[PD-62]`: an empty candidate list renders explicit guidance; **no search affordance is re-introduced** | PD register | `[BR-24]`, `[E-5]` |
@@ -1517,13 +1525,15 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **`[PD-51]` tagged `· OWNER-PENDING`** and added to §9.1's cross-referenced list; §8.16's `DC-10` / `DC-13` map rows reconciled by adding the missing citations to QA-NEG-02 and QA-VAL-05; §8.0's totals sentence reworded so QA-VAL-10 reads as inside the total, not additional | verification m1 D-4, D-8, D-10 | §8.0, §8.16, §9.1, §9.3 |
 | 2026-08-03 | **Register-citation warning added** to §2.5: `_review.md` §2a mis-cites this page's dead-code cleanup as `WF-9`; the correct entry is `WF-10`, which is what every citation in this document uses | verification m3b finding 5.3 | §2.5 |
 | 2026-08-03 | **Remediation pass (spec v1.2).** §8 recounted from the scenario bodies: **168 scenarios — 66 `[WF]`, 102 `[ADMIN]`; 61 negatives (36.3 %)**; per-block, per-tier and per-negative counts published in §8.0 and re-derivable from the blocks | this document | §8.0 and all of §8 |
+| 2026-08-03 | **Owner confirmation of `[PD-5]` → `[PD-60]` CONFIRMED (spec v1.3).** Every removal/deletion gets a confirm dialog + toast; for this page's ✕ that is `[L-M2]` with header `Remove this item from the pool?`, toast lead `✓ Removed from pool`, and a removal auto-comment on the pool item entity (new event `[DC-29]`, mention-free — §6.1's no-Slack-route stands). Reason labels finalized as `Registered by mistake` / `Routed to inbound request` / `No action needed` / `Other` (+ mandatory memo for `Other`) — the owner-confirmed enum **plus** the `Routed to inbound request` option retained so `[PD-64 · OWNER-PENDING]` and the `[BR-11]` inbound handoff stay mountable. `[DC-14]`'s reason tokens updated to match | owner confirmation, 2026-08-03; PD register PD-5/PD-60 | `[L-M2]` §3.8, `[BR-9]`, `[DC-14]`, `[DC-29]`, §5.1 count 28→29, §8.16, §9.1 |
+| 2026-08-03 | **Wireframe pass applied (local edit; `/wf-deploy` pending).** `WF-6` closed (M2 modal `#m-remove` + wf-bar demo button + legend/footer updates, dot count 7→8), `WF-NEW-D` fixed (removal confirm guarded by `rmRow.isConnected`), `WF-NEW-E` fixed on this page (canonical hub pane headers), `WF-10`+`WF-NEW-C` dead v1 CSS/JS deleted (`.toast.err` kept; `.mtextarea` kept — now used by M2's memo; `.tag-jit` kept for M1). Verified by an automated Playwright run: 58 assertions PASS, 0 pageerror, M1 regression suite green. QA re-baselined (QA-XDEL-01…03, QA-WFQ-02/03/07, QA-CMT-03/05, QA-LOAD-07/09/11/12, QA-EMPTY-01, QA-NEG-01/03 notes); **§8 totals unchanged** (168 / 66 `[WF]` / 102 `[ADMIN]` / 61 neg). `WF-NEW-A` and `WF-NEW-B` remain open | this document; `_wireframe-fixes.md` §B/§C | §2.1–§2.5, §3.6, §3.8, §8 |
 
 ### 10.1 Reversal chains (verbatim, so nobody re-implements a superseded state)
 
 1. **Photo capture:** 2026-07-13 photo column shipped → 2026-07-21 **hold** (removed from the View Orders modal, column left pending) → 2026-08-03 **permanently deleted** `[PD-63 · OWNER-PENDING]`. Current truth: no photo anywhere on this page, not deferred.
 2. **Manual PIC search:** 2026-07-13 primary interaction (handlers hunt their own name per product) → 2026-07-23 demoted to a **fallback** under the new pre-proposal UX → 2026-07-23 (same day, `e43ce68`) **removed entirely**. Current truth: no search of any kind on this page.
 3. **Order number in the unrecognized modal:** 2026-07-23 added as **optional** (`4cdd21d`) → 2026-07-23 made **mandatory** with send gating (`33a0eaf`) → 2026-07-23 restructured into the **two-step lookup flow** (`817749e`). Current truth: the number is entered upstream and a successful lookup means the item never reaches this pool, which is why Order No is normally `–`.
-4. **Row ✕ removal:** 2026-07-23 added as **one click, no confirm, no reason, no toast** → 2026-08-03 adjudication C-6 requires **confirm + mandatory reason + toast** `[PD-60 · OWNER-PENDING]`. Current truth: `[L-M2]`; the wireframe still shows the old behavior (`WF-6`), asserted as-is by QA-WFQ-03.
+4. **Row ✕ removal:** 2026-07-23 added as **one click, no confirm, no reason, no toast** → 2026-08-03 adjudication C-6 requires **confirm + mandatory reason + toast** (`[PD-60]`, provisional) → 2026-08-03 **owner CONFIRMED** (`[PD-5]`/`[PD-60]`) **and the wireframe implements it** — M2 (`#m-remove`) shipped, `WF-6` closed, plus a removal auto-comment `[DC-29]`. Current truth: `[L-M2]` as specced **and** as wired; the fixed chain is asserted by QA-XDEL-01…03 / QA-WFQ-03/07.
 5. **Comments-hub search:** 2026-07-29 added globally (`8e5abeb`) → **never wired into this page's markup**. Current truth: required by `[G-7]` and legend 5, missing in the wireframe (`WF-NEW-A`), asserted absent by QA-WFQ-05 and required by QA-CMT-07.
 6. **Unrequested inbound arrivals:** a separate temporary registration path was **proposed and rejected by the owner** on 2026-08-02 in favour of reusing this pool. Current truth: `[BR-11]`. Do not re-propose a separate path.
 7. **"Slack notified" column:** 2026-07-13 shipped as a visible column with a status pill → 2026-07-23 **removed from the UI**, while the dispatch itself remains fully persisted `[DC-4]`. Current truth: the data survives, the column does not.

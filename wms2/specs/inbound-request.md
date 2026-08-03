@@ -1,7 +1,9 @@
 # Inbound Request — Screen Specification
 
-Slug: `inbound-request` · Wireframe SST: `wms2/inbound-request/index.html` (850 lines, v1) · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/
-Spec version 1.2 · 2026-08-03 (remediation pass over v1.1) · Companion: `_global-rules.md` (cited as `[G-n]`), `_plans/_provisional-decisions.md` (cited as `[PD-n · OWNER-PENDING]`), `_plans/_wireframe-fixes.md` (cited as `WF-n`), `_plans/_review.md` (adjudications `C-n`, conventions §3).
+> **Decision status update (2026-08-03)** — PD-1, 2, 3, 4, 5, 7, 8, 51, 55, 66, 74, 79 are now **OWNER-DECIDED**; any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions. PD-6 and PD-71 remain provisional/open.
+
+Slug: `inbound-request` · Wireframe SST: `wms2/inbound-request/index.html` (965 lines, v1) · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/
+Spec version 1.3 · 2026-08-03 (feature pass over v1.2 — owner resolved `PD-79`: post-registration **Edit** and **Cancel**; wireframe defects **WF-2** / **WF-11** applied to the SST in the same commit) · Companion: `_global-rules.md` (cited as `[G-n]`), `_plans/_provisional-decisions.md` (cited as `[PD-n · OWNER-PENDING]`), `_plans/_wireframe-fixes.md` (cited as `WF-n`), `_plans/_review.md` (adjudications `C-n`, conventions §3).
 
 Reading contract: this document is written to be executed end-to-end by an AI QA agent and implemented by a developer with zero ambiguity. Global rules are **cited, never restated** — only this page's deltas appear here. Korean strings (product names, supplier names) are **data** and appear verbatim [G-6]. All UI copy in backticks is byte-accurate to the wireframe.
 
@@ -35,6 +37,7 @@ The desk half **declares intent and identity** (what is coming, from whom, how m
 3. **In transit** — requests still in `REQUESTED` with no tracking number are chased **by push, not by poll**: a once-a-morning automated Slack check posts them into the channel where the responsible team already lives (`[L-S3-6]`).
 4. **On arrival** — the center scans the tracking barcode in View Orders. Status flips to `PARTIAL` or `INBOUNDED` here **automatically**. The desk observes; it never asserts.
 5. **After arrival** — quantity disputes, damage, arrival slips and forklift notes travel as comments on the request, with `@mention` Slack pushes [G-7], so the request stays the single thread of record.
+6. **Before anything arrives — the purchase falls through or was mis-entered** (2026-08-03, `PD-79` resolved). While the request is still `REQUESTED`, the requester **edits** it (wrong SKU / qty / cost / supplier / route) or **cancels** it (purchase cancelled, wrong entry) from the Request List. Both paths die the moment stock moves: `PARTIAL` and `INBOUNDED` requests can be neither edited nor cancelled (§3.3.11, `BR-32`).
 
 ### 1.4 Physical reality that shaped specific decisions
 
@@ -72,15 +75,15 @@ Stated so QA does not import behavior that does not apply, and so a developer do
 
 ### 2.1 Declared unit count
 
-**Total legend units covered by this spec: 39.**
+**Total legend units covered by this spec: 42.**
 
-- **28 on-screen legend dots** (State 1: 15 · State 2: 2 · State 3: 10 · Modal: 1, labelled `M1` rather than numbered)
+- **31 on-screen legend dots** (State 1: 15 · State 2: 2 · State 3: 12 · Modals: 2, labelled `M1` / `M2` rather than numbered)
 - **2 off-screen normative footer rule blocks** (`[L-S1-F]`, `[L-S2-F]`)
 - **9 page-furniture units** (`[L-F1]` … `[L-F9]`) — unnumbered on the wireframe but normative
 
-Plus **12 negative entries** (`[L-R1]` … `[L-R12]`) recording removed or rejected features that **must NOT exist** in the build. Negative entries are not legend units and are not counted in the 39.
+Plus **12 negative entries** (`[L-R1]` … `[L-R12]`) recording removed or rejected features that **must NOT exist** in the build. Negative entries are not legend units and are not counted in the 42.
 
-**Verification (re-measured 2026-08-03, remediation pass).** The wireframe carries exactly **28** on-screen `.dot` elements (State 1: `1,2,3,4,5,10,11,12,6,7,8,9,14,15,16` = 15 · State 2: `1,2` = 2 · State 3: `1`–`10` = 10 · Modal: `M1` = 1) and exactly **27** legend `<li>` rows across its three `<div class="legend">` blocks (State 1: 15 · State 2: 2 · State 3: 10). The 28th dot, `M1`, is annotated directly on the modal and deliberately carries **no legend row** — it is an intentional orphan dot, specified in full at §3.4 and covered by QA-D-01…QA-D-18. **Every legend row has a dot; exactly one dot (`M1`) has no legend row.** State 3's legend carries **no** trailing footer paragraph; States 1 and 2 each carry exactly one.
+**Verification (re-measured 2026-08-03, feature pass).** The wireframe carries exactly **31** on-screen `.dot` elements (State 1: `1,2,3,4,5,10,11,12,6,7,8,9,14,15,16` = 15 · State 2: `1,2` = 2 · State 3: `1`–`12` = 12 · Modals: `M1`, `M2` = 2) and exactly **29** legend `<li>` rows across its three `<div class="legend">` blocks (State 1: 15 · State 2: 2 · State 3: 12). The modal dots `M1` and `M2` are annotated directly on their modals and deliberately carry **no legend row** — they are intentional orphan dots, specified in full at §3.4 / §3.4b and covered by QA-D-01…QA-D-18 / QA-C-26. **Every legend row has a dot; exactly two dots (`M1`, `M2`) have no legend row.** State 3's legend carries **no** trailing footer paragraph; States 1 and 2 each carry exactly one. *(v1.2 measured 28 dots / 27 rows / one orphan; the 2026-08-03 `PD-79` feature pass added State 3 dots `11`–`12`, their two legend rows, and the `M2` dot.)*
 
 *(v1.1 of this spec asserted "28 legend `<li>` rows … no orphan dot". That claim was false against the SST and is corrected here; the orphan is now declared rather than denied.)*
 
@@ -103,6 +106,7 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 | S2 | `2 · New Request (Wholesale / Partnership)` | `#s2` | Top-bar `.wf-tab[data-state="s2"]` | §3.2 |
 | S3 | `3 · Request List (Requested/Partial/Inbounded)` | `#s3` | Top-bar `.wf-tab[data-state="s3"]`; or the in-page tab `Request List`; or load with `#reqlist` / `#s3` | §3.3 |
 | M1 | `Modal: Add Tracking No` | `#m-invoice` | Top-bar `.wf-tab[data-modal="m-invoice"]`; or any `Add tracking` button in the Request List; or — **`[ADMIN]` only** — `Bulk add tracking numbers` (that button carries no `data-modal` in the wireframe and opens nothing there, see §2.4) | §3.4 |
+| M2 | `Modal: Cancel Inbound Request` (2026-08-03) | `#m-cancel` | The `Cancel` button in a **`REQUESTED`** Request List row (`.req-cancel`). No top-bar tab — reachable only from a row | §3.4b |
 
 **S1 and S2 are one functional surface.** They are the same New Request form rendered with different demo data (S1 = Smart Buy route with a mid-entry blue prefill row; S2 = Wholesale route with a tracking number already known and a free-of-charge row). The spec treats them as a single form with route-parametrised examples; State 2's two dots are deltas, not a second screen.
 
@@ -141,7 +145,10 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 | `[L-S3-8]` | INBOUNDED auto-switched by View Orders scan | §3.3.8 |
 | `[L-S3-9]` | Inbound automation note | §3.3.9 |
 | `[L-S3-10]` | Received Date column; no Carrier column | §3.3.10 |
+| `[L-S3-11]` | ✎ Edit / Cancel row actions (REQUESTED only) | §3.3.11 |
+| `[L-S3-12]` | CANCELLED status — terminal, row kept, chip added | §3.3.12 |
 | `[L-M1]` | Add Tracking No modal | §3.4 |
+| `[L-M2]` | Cancel Inbound Request modal | §3.4b |
 | `[L-F1]` | Registration confirmation toast | §3.5.1 |
 | `[L-F2]` | Per-row `💬 Comments` button + inline panel | §3.5.2 |
 | `[L-F3]` | `＋ New Inbound Request` button | §3.5.3 |
@@ -157,8 +164,8 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 
 | Defect | What is stale | Spec position |
 |---|---|---|
-| **WF-2** | State 1 off-screen footer says "Received Date **and Carrier** are recorded automatically" | The spec follows `[L-S3-10]` and the 2026-08-03 decision (review **C-1**): **Received Date only. No Carrier capture, no Carrier column** `[PD-9 · OWNER-PENDING]`. The footer text is stale and must be fixed in the wireframe (drop "+ Carrier"). Never implement carrier capture from this footer. |
-| **WF-11** | An HTML comment for the removed "View Orders link info" modal remains at ~line 701 | Tombstone `[L-R1]`. The modal must not be built. The comment block is to be deleted in the wireframe-fix pass. |
+| **WF-2** — **FIXED in the SST 2026-08-03** | State 1 off-screen footer used to say "Received Date **and Carrier** are recorded automatically" | Applied per the register: the footer now reads "Received Date is recorded automatically at inbound … — automatic Carrier recording is not supported and there is no Carrier column (confirmed 2026-08-03)". The spec position (`[L-S3-10]`, review **C-1**, `[PD-9 · OWNER-PENDING]`) is unchanged: **Received Date only. No Carrier capture, no Carrier column.** |
+| **WF-11** — **FIXED in the SST 2026-08-03** | An HTML comment for the removed "View Orders link info" modal remained at ~line 701 | Deleted per the register (its slot now holds the 2026-08-03 `#m-cancel` modal, `[L-M2]`). Tombstone `[L-R1]` stands: the link-info modal must not be built. |
 
 **Two further stale-text observations found while writing this spec.** They are **not** in the `WF-1`…`WF-14` backlog; they are proposed additions to it, recorded here so the behavior is unambiguous even if the wireframe is never edited:
 
@@ -166,7 +173,9 @@ Live URL for all rows: `https://yongwon-pixel.github.io/skinseoul-wireframes/wms
 2. **A Tracking No cell that already holds a number offers no inline add affordance.** In the wireframe, `Add tracking` renders only when the cell is empty. Since `[G-10]` requires that numbers can keep arriving for a still-open request, the **specified path** for adding to a request that already has numbers is the bulk bar (§3.3.2, §3.3.4). Whether to add an inline `＋` to a filled cell is a UX question for the owner, not a licence to invent one now (§9.2 OQ-3).
 3. **The Comments-hub pane strings on this wireframe diverge from the rest of the corpus.** This page ships `Comments where I'm tagged` / `Mark all as read` / `Comments I saved` / `Unstar to remove from list`. Across the eight screens only two of those four strings have a majority at all — the mentions header (`Comments mentioning me · Click to open the order`, 4 pages) and the read-all action (`Mark all read`, 6 pages) — while the saved header and the unstar hint are split with **no** majority (`Unstar to remove` 1 · `… from the list` 2 · `… from this list` 2 · `… from list` 2, this page and `order-management`). `[G-7]` does **not** currently publish these six strings as byte-exact contract, so no canonical exists to conform to and none is invented here. Position: the `[WF]` assertions in §8 stay byte-accurate to **this** wireframe (convention §3.9); when `[G-7]` publishes the canonical set, the admin build follows `[G-7]` and this wireframe is corrected (proposed backlog entry **`[IR-WFX-1 · proposed]`**, `_wireframe-fixes.md` §G, conditional on that publication). See §3.1.13 and QA-F-11.
 
-**Wireframe demo limitations that are not defects** (QA must tag assertions about them `[ADMIN]`, not file bugs): filter chips toggle visually but do not filter rows; row checkboxes are inert and the `2 selected` count never changes; `Register Inbound Request` always fires the success toast regardless of validation; the M1 header is static (`Add Tracking No — 202607130003`) whichever row opened it; the Comments hub dropdown is wired only in State 1 (`data-open="inbox1"`), so States 2 and 3 render the button without a dropdown; the demo autocomplete list is static and does not respond to typing; **`Bulk add tracking numbers` (index.html:548) carries no `data-modal` attribute and therefore does not open `#m-invoice` in the wireframe — the bulk→M1 path is `[ADMIN]`-only, and clicking that button in the wireframe is expected to do nothing**; **no `.qrow` input in `#m-invoice` has an `Enter` handler, so the M1 keyboard contract (§3.4) is `[ADMIN]`-only**.
+**Wireframe demo limitations that are not defects** (QA must tag assertions about them `[ADMIN]`, not file bugs): filter chips toggle visually but do not filter rows; row checkboxes are inert and the `2 selected` count never changes; `Register Inbound Request` always fires the success toast regardless of validation; the M1 header is static (`Add Tracking No — 202607130003`) whichever row opened it; the Comments hub dropdown is wired only in State 1 (`data-open="inbox1"`), so States 2 and 3 render the button without a dropdown; the demo autocomplete list is static and does not respond to typing; **`Bulk add tracking numbers` carries no `data-modal` attribute and therefore does not open `#m-invoice` in the wireframe — the bulk→M1 path is `[ADMIN]`-only, and clicking that button in the wireframe is expected to do nothing**; **no `.qrow` input in `#m-invoice` has an `Enter` handler, so the M1 keyboard contract (§3.4) is `[ADMIN]`-only**.
+
+**`PD-79` feature demo limitations (2026-08-03, also not defects):** the edit-mode "prefill" is the form's existing demo values — the wireframe does not load the clicked row's actual lines; a demo cancellation flips the row's badge, note, buttons and Tracking No cell but does **not** recompute the filter-chip counts or the `Showing 7 of 13` footer line (server-computed in the admin); the M2 `Memo` field is not validated in the demo even when reason = `Other`; the M2 header number **is** live-bound to the opening row (unlike M1's static header).
 
 ---
 
@@ -385,7 +394,7 @@ The row placeholder repeats the rule: `Per-unit price ₩ (0 if free)`.
 
 Three normative rules printed under the State 1 legend. They are binding except where superseded:
 
-**(a) Automatic capture at inbound.** **Received Date** is recorded automatically at inbound and shown in the Request List; it is never a form input. **The footer's "and Carrier" clause is stale** — automatic Carrier recording is **not supported** and there is **no Carrier column** (2026-08-03; `[L-S3-10]`, `[PD-9 · OWNER-PENDING]`, defect **WF-2**, review **C-1**). Implement Received Date only.
+**(a) Automatic capture at inbound.** **Received Date** is recorded automatically at inbound and shown in the Request List; it is never a form input. Automatic Carrier recording is **not supported** and there is **no Carrier column** (2026-08-03; `[L-S3-10]`, `[PD-9 · OWNER-PENDING]`, review **C-1**). The footer's former "and Carrier" clause was defect **WF-2**, **fixed in the SST 2026-08-03** — the footer now states the negative explicitly. Implement Received Date only.
 
 **(b) The Request List is the scrape source.** The Request List is the dataset the Procurement Hub Google Sheet will scrape **as-is**. Nothing may be written into the list that the sheet cannot represent. The sheet integration is designed **separately, as the last step** (agreed 2026-07-23) — see §6.4 and §9.1.
 
@@ -408,7 +417,7 @@ Three normative rules printed under the State 1 legend. They are binding except 
 
 #### 3.2.3 `[L-S2-F]` State 2 off-screen footer rules
 
-**(a) Status has exactly three stages:** `REQUESTED → PARTIAL → INBOUNDED`. `SHIPPED` was retired 2026-07-27 → `[L-R4]`; `PARTIAL` was added 2026-08-02. No fourth status exists, and no status may be set from this page [G-11].
+**(a) Status has exactly three stages:** `REQUESTED → PARTIAL → INBOUNDED`. `SHIPPED` was retired 2026-07-27 → `[L-R4]`; `PARTIAL` was added 2026-08-02. **Declared delta (2026-08-03):** this footer sentence describes the **receive pipeline**, which still has exactly three stages; the `PD-79` resolution added `CANCELLED` as a **terminal branch off `REQUESTED`** (§3.3.12, `BR-10`), written from the Request List's Cancel action — never from this form, and never by the receive flow. No receive-side status may be set from this page [G-11].
 
 **(b) Tracking timing.** If the tracking number is already known, enter it now and View Orders matching activates the moment the request registers. Otherwise leave it blank and add it later from the Request List via `[L-M1]`.
 
@@ -419,11 +428,11 @@ Three normative rules printed under the State 1 legend. They are binding except 
 
 #### 3.3.1 `[L-S3-1]` Status filter chips
 
-**Behavior.** Four single-select chips above the table, each showing a live count:
-`All 12` · `REQUESTED 8` · `PARTIAL 1` · `INBOUNDED 3`
-The `REQUESTED` / `PARTIAL` / `INBOUNDED` chips render the status pill inline followed by the count. Exactly one chip is active (class `on`); clicking a chip filters the table to that status and moves `on`. `All` is the default.
+**Behavior.** Five single-select chips above the table, each showing a live count:
+`All 13` · `REQUESTED 8` · `PARTIAL 1` · `INBOUNDED 3` · `CANCELLED 1`
+The `REQUESTED` / `PARTIAL` / `INBOUNDED` / `CANCELLED` chips render the status pill inline followed by the count. Exactly one chip is active (class `on`); clicking a chip filters the table to that status and moves `on`. `All` is the default. *(The `CANCELLED` chip was added 2026-08-03 with the `PD-79` resolution — `[L-S3-12]`.)*
 
-**Counts** are computed over the full request set, not the current page, and are recomputed after every status change and every new registration. The three status counts must always sum to the `All` count.
+**Counts** are computed over the full request set, not the current page, and are recomputed after every status change, every new registration, and every cancellation. The four status counts must always sum to the `All` count.
 
 **Tracking presence is not a status.** Whether a request has a tracking number is read from the **Tracking No column**, never from the status chip. A `REQUESTED` request may have zero, one, or many tracking numbers (`[BR-10]`).
 
@@ -442,7 +451,7 @@ The `REQUESTED` / `PARTIAL` / `INBOUNDED` chips render the status pill inline fo
 
 **Selection model.** A header checkbox selects all **currently visible (filtered) rows only**; per-row checkboxes toggle individually. Selecting rows that are not on screen is the classic bulk-action accident, so it is forbidden (`[BR-29]`). Per-row selection persists across chip switches within a session. Selection is client-local (§5.4).
 
-**Enabled conditions.** `Bulk add tracking numbers` is **disabled at 0 selected** (`[E-24]`). Rows in `INBOUNDED` are excluded from the operation and reported in the result toast, because adding tracking to a terminal request is blocked `[PD-85 · OWNER-PENDING]` (`[E-25]`, `[E-28]`).
+**Enabled conditions.** `Bulk add tracking numbers` is **disabled at 0 selected** (`[E-24]`). Rows in `INBOUNDED` **or `CANCELLED`** are excluded from the operation and reported in the result toast, because adding tracking to a terminal request is blocked `[PD-85 · OWNER-PENDING]` / `BR-34` (`[E-25]`, `[E-28]`, `[E-94]`).
 
 **This is also the add-more-numbers path.** Because the Tracking No cell offers `Add tracking` only when it is empty (§3.3.4), the bulk bar is the **specified path** for adding a further number to a `REQUESTED` or `PARTIAL` request that already has one: select the row → `Bulk add tracking numbers` → the same `[L-M1]` contract applies to that request (§2.4 observation 2).
 
@@ -470,6 +479,7 @@ The `REQUESTED` / `PARTIAL` / `INBOUNDED` chips render the status pill inline fo
 | One number | The number in blue tabular-numeral text | none inline — use the bulk bar to add more (§3.3.2) |
 | Two or more | Every number, one per line, plus the note `{n} tracking numbers — all matching active` | none inline — use the bulk bar |
 | INBOUNDED | The number(s) plus the note `Switched by View Orders scan inbound` | **No `Add tracking` button** `[PD-85 · OWNER-PENDING]` |
+| CANCELLED (2026-08-03) | Muted `–` (or the retained number(s)) plus the note `Tracking matching deactivated` | **No `Add tracking` button** — terminal, `BR-34` (`[E-94]`) |
 
 **Contract.** The cell never truncates the number list — a split shipment with four numbers shows four numbers. All registered numbers are match/scan targets simultaneously [G-10].
 
@@ -484,18 +494,20 @@ The `REQUESTED` / `PARTIAL` / `INBOUNDED` chips render the status pill inline fo
 | `REQUESTED` | amber fill, dark-amber text | Declared; nothing received yet |
 | `PARTIAL n/m` | orange fill, white text, e.g. `PARTIAL 120/180` | Partially received; `n` received of `m` expected |
 | `INBOUNDED` | green fill, white text | Fully received; terminal |
+| `CANCELLED` | gray fill, white text (2026-08-03) | Cancelled from **this** page while still `REQUESTED`; terminal. The pill carries a `.route-note` with the reason and date (demo: `Purchase cancelled · 07-12`). Row retained for audit — `[L-S3-12]`, `BR-34` |
 
 **Declared [G-11] delta — pill arithmetic (2026-08-03).** `[G-11]` writes the middle stage as "`PARTIAL (n/m remaining …)`". The rendered numbers on this page and on View Orders are **received / expected**, not remaining / expected: a request expecting 180 with 120 received renders `PARTIAL 120/180`, never `PARTIAL 60/180`. `[G-11]`'s parenthetical is a wording slip in the rule, not a different behavior; the received/expected form is what both consuming specs implement and what QA asserts (`[E-30]`, `BR-10`, QA-C-09, QA-E-01). `[G-11]` is to be corrected to "`PARTIAL ({received}/{expected}, amber)`"; this page does not change either way.
 
-**Transitions (all written from View Orders, never from here):**
+**Transitions (receive-side written from View Orders; the single desk-written transition is the 2026-08-03 Cancel):**
 
 ```
 REQUESTED ──(View Orders State 6 "Save Partial")──▶ PARTIAL (n/m)
 REQUESTED ──(View Orders State 6 "Confirm Full Inbound")──▶ INBOUNDED
 PARTIAL   ──(rescan of any registered number, remainder reconciled)──▶ PARTIAL (n'/m) or INBOUNDED
+REQUESTED ──(this page: Cancel → M2 "Confirm cancellation")──▶ CANCELLED   (terminal · 2026-08-03, PD-79 resolved)
 ```
 
-No reverse transition exists on this page. `INBOUNDED` is terminal (`[BR-14]`). A request may go `REQUESTED → INBOUNDED` directly when the first receipt is complete; `PARTIAL` is not a required stop (`[E-89]`).
+No reverse transition exists on this page. `INBOUNDED` and `CANCELLED` are terminal (`[BR-14]`, `BR-34`). A request may go `REQUESTED → INBOUNDED` directly when the first receipt is complete; `PARTIAL` is not a required stop (`[E-89]`). `CANCELLED` is reachable **only** from `REQUESTED` — never from `PARTIAL` or `INBOUNDED` (`BR-32`, `[E-93]`).
 
 **Rescan resumes from the remainder.** Scanning any registered tracking number of a `PARTIAL` request re-enters View Orders State 6 with the running totals restored; received counts accumulate against the same request and are never double-counted (`[E-44]`, [G-10]).
 
@@ -535,7 +547,7 @@ Payload per row: Inbound No., supplier, requested-by, age.
 
 **The OTHER gap must not be silent** (`[BR-31]`). Until a channel is named, `OTHER`-route requests are **still collected and still written into `DC-14`** with `channel=unrouted`. The run record therefore proves how many requests went unchased, and turning the channel on later is a routing change, not a data-recovery exercise (`[E-75]`). Inventing a channel now is forbidden — it would create an unowned alert stream.
 
-**Scope guards.** `PARTIAL` and `INBOUNDED` requests are never included (they have tracking by definition). Requests with at least one number are never included. The job runs **once per calendar day**; a scheduler retry must be idempotent per date and must not double-post (`[E-52]`). A run that finds nothing posts nothing but **still records the run** (`[E-76]`).
+**Scope guards.** `PARTIAL` and `INBOUNDED` requests are never included (they have tracking by definition). **`CANCELLED` requests are never included** — a cancelled purchase has no tracking number coming, so chasing it would be noise (2026-08-03, `BR-34`, `[E-95]`). Requests with at least one number are never included. The job runs **once per calendar day**; a scheduler retry must be idempotent per date and must not double-post (`[E-52]`). A run that finds nothing posts nothing but **still records the run** (`[E-76]`).
 
 **Server.** Execution is persisted with the flagged request ids per channel and the Slack message ts (`DC-14`) so a silent scheduler failure is detectable; each dispatch result is persisted separately (`DC-15`). A partial failure — one channel delivered, one not — is recorded per channel and retried per channel (`[E-77]`). Slack delivery failure never blocks or alters request state `[PD-4 · OWNER-PENDING]` (`[E-51]`).
 
@@ -574,7 +586,52 @@ It is display only. It exists to stop anyone from looking for the manual control
 
 **Partial requests.** A `PARTIAL` request still shows `–`; Received Date marks completion, not first contact. Per-arrival timestamps live on the View Orders reception events, not in this column.
 
-**No Carrier.** Automatic Carrier recording is **not supported**, and there is **no Carrier column** on this page (confirmed 2026-08-03, review **C-1**) `[PD-9 · OWNER-PENDING]`. QA asserts the column's absence and the absence of a carrier field on `DC-9`. The State 1 footer's contrary sentence is defect **WF-2** and must not be implemented → `[L-R9]`.
+**No Carrier.** Automatic Carrier recording is **not supported**, and there is **no Carrier column** on this page (confirmed 2026-08-03, review **C-1**) `[PD-9 · OWNER-PENDING]`. QA asserts the column's absence and the absence of a carrier field on `DC-9`. The State 1 footer's former contrary sentence was defect **WF-2**, fixed in the SST 2026-08-03 → `[L-R9]`.
+
+#### 3.3.11 `[L-S3-11]` ✎ Edit / Cancel row actions — REQUESTED only (2026-08-03, `PD-79` resolved)
+
+**Trigger.** Two buttons in every row's Actions cell, after `💬 Comments`: `✎ Edit` (`.req-edit`) and `Cancel` (`.req-cancel`, red-outline).
+
+**Enablement matrix (`BR-32`).** Both actions exist **only while nothing physical has happened**:
+
+| Row status | ✎ Edit | Cancel | Disabled tooltip (`title`, byte-accurate) |
+|---|---|---|---|
+| `REQUESTED` | enabled | enabled | (enabled titles: `Edit request — REQUESTED only` / `Cancel request — REQUESTED only`) |
+| `PARTIAL` | **disabled** | **disabled** | `Stock already received against this request — a PARTIAL request can't be edited` / `… can't be cancelled` |
+| `INBOUNDED` | **disabled** | **disabled** | `Stock has already moved — an INBOUNDED request can't be edited` / `… can't be cancelled` |
+| `CANCELLED` | **disabled** | **disabled** | `Request cancelled — terminal` (both) |
+
+Disabled buttons render gray (`.btn-gray` + `disabled`) and are inert. The gating is enforced **server-side as well** — a direct API edit/cancel of a non-`REQUESTED` request is rejected (`[E-93]`, `[E-98]`).
+
+**Edit flow.**
+
+1. Click `✎ Edit` on a `REQUESTED` row → the **New Request form opens prefilled with the request's saved values** (route, lines, costs, supplier, tracking, expected arrival, memo) in **edit mode**, with a banner above the form: `Editing request {Inbound No.}` plus the explanation that saving logs every changed field and notifies the requester, and an `Exit edit mode` button that discards the mode with no server call (§5.4).
+2. **The Inbound No. never changes.** Editing never re-allocates, re-buckets or re-sequences the number — the request keeps its identity for the sheet scrape, View Orders matching and the comment thread (`BR-33`, QA-C-29).
+3. Every creation-form rule applies unchanged in edit mode: same field contract (§3.1.4), same validation order (§3.1.7), same locked catalog cells, same duplicate-SKU block, same idempotency [G-9].
+4. Save → the request is **updated in place** (no new row, no new number), green toast [G-2] `✓ Inbound request updated — {Inbound No.}` with secondary line `Changed fields logged as an auto-comment (old → new) · Requester notified on Slack · No refresh`, and:
+   - `inbound_request.edited` (`DC-24`) persists the full field-level diff [G-8];
+   - an auto-comment (`DC-11`, `trigger=request_edited`) lists every changed field as `{field}: {old} → {new}`;
+   - Slack `@`-mentions the **requester** in `#fulfillment-admin-comments` through the same [G-7] comment-mention pipeline (§6.1 row 7).
+5. A save that changes **nothing** is a quiet no-op: edit mode exits, **no** `DC-24`, no auto-comment, no Slack (`[E-99]`).
+6. A save against a request that left `REQUESTED` while the form was open is rejected — red toast, row reloaded, form values retained, `DC-22` persisted (`[E-98]`).
+
+**Cancel flow.** Click `Cancel` on a `REQUESTED` row → confirmation modal `[L-M2]` (§3.4b). Nothing is written until the modal's `Confirm cancellation`.
+
+**Why REQUESTED-only.** Once any unit has been received (`PARTIAL`) the request is a reconciliation anchor for physical stock — editing its declared lines would rewrite the denominator under a live count, and cancelling it would orphan received goods. The correction channels for moved stock remain the View Orders M6 expected-qty edit and comments (`BR-13`, `BR-25`).
+
+#### 3.3.12 `[L-S3-12]` CANCELLED status — terminal, row kept for audit (2026-08-03)
+
+**Behavior.** A cancelled request stays in the Request List with a **gray `CANCELLED` pill** and a `.route-note` carrying the reason and date (demo row `202607110006`: `Purchase cancelled · 07-12`). The row is **never deleted** — the audit trail (who requested, who cancelled, why) is the point of keeping it.
+
+**Terminal semantics (`BR-34`).**
+
+- The only transition into `CANCELLED` is from `REQUESTED`, via M2 (§3.3.5). There is **no un-cancel**; a revived purchase is a **new** request.
+- **View Orders tracking matching is deactivated** for every number registered on the request, atomically with the cancellation — a subsequent scan of such a number does **not** match and falls to the unrecognized pool like any unknown barcode (`[E-96]`). Registered numbers are retained on the record for audit; the Tracking No cell renders the note `Tracking matching deactivated` (§3.3.4).
+- `Add tracking` is blocked, and bulk adds exclude `CANCELLED` rows with a named exclusion (`[E-94]`).
+- The **morning no-tracking check never includes** `CANCELLED` requests (`[E-95]`, §3.3.6).
+- Comments stay open — like `INBOUNDED`, a frozen record stays discussable (`[E-49]` doctrine).
+- The **`CANCELLED` filter chip** (§3.3.1) and the footer status breakdown (§3.5.4) count cancelled requests; `All` includes them.
+- **Sheet scrape:** cancelled rows are scraped **as-is** with their status, so the Procurement Hub sheet sees the cancellation rather than a silently vanished row (`BR-20`).
 
 ### 3.4 `[L-M1]` Modal — Add Tracking No
 
@@ -630,6 +687,38 @@ Purple note: `Saved numbers auto-match to View Orders — when the center scans 
 
 **Status.** Saving numbers **never** changes status — the request stays `REQUESTED` (or `PARTIAL`).
 
+### 3.4b `[L-M2]` Modal — Cancel Inbound Request (2026-08-03, `PD-79` resolved)
+
+**Open trigger.** The `Cancel` button (`.req-cancel`) on a `REQUESTED` Request List row (§3.3.11). No other path — no top-bar tab, no bulk cancel, no keyboard shortcut. DOM: `#m-cancel`.
+
+**Header.** `Cancel Inbound Request — {Inbound No.}` with an `✕` close control. **The number is live-bound to the opening row** (`#mcNo`) — unlike M1's static demo header.
+
+**Body copy, verbatim.**
+`This cancels the request before any stock movement.`
+`Allowed only while the request is still REQUESTED — once goods start arriving (PARTIAL / INBOUNDED) it can no longer be cancelled. The row is kept in the Request List as CANCELLED for audit, and View Orders tracking matching is deactivated for every registered number.`
+Purple note: `Cancelling posts an auto-comment with the reason and Slack-notifies the requester (@mention) — the same comment-mention pipeline as every other request comment.`
+
+**Fields.**
+
+| Field | Type | Required | Contract |
+|---|---|---|---|
+| `Reason *` | select (`#mcReason`) | Yes | Exactly three options, byte-accurate: `Purchase cancelled` · `Wrong entry` · `Other`. Persisted values: `purchase_cancelled` \| `wrong_entry` \| `other` |
+| `Memo` | text (`#mcMemo`) | **Only when reason = `Other`** | Label qualifier: `— required when reason is Other`. Placeholder: `Why is this request being cancelled?`. An `Other` cancellation with a blank/whitespace-only memo is blocked with an inline error (`[E-100]`). For the other two reasons the memo is optional context |
+
+**Buttons.** `Keep request` (secondary — closes with **no** server call, no event, §5.4) and `Confirm cancellation` (destructive, red-outline).
+
+**Confirm server action.**
+
+1. Idempotency-keyed [G-9]; a double-click produces exactly one cancellation (`[E-97]`).
+2. Server re-validates status: if the request is no longer `REQUESTED` (a partial receipt landed while the modal was open), the cancellation is **rejected** — red toast, row reloaded, no write, `DC-22` persisted (`[E-93]`). An already-`CANCELLED` request rejects the same way (`already cancelled`, `[E-97]`).
+3. On success, atomically: status → `CANCELLED` (terminal), every registered tracking number's View Orders matching **deactivated** (`[E-96]`), reason + memo + actor + timestamp persisted (`DC-25`).
+4. After commit (side effects, `BR-27`): auto-comment (`DC-11`, `trigger=request_cancelled`) with the reason (and memo when present), and Slack `@`-mention of the **requester** in `#fulfillment-admin-comments` (§6.1 row 8).
+
+**Feedback.** Modal closes; green top-right toast [G-2]:
+`✓ Inbound request cancelled` with secondary line `Row kept in the list for audit · Tracking matching deactivated · No refresh`. The row's pill flips to the gray `CANCELLED` badge in place, its Edit/Cancel/`Add tracking` affordances disable, and the chip counts and footer breakdown recompute — no page refresh (`BR-28`).
+
+**Dismissal.** `Keep request`, the header `✕`, and a backdrop click all close the modal, discard the selected reason and memo, and write nothing (§5.4).
+
 ### 3.5 Page furniture (unnumbered but normative)
 
 #### 3.5.1 `[L-F1]` Registration confirmation toast
@@ -658,8 +747,8 @@ A blue small button at the top-left of the Request List that navigates to the `N
 
 #### 3.5.4 `[L-F4]` Result count footer line
 
-Verbatim: `Showing 6 of 12 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3`
-It reports (i) rows rendered on this page of results, (ii) total rows in the current filter, (iii) the full status breakdown. The status breakdown is over all requests and must always agree with the chip counts in `[L-S3-1]`. Page size, default sort (newest-first assumed) and pagination controls are dev decisions (§9.3).
+Verbatim: `Showing 7 of 13 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3 · CANCELLED 1`
+It reports (i) rows rendered on this page of results, (ii) total rows in the current filter, (iii) the full status breakdown including `CANCELLED` (2026-08-03). The status breakdown is over all requests and must always agree with the chip counts in `[L-S3-1]`. Page size, default sort (newest-first assumed) and pagination controls are dev decisions (§9.3).
 
 #### 3.5.5 `[L-F5]` Deep link `#reqlist` / `#s3`
 
@@ -719,7 +808,7 @@ Each entry has a dated Decision Log row in §10. These are recorded so no one re
 | `[L-R9]` | `Carrier` column, and any automatic carrier capture | 2026-08-03 `[PD-9 · OWNER-PENDING]` |
 | `[L-R10]` | Result link to View Orders on an INBOUNDED row | 2026-08-03 |
 | `[L-R11]` | Ad-hoc inbound registration path for unrequested arrivals | 2026-08-02 → unrecognized pool reuse |
-| `[L-R12]` | Any manual status control on this page (set INBOUNDED / PARTIAL / revert) | Standing rule; reaffirmed 2026-08-02 |
+| `[L-R12]` | Any manual **receive-side** status control on this page (set INBOUNDED / PARTIAL / revert / un-cancel) | Standing rule; reaffirmed 2026-08-02 · **scope narrowed 2026-08-03**: the `REQUESTED → CANCELLED` transition via the Cancel action (`[L-S3-11]`, `PD-79` resolved) is the **sole** desk-written status and is not covered by this tombstone — receive statuses remain scan-only (`BR-11`) |
 
 ---
 
@@ -738,8 +827,8 @@ Page-scoped, stable IDs. Every rule carries its rationale and its decision date.
 | **BR-7** | **Supplier is required** (whitespace-only trims to blank and is rejected). | It is the settlement counterparty and the party whose dispatch produces the inbound tracking number. | 2026-07-23 |
 | **BR-8** | **Tracking No is optional at creation** and there is exactly **one** register button; presence of a number does not change which button is used. | Purchases are usually declared before dispatch; two buttons made operators choose a workflow branch they could get wrong. | 2026-07-27 |
 | **BR-9** | **One request may hold many tracking numbers**, and every registered number is an independent View Orders match/scan target. Partial arrivals accumulate against the same request. | Split shipments are normal; forcing one number per request would fragment one purchase into several inbound records [G-10]. | 2026-08-03 (confirmed) |
-| **BR-10** | Status has **exactly three stages** — `REQUESTED` → `PARTIAL (n/m)` → `INBOUNDED` — and **tracking presence is not a status**. `PARTIAL` is not a mandatory stop. | `SHIPPED` duplicated information the Tracking No column already carried; `PARTIAL` was needed because real deliveries arrive in pieces. | `SHIPPED` retired 2026-07-27 · `PARTIAL` added 2026-08-02 |
-| **BR-11** | **No manual status transition exists on this page.** `INBOUNDED` and `PARTIAL` are written only by View Orders scans. | Status is a physical fact. If the desk could set it, the list would stop describing the warehouse — and the "tidy the list early" failure mode would be structurally available. | Standing · reaffirmed 2026-08-02 |
+| **BR-10** | The **receive pipeline has exactly three stages** — `REQUESTED` → `PARTIAL (n/m)` → `INBOUNDED` — plus one **terminal branch**: `REQUESTED → CANCELLED` (2026-08-03). **Tracking presence is not a status.** `PARTIAL` is not a mandatory stop. | `SHIPPED` duplicated information the Tracking No column already carried; `PARTIAL` was needed because real deliveries arrive in pieces; `CANCELLED` records a purchase that died before stock moved. | `SHIPPED` retired 2026-07-27 · `PARTIAL` added 2026-08-02 · `CANCELLED` added 2026-08-03 (`PD-79` resolved) |
+| **BR-11** | **No manual receive-side status transition exists on this page.** `INBOUNDED` and `PARTIAL` are written only by View Orders scans. The **sole** desk-written status is `CANCELLED` via the Cancel action (`BR-32`, 2026-08-03) — it asserts a commercial fact (the purchase died), not a physical one. | Receive status is a physical fact. If the desk could set it, the list would stop describing the warehouse — and the "tidy the list early" failure mode would be structurally available. Cancellation is different in kind: no goods exist to observe. | Standing · reaffirmed 2026-08-02 · cancel exception carved out 2026-08-03 |
 | **BR-12** | **Received Date is captured automatically at the View Orders scan time on `INBOUNDED`**; pre-inbound and `PARTIAL` rows show `–`. **No Carrier is captured and no Carrier column exists.** | Received Date is a by-product of a scan that already happens; carrier data has no reliable automatic source, so capturing it would mean typing it, which nobody would do accurately `[PD-9 · OWNER-PENDING]`. | 2026-08-03 |
 | **BR-13** | **Expected-quantity edits originate only in View Orders M6**, carry a mandatory reason from the [G-11] enum, recompute remaining quantity and the full-confirm gate, auto-post a comment on the request, and notify the requester on Slack. This page **displays** the resulting history and offers no edit control. | The person who can see the damaged carton is the person at the bench, not the person at the desk; one edit origin means one audit trail [G-11]. | 2026-08-02 |
 | **BR-14** | `INBOUNDED` is **terminal**. Tracking numbers may not be added to an INBOUNDED request; a late split shipment becomes a new inbound request `[PD-85 · OWNER-PENDING]`. | Reopening a completed request would invalidate its Received Date and its completed reconciliation. | 2026-08-03 |
@@ -760,6 +849,9 @@ Page-scoped, stable IDs. Every rule carries its rationale and its decision date.
 | **BR-29** | **Select-all covers only the currently visible (filtered) rows.** Off-screen rows are never selected by a select-all, and per-row selection persists across chip switches within a session. | Selecting rows the operator cannot see is the classic bulk-action accident; the same doctrine governs bulk selection on Ready to be Outbounded. | 2026-08-03 |
 | **BR-30** | **The Qty-cell edit marker renders a short reason token**, not the full reason string, on the fixed mapping in §3.3.5. The third option — whose label is `Other`, per §3.3.5's declared [G-11] delta — renders `other`; the memo text is never inlined into the cell. | The wireframe's `(damaged)` is narrower than the reason string it stands for; an ad-hoc abbreviation per developer would make the marker unreadable and untestable. | 2026-08-03 |
 | **BR-31** | **`OTHER`-route requests with no tracking are still collected by the morning check and written to `DC-14` with `channel=unrouted`,** even though no channel receives them yet. | Without this, an entire route's chase gap is invisible: the requests would be silently skipped and nobody could measure the cost of the missing channel decision. | 2026-08-03 |
+| **BR-32** | **Edit and Cancel are available only while the request is `REQUESTED`.** On `PARTIAL` / `INBOUNDED` / `CANCELLED` rows both buttons are disabled with an explanatory tooltip, and the server rejects direct API attempts. | Once stock has moved the request is a live reconciliation anchor — editing would rewrite the denominator under a physical count, and cancelling would orphan received goods. | 2026-08-03 (owner, `PD-79` resolved) |
+| **BR-33** | **Editing never changes the Inbound No.** and leaves a complete audit trail: `DC-24` persists the field-level diff, an auto-comment lists every change as `{field}: {old} → {new}`, and the requester is Slack-`@mentioned` [G-7]. Edit-mode validation is identical to creation. A zero-diff save writes nothing. | The number is the entity key for the sheet scrape, View Orders matching and the comment thread; silent edits would make the audit comment corpus lie. | 2026-08-03 (owner, `PD-79` resolved) |
+| **BR-34** | **`CANCELLED` is terminal and audit-preserving:** the row is never deleted, the reason (enum + memo) is mandatory, every registered tracking number's View Orders matching is deactivated atomically, and cancelled requests are excluded from the morning check and from bulk tracking adds. There is no un-cancel — a revived purchase is a new request. | Deleting the row would erase the evidence that a purchase was declared and killed; leaving matching active would let a dead request swallow a live scan. | 2026-08-03 (owner, `PD-79` resolved) |
 
 ---
 
@@ -782,7 +874,9 @@ Shared cross-page event names are **byte-identical** to the canonical list in `_
 | **DC-5** | `tracking_no.bulk_added` | `Bulk add tracking numbers` completes | actor | `batch_id`, `request_ids[]`, per-request `numbers[]`, `excluded_request_ids[]` + exclusion reason | Bulk result toast |
 | **DC-6** | `tracking_match.activated` | Atomic with each number's save | system | `request_id`, `tracking_no`, `activated_at` | Note `{n} tracking numbers — all matching active` |
 | **DC-10** | `comment.posted` | `Post` in a row panel or the hub | author | `entity_type=inbound_request`, `inbound_no`, `text`, `mentions[]`, `unresolved_mention_tokens[]` | Panel + hub `[L-F2]` `[L-S1-14]` |
-| **DC-11** | `comment.auto_posted` (`source=system`) | Memo materialisation at registration; expected-qty edit; unrecognized match confirmed | system (on behalf of the causing actor) | `inbound_no`, `text`, `trigger` ∈ `memo_materialization\|expected_qty_edit\|unrecognized_match_confirmed`, `caused_by_event_id` | Comment thread |
+| **DC-11** | `comment.auto_posted` (`source=system`) | Memo materialisation at registration; expected-qty edit; unrecognized match confirmed; request edited; request cancelled (both 2026-08-03) | system (on behalf of the causing actor) | `inbound_no`, `text`, `trigger` ∈ `memo_materialization\|expected_qty_edit\|unrecognized_match_confirmed\|request_edited\|request_cancelled`, `caused_by_event_id` | Comment thread |
+| **DC-24** | `inbound_request.edited` | Edit-mode save commits with ≥ 1 changed field (`[L-S3-11]`) | editor | `inbound_no` (unchanged, `BR-33`), `diff[]{field, old, new}` — request-level fields and line-level adds/removes/changes, `idempotency_key` | Updated row + toast; auto-comment via `DC-11` (`trigger=request_edited`) |
+| **DC-25** | `inbound_request.cancelled` | `Confirm cancellation` in M2 (`[L-M2]`) | canceller | `inbound_no`, `reason` ∈ `purchase_cancelled\|wrong_entry\|other`, `reason_memo\|null` (required iff `other`), `deactivated_tracking_nos[]`, `idempotency_key` | Gray `CANCELLED` pill + reason note + toast; auto-comment via `DC-11` (`trigger=request_cancelled`) |
 | **DC-12** | `comment.starred` / `comment.unstarred` | `★` toggle in the hub | user | `comment_id`, per-user saved state | `★ Saved` tab |
 | **DC-13** | `comment.read` / `comment.mark_all_read` | Opening a mention; `Mark all as read` | user | `comment_ids[]` | Unread badge |
 | **DC-17** | `comment.mention_notified` | A resolved `@mention` is dispatched | system | `comment_id`, `mentioned_user`, `channel`, `deep_link` | none (drives §6.1 row 4) |
@@ -828,6 +922,8 @@ Declared so developers do not over-build and so QA does not assert persistence t
 8. Page-tab switches (`New Request` ↔ `Request List`) and comment-panel expand/collapse.
 9. Blocked client-side comment posts (empty text never reaches the server, so there is nothing to record).
 10. Wireframe demo counters and static demo values — not data.
+11. **Entering or leaving edit mode without saving** (`✎ Edit` click, `Exit edit mode`, tab-away) — nothing persists until the edit-mode save commits (`DC-24`). *(2026-08-03)*
+12. **M2 dismissal without confirming** — `Keep request`, the header `✕`, or a backdrop click discard the selected reason and memo with no server call. *(2026-08-03)*
 
 Anything operator-initiated that is not on this list **must** persist.
 
@@ -847,12 +943,14 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 | 4 | Comment `@mention` on an inbound request (row panel or hub) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | entity no. (Inbound No.), comment text, time, author, @mentioned user, deep link to the request | the mentioned person, `@`-tagged in the message body | CONFIRMED by owner 2026-08-03 (review **C-2**) |
 | 5 | **Expected-qty edit** auto-comment (originating in View Orders M6, landing on this request) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | old→new qty, reason, editor | **@requester** of this inbound request | CONFIRMED 2026-08-03 |
 | 6 | **Unrecognized match confirmed** where the resolution routes to an inbound request | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | tracking no., matched product line, resolver | @registrant (suppressed when resolver == registrant `[PD-16 · OWNER-PENDING]`) | CONFIRMED 2026-08-03 · owned by `tracking-missing`, referenced here for the recovery loop |
+| 7 | **Request edited** (`DC-24` auto-comment, §3.3.11) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | Inbound No., changed fields `{field}: {old} → {new}`, editor, deep link | **@requester** of the inbound request | Owner decision 2026-08-03 (`PD-79` resolved) · same [G-7] pipeline as rows 4–6 |
+| 8 | **Request cancelled** (`DC-25` auto-comment, §3.4b) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | Inbound No., reason (+ memo when present), canceller, deep link | **@requester** of the inbound request | Owner decision 2026-08-03 (`PD-79` resolved) · same [G-7] pipeline as rows 4–6 |
 
 **Adjacent route, not fired from this page:** unrecognized barcode registration → **#unrecognized-tracking** (first mention in this spec; `_slack-routing.md` publishes no ID for it), owned by the `tracking-missing` spec. It appears here only because `BR-19`'s recovery loop begins there.
 
 **Delivery semantics.** The `@mention` sits **in the message body**, so Slack raises a personal notification while the channel doubles as a team-visible archive [G-7]. Dispatch results are persisted (`DC-15`); failures are retried and never block or roll back the primary action `[PD-4 · OWNER-PENDING]` (`BR-27`). Retry policy is a dev decision.
 
-**No other Slack route exists on this page.** Registration, M1 save, bulk add, and status transitions do **not** notify Slack. Adding one would create an unowned alert stream.
+**No other Slack route exists on this page.** Registration, M1 save, bulk add, and **receive-side** status transitions (`PARTIAL` / `INBOUNDED`) do **not** notify Slack. Edit and cancel notify only through their auto-comments (rows 7–8) — no separate broadcast. Adding any other route would create an unowned alert stream.
 
 ### 6.2 Cross-page links and deep links
 
@@ -890,13 +988,13 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 
 ## 7. Edge Cases & Error States
 
-IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planning catalogue and keep their original meanings; `[E-47]`–`[E-92]` extend it. Merged entries keep both IDs and are listed under both.
+IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planning catalogue and keep their original meanings; `[E-47]`–`[E-92]` extend it; `[E-93]`–`[E-100]` were added 2026-08-03 with the `PD-79` Edit/Cancel feature (§7.8). Merged entries keep both IDs and are listed under both.
 
 > **Retired IDs.** Two non-conforming keys have been retired and **must never be reused**:
 > - **`E-c1`** — carried by an early draft, merged onto `[E-16]`. That merge was wrong (`[E-16]` is *empty Memo*, `E-c1` was *empty comment post*, an unrelated case) and `E-c1` violated the `[E-{n}]` key convention. The empty-comment case is `[E-65]`; `[E-16]` is unchanged.
 > - **`E-18b`** — a letter-suffixed alias for `[E-59]` (Procurement Hub scrape during an in-flight registration). It violated the same `[E-{n}]` convention that retired `E-c1`, and unlike `E-c1` it had a fully conforming key already in use. **`[E-59]` is the sole live key** for that case; the merge-alias notation `E-18b = E-59` is withdrawn (2026-08-03 remediation pass). Note this is an alias retirement, **not** a renumbering — no `[E-{n}]` has changed meaning or number.
 
-**Total: 92 edge cases** (`E-1` … `E-92`, no numbering gaps, no letter-suffixed keys).
+**Total: 100 edge cases** (`E-1` … `E-100`, no numbering gaps, no letter-suffixed keys).
 
 ### 7.1 New Request — form validation
 
@@ -1021,7 +1119,20 @@ IDs are page-scoped and stable. `[E-1]`–`[E-46]` are inherited from the planni
 
 ### 7.7 Permissions
 
-Under v1's single admin role `[PD-1 · OWNER-PENDING]` [G-15] there are **no permission-denied states** on this page. Every authenticated admin may create requests, add tracking numbers, bulk add, and comment; every such action records the actor (`BR-26`). A future role model would gate creation and tracking entry separately — that is a post-v1 owner decision.
+Under v1's single admin role `[PD-1 · OWNER-PENDING]` [G-15] there are **no permission-denied states** on this page. Every authenticated admin may create requests, add tracking numbers, bulk add, comment, **edit, and cancel** (2026-08-03); every such action records the actor (`BR-26`). A future role model would gate creation, tracking entry, editing and cancellation separately — that is a post-v1 owner decision.
+
+### 7.8 Edit & Cancel (2026-08-03, `PD-79` resolved)
+
+| ID | Situation | Expected behavior |
+|---|---|---|
+| **E-93** | **Cancel/receipt race:** a View Orders partial save commits between opening M2 and clicking `Confirm cancellation` | The server re-validates status at commit: the request is no longer `REQUESTED`, so the cancellation is **rejected** — red toast, row reloaded showing `PARTIAL`, no write, `DC-22` persisted. The same server-side gate rejects any direct API cancel of a non-`REQUESTED` request (`BR-32`) |
+| **E-94** | A `CANCELLED` request is included in a bulk tracking add, or its `Add tracking` path is invoked directly | Excluded/blocked exactly like `INBOUNDED` (`[E-25]`, `[E-28]`): named in the result toast with its exclusion reason; no `DC-3` is written (`BR-34`) |
+| **E-95** | The morning no-tracking check runs while `CANCELLED` requests with zero tracking numbers exist | They are **never** collected, never posted, and never written into `DC-14` `flagged[]` — a cancelled purchase has no shipment to chase (`BR-34`) |
+| **E-96** | A tracking number registered on a request is scanned in View Orders **after** the request was cancelled | **No match** — matching was deactivated atomically with the cancellation. The scan falls to the unrecognized pool like any unknown barcode (`BR-19`); the number remains visible on the cancelled row for audit with the note `Tracking matching deactivated` |
+| **E-97** | Double-click on `Confirm cancellation`, or two operators cancel the same request concurrently | Exactly **one** `inbound_request.cancelled` (`DC-25`) [G-9]; the second attempt is rejected as `already cancelled` with a non-green toast and a row reload — never a second event, never an error cascade |
+| **E-98** | **Edit/receipt race:** the request leaves `REQUESTED` (partial receipt) while the edit form is open, then the operator saves | The save is rejected — red toast, row reloaded, **form values retained** for copy-out, `DC-22` persisted, no partial write. The correction path for moved stock is View Orders M6 + comments (`BR-13`) |
+| **E-99** | An edit-mode save with **zero changed fields** | Quiet no-op: edit mode exits, **no** `DC-24`, no auto-comment, no Slack — nothing changed, so nothing is recorded (`BR-33`) |
+| **E-100** | Cancellation with reason `Other` and a blank or whitespace-only memo | Blocked in the modal with an inline error on the Memo field; nothing is written until a non-blank memo is supplied (§3.4b) |
 
 ---
 
@@ -1046,7 +1157,7 @@ Under v1's single admin role `[PD-1 · OWNER-PENDING]` [G-15] there are **no per
 
 Unless a scenario names a different step, every `[WF]` scenario begins from **N1** on a freshly loaded page (**NX**).
 
-**Wireframe reality baseline** (assert nothing beyond this in `[WF]` scenarios): route cards toggle `.on` and `Other` enables + focuses `.etc-in`; filter chips toggle `.on` but do **not** filter rows; row checkboxes are inert; `Register Inbound Request` **always** fires `#gtoast` regardless of input; the M1 header is static; `＋ Add tracking number` appends rows and last-row `✕` clears instead of removing; no `.qrow` input has an `Enter` handler; `Bulk add tracking numbers` carries no `data-modal` and opens nothing; `.comment-btn` injects a `.cpanel-ir` row from the static `IR_COMMENTS` map; the Comments hub dropdown is wired only in State 1; the autocomplete list is static and does not respond to typing.
+**Wireframe reality baseline** (assert nothing beyond this in `[WF]` scenarios): route cards toggle `.on` and `Other` enables + focuses `.etc-in`; filter chips toggle `.on` but do **not** filter rows; row checkboxes are inert; `Register Inbound Request` fires `#gtoast` regardless of input (registered copy by default, updated copy while edit mode is active); the M1 header is static; `＋ Add tracking number` appends rows and last-row `✕` clears instead of removing; no `.qrow` input has an `Enter` handler; `Bulk add tracking numbers` carries no `data-modal` and opens nothing; `.comment-btn` injects a `.cpanel-ir` row from the static `IR_COMMENTS` map; the Comments hub dropdown is wired only in State 1; the autocomplete list is static and does not respond to typing. **`PD-79` demo wiring (2026-08-03):** `.req-edit` on an enabled row activates `#s1` and shows `#editBanner` with the row's Inbound No.; `.req-cancel` opens `#m-cancel` with a **live-bound** header number; `#mcConfirm` flips the opener row's badge to `CANCELLED` (+ reason note `· just now`), disables that row's Edit/Cancel, replaces its Tracking No affordance with `– Tracking matching deactivated`, closes the modal and toasts — but the chip counts and the `Showing 7 of 13` footer line do **not** recompute, and the M2 memo is **not** validated (both `[ADMIN]`).
 
 ### 8.0a Text-normalisation and scoping rules (binding on every scenario below)
 
@@ -1057,10 +1168,11 @@ These four rules exist because the wireframe interleaves demo annotation chrome 
 3. **Negative assertions are about controls, not prose, unless the scenario says otherwise.** A word that a scenario forbids as a *label* may legitimately appear in the wireframe's legend prose or sub-copy, which is annotation text describing the very rule being asserted. Each such scenario carries an explicit Precision note naming the legitimate occurrences; a naive full-document text search will false-fail. The three affected words on this page are `JIT`, `Size` and `SHIPPED`.
 4. **A label assertion is satisfied by a prefix match when the scenario declares an expected trailing element.** Two asserted labels contain a nested secondary element: the Request List Actions buttons carry a trailing `<span class="badge-n">` unread count, and the M1 `<header>` carries a trailing `<button class="x" data-close>✕</button>`. Each affected scenario states this explicitly; nowhere else on this page is a label allowed to carry extra text.
 
-**Counts.** **123 scenarios** — Block A 36 · B 7 · C 24 · D 18 · E 11 · F 11 · G 16.
-Tier split: **51 `[WF]`-only · 70 `[ADMIN]`-only · 2 dual-tier** (`QA-A-19`, `QA-A-25`) — so **53** scenarios carry a `[WF]` assertion and **72** carry an `[ADMIN]` assertion.
-**56 negative tests (45.5 %)**, well above the 25 % floor.
-**Coverage invariants**, each checkable from a map in this section: every `DC-n` in §5 carries ≥ 1 asserting scenario (§8.1) · every `[L-*]` unit and every `[L-R*]` negative entry carries ≥ 1 scenario (§8.2) · **every one of the 92 `[E-n]` edge cases carries ≥ 1 scenario (§8.3)**.
+**Counts.** **130 scenarios** — Block A 36 · B 7 · C 31 · D 18 · E 11 · F 11 · G 16.
+Tier split: **55 `[WF]`-only · 73 `[ADMIN]`-only · 2 dual-tier** (`QA-A-19`, `QA-A-25`) — so **57** scenarios carry a `[WF]` assertion and **75** carry an `[ADMIN]` assertion.
+**58 negative tests (44.6 %)**, well above the 25 % floor.
+**Coverage invariants**, each checkable from a map in this section: every `DC-n` in §5 carries ≥ 1 asserting scenario (§8.1) · every `[L-*]` unit and every `[L-R*]` negative entry carries ≥ 1 scenario (§8.2) · **every one of the 100 `[E-n]` edge cases carries ≥ 1 scenario (§8.3)**.
+*(2026-08-03 feature pass: QA-C-25…QA-C-31 added for `[L-S3-11]` / `[L-S3-12]` / `[L-M2]`; QA-C-02, QA-C-14 and QA-A-26 re-baselined against the updated wireframe.)*
 
 ### Block A — New Request form `[L-S1-1]`…`[L-S1-16]`, `[L-S1-F]`, `[L-F6]`, `[L-F8]`
 
@@ -1209,8 +1321,9 @@ And `[ADMIN]` at the target admin viewport width the complete form from the rout
 
 **QA-A-26** `[WF]` — covers `[L-S1-F]`(c), `BR-22`
 Given **N1**, then **N3**
-Then every comments affordance on the page is labelled with the exact word `Comments`: the nav button's label **begins with** `💬 Comments`, every Request List Actions button's label **begins with** `💬 Comments`, and the hub tabs begin with `@ Mentions` and read `★ Saved`
-*Declared trailing element (§8.0a rule 4): the nav button, the `@ Mentions` tab and Actions rows 1–3 each carry a trailing unread-count `<span class="badge-n">`, so their raw `textContent` is `💬 Comments2`, `@ Mentions 2` and `💬 Comments 1|2|3`. The 6 Actions buttons read `['💬 Comments 1','💬 Comments 2','💬 Comments 3','💬 Comments','💬 Comments','💬 Comments']`. Assert the prefix, or compare after removing `.badge-n` descendants.*
+Then every comments affordance on the page is labelled with the exact word `Comments`: the nav button's label **begins with** `💬 Comments`, every Request List **`.comment-btn`** button's label **begins with** `💬 Comments`, and the hub tabs begin with `@ Mentions` and read `★ Saved`
+*Scope note (re-baselined 2026-08-03): the Actions cell now also carries the `✎ Edit` / `Cancel` buttons (`[L-S3-11]`) — the comments-label assertion is scoped to `.comment-btn`, never to "every button in the Actions cell".*
+*Declared trailing element (§8.0a rule 4): the nav button, the `@ Mentions` tab and comment buttons on rows 1–3 each carry a trailing unread-count `<span class="badge-n">`, so their raw `textContent` is `💬 Comments2`, `@ Mentions 2` and `💬 Comments 1|2|3`. The **7** `.comment-btn` buttons read `['💬 Comments 1','💬 Comments 2','💬 Comments 3','💬 Comments','💬 Comments','💬 Comments','💬 Comments']`. Assert the prefix, or compare after removing `.badge-n` descendants.*
 And no localised or alternative label (e.g. `메모`, `Notes`, `Remarks`) appears on any comments control.
 
 **QA-A-27 (negative)** `[ADMIN]` — covers `[L-S1-F]`(a), `[L-R9]`, `[PD-9 · OWNER-PENDING]`
@@ -1330,15 +1443,15 @@ And loading with `#s3` **while `#s3` is already active**, and loading with an un
 
 **QA-C-02** `[WF]` — covers `[L-S3-1]`, `[L-R4]`
 Given **N3**
-Then `.filterchips` contains exactly 4 `.chip` buttons whose trimmed texts are `All 12`, `REQUESTED 8`, `PARTIAL 1`, `INBOUNDED 3`
-And the `All 12` chip carries class `on`
-And the three status counts sum to the `All` count (8 + 1 + 3 = 12)
+Then `.filterchips` contains exactly 5 `.chip` buttons whose trimmed texts are `All 13`, `REQUESTED 8`, `PARTIAL 1`, `INBOUNDED 3`, `CANCELLED 1` (re-baselined 2026-08-03, `[L-S3-12]`)
+And the `All 13` chip carries class `on`
+And the four status counts sum to the `All` count (8 + 1 + 3 + 1 = 13)
 And **no chip labelled `SHIPPED` exists**.
 
 **QA-C-03** `[WF]` — covers `[L-S3-1]`
 Given **N3**
 When I click the chip whose text is `PARTIAL 1`
-Then it gains class `on`, `All 12` loses it, and exactly one chip in `.filterchips` carries `on`.
+Then it gains class `on`, `All 13` loses it, and exactly one chip in `.filterchips` carries `on`.
 
 **QA-C-04 (negative)** `[ADMIN]` — covers `[L-S3-1]` / `[E-23]`, `[E-26]`, `[E-61]`
 When I select a chip whose status has no rows
@@ -1395,9 +1508,9 @@ Then a `.note.purple` below the table contains the exact substrings `is not done
 
 **QA-C-14** `[WF]` — covers `[L-F4]`
 Given **N3**
-Then the footer line reads exactly `Showing 6 of 12 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3`
-And the three counts in it match the chip counts asserted in `QA-C-02`
-And exactly 6 data rows are rendered in `.tbl tbody` (excluding any injected `.cpanel-ir` row).
+Then the footer line reads exactly `Showing 7 of 13 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3 · CANCELLED 1` (re-baselined 2026-08-03)
+And the four counts in it match the chip counts asserted in `QA-C-02`
+And exactly 7 data rows are rendered in `.tbl tbody` (excluding any injected `.cpanel-ir` row).
 
 **QA-C-15** `[WF]` — covers `[L-F3]`
 Given **N3**
@@ -1449,6 +1562,61 @@ And no selected row is deselected by the insert.
 Given **N3** on a freshly loaded page (**NX**)
 Then a **static** `.toast` element is present inside `#s3` reading `✓ Inbound request registered — 202607130003` with the sub-line `No refresh · added to top of the list`
 And this element is **not** `#gtoast`: it exists before any click, it is not created by `gtoastShow`, and it does not auto-hide. QA must never treat its presence as evidence that a registration fired.
+
+**QA-C-25 (negative)** `[WF]` — covers `[L-S3-11]`, `BR-32` *(added 2026-08-03)*
+Given **N3**
+Then every one of the 7 data rows carries exactly one `.req-edit` button labelled `✎ Edit` and one `.req-cancel` button labelled `Cancel` in its Actions cell, after the `.comment-btn`
+And on the `REQUESTED` rows (`202607130003`, `202607130002`, `202607120004`) both buttons are **enabled** with titles `Edit request — REQUESTED only` / `Cancel request — REQUESTED only`
+And on row `202607120001` (`PARTIAL`) both are **disabled** (`.btn-gray` + `disabled`) with titles beginning `Stock already received against this request`
+And on rows `202607100005` and `202607090002` (`INBOUNDED`) both are **disabled** with titles beginning `Stock has already moved`
+And on row `202607110006` (`CANCELLED`) both are **disabled** with title exactly `Request cancelled — terminal`.
+
+**QA-C-26** `[WF]` — covers `[L-M2]`, `[L-S3-11]`, `[L-F1]`, `[G-2]` *(added 2026-08-03)*
+Given **N3**
+When I click `.req-cancel` on row `202607130002`
+Then `#m-cancel` gains class `open` and its header, excluding the `.x` control (§8.0a rule 4), reads exactly `Cancel Inbound Request — 202607130002` — the number is **live-bound** to the opening row
+And `#mcReason` contains exactly the options `Purchase cancelled`, `Wrong entry`, `Other`
+When I click `Keep request`
+Then `#m-cancel` loses class `open`, **no `#gtoast` appears**, and the row still renders the `REQUESTED` pill
+When I reopen it, select reason `Wrong entry`, and click `Confirm cancellation`
+Then `#m-cancel` loses class `open`, the row's Status cell renders the gray `CANCELLED` pill with the note `Wrong entry · just now`, its `.req-edit` / `.req-cancel` become disabled, its Tracking No cell renders `–` with the note `Tracking matching deactivated` and **no `Add tracking` button**, and `#gtoast` shows `✓ Inbound request cancelled` with the secondary line `Row kept in the list for audit · Tracking matching deactivated · No refresh`.
+*Wireframe limitation: the chip counts and footer line do not recompute after the demo cancellation — that half is `[ADMIN]` (QA-C-30).*
+
+**QA-C-27** `[WF]` — covers `[L-S3-11]`, `[L-F1]` *(added 2026-08-03)*
+Given **N3**
+When I click `.req-edit` on row `202607130003`
+Then `#s1` becomes the active state and `#editBanner` gains class `on`, its `<b>` reading exactly `Editing request 202607130003`
+When I click `Register Inbound Request`
+Then `#gtoast` shows `✓ Inbound request updated — 202607130003` with the secondary line `Changed fields logged as an auto-comment (old → new) · Requester notified on Slack · No refresh`, and `#editBanner` loses class `on`
+And a **second** click of `Register Inbound Request` shows the default `✓ Inbound request registered` toast again — edit mode does not leak
+And when edit mode is instead dismissed via `Exit edit mode`, the banner hides and the next `Register Inbound Request` click toasts the registered copy (`[E-99]`'s persistence half is `[ADMIN]`, QA-C-29).
+
+**QA-C-28** `[WF]` — covers `[L-S3-12]` *(added 2026-08-03)*
+Given **N3**
+Then row `202607110006` renders: the `WHOLESALE` route tag; `Torriden` in bold with `Dive-In Low Molecular Hyaluronic Acid Serum, 50ml`; Qty `150`; a muted `–` Tracking No cell with the note `Tracking matching deactivated` and **no `Add tracking` button**; an en-dash Received Date; the gray `CANCELLED` pill with the note `Purchase cancelled · 07-12`; and the annotation dot `12` on its Status cell
+And the row is an ordinary list row — checkbox present, `💬 Comments` enabled — kept for audit, not visually quarantined.
+
+**QA-C-29** `[ADMIN]` — covers `[L-S3-11]`, `BR-33`, `DC-24`, `DC-11`, §6.1 row 7 / `[E-98]`, `[E-99]` *(added 2026-08-03)*
+Given a `REQUESTED` request whose Order Qty is edited from `200` to `260` and whose Supplier is changed
+When the edit-mode save commits
+Then the request is updated **in place** and its **Inbound No. is byte-identical to before the edit** — no re-allocation, no new `inbound_no.allocated` (`DC-2`) event, no new row
+And `inbound_request.edited` (`DC-24`) is persisted with actor, timestamp and the full `diff[]` naming both fields with old → new values
+And `comment.auto_posted` (`DC-11`, `trigger=request_edited`) lists `{field}: {old} → {new}` for every changed field, and a Slack message reaches `#fulfillment-admin-comments` (`C0BMGEWM5QA`) `@`-mentioning the requester
+And a save with **zero** changed fields exits edit mode writing no `DC-24`, no comment and no Slack (`[E-99]`)
+And a save against a request that left `REQUESTED` while the form was open is rejected with a red toast, a row reload and `DC-22` — form values retained (`[E-98]`).
+
+**QA-C-30** `[ADMIN]` — covers `[L-M2]`, `BR-34`, `DC-25`, `DC-11`, §6.1 row 8 / `[E-93]`, `[E-96]`, `[E-97]`, `[E-100]` *(added 2026-08-03)*
+When `Confirm cancellation` commits for a `REQUESTED` request holding two tracking numbers
+Then `inbound_request.cancelled` (`DC-25`) is persisted with actor, timestamp, `reason`, `reason_memo|null` and both numbers in `deactivated_tracking_nos[]`, atomically with the status flip and the matching deactivation
+And scanning either number in View Orders afterwards does **not** match and falls to the unrecognized pool (`[E-96]`)
+And the chip counts and footer breakdown recompute without a page refresh, and `comment.auto_posted` (`trigger=request_cancelled`) plus the Slack `@requester` mention fire after commit
+And a cancellation with reason `Other` and a blank memo is blocked inline (`[E-100]`); a double-click or concurrent second cancel yields exactly one `DC-25` with the loser rejected as `already cancelled` (`[E-97]`); a cancel racing a partial receipt is rejected with a red toast and no write (`[E-93]`).
+
+**QA-C-31 (negative)** `[ADMIN]` — covers `[L-S3-12]`, `BR-32`, `BR-34` / `[E-94]`, `[E-95]` *(added 2026-08-03)*
+Then a direct API edit or cancel of a `PARTIAL`, `INBOUNDED` or `CANCELLED` request is rejected server-side — the disabled buttons are not the only gate
+And a `CANCELLED` request selected into a bulk tracking add is excluded and named in the result toast with no `DC-3` written (`[E-94]`)
+And the morning no-tracking check never collects a `CANCELLED` request (`[E-95]`)
+And no un-cancel control exists anywhere — a revived purchase is registered as a new request.
 
 ### Block D — M1 Add Tracking No modal `[L-M1]`
 
@@ -1758,7 +1926,7 @@ And `DC-14` / `DC-15` automation logs and `DC-18` / `DC-19` / `DC-22` / `DC-23` 
 **QA-G-16 (negative)** `[WF]` — covers `[L-R1]`…`[L-R12]` (wireframe-runnable half of `QA-G-12`)
 Given **N1**, then **N2**, then **N3**, then **NM**
 Then across all four surfaces the document contains: no element with `data-modal` other than `m-invoice`; no input or label whose text contains `Inbound No.` inside a `.formcard`; no checkbox bound to a free-of-charge behavior; no `.chip`, `.tag`, `.pill`, `<option>` or `<button>` reading `SHIPPED`; no `<th>`, `<label>`, form control or table cell labelled `Size` or `Carrier`; no second submit button (exactly one button reads `Register Inbound Request` per state); and no `Add tracking` button on rows `202607100005` or `202607090002`.
-*Precision note (§8.0a rule 3): `SHIPPED` (3 occurrences) and `Size` (1 occurrence) appear in legend/footer prose that documents their own removal, and `Carrier` appears in the stale State 1 footer (defect **WF-2**) and in legend `[L-S3-10]`'s negative declaration. Every clause above is scoped to controls and table cells; a full-document text search for any of the three words will produce a false failure.*
+*Precision note (§8.0a rule 3): `SHIPPED` (3 occurrences) and `Size` (1 occurrence) appear in legend/footer prose that documents their own removal, and `Carrier` appears in the State 1 footer's **negative declaration** ("automatic Carrier recording is not supported…", the 2026-08-03 **WF-2** fix) and in legend `[L-S3-10]`'s negative declaration. Every clause above is scoped to controls and table cells; a full-document text search for any of the three words will produce a false failure.*
 
 ### 8.1 Data-capture coverage map
 
@@ -1787,14 +1955,16 @@ Every event in §5 has at least one QA scenario whose Then-clause asserts its pe
 | `DC-19` `tracking_no.duplicate_blocked` | QA-D-09, QA-G-05 |
 | `DC-20` `inbound_request.sheet_scraped` | QA-G-08 |
 | `DC-21` `unrecognized_pool.linked_to_request` | QA-E-07 |
-| `DC-22` `inbound_request.stale_conflict_rejected` | QA-D-14 |
+| `DC-22` `inbound_request.stale_conflict_rejected` | QA-D-14, QA-C-29, QA-C-30 |
 | `DC-23` `inbound_request.idempotent_replay_suppressed` | QA-A-19, QA-A-34, QA-D-11 |
+| `DC-24` `inbound_request.edited` | QA-C-29 |
+| `DC-25` `inbound_request.cancelled` | QA-C-30 |
 | **NON-events** (§5.4) | QA-G-09 |
 | **Retention** (§5.3) | QA-G-15 |
 
 ### 8.2 Legend-unit coverage map
 
-Every one of the 39 legend units and all 12 negative entries carry at least one scenario.
+Every one of the 42 legend units and all 12 negative entries carry at least one scenario.
 
 | Unit | Scenarios |
 |---|---|
@@ -1827,7 +1997,10 @@ Every one of the 39 legend units and all 12 negative entries carry at least one 
 | `[L-S3-8]` | QA-C-10, E-03 |
 | `[L-S3-9]` | QA-C-13 |
 | `[L-S3-10]` | QA-C-10, C-11, E-03, E-11 |
+| `[L-S3-11]` | QA-C-25, C-26, C-27, C-29 |
+| `[L-S3-12]` | QA-C-28, C-31, C-02 |
 | `[L-M1]` | QA-D-01 … D-18 |
+| `[L-M2]` | QA-C-26, C-30 |
 | `[L-F1]` | QA-A-18, B-04, C-24, D-04 |
 | `[L-F2]` | QA-F-04, F-05, F-06, F-07, F-08, F-10 |
 | `[L-F3]` | QA-C-15 |
@@ -1841,7 +2014,7 @@ Every one of the 39 legend units and all 12 negative entries carry at least one 
 
 ### 8.3 Edge-case coverage map
 
-**Invariant: every one of the 92 `[E-n]` edge cases defined in §7 carries at least one QA scenario.** This map exists so the invariant is checkable from inside the document — §8.1 and §8.2 made the `DC-n` and `[L-*]` gaps visible, and without this table an executing QA agent could silently under-run §7. Any future edge case added to §7 must be added here in the same commit.
+**Invariant: every one of the 100 `[E-n]` edge cases defined in §7 carries at least one QA scenario.** This map exists so the invariant is checkable from inside the document — §8.1 and §8.2 made the `DC-n` and `[L-*]` gaps visible, and without this table an executing QA agent could silently under-run §7. Any future edge case added to §7 must be added here in the same commit.
 
 | Edge case | Asserted by | Edge case | Asserted by |
 |---|---|---|---|
@@ -1891,8 +2064,12 @@ Every one of the 39 legend units and all 12 negative entries carry at least one 
 | `E-46` | QA-A-19 | `E-90` | QA-A-08, QA-A-09 |
 | | | `E-91` | QA-E-10 |
 | | | `E-92` | QA-C-22 |
+| `E-93` | QA-C-30 | `E-97` | QA-C-30 |
+| `E-94` | QA-C-31 | `E-98` | QA-C-29 |
+| `E-95` | QA-C-31 | `E-99` | QA-C-27, QA-C-29 |
+| `E-96` | QA-C-30 | `E-100` | QA-C-30 |
 
-Merged entries appear once under both IDs (`E-1` = `E-14`, `E-21` = `E-35`); the retired keys `E-c1` and `E-18b` are absent by design (§7 preamble). Rows: 90 distinct entries covering all 92 numeric IDs.
+Merged entries appear once under both IDs (`E-1` = `E-14`, `E-21` = `E-35`); the retired keys `E-c1` and `E-18b` are absent by design (§7 preamble). Rows: 98 distinct entries covering all 100 numeric IDs.
 
 ---
 
@@ -1919,11 +2096,8 @@ Per the writing convention, owner questions that already carry a provisional def
 
 ### 9.2 NO-DEFAULT open questions (owner must decide — no behavior is specified)
 
-**OQ-1 · Post-registration correction, cancellation or voiding of a request** `[PD-79]`
-The wireframe has **no** edit, cancel, or void affordance. Once registered, a request can only receive tracking numbers (`[L-M1]`), have its expected quantity edited from View Orders M6, and accumulate comments. A request created with the wrong SKU, wrong route, or wrong supplier — or a purchase cancelled before dispatch — therefore has **no defined path**.
-*Current specified behavior:* requests are immutable except for the three channels above; a wrong request stays in the list and is annotated by comment.
-*What deciding it would add:* a cancel/void status (a fourth status, contradicting `BR-10`), its own Slack and comment trail, its effect on the chip counts, on the morning check, and on the Procurement Hub sheet scrape.
-**Blocking:** the sheet integration design and any future request-editing feature. **Owner decision required.**
+**OQ-1 · Post-registration correction, cancellation or voiding of a request — RESOLVED 2026-08-03 (owner)**
+`PD-79` was decided by the owner on 2026-08-03 and is **no longer an open question**. The resolution: **✎ Edit** and **Cancel** row actions, `REQUESTED`-only (`BR-32`); Edit reuses the New Request form in edit mode with a full diff audit trail and no re-numbering (`BR-33`); Cancel requires a reason enum and produces the terminal `CANCELLED` status with the row retained for audit and tracking matching deactivated (`BR-34`). Specified at §3.3.11, §3.3.12, §3.4b; events `DC-24` / `DC-25`; edge cases `[E-93]`–`[E-100]`; Slack §6.1 rows 7–8. *(The entry number OQ-1 is retained so older cross-references stay resolvable; nothing here is open.)*
 
 **OQ-2 · May an item enter the unrecognized pool with NO tracking number (label destroyed)?** `[PD-66]`
 Cross-page dependency owned by `tracking-missing`, listed here because `BR-19`'s recovery loop depends on the answer: if a pool item can exist with no number, then "match" has nothing to write onto the product line and the rescan-resolves loop this page relies on does not close.
@@ -1948,7 +2122,7 @@ Raised by this spec, not previously registered. The wireframe renders `Add track
 | D-8 | Numeric formatting | Store integers, format with commas on render (`[E-7]`); normalise full-width digits on input (`[E-71]`) |
 | D-9 | Form reset after successful registration | Clear for the next request, or retain values. Must be consistent and must not half-clear |
 | D-10 | Tracking-number charset and length validation breadth | **Carrier-agnostic.** No single-carrier regex — carriers differ (`[E-36]`, `[E-73]`) |
-| D-11 | Request List pagination, page size and default sort | `Showing 6 of 12` implies paging; newest-first assumed (`[L-F4]`) |
+| D-11 | Request List pagination, page size and default sort | `Showing 7 of 13` implies paging; newest-first assumed (`[L-F4]`) |
 | D-12 | Idempotency key mechanics | Per-form-session UUID recommended; [G-9] mandates existence, not mechanism |
 | D-13 | Toast duration, stacking policy and failure copy | Wireframe uses a single reused slot with a 2600 ms timer (`[L-F1]`, `[E-46]`) |
 | D-14 | Comment search debounce and index scope | Hub full-text search across all comments [G-7] |
@@ -2028,6 +2202,8 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 (remediation pass) | **Traceability gap recorded, register not edited:** `_provisional-decisions.md` lists `Pages:` scopes for `[PD-12]` ("VO"), `[PD-16]` ("VO, TM, OD") and `[PD-63]` ("TM, VO") that do **not** name IR, although this spec cites all three with meanings that match the register exactly. If the owner reverses any of the three, the register's impact list will not point an editor at this file. **Fix belongs in the register (add `IR` to those three `Pages:` lines), not here** | §3.3.5, §6.1 row 6, §9.1 | Audit finding (M1 D8) |
 | 2026-08-03 (remediation pass) | **Event-name caveat declared.** `DC-23` and `DC-15` name concepts that other screens persist under different local names; `_global-rules`' canonical list does not yet cover them. This page renames to match when it does — rename only, no payload or trigger change. No name standardised unilaterally | §5 preamble | Cross-page consistency audit (M3a D14) |
 | 2026-08-03 (remediation pass) | Minor conformance fixes: banned `MM-DD` date shorthand expanded to `YYYY-MM-DD` in the reversal-chain block; `[G-7]`'s rule body no longer restated in §3.1.13 (citation + delta only); `[PD-63]` given its `· OWNER-PENDING` tag; Slack channel IDs annotated on first mention (§3.3.6) rather than in §6.1 | §3.1.13, §3.3.6, §6.1, §9.1, §10 | Audit findings (M1 D4, D6, D7, D12) |
+| 2026-08-03 (feature pass) | **`PD-79` RESOLVED by the owner — post-registration Edit & Cancel added ("keep it simple").** **Edit**: `REQUESTED`-only; New Request form reused in edit mode with an `Editing request {Inbound No.}` banner; Inbound No. never re-allocated; save → in-place update + green toast + diff auto-comment (old → new) + Slack `@requester` via the [G-7] pipeline. **Cancel**: `REQUESTED`-only (`PARTIAL`/`INBOUNDED` = stock moved → disabled + tooltip); confirm modal M2 with reason enum `Purchase cancelled` / `Wrong entry` / `Other` + memo; result = terminal **`CANCELLED`** (gray pill, row kept for audit), tracking matching deactivated, chip added, auto-comment + Slack. New units `[L-S3-11]` `[L-S3-12]` `[L-M2]`; rules `BR-32`–`BR-34`; `BR-10`/`BR-11`/`[L-R12]` scope-amended; events `DC-24`/`DC-25`; edge cases `[E-93]`–`[E-100]`; QA-C-25…C-31; §9.2 OQ-1 closed | §1.3(6), §2, §3.3.1/2/4/5/6/11/12, §3.4b, §3.5.4, §4, §5, §6.1 rows 7–8, §7.8, §8 | Owner decision 2026-08-03 · `_provisional-decisions.md` `[PD-79]` |
+| 2026-08-03 (feature pass) | **Wireframe defects WF-2 and WF-11 applied to the SST** in the same commit: the State 1 footer now states the Carrier negative explicitly, and the dead link-info-modal HTML comment was deleted (its slot now holds `#m-cancel`). §2.4's defect table re-marked FIXED; QA-G-16's Carrier precision note re-baselined | §2.4, §3.1.16(a), §3.3.10, QA-G-16 | `_wireframe-fixes.md` WF-2 / WF-11 |
 
 **Reversal chains at a glance** (so nobody re-implements a superseded state):
 
@@ -2036,10 +2212,11 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 3. **JIT Price scope:** Smart Buy + Wholesale only (2026-07-23) → optional on **all** routes (2026-07-26, current).
 4. **Product search:** per-row search boxes + add-row button (2026-07-23) → single unified search box, no add-row button (2026-07-27, current).
 5. **Submit:** two register buttons (2026-07-23) → one `Register Inbound Request` (2026-07-27, current).
-6. **Status stages:** `REQUESTED` / `SHIPPED` / `INBOUNDED` (2026-07-23) → `SHIPPED` retired, 2 stages (2026-07-27) → `PARTIAL` added, 3 stages (2026-08-02, current).
+6. **Status stages:** `REQUESTED` / `SHIPPED` / `INBOUNDED` (2026-07-23) → `SHIPPED` retired, 2 stages (2026-07-27) → `PARTIAL` added, 3 stages (2026-08-02) → `CANCELLED` terminal branch added off `REQUESTED`, receive pipeline still 3 stages (2026-08-03, `PD-79` resolved, current).
 7. **View Orders linkage UI:** link-info modal + INBOUNDED result link (2026-07-23 → 2026-08-02) → both removed, badge only (2026-08-03, current).
-8. **Carrier:** footer promised automatic capture (2026-07-23 era) → automatic capture **rejected**, no column (2026-08-03, current; the footer text is stale defect **WF-2**).
+8. **Carrier:** footer promised automatic capture (2026-07-23 era) → automatic capture **rejected**, no column (2026-08-03) → stale footer text fixed in the SST (defect **WF-2**, applied 2026-08-03, current).
+9. **Post-registration mutability:** immutable except tracking adds / M6 qty edits / comments (2026-07-13 → 2026-08-03 morning, `PD-79` NO-DEFAULT) → owner resolved: `REQUESTED`-only Edit + Cancel with `CANCELLED` terminal status (2026-08-03, current).
 
 ---
 
-*End of specification — `inbound-request` v1.2, 2026-08-03.*
+*End of specification — `inbound-request` v1.3, 2026-08-03.*
