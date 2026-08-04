@@ -207,10 +207,11 @@ Provisional: **Orders with any non-INBOUNDED line are auto-excluded from the bat
 Rationale: partial outbound would ship incomplete orders; JIT rows are complete and only awaiting the click.
 Pages: RTO (Q1/Q4/OQ-B2/E-21).
 
-**[PD-36] Should the picking list (M1 / printed) include sample-set lines?**
-Provisional: **Yes — internal picking artifacts list WHICH sample and HOW MANY per [G-13].**
-Rationale: G-13 explicitly assigns sample detail to the internal picking artifact; otherwise the picker cannot pick it → conditional wireframe fix WF-9.
-Pages: RTO (Q3/OQ-B5), OM.
+**[PD-36] Should the picking list (M1 / printed) include sample-set lines?** — **RESOLVED, OWNER-DECIDED 2026-08-04: yes.**
+Answer: the picking list carries **one** sample-set line per order holding an assigned set. Its content is `sample set` only — no sample type, no per-type quantity — per `[PD-51]` (2026-08-03). The line sorts **last** and sits outside the location ordering because it carries no location.
+Rationale: G-13 assigns sample detail to the internal picking artifact; otherwise the picker cannot pick it. Wireframe fix WF-9 added the row on 2026-08-03 and this decision ratifies it, so WF-9 is no longer conditional.
+Applied: `_global-rules.md` [G-13] v1.4 · `ready-to-outbound.md` §2.4/§3.15/[BR-21]/[DC-5]/§6.5/§7/§9.2/§9.4/§10 · `order-management.md` §3.6/BR-8/§6.6/[E-34]/QA-SMP-46/§9.1 · `order-detail.md` §9. Inline `OWNER-PENDING` tags removed in the same commit.
+Pages: RTO (Q3/OQ-B5), OM, OD.
 
 **[PD-37] Do Total Items and the bulk-button item counts include non-inbounded units?**
 Provisional: **All units of the order** (MKT-40233 showing Total 3 with one item not inbounded is the precedent).

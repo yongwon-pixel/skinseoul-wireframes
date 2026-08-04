@@ -1,6 +1,6 @@
 # View Orders — Screen Specification
 
-> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
+> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — that decision round is closed), and **PD-36 was owner-decided 2026-08-04** (the picking list carries a `sample set` line; its inline tags were removed outright, so it is the one decided ID you will not see tagged); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
 **Page slug:** `view-orders` · **Wireframe SST:** `wms2/view-orders/index.html` (v21, 1,854 lines)
 **Live wireframe:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/view-orders/

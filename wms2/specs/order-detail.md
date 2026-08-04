@@ -1,6 +1,6 @@
 # Order Detail — Screen Specification (WMS 2.0)
 
-> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
+> **Decision status update (2026-08-03)** — PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — that decision round is closed), and **PD-36 was owner-decided 2026-08-04** (the picking list carries a `sample set` line; its inline tags were removed outright, so it is the one decided ID you will not see tagged); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded — see `_provisional-decisions.md` for the decisions.
 
 Page slug: `order-detail` · Spec version 1.2 · 2026-08-03
 Wireframe (SST): `wms2/order-detail/index.html` · Live: https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/order-detail/
@@ -2288,7 +2288,7 @@ Per `_review.md` §3.8, this section lists **only** three things: what this scre
 | **Scanner protocol `[G-1]`** | Order Detail is not a scan surface and must never gain a scan input `[BR-30]`. Scanning lives in View Orders (all states) and Closing. QA must not apply the `[G-1]` invariants here. |
 | **Audio `[G-3]`(b) TTS and (c) warning tone** | (b) is a Closing scan-warning mechanism; (c) is a View Orders State 6 wrong-product signal. Neither has an analogue on a desk screen `[BR-29]`. Only `[G-3]`(a) applies here — and (a) is **in scope as page behavior**, specified in `[L-9]` step 2 with its own QA scenario, not merely cross-referenced (`_review.md` §2b codes this row `Δ`; that coding is stale, §3.0.1). |
 | **Label / invoice layout content** | Deferred to **Phase 3-1**, a separate session with the owner. This spec covers print *behavior* `[G-4]` only, never what is printed on the label. |
-| **Sample assignment UI** | Order Management is the primary home `[G-13]`. Order Detail only **displays** the assigned sample `[PD-27 · OWNER-PENDING]` `[BR-34]`. Sample-set contents on the picking list are RTO's concern `[PD-36 · OWNER-PENDING]`. |
+| **Sample assignment UI** | Order Management is the primary home `[G-13]`. Order Detail only **displays** the assigned sample `[PD-27 · OWNER-PENDING]` `[BR-34]`. Sample-set contents on the picking list are RTO's concern `[PD-36]` (owner-decided 2026-08-04 — the picking list carries a `sample set` line). |
 | **Unrecognized-tracking resolution UI** | tracking-missing (primary) and View Orders M2. Order Detail is a landing surface only `[BR-35]`. |
 | **Partial-quantity receipt and the inbound-request lifecycle** (`REQUESTED → PARTIAL → INBOUNDED`, expected-qty edits, multiple tracking numbers `[G-10]` `[G-11]`) | Inbound Request + View Orders State 6 / M6. Order Detail's per-line inbound is all-or-nothing `[BR-41]` `[E-71]`. |
 | **Line-based location filter and audit-mode visibility `[G-14]`; JIT residual stock** | Inventory (stock-status). Order Detail shows `Latest Inventory Count` as a read `[L-10]`. Inventory's M4 reservation release is the sibling of this page's Cancel Inbound `[PD-45 · OWNER-PENDING]` — cross-referenced in §6.5, specified there. |

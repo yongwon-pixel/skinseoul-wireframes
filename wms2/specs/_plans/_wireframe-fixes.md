@@ -69,8 +69,8 @@ Raised by: closing.B E-15/E-16, QA-S0-02.
 
 **[WF-9] ready-to-outbound — picking list modal (M1) has no sample-set lines.**
 File: `wms2/ready-to-outbound/index.html` · `#m-pick` `.picktbl`.
-[G-13] requires internal picking artifacts to show WHICH sample and HOW MANY (PD-36).
-Fix: **conditional on owner approval of PD-36 and on PD-51 (the sample-set definition source) being answered** — add sample rows to the picking table. Do not add until both land.
+[G-13] requires internal picking artifacts to carry a sample line (PD-36); its content was PD-51.
+Fix: add sample rows to the picking table. **Both gates have since cleared** — PD-51 answered 2026-08-03 ("sample set" only) and PD-36 owner-decided 2026-08-04 (the line exists). The fix was applied 2026-08-03; nothing here is conditional any more.
 Raised by: ready-to-outbound.A Q3 / ready-to-outbound.B OQ-B5 + E-28.
 **APPLIED 2026-08-03** — owner approved the pass; per PD-51 v1 single label, one amber-tinted `sample set ×1` row added to `#m-pick` (order 422165, no-location marker pill). **Spec debt settled 2026-08-03 (owner-approved batch):** `ready-to-outbound.md` QA-M1-01 (the `{skus}` ≠ row-count clause), QA-M1-03 (4 → 5 rows, sample row last and excluded from the location sort), QA-M1-04 (sample SKU `—`), QA-M1-05 (`sample set`, `×1` bold), QA-M1-06 (order column tail), QA-M1-07 (third `422165` row is the sample, not a product line), §3 sample-lines paragraph, `BR-21`, `[E-28]` and QA-E-20 (unblocked) all re-baselined. Playwright-asserted.
 
