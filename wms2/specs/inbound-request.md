@@ -537,7 +537,7 @@ No reverse transition exists on this page. `INBOUNDED` and `CANCELLED` are termi
 
 **Behavior.** Once per morning an automated job collects every request that is still `REQUESTED` **and has zero tracking numbers**, and posts them to Slack split by route:
 
-- `WHOLESALE` and `SMART BUY` → **#wholesale-ops** (channel name CONFIRMED 2026-07-27; `_slack-routing.md` publishes no ID for it — that is an unpublished ID, not a pending decision)
+- `WHOLESALE` and `SMART BUY` → **#wholesale-ops** (channel name CONFIRMED 2026-07-27; `_inputs/slack-routing.md` publishes no ID for it — that is an unpublished ID, not a pending decision)
 - `PARTNERSHIP` → **#partnership-kr** (same: name confirmed, ID not published)
 - `OTHER` → channel deferred to development (§9.3, D-1)
 
@@ -942,7 +942,7 @@ Anything operator-initiated that is not on this list **must** persist.
 
 ### 6.1 Slack routing
 
-Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Channel IDs are annotated on **first mention per spec** (convention §3.6): `#wholesale-ops` and `#partnership-kr` are first mentioned at §3.3.6 and carry their "ID not published" annotation there; `#fulfillment-admin-comments` is first mentioned in row 4 below and carries its ID. Where the routing file publishes no ID, that is an unpublished ID, not a pending decision — the channel **names** are confirmed.
+Payload fields are verbatim from `_inputs/slack-routing.md` (CONFIRMED 2026-08-03). Channel IDs are annotated on **first mention per spec** (convention §3.6): `#wholesale-ops` and `#partnership-kr` are first mentioned at §3.3.6 and carry their "ID not published" annotation there; `#fulfillment-admin-comments` is first mentioned in row 4 below and carries its ID. Where the routing file publishes no ID, that is an unpublished ID, not a pending decision — the channel **names** are confirmed.
 
 | # | Trigger (this page) | Channel | Payload fields | Mention target | Status |
 |---|---|---|---|---|---|
@@ -955,7 +955,7 @@ Payload fields are verbatim from `_slack-routing.md` (CONFIRMED 2026-08-03). Cha
 | 7 | **Request edited** (`DC-24` auto-comment, §3.3.11) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | Inbound No., changed fields `{field}: {old} → {new}`, editor, deep link | **@requester** of the inbound request | Owner decision 2026-08-03 (`PD-79` resolved) · same [G-7] pipeline as rows 4–6 |
 | 8 | **Request cancelled** (`DC-25` auto-comment, §3.4b) | **#fulfillment-admin-comments** (`C0BMGEWM5QA`) | Inbound No., reason (+ memo when present), canceller, deep link | **@requester** of the inbound request | Owner decision 2026-08-03 (`PD-79` resolved) · same [G-7] pipeline as rows 4–6 |
 
-**Adjacent route, not fired from this page:** unrecognized barcode registration → **#unrecognized-tracking** (first mention in this spec; `_slack-routing.md` publishes no ID for it), owned by the `tracking-missing` spec. It appears here only because `BR-19`'s recovery loop begins there.
+**Adjacent route, not fired from this page:** unrecognized barcode registration → **#unrecognized-tracking** (first mention in this spec; `_inputs/slack-routing.md` publishes no ID for it), owned by the `tracking-missing` spec. It appears here only because `BR-19`'s recovery loop begins there.
 
 **Delivery semantics.** The `@mention` sits **in the message body**, so Slack raises a personal notification while the channel doubles as a team-visible archive [G-7]. Dispatch results are persisted (`DC-15`); failures are retried and never block or roll back the primary action `[PD-4 · OWNER-PENDING]` (`BR-27`). Retry policy is a dev decision.
 
@@ -2113,9 +2113,11 @@ Per the writing convention, owner questions that already carry a provisional def
 **OQ-1 · Post-registration correction, cancellation or voiding of a request — RESOLVED 2026-08-03 (owner)**
 `PD-79` was decided by the owner on 2026-08-03 and is **no longer an open question**. The resolution: **✎ Edit** and **Cancel** row actions, `REQUESTED`-only (`BR-32`); Edit reuses the New Request form in edit mode with a full diff audit trail and no re-numbering (`BR-33`); Cancel requires a reason enum and produces the terminal `CANCELLED` status with the row retained for audit and tracking matching deactivated (`BR-34`). Specified at §3.3.11, §3.3.12, §3.4b; events `DC-24` / `DC-25`; edge cases `[E-93]`–`[E-100]`; Slack §6.1 rows 7–8. *(The entry number OQ-1 is retained so older cross-references stay resolvable; nothing here is open.)*
 
-**OQ-2 · May an item enter the unrecognized pool with NO tracking number (label destroyed)?** `[PD-66]`
-Cross-page dependency owned by `tracking-missing`, listed here because `BR-19`'s recovery loop depends on the answer: if a pool item can exist with no number, then "match" has nothing to write onto the product line and the rescan-resolves loop this page relies on does not close.
-*No behavior is specified on either side.* **Owner decision required.**
+**OQ-2 · May an item enter the unrecognized pool with NO tracking number (label destroyed)?** `[PD-66]` — **RESOLVED, OWNER-DECIDED 2026-08-03**
+Cross-page dependency owned by `tracking-missing`, listed here because `BR-19`'s recovery loop depends on the answer: if a pool item could exist with no number, then "match" would have nothing to write onto the product line and the rescan-resolves loop this page relies on would not close.
+- **The answer.** The case **does not exist**. Either a tracking number **or** an order number is always present, so a pool item always carries an identifier and `BR-19`'s loop always closes. The identifier-required registration contract stands unchanged.
+- **Effect on this page.** None — `BR-19` was already written against an always-identified pool item, so no behavior changes here. The question is recorded as closed so nobody re-opens it.
+- **Cross-page counterparts:** `view-orders.md` §9.2 OQ-1 and `tracking-missing.md` §10 carry the same ruling. *(This page's copy still read "Owner decision required" until 2026-08-04 — a propagation miss, not a second open question.)*
 
 **OQ-3 · Should a Tracking No cell that already holds a number offer an inline add affordance?**
 Raised by this spec, not previously registered. The wireframe renders `Add tracking` only on empty cells, so the **specified** path for adding a further number to an already-numbered `REQUESTED` / `PARTIAL` request is the bulk bar (§3.3.2). That works but costs three clicks at a moment (a dispatch email arriving) when the operator is in a hurry. Adding an inline `＋` is a new affordance and is therefore **not invented here**.
@@ -2126,7 +2128,7 @@ Raised by this spec, not previously registered. The wireframe renders `Add track
 
 | # | Decision | Note / recommended default |
 |---|---|---|
-| D-1 | Slack channel for the `OTHER`-route morning check | Deferred by `_slack-routing.md` and legend `[L-S3-6]`. Until it exists, rows are collected with `channel=unrouted` (`BR-31`). Surface to the owner **only** if a new channel must be created |
+| D-1 | Slack channel for the `OTHER`-route morning check | Deferred by `_inputs/slack-routing.md` and legend `[L-S3-6]`. Until it exists, rows are collected with `channel=unrouted` (`BR-31`). Surface to the owner **only** if a new channel must be created |
 | D-2 | `NNNN` overflow behavior (> 9999/day) | Hard-fail with a red toast and a persisted attempt (`[E-20]`). Practically unreachable; must never wrap |
 | D-3 | Bulk-add UX shape | One modal iterating the selection, or a per-request sequence. Wireframe encodes only the button + count (`[L-S3-2]`) |
 | D-4 | `Expected arrival` default and bounds | No asterisk ⇒ optional. Recommend blank default, past dates allowed with a warning (`[E-15]`, `[E-54]`) |
@@ -2191,7 +2193,7 @@ Every decision that shaped this screen, 2026-07-09 → 2026-08-03, including rev
 | 2026-08-03 | **M1 save toast added** and the `gtoast` element-reuse bug fixed; registration toast added; per-row Comments panels added | `[L-F1]`, `[L-F2]`, `[L-M1]`, `[G-2]` | commit `890e909` |
 | 2026-08-03 | Full English pass on this page (389 lines replaced, 30/30 checks); Korean product, carrier and supplier names deliberately preserved as **data** | `[G-6]`, `[L-S1-12]` | commit `890e909` |
 | 2026-08-03 | State 1 legend **renumbered — dot 13 vacated** by the modal removal (intentional gap) | §2.1 | Legend, supervisor ruling 14 |
-| 2026-08-03 | **Comment `@mention` channel CONFIRMED by the owner: `#fulfillment-admin-comments` (`C0BMGEWM5QA`)**, superseding the "pending" wording in the older drafts; expected-qty-edit and match-confirmed auto-comments route the same way | §6.1 rows 4–6, `[G-7]` · review **C-2** | `_slack-routing.md` |
+| 2026-08-03 | **Comment `@mention` channel CONFIRMED by the owner: `#fulfillment-admin-comments` (`C0BMGEWM5QA`)**, superseding the "pending" wording in the older drafts; expected-qty-edit and match-confirmed auto-comments route the same way | §6.1 rows 4–6, `[G-7]` · review **C-2** | `_inputs/slack-routing.md` |
 | 2026-08-03 | Global rules v1.0 issued (`[G-1]`…`[G-15]`), including: `[G-5]` amended so the inbound-origin form's fourth route is `OTHER` + free text while order-facing badges stay the original four; `[G-11]` reason enum aligned to the M6 strings; new `[G-15]` single admin role | `BR-2`, `BR-13`, `BR-26` · review **C-3** / **C-11** / **GD-8** | `_global-rules.md` |
 | 2026-08-03 | Owner emphasis re-confirmed across all eight screens: **no page refresh** and **a confirmation toast on every confirming action**, with removals/deletions counted as confirming actions | `BR-28`, `[G-2]` · review **C-6** | `_global-rules.md` |
 | 2026-08-03 | Provisional decisions adopted for this page pending owner review — `[PD-1]` single role · `[PD-3]` comments append-only · `[PD-4]` Slack failure never blocks · `[PD-5]` removals confirm + toast · `[PD-6]` stale-entity revalidation · `[PD-7]` concurrency (merge for additive sets) · `[PD-8]`/`[PD-82]` tracking uniqueness · `[PD-9]` no carrier · `[PD-12]` over-receipt warn-and-count · `[PD-14]` new expected qty ≥ received · `[PD-16]` match auto-comment · `[PD-64]` pool removal captures the Inbound No. · `[PD-80]` `OTHER (channel)` rendering · `[PD-81]` frozen matched numbers · `[PD-83]` no duplicate SKU · `[PD-84]` no auto-transition on qty edit · `[PD-85]` `INBOUNDED` terminal · `[PD-86]` separate tracking namespaces. `[PD-2]` (send sound) is explicitly **N/A** here | Each tagged `[PD-n · OWNER-PENDING]` inline throughout §3–§8 | `_provisional-decisions.md` |
