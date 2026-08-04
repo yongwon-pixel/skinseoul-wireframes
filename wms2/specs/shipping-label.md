@@ -2,7 +2,7 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.4 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
+> **Spec version:** 1.5 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
 > **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
@@ -31,7 +31,7 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 ### 3.2 Fixed layout (corners kept from the current format)
 | Position | Content |
 |---|---|
-| Top-left | `PACKING` + order number (`#428204`) |
+| Top-left | `PACKING` + order number (`#428204`) — **the order number is set at the same size and weight as the `PACKING` title** (owner, 2026-08-04; it was two-thirds the title before). It is the one string a packer matches against the parcel and the picking list, so it reads at arm's length rather than sitting as a caption under the word `PACKING`. |
 | Top-center | Order barcode |
 | Top-right | `총수량: {n}` |
 | Body | Item table (§3.3) |
@@ -75,7 +75,7 @@ Measured glyph heights on the photographed labels, at the wireframe's 1mm = 5px 
 |---|---|---|
 | Body / table text | ≈ 3.6–3.8mm | 18–19px |
 | Qty (bold) | ≈ 4.2mm | 21px |
-| `PACKING` title | ≈ 5.2–5.5mm | 26–28px |
+| `PACKING` title **and the order number** | ≈ 5.2–5.5mm | 26–28px |
 | `총수량` | ≈ 4.4mm | 22px |
 | Footer | ≈ 2.7mm | 13.5px |
 
@@ -101,6 +101,7 @@ Order number & barcode = the order record · 바코드 뒤4 = the product's regi
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.5 | 2026-08-04 | Owner: **the order number is set at the same size and weight as the PACKING title** (§3.2, §3.5) — it was two-thirds the title and read as a caption, when it is the one string the packer matches against the parcel. Applied to all three proposed-format cards in the mockup; the DELEO/YUN *current* reproductions are untouched, being records of what prints today. |
 | 1.4 | 2026-08-04 | **Two-page worked example added to the wireframe** (§3.2): the multi-page rule was specified but never drawn, so `총수량` repeating, `계속 →` occupying the `합계` slot right-aligned with an empty 수량 cell, and the sample-set row landing on the final page were prose-only. Order `#431902` now renders both pages. No rule changed — the example is a rendering of the existing rule, and rows-per-page stays derived (§3.5), not a constant. |
 | 1.3 | 2026-08-04 | Owner decision: **new `바코드 뒤4` column**, left of 상품명 — last 4 digits of the product **EAN** (not the internal SKU), so the packer verifies against the code on the box. **Always exactly 4 digits — no widening on collision** (owner, same day): the column is a confirmation aid, not a unique key, and the product name distinguishes any two lines that share the last 4. Sample-set row carries none; missing EAN renders `—`. Mockup updated in the same commit (legend item 8). |
 | 1.2 | 2026-08-03 | Owner decision: **sample set counts toward `총수량`/`합계`** (open item 3 — last one). §3.4 added: internal row vs carrier-facing `(+ sample set)`-on-last-product-name rendering, explicitly separated. Spec fully confirmed. |
