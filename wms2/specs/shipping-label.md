@@ -2,7 +2,7 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.3 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
+> **Spec version:** 1.4 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
 > **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
@@ -40,6 +40,12 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 | Bottom-right | Page `n/m` |
 
 **Multi-page rule [CONFIRMED 2026-08-03]:** the `합계` row prints on the **last page only**; earlier pages end with `계속 →` in its place. The top-right `총수량` repeats on **every** page.
+
+**Worked two-page example — mocked, not just described.** *(added 2026-08-04)* The wireframe carries a second, longer order (`#431902`, 17 units over 14 product lines plus a sample set) rendered across both of its pages, because three rules of this section are only observable when a label overflows and were previously stated in prose alone:
+- **`총수량` repeats.** Both pages print `총수량: 17` top-right. A packer who picks up page 2 alone still knows the parcel's true total.
+- **`계속 →` occupies the `합계` row's slot** on every page but the last: same row position, spanning the label columns and **right-aligned**, with the 수량 cell left **empty**. It is a continuation marker, not a subtotal — printing a running subtotal there would be read as the parcel total and is forbidden.
+- **The sample-set row sorts last**, so on a multi-page invoice it always lands on the **final** page, immediately above `합계`.
+Page count and rows-per-page are derived at render time (§3.5), so this example is a rendering of the rule at the current type sizes — **not** a fixed 9-rows-then-break constant.
 
 ### 3.3 Item table columns
 `No · 바코드 뒤4 · 상품명 · 사이즈 · 로케이션 · 수량` — **column headers are Korean** (the invoice is a warehouse-floor document; continuity with the current prints) **[CONFIRMED 2026-08-03]**.
@@ -95,5 +101,6 @@ Order number & barcode = the order record · 바코드 뒤4 = the product's regi
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.4 | 2026-08-04 | **Two-page worked example added to the wireframe** (§3.2): the multi-page rule was specified but never drawn, so `총수량` repeating, `계속 →` occupying the `합계` slot right-aligned with an empty 수량 cell, and the sample-set row landing on the final page were prose-only. Order `#431902` now renders both pages. No rule changed — the example is a rendering of the existing rule, and rows-per-page stays derived (§3.5), not a constant. |
 | 1.3 | 2026-08-04 | Owner decision: **new `바코드 뒤4` column**, left of 상품명 — last 4 digits of the product **EAN** (not the internal SKU), so the packer verifies against the code on the box. **Always exactly 4 digits — no widening on collision** (owner, same day): the column is a confirmation aid, not a unique key, and the product name distinguishes any two lines that share the last 4. Sample-set row carries none; missing EAN renders `—`. Mockup updated in the same commit (legend item 8). |
 | 1.2 | 2026-08-03 | Owner decision: **sample set counts toward `총수량`/`합계`** (open item 3 — last one). §3.4 added: internal row vs carrier-facing `(+ sample set)`-on-last-product-name rendering, explicitly separated. Spec fully confirmed. |
