@@ -975,11 +975,13 @@ Given `#m-import` is open
 When I read the last cell of every row whose Country cell is `GB`
 Then each contains exactly `YunExpress` with computed colour `rgb(25, 135, 84)` and `font-weight` `700`.
 
-**QA-IMP-15 [WF] (neg)** — Unconnected carrier does not block `[L-M1b]` `[E-7]`
-Given `#m-import` is open
-When I read the row whose Recipient is `Lucia Ramos` and whose Country is `PE`
-Then its last cell reads exactly `Not connected — contact the Fulfillment Center` with computed colour `rgb(180, 83, 9)` and `font-weight` `700`
-And `#mktConfirm` has neither the `disabled` attribute nor `aria-disabled="true"` — the unconnected row does not block the batch.
+**QA-IMP-15 [WF] (neg)** — Unconnected carrier blocks the whole file `[L-M1b]` `[E-7]` `[G-17]` *(rewritten 2026-08-04 — it previously asserted the superseded "does not block" behaviour)*
+Given `#m-import` is open in its default state (the **clean** preview)
+Then the row whose Recipient is `Lucia Ramos` and whose Country is `PE` carries `YunExpress` with computed colour `rgb(25, 135, 84)`, `#mktBlock` is `display: none`, and `#mktConfirm` has neither `disabled` nor `aria-disabled="true"`
+When I close the modal, click the wf-bar toggle `#impPreviewToggle`, and reopen `#m-import` — the **unconnected** preview (`WF-16b`, wireframe-only chrome)
+Then `#mktPECell` reads exactly `Cannot import — no connected carrier` with computed colour `rgb(220, 53, 69)` and `font-weight` `700`
+And `#mktBlock` is `display: block` and reads exactly `Cannot import — these countries have no connected carrier: PE. Ask the fulfillment team to connect them, or remove those rows and upload again.`
+And `#mktConfirm` carries both `disabled` and `aria-disabled="true"` — one unconnected row refuses the entire file, and no order is created `[G-17]`.
 
 **QA-IMP-16 [WF]** — Confirm button label format
 Given `#m-import` is open

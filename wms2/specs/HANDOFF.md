@@ -69,6 +69,8 @@ Every bracketed token in these documents is a stable identifier. **IDs are never
 | `[DC-n]` | **Data-capture event** — a persisted event with a defined payload. | §5 |
 | `[NE-n]` | **Declared NON-event** — ephemeral client-local state that deliberately does not persist (checkbox toggles, tab switches, cancelled edits). Anything operator-initiated and *not* declared a non-event **must** persist `[G-8]`. | §5 |
 | `[E-n]` | **Edge case / error state.** | §7 |
+> **Structured export.** Every scenario is also available as `_verify/scenarios.csv` and `_verify/scenarios.json` — id, page, tier, block, refs, given/when/then, source line. Regenerate with `python3 _verify/export_scenarios.py`. Coverage and tier counts are reconciled against the runners; see `_verify/SCENARIOS-EXPORT.md`.
+
 | `QA-*` | **QA scenario id**, e.g. `QA-S0-01`, `QA-IMP-35`, `QA-CMT-10`. | §8 |
 | `[WF]` / `[ADMIN]` | **QA tier** — see §4 below. | §8.0 |
 | `WF-n` | **Wireframe defect** — a logged fault in the drawing. **Do not confuse with the `[WF]` QA tier**: `[WF]` (in brackets, in a QA scenario header) is a test tier; `WF-1`, `WF-15`, `WF-VO-1` (no brackets) are defect ids. | §2.4, and `_plans/_wireframe-fixes.md` |
