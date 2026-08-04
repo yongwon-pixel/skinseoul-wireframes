@@ -94,7 +94,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pkNew th{font-size:16px}
 .pkNew th,.pkNew td{padding:5px 9px}
 .pkNew td.qty{font-weight:800;font-size:21px}
-.pkNew td.loc{font-family:"SF Mono",Menlo,monospace;font-weight:700;font-size:17px}
+.pkNew td.ean4{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-weight:700;letter-spacing:.02em}
+.loc{font-family:"SF Mono",Menlo,monospace;font-weight:700;font-size:17px}
 .pkNew td.dim{color:#888}
 .pkNew tr.sample td{background:var(--amber-soft)}
 .pkNew .ft{font-size:13.5px}
@@ -228,18 +229,18 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <span class="dot" style="top:-13px;left:470px">2</span>
       <span class="dot" style="top:-13px;left:588px">3</span>
       <thead><tr>
-        <th style="width:44px">No</th><th>상품명</th><th style="width:84px">사이즈</th><th style="width:112px">로케이션</th><th style="width:64px">수량</th>
+        <th style="width:44px">No</th><th style="width:78px">바코드 뒤4</th><th>상품명</th><th style="width:84px">사이즈</th><th style="width:112px">로케이션</th><th style="width:64px">수량</th>
       </tr></thead>
       <tbody>
-        <tr><td>1</td><td class="nm">PDRN 5% 액티브 앰플</td><td>30ml</td><td class="loc">A-03-12</td><td class="qty">1</td></tr>
-        <tr><td>2</td><td class="nm">코스알엑스 알로에 수딩 선 크림 SF+ A+++</td><td>50ml</td><td class="loc">A-01-07</td><td class="qty">2</td></tr>
-        <tr><td>3</td><td class="nm">리들샷 리프팅 아이크림</td><td>30ml</td><td class="loc">B-02-04</td><td class="qty">1</td></tr>
-        <tr><td>4</td><td class="nm">브이티코스메틱 리들샷</td><td>50ml</td><td class="dim">—</td><td class="qty">1</td></tr>
-        <tr><td>5</td><td class="nm">마데카 크림 타이트 리프팅</td><td>45ml</td><td class="loc">C-01-11</td><td class="qty">1</td></tr>
-        <tr><td>6</td><td class="nm">바이오힐보 프로바이오덤 리프팅 크림</td><td>50ml</td><td class="loc">B-03-02</td><td class="qty">1</td></tr>
-        <tr><td>7</td><td class="nm">코스알엑스 스네일 96 뮤신 파워 에센스</td><td>100ml</td><td class="loc">A-02-15</td><td class="qty">1</td></tr>
-        <tr class="sample anno"><td>8<span class="dot" style="top:6px;left:-11px">7</span></td><td class="nm">sample set</td><td class="dim">—</td><td class="loc">SMP-01</td><td class="qty">1</td></tr>
-        <tr class="total anno"><td colspan="4">합계<span class="dot" style="top:4px;right:64px">6</span></td><td class="qty">9</td></tr>
+        <tr><td>1</td><td class="ean4">8451</td><td class="nm">PDRN 5% 액티브 앰플</td><td>30ml</td><td class="loc">A-03-12</td><td class="qty">1</td></tr>
+        <tr><td>2</td><td class="ean4">30726</td><td class="nm">코스알엑스 알로에 수딩 선 크림 SF+ A+++</td><td>50ml</td><td class="loc">A-01-07</td><td class="qty">2</td></tr>
+        <tr><td>3</td><td class="ean4">2298</td><td class="nm">리들샷 리프팅 아이크림</td><td>30ml</td><td class="loc">B-02-04</td><td class="qty">1</td></tr>
+        <tr><td>4</td><td class="ean4">7734</td><td class="nm">브이티코스메틱 리들샷</td><td>50ml</td><td class="dim">—</td><td class="qty">1</td></tr>
+        <tr><td>5</td><td class="ean4">5106</td><td class="nm">마데카 크림 타이트 리프팅</td><td>45ml</td><td class="loc">C-01-11</td><td class="qty">1</td></tr>
+        <tr><td>6</td><td class="ean4">8820</td><td class="nm">바이오힐보 프로바이오덤 리프팅 크림</td><td>50ml</td><td class="loc">B-03-02</td><td class="qty">1</td></tr>
+        <tr><td>7</td><td class="ean4">70726</td><td class="nm">코스알엑스 스네일 96 뮤신 파워 에센스</td><td>100ml</td><td class="loc">A-02-15</td><td class="qty">1</td></tr>
+        <tr class="sample anno"><td>8<span class="dot" style="top:6px;left:-11px">7</span></td><td class="dim">—</td><td class="nm">sample set</td><td class="dim">—</td><td class="loc">SMP-01</td><td class="qty">1</td></tr>
+        <tr class="total anno"><td colspan="5">합계<span class="dot" style="top:4px;right:64px">6</span></td><td class="qty">9</td></tr>
       </tbody>
     </table>
     <div class="ft anno"><span>[검수 후 폐기]</span><span>1/1<span class="dot" style="top:-6px;right:-28px">4</span></span></div>
@@ -311,6 +312,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">5</span><span>Top strip unchanged in content: <b>PACKING + order number</b> top-left, <b>order barcode</b> top-center, <b>총수량</b> top-right <span class="ref">— kept from current</span></span></li>
     <li><span class="n">6</span><span><b>합계 row added at the bottom of the table</b> — total quantity repeated at the bottom, separate from the top-right 총수량, so the packer can verify without looking back up. <b>Multi-page rule (confirmed 2026-08-03)</b>: 합계 prints on the last page only, earlier pages end with 계속 → in its place; the top-right 총수량 repeats on every page <span class="ref">— owner 2026-08-03</span></span></li>
     <li><span class="n">7</span><span><b>Sample set row</b> — when the order has a sample assignment, one amber-tinted row rendered as exactly “sample set” (no type, no per-type qty — v1 rule [G-13]/PD-51); location = sample shelf. <b>It counts toward 총수량 and 합계</b> (confirmed 2026-08-03: the invoice verifies what is physically in the box — here 9 = 8 products + 1 sample set). <b>Carrier-facing data is a separate rule</b>: no sample line is sent — only the string “(+ sample set)” appended to the last product name (tax handling); the carrier never receives a sample line, qty, or price <span class="ref">— G-13 / owner 2026-08-03</span></span></li>
+    <li><span class="n">8</span><span><b>바코드 뒤4 column added</b> — the last 4 digits of the product's <b>EAN barcode</b> (already collected in the current admin), printed immediately left of 상품명 so the packer verifies against the code physically on the box. <b>Collision rule:</b> when two lines on the same invoice share the same last 4, <b>both</b> widen by one digit until they differ — rows 2 and 7 above show this (30726 / 70726). The sample-set row carries none. <span class="ref">— owner 2026-08-04</span></span></li>
     <li><span class="n">8</span><span>YUN carrier label — carrier standard spec reproduced as-is (routing · destination · tracking barcode · SHIP TO · Tel · SKINSEOUL_no.); unchangeable <span class="ref">— actual print</span></span></li>
     <li><span class="n">9</span><span>DELEO carrier label — DELEO default kept; their layout truncates to 3 items + “5 more”, which is fine because full detail lives on the internal invoice <span class="ref">— actual print</span></span></li>
   </ol>

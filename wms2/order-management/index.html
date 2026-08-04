@@ -157,7 +157,8 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <button class="wf-tab" data-modal="m-import">Modal: Marketing Import</button>
     <button class="wf-tab" data-modal="m-sampleon">Modal: Sample Assignment ON</button>
     <button class="wf-tab" data-modal="m-sampleoff">Modal: Cancel Sample Assignment</button>
-    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+    <button class="wf-toggle" id="impPreviewToggle">Import preview: unconnected row</button>
+  <button class="wf-toggle" id="annoToggle">Hide annotations</button>
   </div>
 </div>
 
@@ -334,12 +335,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
             <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
             <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
             <tr><td colspan="7" style="text-align:center;color:var(--ink-3)">⋯ +8 more rows</td></tr>
-          <tr><td>Lucia Ramos</td><td>PE</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--amber);font-weight:700">Not connected — contact the Fulfillment Center</td></tr>
+          <tr><td>Lucia Ramos</td><td>PE</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">1</td><td>July Seeding</td><td id="mktPECell" style="color:var(--green);font-weight:700">YunExpress</td></tr>
           </tbody>
         </table>
       </div>
       <div class="note mkt">On confirm, orders are created as MKT- orders and <b>appear immediately in Ready to be Outbonded (Marketing view) regardless of stock or inbound status</b>.</div>
     </div>
+    <div id="mktBlock" style="display:none;margin:10px 0 0;padding:10px 12px;border:1px solid var(--red);background:var(--red-soft);color:var(--red);font-weight:600;border-radius:4px;font-size:13px">Cannot import — these countries have no connected carrier: PE. Ask the fulfillment team to connect them, or remove those rows and upload again.</div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Cancel</button>
       <button class="btn btn-mkt btn-sm" data-close id="mktConfirm">Confirm Import (12 orders)</button>
@@ -446,7 +448,34 @@ function showToast(id,html){
 }
 const mc=document.getElementById('mktConfirm');
 if(mc){mc.addEventListener('click',()=>{
-  showToast('gtoast','✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center</small>');});}
+  showToast('gtoast','✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country</small>');});}
+
+/* WF-16b (2026-08-04): import preview carries BOTH states per [G-17].
+   Wireframe-only chrome — the toggle must not ship. Default = clean file. */
+(function(){
+  const btn=document.getElementById('impPreviewToggle');
+  const cell=document.getElementById('mktPECell');
+  const block=document.getElementById('mktBlock');
+  const conf=document.getElementById('mktConfirm');
+  if(!btn||!cell||!block||!conf)return;
+  let blocked=false;
+  btn.addEventListener('click',()=>{
+    blocked=!blocked;
+    if(blocked){
+      cell.textContent='Cannot import — no connected carrier';
+      cell.style.color='var(--red)';
+      block.style.display='block';
+      conf.setAttribute('disabled','');conf.setAttribute('aria-disabled','true');
+      btn.textContent='Import preview: clean file';
+    }else{
+      cell.textContent='YunExpress';
+      cell.style.color='var(--green)';
+      block.style.display='none';
+      conf.removeAttribute('disabled');conf.removeAttribute('aria-disabled');
+      btn.textContent='Import preview: unconnected row';
+    }
+  });
+})();
 
 /* WF-16 (2026-08-03): Start Assignment (ON) — green confirmation toast per spec §3.6.5 [G-2] */
 const ssb=document.getElementById('sampStartBtn');

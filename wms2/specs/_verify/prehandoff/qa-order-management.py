@@ -34,10 +34,12 @@ PAGE_URL = (BASE / "order-management" / "index.html").as_uri()
 S_STEP1_HELP = "Standard form from the dev team — Recipient · Contact · Address · Country · SKU · Qty · Campaign name"
 S_PIC_HELP = "Default = logged-in user · Recorded as the PIC for this entire import — shown in the order list & RTO"
 S_PREVIEW = "Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors"
-S_NOTCONN = "Not connected — contact the Fulfillment Center"
+S_NOTCONN = "Cannot import — no connected carrier"
+S_BLOCKMSG = ("Cannot import — these countries have no connected carrier: PE. "
+              "Ask the fulfillment team to connect them, or remove those rows and upload again.")
 S_NOTE_MKT = "On confirm, orders are created as MKT- orders and appear immediately in Ready to be Outbonded (Marketing view) regardless of stock or inbound status."
 S_TOAST1 = "✓ Confirmed — 12 orders imported"
-S_TOAST1_SUB = "Carrier auto-assigned per country · 1 not connected — flagged to contact Fulfillment Center"
+S_TOAST1_SUB = "Carrier auto-assigned per country"
 S_M3_NOTE = "Multiple assignment periods may exist — select the period(s) to cancel, then confirm. Ended periods are for record only (cannot be cancelled). Cancellation immediately stops new assignments for that period (already-assigned orders are kept)."
 S_TOAST2 = "✓ Assignment period cancelled"
 S_TOAST2_SUB = "New assignments stopped for the selected period · already-assigned orders kept"
@@ -315,23 +317,40 @@ def imp14(page, c):
         c.eq("GB row %d font-weight" % (i + 1), cell["fw"], "700")
 
 
-@scen("QA-IMP-15", "(neg) Unconnected carrier does not block [E-7]")
+@scen("QA-IMP-15", "(neg) Unconnected carrier blocks the whole file [E-7] [G-17]")
 def imp15(page, c):
     open_import(page)
-    r = page.evaluate("""() => {
+    probe = """() => {
       const tr = [...document.querySelectorAll('#m-import tbody tr')]
         .find(t => !t.querySelector('td[colspan]') && t.cells[0].textContent === 'Lucia Ramos');
-      const td = tr.cells[tr.cells.length - 1];
+      const td = document.getElementById('mktPECell');
+      const blk = document.getElementById('mktBlock');
       const btn = document.getElementById('mktConfirm');
       return { country: tr.cells[1].textContent, txt: td.textContent,
         col: window.__cs(td, 'color'), fw: window.__cs(td, 'fontWeight'),
+        blk: window.__cs(blk, 'display'), blkTxt: blk.textContent.trim(),
         dis: btn.hasAttribute('disabled'), aria: btn.getAttribute('aria-disabled') };
-    }""")
-    c.eq("country", r["country"], "PE")
-    c.eq("amber string", r["txt"], S_NOTCONN)
-    c.eq("colour", r["col"], "rgb(180, 83, 9)")
-    c.eq("font-weight", r["fw"], "700")
-    c.ok("#mktConfirm not disabled", not r["dis"] and r["aria"] != "true")
+    }"""
+    # default preview = clean file: PE resolves, nothing is blocked
+    a = page.evaluate(probe)
+    c.eq("country", a["country"], "PE")
+    c.eq("clean: carrier", a["txt"], "YunExpress")
+    c.eq("clean: colour", a["col"], "rgb(25, 135, 84)")
+    c.eq("clean: no block banner", a["blk"], "none")
+    c.ok("clean: #mktConfirm enabled", not a["dis"] and a["aria"] != "true")
+
+    # WF-16b toggle -> unconnected preview: the file is refused in full [G-17].
+    # The toggle lives on the wf-bar, so the modal must be closed to reach it.
+    page.click('#m-import [data-close]')
+    page.click("#impPreviewToggle")
+    open_import(page)
+    b = page.evaluate(probe)
+    c.eq("blocked: red string", b["txt"], S_NOTCONN)
+    c.eq("blocked: colour", b["col"], "rgb(220, 53, 69)")
+    c.eq("blocked: font-weight", b["fw"], "700")
+    c.eq("blocked: banner shown", b["blk"], "block")
+    c.eq("blocked: banner copy", b["blkTxt"], S_BLOCKMSG)
+    c.ok("blocked: #mktConfirm disabled", b["dis"] and b["aria"] == "true")
 
 
 @scen("QA-IMP-16", "Confirm button label format")
@@ -1425,7 +1444,8 @@ def gbl11(page, c):
     c.ok(".wf-bar exists", r["bar"])
     c.eq("wf-bar buttons", r["btns"],
          ["Modal: Marketing Import", "Modal: Sample Assignment ON",
-          "Modal: Cancel Sample Assignment", "Hide annotations"])
+          "Modal: Cancel Sample Assignment", "Import preview: unconnected row",
+          "Hide annotations"])
     c.ok(".dot elements exist", r["dots"] > 0, str(r["dots"]))
     c.ok(".legend exists", r["legend"])
 

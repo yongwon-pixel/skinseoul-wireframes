@@ -2,7 +2,7 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.2 · **Written:** 2026-08-03 · **Global rules:** cited as `[G-n]`, never restated.
+> **Spec version:** 1.3 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
 > **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
@@ -42,7 +42,12 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 **Multi-page rule [CONFIRMED 2026-08-03]:** the `합계` row prints on the **last page only**; earlier pages end with `계속 →` in its place. The top-right `총수량` repeats on **every** page.
 
 ### 3.3 Item table columns
-`No · 상품명 · 사이즈 · 로케이션 · 수량` — **column headers are Korean** (the invoice is a warehouse-floor document; continuity with the current prints) **[CONFIRMED 2026-08-03]**.
+`No · 바코드 뒤4 · 상품명 · 사이즈 · 로케이션 · 수량` — **column headers are Korean** (the invoice is a warehouse-floor document; continuity with the current prints) **[CONFIRMED 2026-08-03]**.
+- **바코드 뒤4** — the **last 4 digits of the product's EAN barcode**, printed immediately **left of 상품명**. **CONFIRMED 2026-08-04 (owner).** *(added 2026-08-04)*
+  - **Source: the product EAN, already collected in the current admin** — never the internal SKU. The column exists so the packer can verify against the code **physically printed on the box**; an internal SKU fragment matches nothing on the product and would make the check unperformable.
+  - Rendered mono bold, right-aligned with `font-variant-numeric: tabular-nums` so digits line up down the column.
+  - **Collision rule.** The last 4 digits of an EAN-13 are 3 data digits plus the check digit, so they are **not unique**. When two or more lines **on the same invoice** share the same last 4, **every colliding line widens by one digit** — and repeats — until all of them differ. Non-colliding lines on the same invoice stay at 4. The header text does not change. Rationale: the operator must never have to decide anything; either the printed digits distinguish the lines or the document is wrong.
+  - A line whose product has **no EAN registered** renders the unknown marker `—`, the same convention 로케이션 uses. The **sample-set row carries no value** (`[G-13]`: it is a set, not a catalogue product).
 - **상품명** — Korean product name (label content is data and stays Korean `[G-6]`).
   - **Overflow (name wider than the column):** the cell renders on **one line only**, clipped at the column edge with a trailing ellipsis (`…`) — this is a **display** truncation; it never wraps to a second line and the underlying data is never shortened to fit, per the same doctrine `view-orders` `[E-77]` assigns to this template ("only the physical label template truncates, never the stored data"). *(added 2026-08-03)*
 - **사이즈** — from the Order page line-items **Size** column (e.g. `50ml`). *(added 2026-08-03)*
@@ -73,7 +78,7 @@ Measured glyph heights on the photographed labels, at the wireframe's 1mm = 5px 
 **Rows per page is derived at render time, not a fixed constant. *(added 2026-08-03)*** Pagination computes the count as *(usable body height) ÷ (rendered row height)* — usable body height = the printed sheet height (§3.1) minus the §3.1 margins and the fixed §3.2 furniture (top corner block, table header, and the bottom `합계` / `계속 →` row); rendered row height follows from the type sizes in this section. The `≈ 9` above is the **measured outcome** at the current sizes and margins, quoted as a reference value — it is not a number to hard-code, and any change to type size, margin, or fixed furniture changes it. Whatever count the calculation yields is what the §3.2 multi-page rule and the bottom-right page `n/m` report.
 
 ## 4. Data sources
-Order number & barcode = the order record · 사이즈 = line-items Size · 로케이션 = SKU's registered location at print time (one location per SKU `[G-14]`) · quantities & totals = order line quantities + sample assignment.
+Order number & barcode = the order record · 바코드 뒤4 = the product's registered **EAN** (existing admin field), truncated at print time and widened only on same-invoice collision (§3.3) · 사이즈 = line-items Size · 로케이션 = SKU's registered location at print time (one location per SKU `[G-14]`) · quantities & totals = order line quantities + sample assignment.
 
 ## 5. Print behavior
 `[G-4]` instant print (no dialog, no preview, correct carrier automatically) from every Print surface that emits the internal invoice: View Orders (order Print, single-item auto-print), RTO (row Print, Bulk Print Labels), Order Detail (Print).
@@ -90,4 +95,5 @@ Order number & barcode = the order record · 사이즈 = line-items Size · 로�
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.3 | 2026-08-04 | Owner decision: **new `바코드 뒤4` column**, left of 상품명 — last 4 digits of the product **EAN** (not the internal SKU), so the packer verifies against the code on the box. Collision rule added: colliding lines on one invoice widen a digit at a time until distinct. Sample-set row carries none; missing EAN renders `—`. Mockup updated in the same commit (legend item 8; rows 2 and 7 demonstrate the widened case). |
 | 1.2 | 2026-08-03 | Owner decision: **sample set counts toward `총수량`/`합계`** (open item 3 — last one). §3.4 added: internal row vs carrier-facing `(+ sample set)`-on-last-product-name rendering, explicitly separated. Spec fully confirmed. |
