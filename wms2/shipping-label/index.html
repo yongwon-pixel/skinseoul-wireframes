@@ -89,6 +89,10 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 .pkNew{width:750px;height:500px;padding:12px 14px}
 .pkNew .hd{margin-bottom:8px;align-items:center}
 .pkNew .hd .ttl{font-size:26px}
+/* spec §3.3: the product name renders on ONE line, clipped with an ellipsis — never wrapped.
+   Scoped to the proposed format; the DELEO/YUN current reproductions keep their own behaviour. */
+.pkNew table{table-layout:fixed}
+.pkNew td.nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pkNew .hd .tq{font-size:22px}
 .pkNew table{font-size:19px;line-height:1.25}
 .pkNew th{font-size:16px}

@@ -2,7 +2,7 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.5 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
+> **Spec version:** 1.6 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
 > **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
@@ -101,6 +101,7 @@ Order number & barcode = the order record · 바코드 뒤4 = the product's regi
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.6 | 2026-08-05 | **Mockup brought in line with its own §3.3 overflow rule.** The rule — product name on one line, clipped with an ellipsis, never wrapped — has been specified since 2026-08-03, but the mockup carried no truncation CSS and a long Korean name wrapped to two lines. Fixed with `table-layout: fixed` plus `white-space: nowrap; overflow: hidden; text-overflow: ellipsis`, scoped to the proposed format only (the DELEO/YUN current reproductions are records of what prints today and keep their behaviour). Verified headless: all 23 name cells render at one uniform height with the rule on, and exactly one drops to a second line with it off. **No rule changed** — the drawing was wrong, not the spec. |
 | 1.5 | 2026-08-04 | Owner: **the order number is set at the same size and weight as the PACKING title** (§3.2, §3.5) — it was two-thirds the title and read as a caption, when it is the one string the packer matches against the parcel. Applied to all three proposed-format cards in the mockup; the DELEO/YUN *current* reproductions are untouched, being records of what prints today. |
 | 1.4 | 2026-08-04 | **Two-page worked example added to the wireframe** (§3.2): the multi-page rule was specified but never drawn, so `총수량` repeating, `계속 →` occupying the `합계` slot right-aligned with an empty 수량 cell, and the sample-set row landing on the final page were prose-only. Order `#431902` now renders both pages. No rule changed — the example is a rendering of the existing rule, and rows-per-page stays derived (§3.5), not a constant. |
 | 1.3 | 2026-08-04 | Owner decision: **new `바코드 뒤4` column**, left of 상품명 — last 4 digits of the product **EAN** (not the internal SKU), so the packer verifies against the code on the box. **Always exactly 4 digits — no widening on collision** (owner, same day): the column is a confirmation aid, not a unique key, and the product name distinguishes any two lines that share the last 4. Sample-set row carries none; missing EAN renders `—`. Mockup updated in the same commit (legend item 8). |
