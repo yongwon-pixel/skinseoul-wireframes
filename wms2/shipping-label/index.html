@@ -252,7 +252,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   <div style="text-align:center;color:var(--ink-3);font-size:12px;margin-top:10px">Mockup scale 5px/mm — 100×150mm label rotated to landscape · same order as the DELEO Current tab (2 pages → 1 page)</div>
 
   <hr style="border:none;border-top:1px solid var(--line);margin:26px 0 18px">
-  <p class="paneintro"><b>Worked example — an order that does not fit on one label.</b> Rows per page are derived at render time from the sheet height, the margins and the fixed furniture; at the type sizes above that lands at about 9 rows. This order carries 18 units across 14 product lines plus a sample set, so it prints on two pages. Three rules are visible here and nowhere else: <b>총수량 repeats on every page</b>, the <b>합계 row prints on the last page only</b> — earlier pages close with <b>계속 →</b> in its place — and the <b>sample set sorts last</b>, which puts it on the final page.</p>
+  <p class="paneintro"><b>Worked example — an order that does not fit on one label.</b> Rows per page are derived at render time from the sheet height, the margins and the fixed furniture. At the type sizes above the body holds about 9 row slots, and the 합계 / 계속 → row occupies one of them — so <b>8 product rows per page</b>. This order carries 18 units across 14 product lines plus a sample set, so it prints on two pages. Three rules are visible here and nowhere else: <b>총수량 repeats on every page</b>, the <b>합계 row prints on the last page only</b> — earlier pages close with <b>계속 →</b> in its place — and the <b>sample set sorts last</b>, which puts it on the final page.</p>
   <div class="paper pk pkNew" style="margin-top:14px">
     <div class="hd">
       <div><span class="ttl">PACKING <span class="mono">#431902</span></span></div>
@@ -272,7 +272,6 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <tr><td>6</td><td class="ean4">8820</td><td class="nm">코스알엑스 스네일 96 에센스</td><td>100ml</td><td class="loc">C-02-09</td><td class="qty">1</td></tr>
         <tr><td>7</td><td class="ean4">0726</td><td class="nm">메디힐 티트리 마스크팩</td><td>10ea</td><td class="dim">—</td><td class="qty">1</td></tr>
         <tr><td>8</td><td class="ean4">4471</td><td class="nm">닥터지 레드 블레미쉬 크림</td><td>70ml</td><td class="loc">A-03-04</td><td class="qty">1</td></tr>
-        <tr><td>9</td><td class="ean4">9038</td><td class="nm">마녀공장 퓨어 클렌징 오일</td><td>200ml</td><td class="loc">B-01-02</td><td class="qty">1</td></tr>
         <tr class="total"><td colspan="5" style="text-align:right">계속 →</td><td class="qty"></td></tr>
       </tbody>
     </table>
@@ -289,6 +288,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <th style="width:44px">No</th><th style="width:78px">바코드 뒤4</th><th>상품명</th><th style="width:84px">사이즈</th><th style="width:112px">로케이션</th><th style="width:64px">수량</th>
       </tr></thead>
       <tbody>
+        <tr><td>9</td><td class="ean4">9038</td><td class="nm">마녀공장 퓨어 클렌징 오일</td><td>200ml</td><td class="loc">B-01-02</td><td class="qty">1</td></tr>
         <tr><td>10</td><td class="ean4">6612</td><td class="nm">아이소이 불가리안 로즈 세럼</td><td>30ml</td><td class="loc">C-03-08</td><td class="qty">1</td></tr>
         <tr><td>11</td><td class="ean4">3390</td><td class="nm">넘버즈인 1번 개선세럼</td><td>30ml</td><td class="loc">A-02-11</td><td class="qty">2</td></tr>
         <tr><td>12</td><td class="ean4">7145</td><td class="nm">바닐라코 클린 잇 제로</td><td>100ml</td><td class="loc">B-02-06</td><td class="qty">1</td></tr>

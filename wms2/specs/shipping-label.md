@@ -2,7 +2,7 @@
 
 > Companion to the 8 screen specs — covers the printed paperwork, not an admin screen.
 > **Wireframe SST:** `wms2/shipping-label/index.html` · **Live:** https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/shipping-label/
-> **Spec version:** 1.6 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
+> **Spec version:** 1.7 · **Written:** 2026-08-03, amended 2026-08-04 · **Global rules:** cited as `[G-n]`, never restated.
 > **Status:** **fully CONFIRMED** (owner, 2026-08-03) — carrier-label policy, unified internal invoice, and all three §6 items are decided. No open questions.
 
 ## 1. Document taxonomy
@@ -41,11 +41,11 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 
 **Multi-page rule [CONFIRMED 2026-08-03]:** the `합계` row prints on the **last page only**; earlier pages end with `계속 →` in its place. The top-right `총수량` repeats on **every** page.
 
-**Worked two-page example — mocked, not just described.** *(added 2026-08-04)* The wireframe carries a second, longer order (`#431902`, 18 units over 14 product lines plus a sample set) rendered across both of its pages, because three rules of this section are only observable when a label overflows and were previously stated in prose alone:
+**Worked two-page example — mocked, not just described.** *(added 2026-08-04)* The wireframe carries a second, longer order (`#431902`, 18 units over 14 product lines plus a sample set — **8 product rows on page 1**, the remaining 6 plus the sample set on page 2) rendered across both of its pages, because three rules of this section are only observable when a label overflows and were previously stated in prose alone:
 - **`총수량` repeats.** Both pages print `총수량: 18` top-right. A packer who picks up page 2 alone still knows the parcel's true total.
 - **`계속 →` occupies the `합계` row's slot** on every page but the last: same row position, spanning the label columns and **right-aligned**, with the 수량 cell left **empty**. It is a continuation marker, not a subtotal — printing a running subtotal there would be read as the parcel total and is forbidden.
 - **The sample-set row sorts last**, so on a multi-page invoice it always lands on the **final** page, immediately above `합계`.
-Page count and rows-per-page are derived at render time (§3.5), so this example is a rendering of the rule at the current type sizes — **not** a fixed 9-rows-then-break constant.
+Page count and rows-per-page are derived at render time (§3.5), so this example is a rendering of the rule at the current type sizes — **not** a fixed rows-then-break constant. The current measured capacity is **8 product rows** per page: the body holds 9.54 row slots and the `합계` / `계속 →` row takes one of them (§3.5).
 
 ### 3.3 Item table columns
 `No · 바코드 뒤4 · 상품명 · 사이즈 · 로케이션 · 수량` — **column headers are Korean** (the invoice is a warehouse-floor document; continuity with the current prints) **[CONFIRMED 2026-08-03]**.
@@ -79,7 +79,9 @@ Measured glyph heights on the photographed labels, at the wireframe's 1mm = 5px 
 | `총수량` | ≈ 4.4mm | 22px |
 | Footer | ≈ 2.7mm | 13.5px |
 
-**Floor:** the unified format must never render body text smaller than the current DELEO internal invoice (≈3.6mm). Capacity at these sizes ≈ 9 item rows per page.
+**Floor:** the unified format must never render body text smaller than the current DELEO internal invoice (≈3.6mm).
+
+**Capacity at these sizes — 8 product rows per page.** *(corrected 2026-08-05)* Measured on the rendered label: 150×100mm at 5px/mm = 750×500px, minus 24px padding, a 46px header block, a 51px table header and a 26px footer, leaves **353px** of body against a **37px** row — **9.54 row slots**. The `합계` / `계속 →` row occupies one of them, so a page carries **8 product rows**, not 9. Through 2026-08-04 this line read "≈ 9 item rows per page", which counted row *slots* and forgot the closing row; the wireframe's two-page example was built on that number and its first page overflowed the label by 14px, clipping the footer. Both are corrected. The figure remains a **measured outcome, not a constant** (§3.5 below) — change a type size, a margin or the fixed furniture and it changes.
 
 **Rows per page is derived at render time, not a fixed constant. *(added 2026-08-03)*** Pagination computes the count as *(usable body height) ÷ (rendered row height)* — usable body height = the printed sheet height (§3.1) minus the §3.1 margins and the fixed §3.2 furniture (top corner block, table header, and the bottom `합계` / `계속 →` row); rendered row height follows from the type sizes in this section. The `≈ 9` above is the **measured outcome** at the current sizes and margins, quoted as a reference value — it is not a number to hard-code, and any change to type size, margin, or fixed furniture changes it. Whatever count the calculation yields is what the §3.2 multi-page rule and the bottom-right page `n/m` report.
 
@@ -101,6 +103,7 @@ Order number & barcode = the order record · 바코드 뒤4 = the product's regi
 |---|---|---|
 | 1.0 | 2026-08-03 | Initial spec from the owner's Phase 3-1 direction: taxonomy split, carrier-default policy confirmed, unified internal invoice (landscape 150×100 · Size/Location columns · minimal margins · bottom 합계 · corner layout), photo-measured typography, 3 open items. |
 | 1.1 | 2026-08-03 | Owner decisions: column headers **Korean** (open item 1) · multi-page totals **last page only, `계속 →` on earlier pages** (open item 2). Open item 3 (sample set in totals) remains. |
+| 1.7 | 2026-08-05 | **Capacity corrected: 8 product rows per page, not 9** (§3.5, §3.2). The old figure counted row *slots* and forgot that the `합계` / `계속 →` row occupies one. The two-page example had been built on it and its first page overflowed the 100mm label by 14px, clipping the footer — caught by the owner reading the mockup. Row 9 moved to page 2; both pages now fit exactly (500/500px, measured headless). |
 | 1.6 | 2026-08-05 | **Mockup brought in line with its own §3.3 overflow rule.** The rule — product name on one line, clipped with an ellipsis, never wrapped — has been specified since 2026-08-03, but the mockup carried no truncation CSS and a long Korean name wrapped to two lines. Fixed with `table-layout: fixed` plus `white-space: nowrap; overflow: hidden; text-overflow: ellipsis`, scoped to the proposed format only (the DELEO/YUN current reproductions are records of what prints today and keep their behaviour). Verified headless: all 23 name cells render at one uniform height with the rule on, and exactly one drops to a second line with it off. **No rule changed** — the drawing was wrong, not the spec. |
 | 1.5 | 2026-08-04 | Owner: **the order number is set at the same size and weight as the PACKING title** (§3.2, §3.5) — it was two-thirds the title and read as a caption, when it is the one string the packer matches against the parcel. Applied to all three proposed-format cards in the mockup; the DELEO/YUN *current* reproductions are untouched, being records of what prints today. |
 | 1.4 | 2026-08-04 | **Two-page worked example added to the wireframe** (§3.2): the multi-page rule was specified but never drawn, so `총수량` repeating, `계속 →` occupying the `합계` slot right-aligned with an empty 수량 cell, and the sample-set row landing on the final page were prose-only. Order `#431902` now renders both pages. No rule changed — the example is a rendering of the existing rule, and rows-per-page stays derived (§3.5), not a constant. |
