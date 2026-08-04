@@ -41,8 +41,8 @@ One internal-invoice format for **all** carriers. YUN switches from portrait to 
 
 **Multi-page rule [CONFIRMED 2026-08-03]:** the `합계` row prints on the **last page only**; earlier pages end with `계속 →` in its place. The top-right `총수량` repeats on **every** page.
 
-**Worked two-page example — mocked, not just described.** *(added 2026-08-04)* The wireframe carries a second, longer order (`#431902`, 17 units over 14 product lines plus a sample set) rendered across both of its pages, because three rules of this section are only observable when a label overflows and were previously stated in prose alone:
-- **`총수량` repeats.** Both pages print `총수량: 17` top-right. A packer who picks up page 2 alone still knows the parcel's true total.
+**Worked two-page example — mocked, not just described.** *(added 2026-08-04)* The wireframe carries a second, longer order (`#431902`, 18 units over 14 product lines plus a sample set) rendered across both of its pages, because three rules of this section are only observable when a label overflows and were previously stated in prose alone:
+- **`총수량` repeats.** Both pages print `총수량: 18` top-right. A packer who picks up page 2 alone still knows the parcel's true total.
 - **`계속 →` occupies the `합계` row's slot** on every page but the last: same row position, spanning the label columns and **right-aligned**, with the 수량 cell left **empty**. It is a continuation marker, not a subtotal — printing a running subtotal there would be read as the parcel total and is forbidden.
 - **The sample-set row sorts last**, so on a multi-page invoice it always lands on the **final** page, immediately above `합계`.
 Page count and rows-per-page are derived at render time (§3.5), so this example is a rendering of the rule at the current type sizes — **not** a fixed 9-rows-then-break constant.
