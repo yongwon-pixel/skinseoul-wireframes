@@ -312,10 +312,11 @@ Provisional: **No batch revert in v1. Cleanup is per order via ✕ Cancel Order 
 Rationale: a batch revert on orders that may already be picked is a larger feature than the wireframe encodes.
 Pages: OM (OQ-4), OD.
 
-**[PD-55] "Not connected — contact the Fulfillment Center" orders: what unblocks them, and who owns it? — NO-DEFAULT**
+**[PD-55] "Not connected — contact the Fulfillment Center" orders: what unblocks them, and who owns it? — VOIDED 2026-08-04**
 The order is created and appears in RTO, but no screen offers a manual carrier assignment and no Slack route exists for the follow-up. Deciding this would invent both a UI affordance and an owner. **Not decided — specs state the flagged state and its persistence, and list the unblocking path as an open question.**
 Pages: OM (OQ-5/Q-O6), RTO.
 **OWNER-DECIDED 2026-08-03**: Unblocking is **manual coordination — contact the fulfillment person in charge via Slack**. v1 ships no in-admin release/carrier-assignment UI.
+**VOIDED 2026-08-04 by `[G-17]`**: the question no longer exists. An unconnected carrier now rejects the **whole file** at import, so no flagged order is ever created and there is nothing downstream to unblock. Counts as a retired decision, not an open one.
 
 **[PD-56] Does an active sample period also match MKT- marketing orders?**
 Provisional: **No — sales orders only.**

@@ -204,7 +204,7 @@ Modal header: `Marketing Order Import`, with a `✕` close control (`#m-import h
   - When `{u} == 0` the subtext reads `Carrier auto-assigned per country · all rows connected`.
   - Auto-dismiss (the wireframe uses 2 600 ms); duration and stacking policy are developer decisions (§9.3).
   - **Failure** is a **red** toast carrying the server reason `[G-2]`; the modal stays open with its staged file intact so the operator can retry.
-- **Persists:** `[DC-4]`/`[DC-5]` (duplicate path), `[DC-6] import.batch_confirmed`, `[DC-9] order.created` ×n, `[DC-10] order.carrier_assigned` / `[DC-11] order.carrier_unresolved` ×n, `[DC-12] order.pic_assigned` ×n, `[DC-7] import.batch_rejected` on failure, `[DC-28] idempotency.duplicate_suppressed` on a suppressed repeat.
+- **Persists:** `[DC-4]`/`[DC-5]` (duplicate path), `[DC-6] import.batch_confirmed`, `[DC-9] order.created` ×n, `[DC-10] order.carrier_assigned` ×n, `[DC-12] order.pic_assigned` ×n, `[DC-7] import.batch_rejected` on failure — **including a file with any unconnected row `[G-17]`** — and `[DC-28] idempotency.duplicate_suppressed` on a suppressed repeat. (`[DC-11]` retired 2026-08-04 by `[G-17]`.)
 
 #### 3.2.6 Abandoning the modal
 
@@ -226,8 +226,8 @@ The spelling `Outbonded` is the live admin's and is preserved verbatim (`_wirefr
 - **Connected country:** the cell renders the carrier name in **green bold** (`--green` `#198754`, `font-weight:700`). Demo: every `GB` row shows `YunExpress`.
 - **Unconnected country — blocks the file `[G-17]`:** the cell renders, in **red bold** (`--red` `#DC3545`, computed `rgb(220, 53, 69)`, `font-weight:700`), the byte-exact string `Cannot import — no connected carrier`. Demo: the `PE` row (recipient `Lucia Ramos`). **No order is created — not for this row and not for any other row in the file.** `Confirm Import` is **disabled** (`disabled` attribute plus `aria-disabled="true"`) for as long as any row is unconnected, and a blocking banner above the table reads `Cannot import — these countries have no connected carrier: {countries}. Ask the fulfillment team to connect them, or remove those rows and upload again.` with `{countries}` the distinct ISO codes in file order, comma-separated (BR-20, [E-7]). A file where **every** row is unconnected is still confirmable ([E-8]). A country whose mapping exists but whose carrier connection is **disabled** at confirm time is treated identically, with reason `connection_disabled` ([E-80]).
 - **Ambiguous mapping:** if configuration yields more than one connected carrier for a country, the confirm fails with a red toast naming the country and **no** orders are created (atomicity, BR-12). This is a configuration error, not an operator error ([E-52]).
-- **Downstream:** unblocking a `carrier_unresolved` order is **manual coordination — contact the fulfillment person in charge via Slack** (`[PD-55]` owner-decided 2026-08-03). v1 ships no in-admin release/carrier-assignment UI; this spec states the flagged state and its persistence (§9.1).
-- **Persists:** `[DC-10] order.carrier_assigned` (`old = null → new = {carrier}`, mapping version) or `[DC-11] order.carrier_unresolved` (`country`, `reason = no_connected_carrier | connection_disabled`) per order.
+- **Downstream:** there is nothing to unblock. `[G-17]` (2026-08-04) rejects the whole file at import, so no flagged order ever exists downstream — this voids `[PD-55]` and the manual-Slack-coordination answer recorded under it on 2026-08-03. The importer contacts the Fulfillment Center, fixes the carrier connection, and re-uploads.
+- **Persists:** `[DC-10] order.carrier_assigned` (`old = null → new = {carrier}`, mapping version) per order on success; `[DC-7] import.batch_rejected` (`reason = no_connected_carrier | connection_disabled`, affected countries) for the file on rejection.
 
 ---
 
@@ -679,7 +679,7 @@ Exactly **one** confirmed route fires from this page.
 Naming them closes the audit rather than leaving silence:
 
 - **Import confirmed** → no Slack route. Not invented here; `_slack-routing` classifies further routes as "decide per feature at dev time".
-- **`carrier_unresolved` row created** → no automated Slack route; the follow-up is manual Slack contact with the fulfillment person in charge (`[PD-55]` owner-decided 2026-08-03, §9.1).
+- **File rejected for an unconnected carrier `[G-17]`** → no automated Slack route; the importer sees the rejection on screen and contacts the Fulfillment Center directly. (Supersedes the 2026-08-03 `[PD-55]` answer, which assumed a flagged order existed to unblock.)
 - **Sample period created / cancelled** → no Slack route in v1.
 - **#unrecognized-tracking**, **#wholesale-ops**, **#partnership-kr** → these three confirmed routes belong to other screens and never fire from Order Management. (`_slack-routing` defines a channel ID only for the comments channel; the other three are named without IDs there.)
 
@@ -1043,14 +1043,14 @@ Given the real admin import modal is open
 When I upload a valid template containing headers but no data rows
 Then the preview header reads `… · 0 rows parsed · 0 errors`, `Confirm Import` is disabled, and no empty batch is created.
 
-**QA-IMP-27 [ADMIN]** — Confirm persists the whole batch chain `[DC-6]` `[DC-9]` `[DC-10]` `[DC-11]` `[DC-12]`
-Given a valid 12-row file with 11 `GB` rows and 1 `PE` row, order type `Influencer Seeding`, PIC `Yongwon Ryu (me)`
+**QA-IMP-27 [ADMIN]** — Confirm persists the whole batch chain `[DC-6]` `[DC-9]` `[DC-10]` `[DC-12]`
+Given a valid 12-row file in which **every** row's country has a connected carrier (12 `GB` rows), order type `Influencer Seeding`, PIC `Yongwon Ryu (me)`
 When I click `Confirm Import (12 orders)`
 Then exactly 12 orders exist with `MKT-` numbers
-And `[DC-6] import.batch_confirmed` persists with batch id, filename, file hash, `order_count=12`, order type, PIC, `carriers_assigned=11`, `carrier_unresolved=1`, idempotency key
+And `[DC-6] import.batch_confirmed` persists with batch id, filename, file hash, `order_count=12`, order type, PIC, `carriers_assigned=12`, idempotency key
 And 12 `[DC-9] order.created` events persist with recipient, contact, address, country, SKU, qty, product-name snapshot, campaign and batch id
-And 11 `[DC-10] order.carrier_assigned` events persist with `old=null → new=YunExpress`
-And 1 `[DC-11] order.carrier_unresolved` persists with `country=PE`, `reason=no_connected_carrier`
+And 12 `[DC-10] order.carrier_assigned` events persist with `old=null → new=YunExpress`
+And **no** `[DC-11]` event persists — `[G-17]` retired that state; a file containing any unconnected row never reaches Confirm (see QA-IMP-55)
 And 12 `[DC-12] order.pic_assigned` events persist with the batch PIC.
 
 **QA-IMP-28 [ADMIN] (neg)** — Double-click creates one batch `[E-11]` `[DC-28]`
@@ -1175,10 +1175,11 @@ Given a confirmed import
 When I press the browser Back button
 Then the dashboard is shown, the batch still exists in full, and no revert or undo affordance is offered anywhere (BR-14, `[PD-54 · OWNER-PENDING]`).
 
-**QA-IMP-51 [ADMIN]** — Disabled carrier connection behaves as unconnected `[E-80]`
+**QA-IMP-51 [ADMIN]** — Disabled carrier connection behaves as unconnected `[E-80]` `[G-17]`
 Given `GB` maps to `YunExpress` but that connection is disabled at confirm time
 When I upload a file of `GB` rows and click `Confirm Import`
-Then the `GB` rows render amber `Not connected — contact the Fulfillment Center`, the orders are created flagged, and `[DC-11]` persists with reason `connection_disabled`.
+Then the `GB` rows render amber `Not connected — contact the Fulfillment Center`, **the whole file is rejected and no order is created** `[G-17]`, and `[DC-7] import.batch_rejected` persists with reason `connection_disabled`.
+And a disabled connection is treated identically to no mapping at all — the two must not diverge into different outcomes.
 
 **QA-IMP-52 [ADMIN]** — Per-row carriers in one batch `[E-81]` `[E-18]`
 Given the configuration maps `GB` and `AU` to two different connected carriers and `PE` to none
@@ -1198,11 +1199,11 @@ When I upload a file containing one row whose Country is `ZZ` (not a supported c
 Then the `ZZ` row shows the reason `Invalid country`, is counted in `{e}`, and blocks the whole file
 And the `PE` row is **not** an error: it renders amber `Not connected — contact the Fulfillment Center` and would not have blocked anything on its own — the two conditions must never be merged into one error class.
 
-**QA-IMP-55 [ADMIN] (neg)** — A file where every row is unconnected is still confirmable `[E-8]` `[DC-11]`
+**QA-IMP-55 [ADMIN] (neg)** — A file where every row is unconnected is rejected in full `[E-8]` `[G-17]`
 Given the real admin import modal is open
 When I upload a 9-row file in which every row's country has no connected carrier, and I click `Confirm Import`
-Then `Confirm Import` was enabled, all 9 orders are created, every one carries the `carrier_unresolved` flag, and 9 `[DC-11] order.carrier_unresolved` events persist
-And the toast subtext reads `Carrier auto-assigned per country · 9 not connected — flagged to contact Fulfillment Center` (BR-20).
+Then **no order is created** and `[DC-7] import.batch_rejected` persists with the unconnected countries listed `[G-17]`
+And the rejection is all-or-nothing — the file is never partially imported, because a silently partial success is the one failure mode nobody notices.
 
 **QA-IMP-56 [ADMIN] (neg)** — Row or byte limit rejects the file `[E-16]` `[DC-2]`
 Given the configured maximum row count and maximum file size
