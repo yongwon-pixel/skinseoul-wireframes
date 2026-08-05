@@ -28,7 +28,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 URL = "file://" + str((HERE / ".." / ".." / ".." / "closing" / "index.html").resolve())
 OUT_JSON = os.environ.get(
     "QA_CLOSING_OUT",
-    "/private/tmp/claude-501/-Users-yongwon-yongwon-sync/635405b8-dea2-4665-89c5-efd98bf60282/scratchpad/qa-closing-prehandoff-results.json")
+    "(internal scratch path, not published)")
 
 INIT = r"""
 window.__spoken = [];
@@ -1329,7 +1329,8 @@ def main():
     nerr = sum(1 for r in results if r["verdict"] == "ERROR")
     print(f"\n== {n} scenarios · PASS {npass} · FAIL {nfail} · ERROR {nerr} ==")
     pathlib.Path(OUT_JSON).parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT_JSON, "w") as f:
+    # encoding 미지정이면 Windows 기본 코덱(cp949)으로 열려 한글 시나리오에서 죽는다.
+    with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=1)
     print("json:", OUT_JSON)
     return 0 if nfail == 0 and nerr == 0 else 1

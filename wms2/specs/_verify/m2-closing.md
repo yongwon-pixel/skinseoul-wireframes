@@ -4,11 +4,11 @@
 beyond what §8 supplies. Selectors, expected strings and activation steps come from §8 only; the
 wireframe source was consulted **after** a failure, solely to quote what the page actually does.
 
-- **Spec under test:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md` §8 (lines 1033–2112)
-- **System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/closing/index.html`
-- **Runner:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-closing.py` (Playwright · python · headless chromium · viewport 1440×900)
-- **Raw results:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-closing-results.json`
-- **Wireframe-defect cross-reference:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_plans/_wireframe-fixes.md`
+- **Spec under test:** `wms2/specs/closing.md` §8 (lines 1033–2112)
+- **System under test:** `wms2/closing/index.html`
+- **Runner:** `wms2/specs/_verify/qa-closing.py` (Playwright · python · headless chromium · viewport 1440×900)
+- **Raw results:** `wms2/specs/_verify/qa-closing-results.json`
+- **Wireframe-defect cross-reference:** `wms2/specs/_plans/_wireframe-fixes.md`
 
 ---
 
@@ -261,7 +261,7 @@ improvised. Fix F1–F3 and F5 and this becomes a clean *yes*.
 ## 6. Reproducing
 
 ```bash
-cd /Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify
+cd wms2/specs/_verify
 python3 qa-closing.py          # prints the table, writes qa-closing-results.json
 ```
 The script targets the local `index.html` by relative path; point `URL` at

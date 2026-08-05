@@ -4,7 +4,7 @@
 1. **Wireframes (SST for screens)** — `wms2/{slug}/index.html`, live at `https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/{slug}/`. Legend numbers = implementation units. Legends already encode most decisions with dates.
 2. **Planning doc (Notion, sections 0~J)** — fetch `38705a34aa25800da0bfec9900639b1c` via mcp__notion__notion-fetch (load via ToolSearch). Struck-through items are dead — do NOT spec them; the replacement memo next to them is the truth.
 3. **Developer handoff notes (Notion)** — `3b005a34aa258184828dfa13877a09b7` (6 implementation notes: double-click bug, print agent, YUN landscape method, photo-upload deferred, audit cost source, G corrections).
-4. **Decision ledgers (Korean, read for dates/reversals)** — `~/yongwon-sync/obsidian/AI/Plans/2026-07-09-wms2-wireframes.md` and `2026-08-02-wms2-en-spec-handoff.md`.
+4. **Decision ledgers (Korean, read for dates/reversals)** — (internal decision ledger, not published) and `2026-08-02-wms2-en-spec-handoff.md`.
 5. Local inputs: `spec-template.md`, `global-rules-draft.md`, `slack-routing.md` (this folder).
 
 ## Mandatory inclusions (owner-flagged — every one must land in the right page spec)

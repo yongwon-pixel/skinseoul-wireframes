@@ -3,7 +3,7 @@
 **Verifier role:** hostile QA robot. I did not write this spec and did not read the wireframe
 source before writing the tests.
 **Target spec:** `wms2/specs/inbound-request.md` §8 (QA Acceptance Criteria)
-**System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/inbound-request/index.html`
+**System under test:** `wms2/inbound-request/index.html`
 (identical to the deployed page at `https://yongwon-pixel.github.io/skinseoul-wireframes/wms2/inbound-request/`)
 **Runner:** `_verify/qa-inbound-request.py` — Playwright, python, headless chromium, viewport 1440×900
 **Date:** 2026-08-03
@@ -201,6 +201,6 @@ questions" goal is meant to eliminate. Apply S-1 through S-4 and the `[WF]` set 
 
 ## 5. Artefacts
 
-- Runner (re-runnable): `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-inbound-request.py`
-- This report: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/m2-inbound-request.md`
+- Runner (re-runnable): `wms2/specs/_verify/qa-inbound-request.py`
+- This report: `wms2/specs/_verify/m2-inbound-request.md`
 - Command: `python3 qa-inbound-request.py --json results.json`

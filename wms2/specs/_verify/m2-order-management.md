@@ -2,7 +2,7 @@
 
 **Method:** Verification Method 2 (hostile QA robot; the executor did not write the spec).
 **Spec under test:** `wms2/specs/order-management.md` §8 (QA Acceptance Criteria)
-**System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-management/index.html` (identical to the deployed page)
+**System under test:** `wms2/order-management/index.html` (identical to the deployed page)
 **Harness:** Playwright 1.58.0 · headless Chromium · viewport 1500×1000 · `_verify/qa-order-management.py` (re-runnable)
 **Raw results:** `_verify/qa-order-management.results.json`
 **Date:** 2026-08-03

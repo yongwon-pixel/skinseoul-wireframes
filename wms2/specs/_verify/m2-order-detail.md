@@ -5,9 +5,9 @@ knowledge of the page beyond what §8 states, and was forbidden from improvising
 expected strings.
 
 - **Date:** 2026-08-03
-- **Spec under test:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-detail.md` §8
-- **System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-detail/index.html` (identical to the deployed GitHub Pages target named in §8.0)
-- **Runner:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-order-detail.py` (Playwright, headless Chromium, viewport 1680×1000)
+- **Spec under test:** `wms2/specs/order-detail.md` §8
+- **System under test:** `wms2/order-detail/index.html` (identical to the deployed GitHub Pages target named in §8.0)
+- **Runner:** `wms2/specs/_verify/qa-order-detail.py` (Playwright, headless Chromium, viewport 1680×1000)
 - **Cross-check for culprit assignment:** `specs/_plans/_wireframe-fixes.md`
 
 ---

@@ -1,7 +1,7 @@
 # M2 — Adversarial QA Execution: `stock-status.md` §8
 
 **Target spec:** `wms2/specs/stock-status.md` v1.1 (2026-08-03), §8 *QA Acceptance Criteria (machine-runnable)*
-**System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/stock-status/index.html` (byte-identical to the deployed page)
+**System under test:** `wms2/stock-status/index.html` (byte-identical to the deployed page)
 **Runner:** `wms2/specs/_verify/qa-stock-status.py` (Playwright, headless Chromium, Python 3.13) — re-runnable
 **Raw output:** `wms2/specs/_verify/qa-stock-status-results.json`
 **Date:** 2026-08-03 · Executed as a hostile QA robot with no authorship of the spec.

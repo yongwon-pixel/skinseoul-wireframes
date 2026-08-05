@@ -1227,8 +1227,6 @@ def main():
             d = "AMB: " + "; ".join(r["amb"])
         print(f"{r['id']:<18} {r['verdict']:<11} {r['npass']:<5} {d[:400]}")
     print("\nTOTAL", len(results), counts)
-    (HERE / "qa-closing-results.json").write_text(json.dumps(results, indent=1, ensure_ascii=False))
-
-
+    (HERE / "qa-closing-results.json").write_text(json.dumps(results, indent=1, ensure_ascii=False), encoding="utf-8")
 if __name__ == "__main__":
     main()

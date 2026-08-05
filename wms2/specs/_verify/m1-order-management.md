@@ -2,8 +2,8 @@
 
 Method: independent coverage audit (Verification Method 1). The auditor did **not** write the spec. Every count below was derived by direct extraction (Python/grep) over `wms2/order-management/index.html` and `wms2/specs/order-management.md`; no count asserted by the spec was trusted before it was re-derived.
 
-Target: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md` (1781 lines, spec v1.1, 2026-08-03)
-Wireframe (SST): `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-management/index.html` (435 lines)
+Target: `wms2/specs/order-management.md` (1781 lines, spec v1.1, 2026-08-03)
+Wireframe (SST): `wms2/order-management/index.html` (435 lines)
 Date: 2026-08-03
 
 ---

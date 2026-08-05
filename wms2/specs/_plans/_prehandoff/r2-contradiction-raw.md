@@ -1,6 +1,6 @@
 # R2 — 모순 사냥 원시 발견 (미검증, 적대 반증 전)
 
-워크플로우 wf_c9f3e0ec-652 · 15/16 완료(register-vs-spec은 크레딧 한도로 미실행) · 4.57M 토큰 · 29분
+내부 실행 · 15/16 완료(register-vs-spec은 크레딧 한도로 미실행) · 4.57M 토큰 · 29분
 
 > **이 문서의 주장은 아직 검증되지 않았다.** 반증 통과분만 ledger.md로 승격한다.
 
@@ -135,76 +135,76 @@
 
 ### [C-15] MAJOR — WF-9(피킹 리스트 샘플 행)·PD-36의 현재 상태가 문서 간·문서 내에서 정반대로 서술된다 — RTO §3.15/QA-E-20은 '2026-08-03 적용 완료·PD-36 사실상 확정'이라 하고, RTO §2.4·§9.4·OQ-1 말미와 OM §9.1은 '샘플 행 없음·PD-36 승인 대기로 블록'이라 한다(와이어프레임 실측은 행이 존재 = 적용 완료 측이 사실).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "**WF-9 was applied to the wireframe on 2026-08-03** (owner-approved batch): M1 now renders one amber-tinted `sample set` row for order `422165` ... `[PD-36]` is thereby settled in the affirmative for the modal"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "M1 picking list has no sample-set rows, while [G-13] requires internal picking artifacts to show **which** sample and **how many**. Fix is **conditional** on owner approval of PD-36 *and* an answer to PD-51."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "**WF-9** — add sample rows to the M1 picking table | **Conditional** — blocked on `[PD-36]` approval **and** OQ-1 (`[PD-51]`)"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "wireframe fix **WF-9** (adding sample rows to M1) is no longer gated on a definition source — only owner approval of `[PD-36]` remains. QA-E-20 unblocks once PD-36 lands."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "Unblocks the internal-invoice and picking-list *content*; `_wireframe-fixes` WF-9 now waits on `[PD-36]` only"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/ready-to-outbound/index.html`: "<!-- WF-9 (2026-08-03): sample-set picking line per [G-13]/[BR-21] — PD-51 v1 keeps the single label "sample set" -->"
+- `wms2/specs/ready-to-outbound.md`: "**WF-9 was applied to the wireframe on 2026-08-03** (owner-approved batch): M1 now renders one amber-tinted `sample set` row for order `422165` ... `[PD-36]` is thereby settled in the affirmative for the modal"
+- `wms2/specs/ready-to-outbound.md`: "M1 picking list has no sample-set rows, while [G-13] requires internal picking artifacts to show **which** sample and **how many**. Fix is **conditional** on owner approval of PD-36 *and* an answer to PD-51."
+- `wms2/specs/ready-to-outbound.md`: "**WF-9** — add sample rows to the M1 picking table | **Conditional** — blocked on `[PD-36]` approval **and** OQ-1 (`[PD-51]`)"
+- `wms2/specs/ready-to-outbound.md`: "wireframe fix **WF-9** (adding sample rows to M1) is no longer gated on a definition source — only owner approval of `[PD-36]` remains. QA-E-20 unblocks once PD-36 lands."
+- `wms2/specs/order-management.md`: "Unblocks the internal-invoice and picking-list *content*; `_wireframe-fixes` WF-9 now waits on `[PD-36]` only"
+- `wms2/ready-to-outbound/index.html`: "<!-- WF-9 (2026-08-03): sample-set picking line per [G-13]/[BR-21] — PD-51 v1 keeps the single label "sample set" -->"
 
 주: 와이어프레임(index.html L361-362)에는 샘플 행이 실제로 존재하므로 §3.15/QA-M1-03(5행 [WF] 단언)/QA-E-20 측이 사실이고, RTO §2.4 레지스터 행·§9.4 백로그 표·OQ-1 말미 문장·§6.2/DC-5의 'once PD-36 lands', 그리고 OM §9.1의 'WF-9 now waits on PD-36 only'가 미전파 스테일. 취소선·이력 표기가 아닌 현행 상태 표들이라 이력 서술 면제에 해당하지 않음. 헤더의 owner-decided 목록(PD-1~8,51,55,66,71,74,79)에 PD-36이 없어 'settled in the affirmative' 주장과 OWNER-PENDING 태그 사이의 근거 충돌도 남는다.
 
 ### [C-16] MAJOR — MKT 오더 PIC의 타입 계약이 정면 충돌한다 — OM은 자유 텍스트 PIC를 허용하고 그것이 'RTO에 렌더된다'고 명시(BR-4·E-59)하는데, RTO [L-8]은 'PIC resolves to a system user'(PD-33)로 못박고 자유 텍스트 분기를 전혀 정의하지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**Free-text PIC:** stored as a display string, not a user reference. It renders in the order list PIC column and in RTO"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**PIC defaults to the logged-in user and accepts free text.** The select lists system users; `✎ Custom` accepts any string, which `Search PIC` matches as a substring. | The real PIC is sometimes an agency contact or a campaign owner with no admin account; forcing a system user would produce a false record."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "PIC resolves to a system user `[PD-33 · OWNER-PENDING]`; if unset, render an explicit `PIC: —` rather than an empty line [E-42]; if the user was deactivated, render the stored display name unchanged plus a neutral marker rather than dropping the line [E-71]."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_plans/_provisional-decisions.md`: "**[PD-33] PIC edit — free text or user picker, and is the new PIC notified?**
+- `wms2/specs/order-management.md`: "**Free-text PIC:** stored as a display string, not a user reference. It renders in the order list PIC column and in RTO"
+- `wms2/specs/order-management.md`: "**PIC defaults to the logged-in user and accepts free text.** The select lists system users; `✎ Custom` accepts any string, which `Search PIC` matches as a substring. | The real PIC is sometimes an agency contact or a campaign owner with no admin account; forcing a system user would produce a false record."
+- `wms2/specs/ready-to-outbound.md`: "PIC resolves to a system user `[PD-33 · OWNER-PENDING]`; if unset, render an explicit `PIC: —` rather than an empty line [E-42]; if the user was deactivated, render the stored display name unchanged plus a neutral marker rather than dropping the line [E-71]."
+- `wms2/specs/_plans/_provisional-decisions.md`: "**[PD-33] PIC edit — free text or user picker, and is the new PIC notified?**
 Provisional: **System-user picker; no automatic Slack notification** (use an @mention comment to notify).
 Rationale: PIC feeds filters and mention routing, so it must resolve to a real user; auto-notifying every reassignment would be noise.
 Pages: OD (Q-A11/L-5), OM (custom-PIC exception, PD-51 area)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "| **DC-14** | `order.mkt_surfaced` | system | order | `import_batch_ref` (Order Management), `pic_user`, `rto_visible_at`"
+- `wms2/specs/ready-to-outbound.md`: "| **DC-14** | `order.mkt_surfaced` | system | order | `import_batch_ref` (Order Management), `pic_user`, `rto_visible_at`"
 
 주: RTO의 PIC 소스는 오직 OM 임포트인데, 그 소스가 자유 텍스트를 허용한다(OM DC-12 payload: pic type `user_ref|free_text`). PD-33 레지스터 스스로 'OM (custom-PIC exception)'을 명기하고 RTO를 적용 페이지로 나열하지도 않는데, RTO는 PD-33을 무예외 인용. 자유 텍스트 PIC('Agency — Lumi')가 RTO에 표출되는 순간 [L-8]의 user-ref 전제(E-71 비활성 사용자 마커, DC-14 `pic_user` 필드)가 성립하지 않는다.
 
 ### [C-17] MAJOR — 공유 컴포넌트인 Comments 허브의 클릭 라우팅 계약이 갈린다 — OM(BR-32)·G-7은 허브 행이 inbound request/pool item일 수 있고 클릭이 '그 엔티티의 화면'으로 라우트된다고 하는데, RTO §3.10·§6.2는 무조건 'opens the order (Order Detail)'로 못박는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "Click on any hub entry opens the order (Order Detail) [G-12]."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "The hub is identical on all eight screens; only the entry points differ."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**The Comments hub corpus is cross-entity.** Rows surfaced here may reference orders, inbound requests or unrecognized-pool items `[G-7]`; a click routes to that entity's own screen `[PD-67 · OWNER-PENDING]`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "`[G-7]` makes pool items a first-class commentable type and the hub searches all comments, so this page's hub cannot assume every row is an order."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Commentable entity types include orders **and** inbound requests **and** unrecognized-pool items."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "The hub is one component with one string; "click opens the entity" is the behavior, and the word `order` is not re-worded per entity type."
+- `wms2/specs/ready-to-outbound.md`: "Click on any hub entry opens the order (Order Detail) [G-12]."
+- `wms2/specs/ready-to-outbound.md`: "The hub is identical on all eight screens; only the entry points differ."
+- `wms2/specs/order-management.md`: "**The Comments hub corpus is cross-entity.** Rows surfaced here may reference orders, inbound requests or unrecognized-pool items `[G-7]`; a click routes to that entity's own screen `[PD-67 · OWNER-PENDING]`."
+- `wms2/specs/order-management.md`: "`[G-7]` makes pool items a first-class commentable type and the hub searches all comments, so this page's hub cannot assume every row is an order."
+- `wms2/specs/_global-rules.md`: "Commentable entity types include orders **and** inbound requests **and** unrecognized-pool items."
+- `wms2/specs/_global-rules.md`: "The hub is one component with one string; "click opens the entity" is the behavior, and the word `order` is not re-worded per entity type."
 
 주: G-7이 '단일 컴포넌트·click opens the entity'를 명시하고 허브 검색은 전 코퍼스를 대상으로 하므로 RTO 허브에도 비-오더 행이 표출될 수 있다. OM의 BR-32 논거('이 페이지의 허브는 모든 행이 오더라고 가정할 수 없다')는 RTO에 동일하게 적용되는데 RTO는 정확히 그 가정을 명문화했다. RTO §3.10/§6.2/QA-L10-12의 라우팅 문장을 엔티티 라우팅으로 교정 필요.
 
 ### [C-18] MINOR — OM §6.3이 임포트 후 도착지를 `../ready-to-outbound/#marketing`(Marketing view 활성화)으로 계약하지만, RTO 스펙·와이어프레임 어디에도 `#marketing` 프래그먼트로 탭을 활성화하는 수신측 계약이 존재하지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "| Confirmed import | Ready to be Outbonded, Marketing view | `../ready-to-outbound/#marketing` — MKT orders are listed there immediately, regardless of stock (BR-1) |"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "| V-3 | **Marketing** | `.vtab[data-view="mkt"]` | `MKT-40233` | `Found 1 order(s) with items ready for outbound` |"
+- `wms2/specs/order-management.md`: "| Confirmed import | Ready to be Outbonded, Marketing view | `../ready-to-outbound/#marketing` — MKT orders are listed there immediately, regardless of stock (BR-1) |"
+- `wms2/specs/ready-to-outbound.md`: "| V-3 | **Marketing** | `.vtab[data-view="mkt"]` | `MKT-40233` | `Found 1 order(s) with items ready for outbound` |"
 
 주: RTO의 Marketing 뷰 도달 경로는 탭 클릭뿐이며(V-3), 와이어프레임 HTML에 location.hash/hashchange 핸들러가 0건임을 실측 확인. OM의 QA는 디렉토리형 href(`../{slug}/#anchor`)를 단언하므로 프래그먼트 계약이 편측에만 존재한다. 링크 자체는 RTO 페이지로 열리고 All 뷰에도 MKT 행이 보이므로 동작은 완만히 열화하나, 'Marketing view'라는 약속은 수신측 미정의.
 
 ### [C-19] MINOR — carrier_unresolved 후속 조치의 오너 존재 여부가 상반된다 — OM §6.2는 '풀필먼트 담당자에게 수동 Slack 연락(PD-55 owner-decided)'이라 하고, RTO §6.1은 현행 산문으로 'No route and no owner exist for that follow-up'이라 주장한다(RTO 자신의 §9.2 OQ-2 해답과도 모순).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "**"Not connected — contact the Fulfillment Center" orders raise no Slack alert.** No route and no owner exist for that follow-up — that is precisely the gap recorded as `[PD-55 · NO-DEFAULT]` (§9.2 OQ-2)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**`carrier_unresolved` row created** → no automated Slack route; the follow-up is manual Slack contact with the fulfillment person in charge (`[PD-55]` owner-decided 2026-08-03, §9.1)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "**The answer.** Unblocking is **manual coordination — contact the fulfillment person in charge via Slack**. v1 ships no in-admin release/carrier-assignment UI and no automated Slack route."
+- `wms2/specs/ready-to-outbound.md`: "**"Not connected — contact the Fulfillment Center" orders raise no Slack alert.** No route and no owner exist for that follow-up — that is precisely the gap recorded as `[PD-55 · NO-DEFAULT]` (§9.2 OQ-2)."
+- `wms2/specs/order-management.md`: "**`carrier_unresolved` row created** → no automated Slack route; the follow-up is manual Slack contact with the fulfillment person in charge (`[PD-55]` owner-decided 2026-08-03, §9.1)."
+- `wms2/specs/ready-to-outbound.md`: "**The answer.** Unblocking is **manual coordination — contact the fulfillment person in charge via Slack**. v1 ships no in-admin release/carrier-assignment UI and no automated Slack route."
 
 주: 헤더의 supersession 공지(PD-55 포함)가 인라인 태그는 무효화하지만, 'No route and no owner exist'는 태그가 아닌 현행 사실 서술이라 공지로 덮이지 않는다. '자동 Slack 라우트 없음' 부분은 양쪽 일치 — 갈리는 것은 오너 존재 서술뿐.
 
 ### [C-20] MINOR — '8화면 동일'이라 선언된 허브의 닫힘 계약이 갈린다 — OM은 outside click + Esc 두 경로를 규범으로 명시하는데, RTO는 outside click만 명시하고 Esc는 스펙 전체에서 부재한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**Dismissal:** the panel closes on an outside click and on `Esc`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "Dropdown anchored top-right; **closes on outside click**, stays open on clicks inside (normative)."
+- `wms2/specs/order-management.md`: "**Dismissal:** the panel closes on an outside click and on `Esc`."
+- `wms2/specs/ready-to-outbound.md`: "Dropdown anchored top-right; **closes on outside click**, stays open on clicks inside (normative)."
 
 주: RTO QA-L10-09도 outside click만 단언. 동일 컴포넌트 선언(RTO §3.10 'identical on all eight screens')하에서 한쪽만 Esc를 규범화한 드리프트 — 침묵 대 명시 유형이라 MINOR.
 
 ### [C-21] MINOR — 동일 허브의 `Mark all read` 확인 서피스가 갈린다 — RTO는 G-2/BR-34 근거로 녹색 토스트 `✓ All mentions marked as read`를 규범(spec-defined)으로 부여했는데, OM의 같은 액션(E-39·QA-CMT-10)은 토스트 없이 배지 클리어만 서술한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "with a right-aligned `Mark all read` action (HUB-4) [DC-4]. On use it shows the green toast `✓ All mentions marked as read` **(spec-defined)** because the change spans rows the operator may not be looking at [G-2] [BR-34]."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "**Badge:** equals the unread mention count; `Mark all read` clears it to zero without a page reload ([E-39])."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "Then every `.unread` tint is removed, the nav badge clears to `0` without a page reload, and `[DC-24] comment.mark_all_read` persists with the 3 comment ids and `count=3`"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "The hub is identical on all eight screens; only the entry points differ."
+- `wms2/specs/ready-to-outbound.md`: "with a right-aligned `Mark all read` action (HUB-4) [DC-4]. On use it shows the green toast `✓ All mentions marked as read` **(spec-defined)** because the change spans rows the operator may not be looking at [G-2] [BR-34]."
+- `wms2/specs/order-management.md`: "**Badge:** equals the unread mention count; `Mark all read` clears it to zero without a page reload ([E-39])."
+- `wms2/specs/order-management.md`: "Then every `.unread` tint is removed, the nav badge clears to `0` without a page reload, and `[DC-24] comment.mark_all_read` persists with the 3 comment ids and `count=3`"
+- `wms2/specs/ready-to-outbound.md`: "The hub is identical on all eight screens; only the entry points differ."
 
 주: RTO의 근거(읽음 상태 변경이 시야 밖 행에 걸침 → G-2 토스트)는 코퍼스 공통 논리라 OM 허브에도 동일 적용돼야 한다. OM은 명시적 부정은 아니고 무언급이므로 MINOR — 다만 QA 스위트가 양 페이지에서 상반된 기대를 기계 단언하게 되는 지점.
 
 ### [C-22] MINOR — PD-51로 개정된 G-13('sample set' 단일 표기, which/how-many 폐기)이 반영되지 않은 현행 산문이 양쪽에 남아 있다 — OM §1.3은 '피커에게 which sample·how many를 알려야 한다'를 현재형 규범 근거로 서술하고, RTO §2.4 WF-9 행도 '[G-13] requires ... which sample and how many'를 현행 요구로 서술한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "the sample dual-view rule `[G-13]` exists because the picker must be told *which* sample and *how many*, while the carrier-facing data must not be told (tax handling)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-management.md`: "Internal invoice and picking artifacts render **"sample set" only** in v1 — no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03)"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md`: "M1 picking list has no sample-set rows, while [G-13] requires internal picking artifacts to show **which** sample and **how many**."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_plans/_provisional-decisions.md`: "[G-13]'s "which sample and how many" requirement is amended accordingly."
+- `wms2/specs/order-management.md`: "the sample dual-view rule `[G-13]` exists because the picker must be told *which* sample and *how many*, while the carrier-facing data must not be told (tax handling)."
+- `wms2/specs/order-management.md`: "Internal invoice and picking artifacts render **"sample set" only** in v1 — no type/qty breakdown (`[PD-51]` owner-decided 2026-08-03)"
+- `wms2/specs/ready-to-outbound.md`: "M1 picking list has no sample-set rows, while [G-13] requires internal picking artifacts to show **which** sample and **how many**."
+- `wms2/specs/_plans/_provisional-decisions.md`: "[G-13]'s "which sample and how many" requirement is amended accordingly."
 
 주: 두 인용 모두 이력 표기(취소선·'was'·날짜 한정) 없이 현재형으로 G-13 요구를 진술하므로 이력 서술 면제 대상이 아니다. PD-36 레지스터 항목의 Provisional 문구('list WHICH sample and HOW MANY per [G-13]')도 같은 계열의 미개정 텍스트.
 
@@ -289,7 +289,7 @@ Pages: OD (Q-A11/L-5), OM (custom-PIC exception, PD-51 area)."
 
 **대조 후 이상 없음:** 멀티 송장(G-10): 요청당 무제한 등록·전 번호 독립 매치·PARTIAL 누적·같은 송장 재스캔 시 잔량부터 재개(VO E-22/BR-17 ↔ IR L-S3-7/E-44) — 일치 · 수신 파이프라인 3단계(REQUESTED→PARTIAL→INBOUNDED)·PARTIAL 비필수 정차(IR E-89)·PARTIAL 필 산술 = received/expected(양측이 동일한 [G-11] 델타를 각각 선언, VO PARTIAL 620/800 ↔ IR PARTIAL 120/180 형식) — 일치 · 송장 uniqueness: 시스템 전역 유일·타 요청 등록 시 상대 Inbound No. 명시 차단(VO E-64/PD-82 ↔ IR BR-15/E-21=E-35)·전문자열 등가 매칭(E-73)·인바운드/아웃바운드 네임스페이스 분리 및 인바운드 우선(VO BR-45/E-8 ↔ IR BR-16/E-22) — 일치 · INBOUNDED 터미널 의미론: 추가 송장 차단→신규 요청(PD-85, VO 없음·IR E-28), 완료 요청 재스캔 = VO 읽기 전용 6b+info 토스트(E-17) ↔ IR 결과 링크·역링크 부재(L-R10) — 일치 · Carrier 미기록·Received Date 자동(스캔 시각, PARTIAL은 '–', 완료 시점 기록): VO BR-24/WF-1 ↔ IR BR-12/L-S3-10/WF-2 — 일치 · 수동 수신 상태 전이 금지: IR BR-11/L-R12(데스크는 CANCELLED만) ↔ VO BR-52(State 6 = 유일 확정 경로) — 일치 · M6 계약: reason 3옵션·세 번째 라벨 'Other'(양측 동일 C-11 채택), received 하한 하드블록(VO E-24 ↔ IR E-42), 정확 일치로 낮춰도 auto-confirm 없음(VO E-23 ↔ IR E-43), 오토코멘트+@requester Slack 채널 #fulfillment-admin-comments C0BMGEWM5QA 동일 — 일치 · 오버수령: warn-and-count·cap 금지·n>m unclamped 렌더·full confirm 차단(VO BR-19/E-15 ↔ IR E-92/QA-C-22) — 일치 · 미인식 풀 복구 루프: 전용 등록 경로 기각·풀 재사용·요청 생성→송장 등록→사유 'routed to inbound request'+Inbound No. 캡처→재스캔 State 6(VO BR-48 ↔ IR BR-19/DC-21/E-53) — 일치 · 모닝 no-tracking Slack 체크 소유권: IR 소유(#wholesale-ops/#partnership-kr) ↔ VO §6.1 'Not routed from this page' 명시 — 일치 · 카탈로그 스냅샷 의미론: 요청 라인은 선택 시점 스냅샷·재파생 금지(VO L-S6-5 ↔ IR E-66/E-91) — 일치 · 프로덕션 딥링크 도착 계약: 특정 Inbound No.로 필터(VO §6.2/L-S6-2 ↔ IR L-F5/QA-G-07) — 일치 (경로 표기형만 MINOR 발견 참조)
 
-## 경계면 페어 감사 — stock-status ↔ order-detail (레포: /Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs, 기준선 review-baseline-20260803). 두 문서 전문 정독 후 동일 물리 사실·이벤트·검증·상호 인용·개정 드리프트 대조.
+## 경계면 페어 감사 — stock-status ↔ order-detail (레포: wms2/specs, 기준선 review-baseline-20260803). 두 문서 전문 정독 후 동일 물리 사실·이벤트·검증·상호 인용·개정 드리프트 대조.
 
 ### [C-32] BLOCKER — 같은 창고의 '로컬 타임존'을 stock-status는 KST(Asia/Seoul), order-detail은 SGT로 규범 선언하고 있어, 두 페이지가 공유하는 동일 재고이동 이벤트가 화면마다 1시간 어긋난 시각으로 렌더된다 — 어느 쪽 X-리스트/충돌 선언에도 없는 미선언 정면 모순.
 
@@ -637,67 +637,67 @@ Pages: OD (Q-A11/L-5), OM (custom-PIC exception, PD-51 area)."
 
 ### [C-72] MAJOR — closing.md 헤더는 [WF-15]를 현재형으로 'remains open'이라 서술하지만, _global-rules.md [G-7] v1.2는 8개 와이어프레임·8개 QA 스위트가 동일 커밋에서 canonical로 이동 완료됐다고 CONFIRMED로 못박았고, closing.md 자신의 §2.3/§3.8도 fixed로 기록해 헤더가 옛 상태로 남아 있다 (§10 로그의 '적용 안 함'과 §2.3의 '6건 배치 적용' 귀속도 상호 모순).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "**`[WF-4]` `[WF-5]` `[WF-7]` `[WF-8]` `[WF-12]` were applied to the wireframe on 2026-08-03** (owner-approved batch — §2.3); `[WF-15]` remains open (corpus-wide `[G-7]` fix)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7. All eight wireframes and all eight spec QA suites were moved to these values in the same commit."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "`[WF-15]` **(fixed 2026-08-03)** Comments hub pane headers and the unstar hint diverged from the cross-page `[G-7]` contract"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "`[WF-15]` deliberately **not** applied (corpus-wide `[G-7]` precondition, §2.3)"
+- `wms2/specs/closing.md`: "**`[WF-4]` `[WF-5]` `[WF-7]` `[WF-8]` `[WF-12]` were applied to the wireframe on 2026-08-03** (owner-approved batch — §2.3); `[WF-15]` remains open (corpus-wide `[G-7]` fix)."
+- `wms2/specs/_global-rules.md`: "**[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7. All eight wireframes and all eight spec QA suites were moved to these values in the same commit."
+- `wms2/specs/closing.md`: "`[WF-15]` **(fixed 2026-08-03)** Comments hub pane headers and the unstar hint diverged from the cross-page `[G-7]` contract"
+- `wms2/specs/closing.md`: "`[WF-15]` deliberately **not** applied (corpus-wide `[G-7]` precondition, §2.3)"
 
 주: §2.3는 'The six `(fixed 2026-08-03)` rows were applied to `wms2/closing/index.html` in the owner-approved wireframe-edit batch'라 6건(WF-15 포함)을 배치에 귀속시키고, §3.8은 WF-15가 [G-7] v1.2와 '같은 커밋'에서 적용됐다 하고, §10은 그 배치에서 '적용 안 함'이라 한다. 현재 규범 상태(전역규칙 CONFIRMED)는 fixed이므로 헤더 line 9와 §10 서술이 stale.
 
 ### [C-73] MAJOR — closing.md §3.21/§6.6은 PD-2(송신음 스코프)를 여전히 '오너가 해소해야 할 열린 긴장'으로 서술하고 reversal-impact 절까지 유지하지만, _global-rules.md [G-3a]는 PD-2를 owner CONFIRMED로 종결했다 — 게다가 확정된 규칙의 열거에는 closing M1 버튼이 여전히 빠져 있어 스펙의 'by class 적용'과 규칙 열거가 형식상 어긋난 채 남았다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "Note the tension the owner is being asked to resolve: PD-2's enumeration names View Orders, RTO, Order Detail and Inventory and does **not** name closing, while adjudication C-5's verdict is scope-by-button-class ("every outbound-class button on every page"), which does reach this button. This spec applies the rule by class. Reversal impact if the owner scopes PD-2 by page instead: delete this clause"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "(a) **Send sound** — outbound-class buttons play a short synthesized rising sweep (Web Audio, no external files). Scope: every outbound-class button on every page — View Orders (Outbound, Inbound + Outbound, bulk), RTO (Bulk Outbound), Order Detail (Outbound), Inventory (− Record Outbound). **CONFIRMED 2026-08-03 (owner, PD-2).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "`[G-3a]` send sound | **Yes — one button only**: M1's `[Process Outbound → resolve warning]`, as an outbound-class button `[PD-2 · OWNER-PENDING]`. PD-2's page enumeration does not name closing; adjudication C-5's button-class scope does."
+- `wms2/specs/closing.md`: "Note the tension the owner is being asked to resolve: PD-2's enumeration names View Orders, RTO, Order Detail and Inventory and does **not** name closing, while adjudication C-5's verdict is scope-by-button-class ("every outbound-class button on every page"), which does reach this button. This spec applies the rule by class. Reversal impact if the owner scopes PD-2 by page instead: delete this clause"
+- `wms2/specs/_global-rules.md`: "(a) **Send sound** — outbound-class buttons play a short synthesized rising sweep (Web Audio, no external files). Scope: every outbound-class button on every page — View Orders (Outbound, Inbound + Outbound, bulk), RTO (Bulk Outbound), Order Detail (Outbound), Inventory (− Record Outbound). **CONFIRMED 2026-08-03 (owner, PD-2).**"
+- `wms2/specs/closing.md`: "`[G-3a]` send sound | **Yes — one button only**: M1's `[Process Outbound → resolve warning]`, as an outbound-class button `[PD-2 · OWNER-PENDING]`. PD-2's page enumeration does not name closing; adjudication C-5's button-class scope does."
 
 주: 행동 자체(클래스 스코프로 M1에 사운드 적용)는 확정 규칙의 헤드라인 스코프와 일치. 결함은 (1) 이미 판결난 사안을 '오너 대기'로 계속 서술하는 stale 내러티브, (2) 확정 규칙의 열거가 closing M1을 명기하지 않아 [G-3a]만 읽는 구현자는 반대 결론에 도달할 수 있다는 잔여 모호성. 헤더의 PD 태그 일괄 supersession은 태그만 커버하고 이 산문은 커버하지 못한다.
 
 ### [C-74] MINOR — closing.md §6.1은 Slack 재전송을 통째로 'Retry policy is a developer decision'으로 위임하지만, 전역규칙(PD-4 CONFIRMED)은 백그라운드 재시도 큐 + 지수 백오프 자동 재전송 + N회 초과 시 admin 로그 플래그를 규칙으로 고정하고 N만 개발자 결정으로 남긴다 — 확정 규칙 본문을 다르게 재서술한 계약 위반.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "A failed Slack dispatch is persisted (DC-17 with `delivery_status=failure`) and retried; it never blocks the UI and never rolls anything back. Retry policy is a developer decision."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "the failure is queued in a background retry queue and re-sent automatically with exponential backoff. Every dispatch result is persisted [G-8]. An item still undelivered after N retries (N = developer decision) is flagged in the admin notification log."
+- `wms2/specs/closing.md`: "A failed Slack dispatch is persisted (DC-17 with `delivery_status=failure`) and retried; it never blocks the UI and never rolls anything back. Retry policy is a developer decision."
+- `wms2/specs/_global-rules.md`: "the failure is queued in a background retry queue and re-sent automatically with exponential backoff. Every dispatch result is persisted [G-8]. An item still undelivered after N retries (N = developer decision) is flagged in the admin notification log."
 
 ### [C-75] MINOR — closing.md QA-HUB-09는 검색결과 헤더(HUB-5)를 '결과가 있는 검색'에 조건화해 서술하지만, [G-7]의 reading rule은 0건 검색에서도 헤더가 항상 렌더되고 HUB-6이 별도 노드로 뒤따른다고 규정한다 — 이 QA 문구대로면 0건 시 헤더를 생략한 구현도 통과한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "And a search returning results renders the header "{n} results · newest first · click to open the order", while a search with no match renders exactly "No matching comments""
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`{n}` in HUB-5 is a count substituted at render time, never a literal — a zero-hit search still renders the header, followed by HUB-6 as a separate node."
+- `wms2/specs/closing.md`: "And a search returning results renders the header "{n} results · newest first · click to open the order", while a search with no match renders exactly "No matching comments""
+- `wms2/specs/_global-rules.md`: "`{n}` in HUB-5 is a count substituted at render time, never a literal — a zero-hit search still renders the header, followed by HUB-6 as a separate node."
 
 ### [C-76] MINOR — [G-7] v1.2는 canonical 문자열을 7종(HUB-7 포함)으로 발행하고 '8개 스펙 QA 스위트가 모두 이 값으로 이동했다'고 주장하지만, closing.md의 유일한 hub-copy ADMIN 시나리오 QA-HUB-09는 HUB-1…HUB-6만 단언하고 HUB-7(검색 placeholder)은 스펙 QA 어디에서도 단언되지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "**QA-HUB-09 `[ADMIN]`** — the hub carries the canonical cross-page copy `[G-7]` HUB-1…HUB-6 `[WF-15]`"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "HUB-7 (search placeholder) is one beyond the six the register enumerated — same component, same defect class, unambiguous 4/5 majority."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "A page may not introduce a local variant of any of the seven."
+- `wms2/specs/closing.md`: "**QA-HUB-09 `[ADMIN]`** — the hub carries the canonical cross-page copy `[G-7]` HUB-1…HUB-6 `[WF-15]`"
+- `wms2/specs/_global-rules.md`: "HUB-7 (search placeholder) is one beyond the six the register enumerated — same component, same defect class, unambiguous 4/5 majority."
+- `wms2/specs/_global-rules.md`: "A page may not introduce a local variant of any of the seven."
 
 주: §3.8 표에는 HUB-7이 포함돼 있어 문자열 자체는 스펙에 존재. 결손은 QA 단언 커버리지뿐.
 
 ### [C-77] MINOR — closing.md §3.8은 M3a-D7이 pane header에서 'closing과 inbound-request 두 페이지'를 outlier로 찾았다고 서술하지만, [G-7]의 corpus basis는 HUB-1/HUB-2 majority가 5/8(OD·RTO·INV·OM·TM)이라 비-majority 페이지는 VO를 포함한 3개다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "Cross-page defect M3a-D7 found closing and inbound-request to be the two outliers on the pane headers."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "| **HUB-1** | `@ Mentions` pane header | `Comments mentioning me · Click to open the order` | **majority 5/8** (OD · RTO · INV · OM · TM) |"
+- `wms2/specs/closing.md`: "Cross-page defect M3a-D7 found closing and inbound-request to be the two outliers on the pane headers."
+- `wms2/specs/_global-rules.md`: "| **HUB-1** | `@ Mentions` pane header | `Comments mentioning me · Click to open the order` | **majority 5/8** (OD · RTO · INV · OM · TM) |"
 
 주: 8페이지 − majority 5 = VO·CL·IR 3개가 비-majority. VO가 pane header에서 majority였다면 corpus basis는 6/8이어야 한다.
 
 ### [C-78] MINOR — Amend 플로우가 [G-2] CONFIRMED 의무 두 건을 비껴간다: `closing.startAmend` 성공(CONFIRMED→AMENDING 상태 변경, DC-26 영속)은 확인성 액션인데 토스트가 정의돼 있지 않고(앰버 배너만), `[✕ Exit amendment]`는 작업 변경분을 폐기하는 파괴성 액션인데 confirm 다이얼로그가 정의돼 있지 않다(같은 페이지의 Cancel Closing은 0스캔에도 항상 묻는다).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "**On `[Amend — open the closing]`.** `closing.startAmend(session_id, idempotency_key)` [G-9] → the `[BR-41]` guard is evaluated server-side; on pass, `CONFIRMED → AMENDING`, DC-26 persisted, and the screen enters amendment mode (§3.24) with no page refresh [G-2]."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "An explicit exit discards the working changes from the record, retains any added scan rows in the audit log [G-8], returns the session to `CONFIRMED` v{n}, and persists DC-29 (E-81)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Every confirming action** — register, confirm, cancel, send, save, remove/delete — shows a top-right toast stating what happened."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Every removal/deletion-class (destructive) action takes a confirm dialog, plus a reason where the flow already carries a reason field, plus the toast.** **CONFIRMED 2026-08-03 (owner, PD-5).**"
+- `wms2/specs/closing.md`: "**On `[Amend — open the closing]`.** `closing.startAmend(session_id, idempotency_key)` [G-9] → the `[BR-41]` guard is evaluated server-side; on pass, `CONFIRMED → AMENDING`, DC-26 persisted, and the screen enters amendment mode (§3.24) with no page refresh [G-2]."
+- `wms2/specs/closing.md`: "An explicit exit discards the working changes from the record, retains any added scan rows in the audit log [G-8], returns the session to `CONFIRMED` v{n}, and persists DC-29 (E-81)."
+- `wms2/specs/_global-rules.md`: "**Every confirming action** — register, confirm, cancel, send, save, remove/delete — shows a top-right toast stating what happened."
+- `wms2/specs/_global-rules.md`: "**Every removal/deletion-class (destructive) action takes a confirm dialog, plus a reason where the flow already carries a reason field, plus the toast.** **CONFIRMED 2026-08-03 (owner, PD-5).**"
 
 주: 분류는 논쟁 여지 있음: startAmend는 M3 다이얼로그를 통과하고 DC-29는 토스트를 갖는다(진입=다이얼로그만/토스트 없음, 이탈=토스트만/다이얼로그 없음의 비대칭). QA-AMEND-05([WF])는 Exit 클릭 즉시 복원을 단언해 다이얼로그 부재가 데모 한계가 아니라 스펙 의도로 읽힌다. 델타로 의도했다면 명시적 델타 선언이 없다.
 
 ### [C-79] MINOR — closing.md §6.3/QA-HIST-11은 딥링크 URL의 '디렉토리 형식 `../{slug}/#{anchor}`'이 [G-12]에 의해 고정됐다고 주장하지만, [G-12] 본문은 링크의 실재성만 규정하고 형식은 예시 하나로만 보여줄 뿐 canonical 형식을 규정하지 않는다 — 인용이 규칙이 말하지 않는 내용을 주장(사냥 대상 3).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "Wireframe path `../order-detail/#{order_id}` — the **directory form** `../{slug}/#{anchor}` fixed by `[G-12]`, never `../order-detail/index.html#…` (cross-page defect M3a-D16, normalized 2026-08-03)"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Cross-page references are real links, not decoration — e.g. View Orders State 6 banner → `../inbound-request/#reqlist` opens the Request List tab."
+- `wms2/specs/closing.md`: "Wireframe path `../order-detail/#{order_id}` — the **directory form** `../{slug}/#{anchor}` fixed by `[G-12]`, never `../order-detail/index.html#…` (cross-page defect M3a-D16, normalized 2026-08-03)"
+- `wms2/specs/_global-rules.md`: "Cross-page references are real links, not decoration — e.g. View Orders State 6 banner → `../inbound-request/#reqlist` opens the Request List tab."
 
 주: 형식 규범 자체는 M3a-D16 정규화의 산물로 8페이지가 공유하는 듯하나, 그 규범의 소재지가 [G-12] 본문이 아니므로 'fixed by [G-12]' 귀속은 부정확. [G-12]에 형식 문장을 추가하거나 인용을 M3a-D16으로 돌리는 편이 정확하다.
 
 ### [C-80] MINOR — closing.md는 전역규칙 본문을 두 곳에서 재서술한다(§5 서두가 [G-8]의 'actor · timestamp · entity · old→new · quantity' 독트린 문장을, §3.13 clause 10이 [G-1]의 3불변을 그대로 반복) — 현재는 의미 드리프트가 없으나 '스펙은 델타만 서술하고 규칙 본문을 재서술하지 않는다'는 전역 계약 위반이라 향후 드리프트 위험이 있다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "Doctrine [G-8]: every operator-initiated action persists **actor · timestamp · entity · old value → new value · quantity**."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md`: "**Continuous scanning** — the page-local expression of [G-1]: the scanner's automatic Enter substitutes for the Scan button, the cursor returns to the scan input with the text fully selected, the next scan overwrites it, and the page never refreshes between scans."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body."
+- `wms2/specs/closing.md`: "Doctrine [G-8]: every operator-initiated action persists **actor · timestamp · entity · old value → new value · quantity**."
+- `wms2/specs/closing.md`: "**Continuous scanning** — the page-local expression of [G-1]: the scanner's automatic Enter substitutes for the Scan button, the cursor returns to the scan input with the text fully selected, the next scan overwrites it, and the page never refreshes between scans."
+- `wms2/specs/_global-rules.md`: "Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body."
 
 주: §3.13은 와이어프레임 legend footer(페이지 산출물)를 규범으로 선언하는 맥락이라 완화 사유가 있음. 내용 모순은 없어 MINOR.
 
@@ -896,7 +896,7 @@ These have **no** specified behavior and none may be invented."
 
 **대조 후 이상 없음:** [G-1] 스캐너 프로토콜 — 스펙의 적용 제외 선언([BR-30])은 G-1의 스코프 문구('Applies to every scan surface: View Orders (all states), Closing')와 정합. 인바리언트 제거가 아니라 스코프 밖 선언 · [G-2] 무리프레시 — '이 페이지는 리프레시 예외 없음'은 G-2의 유일 예외(RTO Bulk Outbound)와 정합. 파괴적 액션 confirm+토스트도 전면 반영([C-6]·BR-39 행동부) · [G-3](a) 사운드 스코프 — G-3 CONFIRMED 목록의 'Order Detail (Outbound)'과 [L-9] step 2·BR-29 일치. (b) TTS·(c) 경고음 부재 선언도 G-3 원문의 페이지 귀속과 일치 · [G-4] 인쇄 동작 — 즉시 출력·브라우저 다이얼로그 금지·실패 red 토스트·print.job_result 영속 모두 일치. 프린트 서피스 목록('Order Detail (Print)')과 'View Label은 프리뷰' 구분도 정합 (Phase 3-1 이연 문구만 별도 지적) · [G-5] 소싱 루트 — 오더-페이싱 4배지, JIT 채널 괄호(Coupang/Naver/Other retail), 무색 검정 볼드(colorless, QA-REN-4의 transparent+#14101B), OTHER 부재([C-3]/[X-5]) 모두 정합 · [G-7] 허브 캐노니컬 카피 — HUB-1~HUB-7 일곱 문자열을 [L-7]·QA-HUB-1/3/4와 바이트 단위 대조: 전부 일치. {n} 치환 규칙('1 results' 허용)·'order' 고정 어휘 규칙도 준수. [X-6] RESOLVED 서술은 G-7 v1.2 변경이력과 일치 · [G-7] Slack 라우팅 — §6.1 행 1·2의 채널(#fulfillment-admin-comments)·ID(C0BMGEWM5QA)·페이로드·@registrant 대상이 전역 라우팅 표와 일치, 'pending' 미기재 준수([C-2]) · [G-8] 데이터 캡처 — 논이벤트 16건의 명시적 선언 구조는 G-8의 'Specs may declare explicit NON-events' 위임과 정합. NE-8(코멘트 검색)의 크로스페이지 이견은 [X-8]로 자진 등재돼 있음 · [G-9] 멱등성 — 클라 디바운스+서버 키, 동시편집 409→행 리로드+non-green 토스트([E-21]·DC-37)가 G-9 CONFIRMED 문안과 일치. 카운팅 플로우 병합 조항은 이 페이지에 해당 플로우 없음 · [G-10] 트래킹 네임스페이스 — [L-4] 분리표(inbound vs outbound, 일치 허용·해석 분리)가 G-10 CONFIRMED와 정합 · [G-12] 딥링크 — §6.2의 '특정 엔티티로 해석' 서술이 G-12와 일치 · [G-13]/PD-51 — v1 'sample set only'(타입·수량 무표기)가 [L-10]·BR-34·E-57·QA-REN-16·§5.3에 일관 전파됨. 클론의 샘플 미복사도 G-13 기간 규칙 근거로 정합
 
-## 전역규칙 준수 감사 — tracking-missing.md(전문 1541행 정독) vs _global-rules.md v1.2(전문 정독). 경로: /Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/. 대조 축: (1) 전역규칙 재서술 (2) 페이지 델타 모순 (3) [G-n] 인용 오귀속 (4) CONFIRMED 사항의 옛 상태 잔존.
+## 전역규칙 준수 감사 — tracking-missing.md(전문 1541행 정독) vs _global-rules.md v1.2(전문 정독). 경로: wms2/specs/. 대조 축: (1) 전역규칙 재서술 (2) 페이지 델타 모순 (3) [G-n] 인용 오귀속 (4) CONFIRMED 사항의 옛 상태 잔존.
 
 ### [C-103] BLOCKER — 전역규칙 헤더(와 스펙 배너)는 PD-66을 2026-08-03 오너 결정 완료로 선언했는데, 스펙 본문(§9.1, [E-3], QA-VAL-10, [L-1] 1열)은 여전히 '미결정·행동 미기술·QA 영구 BLOCKED' 상태라 결정된 행동이 스펙에 부재한다.
 
@@ -981,110 +981,110 @@ These have **no** specified behavior and none may be invented."
 
 ### [C-112] MAJOR — M6 사유 enum의 세 번째 옵션 문자열이 두 정본에서 다르다 — [G-11]은 "exact enum"으로 "Other (memo)"를 박아두었는데 스펙(BR-53, QA-S6-13)은 정확히 `Other`를 규범으로 선언하고 [G-11]의 문구를 재해석으로 무력화한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Expected-quantity edits are allowed with a **mandatory reason** — exact enum: "Damaged/defective — cannot accept" / "Supplier qty change" / "Other (memo)"."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "M6's third reason option label is exactly `Other`. `[G-11]`'s "Other (memo)" phrasing names the memo obligation, not the option string."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Then its `select` has exactly 3 options and the third option's text is exactly `Other` — not `Other (memo)` `[G-11]`"
+- `wms2/specs/_global-rules.md`: "Expected-quantity edits are allowed with a **mandatory reason** — exact enum: "Damaged/defective — cannot accept" / "Supplier qty change" / "Other (memo)"."
+- `wms2/specs/view-orders.md`: "M6's third reason option label is exactly `Other`. `[G-11]`'s "Other (memo)" phrasing names the memo obligation, not the option string."
+- `wms2/specs/view-orders.md`: "Then its `select` has exactly 3 options and the third option's text is exactly `Other` — not `Other (memo)` `[G-11]`"
 
 주: 스펙은 _review.md C-11로 국지 판정했지만 G-11 본문은 v1.2까지 미수정 — "exact enum"이라는 전역규칙의 자기 선언과 정면 충돌. 계약상 바이트 정확 문자열은 전역규칙이 정본이어야 하므로(G-7 HUB 사례처럼) G-11 본문을 `Other`로 고치는 게 정합. QA-S6-13은 두 문서 중 어느 쪽을 읽느냐에 따라 다른 문자열을 단언하게 된다.
 
 ### [C-113] MAJOR — [G-10]이 CONFIRMED(owner, PD-8)로 확정한 내용(추적번호 시스템 전역 유일 + 인바운드/아웃바운드 별도 네임스페이스 + 인바운드 우선 해석)을 스펙 본문이 여전히 PD-82·PD-86 OWNER-PENDING에 걸어두고 있으며, 이 두 태그는 헤더의 supersede 면책 목록(PD-1~8, 51, 55, 66, 71, 74, 79)에 없어 면책되지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "An inbound tracking number is **unique system-wide** — registering one that already exists on another inbound request is blocked. Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "when a scanned number exists in both, inbound-request tracking wins `[PD-8 · OWNER-PENDING]` `[PD-86 · OWNER-PENDING]` `[E-8]`"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Prevented upstream at Inbound Request save `[PD-82 · OWNER-PENDING]`; if it ever occurs, this page's resolution is non-deterministic"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "A tracking number is unique across inbound requests; a duplicate is blocked at Inbound Request save | `[E-64]` `[PD-82 · OWNER-PENDING]` | provisional"
+- `wms2/specs/_global-rules.md`: "An inbound tracking number is **unique system-wide** — registering one that already exists on another inbound request is blocked. Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**"
+- `wms2/specs/view-orders.md`: "when a scanned number exists in both, inbound-request tracking wins `[PD-8 · OWNER-PENDING]` `[PD-86 · OWNER-PENDING]` `[E-8]`"
+- `wms2/specs/view-orders.md`: "Prevented upstream at Inbound Request save `[PD-82 · OWNER-PENDING]`; if it ever occurs, this page's resolution is non-deterministic"
+- `wms2/specs/view-orders.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 are now **OWNER-DECIDED** (PD-6 confirmed 2026-08-03 — the owner decision round is fully closed); any inline `[PD-{these} · OWNER-PENDING]` or `[PD-{these} · NO-DEFAULT]` tags below are superseded"
+- `wms2/specs/view-orders.md`: "A tracking number is unique across inbound requests; a duplicate is blocked at Inbound Request save | `[E-64]` `[PD-82 · OWNER-PENDING]` | provisional"
 
 주: PD-86/PD-82가 레지스터에서 PD-8의 세부 별건일 가능성은 있으나, 두 산출물만 대조하면 동일 문장이 한쪽은 CONFIRMED, 한쪽은 owner-pending·provisional — 구현자가 확정 규칙을 가역으로 오판할 수 있는 상태 모순.
 
 ### [C-114] MAJOR — [G-4]는 "우리가 디자인하는 것은 내부 인보이스(PACKING)뿐"이라고 확정(CONFIRMED, owner)했는데, 스펙 M4는 우리가 내용을 구성하는 별도의 공급사 반품 라벨(운송사명+한글 상품명+사이즈+수량, 생략 규칙, 라이브 프리뷰)을 규범으로 정의하고 그 물리 레이아웃을 Phase 3-1로 넘긴다 — 그러나 §9.1의 Phase 3-1 범위(DELEO A4·YUN 4×6·샘플 듀얼뷰)에도 M4 라벨은 없다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "no custom carrier-label layout exists or will be built, for YUN, DELEO, or any carrier added later (e.g. FedEx). Only the internal invoice ("PACKING") is ours to design — see `specs/shipping-label.md`. **CONFIRMED 2026-08-03 (owner).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Printing puts carrier name + product name (KR) + size + qty on the label — size/qty omitted if empty; attach it to the return box."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**Out of scope:** the label's physical layout — that is Phase 3-1 (§9.1)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**Label and invoice layout content** — what is physically on the DELEO A4 picking sheet and the YUN 4×6 carrier label, including the sample dual view | **Phase 3-1** (separate owner session, after Phase 3)"
+- `wms2/specs/_global-rules.md`: "no custom carrier-label layout exists or will be built, for YUN, DELEO, or any carrier added later (e.g. FedEx). Only the internal invoice ("PACKING") is ours to design — see `specs/shipping-label.md`. **CONFIRMED 2026-08-03 (owner).**"
+- `wms2/specs/view-orders.md`: "Printing puts carrier name + product name (KR) + size + qty on the label — size/qty omitted if empty; attach it to the return box."
+- `wms2/specs/view-orders.md`: "**Out of scope:** the label's physical layout — that is Phase 3-1 (§9.1)."
+- `wms2/specs/view-orders.md`: "**Label and invoice layout content** — what is physically on the DELEO A4 picking sheet and the YUN 4×6 carrier label, including the sample dual view | **Phase 3-1** (separate owner session, after Phase 3)"
 
 주: G-4의 해당 절이 '고객 출고용 캐리어 라벨' 한정이라는 화해적 독해는 가능하나, "Only …" 배타 문장의 자면과 M4의 자체 디자인 라벨은 양립 불가. Phase 3-1 계획에서 M4 반품 라벨 템플릿이 누락될 실무 리스크가 있어 G-4 문장의 범위 한정(또는 M4 명시 편입)이 필요.
 
 ### [C-115] MINOR — [L-S1-6]은 [G-5]가 order-facing 배지를 "exactly 4"라고 말한다고 인용부호까지 붙여 주장하지만 G-5 본문에 그 표현은 없고("Order-facing badges (4)"), G-5는 이미 자체적으로 OTHER의 다운스트림 렌더링을 규정하고 있어 '전역규칙과 어긋나는 다섯 번째 값'이라는 델타 프레이밍 자체가 과장이다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Order-facing badges (4):** SMART BUY · JIT (purchase channel in parentheses: Coupang / Naver / Other retail) · WHOLESALE · PARTNERSHIP."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "OTHER renders downstream as black bold `OTHER (channel)` `[PD-80 · OWNER-PENDING]`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "`[G-5]` states the order-facing badge set as "exactly 4"; this page renders a fifth **display** value"
+- `wms2/specs/_global-rules.md`: "**Order-facing badges (4):** SMART BUY · JIT (purchase channel in parentheses: Coupang / Naver / Other retail) · WHOLESALE · PARTNERSHIP."
+- `wms2/specs/_global-rules.md`: "OTHER renders downstream as black bold `OTHER (channel)` `[PD-80 · OWNER-PENDING]`."
+- `wms2/specs/view-orders.md`: "`[G-5]` states the order-facing badge set as "exactly 4"; this page renders a fifth **display** value"
 
 주: 실체적 충돌(어느 표면이 OTHER를 렌더하는가)은 CP-3로 자가 신고돼 있음 — 신규 발견은 존재하지 않는 문구를 G-5에 귀속시킨 오인용 부분.
 
 ### [C-116] MINOR — PARTIAL 배지의 분수 의미가 상충한다 — [G-11]은 "PARTIAL (n/m remaining)"이라 하는데 스펙은 일관되게 {received}/{expected}(예: 620/800, 620=수령분)를 렌더한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Status renders `REQUESTED` (amber) or `PARTIAL {received}/{expected}` (amber, `.row-part` tint)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "the request becomes `PARTIAL 620/800`; State 0's Expected Inbound table shows the amber `PARTIAL 620/800` row"
+- `wms2/specs/_global-rules.md`: "`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`."
+- `wms2/specs/view-orders.md`: "Status renders `REQUESTED` (amber) or `PARTIAL {received}/{expected}` (amber, `.row-part` tint)."
+- `wms2/specs/view-orders.md`: "the request becomes `PARTIAL 620/800`; State 0's Expected Inbound table shows the amber `PARTIAL 620/800` row"
 
 주: 620/800에서 remaining은 180이므로 G-11의 "remaining" 자면과 불일치. G-11이 'n of m, 잔여 있음'의 축약이었을 개연성이 높으나 자면 그대로 구현하면 다른 숫자가 나온다 — G-11 괄호 문구 정정 권고.
 
 ### [C-117] MINOR — [G-2](CONFIRMED, PD-5)는 파괴적 액션에 확인 다이얼로그를 요구하고 스펙 자신도 "이 페이지의 파괴적 액션은 항상 confirm step을 거친다"고 단언하는데, Cancel Outbound([L-S3-2])는 클릭 즉시 상태를 롤백하며 어떤 확인 단계도 서술되지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Every removal/deletion-class (destructive) action takes a confirm dialog, plus a reason where the flow already carries a reason field, plus the toast.** **CONFIRMED 2026-08-03 (owner, PD-5).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Destructive actions on this page always carry a confirm step and a stated confirmation `[PD-5 · OWNER-PENDING]` `[G-2]`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**Trigger:** clicking `Cancel Outbound` (`.btn-red-line`) on an outbounded order.
+- `wms2/specs/_global-rules.md`: "**Every removal/deletion-class (destructive) action takes a confirm dialog, plus a reason where the flow already carries a reason field, plus the toast.** **CONFIRMED 2026-08-03 (owner, PD-5).**"
+- `wms2/specs/view-orders.md`: "Destructive actions on this page always carry a confirm step and a stated confirmation `[PD-5 · OWNER-PENDING]` `[G-2]`."
+- `wms2/specs/view-orders.md`: "**Trigger:** clicking `Cancel Outbound` (`.btn-red-line`) on an outbounded order.
 - **Behavior:** rolls the order status back **`prepare shipment` → `processing`**."
 
 주: 쟁점은 Cancel Outbound가 removal/deletion-class인가의 분류 — Cancel Inbound는 M1 다이얼로그를 받는데 같은 cancel 계열인 Cancel Outbound만 무확인이라 어느 쪽이든 경계 선언이 필요. 부수: §10.1은 G-2의 "a reason where the flow already carries a reason field"를 "a reason where an enum exists"로 다르게 재서술.
 
 ### [C-118] MINOR — 스펙 헤더가 전역규칙을 "v1.0"으로 핀해 인용하지만 실제 _global-rules.md는 v1.2이고, 스펙 본문 자체가 v1.2에서만 존재하는 내용([G-7] HUB-1…HUB-7)에 의존한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**Global rules:** `_global-rules.md` v1.0 — cited as `[G-n]`; this document states **page deltas only** and never restates a rule body."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Version 1.2 · 2026-08-03 · Applies to all 8 screen specs."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "`[G-7]` v1.2 (2026-08-03) publishes them as **HUB-1…HUB-7**"
+- `wms2/specs/view-orders.md`: "**Global rules:** `_global-rules.md` v1.0 — cited as `[G-n]`; this document states **page deltas only** and never restates a rule body."
+- `wms2/specs/_global-rules.md`: "Version 1.2 · 2026-08-03 · Applies to all 8 screen specs."
+- `wms2/specs/view-orders.md`: "`[G-7]` v1.2 (2026-08-03) publishes them as **HUB-1…HUB-7**"
 
 ### [C-119] MINOR — 정본 이벤트명 개수가 세 군데서 다르다 — 전역규칙 목록은 9개 그룹(슬래시쌍 포함 11개 리터럴), 스펙 §5는 "9 groups covering 11 literal names", §9.5 CP-7은 "The 10 canonical names"라고 셈해 어느 집계와도 맞지 않는다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "The canonical cross-page names — **9 groups covering 11 literal names** — must be byte-identical wherever they appear"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "The 10 **canonical** names are byte-identical everywhere; this is the tier below them."
+- `wms2/specs/_global-rules.md`: "`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result`."
+- `wms2/specs/view-orders.md`: "The canonical cross-page names — **9 groups covering 11 literal names** — must be byte-identical wherever they appear"
+- `wms2/specs/view-orders.md`: "The 10 **canonical** names are byte-identical everywhere; this is the tier below them."
 
 ### [C-120] MINOR — BR-44와 BR-45는 [G-9]·[G-10]의 규칙 본문을 [G-n] 인용 없이 사실상 그대로 재서술한다 — "델타만 서술, 본문 재서술 금지" 계약 위반이며, 같은 감사가 BR-33~36은 이미 정리했다고 기록한 것과 대비된다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Concurrency: order-level edits use an optimistic version check → 409 → reload the row + non-green toast. **State 6 counting merges server-side** instead, because the value is a running total. | Last-write-wins would destroy counted units; merge is correct only where the value accumulates. | 2026-08-03 `[PD-7 · OWNER-PENDING]`"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "An inbound tracking number is unique system-wide. Inbound and outbound tracking numbers are **separate namespaces** and may coincide; when they do, inbound-request tracking wins the resolution."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "the `[G-*]`-restating rows `BR-33`…`BR-36` reduced to page deltas"
+- `wms2/specs/_global-rules.md`: "**Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead."
+- `wms2/specs/view-orders.md`: "Concurrency: order-level edits use an optimistic version check → 409 → reload the row + non-green toast. **State 6 counting merges server-side** instead, because the value is a running total. | Last-write-wins would destroy counted units; merge is correct only where the value accumulates. | 2026-08-03 `[PD-7 · OWNER-PENDING]`"
+- `wms2/specs/view-orders.md`: "An inbound tracking number is unique system-wide. Inbound and outbound tracking numbers are **separate namespaces** and may coincide; when they do, inbound-request tracking wins the resolution."
+- `wms2/specs/view-orders.md`: "the `[G-*]`-restating rows `BR-33`…`BR-36` reduced to page deltas"
 
 주: 내용 자체는 G-9/G-10과 일치하므로 행위 모순은 아님 — 계약(재서술 금지) 위반 및 인용 누락. BR-44는 G-9의 "concurrent edits"를 "order-level edits"로 좁혀 재서술한 점도 미세 차이.
 
 ### [C-121] MINOR — 전역규칙이 "오너 결정 라운드 완전 종료, PD-1~8 등 확정"이라 선언했는데 스펙 §9.2는 PD-1~8을 여전히 '제공적 디폴트(provisional default) 33개'에 포함시키고 PD-66만 결정됐다고 단서 달며, §10.1 상태열도 PD-1/3/4/5/6/7/8 행을 "provisional"로 남겨둔다 — 헤더 면책은 '인라인 태그'만 supersede하므로 이 산문·상태열은 미커버.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "Owner questions that **do** have a provisional default are **not** repeated here — they live in the PD register and are tagged inline in §3/§4/§5/§7 where the behavior appears. This page rests on **33** of them: `PD-1, 2, 3, 4, 5, 6, 7, 8, 9, 10,"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "| 2026-08-03 | Comments are **append-only** | `[BR-33]` `[PD-3 · OWNER-PENDING]` | provisional |"
+- `wms2/specs/_global-rules.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed"
+- `wms2/specs/view-orders.md`: "Owner questions that **do** have a provisional default are **not** repeated here — they live in the PD register and are tagged inline in §3/§4/§5/§7 where the behavior appears. This page rests on **33** of them: `PD-1, 2, 3, 4, 5, 6, 7, 8, 9, 10,"
+- `wms2/specs/view-orders.md`: "| 2026-08-03 | Comments are **append-only** | `[BR-33]` `[PD-3 · OWNER-PENDING]` | provisional |"
 
 ### [C-122] MINOR — [G-1] 불변식 1은 "이전 값이 선택된 채(previous value selected)" 포커스 복귀를 요구하고 델타가 불변식을 제거하는 것을 금지하는데, [L-S6b-2]는 입력을 비우는(emptied) 동작을 [G-1]을 인용하며 서술한다 — 자면상 불변식 1의 절반을 제거하는 델타인데 [L-S1-12]의 페이지 내부 예외로만 선언돼 있다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "after every action, focus returns there with the previous value selected (so the next scan overwrites it)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Page deltas may add local behavior (e.g. Closing disables the input before the count is entered), never remove the three invariants above."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "on completion the search input is re-focused and **emptied** (its placeholder becomes `Scan a tracking barcode — continue with the next one`), ready for the next tracking scan `[G-1]`"
+- `wms2/specs/_global-rules.md`: "after every action, focus returns there with the previous value selected (so the next scan overwrites it)."
+- `wms2/specs/_global-rules.md`: "Page deltas may add local behavior (e.g. Closing disables the input before the count is entered), never remove the three invariants above."
+- `wms2/specs/view-orders.md`: "on completion the search input is re-focused and **emptied** (its placeholder becomes `Scan a tracking barcode — continue with the next one`), ready for the next tracking scan `[G-1]`"
 
 주: 기능적 취지(다음 스캔이 무타건으로 덮어씀)는 보존됨 — 빈 입력도 덮어쓰기와 등가. 다만 G-1 자면과의 어긋남을 [G-1] 델타로 명시 선언하는 편이 정합.
 
 ### [C-123] MINOR — BR-36은 KR 상품명 열에도 굵은 EN 브랜드가 붙는다는 것을 "Page delta on [G-6]"·"two-column repetition is page-specific"이라고 주장하지만, 그 내용은 [G-6]이 이미 전역으로 규정한 본문이라 델타가 아니라 재서술이다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Korean product names also carry the EN brand in bold (e.g. **Dr.Jart+** 포어레미디 리뉴잉 폼 클렌저)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**Page delta on `[G-6]`:** the brand-in-bold prefix applies to **both** the `Product Name` and `Product Name KR` columns of this page's tables `[L-S1-18]`, and to the product lists inside M2, M2b and M4."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "The two-column repetition is page-specific: pickers read whichever column their eye lands on first, so the brand must anchor both."
+- `wms2/specs/_global-rules.md`: "Korean product names also carry the EN brand in bold (e.g. **Dr.Jart+** 포어레미디 리뉴잉 폼 클렌저)."
+- `wms2/specs/view-orders.md`: "**Page delta on `[G-6]`:** the brand-in-bold prefix applies to **both** the `Product Name` and `Product Name KR` columns of this page's tables `[L-S1-18]`, and to the product lists inside M2, M2b and M4."
+- `wms2/specs/view-orders.md`: "The two-column repetition is page-specific: pickers read whichever column their eye lands on first, so the brand must anchor both."
 
 주: 모달 상품 리스트(M2/M2b/M4)로의 확장만이 진짜 페이지 고유분 — 그 부분으로 델타 서술을 좁히면 해소.
 
 ### [C-124] MINOR — QA-M2-11은 #unrecognized-tracking 채널 알림 문구 검증에 [G-7]을 키로 달았지만, [G-7]은 코멘트 시스템(#fulfillment-admin-comments 멘션 알림)에 관한 규칙이고 미인식 풀 Slack 라우트는 전역규칙의 별도 Slack routing 표 소관이라 오귀속이다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "**QA-M2-11 [WF]** `[L-M2b]` `[G-7]`
+- `wms2/specs/view-orders.md`: "**QA-M2-11 [WF]** `[L-M2b]` `[G-7]`
 Given `#m-unrec2` is open, Then its note is exactly `On send, the #unrecognized-tracking channel gets an "Unrecognized product added" alert"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`@mention` notifies the mentioned person through Slack: **#fulfillment-admin-comments** (`C0BMGEWM5QA`)"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "| Unrecognized barcode sent to the Missing Tracking List | `#unrecognized-tracking` | tracking no., product, qty, memo, registrant, suspected orders |"
+- `wms2/specs/_global-rules.md`: "`@mention` notifies the mentioned person through Slack: **#fulfillment-admin-comments** (`C0BMGEWM5QA`)"
+- `wms2/specs/_global-rules.md`: "| Unrecognized barcode sent to the Missing Tracking List | `#unrecognized-tracking` | tracking no., product, qty, memo, registrant, suspected orders |"
 
 ### [C-125] MINOR — 딥링크 경로 형식이 두 문서에서 다르다 — [G-12]는 `../inbound-request/#reqlist` 형식을 쓰고 스펙·QA는 `../inbound-request/index.html#reqlist`만을 이 페이지의 유일 허용 형식으로 규정한다 (스펙이 CP-8로 자가 신고했고 수정을 G-12에 배정했으나 G-12 본문은 기준선 시점 미통일).
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "e.g. View Orders State 6 banner → `../inbound-request/#reqlist` opens the Request List tab."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md`: "`[G-12]`'s illustrative directory form (`../inbound-request/#reqlist`) is a cross-page inconsistency, not a second permitted form on this page (§9.5 CP-8)."
+- `wms2/specs/_global-rules.md`: "e.g. View Orders State 6 banner → `../inbound-request/#reqlist` opens the Request List tab."
+- `wms2/specs/view-orders.md`: "`[G-12]`'s illustrative directory form (`../inbound-request/#reqlist`) is a cross-page inconsistency, not a second permitted form on this page (§9.5 CP-8)."
 
 주: 신규 발견 아님(자가 신고 CP-8) — 기준선에서 미해소 상태임을 확인하는 기록.
 
@@ -1094,70 +1094,70 @@ Given `#m-unrec2` is open, Then its note is exactly `On send, the #unrecognized-
 
 ### [C-126] MAJOR — 오너 확정(PD-79)된 CANCELLED 터미널 상태·편집/취소 알림이 _global-rules에 미반영 — [G-11] 라이프사이클, [G-7] 시스템 자동코멘트 열거, Slack 라우팅 표가 스펙과 모순된다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "The **receive pipeline has exactly three stages** — `REQUESTED` → `PARTIAL (n/m)` → `INBOUNDED` — plus one **terminal branch**: `REQUESTED → CANCELLED` (2026-08-03)."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "System auto-comments (expected-qty edit, unrecognized match-confirm) use the same pipeline with `source=system`."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "`trigger` ∈ `memo_materialization\|expected_qty_edit\|unrecognized_match_confirmed\|request_edited\|request_cancelled`"
+- `wms2/specs/_global-rules.md`: "`REQUESTED → PARTIAL (n/m remaining, amber) → INBOUNDED`."
+- `wms2/specs/inbound-request.md`: "The **receive pipeline has exactly three stages** — `REQUESTED` → `PARTIAL (n/m)` → `INBOUNDED` — plus one **terminal branch**: `REQUESTED → CANCELLED` (2026-08-03)."
+- `wms2/specs/_global-rules.md`: "System auto-comments (expected-qty edit, unrecognized match-confirm) use the same pipeline with `source=system`."
+- `wms2/specs/inbound-request.md`: "`trigger` ∈ `memo_materialization\|expected_qty_edit\|unrecognized_match_confirmed\|request_edited\|request_cancelled`"
 
 주: grep 확인: _global-rules.md에 'CANCELLED' 0건. 스펙 §6.1 rows 7–8(Request edited/cancelled → #fulfillment-admin-comments @requester, 'Owner decision 2026-08-03 (PD-79 resolved)')에 대응하는 행이 전역 Slack 라우팅 표(6행)에 없다 — 유사 성격의 expected-qty edit 자동코멘트는 전역 표에 자체 행이 있으므로 단순 생략으로 보기 어렵다. PD-79는 전역규칙 헤더가 오너 확정으로 명시한 항목이므로 수정 방향은 _global-rules([G-11] CANCELLED 분기 추가 + Slack 표 2행 + [G-7] 트리거 열거 갱신) 쪽.
 
 ### [C-127] MAJOR — M1 동시 저장을 서버측 merge로 규정한 스펙이 [G-9](CONFIRMED, PD-7)의 동시성 모델과 모순 — G-9는 merge를 'counting flows (State 6 receive, closing scans)'에만 허용하고 그 외 동시 편집은 409인데, 스펙은 델타 선언 없이 [PD-7] 인용 하에 트래킹번호 세트 merge를 규정한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead. **CONFIRMED 2026-08-03 (owner, PD-7).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "**Concurrency.** Two operators saving different sets for the same request resolve by **server-side merge of the number set** (numbers are additive, not a replaced field), with a version check on the request itself; a genuine conflict returns 409"
+- `wms2/specs/_global-rules.md`: "**Concurrent edits** by two operators resolve by optimistic version check → 409 → reload the row + non-green toast; counting flows (State 6 receive, closing scans) merge server-side instead. **CONFIRMED 2026-08-03 (owner, PD-7).**"
+- `wms2/specs/inbound-request.md`: "**Concurrency.** Two operators saving different sets for the same request resolve by **server-side merge of the number set** (numbers are additive, not a replaced field), with a version check on the request itself; a genuine conflict returns 409"
 
 주: M1 트래킹번호 저장은 counting flow가 아니다. 같은 시나리오(두 오퍼레이터가 서로 다른 번호 세트 저장)에서 G-9 문자 구현=후발 409, 스펙(QA-D-14 'the server merges the sets … no number is lost')=merge — 구현이 갈린다. 스펙은 G-11 델타들과 달리 이를 델타로 선언하지 않고 [PD-7 · OWNER-PENDING] 인용으로 처리했다. 참고: 레지스터 PD-7의 Pages에 'IR E-39'가 올라 있어 코퍼스 의도는 merge 승인일 수 있으나, 레지스터 rationale('merge is correct only where the value is a running total')과도 상충 — [G-9] 문구를 additive-set까지 넓히거나 스펙에 델타 선언이 필요.
 
 ### [C-128] MAJOR — 스펙이 [G-11]의 두 문자를 오기로 선언하고 '정정 예정'이라 했으나 _global-rules v1.2에 정정이 반영되지 않아 PARTIAL 표기(n/m remaining vs received/expected)와 M6 사유 enum 3번째 옵션(Other (memo) vs Other)이 두 문서에서 모순 상태로 남아 있다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "a request expecting 180 with 120 received renders `PARTIAL 120/180`, never `PARTIAL 60/180`. `[G-11]`'s parenthetical is a wording slip in the rule, not a different behavior"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "exact enum: "Damaged/defective — cannot accept" / "Supplier qty change" / "Other (memo)""
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "**the option label is `Other`**, the memo is a separate mandatory field when that option is chosen, and the persisted `DC-8` value stays `reason=other`. `[G-11]`'s enum text is to be corrected to match"
+- `wms2/specs/inbound-request.md`: "a request expecting 180 with 120 received renders `PARTIAL 120/180`, never `PARTIAL 60/180`. `[G-11]`'s parenthetical is a wording slip in the rule, not a different behavior"
+- `wms2/specs/_global-rules.md`: "exact enum: "Damaged/defective — cannot accept" / "Supplier qty change" / "Other (memo)""
+- `wms2/specs/inbound-request.md`: "**the option label is `Other`**, the memo is a separate mandatory field when that option is chosen, and the persisted `DC-8` value stays `reason=other`. `[G-11]`'s enum text is to be corrected to match"
 
 주: 둘 다 스펙이 §3.3.5에서 'Declared [G-11] delta'로 선언한 항목(리뷰 판결 C-11, View Orders BR-53과 정렬). 그러나 [G-11]은 'exact enum'을 표방하는 규칙이고, _global-rules는 같은 날 v1.1→v1.2로 두 차례 개정되면서도 이 정정을 싣지 않았다. 마감 전 [G-11] 본문 정정('PARTIAL ({received}/{expected}, amber)' + enum 3번째 'Other') 필요 — 스펙 측 변경은 불필요(스펙 자체 명시).
 
 ### [C-129] MAJOR — PD-66이 오너 확정(전역규칙 헤더 명시)됐는데 스펙 §9.2 OQ-2는 여전히 'No behavior is specified on either side / Owner decision required'로 미결 상태를 규범 서술한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "*No behavior is specified on either side.* **Owner decision required.**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_plans/_provisional-decisions.md`: "**OWNER-DECIDED 2026-08-03**: The case does not exist — either a tracking number or an order number is always present. The current registration contract (an identifier is required) stands."
+- `wms2/specs/_global-rules.md`: "PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed"
+- `wms2/specs/inbound-request.md`: "*No behavior is specified on either side.* **Owner decision required.**"
+- `wms2/specs/_plans/_provisional-decisions.md`: "**OWNER-DECIDED 2026-08-03**: The case does not exist — either a tracking number or an order number is always present. The current registration contract (an identifier is required) stands."
 
 주: 같은 확정 목록의 PD-79는 OQ-1이 'RESOLVED 2026-08-03 (owner)'로 재작성됐는데 OQ-2(PD-66)만 미갱신 — 비대칭이 누락을 방증. 스펙 3행의 일괄 supersede 선언은 '[PD-{these} · OWNER-PENDING]/[PD-{these} · NO-DEFAULT] 태그'만 커버하며, OQ-2의 본문 서술('Owner decision required')과 §9.2 섹션 배치(NO-DEFAULT open questions)는 태그가 아니라 커버되지 않는다. 오너 결정(케이스 부존재)이 BR-19 회복 루프의 전제를 확정하므로 OQ-2를 RESOLVED로 재작성해야 한다.
 
 ### [C-130] MAJOR — 스펙 §9.1이 Comments-hub 캐노니컬을 아직 미발행 상태('follows [G-7] once the six shared strings are canonicalised')로 서술하나, [G-7] v1.2는 일곱 개 문자열(HUB-1…HUB-7)을 이미 확정 계약으로 발행했고 스펙 자신의 §3.1.13도 적용 완료를 기록한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "This page ships its wireframe's strings and follows `[G-7]` once the six shared strings are canonicalised (§3.1.13, QA-F-11)"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "**[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "`[G-7]` v1.2 published HUB-1…HUB-7 and **`[IR-WFX-1]` was applied**; the wireframe and QA-F-02 / QA-F-03 moved with it in the same commit"
+- `wms2/specs/inbound-request.md`: "This page ships its wireframe's strings and follows `[G-7]` once the six shared strings are canonicalised (§3.1.13, QA-F-11)"
+- `wms2/specs/_global-rules.md`: "**[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7."
+- `wms2/specs/inbound-request.md`: "`[G-7]` v1.2 published HUB-1…HUB-7 and **`[IR-WFX-1]` was applied**; the wireframe and QA-F-02 / QA-F-03 moved with it in the same commit"
 
 주: §9.1 out-of-scope 표의 잔존 stale 행. 문자열 개수도 틀림(six vs seven — HUB-7 검색 플레이스홀더 포함 7종). 현재형 조건문이라 이력 서술로 볼 수 없고, 구현자가 이 행만 읽으면 캐노니컬이 아직 비구속이라 오독할 수 있다. 행을 '캐노니컬 발행·적용 완료(2026-08-03)' 상태로 재작성 필요.
 
 ### [C-131] MINOR — View Orders 해석 우선순위(inbound-request 우선)가 [G-10]에선 PD-8로 CONFIRMED인데 스펙은 같은 규칙을 [PD-86 · OWNER-PENDING]로 태깅해(§3.3.7·BR-16·[E-22]·QA-E-08·§6.3) 확정/미결 상태가 두 문서에서 충돌한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "View Orders resolution precedence puts inbound-request tracking first (State 6) `[PD-86 · OWNER-PENDING]` (`[E-22]`)"
+- `wms2/specs/_global-rules.md`: "Inbound (supplier→warehouse) and outbound (warehouse→customer) tracking numbers are separate namespaces and may coincide; View Orders resolution precedence puts inbound-request tracking first (State 6). **CONFIRMED 2026-08-03 (owner, PD-8).**"
+- `wms2/specs/inbound-request.md`: "View Orders resolution precedence puts inbound-request tracking first (State 6) `[PD-86 · OWNER-PENDING]` (`[E-22]`)"
 
 주: 행동 서술 자체는 양쪽 동일(우선순위 = inbound 우선)하나 결정 상태가 상충. PD-86은 스펙 헤더의 일괄 supersede 목록(PD-1~8, 51, 55, 66, 71, 74, 79)에 없어 선언으로 커버되지 않는다. 근본 원인은 레지스터 중복으로 보임: PD-8 OWNER-DECIDED 본문이 'View Orders resolution keeps inbound-request precedence'까지 포함하는 반면 PD-86 항목은 OWNER-DECIDED 줄 없이 provisional로 남아 있다. 마감 시 유령 미결 항목이 되므로 태그 정리(또는 레지스터 PD-86에 PD-8 흡수 명기) 권장.
 
 ### [C-132] MINOR — §3.3.7(및 BR-9)이 [G-10] 규칙 본문을 다른 표현으로 재서술하고 스스로 'primary home of [G-10]'을 자처해, '스펙은 인용만 하고 본문을 재서술하지 않는다'는 전역규칙 헤더 계약을 위반한다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "**Behavior.** One inbound request may hold **any number** of tracking numbers, because one purchase frequently ships as several parcels. Every registered number is an independent View Orders match/scan target, and partial arrivals accumulate against the same request until it is fully received [G-10]."
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "One inbound request may register several tracking numbers (split shipments). **Every** registered number matches in View Orders and enters the internal-inbound screen (State 6); partial arrivals accumulate against the same request until fully received. **CONFIRMED 2026-08-03.**"
+- `wms2/specs/_global-rules.md`: "Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body."
+- `wms2/specs/inbound-request.md`: "**Behavior.** One inbound request may hold **any number** of tracking numbers, because one purchase frequently ships as several parcels. Every registered number is an independent View Orders match/scan target, and partial arrivals accumulate against the same request until it is fully received [G-10]."
+- `wms2/specs/_global-rules.md`: "One inbound request may register several tracking numbers (split shipments). **Every** registered number matches in View Orders and enters the internal-inbound screen (State 6); partial arrivals accumulate against the same request until fully received. **CONFIRMED 2026-08-03.**"
 
 주: 내용은 의미상 동일('several'→'any number'로 미세 강화)해 행동 리스크는 낮으나, 같은 스펙의 결정 로그가 '[G-7]'s rule body no longer restated in §3.1.13 (citation + delta only)'라며 재서술을 결함 클래스로 제거한 전력과 비일관. 또한 [G-13]처럼 전역규칙이 primary home을 지정한 사례와 달리 [G-10]은 primary home을 지정하지 않는데 스펙이 자처한다. 재서술부를 인용+델타로 압축하거나 [G-10]에 primary home 지정을 명기하는 정리 권장.
 
 ### [C-133] MINOR — §2.4 관찰 3이 Saved 페인 헤더를 '과반 없음'(split 5/1/2)으로 서술하나 [G-7] HUB-2 표는 같은 항목을 'majority 5/8'로 기록해 캐노니컬 산정 근거 서술이 모순된다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "Of those four, two had a corpus majority (mentions header `Comments mentioning me · Click to open the order`, 5 pages; read-all `Mark all read`, 6 pages) and two did not — the saved header split 5 / 1 / 2"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "| **HUB-2** | `★ Saved` pane header | `Saved comments · Click to open the order` | **majority 5/8** (same five) |"
+- `wms2/specs/inbound-request.md`: "Of those four, two had a corpus majority (mentions header `Comments mentioning me · Click to open the order`, 5 pages; read-all `Mark all read`, 6 pages) and two did not — the saved header split 5 / 1 / 2"
+- `wms2/specs/_global-rules.md`: "| **HUB-2** | `★ Saved` pane header | `Saved comments · Click to open the order` | **majority 5/8** (same five) |"
 
 주: 5/1/2 분포는 산술적으로 5/8 과반 존재 — '과반 없음'은 [G-7] 표와도, 분포 자체와도 안 맞는다. 과반 부재로 표준영어 근거 해소된 것은 unstar 힌트(HUB-3, 3/2/2/1)뿐. 규범 문자열 주장(HUB-2 값)은 양쪽 byte 일치라 행동 영향 없음 — 근거 서사만 정정하면 됨.
 
 ### [C-134] MINOR — §5 전문의 '전역 캐노니컬 목록이 ten names를 커버한다'는 수치가 틀렸다 — 실제 목록은 그룹 9개 / 개별 이벤트명 11개로 어느 셈법으로도 10이 아니다.
 
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/inbound-request.md`: "because `_global-rules`' canonical list covers ten names and does not yet cover these"
-- `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_global-rules.md`: "`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result`."
+- `wms2/specs/inbound-request.md`: "because `_global-rules`' canonical list covers ten names and does not yet cover these"
+- `wms2/specs/_global-rules.md`: "`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result`."
 
 주: · 구분 그룹 9개(starred/unstarred, read/mark_all_read를 쌍으로 셈) 또는 개별 11개. DC-23/DC-15 네이밍 caveat 자체(선언된 로컬명, 캐노니컬 승격 시 rename-only)는 문제 없음 — 수치만 정정 대상.
 

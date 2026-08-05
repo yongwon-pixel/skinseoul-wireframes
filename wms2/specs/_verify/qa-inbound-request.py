@@ -22,7 +22,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-REPO = Path("/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes")
+REPO = Path(__file__).resolve().parents[3]
 TARGET = (REPO / "wms2/inbound-request/index.html").as_uri()
 
 RESULTS = []

@@ -3,7 +3,7 @@
 > **Do not apply these now.** This is a backlog for a separate wireframe-edit pass (after P3-3/P3-4), so spec writing and wireframe editing never race on the same files. The specs are written against the **decided behavior** (see `_provisional-decisions.md`), not against the stale wireframe text below.
 > Deploy rule reminder: any wireframe edit must go out through `/wf-deploy {slug}` (3-channel sync), never by editing the published copy.
 
-Source: all 16 plans. Repo root for paths below: `~/yongwon-sync/claude/repos/skinseoul-wireframes/`.
+Source: all 16 plans. Repo root for paths below: ``.
 
 > **Batch status — 2026-08-03 (owner-approved).** Every entry in this register is now **APPLIED**. The last open cluster was the Comments-hub copy fork (`[WF-VO-1]` · `[WF-15] closing` · `[WF-NEW-E]` · `[IR-WFX-1]` and the §F / §H factual corrections), which was blocked on `_global-rules.md` `[G-7]` publishing the canonical strings. `[G-7]` **v1.2** now publishes them as **HUB-1…HUB-7**, and all eight wireframes plus all eight spec QA suites were moved to them in one commit — the condition every one of those entries attached to its own fix. Verified with headless Chromium across all eight pages: **82 assertions PASS / 0 FAIL**, 0 `pageerror` per page. Two of this register's own corpus tallies were wrong and are corrected in place (see `[WF-15] closing` and `[IR-WFX-1]`): both omitted `view-orders`, so the unstar hint split is **3 / 2 / 2 / 1**, not 2 / 2 / 2 / 1 and not a four-page majority.
 

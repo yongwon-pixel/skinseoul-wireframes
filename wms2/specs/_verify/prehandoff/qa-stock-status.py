@@ -54,7 +54,9 @@ import traceback
 
 from playwright.sync_api import sync_playwright
 
-TARGET = "file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/stock-status/index.html"
+import pathlib
+# 레포 상대경로 — 절대경로를 박으면 클론한 사람 기계에서 전부 미기동된다.
+TARGET = (pathlib.Path(__file__).resolve().parents[3] / "stock-status" / "index.html").as_uri()
 
 HELPERS = r"""
 window.QA = {

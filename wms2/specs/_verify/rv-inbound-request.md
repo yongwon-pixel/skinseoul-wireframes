@@ -3,7 +3,7 @@
 **Verifier role:** independent re-verifier. I neither wrote the spec, nor the wireframe, nor the remediation. Nothing in the remediator's report was taken on trust — every count was re-derived by my own extraction, every claimed fix was located and quoted from the current file, and the QA re-run was coded fresh (not reusing `qa-inbound-request.py`).
 **Target:** `wms2/specs/inbound-request.md` (v1.2, 2,045 lines) · SUT `file:///…/wms2/inbound-request/index.html` (850 lines, unchanged — remediation was spec-only, consistent with M2's "culprit spec 8 / wireframe 0")
 **Prior findings:** `_verify/m1-inbound-request.md` (3 MAJOR + 9 MINOR) · `_verify/m2-inbound-request.md` (8 FAIL / 0 AMBIGUOUS / 0 UNRUNNABLE)
-**Runner:** `/private/tmp/claude-501/-Users-yongwon-yongwon-sync/635405b8-dea2-4665-89c5-efd98bf60282/scratchpad/rv-inbound-rerun2.py` — Playwright, headless chromium, 1440×900
+**Runner:** `(internal scratch path, not published)` — Playwright, headless chromium, 1440×900
 **Date:** 2026-08-03
 
 ---

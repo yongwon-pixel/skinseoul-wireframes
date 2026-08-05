@@ -4,8 +4,8 @@ Method: independent re-derivation. Every count below was extracted from
 `wms2/order-detail/index.html` and `wms2/specs/order-detail.md` with scripts (regex over the DOM
 markup and over the spec's own tables); no number asserted by the spec was trusted.
 
-- Target spec: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/order-detail.md` (2,269 lines, spec v1.1, 2026-08-03)
-- Wireframe (SST): `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-detail/index.html` (761 lines)
+- Target spec: `wms2/specs/order-detail.md` (2,269 lines, spec v1.1, 2026-08-03)
+- Wireframe (SST): `wms2/order-detail/index.html` (761 lines)
 - References: `_global-rules.md`, `_plans/_review.md`, `_plans/_provisional-decisions.md`, `_plans/_wireframe-fixes.md`, `_plans/order-detail.A.md`, `_plans/order-detail.B.md`
 
 ---

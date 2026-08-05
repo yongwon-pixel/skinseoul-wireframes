@@ -2,8 +2,8 @@
 
 Method: independent verification. Nothing in the spec's own counts was trusted; every number below was re-derived by script over `wms2/stock-status/index.html`, `specs/stock-status.md`, and the four `_plans/` registers. Auditor did not write the spec.
 
-Target: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/stock-status.md` (1302 lines, v1.1, 2026-08-03)
-Wireframe: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/stock-status/index.html` (662 lines)
+Target: `wms2/specs/stock-status.md` (1302 lines, v1.1, 2026-08-03)
+Wireframe: `wms2/stock-status/index.html` (662 lines)
 
 ---
 

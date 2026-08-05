@@ -1,11 +1,11 @@
 # Phase 3 Supervisor State (컴팩션 대비 — 재개 시 이 파일부터 읽기)
 
-작성: 2026-08-03 (유저 취침 중 — 자율 진행 승인됨. OWNER 결정은 추천값 임시 적용 + OWNER-PENDING 표기)
+작성: 2026-08-03 (비동기 진행 구간)
 
 ## 현황
 - [x] P3-0 입력팩: `wms2/specs/_inputs/` 4파일 (Slack 채널 확정: #fulfillment-admin-comments = C0BMGEWM5QA)
-- [x] P3-1 계획 16/16 완료 (workflow wf_c4981053-fc6, 9.6분, 저널: `~/.claude/projects/-Users-yongwon-yongwon-sync/635405b8-dea2-4665-89c5-efd98bf60282/subagents/workflows/wf_c4981053-fc6/journal.jsonl`) → `_plans/{slug}.{A|B}.md` 16개
-- [ ] P3-2 통합 검토: consolidation 에이전트가 `_review.md` + `_provisional-decisions.md` 작성 → 감독(칼리) 승인
+- [x] P3-1 계획 16/16 완료 (internal run)) → `_plans/{slug}.{A|B}.md` 16개
+- [ ] P3-2 통합 검토: consolidation 에이전트가 `_review.md` + `_provisional-decisions.md` 작성 → 감독 승인
 - [ ] P3-3 작성: 8 파이프라인 (A 초안 → B 감사·보강) → `wms2/specs/{slug}.md` + `_global-rules.md` 최종화
 - [ ] P3-4 3중 검증: ① 커버리지 기계 대조 ② 적대적 QA 시뮬레이션(라이브 Pages) ③ 크로스페이지 일관성
 - [ ] P3-5 노션 게시(인덱스 3a705a34… 하위 child 9건 — 본문 편집 금지, 제목 변경 OK) + 아침 보고
@@ -41,7 +41,7 @@
 - **상호참조 붕괴 수리 완료**: review 인용 PD 8개·WF 3개를 레지스터 실제 번호로 기계 리맵(PD 16→21·20→27·28→34·29→36·43→46·53→5·61→68·75→80 / WF 6→5·7→10·10→9). 검증 `_plans/_xref_check.py` → **XREF OK**. review 말미에 correction note 기재
 - **중복 에이전트(a6770fe9…) 정지** — agentA 산출물이 완전해 채택, 경쟁 쓰기 차단
 - **`wms2/specs/_global-rules.md` v1.0 작성** — GD-1~10 반영(G-7 채널 확정·G-5 OTHER·G-3 사운드 범위·G-11 사유 enum·신규 G-15 권한 단일롤) + 정규 이벤트명 + Slack 라우팅표
-- **P3-3 워크플로우 가동**: run `wf_f770b5fa-834` (8 파이프라인 × A작성→B감사, 산출 `wms2/specs/{slug}.md`)
+- **P3-3 워크플로우 가동**: run `(internal run)` (8 파이프라인 × A작성→B감사, 산출 `wms2/specs/{slug}.md`)
 - 다음: P3-4 3중 검증(① 커버리지 기계대조 ② 적대적 QA 시뮬레이션 ③ 크로스페이지 일관성 + **`_review.md` 자기주장 검증 포함**) → 노션 게시 → 아침 보고
 
 

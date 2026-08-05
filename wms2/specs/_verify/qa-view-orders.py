@@ -28,7 +28,10 @@ import time
 
 from playwright.sync_api import sync_playwright
 
-URL = "file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/view-orders/index.html"
+import pathlib
+# 레포 상대경로로 해석한다. 절대경로를 박으면 작성자 기계에서만 돌고,
+# 클론한 사람에게는 전부 미기동으로 나타난다(그러면서 통과율은 그대로라 들키지 않는다).
+URL = (pathlib.Path(__file__).resolve().parents[2] / "view-orders" / "index.html").as_uri()
 
 PRELUDE = r"""
 window.__qa = {
@@ -1768,7 +1771,7 @@ def main():
     print(counts)
     if "--json" in sys.argv:
         out = sys.argv[sys.argv.index("--json") + 1]
-        with open(out, "w") as f:
+        with open(out, "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=1)
         print("wrote", out)
 

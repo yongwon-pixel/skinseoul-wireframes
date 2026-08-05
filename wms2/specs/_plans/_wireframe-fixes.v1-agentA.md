@@ -3,7 +3,7 @@
 > **Do not apply these now.** This is a backlog for a separate wireframe-edit pass (after P3-3/P3-4), so spec writing and wireframe editing never race on the same files. The specs are written against the **decided behavior** (see `_provisional-decisions.md`), not against the stale wireframe text below.
 > Deploy rule reminder: any wireframe edit must go out through `/wf-deploy {slug}` (3-channel sync), never by editing the published copy.
 
-Source: all 16 plans. Repo root for paths below: `~/yongwon-sync/claude/repos/skinseoul-wireframes/`.
+Source: all 16 plans. Repo root for paths below: ``.
 
 ---
 

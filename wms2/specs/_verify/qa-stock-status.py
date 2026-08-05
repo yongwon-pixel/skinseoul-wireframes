@@ -19,7 +19,7 @@ Run:  python3 qa-stock-status.py
 import json, re, sys, pathlib
 from playwright.sync_api import sync_playwright
 
-TARGET = "file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/stock-status/index.html"
+TARGET = (pathlib.Path(__file__).resolve().parents[2] / "stock-status" / "index.html").as_uri()
 
 PASS, FAIL, AMB, UNRUN = "PASS", "FAIL", "AMBIGUOUS", "UNRUNNABLE"
 RESULTS = []

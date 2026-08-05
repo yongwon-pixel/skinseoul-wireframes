@@ -1,8 +1,8 @@
 # Method 2 — Adversarial QA Execution: `view-orders.md` §8
 
-**Target spec** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/view-orders.md` §8 (QA Acceptance Criteria)
-**System under test** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/view-orders/index.html` (identical to the deployed page)
-**Runner** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-view-orders.py` (Playwright, headless Chromium, 1280×900, `file://`, page reloaded between every scenario)
+**Target spec** `wms2/specs/view-orders.md` §8 (QA Acceptance Criteria)
+**System under test** `wms2/view-orders/index.html` (identical to the deployed page)
+**Runner** `wms2/specs/_verify/qa-view-orders.py` (Playwright, headless Chromium, 1280×900, `file://`, page reloaded between every scenario)
 **Date** 2026-08-03 · **Posture** hostile QA robot; did not author the spec; executed only what §8 literally says.
 
 ---
@@ -289,4 +289,4 @@ All 135 [WF] scenarios, in execution order. Evidence is the harness's own output
 
 ---
 
-*Re-run with:* `python3 /Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-view-orders.py --json out.json`
+*Re-run with:* `python3 wms2/specs/_verify/qa-view-orders.py --json out.json`

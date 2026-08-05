@@ -5,7 +5,7 @@
 **Target:** `wms2/specs/ready-to-outbound.md` (1,853 lines, header reads **Spec version: 1.2 · Date: 2026-08-03**)
 **Wireframe:** `wms2/ready-to-outbound/index.html` (486 lines, unchanged)
 **Inputs re-checked:** `_verify/m1-ready-to-outbound.md` · `_verify/m2-ready-to-outbound.md` · remediator's claim list
-**Harness:** `/private/tmp/claude-501/-Users-yongwon-yongwon-sync/635405b8-dea2-4665-89c5-efd98bf60282/scratchpad/rv_rto_qa.py` (Playwright, headless Chromium, 1440×900, fresh load per scenario)
+**Harness:** `(internal scratch path, not published)` (Playwright, headless Chromium, 1440×900, fresh load per scenario)
 
 ---
 

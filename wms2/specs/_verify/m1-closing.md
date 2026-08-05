@@ -1,8 +1,8 @@
 # M1 — Coverage Audit: `closing.md`
 
 Independent verification (auditor did not author the spec). Date: 2026-08-03.
-Target: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md` (2,219 lines)
-Wireframe: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/closing/index.html` (910 lines)
+Target: `wms2/specs/closing.md` (2,219 lines)
+Wireframe: `wms2/closing/index.html` (910 lines)
 
 Every count below was derived by running extraction scripts over the HTML and the markdown. No count asserted by the spec was accepted on its face.
 

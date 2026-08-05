@@ -2,8 +2,8 @@
 
 Re-verifier role: independent — did not author the spec, the m1/m2/m3 findings, or the remediation. Date: 2026-08-03 (second pass; a prior rv-closing.md existed in this directory and was **not trusted** — every count, quote and QA verdict below was re-derived from scratch with fresh extraction scripts and a fresh Playwright runner. The prior file's conclusions were independently reproduced, which corroborates them, but the evidence here is my own).
 
-- Spec under test: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/closing.md` (v1.2, 2,388 lines)
-- Wireframe: `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/closing/index.html` (909 lines)
+- Spec under test: `wms2/specs/closing.md` (v1.2, 2,388 lines)
+- Wireframe: `wms2/closing/index.html` (909 lines)
 - My runner: `scratchpad/rv3_qa_closing.py` · results: `scratchpad/rv3_qa_results.json` (Playwright · headless chromium · 1440×900 · R1/R2/R2b/R3/R4/R5/R6b/R9 implemented from v1.2 §8.0 as written)
 
 ---

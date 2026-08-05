@@ -2,10 +2,10 @@
 
 Hostile-QA verification (executor did not author the spec). Date: 2026-08-03.
 
-- **Spec under test:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/ready-to-outbound.md` §8 (1,813 lines total; §8 = lines 942–1668)
-- **System under test:** `file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/ready-to-outbound/index.html` (486 lines, identical to the deployed page)
-- **Harness:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_verify/qa-ready-to-outbound.py` (Playwright 1.58.0, headless Chromium, viewport 1440×900)
-- **Cross-reference for culprit assignment:** `/Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/specs/_plans/_wireframe-fixes.md`
+- **Spec under test:** `wms2/specs/ready-to-outbound.md` §8 (1,813 lines total; §8 = lines 942–1668)
+- **System under test:** `wms2/ready-to-outbound/index.html` (486 lines, identical to the deployed page)
+- **Harness:** `wms2/specs/_verify/qa-ready-to-outbound.py` (Playwright 1.58.0, headless Chromium, viewport 1440×900)
+- **Cross-reference for culprit assignment:** `wms2/specs/_plans/_wireframe-fixes.md`
 
 **The question being answered:** can an AI run this spec's QA with zero questions? Answered empirically, not by reading.
 

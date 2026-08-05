@@ -4,7 +4,7 @@ Verifier: independent (neither authored the spec nor the remediation). Nothing i
 remediator's report was trusted; every number below was re-derived by script over
 `specs/order-detail.md` (2,450 lines, v1.2) and every QA verdict re-measured with Playwright
 (headless Chromium, 1680×1000) against
-`file:///Users/yongwon/yongwon-sync/claude/repos/skinseoul-wireframes/wms2/order-detail/index.html`.
+`wms2/order-detail/index.html`.
 
 - **Date:** 2026-08-03
 - **Inputs:** `_verify/m1-order-detail.md` (3 MAJOR · 11 MINOR), `_verify/m2-order-detail.md`
