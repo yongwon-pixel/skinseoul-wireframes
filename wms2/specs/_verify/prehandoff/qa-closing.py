@@ -28,7 +28,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 URL = "file://" + str((HERE / ".." / ".." / ".." / "closing" / "index.html").resolve())
 OUT_JSON = os.environ.get(
     "QA_CLOSING_OUT",
-    "(internal scratch path, not published)")
+    str(pathlib.Path(__file__).with_name("qa-closing-prehandoff-results.json")))
 
 INIT = r"""
 window.__spoken = [];

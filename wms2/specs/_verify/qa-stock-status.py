@@ -1108,7 +1108,7 @@ def main():
         print(f"{r['verdict']:<10} {r['id']:<12} {r['evidence']}")
     print("\n=== TOTALS ===", json.dumps(counts))
     pathlib.Path(__file__).with_name("qa-stock-status-results.json").write_text(
-        json.dumps(RESULTS, ensure_ascii=False, indent=1))
+        json.dumps(RESULTS, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":
