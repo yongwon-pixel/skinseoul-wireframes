@@ -11,6 +11,17 @@ import json, re, sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
+import pathlib
+
+# Legacy consoles (Windows cp949 / cp1252) otherwise abort the suite mid-run with
+# UnicodeEncodeError on the first non-ASCII character, leaving a partial pass count.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # pragma: no cover - non-reconfigurable stream
+    pass
+
+
 WF_URL = (Path(__file__).resolve().parents[3] / "ready-to-outbound" / "index.html").as_uri()
 
 IDLE_LABEL = "Bulk Print Labels in progress — 3/5 (60%) · No refresh · selection kept · toast on completion"
@@ -1333,6 +1344,17 @@ def main():
     passed = sum(1 for r in results if r["status"] == "pass")
     failed = [r for r in results if r["status"] == "fail"]
     errored = [r for r in results if r["status"] == "error"]
+    # HANDOFF.md §4 documents `python3 qa-<screen>.py [--json out.json]` for all eight
+    # runners. Without this the flag is accepted, nothing is written, and the run still
+    # exits 0 — a pass rate with no artefact behind it.
+    if "--json" in sys.argv:
+        _out = sys.argv[sys.argv.index("--json") + 1]
+        _p = pathlib.Path(_out)
+        _p.parent.mkdir(parents=True, exist_ok=True)
+        with open(_p, "w", encoding="utf-8") as _f:
+            json.dump({"executed": len(results), "passed": passed,
+                       "failed": failed, "runner_errors": errored}, _f, ensure_ascii=False, indent=1)
+        print("wrote", _p)
     print(json.dumps({"executed": len(results), "passed": passed,
                       "failed": failed, "runner_errors": errored}, ensure_ascii=False, indent=1))
     return 0 if not failed and not errored else 1

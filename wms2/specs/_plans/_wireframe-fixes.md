@@ -247,7 +247,7 @@ Raised by: M3a cross-page verification D7 (2026-08-03) · specced position in `i
 
 ## H. Appended 2026-08-03 — found while remediating `specs/stock-status.md`
 
-> Page-scoped IDs deliberately, not `WF-n`: by the time this pass ran, `WF-15` had been claimed independently by the ready-to-outbound, closing and order-management passes and `WF-16` by closing/tracking-missing and order-management (see section F's collision warning). `stock-status.md` cites these two by the full tokens `[INV-WFX-1 · proposed]` / `[INV-WFX-2 · proposed]`, which cannot collide. Same deploy rule as the rest of this file — do not apply now; ship through `/wf-deploy stock-status`. File for both: `wms2/stock-status/index.html`.
+> Page-scoped IDs deliberately, not `WF-n`: by the time this pass ran, `WF-15` had been claimed independently by the ready-to-outbound, closing and order-management passes and `WF-16` by closing/tracking-missing and order-management (see section F's collision warning). `stock-status.md` cited these two by the full tokens `[INV-WFX-1 · proposed]` / `[INV-WFX-2 · proposed]`, which cannot collide. File for both: `wms2/stock-status/index.html`. **Both were APPLIED on 2026-08-03** — the "do not apply now; ship through `/wf-deploy stock-status`" rule that headed this section when it was written has therefore been discharged for these two entries; see the APPLIED paragraph at the foot of each.
 >
 > **⚑ Factual correction for any hub-copy fix that names this page — RESOLVED 2026-08-03.** `[WF-15] closing` listed stock-status inside the "four-page majority" said to render `Unstar to remove from the list`. Verified against `wms2/stock-status/index.html` (`#inbox1`, saved pane `.paneheader`), **this page rendered `Unstar to remove from this list`** (with `the` → `this`), which `stock-status.md` §3.12 stated and its `[WF]` tier asserted. On the unstar hint the corpus had no majority; stock-status sat in the `… from this list` pair with closing, not in the `… from the list` pair. The other hub strings on this page already matched the majority. The prescribed order was followed exactly: **`[G-7]` v1.2 published HUB-1…HUB-7 first**, then all eight pages were edited in one commit, so this page's hint became HUB-3 `Unstar to remove from the list` alongside §3.12 and its QA. *(Tally correction: the split is **3 / 2 / 2 / 1**, not 1 / 2 / 2 / 2 — `view-orders` was missing from the count. No majority either way, which is why HUB-3 was resolved on standard-English grounds rather than by vote.)*
 
@@ -291,3 +291,165 @@ Fix (four parts, one commit): (1) the unconnected cell renders **red** (`--red` 
 **Was blocked on a demo-data decision, not on the rule.** The shipped demo file contains the `PE` row, so applying the fix alone puts the mock permanently in the blocked state and makes the success path unreachable: a trial run on 2026-08-04 turned **6 `[WF]` scenarios red** (the confirm-click path times out against a disabled button, and the amber-string assertions invert). The mock therefore needs to carry **both** states before this lands — either a wf-bar preview toggle in the established `Modal: …` pattern, or a connected `PE` plus a second blocked-preview state. Choosing one is a wireframe-design call, so the wireframe was **left unchanged** and the specs describe the correct behavior with this entry as the registered gap.
 Spec position (already correct, needs no edit when this lands): `order-management.md` §3.2.2 preview cell, `BR-20` (reversed), `[E-7]`, `[DC-11]` (retired), §3.2.1 toast subtext; `_global-rules.md` `[G-17]`.
 Raised by: owner decision 2026-08-04; trial application and QA measurement the same day.
+
+---
+
+## J. Appended 2026-08-08 — found by live interaction verification of `[L-19]` (pass 2)
+
+> Page-scoped IDs continuing section H's sequence. `[INV-WFX-3]` / `[INV-WFX-4]` were already claimed
+> by `stock-status.md` §3.22 / §3.23 when this section was written, so these take **5** and **6**;
+> those two were finally given their own rows in **section L** on 2026-08-09.
+> Both were found by driving `wms2/stock-status/index.html` with headless Chromium against
+> assertions written from `stock-status.md` §3.22 — not by reading the file. Both are **applied**;
+> ship through `/wf-deploy stock-status`. File for both: `wms2/stock-status/index.html`.
+
+**[INV-WFX-5] stock-status — the `✓` apply handler was re-entrant, so a second dispatch wrote a second `ADJUST` row of delta 0.**
+File: `wms2/stock-status/index.html` · the `button.tot-ok` click handler inside `openTotPop()`.
+`closeTotPop()` detaches the editor, but the listener survives on the detached button. A second
+dispatch therefore ran `applyAdjust()` again — and because the first pass had already written
+`cell.dataset.orig = v`, the second computed `delta = 0` and appended a Stock History row reading
+`ADJUST  Manual · Miscount  −0`. Measured: two synchronous `✓` clicks took the history table from
+6 rows to **8**. A physical double-click did not reach it (the second click lands elsewhere —
+`[INV-WFX-6]`), which is why the existing suites did not catch it.
+This is a **missing guard, not stale text**: `[E-112]` already requires "exactly one `[DC-35]`, one
+history row … client debounce **and** server idempotency key `[G-9]`", and `QA-ADJ-23` asserts it at
+`[ADMIN]` tier. The drawing simply did not carry the client half.
+Fix: single-shot the handler — `if (ok.disabled || pop.dataset.applied) return;` and stamp
+`pop.dataset.applied` immediately before `applyAdjust()`, after the negative-value rejection so a
+rejected value stays retryable.
+**APPLIED 2026-08-08** — verified with headless Chromium: two synchronous `✓` clicks now append
+exactly one row and leave `Total` at the applied value. No spec debt — `[E-112]` and `QA-ADJ-23`
+already stated the contract and need no edit.
+
+**[INV-WFX-6] stock-status — double-clicking `✓` armed an editor on a different SKU.**
+File: `wms2/stock-status/index.html` · the document-level `click` handler that opens `.tot-edit`.
+`div.tot-pop` is anchored `top: calc(100% + 5px)` under its `Total` cell, so `button.tot-ok` sits
+directly over a **lower row's** `✎`. On a double-click the first click applied and removed the
+editor; the second click then hit the newly exposed `✎` underneath and opened that row's editor,
+focused and pre-selected. Measured: applying to SKU `100004819` by double-click left an editor open
+on SKU `100039958` prefilled `27`, with `document.activeElement` inside it — so the next keystroke
+plus `Enter` would have adjusted the wrong SKU.
+Risk if left: a mis-click retargets a stock adjustment onto a neighbouring product silently. This is
+the one path in `[L-19]` where a user action lands on a row they never pointed at.
+Fix: the apply sets a `justApplied` flag; the document handler consumes it and ignores a `.tot-edit`
+click that carries `detail > 1` — that is precisely the second click of a double-click, and a
+deliberate follow-up click always carries `detail === 1` (measured both ways). Clicks originating
+inside a `.tot-pop` are skipped up front, which is what keeps the flag alive across the apply's own
+bubbling click; a detached editor still answers `.closest('.tot-pop')`.
+**APPLIED 2026-08-08** — verified with headless Chromium: a double-click on `✓` now applies once and
+leaves **zero** editors open, while a later deliberate click on any `✎` still opens normally.
+**Spec gap, recorded not silently absorbed:** `[E-113]` covers "a second editor opened while one is
+open" but the `[E-99]`–`[E-113]` enumeration has no entry for "an apply opens an editor the operator
+never pointed at". Adding `[E-114]` would move the "113 edge cases total" census in §7.7 and the
+`[E-99]` – `[E-113]` range cited in §1 and §10, so the extension is left to the spec author rather
+than renumbered here.
+**DISCHARGED 2026-08-08 by verification pass 3** — `stock-status.md` now carries `[E-114]` ("an apply
+leaves an editor open on a row the operator never pointed at") and the three census/pointer sites it
+moved were swept in the same edit: §7's edge-case census, the `[E-99]` – … range in
+§1, and the end-of-spec census. §10's 2026-08-08 feature row was **not** rewritten — it records what
+that decision produced, and `[E-114]` came later; the pass logged its own §10 row instead.
+*(Those three census sites moved again the same day when the implementation-lens pass appended
+`[E-115]` – `[E-117]`; the ranges are deliberately written open-ended here so this entry does not
+have to be re-swept every time the enumeration grows. The live figures are in `stock-status.md`.)*
+
+---
+
+## K. Appended 2026-08-08 — found by verification pass 3 (operator + data-integrity lenses)
+
+> Page-scoped ID continuing section J. **Not applied** — this is a proposed drawing change, and the
+> spec states the contract meanwhile. File: `wms2/stock-status/index.html`; ship through
+> `/wf-deploy stock-status`.
+
+**[INV-WFX-7 · proposed] stock-status — `Escape` is bound to the value field only, so it cannot cancel from the reason select.**
+File: `wms2/stock-status/index.html` · the `keydown` listener inside `openTotPop()`.
+The editor's only key handler is attached to `input.tot-in`. `select.tot-rsn`, `button.tot-ok` and
+`button.tot-no` carry none, and there is no editor-level or document-level `keydown` handler in the
+file (grep: exactly one `addEventListener('keydown'` in `[L-19]`, on the input).
+**Measured** with headless Chromium on SKU `100004819`, value set to `30`, reason `Lost`: `Escape`
+with focus in `select.tot-rsn` leaves **1** `.tot-pop` in the document; with focus on `button.tot-ok`,
+**1**; with focus in `input.tot-in`, **0**. Found by driving the drawing, not by reading it.
+Consequence: the gap lands on the **decrease** path, which is the one path that requires a second
+control. Picking a reason moves focus into `select.tot-rsn`; from there `Escape` closes only the
+native dropdown and leaves the editor open, so an operator who changes their mind at the last step
+must reach for `✗` or click outside.
+Severity: low. Nothing is written until `✓`, and both other cancel routes (`✗`, outside click) work,
+so no data is at risk — this is an affordance that does not do what the spec and the owner decision
+file both say it does (`DECISIONS-manual-adjust.md`: *"`Escape` cancels"*).
+Fix: move the handler onto `div.tot-pop` (or bind the same handler to the select and both buttons),
+so `Escape` cancels wherever focus sits inside the editor. `Enter`-applies stays on the input only —
+`Enter` on a `<select>` or a `<button>` already has native meaning and must not be re-purposed.
+Spec position: `stock-status.md` §3.22 **Keyboard** states the contract (Escape cancels the editor
+whatever holds focus) and carries the `[INV-WFX-7 · proposed]` note declaring the shipped subset.
+`QA-ADJ-11` asserts `Escape` **in `input.tot-in`** and is correct as written — it is a census of what
+the drawing binds; the contract half joins the `[ADMIN]` tier when this is applied, so **no runner
+change is owed today** and `qa-stock-status.py` stays at 90/90.
+Raised by: verification pass 3, 2026-08-08 — read as the operator standing at the shelf.
+
+**[INV-WFX-8 · proposed] stock-status — a negative `Available` is drawn in the green sellable colour.**
+File: `wms2/stock-status/index.html` · the `Available` `<td>` of every Current Stocks data row, and
+the `applyAdjust()` recompute that writes into it.
+Since 2026-08-08 a below-`Reserved` adjustment `[BR-39]` can take `Available` below zero, and the
+drawing computes it correctly — `applyAdjust()` writes `Total − Reserved`, so applying `Total = 3`
+to the Madecassol row (`Reserved 8`) renders `-5`, which is the contract. The colour is not: each
+`Available` cell carries the fixture's inline `color: var(--green)` and the recompute never touches
+it, so a shortage renders in the token reserved for stock you can sell.
+Risk if left: this is the one cell on the page where a problem reads as health, and it is read at
+cart distance. An operator scanning the column for green sees the row that most needs attention.
+Contract (spec, §3.1 and `[E-117]`): `Available` is never clamped, a negative renders, and it
+renders in red rather than the green sellable style.
+Fix: drop the inline colour from the cell and drive it from a class the recompute sets, so the token
+follows the sign instead of the fixture.
+No runner change is owed — `QA-ADJ-29` asserts the contract at `[ADMIN]` tier and carries the
+drawing as a census clause, and no `[WF]` row asserts the colour; `qa-stock-status.py` stays at
+90/90.
+Raised by: verification pass, 2026-08-08 — read as the developer who must render the cell.
+
+---
+
+## L. Appended 2026-08-09 — the two entries sections H–K deferred, now written down
+
+> Page-scoped IDs **3** and **4**, raised in `stock-status.md` on 2026-08-08 and cited there ever
+> since as *"owes a row in `_wireframe-fixes.md`"*. Section J's preamble named them as already
+> claimed and skipped to **5** and **6**; that explained the numbering but left this register short
+> of two entries its own spec said belonged in it. Both are here now, so no `[INV-WFX-n]` on this
+> page is unregistered. **They are in different states and must not be treated alike:** `4` is
+> **applied**, `3` is **proposed**. File for both: `wms2/stock-status/index.html`.
+
+**[INV-WFX-3 · proposed] stock-status — the below-`Reserved` warning names the reserved total where the contract is the shortfall.**
+File: `wms2/stock-status/index.html` · the warning string built in the editor's `refresh()`.
+The shipped sentence is `'Allowed, but '+res+' unit(s) are held by orders that can no longer be
+filled from stock.'` — it interpolates `Reserved`. With `Total → 5` against `Reserved 8`, five of
+the eight units *can* still be filled and the unfillable count is `reserved − new total = 3`, so the
+sentence reads `8` where the true shortfall is `3`. **Measured** with headless Chromium on SKU
+`100004819` (`data-res=8`), value set to `5`: the rendered warning contains `8`.
+Risk if left: it overstates the damage at the exact moment an operator is deciding whether to
+re-purchase, and it is the number they would quote to whoever asks.
+Contract (spec, §3.22): the sentence must name `{reserved − new total}` of `{reserved}`.
+Severity: low-moderate. Wrong number, right decision — the adjustment is allowed either way
+`[BR-39]`, and nothing downstream reads the string.
+**Not applied, deliberately.** Unlike `[INV-WFX-4]` this changes an **asserted** string: `QA-ADJ-06`
+pins the shipped literal as a census of the drawing and `QA-ADJ-18` asserts the contract at
+`[ADMIN]` tier. Applying it therefore means moving the drawing, `stock-status.md` §3.22 and
+`QA-ADJ-06` **in the same pass**, or the runner correctly fails. Ship through
+`/wf-deploy stock-status`.
+Raised by: verification pass, 2026-08-08 — read as the operator deciding whether to re-purchase.
+
+**[INV-WFX-4] stock-status — `#m-adjlog` labelled one of its three rows and its siblings not at all. APPLIED 2026-08-09.**
+File: `wms2/stock-status/index.html` · the `#m-adjlog` (`[L-M2]`) session-detail table.
+The 2026-08-08 change introduced `span.src-note` — the class did not exist in the drawing before it
+— and attached it to the **first** of the three `2026-07-22` rows, reading `Audit`. The two sibling
+rows carried nothing, as did all five `#m-adjlog6` (`[L-M2b]`) rows and all three `m-audit-confirm`
+(`[L-M1]`) rows. One row updated and its siblings not is the `[E-7]` / `[E-8]` class this program
+has been bitten by before, and it put the drawing at odds with its own spec on a line the same
+change wrote.
+Contract (spec, §3.23): `[L-M2]` / `[L-M2b]` carry **no** `span.src-note` at all — a session-detail
+modal is single-session by construction and its header already names the session, so a per-row
+source trail is redundant there. The trail belongs to the Stock History table `[L-8]`, where
+`[BR-41]` puts it.
+**Applied 2026-08-09**: the stray label was deleted and an HTML comment left in its place naming the
+contract, so a later editor does not "complete the sweep" by adding two more. `span.src-note` now
+appears in three places only — the CSS rule, the `[L-8]` audit row, and the `[L-8]` row the apply
+handler appends.
+No runner change was owed and none was made: `QA-LOG-03` deliberately does not assert on it and
+`QA-LOG-06` asserts the Product cell and the `.note` string only. Measured 90/90 before and after.
+Raised by: verification pass, 2026-08-08. Applied at the final gate, 2026-08-09.

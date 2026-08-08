@@ -170,6 +170,40 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
 #m-reserved .body{overflow-x:auto}
 #m-reserved .tbl th,#m-reserved .tbl td{padding:8px 8px}
 #m-reserved .btn{white-space:nowrap}
+
+/* ===== [19] manual stock adjustment · [20] ADJUST source trail ===== */
+.tot-cell{position:relative;white-space:nowrap}
+.tot-edit{border:1px solid var(--ss-purple-100);background:var(--ss-purple-50);color:var(--ss-purple);
+  border-radius:5px;width:21px;height:21px;line-height:1;font-size:11px;cursor:pointer;margin-left:7px;
+  padding:0;vertical-align:middle;font-weight:700}
+.tot-edit:hover{background:var(--ss-purple-100)}
+.no-anno .tot-edit{border-color:var(--line);background:var(--page);color:var(--ink-3)}
+.tot-pop{position:absolute;top:calc(100% + 5px);right:0;z-index:60;background:var(--page);
+  border:1px solid var(--ss-purple);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);
+  padding:11px;text-align:left;white-space:normal;min-width:196px;font-weight:400}
+.tot-pop .prow{display:flex;align-items:center;gap:7px}
+.tot-in{width:78px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;font-size:13.5px;
+  font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.tot-in:focus{outline:2px solid var(--ss-purple-100);border-color:var(--ss-purple)}
+.tot-rsn{margin-top:8px;width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:7px;font-size:12px}
+.tot-rsn.need{border-color:var(--amber)}
+.tot-ok,.tot-no{width:28px;height:28px;border-radius:7px;font-size:13px;cursor:pointer;padding:0;line-height:1;font-weight:800}
+.tot-ok{border:1px solid var(--green);background:var(--green-soft);color:var(--green)}
+.tot-no{border:1px solid var(--line);background:var(--page);color:var(--ink-3)}
+.tot-ok:disabled{opacity:.35;cursor:not-allowed}
+.tot-hint{margin-top:7px;font-size:11px;color:var(--ink-3);line-height:1.5}
+.tot-warn{margin-top:8px;background:var(--amber-soft);border-radius:8px;padding:9px 10px;font-size:11.5px;
+  color:var(--ink-2);line-height:1.55}
+.tot-warn .wh{font-weight:800;color:var(--amber);display:block;margin-bottom:3px}
+.tot-warn ul{margin:5px 0 0;padding-left:16px}
+.tot-warn li{font-variant-numeric:tabular-nums}
+.tot-warn .more{color:var(--ink-3);list-style:none;margin-left:-16px}
+.tot-saved{display:none;margin-left:7px;font-size:11px;font-weight:800;color:var(--green)}
+.src-note{font-size:10.5px;color:var(--ink-3);margin-left:7px;font-weight:600;white-space:nowrap}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast.bad{background:var(--red)}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
 </style>
 
 <div class="wf-bar">
@@ -282,13 +316,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       </div>
       <div style="border:1px solid var(--line);border-radius:8px;overflow:auto;max-height:340px">
         <table class="tbl">
-          <thead><tr><th>Type</th><th>Quantity</th><th>Status</th><th>Tracking No</th><th>Carrier</th><th>Location</th><th>Order ID</th><th>Created At</th><th>Auditor</th></tr></thead>
+          <thead id="histHead"><tr><th>Type</th><th>Quantity</th><th>Status</th><th>Tracking No</th><th>Carrier</th><th>Location</th><th>Order ID</th><th>Created At</th><th>Auditor</th></tr></thead>
           <tbody>
             <tr class="pending"><td><span class="ty ty-in">INBOUND</span></td><td class="num">+6</td><td><span class="stt stt-pend">PENDING</span></td><td class="num">12101316464794</td><td>Coupang</td><td class="loc-pill">–</td><td class="num">407847</td><td class="num">07-13 09:12</td><td>Miranti</td></tr>
             <tr><td><span class="ty ty-out">OUTBOUND</span></td><td class="num">−2</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">DL20260630072138</td><td>Deleo</td><td class="loc-pill">A-02-13</td><td class="num">407506</td><td class="num">07-12 18:40</td><td>Dean</td></tr>
             <tr><td><span class="ty ty-res">RESERVE</span></td><td class="num">−8</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">A-02-13</td><td class="num">407812</td><td class="num">07-12 11:05</td><td>System</td></tr>
             <tr><td><span class="ty ty-in">INBOUND</span></td><td class="num">+30</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">10323100835644</td><td>Coupang</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-10 14:22</td><td>Miranti</td></tr>
-            <tr><td><span class="ty ty-adj">ADJUST</span></td><td class="num diff-neg">−1</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-09 16:50</td><td>Yongwon</td></tr>
+            <tr><td><span class="ty ty-adj">ADJUST</span> <span class="src-note">Audit #2026-07</span></td><td class="num diff-neg">−1</td><td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-09 16:50</td><td>Yongwon</td></tr>
             <tr><td><span class="ty ty-in">INBOUND</span></td><td class="num">+12</td><td><span class="stt stt-conf">CONFIRMED</span></td><td class="num">10323100835261</td><td>Coupang</td><td class="loc-pill">A-02-13</td><td class="num">–</td><td class="num">07-08 10:11</td><td>Miranti</td></tr>
           </tbody>
         </table>
@@ -342,17 +376,17 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <table class="tbl">
           <thead><tr><th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Barcode</th><th>Sourcing Route</th><th>Location <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">12</span></th><th>Total</th><th>Reserved</th><th>Available <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-left:5px">11</span></th><th class="audcol" style="display:none">Counted Qty</th><th class="audcol" style="display:none">Diff</th><!-- No Loss column, by owner decision 2026-08-04: the stock audit reports quantity differences only (±count). Product cost, loss amounts and every currency figure were removed from the audit flow and must NOT be reintroduced. --></tr></thead>
           <tbody>
-            <tr><td class="num">100031877</td><td><div class="thumb">IMG</div></td><td><b>Beauty of Joseon</b> Glow Serum</td><td><b>Beauty of Joseon</b> 글로우 세럼</td><td>30ml</td><td class="num">8809738317481</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-02-03"></td><td class="num">88</td><td class="num" style="color:var(--amber)">6</td><td class="num" style="color:var(--green)">82</td><td class="audcol" style="display:none"><input class="qty-in" value="88"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td><b>The Face Shop</b> 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="Enter barcode"></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="A-03-02"></td><td class="num">61</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100005088</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Vital Hydra Solution Water Cream</td><td><b>Dr.Jart+</b> 바이탈 하이드라 워터크림</td><td>50ml</td><td class="num">8809535800120</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-01-07"></td><td class="num">55</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">55</td><td class="audcol" style="display:none"><input class="qty-in" value="55"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100004819</td><td><div class="thumb">IMG</div></td><td><b>Dongkook</b> Madecassol Cream</td><td><b>Dongkook</b> 마데카솔 크림</td><td>50ml</td><td class="num">8806404003224</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-13"></td><td class="num">42</td><td class="num" style="color:var(--amber)">8</td><td class="num" style="color:var(--green)">34</td><td class="audcol" style="display:none"><input class="qty-in" value="42"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100039958</td><td><div class="thumb">IMG</div></td><td><b>AtoBarrier365</b> Body Lotion</td><td><b>AtoBarrier365</b> 바디로션</td><td>350ml</td><td class="num">8809740506332</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="C-01-05"></td><td class="num">27</td><td class="num" style="color:var(--amber)">4</td><td class="num" style="color:var(--green)">23</td><td class="audcol" style="display:none"><input class="qty-in" value="27"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100005104</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>150ml</td><td class="num">8809571501234</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-04"></td><td class="num">18</td><td class="num" style="color:var(--amber)">2</td><td class="num" style="color:var(--green)">16</td><td class="audcol" style="display:none"><input class="qty-in" value="17"></td><td class="audcol num" style="display:none"><span class="diff-neg">−1</span></td></tr>
-            <tr><td class="num">100040311</td><td><div class="thumb">IMG</div></td><td><b>COSRX</b> Pomegranate &amp; Collagen Lifting Cream</td><td><b>COSRX</b> 석류 콜라겐 탄력 크림</td><td>100ml</td><td class="num">8801051283860</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-05"></td><td class="num">12</td><td class="num" style="color:var(--amber)">1</td><td class="num" style="color:var(--green)">11</td><td class="audcol" style="display:none"><input class="qty-in" value="12"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100012534</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>75ml</td><td class="num">8809642713823</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-20"></td><td class="num">9</td><td class="num" style="color:var(--amber)">3</td><td class="num" style="color:var(--green)">6</td><td class="audcol" style="display:none"><input class="qty-in" value="11"></td><td class="audcol num" style="display:none"><span class="diff-pos">+2</span></td></tr>
-            <tr><td class="num">100043697</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td><b>Dr.Jart+</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td class="num">8809642714233</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="C-02-01"></td><td class="num">4</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">4</td><td class="audcol" style="display:none"><input class="qty-in" value="4"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td><b>Medicube</b> 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="" placeholder="Unassigned"></td><td class="num">2</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
-            <tr><td class="num">100045210</td><td><div class="thumb">IMG</div></td><td><b>Anua</b> Heartleaf 77% Soothing Toner</td><td><b>Anua</b> 하트리프 77% 수딩 토너</td><td>250ml</td><td class="num">8809640732124</td><td><span class="tag tag-jit">JIT (Coupang)</span></td><td><input class="loc-in" value="B-03-02"></td><td class="num">1</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">1</td><td class="audcol" style="display:none"><input class="qty-in" value="1"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100031877"><td class="num">100031877</td><td><div class="thumb">IMG</div></td><td><b>Beauty of Joseon</b> Glow Serum</td><td><b>Beauty of Joseon</b> 글로우 세럼</td><td>30ml</td><td class="num">8809738317481</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-02-03"></td><td class="num tot-cell" data-orig="88" data-res="6"><span class="tot-v">88</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">6</td><td class="num" style="color:var(--green)">82</td><td class="audcol" style="display:none"><input class="qty-in" value="88"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100024743"><td class="num">100024743</td><td><div class="thumb">IMG</div></td><td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes</td><td><b>The Face Shop</b> 미감수 클렌징 티슈</td><td>50ea</td><td><input class="bcin" placeholder="Enter barcode"></td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="A-03-02"></td><td class="num tot-cell" data-orig="61" data-res="0"><span class="tot-v">61</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">61</td><td class="audcol" style="display:none"><input class="qty-in" value="61"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100005088"><td class="num">100005088</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Vital Hydra Solution Water Cream</td><td><b>Dr.Jart+</b> 바이탈 하이드라 워터크림</td><td>50ml</td><td class="num">8809535800120</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td><input class="loc-in" value="B-01-07"></td><td class="num tot-cell" data-orig="55" data-res="0"><span class="tot-v">55</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">55</td><td class="audcol" style="display:none"><input class="qty-in" value="55"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100004819"><td class="num">100004819</td><td><div class="thumb">IMG</div></td><td><b>Dongkook</b> Madecassol Cream</td><td><b>Dongkook</b> 마데카솔 크림</td><td>50ml</td><td class="num">8806404003224</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-13"></td><td class="num tot-cell" data-orig="42" data-res="8"><span class="tot-v">42</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">8</td><td class="num" style="color:var(--green)">34</td><td class="audcol" style="display:none"><input class="qty-in" value="42"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100039958"><td class="num">100039958</td><td><div class="thumb">IMG</div></td><td><b>AtoBarrier365</b> Body Lotion</td><td><b>AtoBarrier365</b> 바디로션</td><td>350ml</td><td class="num">8809740506332</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="C-01-05"></td><td class="num tot-cell" data-orig="27" data-res="4"><span class="tot-v">27</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">4</td><td class="num" style="color:var(--green)">23</td><td class="audcol" style="display:none"><input class="qty-in" value="27"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100005104"><td class="num">100005104</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>150ml</td><td class="num">8809571501234</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-04"></td><td class="num tot-cell" data-orig="18" data-res="2"><span class="tot-v">18</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">2</td><td class="num" style="color:var(--green)">16</td><td class="audcol" style="display:none"><input class="qty-in" value="17"></td><td class="audcol num" style="display:none"><span class="diff-neg">−1</span></td></tr>
+            <tr data-sku="100040311"><td class="num">100040311</td><td><div class="thumb">IMG</div></td><td><b>COSRX</b> Pomegranate &amp; Collagen Lifting Cream</td><td><b>COSRX</b> 석류 콜라겐 탄력 크림</td><td>100ml</td><td class="num">8801051283860</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-01-05"></td><td class="num tot-cell" data-orig="12" data-res="1"><span class="tot-v">12</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">1</td><td class="num" style="color:var(--green)">11</td><td class="audcol" style="display:none"><input class="qty-in" value="12"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100012534"><td class="num">100012534</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>75ml</td><td class="num">8809642713823</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td><input class="loc-in" value="A-02-20"></td><td class="num tot-cell" data-orig="9" data-res="3"><span class="tot-v">9</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">3</td><td class="num" style="color:var(--green)">6</td><td class="audcol" style="display:none"><input class="qty-in" value="11"></td><td class="audcol num" style="display:none"><span class="diff-pos">+2</span></td></tr>
+            <tr data-sku="100043697"><td class="num">100043697</td><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td><b>Dr.Jart+</b> 시카페어 젠틀 클렌징 폼</td><td>150ml</td><td class="num">8809642714233</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="C-02-01"></td><td class="num tot-cell" data-orig="4" data-res="0"><span class="tot-v">4</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">4</td><td class="audcol" style="display:none"><input class="qty-in" value="4"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100038120"><td class="num">100038120</td><td><div class="thumb">IMG</div></td><td><b>Medicube</b> Zero Pore Pad 2.0 (1+1)</td><td><b>Medicube</b> 제로 모공 패드 2.0</td><td>70ea</td><td class="num">8809894261234</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td><input class="loc-in" value="" placeholder="Unassigned"></td><td class="num tot-cell" data-orig="2" data-res="0"><span class="tot-v">2</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">2</td><td class="audcol" style="display:none"><input class="qty-in" value="2"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
+            <tr data-sku="100045210"><td class="num">100045210</td><td><div class="thumb">IMG</div></td><td><b>Anua</b> Heartleaf 77% Soothing Toner</td><td><b>Anua</b> 하트리프 77% 수딩 토너</td><td>250ml</td><td class="num">8809640732124</td><td><span class="tag tag-jit">JIT (Coupang)</span></td><td><input class="loc-in" value="B-03-02"></td><td class="num tot-cell" data-orig="1" data-res="0"><span class="tot-v">1</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">1</td><td class="audcol" style="display:none"><input class="qty-in" value="1"></td><td class="audcol num" style="display:none"><span class="diff-pos">0</span></td></tr>
             <tr class="audrow" style="display:none"><td colspan="13" style="background:var(--ss-purple-50);padding:10px 12px">
               <span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">13</span><span style="font-weight:700;color:var(--ss-purple)">＋ Unregistered product found during audit</span>
               <span class="ausel"><input id="auSearch" class="bcin" style="width:230px;margin-left:10px" placeholder="Search product name (autocomplete — barcode not required)" autocomplete="off"><div class="audrop" id="auDrop"></div></span>
@@ -372,9 +406,13 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
   </div>
 </div></div>
 
+<div class="gtoast" id="gtoast"></div>
+
 <div class="legend">
   <h3>Inventory — Changes</h3>
   <ol>
+    <li><span class="n">19</span><span><b>Per-row stock adjustment</b> (Current Stocks) — every row's <b>Total</b> carries a <b>&#9998;</b> button. Clicking it opens a small in-cell box: enter the new quantity, then <b>&#10003;</b> applies or <b>&#10007;</b> cancels. <b>Increases need no reason</b> — <code>Miscount</code> is the only one that can apply, so it is set automatically and the box stays a single field. <b>Decreases require a reason</b> from a fixed list of four: <b>Damaged</b> (unsellable through breakage) &middot; <b>Expired</b> (past shelf life or degraded) &middot; <b>Lost</b> (inbound record is trusted but the goods are gone) &middot; <b>Miscount</b> (the book figure itself was wrong). There is no free-text option — anything outside these four belongs to a route that already exists (returns, inbound requests, sample assignment, reservation release), and offering it here would let those routes be bypassed. Applying gives <b>in-place <span style="color:var(--green)">&#10003; Saved</span> feedback, not a toast</b> [G-2 CP-9]; failures still raise the red top-right toast. Hidden while Stock Audit mode is on — counts are entered in the Counted Qty column there <span class="ref">— E stock adjustment</span></span></li>
+    <li><span class="n">20</span><span><b>ADJUST now carries its source</b> — the type stays <code>ADJUST</code> (filters unchanged) and the origin rides beside it as small grey text: <b>Manual &middot; {reason}</b> for [19], <b>Audit #{session}</b> for a stock take, <b>Release</b> for a reservation released as lost. Until now all three wrote an indistinguishable <code>ADJUST</code> row, so history could not tell a counted correction from a manual one. Reducing Total below <b>Reserved</b> is <b>allowed with a warning</b>, not blocked — stock that is physically gone must be recordable even while orders hold it, and the buyer then needs to re-purchase. The box lists the holding orders (first 5, then "+N more") and requires the reason; on apply, each affected order gets an auto-comment and <code>#fulfillment-admin-comments</code> is notified [G-7], so the person who must act finds out. <b>This is deliberately weaker than the stock audit</b>, which blocks confirmation on the same condition: an audit is a scheduled reconciliation, whereas this is the floor reporting what it can see right now <span class="ref">— E stock adjustment</span></span></li>
     <li><span class="n">15</span><span><b>Past Audit Logs</b> — opened as a modal next to the Stock Audit button (same flow). Monthly sessions (audit date · Auditor · adjustments · new additions, tracking the adjustment count toward 0) + link to each session's ADJUST detail <span class="ref">— E "monthly audits are logged"</span></span></li>
     <li><span class="n">14</span><span><b>Single location per SKU</b> (confirmed 2026-07-22) — By Location always shows the one current location, consistent with the Current Stocks location input. Returns are also merged into the same location after inspection (RETURN-BIN concept dropped) <span class="ref">— E location</span></span></li>
     <li><span class="n">13</span><span><b>Add unregistered product</b> (Stock Audit mode only) — <b>search product name → autocomplete</b> (shows name · size · SKU, barcode not required) → click to select → enter Location · Qty → Add inserts a <b>new row at the top of the list</b> (system 0 → Diff +qty) → merged as ADJUST(+) on confirm. If it is not in the catalog either, register manually via the Unrecognized flow (F) <span class="ref">— E stock audit</span></span></li>
@@ -390,7 +428,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
     <li><span class="n">17</span><span><b>Past Audit Logs modal</b> — the body of legend 15, now annotated with its own dot so the legend↔modal map is 1:1 self-evident (added 2026-08-03, WF-14) <span class="ref">— E "monthly audits are logged"</span></span></li>
     <li><span class="n">18</span><span><b>06-30 ADJUST detail modal</b> — a second instance of the M2 session-detail pattern, opened from the 2026-06-30 row of Past Audit Logs; own dot added 2026-08-03 (WF-14) <span class="ref">— E</span></span></li>
   </ol>
-  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · Export Stock Status · Search dropdown · Inbound/Outbound forms · event columns (Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor) stay as on the live screen. Data uses the Madecassol Cream (100004819) example.</p>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · Export Stock Status · Search dropdown · Inbound/Outbound forms · event columns (Type/Quantity/Status/Tracking No/Carrier/Location/Order ID/Created At/Auditor) stay as on the live screen. <b>The ADJUST source trail (Manual · Audit · Release) rides inside the existing Type cell</b> — no column is added. Data uses the Madecassol Cream (100004819) example.</p>
 </div>
 
 <!-- Modal: audit session detail — ADJUST event list -->
@@ -402,6 +440,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
       <table class="tbl" style="font-size:12.5px">
         <thead><tr><th>Time</th><th>SKU</th><th>Product</th><th>Location</th><th>System → Counted</th><th>Adjustment</th><!-- No Loss column: ADJUST events carry the ±quantity only (owner decision 2026-08-04). --></tr></thead>
         <tbody>
+          <!-- No span.src-note in this modal: [L-M2]/[L-M2b] are single-session by construction and the header already names the session (stock-status.md §3.23, [INV-WFX-4]). -->
           <tr><td class="num">14:20:11</td><td class="num">100005104</td><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼</td><td>A-01-04</td><td class="num">18 → 17</td><td><span class="ty ty-adj">ADJUST(−1)</span></td></tr>
           <tr><td class="num">14:20:11</td><td class="num">100012534</td><td><b>Dr.Jart+</b> 시카페어 슬리페어 마스크</td><td>A-02-20</td><td class="num">9 → 11</td><td><span class="ty ty-adj">ADJUST(+2)</span></td></tr>
           <tr style="background:var(--ss-purple-50)"><td class="num">14:20:11</td><td class="num">100048201</td><td><b>UNOVE</b> 딥 대미지 트리트먼트 <b style="color:var(--ss-purple)">[NEW ADDITION]</b></td><td>B-01-02</td><td class="num">0 → 3</td><td><span class="ty ty-adj">ADJUST(+3)</span></td></tr>
@@ -455,7 +494,7 @@ body.no-anno .dot,body.no-anno .legend{display:none!important}
         <b style="color:var(--ink)">4. Memo (Optional)</b>
         <textarea class="mtextarea" placeholder="Cancellation reason or notes — if written, also recorded in the order's Comments history"></textarea>
       </div>
-      <div class="note">On release, Reserved 8 → 5; choosing "Yes" brings Available 34 → 37. The action is recorded in Stock History as a RESERVE release event.</div>
+      <div class="note">On release, Reserved 8 → 5; choosing "Yes" brings Available 34 → 37. The action is recorded in Stock History as a RESERVE release event. A "No" choice additionally records ADJUST with source <b>Release</b> — distinct from a Manual adjustment [19].</div>
     </div>
     <div class="foot">
       <button class="btn btn-gray btn-sm" data-close>Cancel</button>
@@ -567,7 +606,9 @@ document.getElementById('auAdd').addEventListener('click',()=>{
   const tb=document.querySelector('#p-current tbody');
   const tr=document.createElement('tr');
   tr.style.background='var(--ss-purple-50)';
-  tr.innerHTML=`<td class="num">${auPick.sku}</td><td><div class="thumb">IMG</div></td><td>—</td><td><b>${auPick.kr}</b> <span style="color:var(--ss-purple);font-weight:700;font-size:10.5px">[NEW]</span></td><td>${auPick.size}</td><td>–</td><td>—</td><td><input class="loc-in" value="${loc}"></td><td class="num">0</td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">0</td><td class="audcol" style="display:table-cell"><input class="qty-in" value="${qty}"></td><td class="audcol num" style="display:table-cell"><span class="diff-pos">+${qty}</span></td>`;
+  tr.innerHTML=`<td class="num">${auPick.sku}</td><td><div class="thumb">IMG</div></td><td>—</td><td><b>${auPick.kr}</b> <span style="color:var(--ss-purple);font-weight:700;font-size:10.5px">[NEW]</span></td><td>${auPick.size}</td><td>–</td><td>—</td><td><input class="loc-in" value="${loc}"></td><td class="num tot-cell" data-orig="0" data-res="0"><span class="tot-v">0</span><button class="tot-edit" title="Adjust stock quantity" aria-label="Adjust stock quantity">&#9998;</button><span class="tot-saved">&#10003; Saved</span></td><td class="num" style="color:var(--amber)">0</td><td class="num" style="color:var(--green)">0</td><td class="audcol" style="display:table-cell"><input class="qty-in" value="${qty}"></td><td class="audcol num" style="display:table-cell"><span class="diff-pos">+${qty}</span></td>`;
+  tr.dataset.sku=auPick.sku;
+  const nb=tr.querySelector('.tot-edit'); if(nb) nb.style.display='none';
   tb.insertBefore(tr, tb.firstElementChild);
   auS.value=''; document.getElementById('auQty').value=''; document.getElementById('auLoc').value=''; auPick=null;
 });
@@ -615,6 +656,8 @@ document.getElementById('toggleAudit').addEventListener('click',function(){
     ? [...csOrig].sort((a,b)=>((a.querySelector('.loc-in')?.value||'\uD7A3').localeCompare(b.querySelector('.loc-in')?.value||'\uD7A3')))
     : csOrig;
   rows.forEach(r=>csBody.insertBefore(r,ar));
+  closeTotPop();
+  document.querySelectorAll('#p-current .tot-edit').forEach(x=>{x.style.display=on?'none':'inline-block';});
   this.textContent=on?'Exit Stock Audit':'Start Stock Audit';
 });
 document.getElementById('annoToggle').addEventListener('click',function(){
@@ -663,4 +706,142 @@ function cSearch(inp){
       :'<div class="empty">No matching comments</div>');
   pane.style.display='block';
 }
+
+/* ===== [19] Manual stock adjustment · [20] ADJUST source trail ===== */
+const ADJ_DEC=[['Damaged','Damaged — unsellable through breakage'],
+               ['Expired','Expired — past shelf life or degraded'],
+               ['Lost','Lost — inbound record trusted, goods gone'],
+               ['Miscount','Miscount — the book figure was wrong']];
+/* orders holding reserved units, per SKU (demo data; Madecassol matches modal M3 exactly) */
+const RESV_ORDERS={
+  '100004819':[['407812',2],['413650',3],['409112',3]],
+  '100031877':[['414002',4],['414118',2]],
+  '100039958':[['413870',4]],
+  '100005104':[['414221',2]],
+  '100040311':[['413995',1]],
+  '100012534':[['414077',2],['414150',1]]
+};
+const MAX_RESV_SHOWN=5;
+let toastTimer=null;
+/* set by an apply, read once by the document click handler — see the ✓ handler and [G-9] below */
+let justApplied=false;
+function gtoast(msg,sub,bad){
+  const t=document.getElementById('gtoast');
+  t.className='gtoast'+(bad?' bad':'');
+  t.innerHTML=msg+(sub?'<small>'+sub+'</small>':'');
+  t.style.display='block';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.style.display='none';},2600);
+}
+function closeTotPop(){document.querySelectorAll('.tot-pop').forEach(p=>p.remove());}
+function openTotPop(btn){
+  closeTotPop();
+  const cell=btn.closest('.tot-cell');
+  const orig=+cell.dataset.orig, res=+cell.dataset.res;
+  const sku=cell.closest('tr').dataset.sku||'';
+  const pop=document.createElement('div');
+  pop.className='tot-pop';
+  pop.innerHTML=
+    '<div class="prow"><input class="tot-in" type="number" min="0" value="'+orig+'" aria-label="New quantity">'
+    +'<button class="tot-ok" title="Apply" aria-label="Apply">&#10003;</button>'
+    +'<button class="tot-no" title="Cancel" aria-label="Cancel">&#10007;</button></div>'
+    +'<select class="tot-rsn" style="display:none" aria-label="Reason">'
+    +'<option value="">Select a reason…</option>'
+    +ADJ_DEC.map(r=>'<option value="'+r[0]+'">'+r[1]+'</option>').join('')
+    +'</select>'
+    +'<div class="tot-hint">Reserved '+res+' · increases are recorded as Miscount</div>'
+    +'<div class="tot-warn" style="display:none"></div>';
+  cell.appendChild(pop);
+  const inp=pop.querySelector('.tot-in'), sel=pop.querySelector('.tot-rsn'),
+        ok=pop.querySelector('.tot-ok'), warn=pop.querySelector('.tot-warn'),
+        hint=pop.querySelector('.tot-hint');
+  function refresh(){
+    const raw=inp.value.trim(), v=+raw;
+    const bad=raw===''||isNaN(v)||v<0||!Number.isInteger(v);
+    const dec=!bad&&v<orig, same=!bad&&v===orig, below=!bad&&v<res;
+    sel.style.display=dec?'block':'none';
+    sel.classList.toggle('need',below);
+    hint.textContent=bad?'Enter a whole number of 0 or more'
+      :(dec?'Decrease of '+(orig-v)+' — a reason is required'
+           :(same?'Unchanged':'Increase of '+(v-orig)+' — recorded as Miscount'));
+    if(below){
+      const list=RESV_ORDERS[sku]||[];
+      const shown=list.slice(0,MAX_RESV_SHOWN);
+      warn.innerHTML='<span class="wh">Below Reserved ('+res+')</span>'
+        +'Allowed, but '+res+' unit(s) are held by orders that can no longer be filled from stock. '
+        +'Applying comments on each order and notifies #fulfillment-admin-comments.'
+        +(shown.length?'<ul>'+shown.map(o=>'<li>#'+o[0]+' — '+o[1]+'</li>').join('')
+          +(list.length>MAX_RESV_SHOWN?'<li class="more">+'+(list.length-MAX_RESV_SHOWN)+' more</li>':'')+'</ul>':'');
+      warn.style.display='block';
+    } else { warn.style.display='none'; }
+    ok.disabled=bad||same||(dec&&!sel.value);
+  }
+  inp.addEventListener('input',refresh);
+  sel.addEventListener('change',refresh);
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!ok.disabled){e.preventDefault();ok.click();}
+    if(e.key==='Escape'){e.preventDefault();closeTotPop();}
+  });
+  pop.querySelector('.tot-no').addEventListener('click',closeTotPop);
+  ok.addEventListener('click',()=>{
+    /* Single-shot. closeTotPop() detaches the editor but this listener survives on the detached
+       button, so a second dispatch would apply again — with data-orig already updated, that wrote
+       a second ADJUST row of delta 0. Exactly one event per apply [G-9]. */
+    if(ok.disabled||pop.dataset.applied) return;
+    const v=+inp.value.trim();
+    if(v<0||isNaN(v)){gtoast('Adjustment rejected','Quantity cannot be negative',true);return;}
+    pop.dataset.applied='1';
+    const reason=v<orig?sel.value:'Miscount';
+    applyAdjust(cell,v,reason,v<res);
+    justApplied=true;
+    closeTotPop();
+  });
+  refresh();
+  inp.focus(); inp.select();
+}
+function applyAdjust(cell,v,reason,below){
+  const orig=+cell.dataset.orig, res=+cell.dataset.res, row=cell.closest('tr');
+  const delta=v-orig;
+  cell.dataset.orig=v;
+  cell.querySelector('.tot-v').textContent=v;
+  const avail=row.querySelectorAll('td')[10];
+  if(avail) avail.textContent=v-res;
+  const cnt=row.querySelector('.qty-in'); if(cnt) cnt.value=v;
+  const chip=cell.querySelector('.tot-saved');
+  chip.style.display='inline';
+  setTimeout(()=>{chip.style.display='none';},1800);
+  addHistoryRow(row.dataset.sku,delta,reason,row);
+  if(below) gtoast('Adjusted below Reserved','Affected orders commented · #fulfillment-admin-comments notified');
+}
+/* Stock History demo table holds the Madecassol example only — only its own edits land there */
+function addHistoryRow(sku,delta,reason,row){
+  if(sku!=='100004819') return;
+  const head=document.getElementById('histHead');
+  const hist=head&&head.closest('table');
+  if(!hist) return;
+  const loc=row.querySelector('.loc-in')?.value||'–';
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td><span class="ty ty-adj">ADJUST</span> <span class="src-note">Manual · '+reason+'</span></td>'
+    +'<td class="num '+(delta<0?'diff-neg':'diff-pos')+'">'+(delta>0?'+':'−')+Math.abs(delta)+'</td>'
+    +'<td><span class="stt stt-conf">CONFIRMED</span></td><td>–</td><td>–</td>'
+    +'<td class="loc-pill">'+loc+'</td><td class="num">–</td><td class="num">just now</td><td>Yongwon</td>';
+  hist.querySelector('tbody').insertBefore(tr,hist.querySelector('tbody').firstElementChild);
+}
+document.addEventListener('click',e=>{
+  /* A click that came from inside an editor is already handled by that editor's own controls.
+     The detached editor still answers .closest('.tot-pop'), which is what keeps justApplied alive
+     until the next click. */
+  const inPop=!!e.target.closest('.tot-pop');
+  const b=inPop?null:e.target.closest('.tot-edit');
+  if(b){
+    /* The editor is anchored below its Total cell, so the ✓ sits over a lower row's ✎. On a
+       double-click the second click therefore lands on that neighbour and used to arm an editor
+       on a different SKU, focused and pre-selected. Only that click can carry detail > 1 here;
+       a deliberate follow-up click carries 1. */
+    if(justApplied&&e.detail>1){justApplied=false;return;}
+    justApplied=false;
+    e.stopPropagation();openTotPop(b);return;
+  }
+  if(!inPop){justApplied=false;closeTotPop();}
+});
 </script>

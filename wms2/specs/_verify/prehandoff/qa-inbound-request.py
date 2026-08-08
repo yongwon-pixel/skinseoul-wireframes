@@ -15,6 +15,17 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
+import pathlib
+
+# Legacy consoles (Windows cp949 / cp1252) otherwise abort the suite mid-run with
+# UnicodeEncodeError on the first non-ASCII character, leaving a partial pass count.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # pragma: no cover - non-reconfigurable stream
+    pass
+
+
 WF_FILE = Path(__file__).resolve().parents[3] / "inbound-request" / "index.html"
 assert WF_FILE.is_file(), f"wireframe not found: {WF_FILE}"
 URL = WF_FILE.as_uri()
@@ -1308,6 +1319,16 @@ def main():
         "errored": errored,
         "passed_ids": passed,
     }
+    # HANDOFF.md §4 documents `python3 qa-<screen>.py [--json out.json]` for all eight
+    # runners. Without this the flag is accepted, nothing is written, and the run still
+    # exits 0 — a pass rate with no artefact behind it.
+    if "--json" in sys.argv:
+        _out = sys.argv[sys.argv.index("--json") + 1]
+        _p = pathlib.Path(_out)
+        _p.parent.mkdir(parents=True, exist_ok=True)
+        with open(_p, "w", encoding="utf-8") as _f:
+            json.dump(out, _f, ensure_ascii=False, indent=1)
+        print("wrote", _p)
     print(json.dumps(out, ensure_ascii=False, indent=2))
     return 0 if not failed and not errored else 1
 

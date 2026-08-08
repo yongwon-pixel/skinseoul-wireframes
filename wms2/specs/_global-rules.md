@@ -1,6 +1,6 @@
 # WMS 2.0 — Global Rules (`_global-rules`)
 
-Version 1.3 · 2026-08-03 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
+Version 1.6 · 2026-08-08 · Applies to all 8 screen specs. Screen specs cite these by ID (`[G-n]`) and describe **page deltas only** — they never restate a rule body.
 
 Status legend: **CONFIRMED** = owner-decided, dated. **[PD-n · OWNER-PENDING]** = provisionally adopted on 2026-08-03 while the owner was unavailable; see `_plans/_provisional-decisions.md` for the question, the provisional answer, and the reversal impact. PD-1 through PD-8, 51, 55, 66, 71, 74, 79 were owner-decided on 2026-08-03 — their register entries carry the ruling. The owner decision round is fully closed; remaining `[PD-n]` tags are register-adopted provisional defaults.
 
@@ -42,6 +42,7 @@ Carrier labels themselves are always **each carrier's existing default output, p
   - The value is **derived, and it moves** as stock is consumed. That is correct for a cell describing current stock.
   - **It must be snapshotted at the moment it attaches to an order line, never recomputed.** An order filled from existing inventory stores the route resolved at that instant (`view-orders.md`, "Existing inventory" line rendering); recomputing later answers a different question and makes a shipped order untraceable.
   - **Stock with no inbound receipt carries no route** — stock-audit increases, JIT residual stock (`ready-to-outbound.md` `[BR-7]`: it arrives order-side through no inbound request at all), and any other unattributable quantity. The cell renders the unknown marker instead of inheriting a neighbouring receipt's route. Guessing manufactures a false provenance that is later read as fact.
+  - **A manual stock increase is one of those quantities — this is application of the rule above, not a new decision.** The inline `Total` edit on `stock-status.md` restates a number; it creates no inbound receipt, so the increase cannot be attributed to one and takes the **same unknown marker** already used for stock-audit increases, customer returns and JIT residue. A manual **decrease** is ordinary consumption and walks receipts **oldest-first** like any other. No new route, no new marker, no exception to the FIFO attribution above.
 - **Whether an *order* is JIT — any line. CONFIRMED 2026-08-04 (owner, `ready-to-outbound.md` OQ-3).** An order counts as JIT when **at least one** of its lines is JIT-sourced. The badge, tint, view tab and sort are operational signals meaning "this order is waiting on a purchase that has not happened yet", and a single unsourced line blocks the whole order from shipping — an all-lines rule would hide mixed orders that are equally blocked. Accepted consequence: the JIT tab is a picking/blocking queue, not an accounting segment, and it lists mixed orders.
 
 ## [G-6] Product naming
@@ -120,7 +121,7 @@ A rendered time that omits its zone is KST by definition — never browser-local
 ---
 
 ## Cross-page event names (canonical — byte-identical wherever used)
-`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result`.
+`comment.posted` · `comment.mention_notified` · `comment.starred` / `comment.unstarred` · `comment.read` / `comment.mark_all_read` · `comment.auto_posted` (`source=system`) · `product.barcode_registered` · `order.status_changed` · `order.outbounded` · `print.job_result` · `stock.manual_adjusted`.
 Other events use lowercase `entity.action` semantic names. Literal API/endpoint naming is a developer decision.
 
 ## Slack routing (all confirmed 2026-08-03 unless noted)
@@ -132,6 +133,7 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 | Comment @mention (any screen) | `#fulfillment-admin-comments` (`C0BMGEWM5QA`) | entity no., text, time, author, @mentioned user, deep link |
 | Expected-qty edit (auto-comment) | `#fulfillment-admin-comments` + @requester | old→new qty, reason, editor |
 | Unrecognized match confirmed (auto-comment) | `#fulfillment-admin-comments` + @registrant | tracking no., matched product line, resolver |
+| Manual stock adjustment taking `Total` below `Reserved` (auto-comment) | `#fulfillment-admin-comments` + an auto-comment on **each** affected order | SKU, before → after, reason, actor, affected orders |
 
 **Failed-dispatch retry queue** — a failed Slack dispatch never blocks or rolls back the primary action; the failure is queued in a background retry queue and re-sent automatically with exponential backoff. Every dispatch result is persisted [G-8]. An item still undelivered after N retries (N = developer decision) is flagged in the admin notification log. No dedicated queue screen in v1. **CONFIRMED 2026-08-03 (owner, PD-4).**
 
@@ -147,6 +149,7 @@ Other events use lowercase `entity.action` semantic names. Literal API/endpoint 
 ## Change history
 | Version | Date | Changes |
 |---|---|---|
+| 1.6 | 2026-08-08 | **Manual stock adjustment (`stock-status.md`).** Cross-page event list gains **`stock.manual_adjusted`** — this spelling is the contract; the page spec cites it, it does not re-coin it. `[G-5]` gains one clause **applying** the existing unknown-marker rule: a manual increase creates no inbound receipt, so it cannot be attributed to one and takes the same marker as audit increases, customer returns and JIT residue, while a manual decrease consumes receipts oldest-first. Slack routing gains the below-`Reserved` row (`#fulfillment-admin-comments` plus an auto-comment on each affected order). Nothing else was added: `[G-2]`/`CP-9`, `[G-8]`, `[G-9]`, `[G-15]` and `[G-16]` already govern this change and are cited from the page spec — restating them here would fork them. |
 | 1.2 | 2026-08-03 | **[G-7] publishes the seven canonical hub strings** (HUB-1…HUB-7) as byte-exact cross-page contract, closing cross-page defect M3a D7. All eight wireframes and all eight spec QA suites were moved to these values in the same commit. HUB-7 (search placeholder) is one beyond the six the register enumerated — same component, same defect class, unambiguous 4/5 majority. |
 | 1.1 | 2026-08-03 | Owner decisions applied: PD-1→[G-15], PD-2→[G-3a], PD-3→[G-7], PD-5→[G-2], PD-7→[G-9], PD-8→[G-10] now **CONFIRMED**; tags removed. |
 | 1.1 | 2026-08-03 | [G-13] amended per **PD-51**: v1 renders "sample set" only on internal invoices and picking labels — no sample type/quantity breakdown until sample types exist. |

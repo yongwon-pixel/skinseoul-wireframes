@@ -1,8 +1,34 @@
 #!/usr/bin/env python3
 """
-Pre-handoff QA — wms2/specs/stock-status.md §8, all 75 [WF]-tier scenarios.
+Pre-handoff QA — wms2/specs/stock-status.md §8, all 90 [WF]-tier scenarios.
 
 Executed against the local wireframe file.
+
+Manual stock adjustment 2026-08-08 ([L-19] / [L-20], owner decision of the same date). The
+screen gained a `✎` on every Current Stocks `Total` cell and a source trail inside every
+`ADJUST` Type cell, so this runner gained a QA-ADJ block of fifteen scenarios (QA-ADJ-01 –
+QA-ADJ-15) and three rows were rewritten where the screen changed under them:
+  * QA-RES-06 — the [L-M4] note gained the `Release` source sentence; the expected string was
+    extended, and the new sentence is additionally asserted on its own so a regression names it.
+  * QA-HIS-05 — the ADJUST `Type` cell now holds a second child, so the per-row type is read off
+    `span.ty` instead of the whole cell, `span.src-note` is asserted separately, and every Type
+    cell is checked to hold exactly one badge.
+  * QA-HIS-18 — the ADJUST row is resolved through `span.ty-adj`.closest('tr') instead of by
+    cell text, plus the `span.src-note` census the spec assigns to this row.
+None of the three was loosened: each was re-anchored on the element that carries the contract.
+Every clause added or rewritten on 2026-08-08 was mutation-tested — 29 single-edit regressions
+injected into a throwaway copy of the wireframe, 29 caught by the intended scenario and no other.
+
+QA-ADJ-16 – QA-ADJ-29 remain [ADMIN] in the spec and are deliberately absent here: they need a
+persisted event, FIFO receipt consumption, auto-comments, a Slack dispatch, a second operator, a
+409, a network fault, a debounce key, a server integer ceiling, the production filter vocabulary
+or a seven-order reservation — none of which the shipped file has. QA-ADJ-27 – QA-ADJ-29
+(authoritative Total/Reserved at apply, server-side re-validation, and the commit boundary when a
+side effect fails) were added by the implementation-lens verification pass and are [ADMIN] for the
+same reason: they assert server behaviour the drawing cannot produce, so the [WF] set stays 90. The one clause of QA-ADJ-06
+that the fixture cannot reach (the `+N more` truncation line, since no shipped SKU reserves
+against more than three orders) is asserted as far as it can be — the cap constant and the
+absence of a truncation line under the cap — and the render itself stays with QA-ADJ-20 [ADMIN].
 
 De-monetisation 2026-08-04 (owner decision: "재고 실사의 손실액은 계산하지 말자. 그냥 −1 +1
 이런 것만 보이게 하자"). The Stock Audit carries no money at all. Removed from the wireframe: the
@@ -23,7 +49,8 @@ QA-GLB-11 is a page-wide currency negative. QA-LOG-09 was rewritten, NOT retired
 (the `Total Loss` amber/red/green scale and the ` · target met` suffix) is gone, but the one colour
 rule that survived — a zero adjustment count renders green, per §3.11 — moved onto the surviving
 `Adjustments` column and is still asserted under that same ID. It is asserted there and nowhere
-else, so a colour regression names one scenario. Executed scenarios stay at 75; no [WF] ID retired.
+else, so a colour regression names one scenario. That round left the executed count at 75 and retired
+no [WF] ID; the QA-ADJ block of 2026-08-08 took it to the 90 this file runs today.
 
 Money that is NOT audit loss is out of scope and untouched: Inbound Request `Unit Cost` /
 `JIT Price` (procurement cost of record) and Order Detail order totals (WooCommerce commerce data)
@@ -55,6 +82,15 @@ import traceback
 from playwright.sync_api import sync_playwright
 
 import pathlib
+
+# Legacy consoles (Windows cp949 / cp1252) otherwise abort the suite mid-run with
+# UnicodeEncodeError on the first non-ASCII character, leaving a partial pass count.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # pragma: no cover - non-reconfigurable stream
+    pass
+
 # 레포 상대경로 — 절대경로를 박으면 클론한 사람 기계에서 전부 미기동된다.
 TARGET = (pathlib.Path(__file__).resolve().parents[3] / "stock-status" / "index.html").as_uri()
 
@@ -1016,8 +1052,16 @@ def res06(page):
     r = page.evaluate("""() => ({
       note: QA.t(document.querySelector('#m-resrelease .note')),
       foot: [...document.querySelectorAll('#m-resrelease .foot button')].map(b=>QA.t(b))})""")
+    # Rewritten 2026-08-08 ([L-20], spec §8 QA-RES-06): the note gained a third sentence naming
+    # the `Release` source, so that the ADJUST row this path writes is distinguishable from the
+    # one [L-19] writes. The trailing `[19]` is a legend reference — wireframe chrome that must
+    # not ship — and its absence in production is QA-ADJ-25's job, not this row's.
+    RELEASE_SENTENCE = ('A "No" choice additionally records ADJUST with source Release '
+                        "— distinct from a Manual adjustment [19].")
     exp = ('On release, Reserved 8 → 5; choosing "Yes" brings Available 34 → 37. '
-           "The action is recorded in Stock History as a RESERVE release event.")
+           "The action is recorded in Stock History as a RESERVE release event. "
+           + RELEASE_SENTENCE)
+    check(RELEASE_SENTENCE in r["note"], "note states the Release source sentence", r["note"])
     check(r["note"] == exp, "note exactly", r["note"])
     check(r["foot"] == ["Cancel", "Confirm"], "footer exactly two buttons Cancel / Confirm", r["foot"])
 
@@ -1080,14 +1124,30 @@ HIS_ROWS = [("INBOUND", "+6", "PENDING"), ("OUTBOUND", "−2", "CONFIRMED"),
 @scenario("QA-HIS-05")
 def his05(page):
     open_search_pane(page)
+    # Rewritten 2026-08-08 ([L-20], spec §8 QA-HIS-05). The `Type` cell of the ADJUST row now
+    # holds a second child, `span.src-note`, so the old whole-cell equality failed by
+    # construction. The row census is re-anchored on `span.ty` — the badge itself — which keeps
+    # it strict: a badge whose label, or whose presence, regresses still fails, and a row that
+    # loses its badge yields '' and fails too. The source trail is asserted separately below so
+    # that losing it names this scenario rather than silently passing.
     r = page.evaluate("""() => {
       const tbl = document.querySelector('#p-search .tbl');
+      const rows = [...tbl.querySelectorAll('tbody tr')];
+      const badge = tbl.querySelector('tbody span.ty-adj');
+      const adjCell = badge ? badge.closest('td') : null;
       return {head: [...tbl.querySelectorAll('thead th')].map(t=>QA.t(t)),
-              rows: [...tbl.querySelectorAll('tbody tr')].map(row=>[QA.t(row.cells[0]), QA.t(row.cells[1]), QA.t(row.cells[2])])};}""")
+              rows: rows.map(row=>[QA.t(row.cells[0].querySelector('span.ty')),
+                                   QA.t(row.cells[1]), QA.t(row.cells[2])]),
+              nBadge: rows.map(row=>row.cells[0].querySelectorAll('span.ty').length),
+              adjSrc: adjCell && adjCell.querySelector('span.src-note')
+                        ? QA.t(adjCell.querySelector('span.src-note')) : null};}""")
     check(r["head"] == ["Type", "Quantity", "Status", "Tracking No", "Carrier", "Location", "Order ID", "Created At", "Auditor"],
-          "events table header exact", r["head"])
+          "events table header exact — nine columns, no Reason and no Source column", r["head"])
+    check(all(n == 1 for n in r["nBadge"]), "every Type cell holds exactly one span.ty", r["nBadge"])
     got = [tuple(x) for x in r["rows"]]
-    check(got == HIS_ROWS, "six body rows in order " + str(HIS_ROWS), got)
+    check(got == HIS_ROWS, "six body rows in order (type read off span.ty) " + str(HIS_ROWS), got)
+    check(r["adjSrc"] == "Audit #2026-07",
+          "the ADJUST row's Type cell carries span.src-note reading 'Audit #2026-07'", r["adjSrc"])
 
 
 @scenario("QA-HIS-06")
@@ -1145,19 +1205,35 @@ def his15(page):
 @scenario("QA-HIS-18")
 def his18(page):
     open_search_pane(page)
+    # Rewritten 2026-08-08 ([L-20], spec §8 QA-HIS-18). The ADJUST row is now resolved through
+    # `span.ty-adj`.closest('tr'); the old text match on the whole `Type` cell stopped resolving
+    # the moment the cell gained `span.src-note`. Anchoring on the badge class is not a
+    # weakening — a row that loses the badge, or a badge that lands on the wrong row, leaves
+    # `adj` null and every clause below fails.
     r = page.evaluate("""() => {
-      const rows = [...document.querySelectorAll('#p-search .tbl tbody tr')];
+      const tbl = document.querySelector('#p-search .tbl');
+      const rows = [...tbl.querySelectorAll('tbody tr')];
       const census = {};
       rows.forEach(row=>{const b=row.cells[0].querySelector('.ty');
-        const cls=[...b.classList].find(c=>c.startsWith('ty-'));
+        const cls=b ? [...b.classList].find(c=>c.startsWith('ty-')) : 'MISSING';
         census[QA.t(b)+'/'+cls]=(census[QA.t(b)+'/'+cls]||0)+1;});
-      const adj = rows.find(row=>QA.t(row.cells[0])==='ADJUST');
-      return {census, adjQtyClass: adj ? [...adj.cells[1].classList] : null,
-              adjQtyInner: adj ? !!adj.cells[1].querySelector('.diff-neg') : null};}""")
+      const badge = tbl.querySelector('tbody span.ty-adj');
+      const adj = badge ? badge.closest('tr') : null;
+      const srcs = [...tbl.querySelectorAll('tbody span.src-note')];
+      return {census,
+              adjQty: adj ? QA.t(adj.cells[1]) : null,
+              adjQtyClass: adj ? [...adj.cells[1].classList] : null,
+              adjQtyInner: adj ? !!adj.cells[1].querySelector('.diff-neg') : null,
+              nSrc: srcs.length, srcTxt: srcs.map(s=>QA.t(s)),
+              srcInAdjCell: !!adj && srcs.length === 1 && srcs[0].closest('td') === adj.cells[0]};}""")
     check(r["census"] == {"INBOUND/ty-in": 3, "OUTBOUND/ty-out": 1, "RESERVE/ty-res": 1, "ADJUST/ty-adj": 1},
           "badge census INBOUND×3(ty-in) OUTBOUND×1 RESERVE×1 ADJUST×1", r["census"])
+    check(r["adjQty"] == "−1", "the span.ty-adj row is the −1 row", r["adjQty"])
     check("diff-neg" in (r["adjQtyClass"] or []) or r["adjQtyInner"],
           "ADJUST −1 quantity carries diff-neg class", r)
+    check(r["nSrc"] == 1 and r["srcTxt"] == ["Audit #2026-07"] and r["srcInAdjCell"],
+          "exactly one span.src-note in the table, inside the ADJUST Type cell, "
+          "reading 'Audit #2026-07'", r)
 
 
 # ---------------------------------------------------------------- QA-FRM -----
@@ -1475,6 +1551,431 @@ def glb13(page):
     check(r["nTh"] == 11 and r["hasAvail"], "all eleven visible th incl. Available", r)
 
 
+# ---------------------------------------------------------------- QA-ADJ -----
+# [L-19] manual stock adjustment + [L-20] ADJUST source trail, spec §3.22 / §3.23, added
+# 2026-08-08. Fifteen [WF] rows here (QA-ADJ-01 – QA-ADJ-15).
+#
+# QA-ADJ-16 – QA-ADJ-29 stay [ADMIN] in stock-status.md §8 and are deliberately NOT written
+# here: each needs something the shipped file does not contain — a persisted event and its
+# actor/timestamp (16), FIFO receipt consumption (17), auto-comments and a Slack dispatch (18),
+# two builds' controls in one assertion (19), a seven-order reservation (20), a second operator
+# and a 409 (21), a network fault (22), a debounce/idempotency key (23), a server-side integer
+# ceiling (24), the production admin's own filter and column set (25), a null location record
+# (26), a server that owns Total and Reserved at apply (27), requests that bypass the editor
+# (28), and a transaction boundary with failing side effects (29). Faking any of them in a
+# wireframe runner would produce a green that proves nothing.
+#
+# Every row below assumes audit mode is OFF — the affordance does not exist while it is on
+# (QA-ADJ-14) — and the §8.0 preflight, including norm().
+
+ADJ_SKU = "100004819"        # Madecassol — Total 42, Reserved 8, three holding orders
+ADJ_SKU2 = "100031877"       # Beauty of Joseon Glow Serum — Total 88, Reserved 6
+ADJ_ROW = '#p-current tbody tr[data-sku="%s"]'
+ADJ_REASONS = [("", "Select a reason…"),
+               ("Damaged", "Damaged — unsellable through breakage"),
+               ("Expired", "Expired — past shelf life or degraded"),
+               ("Lost", "Lost — inbound record trusted, goods gone"),
+               ("Miscount", "Miscount — the book figure was wrong")]
+# Census of the shipped below-Reserved sentence. It names the reserved total (8) where the
+# contract is the shortfall (8 − 5 = 3) — `[INV-WFX-3 · proposed]`. Asserted here as a drawing
+# of what ships; the contract is asserted at [ADMIN] tier by QA-ADJ-18.
+ADJ_WARN_BODY = ("Allowed, but 8 unit(s) are held by orders that can no longer be filled from "
+                 "stock. Applying comments on each order and notifies #fulfillment-admin-comments.")
+
+
+def open_current_pane(page):
+    go_pane(page, PANE_WF[0])
+
+
+def open_adjust(page, sku=ADJ_SKU):
+    page.click((ADJ_ROW % sku) + " .tot-edit")
+
+
+def type_qty(page, value):
+    """Enter a quantity through the editor's own 'input' listener."""
+    page.fill(".tot-pop .tot-in", value)
+
+
+def pop_state(page):
+    """Everything the open editor asserts on. `open: False` when no editor exists."""
+    return page.evaluate("""() => {
+      const pop = document.querySelector('.tot-pop');
+      if (!pop) return {open: false, n: document.querySelectorAll('.tot-pop').length};
+      const sel = pop.querySelector('.tot-rsn'), warn = pop.querySelector('.tot-warn');
+      return {open: true, n: document.querySelectorAll('.tot-pop').length,
+        hint: QA.t(pop.querySelector('.tot-hint')),
+        okDisabled: pop.querySelector('.tot-ok').disabled,
+        selVis: QA.vis(sel), selNeed: sel.classList.contains('need'),
+        warnVis: QA.vis(warn),
+        warnHead: QA.t(warn.querySelector('.wh')),
+        warnTxt: QA.t(warn),
+        warnItems: [...warn.querySelectorAll('li:not(.more)')].map(li=>QA.t(li)),
+        warnMore: [...warn.querySelectorAll('li.more')].map(li=>QA.t(li))};}""")
+
+
+def row_state(page, sku=ADJ_SKU):
+    return page.evaluate("""sku => {
+      const row = document.querySelector('#p-current tbody tr[data-sku="'+sku+'"]');
+      const cell = row.querySelector('td.tot-cell');
+      const cnt = row.querySelector('input.qty-in');
+      return {tot: QA.t(cell.querySelector('span.tot-v')),
+              orig: cell.dataset.orig, res: cell.dataset.res,
+              avail: QA.t(row.querySelectorAll('td')[10]),
+              countedLive: cnt ? cnt.value : null,
+              countedAttr: cnt ? cnt.getAttribute('value') : null,
+              chipVis: QA.vis(cell.querySelector('span.tot-saved')),
+              chipTxt: QA.t(cell.querySelector('span.tot-saved')),
+              toastVis: QA.vis(document.getElementById('gtoast')),
+              nPop: document.querySelectorAll('.tot-pop').length};}""", sku)
+
+
+@scenario("QA-ADJ-01")
+def adj01(page):
+    r = page.evaluate("""() => {
+      const btns = [...document.querySelectorAll('#p-current tbody .tot-edit')];
+      const rows = [...document.querySelectorAll('#p-current tbody tr')]
+        .filter(t => !t.classList.contains('audrow'));
+      const cell = document.querySelector('#p-current tbody tr[data-sku="100004819"] td.tot-cell');
+      return {n: btns.length, nRows: rows.length,
+        onAudrow: document.querySelectorAll('#p-current tbody tr.audrow .tot-edit').length,
+        vis: btns.filter(QA.vis).length,
+        txt: [...new Set(btns.map(b => QA.t(b)))],
+        title: [...new Set(btns.map(b => b.title))],
+        aria: [...new Set(btns.map(b => b.getAttribute('aria-label')))],
+        inCell: btns.every(b => {
+          const c = b.closest('td.tot-cell');
+          return !!c && !!c.querySelector('span.tot-v');}),
+        totMatchesOrig: rows.every(t => {
+          const c = t.querySelector('td.tot-cell');
+          return !!c && QA.t(c.querySelector('span.tot-v')) === c.dataset.orig;}),
+        skus: rows.filter(t => t.dataset.sku).length,
+        orig: cell.dataset.orig, res: cell.dataset.res};}""")
+    check(r["n"] == 11 and r["nRows"] == 11 and r["onAudrow"] == 0,
+          "exactly 11 .tot-edit — one per data row, none on .audrow", r)
+    check(r["vis"] == 11, "all 11 rendered with audit mode off", r["vis"])
+    check(r["txt"] == ["✎"], "every button's innerText is exactly '✎'", r["txt"])
+    check(r["title"] == ["Adjust stock quantity"] and r["aria"] == ["Adjust stock quantity"],
+          "title and aria-label both exactly 'Adjust stock quantity'", r)
+    check(r["inCell"], "every button sits in a td.tot-cell that also holds span.tot-v", r["inCell"])
+    check(r["totMatchesOrig"], "every span.tot-v renders its cell's data-orig", r["totMatchesOrig"])
+    check(r["skus"] == 11, "every data row carries data-sku", r["skus"])
+    check((r["orig"], r["res"]) == ("42", "8"),
+          "SKU 100004819 td.tot-cell data-orig='42' data-res='8'", r)
+
+
+@scenario("QA-ADJ-02")
+def adj02(page):
+    open_adjust(page)
+    r = page.evaluate("""() => {
+      const pop = document.querySelector('.tot-pop');
+      const inp = pop.querySelector('input.tot-in');
+      return {n: document.querySelectorAll('.tot-pop').length,
+        inRowCell: pop.closest('td.tot-cell') ===
+          document.querySelector('#p-current tbody tr[data-sku="100004819"] td.tot-cell'),
+        type: inp.type, min: inp.getAttribute('min'), val: inp.value,
+        okTxt: QA.t(pop.querySelector('button.tot-ok')),
+        okDisabled: pop.querySelector('button.tot-ok').disabled,
+        noTxt: QA.t(pop.querySelector('button.tot-no')),
+        selVis: QA.vis(pop.querySelector('select.tot-rsn')),
+        hint: QA.t(pop.querySelector('div.tot-hint')),
+        warnVis: QA.vis(pop.querySelector('div.tot-warn')),
+        activeIsInput: document.activeElement === inp};}""")
+    check(r["n"] == 1 and r["inRowCell"],
+          "exactly one div.tot-pop, inside that row's td.tot-cell", r)
+    check((r["type"], r["min"], r["val"]) == ("number", "0", "42"),
+          "input.tot-in type=number min=0 live value 42", r)
+    check(r["okTxt"] == "✓" and r["okDisabled"], "button.tot-ok reads '✓' and is disabled", r)
+    check(r["noTxt"] == "✗", "button.tot-no reads '✗'", r["noTxt"])
+    check(not r["selVis"], "select.tot-rsn is not visible", r["selVis"])
+    check(r["hint"] == "Unchanged", "div.tot-hint reads exactly 'Unchanged'", r["hint"])
+    check(not r["warnVis"], "div.tot-warn is not visible", r["warnVis"])
+    check(r["activeIsInput"], "document.activeElement is the input.tot-in", r["activeIsInput"])
+
+
+@scenario("QA-ADJ-03")
+def adj03(page):
+    open_adjust(page)
+    type_qty(page, "45")
+    r = pop_state(page)
+    check(not r["selVis"], "select.tot-rsn stays not visible on an increase", r["selVis"])
+    check(not r["warnVis"], "div.tot-warn stays not visible", r["warnVis"])
+    check(not r["okDisabled"], "button.tot-ok becomes enabled with no reason picked", r["okDisabled"])
+    check(r["hint"] == "Increase of 3 — recorded as Miscount",
+          "hint exactly 'Increase of 3 — recorded as Miscount'", r["hint"])
+
+
+@scenario("QA-ADJ-04")
+def adj04(page):
+    open_adjust(page)
+    type_qty(page, "20")
+    before = pop_state(page)
+    check(before["selVis"], "select.tot-rsn becomes visible on a decrease", before["selVis"])
+    check(before["okDisabled"], "button.tot-ok is disabled before a reason is picked", before)
+    check(before["hint"] == "Decrease of 22 — a reason is required",
+          "hint exactly 'Decrease of 22 — a reason is required'", before["hint"])
+    page.select_option(".tot-pop .tot-rsn", "Damaged")
+    after = pop_state(page)
+    check(not after["okDisabled"], "button.tot-ok becomes enabled once Damaged is picked", after)
+    check(after["hint"] == before["hint"], "hint unchanged by picking a reason", after["hint"])
+
+
+@scenario("QA-ADJ-05")
+def adj05(page):
+    # NEGATIVE — the reason list is closed. No Other, no Wrong SKU, no free text anywhere.
+    open_adjust(page)
+    type_qty(page, "20")
+    r = page.evaluate("""() => {
+      const pop = document.querySelector('.tot-pop');
+      return {opts: [...pop.querySelectorAll('select.tot-rsn option')]
+                      .map(o => [o.value, QA.norm(o.textContent)]),
+        nTextarea: pop.querySelectorAll('textarea').length,
+        inputs: [...pop.querySelectorAll('input')].map(i => i.className),
+        nContentEditable: pop.querySelectorAll('[contenteditable]').length};}""")
+    got = [tuple(x) for x in r["opts"]]
+    check(got == ADJ_REASONS, "exactly five options " + str(ADJ_REASONS), got)
+    bad = [o for o in got if re.search(r"other|wrong sku", o[0] + " " + o[1], re.I)]
+    check(bad == [], "no option matches /other/i or /wrong sku/i", bad)
+    check(r["nTextarea"] == 0 and r["inputs"] == ["tot-in"] and r["nContentEditable"] == 0,
+          "div.tot-pop holds no textarea, no contenteditable and no input but input.tot-in", r)
+
+
+@scenario("QA-ADJ-06")
+def adj06(page):
+    open_adjust(page)
+    type_qty(page, "5")
+    r = pop_state(page)
+    check(r["warnVis"], "div.tot-warn becomes visible below Reserved", r["warnVis"])
+    check(r["warnHead"] == "Below Reserved (8)",
+          "first line reads exactly 'Below Reserved (8)'", r["warnHead"])
+    check(r["warnItems"] == ["#407812 — 2", "#413650 — 3", "#409112 — 3"],
+          "lists exactly the three holding orders", r["warnItems"])
+    check(r["selNeed"], "select.tot-rsn gains the class 'need'", r["selNeed"])
+    # The five-line cap. No shipped SKU reserves against more than three orders, so the
+    # `+N more` line cannot be made to render against this file without inventing fixture data —
+    # that render, and the proof that truncation never truncates the written data, is QA-ADJ-20
+    # at [ADMIN] tier. What IS checkable here: the cap constant the drawing ships, and that a
+    # three-order SKU is listed whole with no truncation line.
+    cap = page.evaluate("() => (typeof MAX_RESV_SHOWN === 'number' ? MAX_RESV_SHOWN : null)")
+    check(cap == 5, "the shipped display cap MAX_RESV_SHOWN is 5", cap)
+    check(r["warnMore"] == [],
+          "three holders are under the cap, so no '+N more' line renders", r["warnMore"])
+    # Census clause, not a contract: the shipped sentence names the reserved total where the
+    # contract is the shortfall (8 − 5 = 3). `[INV-WFX-3 · proposed]`; contract = QA-ADJ-18.
+    check(ADJ_WARN_BODY in r["warnTxt"],
+          "shipped body sentence (census, [INV-WFX-3]) " + ADJ_WARN_BODY, r["warnTxt"])
+    check(r["okDisabled"], "apply still needs the reason", r["okDisabled"])
+    page.select_option(".tot-pop .tot-rsn", "Damaged")
+    after = pop_state(page)
+    check(not after["okDisabled"],
+          "with a reason picked the shortage WARNS, it does not block", after["okDisabled"])
+
+
+@scenario("QA-ADJ-07")
+def adj07(page):
+    # NEGATIVE — non-integer, negative and empty are all refused identically.
+    open_adjust(page)
+    base = row_state(page)
+    for v in ["4.5", "-3", ""]:
+        type_qty(page, v)
+        r = pop_state(page)
+        check(r["okDisabled"], "button.tot-ok disabled for input " + repr(v), r)
+        check(r["hint"] == "Enter a whole number of 0 or more",
+              "hint exactly 'Enter a whole number of 0 or more' for input " + repr(v), r["hint"])
+        check(not r["warnVis"], "div.tot-warn not visible for input " + repr(v), r["warnVis"])
+        now = row_state(page)
+        check((now["tot"], now["orig"], now["avail"]) == (base["tot"], base["orig"], base["avail"]),
+              "row unchanged for input " + repr(v), {"before": base, "after": now})
+
+
+@scenario("QA-ADJ-08")
+def adj08(page):
+    # NEGATIVE ([NE-14]) — an identical value can never be applied, so it can never emit.
+    open_adjust(page)
+    left = pop_state(page)
+    check(left["okDisabled"] and left["hint"] == "Unchanged",
+          "value left at Total: disabled + 'Unchanged'", left)
+    type_qty(page, "50")
+    moved = pop_state(page)
+    check(not moved["okDisabled"], "sanity: a real change enables apply", moved)
+    type_qty(page, "42")
+    back = pop_state(page)
+    check(back["okDisabled"] and back["hint"] == "Unchanged",
+          "value typed back to Total: disabled + 'Unchanged'", back)
+
+
+@scenario("QA-ADJ-09")
+def adj09(page):
+    # BOUNDARY — zero is an ordinary decrease, not a special case.
+    open_adjust(page)
+    type_qty(page, "0")
+    r = pop_state(page)
+    check(r["hint"] == "Decrease of 42 — a reason is required",
+          "hint exactly 'Decrease of 42 — a reason is required'", r["hint"])
+    check(r["selVis"], "select.tot-rsn visible", r["selVis"])
+    check(r["okDisabled"], "button.tot-ok disabled until a reason is picked", r["okDisabled"])
+    check(r["warnVis"] and r["warnHead"] == "Below Reserved (8)"
+          and r["warnItems"] == ["#407812 — 2", "#413650 — 3", "#409112 — 3"],
+          "0 < Reserved 8 so the QA-ADJ-06 warning block also renders", r)
+    page.select_option(".tot-pop .tot-rsn", "Damaged")
+    check(not pop_state(page)["okDisabled"], "zero applies once a reason is picked", pop_state(page))
+
+
+@scenario("QA-ADJ-10")
+def adj10(page):
+    page.evaluate("window.__qa_alive = 1")
+    open_adjust(page)
+    type_qty(page, "45")
+    page.press(".tot-pop .tot-in", "Enter")
+    r = row_state(page)
+    alive = page.evaluate("window.__qa_alive || 0")
+    check(r["nPop"] == 0, "Enter applies and the editor closes", r["nPop"])
+    check(r["tot"] == "45", "span.tot-v reads 45", r["tot"])
+    check(r["avail"] == "37", "Available recomputed to 37 (45 − Reserved 8)", r["avail"])
+    check(r["chipVis"] and r["chipTxt"] == "✓ Saved",
+          "the in-place span.tot-saved chip shows '✓ Saved'", r)
+    # CP-9 / [G-2]: success confirms in place. A success toast here is a failure, not a pass.
+    check(not r["toastVis"], "#gtoast is NOT visible — success is the chip, never a toast", r)
+    # The live DOM property, not the HTML attribute: the attribute still reads 42 by design.
+    check(r["countedLive"] == "45" and r["countedAttr"] == "42",
+          "audit Counted Qty live value synced to 45 (attribute untouched)", r)
+    check(r["orig"] == "45", "td.tot-cell data-orig is now 45", r["orig"])
+    check(alive == 1, "document not re-navigated", alive)
+
+
+@scenario("QA-ADJ-11")
+def adj11(page):
+    # NEGATIVE ([NE-14], [E-113]) — every dismissal leaves the row exactly as it was.
+    base = row_state(page)
+
+    def dismissed(how):
+        r = row_state(page)
+        check(r["nPop"] == 0, "editor closed by " + how, r["nPop"])
+        check((r["tot"], r["avail"], r["orig"]) == (base["tot"], base["avail"], base["orig"]),
+              "row unchanged after " + how, {"before": base, "after": r})
+
+    open_adjust(page)
+    type_qty(page, "10")
+    page.click(".tot-pop .tot-no")
+    dismissed("clicking button.tot-no")
+
+    open_adjust(page)
+    type_qty(page, "10")
+    page.press(".tot-pop .tot-in", "Escape")
+    dismissed("pressing Escape in input.tot-in")
+
+    open_adjust(page)
+    type_qty(page, "10")
+    page.evaluate("document.querySelector('.ptitle h2').click()")
+    dismissed("clicking outside the editor (.ptitle h2)")
+
+    open_adjust(page)
+    open_adjust(page, ADJ_SKU2)
+    r = page.evaluate("""() => ({
+      n: document.querySelectorAll('.tot-pop').length,
+      onSecond: !!document.querySelector('#p-current tbody tr[data-sku="100031877"] .tot-pop')})""")
+    check(r["n"] == 1 and r["onSecond"],
+          "opening a second row's ✎ leaves exactly one div.tot-pop, on that second row", r)
+
+
+@scenario("QA-ADJ-12")
+def adj12(page):
+    open_adjust(page)
+    type_qty(page, "3")
+    page.select_option(".tot-pop .tot-rsn", "Lost")
+    page.click(".tot-pop .tot-ok")
+    r = page.evaluate("""() => {
+      const t = document.getElementById('gtoast');
+      return {vis: QA.vis(t), bad: t.classList.contains('bad'), txt: QA.t(t),
+        tot: QA.t(document.querySelector(
+          '#p-current tbody tr[data-sku="100004819"] span.tot-v'))};}""")
+    check(r["vis"], "#gtoast becomes visible", r["vis"])
+    check(not r["bad"], "#gtoast is NOT class 'bad' — a notification, not a failure", r["bad"])
+    check(r["txt"].startswith("Adjusted below Reserved")
+          and "Affected orders commented · #fulfillment-admin-comments notified" in r["txt"],
+          "toast reads 'Adjusted below Reserved' + the notification line", r["txt"])
+    check(r["tot"] == "3", "the apply itself succeeds — span.tot-v reads 3", r["tot"])
+
+
+@scenario("QA-ADJ-13")
+def adj13(page):
+    open_search_pane(page)
+    before = page.evaluate("document.querySelectorAll('#p-search .tbl tbody tr').length")
+    check(before == 6, "fixture starts at six Stock History rows", before)
+    open_current_pane(page)
+    open_adjust(page)
+    type_qty(page, "45")
+    page.press(".tot-pop .tot-in", "Enter")
+    open_search_pane(page)
+    r = page.evaluate("""() => {
+      const tb = document.querySelector('#p-search .tbl tbody');
+      const f = tb.firstElementChild;
+      return {n: tb.children.length,
+        ty: QA.t(f.cells[0].querySelector('span.ty.ty-adj')),
+        src: QA.t(f.cells[0].querySelector('span.src-note')),
+        qty: QA.t(f.cells[1]), qtyCls: [...f.cells[1].classList],
+        stt: QA.t(f.cells[2])};}""")
+    check(r["n"] == before + 1, "the table gains exactly one row", r["n"])
+    check(r["ty"] == "ADJUST", "the new first row's Type cell holds span.ty.ty-adj 'ADJUST'", r["ty"])
+    check(r["src"] == "Manual · Miscount",
+          "and span.src-note 'Manual · Miscount' — an increase is recorded as Miscount", r["src"])
+    check(r["qty"] == "+3" and "diff-pos" in r["qtyCls"],
+          "quantity cell carries the sign of the delta", r)
+    check(r["stt"] == "CONFIRMED", "status badge reads CONFIRMED", r["stt"])
+    # Demo-data scoping, NOT a business rule: the shipped fixture holds the Madecassol SKU only.
+    # In production every SKU's adjustment appends to that SKU's history (QA-ADJ-16).
+    open_current_pane(page)
+    open_adjust(page, ADJ_SKU2)
+    type_qty(page, "90")
+    page.press(".tot-pop .tot-in", "Enter")
+    open_search_pane(page)
+    after = page.evaluate("document.querySelectorAll('#p-search .tbl tbody tr').length")
+    check(after == r["n"], "an adjustment on another SKU leaves the row count unchanged", after)
+
+
+@scenario("QA-ADJ-14")
+def adj14(page):
+    r0 = page.evaluate(
+        "[...document.querySelectorAll('#p-current tbody .tot-edit')].filter(QA.vis).length")
+    check(r0 == 11, "11 visible .tot-edit before the audit", r0)
+    open_adjust(page)
+    check(pop_state(page)["open"], "an editor is open before entering audit mode", pop_state(page))
+    enter_audit(page)
+    on = page.evaluate("""() => ({
+      vis: [...document.querySelectorAll('#p-current tbody .tot-edit')].filter(QA.vis).length,
+      nPop: document.querySelectorAll('.tot-pop').length})""")
+    check(on["vis"] == 0, "no .tot-edit is visible while audit mode is on", on["vis"])
+    check(on["nPop"] == 0, "any open div.tot-pop is gone", on["nPop"])
+    page.click("#toggleAudit")
+    off = page.evaluate(
+        "[...document.querySelectorAll('#p-current tbody .tot-edit')].filter(QA.vis).length")
+    check(off == 11, "all 11 restored on exit", off)
+
+
+@scenario("QA-ADJ-15")
+def adj15(page):
+    enter_audit(page)
+    add_torriden(page)
+    during = page.evaluate("""() => {
+      const tr = document.querySelector('#p-current tbody tr[data-sku="100027733"]');
+      return {isFirst: document.querySelector('#p-current tbody').firstElementChild === tr,
+              vis: QA.vis(tr.querySelector('.tot-edit'))};}""")
+    check(during["isFirst"], "the [L-13] row is inserted first", during["isFirst"])
+    check(not during["vis"],
+          "its .tot-edit is not visible while the session is open", during["vis"])
+    page.evaluate("QA.clickText('#toggleAudit','Exit Stock Audit')")
+    after = page.evaluate("""() => {
+      const tr = document.querySelector('#p-current tbody tr[data-sku="100027733"]');
+      return {vis: QA.vis(tr.querySelector('.tot-edit')),
+              orig: tr.querySelector('td.tot-cell').dataset.orig,
+              nVis: [...document.querySelectorAll('#p-current tbody .tot-edit')]
+                      .filter(QA.vis).length};}""")
+    check(after["vis"], "after Exit Stock Audit the added row carries the affordance", after["vis"])
+    check(after["nVis"] == 12, "12 visible .tot-edit (11 + the addition)", after["nVis"])
+    # Wireframe-only client state: in production nothing is adjustable until [L-M1] Confirm
+    # creates the row ([E-106]). Do not read this as licence to adjust an unconfirmed addition.
+    check(after["orig"] == "0", "the row still carries data-orig='0'", after["orig"])
+
+
 # ------------------------------------------------------------------- run -----
 
 def main():
@@ -1504,6 +2005,18 @@ def main():
                 page.close()
         browser.close()
     passed = sum(1 for r in results if r["verdict"] == "PASS")
+    # HANDOFF.md §4 documents `python3 qa-<screen>.py [--json out.json]` for all eight
+    # runners. Without this the flag is accepted, nothing is written, and the run still
+    # exits 0 — a pass rate with no artefact behind it.
+    if "--json" in sys.argv:
+        _out = sys.argv[sys.argv.index("--json") + 1]
+        _p = pathlib.Path(_out)
+        _p.parent.mkdir(parents=True, exist_ok=True)
+        with open(_p, "w", encoding="utf-8") as _f:
+            json.dump({"total": len(results), "passed": passed,
+                       "failed": [r for r in results if r["verdict"] != "PASS"],
+                       "all": results}, _f, ensure_ascii=False, indent=1)
+        print("wrote", _p)
     print(json.dumps({"total": len(results), "passed": passed,
                       "failed": [r for r in results if r["verdict"] != "PASS"],
                       "all": results}, ensure_ascii=False, indent=1))

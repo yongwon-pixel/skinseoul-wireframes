@@ -1,0 +1,47 @@
+# Python bytecode caches.
+#
+# These are build artifacts, but they are also a leak vector this repo has already
+# been bitten by: CPython stamps the ABSOLUTE source path of every compiled module
+# into the .pyc, so a committed __pycache__ publishes the author's home directory.
+# This repo is public.
+#
+# The leak scanner cannot defend this by itself: `leak-scan.sh --staged` reads the
+# staged *text* diff, and a binary file produces no `+` lines, so it scans an empty
+# string and passes. Its tree mode skips binaries outright (`grep -Iq .`). Ignoring
+# the files is therefore the only layer that actually holds.
+#
+# The one .pyc that was already tracked despite this rule — git keeps tracking a file
+# once it is in the index — was untracked on 2026-08-09 with:
+#   git rm --cached wms2/specs/_verify/prehandoff/__pycache__/qa-view-orders.cpython-313.pyc
+# Working tree at the time of removal contained the absolute path
+# /Users/<author>/.../prehandoff/qa-view-orders.py, so the removal is a leak fix, not tidying.
+# STILL OPEN: that path is in already-published history and untracking does not rewrite it.
+# Purging it needs the history rewrite that is pending owner approval — a separate decision.
+__pycache__/
+*.pyc
+*.pyo
+
+# Runner output written by `qa-<screen>.py --json <name>`.
+#
+# The eight prehandoff runners write wherever `--json` points, so a verification pass
+# that runs the suite leaves result files in the tree. They are a re-runnable measurement,
+# not a record: the record is the `m1-`/`m2-`/`rv-` reports next to them. Ignoring them
+# keeps `git add -A` from turning one pass's local run into a committed artefact.
+#
+# NOT ignored, deliberately, and do not add them here: the four *cited* snapshots
+# `_verify/qa-stock-status-results.json`, `_verify/qa-closing-results.json` and
+# `_verify/qa-order-management.results.json` are named as "Raw output" by the m2 reports
+# and are tracked evidence.
+#
+# WATCH OUT — those three are also what the frozen `_verify/qa-*.py` runners overwrite
+# UNCONDITIONALLY on every run (e.g. `_verify/qa-stock-status.py` writes its results file
+# with no flag and no guard). Running an m2-round runner in-tree therefore destroys the
+# snapshot its own report cites; it happened on 2026-08-09 and was reverted. Run those
+# from a copy of the repo, never in place.
+qa-*-prehandoff-results.json
+qa-*-results.tmp.json
+
+# Scratch probes. Verification passes write throwaway scripts at the repo root; they are
+# never part of the spec set and must not reach a public commit.
+/_*.py
+/scratch/

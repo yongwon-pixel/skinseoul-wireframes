@@ -30,6 +30,15 @@ import time
 from playwright.sync_api import sync_playwright
 
 import pathlib
+
+# Legacy consoles (Windows cp949 / cp1252) otherwise abort the suite mid-run with
+# UnicodeEncodeError on the first non-ASCII character, leaving a partial pass count.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # pragma: no cover - non-reconfigurable stream
+    pass
+
 # 레포 상대경로 — 절대경로를 박으면 클론한 사람 기계에서 전부 미기동된다.
 URL = (pathlib.Path(__file__).resolve().parents[3] / "view-orders" / "index.html").as_uri()
 

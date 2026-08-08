@@ -24,11 +24,24 @@ Output: verdict table on stdout + JSON to the session scratchpad (not the repo).
 import json, os, pathlib, sys
 from playwright.sync_api import sync_playwright
 
+# Legacy consoles (Windows cp949 / cp1252) otherwise abort the suite mid-run with
+# UnicodeEncodeError on the first non-ASCII character, leaving a partial pass count.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:  # pragma: no cover - non-reconfigurable stream
+    pass
+
+
 HERE = pathlib.Path(__file__).resolve().parent
 URL = "file://" + str((HERE / ".." / ".." / ".." / "closing" / "index.html").resolve())
 OUT_JSON = os.environ.get(
     "QA_CLOSING_OUT",
     str(pathlib.Path(__file__).with_name("qa-closing-prehandoff-results.json")))
+# HANDOFF.md §4 documents `python3 qa-<screen>.py [--json out.json]` for all eight runners,
+# so the flag wins over both the env var and the in-tree default.
+if "--json" in sys.argv:
+    OUT_JSON = sys.argv[sys.argv.index("--json") + 1]
 
 INIT = r"""
 window.__spoken = [];
