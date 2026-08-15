@@ -1,0 +1,965 @@
+<title>WMS 2.0 — Inbound Request Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* the existing admin is light-only, so no dark mode */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-purple-line{background:var(--page);border-color:var(--ss-purple);color:var(--ss-purple)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+/* sourcing route badges — black bold text only, no colors (same convention as View Orders) */
+.tag-smartbuy,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
+/* request status badges — REQUESTED / PARTIAL / INBOUNDED (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02) + CANCELLED terminal (added 2026-08-03, gray — row kept for audit) */
+.tag-requested{background:#FFC107;color:#3D2E00}
+.tag-partial{background:#F76707;color:#fff}
+.tag-inbounded{background:var(--green);color:#fff}
+.tag-cancelled{background:var(--ink-3);color:#fff}
+/* edit-mode banner on the New Request form (Edit action, added 2026-08-03) */
+.editbanner{display:none;margin-top:12px;background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:8px;padding:10px 14px;align-items:center;gap:10px;font-size:13px}
+.editbanner.on{display:flex}
+.editbanner b{color:var(--amber)}
+.route-note{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:0}
+.mut{color:var(--ink-3);font-size:12.5px}
+.vo-link{color:var(--ss-purple);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--ss-purple)}
+
+.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+
+/* ── inbound request form (new) ──────────────── */
+.formcard{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:var(--page);
+  padding:18px 20px;box-shadow:var(--shadow)}
+.formcard .flabel{font-size:13px;font-weight:700;color:var(--ink-2);display:block;margin-bottom:7px}
+.fsec{margin-top:20px}
+.frow{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12px;font-weight:600;color:var(--ink-3)}
+.fld input,.fld select{border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px;
+  font:inherit;font-size:13.5px;background:var(--page);color:var(--ink);outline:none;min-width:0}
+.fld input:focus,.fld select:focus{border-color:var(--blue)}
+.fld.opt input::placeholder{color:var(--ink-3)}
+.fld-inv input{border:1.5px dashed var(--line-strong);background:color-mix(in srgb,var(--canvas) 40%,var(--page))}
+
+/* sourcing route radio cards */
+.routecards{display:flex;gap:12px;flex-wrap:wrap}
+.routecard{flex:1;min-width:210px;border:1.5px solid var(--line-strong);border-radius:10px;
+  padding:13px 15px;cursor:pointer;background:var(--page);display:flex;gap:11px;align-items:flex-start;position:relative}
+.routecard input[type=radio]{margin-top:3px;accent-color:var(--blue)}
+.routecard b{display:block;font-size:14px;color:var(--ink)}
+.routecard small{color:var(--ink-3);font-size:11.5px;display:block;margin-top:2px}
+.routecard.on{border-color:var(--blue);background:var(--blue-soft)}
+.routecard.on.rc-wholesale{border-color:var(--ss-purple);background:var(--ss-purple-50)}
+.routecard.on.rc-partnership{border-color:var(--amber);background:var(--amber-soft)}
+.routecard .rc-badge{position:absolute;top:11px;right:12px}
+
+/* product entry rows (autocomplete) */
+.prodtbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+/* cells locked in by search selection (SKU·Brand·Product Name) — not editable, shown as plain text */
+.prodtbl input[readonly]{border-color:transparent;background:transparent;pointer-events:none;user-select:text;font-weight:600;color:var(--ink)}
+.prodtbl th{background:var(--ink);color:var(--page);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap;font-size:12px}
+.prodtbl td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:middle}
+.prodtbl input{border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font:inherit;font-size:13px;
+  background:var(--page);color:var(--ink);outline:none;width:100%}
+.prodtbl .rm{border:none;background:none;color:var(--red);font-size:15px;cursor:pointer;line-height:1}
+.prefill td{background:color-mix(in srgb,var(--blue-soft) 45%,var(--page))}
+
+/* autocomplete dropdown (same grammar as the View Orders unrecognized modal) */
+.auto{border:1px solid var(--line-strong);border-radius:7px;overflow:hidden;background:var(--page);position:relative;z-index:5}
+.auto input{width:100%;border:none;padding:8px 11px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
+.auto .opt{padding:8px 11px;border-top:1px solid var(--line);font-size:13px;cursor:pointer}
+.auto .opt.sel{background:var(--blue-soft);font-weight:600}
+.auto .opt small{color:var(--ink-3)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;
+  font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:54px;resize:vertical}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.note.purple{background:var(--ss-purple-50);border:1px solid var(--ss-purple-100)}
+.submitrow{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
+
+.pagetabs{display:flex;border-bottom:1px solid var(--line-strong);margin:2px 0 14px}
+.pagetabs button{border:1px solid transparent;background:transparent;color:var(--blue);padding:8px 16px;font-size:13.5px;border-radius:7px 7px 0 0;margin-bottom:-1px;cursor:pointer}
+.pagetabs button.on{border-color:var(--line-strong);border-bottom-color:var(--page);background:var(--page);color:var(--ink);font-weight:600}
+/* filter chips (Request List status filter) */
+.filterchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:99px;
+  padding:5px 13px;font-size:12.5px;font-weight:600}
+.chip.on{background:var(--ink);color:var(--page);border-color:var(--ink)}
+
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast small{opacity:.85;font-weight:400}
+
+/* comment inbox dropdown — same as View Orders */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal .qrow input{flex:1;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 11px;background:var(--page);color:var(--ink)}
+
+/* View Orders link mini mockup (M2) */
+.vomock{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.vomock .vh{background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;font-weight:600}
+.vomock .vr{display:flex;align-items:center;gap:10px;padding:9px 10px;font-size:12.5px;border-top:1px solid var(--line)}
+
+.state{display:none}
+.state.on{display:block}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+.cpanel-ir{background:var(--ss-purple-50);border-top:2px solid var(--ss-purple)}
+.cpanel-ir .c-item{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:flex-start}
+.cpanel-ir .c-item:last-of-type{border-bottom:none}
+.cpanel-ir .who{font-weight:700;white-space:nowrap}
+.cpanel-ir .at{color:var(--blue);font-weight:700}
+.cpanel-ir time{color:var(--ink-3);font-size:11px;margin-left:auto;white-space:nowrap}
+.cpanel-ir .cwrite{display:flex;gap:8px;margin-top:8px}
+.cpanel-ir .cwrite input{flex:1;border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;font-size:12.5px;background:var(--page);color:var(--ink)}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · Inbound Request Wireframe</h1>
+  <span class="hint">v1 — purple numbers = new/changed annotations · Section I</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s1">1 · New Request (Smart Buy)</button>
+    <button class="wf-tab" data-state="s2">2 · New Request (Wholesale / Partnership)</button>
+    <button class="wf-tab" data-state="s3">3 · Request List (Requested/Partial/Inbounded)</button>
+    <button class="wf-tab" data-modal="m-invoice">Modal: Add Tracking No</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 1 : New Request — Smart Buy ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+      <span class="dot" style="top:3px;left:-30px">14</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>202607130002</b> · Dean: "@Yongwon when is the tracking number for this wholesale one coming?"<br><time>11:20</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"<br><time>Yesterday</time></div><button class="star on" title="Saved">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>202607120004</b> · Miranti: "@Yongwon the partnership stock's expected arrival slipped by a day"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">15</span>
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — New Request</p>
+    <div class="anno"><div class="pagetabs">
+      <button class="on">New Request</button>
+      <button data-state-jump="s3">Request List</button>
+    </div><span class="dot" style="top:-11px;left:150px">16</span></div>
+
+    <!-- Edit mode banner (PD-79 resolved 2026-08-03) — shown when a REQUESTED request is opened via ✎ Edit in the Request List -->
+    <div class="editbanner" id="editBanner">
+      <b>Editing request 202607130003</b>
+      <span class="mut">— form prefilled with the request's saved values · saving logs every changed field (old → new) as an auto-comment and notifies the requester on Slack · the Inbound No. never changes</span>
+      <button class="btn btn-line btn-sm" id="editExit" style="margin-left:auto">Exit edit mode</button>
+    </div>
+
+    <div class="formcard anno">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+
+      <!-- Sourcing Route -->
+      <div class="fsec anno" style="margin-top:2px">
+        <span class="dot" style="top:-2px;left:-14px">2</span>
+        <span class="flabel">Sourcing Route <span class="mut" style="font-weight:400">— the single intake gateway for everything entering the warehouse</span></span>
+        <div class="routecards">
+          <label class="routecard on"><input type="radio" name="route" checked>
+            <span><b>Smart Buy</b><small>Stock replenishment · Coupang JIT sourcing (via PH)</small></span>
+            <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
+          <label class="routecard rc-wholesale"><input type="radio" name="route">
+            <span><b>Wholesale</b><small>Bulk wholesale inbound (direct request)</small></span>
+            <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
+          <label class="routecard rc-partnership"><input type="radio" name="route">
+            <span><b>Brand Partnership</b><small>Brand sponsorship · marketing stock (direct request)</small></span>
+            <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
+          <label class="routecard"><input type="radio" name="route">
+            <span><b>Other</b><small>Any other channel — type it in</small>
+            <input class="etc-in" placeholder="Enter channel name" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
+            <span class="tag rc-badge" style="background:var(--ink);color:#fff">OTHER</span></label>
+        </div>
+      </div>
+
+
+      <!-- Product entry — rows added via a single unified search box -->
+      <div class="fsec anno">
+        <span class="dot" style="top:-2px;left:-14px">4</span>
+        <span class="flabel">Inbound Products <span class="mut" style="font-weight:400">— one search box is all you need: type any of SKU No. · brand · product name you know → pick a result and the row fills in automatically</span></span>
+        <div class="auto anno" style="max-width:720px;margin-top:8px">
+          <input value="100045210" placeholder="Type any SKU No. · brand · product name → click a suggestion to add a row below">
+          <div class="opt sel">Anua — <b>Heartleaf 77% Soothing Toner, 250ml</b> <small>100045210</small></div>
+          <div class="opt">Anua — Heartleaf 80% Moisture Soothing Ampoule, 30ml <small>100045233</small></div>
+          <div class="opt">Anua — Heartleaf Quercetinol Pore Deep Cleansing Foam, 150ml <small>100045240</small></div>
+          <span class="dot" style="top:-11px;right:-8px">5</span>
+        </div>
+        <p class="mut" style="margin:10px 0 6px;text-align:right;font-size:12px"><b>Unit Cost (KRW)</b> = actual <b>per-unit purchase price</b> from the supplier — enter <b>0</b> if free of charge (required) · <b>JIT Price (KRW)</b> = per-unit price when buying this product via Coupang JIT — <b>leave blank if unknown</b> (optional) · keep selecting in the search box above to add more SKU rows (delete a row = ✕)</p>
+        <table class="prodtbl">
+          <thead><tr>
+            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px" class="anno">Unit Cost (KRW) *<span class="dot" style="top:-11px;right:-8px">10</span></th><th style="width:140px" class="anno">JIT Price (KRW)<span class="dot" style="top:-11px;right:-8px">11</span></th><th style="width:40px"></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><input value="100040311" readonly></td>
+              <td><input value="COSRX" readonly></td>
+              <td><input value="Advanced Snail 96 Mucin Power Essence, 100ml" readonly></td>
+              <td><input value="200" class="num"></td>
+              <td><input value="15,000" class="num"></td>
+              <td><input value="17,000" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
+            </tr>
+            <tr>
+              <td><input value="100031820" readonly></td>
+              <td><input value="Beauty of Joseon" readonly></td>
+              <td><input value="Relief Sun : Rice + Probiotics, 50ml" readonly></td>
+              <td><input value="300" class="num"></td>
+              <td><input value="9,700" class="num"></td>
+              <td><input value="15,200" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
+            </tr>
+            <tr class="prefill anno">
+              <td><input value="100045210" readonly><span class="dot" style="top:14px;left:-12px">6</span></td>
+              <td><input value="Anua" readonly></td>
+              <td><input value="Heartleaf 77% Soothing Toner, 250ml" readonly></td>
+              <td><input value="" class="num" placeholder="Qty"></td>
+              <td><input value="" class="num" placeholder="Per-unit price ₩ (0 if free)"></td>
+              <td><input value="" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="fsec">
+        <div class="frow">
+          <div class="fld anno" style="min-width:200px">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— who is shipping the goods</span></label>
+            <input value="Coupang" placeholder="e.g. 비엠유통, Coupang">
+            <span class="dot" style="top:14px;right:-8px">12</span>
+          </div>
+          <div class="fld opt fld-inv anno" style="flex:1;min-width:280px">
+            <label>Tracking No <span style="font-weight:400;color:var(--ink-3)">— optional · can be added later after dispatch</span></label>
+            <input value="" placeholder="Add after dispatch — you can submit without it (add later)">
+            <span class="dot" style="top:14px;right:-8px">7</span>
+          </div>
+          <div class="fld anno" style="min-width:180px">
+            <label>Expected arrival</label>
+            <input type="date" value="2026-07-16">
+            <span class="dot" style="top:14px;right:-8px">8</span>
+          </div>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>Memo (Optional)</label>
+          <textarea class="mtextarea" placeholder="Notes about this inbound — anything written here is also logged to the request's Comments history"></textarea>
+        </div>
+      </div>
+
+      <div class="note purple anno">
+        <span class="dot" style="top:-11px;left:-10px">9</span>
+        Entering a tracking number <b>auto-matches it to View Orders</b> — when the center scans that tracking barcode, this request's <b>sourcing route shows as a badge</b> (SMART BUY / WHOLESALE / PARTNERSHIP).
+      </div>
+
+      <div class="submitrow">
+        <button class="btn btn-blue">Register Inbound Request</button>
+        <span class="mut anno" style="position:relative">On registration, status = <span class="tag tag-requested">REQUESTED</span> (tracking number saved if provided, added later if not) · <b>Inbound No. (YYYYMMDDNNNN) auto-assigned</b> — shown in the Request List<span class="dot" style="top:-13px;right:-10px">3</span></span>
+      </div>
+    </div>
+
+    <p class="mut" style="margin-top:14px">Registered requests are viewed and managed by status in the <b>[Request List]</b> tab above.</p>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1 Changes — New Inbound Request (Smart Buy)</h3>
+  <ol>
+    <li><span class="n">1</span><span>New Inbound Request screen — the <b>single intake gateway for everything entering the warehouse</b>. Not just Smart Buy restocks: Wholesale and Brand Partnership inbounds are requested here too <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Channel (sourcing route) selection — <b>4</b> radio cards (Smart Buy / Wholesale / Brand Partnership / <b>Other — type the channel name when selected</b>). Badge styling matches View Orders (black bold, no colors) <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">3</span><span><b>Inbound No. auto-assigned — no input field or preview on the request form</b> (panel removed 2026-07-26). On registration, <b>YYYYMMDDNNNN</b> (NNNN 0001–9999 per day) is assigned automatically and <b>shown only in the Request List</b>. Maps to sheet column A "PO No. (=Order ID)" — named Inbound No. so it also fits inbounds without a PO <span class="ref">— I + J</span></span></li>
+    <li><span class="n">4</span><span>Field set = <b>aligned to the PH sheet column order</b>: Inbound No. (auto) → Channel → SKU No. → Brand → Product Name → Order Qty → Unit Cost (KRW) → JIT Price (KRW) → Supplier. SKU·Brand·Product Name are locked in via the unified search; no Size <span class="ref">— PH sheet</span></span></li>
+    <li><span class="n">5</span><span><b>Single unified search box</b> (2026-07-27 UX improvement — one box above the table instead of per-row search) — type <b>whichever one you know</b> of SKU No. · brand · English product name for autocomplete; clicking a result adds a row to the table below with SKU·Brand·Product Name all auto-filled <span class="ref">— I + F autocomplete</span></span></li>
+    <li><span class="n">10</span><span><b>Unit Cost (KRW) required</b> — the placeholder and the disclaimer at the table's top right (position moved 2026-08-03) state it is the "actual per-unit purchase price from the supplier" (fixes the what-goes-here confusion). <b>0 is allowed</b> (free-of-charge stock) — kept required as the basis of FIFO costing and sheet consistency <span class="ref">— sheet Unit Cost column</span></span></li>
+    <li><span class="n">11</span><span><b>JIT Price (KRW) optional</b> — per-unit price when buying via Coupang JIT. <b>The placeholder says "leave blank if unknown"</b> — zero input burden <span class="ref">— sheet JIT Price column</span></span></li>
+    <li><span class="n">12</span><span><b>Supplier required</b> — the label and placeholder (e.g. 비엠유통, Coupang) clarify it means "who is shipping the goods". Kept required as the basis for settlement and inbound tracking <span class="ref">— sheet integration</span></span></li>
+    <li><span class="n">6</span><span>The product you just picked is <b>added as a blue-tinted row</b> — only Order Qty and Unit Cost are left to fill. <b>SKU No.·Brand·Product Name come from the search selection and can't be edited</b> (borderless plain-text display) — to change them, delete the row with ✕ and search again. Multiple SKUs = keep selecting in the search box (the separate "add row" button is retired); remove mistaken rows with ✕ <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">7</span><span>Tracking No field — <b>optional</b> (dashed border), can be added later after dispatch. <b>Single register button</b> (unified 2026-07-27) — with or without a tracking number, the request registers as REQUESTED; if one is provided, View Orders matching activates immediately <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">8</span><span>Expected arrival — lets the center see the inbound schedule ahead of time <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">9</span><span>View Orders link note — entering a tracking number matches the request to View Orders → scans show the sourcing route badge (the link info modal was removed 2026-08-03) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">14</span><span>Top-right Comments hub — Comments tagged on requests (@Mentions/★Saved). Same component as View Orders + full comment search (newest first) <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">15</span><span>Reduced side margins — the whole form fits on one screen without scrolling <span class="ref">— C screen conventions</span></span></li>
+    <li><span class="n">16</span><span><b>New page tabs [New Request | Request List]</b> (added 2026-07-23) — in-admin tabs switching between the request form and the request list (separate from the wireframe's purple state tabs). Pick a route and submit in New Request; view by status and add tracking numbers in Request List <span class="ref">— I Inbound Request</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): Received Date is recorded automatically at inbound and <b>shown in the Request List</b> (not a form input) — automatic Carrier recording is not supported and there is no Carrier column (confirmed 2026-08-03); tracking numbers are added later in the admin. <b>The Request List is the data the Google Sheet (Procurement Hub) will later scrape as-is</b> — sheet integration design happens separately as the last step (agreed 2026-07-23). All labels standardized to "Comments" (never a localized label).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : New Request — Wholesale / Partnership (direct) ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — New Request</p>
+    <div class="pagetabs">
+      <button class="on">New Request</button>
+      <button data-state-jump="s3">Request List</button>
+    </div>
+
+    <div class="formcard">
+      <div class="fsec" style="margin-top:2px">
+        <span class="flabel">Sourcing Route <span class="mut" style="font-weight:400">— the single intake gateway for everything entering the warehouse</span></span>
+        <div class="routecards">
+          <label class="routecard"><input type="radio" name="route2">
+            <span><b>Smart Buy</b><small>Stock replenishment · Coupang JIT sourcing (via PH)</small></span>
+            <span class="tag tag-smartbuy rc-badge">SMART BUY</span></label>
+          <label class="routecard on rc-wholesale"><input type="radio" name="route2" checked>
+            <span><b>Wholesale</b><small>Bulk wholesale inbound (direct request)</small></span>
+            <span class="tag tag-wholesale rc-badge">WHOLESALE</span></label>
+          <label class="routecard rc-partnership"><input type="radio" name="route2">
+            <span><b>Brand Partnership</b><small>Brand sponsorship · marketing stock (direct request)</small></span>
+            <span class="tag tag-partnership rc-badge">PARTNERSHIP</span></label>
+          <label class="routecard"><input type="radio" name="route2">
+            <span><b>Other</b><small>Any other channel — type it in</small>
+            <input class="etc-in" placeholder="Enter channel name" disabled style="margin-top:5px;width:140px;border:1px solid var(--line-strong);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;background:var(--canvas);color:var(--ink)"></span>
+            <span class="tag rc-badge" style="background:var(--ink);color:#fff">OTHER</span></label>
+        </div>
+      </div>
+
+
+      <div class="fsec anno">
+        <span class="dot" style="top:-2px;left:-14px">2</span>
+        <span class="flabel">Inbound Products <span class="mut" style="font-weight:400">— one search box is all you need: type any of SKU No. · brand · product name you know → pick a result and the row fills in automatically</span></span>
+        <div class="auto" style="max-width:720px;margin-top:8px">
+          <input value="" placeholder="Type any SKU No. · brand · product name → click a suggestion to add a row below">
+        </div>
+        <table class="prodtbl">
+          <thead><tr>
+            <th style="width:110px">SKU No.</th><th style="width:135px">Brand</th><th>Product Name</th><th style="width:84px">Order Qty</th><th style="width:150px">Unit Cost (KRW) *</th><th style="width:140px">JIT Price (KRW)</th><th style="width:40px"></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><input value="100052117" readonly></td>
+              <td><input value="Round Lab" readonly></td>
+              <td><input value="1025 Dokdo Toner, 200ml" readonly></td>
+              <td><input value="500" class="num"></td>
+              <td><input value="8,900" class="num"></td>
+              <td><input value="12,000" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
+            </tr>
+            <tr>
+              <td><input value="100052124" readonly></td>
+              <td><input value="Round Lab" readonly></td>
+              <td><input value="1025 Dokdo Cleanser, 150ml" readonly></td>
+              <td><input value="300" class="num"></td>
+              <td><input value="0" class="num"></td>
+              <td><input value="" class="num" placeholder="Blank if unknown"></td>
+              <td><button class="rm" title="Delete row">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mut" style="margin:8px 0 0">Row 2 = free promotional stock — <b>0 entered directly</b> in Unit Cost (0 allowed). <b>JIT Price</b> = per-unit price when buying via Coupang JIT, blank if unknown (optional)</p>
+      </div>
+
+      <div class="fsec">
+        <div class="frow">
+          <div class="fld" style="min-width:200px">
+            <label>Supplier <span style="color:var(--red)">*</span> <span style="font-weight:400;color:var(--ink-3)">— who is shipping the goods</span></label>
+            <input value="비엠유통" placeholder="e.g. 비엠유통, Coupang">
+          </div>
+          <div class="fld opt fld-inv" style="flex:1;min-width:280px">
+            <label>Tracking No <span style="font-weight:400;color:var(--ink-3)">— optional · can be added later after dispatch</span></label>
+            <input value="10325661220417" placeholder="Add after dispatch — you can submit without it">
+          </div>
+          <div class="fld" style="min-width:180px">
+            <label>Expected arrival</label>
+            <input type="date" value="2026-07-18">
+          </div>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>Memo (Optional)</label>
+          <textarea class="mtextarea" placeholder="Notes about this inbound">Wholesale vendor direct ship — 2 pallets, forklift needed</textarea>
+        </div>
+      </div>
+
+      <div class="note purple">
+        A tracking number is already entered, so the request <b>matches to View Orders</b> the moment it registers — scans show the <span class="tag tag-wholesale">WHOLESALE</span> badge.
+      </div>
+
+      <div class="submitrow">
+        <button class="btn btn-blue">Register Inbound Request</button>
+        <span class="mut anno" style="position:relative">On registration, status = <span class="tag tag-requested">REQUESTED</span> (tracking number entered → View Orders matching active immediately) · <b>Inbound No. auto-assigned</b> — shown in the Request List<span class="dot" style="top:-13px;right:-10px">1</span></span>
+      </div>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 Changes — Wholesale / Brand Partnership (Direct Request)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Direct request routes (Wholesale·Partnership·Other) get the <b>same automatic Inbound No.</b> — not shown on the form; assigned at registration and visible in the Request List <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Same product-entry spec — rows added via the <b>single search box</b> above the table; Order Qty·Unit Cost required (<b>row 2 = free-of-charge stock entered as 0</b>), JIT Price optional <span class="ref">— I Inbound Request</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Status has 3 stages: <b>REQUESTED → PARTIAL → INBOUNDED</b> (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02). If you already know the tracking number, enter it right away and View Orders matching activates immediately; otherwise leave it blank and add it later from the Request List.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : Request List (by status) ══════════════ -->
+<section class="state" id="s3">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ Inbound request registered — 202607130003</span><small>No refresh · added to top of the list</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Inbound Request</h2>
+    <p class="sub">Inbound Request — Request List</p>
+    <div class="pagetabs">
+      <button data-state-jump="s1">New Request</button>
+      <button class="on">Request List</button>
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" data-state-jump="s1">＋ New Inbound Request</button>
+      <div class="filterchips anno" style="margin-top:0">
+        <span class="dot" style="top:-11px;left:-10px">1</span>
+        <button class="chip on">All 13</button>
+        <button class="chip"><span class="tag tag-requested" style="margin-right:5px">REQUESTED</span> 8</button>
+        <button class="chip"><span class="tag tag-partial" style="margin-right:5px">PARTIAL</span> 1</button>
+        <button class="chip"><span class="tag tag-inbounded" style="margin-right:5px">INBOUNDED</span> 3</button>
+        <button class="chip"><span class="tag tag-cancelled" style="margin-right:5px">CANCELLED</span> 1</button>
+      </div>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:12px">
+      <button class="btn btn-purple-line btn-sm">Bulk add tracking numbers</button>
+      <span class="cnt">2 selected · Inbound processing (INBOUNDED transition) is applied automatically by View Orders scans</span>
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>Inbound No.</th><th class="anno">Sourcing Route<span class="dot" style="top:-11px;left:80px">3</span></th><th>Brand · Product</th><th>SKU</th><th>Qty</th>
+        <th class="anno">Tracking No<span class="dot" style="top:-11px;left:70px">4</span></th><th>Expected arrival</th><th class="anno">Received Date<span class="dot" style="top:-11px;left:90px">10</span></th><th>Requested by</th><th class="anno">Status<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <!-- REQUESTED (no tracking yet) -->
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td class="num">202607130003</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Essence, 100ml +2 more</td>
+          <td class="num">100040311 +2</td>
+          <td class="num">620</td>
+          <td class="anno"><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">Add tracking</button><span class="dot" style="top:-12px;right:-8px">6</span></td>
+          <td class="num">07-16</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
+          <td class="anno"><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">1</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button><span class="dot" style="top:-12px;right:-8px">11</span></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td>
+          <td class="num">202607130002</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml +1 more</td>
+          <td class="num">100052117 +1</td>
+          <td class="num">800</td>
+          <td><button class="btn btn-purple-line btn-sm" data-modal="m-invoice">Add tracking</button></td>
+          <td class="num">07-18</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Dean</td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">2</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button></td>
+        </tr>
+        <!-- REQUESTED + tracking entered (View Orders matching active) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607120004</td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1 (sponsored)</td>
+          <td class="num">100038120</td>
+          <td class="num">300</td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10325661220417<br>10325661220418</span> <span class="route-note">2 tracking numbers — all matching active</span><span class="dot" style="top:-12px;right:-8px">7</span></td>
+          <td class="num">07-15</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Miranti</td>
+          <td><span class="tag tag-requested">REQUESTED</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments <span class="badge-n" style="position:static;top:auto;right:auto">3</span></button> <button class="btn btn-line btn-sm req-edit" title="Edit request — REQUESTED only">✎ Edit</button> <button class="btn btn-red-line btn-sm req-cancel" title="Cancel request — REQUESTED only">Cancel</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607120001</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
+          <td class="num">100045210</td>
+          <td class="num">180 <span class="route-note" title="Expected qty edit history">✎ 300→180 (damaged)</span></td>
+          <td class="num" style="color:var(--blue)">10324880021991</td>
+          <td class="num">07-14</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-partial">PARTIAL 120/180</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock already received against this request — a PARTIAL request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock already received against this request — a PARTIAL request can't be cancelled">Cancel</button></td>
+        </tr>
+        <!-- CANCELLED (cancelled from this screen before any stock movement — row kept for audit, added 2026-08-03) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607110006</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Torriden</b> Dive-In Low Molecular Hyaluronic Acid Serum, 50ml</td>
+          <td class="num">100047332</td>
+          <td class="num">150</td>
+          <td class="num" style="color:var(--ink-3)">– <span class="route-note">Tracking matching deactivated</span></td>
+          <td class="num">07-13</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+          <td>Miranti</td>
+          <td class="anno"><span class="tag tag-cancelled">CANCELLED</span> <span class="route-note">Purchase cancelled · 07-12</span><span class="dot" style="top:-12px;right:-8px">12</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Request cancelled — terminal">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Request cancelled — terminal">Cancel</button></td>
+        </tr>
+        <!-- INBOUNDED (auto-switched by View Orders scan) -->
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607100005</td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td>
+          <td><b>Beauty of Joseon</b> Relief Sun, 50ml +1 more</td>
+          <td class="num">100031820 +1</td>
+          <td class="num">1,000</td>
+          <td class="anno"><span class="num" style="color:var(--blue)">10323775316153</span> <span class="route-note">Switched by View Orders scan inbound</span><span class="dot" style="top:-12px;right:-8px">8</span></td>
+          <td class="num">07-11</td>
+          <td class="num">07-11 14:22</td>
+          <td>Dean</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock has already moved — an INBOUNDED request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock has already moved — an INBOUNDED request can't be cancelled">Cancel</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">202607090002</td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td class="num">100040311</td>
+          <td class="num">240</td>
+          <td class="num" style="color:var(--blue)">10322198837710</td>
+          <td class="num">07-09</td>
+          <td class="num">07-09 10:05</td>
+          <td>Yongwon</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><button class="btn btn-line btn-sm comment-btn">💬 Comments</button> <button class="btn btn-gray btn-sm req-edit" disabled title="Stock has already moved — an INBOUNDED request can't be edited">✎ Edit</button> <button class="btn btn-gray btn-sm req-cancel" disabled title="Stock has already moved — an INBOUNDED request can't be cancelled">Cancel</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Showing 7 of 13 request(s) · Status: REQUESTED 8 · PARTIAL 1 · INBOUNDED 3 · CANCELLED 1</p>
+
+    <div class="note purple anno" style="max-width:none">
+      <span class="dot" style="top:-11px;left:-10px">9</span>
+      <b>Inbound processing (the INBOUNDED transition) is not done manually on this screen</b> — when the goods arrive, the center scans the tracking barcode in <b>View Orders</b> → processing the inbound automatically switches the request to <span class="tag tag-inbounded">INBOUNDED</span>, and the scan screen shows this request's <b>sourcing route badge</b>. <b>Requests missing a tracking number are checked automatically every morning with a Slack alert</b> (WHOLESALE·SMART BUY → #wholesale-ops / PARTNERSHIP → #partnership-kr).
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 Changes — Request List (Requested / Partial / Inbounded)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Status filter chips — All / <b>REQUESTED / PARTIAL / INBOUNDED, 3 statuses</b> (SHIPPED retired 2026-07-27 · PARTIAL added 2026-08-02). Whether tracking is entered is read from the Tracking No column, not the status <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">2</span><span>Bulk bar (pinned above the table) — bulk add tracking numbers for selected rows. INBOUNDED transitions happen automatically via View Orders scans (the mark-shipped button is retired) <span class="ref">— I + C bulk-bar conventions</span></span></li>
+    <li><span class="n">3</span><span>Sourcing Route column — SMART BUY / WHOLESALE / PARTNERSHIP badges — styled like View Orders (black bold, no colors) <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">4</span><span>Tracking No column — an "Add tracking" button (M1 modal) when empty; when filled, the number list (multiple allowed) + matching status <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">5</span><span>Status column — <b>REQUESTED</b> → <b>PARTIAL</b> (auto-switch when View Orders saves a partial inbound · remaining n/m shown) → <b>INBOUNDED</b>, 3 stages (confirmed 2026-08-02). Rescanning the same tracking number resumes reconciliation from the remainder. <b>Expected qty edits</b> (View Orders M6) show an edit history in the Qty cell (e.g. 300→180) + a Slack alert to the requester <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">6</span><span>REQUESTED + no tracking = add it later via the "Add tracking" button (M1). <b>Automatic once-a-morning check — requests still in REQUESTED without a tracking number are flagged on Slack</b>: WHOLESALE·SMART BUY → <b>#wholesale-ops</b>, PARTNERSHIP → <b>#partnership-kr</b> (the channel for Other routes will be decided during development) <span class="ref">— 2026-07-27 alert spec</span></span></li>
+    <li><span class="n">7</span><span>REQUESTED + tracking entered — <b>multiple tracking numbers can be registered per request (split shipments, confirmed 2026-08-03)</b> and every registered number is a View Orders match/scan target. The status badge stays REQUESTED <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">8</span><span>INBOUNDED = auto-switched by a View Orders scan inbound (the separate link modal and result link were removed 2026-08-03 — the status badge is enough) <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">9</span><span>Inbound automation note — INBOUNDED transitions happen from View Orders scans, not from this screen; scans surface the sourcing route badge <span class="ref">— I + C View Orders</span></span></li>
+    <li><span class="n">10</span><span><b>Received Date column</b> — the View Orders scan time is recorded automatically on INBOUNDED (maps to the sheet's Received Date column); not-yet-inbounded rows show "–". Automatic Carrier recording is not supported — no Carrier column (confirmed 2026-08-03) <span class="ref">— sheet integration</span></span></li>
+    <li><span class="n">11</span><span><b>✎ Edit / Cancel row actions (added 2026-08-03 — owner decision, PD-79 resolved)</b> — available on <b>REQUESTED requests only</b>. <b>Edit</b> opens the New Request form prefilled with the request's saved values in edit mode ("Editing request {Inbound No.}" banner); the Inbound No. never changes; saving logs every changed field (old → new) as an auto-comment and Slack-notifies the requester. <b>Cancel</b> opens confirmation modal M2 with a mandatory reason (Purchase cancelled / Wrong entry / Other + memo). On PARTIAL / INBOUNDED requests both buttons are <b>disabled with a tooltip</b> — stock has already moved <span class="ref">— I Inbound Request</span></span></li>
+    <li><span class="n">12</span><span><b>CANCELLED status (added 2026-08-03)</b> — terminal; the only transition is REQUESTED → CANCELLED, written from this screen (receive-side statuses stay scan-only). The row is <b>kept in the list for audit</b> (gray badge + reason note), View Orders tracking matching is deactivated, the request is excluded from the morning no-tracking check and from bulk tracking adds, and a <b>CANCELLED filter chip</b> is added <span class="ref">— I Inbound Request</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : Add Tracking No (after dispatch) ══════════════ -->
+<div class="overlay" id="m-invoice">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Add Tracking No — 202607130003<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Enter the tracking number(s) once the goods have shipped.</b>
+      <p class="mut" style="margin:8px 0 0"><b>One inbound request can hold multiple tracking numbers</b> (for split shipments) — <b>every registered number becomes a View Orders match/scan target</b>.</p>
+      <div id="tnList">
+        <div class="qrow" style="display:flex;gap:6px;align-items:center">
+          <input value="" placeholder="e.g. 10325661220417 — last-mile / Coupang tracking number" style="flex:1">
+          <button type="button" class="btn btn-line btn-sm tn-del" title="Remove this tracking number">✕</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-line btn-sm" id="tnAdd" style="margin-top:8px">＋ Add tracking number</button>
+      <div class="qrow" style="margin-top:14px">
+        <span class="mut">Saving activates <b>View Orders matching for every number</b> immediately — status stays REQUESTED; any tracking number can be scanned in at the center (full receipt switches the request to INBOUNDED)</span>
+      </div>
+      <div class="note purple">Saved numbers <b>auto-match to View Orders</b> — when the center scans one of these tracking barcodes, the <span class="tag tag-smartbuy">SMART BUY</span> sourcing route badge is shown and the scan is linked to this Inbound No. (202607130003).</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save tracking numbers</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Cancel Inbound Request (added 2026-08-03 — PD-79 resolved) ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Cancel Inbound Request — <span id="mcNo">202607130003</span><button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">This cancels the request before any stock movement.</b>
+      <p class="mut" style="margin:8px 0 0">Allowed only while the request is still <span class="tag tag-requested">REQUESTED</span> — once goods start arriving (PARTIAL / INBOUNDED) it can no longer be cancelled. The row is <b>kept in the Request List as CANCELLED</b> for audit, and <b>View Orders tracking matching is deactivated</b> for every registered number.</p>
+      <div class="fld" style="margin-top:12px">
+        <label>Reason <span style="color:var(--red)">*</span></label>
+        <select id="mcReason">
+          <option>Purchase cancelled</option>
+          <option>Wrong entry</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fld" style="margin-top:10px">
+        <label>Memo <span style="font-weight:400;color:var(--ink-3)">— required when reason is Other</span></label>
+        <input id="mcMemo" placeholder="Why is this request being cancelled?">
+      </div>
+      <div class="note purple">Cancelling posts an <b>auto-comment</b> with the reason and <b>Slack-notifies the requester</b> (@mention) — the same comment-mention pipeline as every other request comment.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep request</button>
+      <button class="btn btn-red-line btn-sm" id="mcConfirm">Confirm cancellation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    document.getElementById(t.dataset.state).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+/* "New Inbound Request" in the list → jump to State 1 */
+document.querySelectorAll('[data-state-jump]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const tab=document.querySelector('.wf-tab[data-state="'+b.dataset.stateJump+'"]');
+    if(tab) tab.click();
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments hub tab switch (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ save toggle */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* sourcing route radio card selection (visual switch inside the form) */
+document.querySelectorAll('.routecards').forEach(group=>{
+  group.querySelectorAll('.routecard').forEach(card=>{
+    card.addEventListener('click',()=>{
+      group.querySelectorAll('.routecard').forEach(c=>c.classList.remove('on'));
+      card.classList.add('on');
+    });
+  });
+});
+/* filter chip toggle */
+document.querySelectorAll('.filterchips .chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    c.closest('.filterchips').querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+  });
+});
+/* "Other" channel — enable the free-text input when selected */
+document.querySelectorAll('input[name="route"],input[name="route2"]').forEach(r=>r.addEventListener('change',()=>{
+  const grp=document.getElementsByName(r.name);
+  [...grp].forEach(x=>{
+    const card=x.closest('.routecard');
+    card.classList.toggle('on', x.checked);
+    const etc=card.querySelector('.etc-in');
+    if(etc){etc.disabled=!x.checked;if(x.checked)etc.focus();}
+  });
+}));
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
+});
+
+/* deep-link: opening with #reqlist (or #s3) activates the Request List tab — linked from the View Orders state 6 banner */
+if(location.hash==='#reqlist'||location.hash==='#s3'){
+  document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+  const t=document.querySelector('.wf-tab[data-state="s3"]'); if(t)t.classList.add('on');
+  document.querySelectorAll('.state').forEach(x=>x.classList.remove('on'));
+  const s3=document.getElementById('s3'); if(s3)s3.classList.add('on');
+}
+
+/* 2026-08-03 additions: registration toast · M1 multiple tracking numbers · M1 save toast · Request List Comments panel */
+function gtoastShow(html){
+  let t=document.getElementById('gtoast');
+  if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';document.body.appendChild(t);}
+  t.innerHTML=html;
+  t.style.display='block';
+  clearTimeout(t._h); t._h=setTimeout(()=>{t.style.display='none';},2600);
+}
+document.querySelectorAll('button').forEach(b=>{
+  if(b.textContent.trim()==='Register Inbound Request'){
+    b.addEventListener('click',()=>{
+      if(editingNo){
+        gtoastShow('✓ Inbound request updated — '+editingNo+'<small>Changed fields logged as an auto-comment (old → new) · Requester notified on Slack · No refresh</small>');
+        editModeOff();
+      }else{
+        gtoastShow('✓ Inbound request registered<small>Inbound No. auto-assigned · added to the Request List · No refresh</small>');
+      }
+    });
+  }
+});
+/* M1 save/confirm → top-right confirmation toast (global rule: confirm-type buttons always toast) */
+document.querySelectorAll('#m-invoice .foot .btn-blue').forEach(b=>{
+  b.addEventListener('click',()=>{
+    gtoastShow('✓ Tracking number(s) saved<small>Every registered number is now matched to View Orders · No refresh</small>');
+  });
+});
+const tnAdd=document.getElementById('tnAdd');
+if(tnAdd){
+  const list=document.getElementById('tnList');
+  tnAdd.addEventListener('click',()=>{
+    const row=document.createElement('div');
+    row.className='qrow'; row.style.cssText='display:flex;gap:6px;align-items:center;margin-top:6px';
+    row.innerHTML='<input value="" placeholder="Additional tracking number" style="flex:1"><button type="button" class="btn btn-line btn-sm tn-del" title="Remove this tracking number">✕</button>';
+    list.appendChild(row); row.querySelector('input').focus();
+  });
+  list.addEventListener('click',e=>{
+    if(e.target.classList.contains('tn-del')){
+      if(list.querySelectorAll('.qrow').length>1) e.target.closest('.qrow').remove();
+      else e.target.closest('.qrow').querySelector('input').value='';
+    }
+  });
+}
+const IR_COMMENTS={
+ '202607130003':[['Dean','@Yongwon tracking number will be added later today','10:20']],
+ '202607130002':[['Dean','Wholesale PO confirmed — expected arrival 07-18','09:12'],['Yongwon','@Dean got it. I\'ll keep location row B open','09:30']],
+ '202607120004':[['Miranti','300 sponsored units — campaign link confirmed','Yesterday'],['EuJin','@Miranti please standardize the campaign name to July Seeding','Yesterday'],['Miranti','Updated','Yesterday']]
+};
+document.querySelectorAll('.comment-btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const tr=btn.closest('tr'); if(!tr) return;
+    const next=tr.nextElementSibling;
+    if(next&&next.classList.contains('cpanel-ir')){next.remove();return;}
+    const no=(tr.querySelector('td:nth-child(2)')||{}).textContent||'';
+    const cs=IR_COMMENTS[no.trim()]||[];
+    const cols=tr.children.length;
+    const panel=document.createElement('tr'); panel.className='cpanel-ir';
+    const inner=cs.length?cs.map(c=>'<div class="c-item"><span class="who">'+c[0]+'</span><span>'+c[1].replace(/@(\w+)/g,'<span class="at">@$1</span>')+'</span><time>'+c[2]+'</time></div>').join(''):'<div class="c-item" style="color:var(--ink-3)">No comments yet</div>';
+    panel.innerHTML='<td colspan="'+cols+'" style="padding:10px 14px">'+inner+'<div class="cwrite"><input placeholder="Write a comment — @name tags trigger a Slack alert"><button class="btn btn-blue btn-sm">Post</button></div></td>';
+    tr.after(panel);
+  });
+});
+
+/* 2026-08-03 additions (PD-79 resolved): ✎ Edit → New Request form in edit mode · Cancel → M2 confirm modal → CANCELLED */
+let editingNo=null, cancelTargetRow=null;
+function editModeOff(){
+  editingNo=null;
+  const bn=document.getElementById('editBanner');
+  if(bn) bn.classList.remove('on');
+}
+document.querySelectorAll('.req-edit').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.disabled) return;
+    const tr=b.closest('tr'); if(!tr) return;
+    editingNo=((tr.querySelector('td:nth-child(2)')||{}).textContent||'').trim();
+    const tab=document.querySelector('.wf-tab[data-state="s1"]'); if(tab) tab.click();
+    const bn=document.getElementById('editBanner');
+    if(bn){ bn.querySelector('b').textContent='Editing request '+editingNo; bn.classList.add('on'); }
+  });
+});
+const editExit=document.getElementById('editExit');
+if(editExit) editExit.addEventListener('click',editModeOff);
+document.querySelectorAll('.req-cancel').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.disabled) return;
+    cancelTargetRow=b.closest('tr'); if(!cancelTargetRow) return;
+    const no=((cancelTargetRow.querySelector('td:nth-child(2)')||{}).textContent||'').trim();
+    document.getElementById('mcNo').textContent=no;
+    document.getElementById('m-cancel').classList.add('open');
+  });
+});
+const mcConfirm=document.getElementById('mcConfirm');
+if(mcConfirm) mcConfirm.addEventListener('click',()=>{
+  if(cancelTargetRow){
+    const reason=document.getElementById('mcReason').value;
+    const st=cancelTargetRow.querySelector('td:nth-child(11)');
+    if(st) st.innerHTML='<span class="tag tag-cancelled">CANCELLED</span> <span class="route-note">'+reason+' · just now</span>';
+    cancelTargetRow.querySelectorAll('.req-edit,.req-cancel').forEach(x=>{
+      x.disabled=true; x.classList.remove('btn-line','btn-red-line'); x.classList.add('btn-gray');
+      x.title='Request cancelled — terminal';
+    });
+    const tcell=cancelTargetRow.querySelector('td:nth-child(7)');
+    if(tcell){
+      const at=tcell.querySelector('[data-modal]');
+      if(at){ at.remove(); tcell.insertAdjacentHTML('afterbegin','<span class="num" style="color:var(--ink-3)">–</span> '); }
+      const note=tcell.querySelector('.route-note');
+      if(note) note.textContent='Tracking matching deactivated';
+      else tcell.insertAdjacentHTML('beforeend',' <span class="route-note">Tracking matching deactivated</span>');
+    }
+    cancelTargetRow=null;
+  }
+  document.getElementById('m-cancel').classList.remove('open');
+  gtoastShow('✓ Inbound request cancelled<small>Row kept in the list for audit · Tracking matching deactivated · No refresh</small>');
+});
+</script>

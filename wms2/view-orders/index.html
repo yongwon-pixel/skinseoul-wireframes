@@ -1,0 +1,1854 @@
+<title>WMS 2.0 — View Orders Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* Existing admin is a single light theme — fixed light, no dark mode */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}   /* C: reduced side padding */
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.searchrow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--ink);border-radius:7px;overflow:hidden}
+.seg button{border:none;background:var(--page);color:var(--ink);padding:8px 14px;font-size:13.5px;border-right:1px solid var(--ink)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--ink);color:var(--page);font-weight:600}
+.search-input{flex:1;min-width:300px;display:flex;border:1px solid var(--line-strong);border-radius:7px}
+.search-input input{flex:1;border:none;background:var(--page);color:var(--ink);padding:8px 12px;font-size:14px;outline:none;border-radius:7px}
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+.shelf{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:7px;
+  padding:4px 12px;background:var(--page)}
+.shelf label{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.shelf input{width:74px;border:1px solid var(--line-strong);border-radius:5px;padding:5px 8px;font-size:14px;
+  background:var(--page);color:var(--ink);text-align:center;font-weight:700}
+
+/* order header card */
+.ordercard{margin-top:16px;background:color-mix(in srgb,var(--canvas) 55%,var(--page));border-radius:8px;padding:14px 18px;
+  display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--line)}
+.ordercard .kv{font-size:13.5px;color:var(--ink-2)} .ordercard .kv b{color:var(--ink)}
+.status{border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:700}
+.st-processing{background:var(--green-soft);color:var(--green)}
+.st-prepare{background:var(--blue-soft);color:var(--blue)}
+.st-hold{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line)}
+.chip-return{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.comment-btn{position:relative;margin-left:auto}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.row-hit td{background:var(--hl);border-top:2px solid var(--hl-line);border-bottom:2px solid var(--hl-line)}
+.row-exist td{background:color-mix(in srgb,var(--blue-soft) 55%,var(--page))}
+.thumb{width:34px;height:34px;border-radius:6px;background:var(--canvas);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-3)}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.qty-warn{background:var(--amber-soft);color:var(--amber);border:1.5px solid var(--amber-line)}
+.bcin{width:110px;border:1px dashed var(--line-strong);border-radius:6px;padding:4px 8px;font-size:12px;font:inherit;background:var(--page);color:var(--ink)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.tag-pending{background:#FFC107;color:#3D2E00}
+.tag-requested{background:#FFC107;color:#3D2E00}
+.tag-inbounded{background:var(--green);color:#fff}
+/* 4 sourcing routes — black bold text only, no colors (Smart Buy / JIT / Wholesale / Partnership) */
+.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
+.bulkbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.bulkbar .cnt{font-size:12.5px;color:var(--ink-3)}
+.mut{color:var(--ink-3);font-size:12.5px}
+.bar-under{text-decoration:underline;text-underline-offset:2px;font-weight:800}
+
+/* comment panel — same grammar as the Order page Operator Comments */
+.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.cpanel .c-item:last-of-type{border-bottom:none}
+.cpanel .who{font-weight:700;white-space:nowrap}
+.cpanel .at{color:var(--blue);font-weight:700}
+.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
+.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+
+/* ★ save (bookmark) toggle — shared by Mentions/Saved */
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* actor log */
+.logsec{margin-top:26px}
+.logsec h4{font-size:14px;margin:0 0 8px}
+.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
+.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
+.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
+
+/* floating scan panel — collapsed by default, click to expand */
+.scanfloat{position:fixed;left:16px;bottom:16px;width:330px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:30}
+.scanfloat header{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--page);padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0}
+.scanfloat header .x{margin-left:auto;background:none;border:none;color:inherit;font-size:14px;line-height:1;cursor:pointer}
+.scanfloat.collapsed{width:auto;border-radius:99px}
+.scanfloat.collapsed ul,.scanfloat.collapsed footer{display:none}
+.scanfloat.collapsed header{border-radius:99px;padding:8px 16px}
+.scanfloat ul{list-style:none;margin:0;padding:6px 0;max-height:170px;overflow:auto}
+.scanfloat li{display:flex;gap:8px;padding:4px 12px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.scanfloat li b{color:var(--ink)}
+.scanfloat li time{margin-left:auto;color:var(--ink-3)}
+.scanfloat footer{border-top:1px solid var(--line);padding:6px 12px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 10px 10px;background:var(--page)}
+.scanfloat footer span{font-size:11px;color:var(--ink-3)}
+.scanfloat footer button{font-size:11.5px;border:1px solid var(--line-strong);background:var(--page);color:var(--ink-2);border-radius:5px;padding:3px 8px}
+
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red)}
+.toast small{opacity:.85;font-weight:400}
+
+.btn[disabled]{opacity:.4;pointer-events:none}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.modal .qrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal .qrow b{flex:none;white-space:nowrap}
+.modal .qrow .mut{flex:1}
+.modal .qrow input:disabled{background:var(--canvas);color:var(--ink-3);cursor:not-allowed;border-style:dashed}
+.cchip{border:1px solid var(--line-strong);border-radius:99px;padding:6px 14px;background:var(--page);font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.cchip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.carrier-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.qrow input{width:80px;text-align:center;font-weight:700;font-size:15px;border:1px solid var(--line-strong);border-radius:6px;padding:7px;background:var(--page);color:var(--ink)}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.auto{border:1px solid var(--line-strong);border-radius:7px;margin-top:8px;overflow:hidden}
+.auto input{width:100%;border:none;padding:9px 12px;font-size:13.5px;background:var(--page);color:var(--ink);outline:none}
+.auto .opt{padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
+.auto .opt.sel{background:var(--blue-soft);font-weight:600}
+.auto .opt small{color:var(--ink-3)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+
+/* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+
+/* ── Internal Inbound (State 6) ── */
+.intbanner{margin-top:14px;background:color-mix(in srgb,var(--ss-purple-50) 70%,var(--page));
+  border:2px solid var(--ss-purple);border-radius:12px;padding:16px 20px}
+.intbanner .big{font-size:21px;font-weight:800;color:var(--ss-purple)}
+.intbanner .warnline{margin-top:3px;font-size:13.5px;font-weight:700;color:var(--ink)}
+.intbanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.intbanner .kv b{color:var(--ink)}
+.donebanner{margin-top:14px;background:var(--green-soft);border:2px solid var(--green);border-radius:12px;padding:16px 20px}
+.donebanner .big{font-size:21px;font-weight:800;color:var(--green)}
+.donebanner .kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--ink-2)}
+.donebanner .kv b{color:var(--ink)}
+.tiles{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.tile{flex:1;min-width:160px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--page)}
+.tile .lab{font-size:12px;color:var(--ink-3)}
+.tile .val{font-size:24px;font-weight:800;color:var(--ink)}
+.tile.ok .val{color:var(--green)}
+.tile.warn .val{color:var(--amber)}
+.scannote{margin-top:14px;background:var(--blue-soft);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--ink-2)}
+.row-done td{background:color-mix(in srgb,var(--green-soft) 45%,var(--page))}
+.row-part td{background:var(--amber-soft)}
+.tag-done{background:var(--green);color:#fff}
+.tag-part{background:#FFC107;color:#3D2E00}
+.qtyin{width:80px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 9px;font-size:14px;font-weight:700;
+  text-align:center;background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.qedit{border:none;background:none;color:var(--blue);cursor:pointer;font-size:12.5px;padding:0 3px}
+.locin{width:110px;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:13px;
+  background:var(--page);color:var(--ink);font-variant-numeric:tabular-nums}
+.flsave{display:inline-flex;align-items:center;margin-left:6px;border:none;border-radius:6px;padding:5px 10px;
+  font-size:12px;font-weight:700;background:var(--ss-purple);color:#fff;cursor:pointer;box-shadow:var(--shadow);
+  animation:flpop .15s ease;white-space:nowrap}
+.flsave.ok{background:var(--green)}
+@keyframes flpop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.state{display:none}
+.state.on{display:block}
+.retbanner{margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:8px;
+  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.retbanner b{color:var(--red);font-size:15px}
+.holdbanner{margin-top:16px;background:var(--amber-soft);border:1.5px solid var(--amber-line);border-radius:8px;
+  padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.holdbanner b{color:var(--amber);font-size:15px}
+.loc-inline{display:flex;align-items:center;gap:6px}
+.loc-need input{border:1.5px solid var(--amber-line);background:var(--amber-soft)}
+.loc-need input::placeholder{color:var(--amber);font-weight:700;font-size:11.5px}
+.loc-inline input{width:88px;border:1px solid var(--line-strong);border-radius:6px;padding:5px 8px;background:var(--page);color:var(--ink);text-align:center;font-weight:600}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · View Orders Wireframe</h1>
+  <span class="hint">v22 — Switch states with the tabs · Purple numbers = change annotations</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s0">0 · Waiting (Before Scan)</button>
+    <button class="wf-tab" data-state="s1">1 · Scan Result (Last Item Remaining)</button>
+    <button class="wf-tab" data-state="s1b">1b · Scan Result (Normal — 2 Remaining)</button>
+    <button class="wf-tab" data-state="s2">2 · All Inbounded</button>
+    <button class="wf-tab" data-state="s3">3 · Outbound Complete</button>
+    <button class="wf-tab" data-state="s4">4 · Customer Return Mode</button>
+    <button class="wf-tab" data-state="s5">5 · Hold Order</button>
+    <button class="wf-tab" data-state="s6">6 · Internal Inbound (Inbound Request)</button>
+    <button class="wf-tab" data-state="s6b">6b · Internal Inbound Complete</button>
+    <button class="wf-tab" data-modal="m-cancel">Modal: Cancel Inbound</button>
+    <button class="wf-tab" data-modal="m-unrec">Modal: Unrecognized Barcode</button>
+    <button class="wf-tab" data-modal="m-unrec2">Modal: Send to Missing Tracking List</button>
+    <button class="wf-tab" data-modal="m-restock">Modal: Customer Return Restock</button>
+    <button class="wf-tab" data-modal="m-retlabel">Modal: Return Label</button>
+    <button class="wf-tab" data-modal="m-partial">Modal: Save Partial Inbound</button>
+    <button class="wf-tab" data-modal="m-qtyedit">Modal: Edit Expected Qty</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 0 : Waiting (initial screen before scan) ══════════════ -->
+<section class="state on" id="s0">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox0">💬 Comments<span class="badge-n">3</span></button>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox0">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="anno" style="display:block;margin-top:16px;border:1.5px dashed var(--line-strong);border-radius:12px;padding:44px 20px;text-align:center;background:var(--page)">
+      <div style="font-size:32px">📡</div>
+      <div style="font-size:16px;font-weight:800;margin-top:6px;color:var(--ink)">Waiting for scan</div>
+      <div class="mut" style="margin-top:6px">Scan a tracking/product barcode or type a number to <b>switch to that order's screen instantly</b></div>
+    </div>
+
+    <div class="anno" style="position:relative;margin-top:14px">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      <button class="btn btn-line btn-sm" id="inexpToggle">▸ Expected Inbound 4 — 2 with tracking · 1 Partial Inbound</button>
+      <div id="inexpTable" style="display:none;margin-top:10px">
+        <table class="tbl">
+          <thead><tr><th>Inbound No.</th><th>Sourcing Route</th><th>Supplier</th><th>Items</th><th>Tracking No</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="num">202608020001</td><td><span class="tag tag-smartbuy">SMART BUY</span></td><td>(주)뷰티서플라이</td>
+              <td><b>COSRX</b> Advanced Snail 96 +2 more · 620 units</td><td class="num" style="color:var(--blue)">10325998120044</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
+            </tr>
+            <tr class="row-part" style="cursor:pointer" onclick="document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));document.getElementById('s6').classList.add('on');window.scrollTo({top:0})">
+              <td class="num">202607120001</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>비엠유통</td>
+              <td><b>Round Lab</b> 1025 Dokdo +1 more · 800 units</td><td class="num" style="color:var(--blue)">10325661220417</td>
+              <td><span class="tag tag-part">PARTIAL 620/800</span></td>
+            </tr>
+            <tr>
+              <td class="num">202608020002</td><td><span class="tag tag-partnership">PARTNERSHIP</span></td><td>Medicube (Partnership)</td>
+              <td><b>Medicube</b> Zero Pore Pad 2.0 · 300 units</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
+            </tr>
+            <tr>
+              <td class="num">202608010004</td><td><span class="tag tag-wholesale">WHOLESALE</span></td><td>(주)뷰티링크</td>
+              <td><b>Beauty of Joseon</b> Relief Sun +1 more · 1,000 units</td><td class="num" style="color:var(--ink-3)">—</td>
+              <td><span class="tag tag-requested">REQUESTED</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mut" style="margin-top:8px">Rows with tracking sorted to top · <b>Click a row = open its reconciliation screen (State 6) without scanning</b> (for bulk boxes with damaged labels) · Full list: Inbound Request → Request List</p>
+      </div>
+    </div>
+
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 0 — Changes: Waiting (Initial Screen Before Scan)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Initial screen = <b>empty unified search box with auto-focus</b> — scanning a barcode / typing a number switches instantly to that order's screen (States 1–5). Auto-detection, Coupang QR "[V1]barcode" recognition (matches the barcode after [V1]), and focus-return rules: see State 1 legend 1·12·14 — <b>these rule texts are not shown on screen</b> <span class="ref">— C Search</span></span></li>
+    <li><span class="n">2</span><span><b>Expected Inbound summary badge (new, decided 2026-08-02)</b> — one-line summary of unfinished Inbound Requests; click to expand an inline table (rows with tracking sorted to top · Sourcing Route badges · Partial Inbound remaining shown). <b>Click a row = open its reconciliation screen (State 6) without scanning</b> (for bulk boxes with damaged tracking labels). Collapsed by default — keeps this screen a scan hub <span class="ref">— I + C</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 1 : Scan result — last item remaining ══════════════ -->
+<section class="state" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="toast"><span>✓ Inbound complete — 100040311</span><small>No refresh · ready for the next scan</small><span class="dot" style="position:static;display:inline-flex;flex:none">15</span></div>
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:3px;left:-30px">3</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">4</span>
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+        <span class="dot" style="top:-10px;right:8px">12</span>
+        <span class="dot" style="top:-10px;right:34px">14</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard anno">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>5</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf anno"><label>Shelf</label><input value="3"><span class="dot" style="top:-11px;right:-11px">2</span></div>
+      <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">10</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1">💬 Comments <span class="badge-n">2</span></button>
+      <span class="dot" style="top:-11px;right:-8px">11</span>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-green btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">1 selected · Processing all triggers auto Outbound (Hold orders: Inbound only)</span>
+      <span class="dot" style="top:-11px;left:-10px">9</span>
+    </div>
+
+    <div class="cpanel anno" id="cpanel1" style="display:block">
+      <span class="dot" style="top:-11px;left:-10px">19</span>
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">18</span></th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th class="anno">Sourcing Route<span class="dot" style="top:-11px;left:104px">6</span></th><th class="anno">Location<span class="dot" style="top:-11px;right:-8px">17</span></th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td><b>COSRX</b> 석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr class="row-hit">
+          <td><input type="checkbox" checked></td>
+          <td class="num anno">100005104<span class="dot" style="left:-14px;top:-11px">5</span></td><td><div class="thumb">IMG</div></td>
+          <td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml</td>
+          <td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809571501234</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td><button class="btn btn-green btn-sm anno">Inbound + Outbound<span class="dot" style="top:-12px;right:-10px">8</span></button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td class="anno"><input class="bcin" placeholder="Enter barcode"><span class="dot" style="top:-11px;right:-6px">20</span></td><td>–</td><td>–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td class="anno"><span class="qty qty-warn">2</span><span class="dot" style="right:-6px;top:-11px">7</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
+
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><span class="anno"><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button><span class="dot" style="top:-11px;right:-9px">22</span></span></div>
+
+    <div class="logsec anno">
+      <h4>Inbound / Outbound Log</h4>
+      <span class="dot" style="top:-8px;left:190px">13</span>
+      <table class="logtbl">
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="scanfloat anno collapsed" id="scanfloat">
+    <header>📡 Live Barcode Feed <span style="background:var(--blue);border-radius:99px;padding:1px 8px;font-size:11px">4</span><button class="x">▾</button></header>
+    <span class="dot" style="top:-11px;right:-11px">16</span>
+    <ul>
+      <li><b>Dean</b><span class="num">8801051283860</span><time>11:32:04</time></li>
+      <li><b>Dean</b><span class="num">8809894261234</span><time>11:31:48</time></li>
+      <li><b>Miranti</b><span class="num">10323775316153</span><time>11:30:02</time></li>
+      <li><b>Miranti</b><span class="num">8806182573156</span><time>11:29:41</time></li>
+    </ul>
+    <footer><span>Max 20 on screen · full history in backend</span><button>Export by date</button></footer>
+  </div>
+
+</div></div>
+
+<div class="legend">
+  <h3>State 1 — Changes: Scan Result (order down to its last item: 3 of 4 inbounded, the just-scanned JIT is last)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Unified search — toggle removed; enter any of Tracking / Inbound Order / Product Order / Last-mile barcode and it auto-detects (multiple matches are all shown for selection). <b>Coupang small QR codes are also recognized</b> — scans arrive as "[V1]barcode", so <b>the barcode after [V1] must also be recognized</b> (prefixed input still matches). <b>This rule text is not shown on screen</b> (behavior only; spec note tidied 2026-07-23) <span class="ref">— C Search + C Customer Return</span></span></li>
+    <li><span class="n">2</span><span>Shelf input — placed left of the Outbound button, editable. <b>Typing a value shows a floating [Save] button; click or Enter saves instantly (no refresh)</b> → shows ✓ Saved, then disappears. The Location inputs in the State 6 Internal Inbound table use the same pattern <span class="ref">— C / H temp</span></span></li>
+    <li><span class="n">3</span><span>Top-right Comments hub — [@ Mentions] comments where I'm tagged + [★ Saved] comments I saved; each comment's ★ saves/unsaves (unsaving removes it from Saved). <b>Clicking a comment in the list opens that order's page</b>. <b>Hub search box (new)</b> — searches <b>every comment on every order</b> (regardless of mention/saved), matching order no · author · text; results in <b>reverse-chronological order (newest first)</b>. Clearing the input returns to the tabs <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">4</span><span>Reduced side padding — every column + button fits on one screen without scrolling <span class="ref">— C Screen</span></span></li>
+    <li><span class="n">5</span><span>Scanned product highlighted + sorted to the top <span class="ref">— C Search</span></span></li>
+    <li><span class="n">6</span><span>Sourcing Route column = <b>4 routes</b> (black text only, no colors) — <b>SMART BUY</b> (restock purchasing, PO-based) / <b>JIT</b> (ordered by the order handler; may be not yet inbounded) / <b>WHOLESALE</b> / <b>PARTNERSHIP</b> (brand partnership). Smart Buy · Wholesale · Partnership arrive already inbounded; only JIT can be PENDING. JIT shows the <b>purchase channel in parentheses</b> chosen by the order handler — JIT (Coupang) / JIT (Naver) / JIT (Other retail). Values come straight from the actual admin dropdown (Coupang/Naver/Other retail/Existing inventory); an Existing inventory pick deducts warehouse stock, so it shows not as JIT but as that stock's own sourcing route. The route assigned in the Inbound Request (I) is matched by tracking number <span class="ref">— I Inbound Request + C Search</span></span></li>
+    <li><span class="n">7</span><span>Quantity ≠ 1 → light amber highlight <span class="ref">— C Search</span></span></li>
+    <li><span class="n">8</span><span>When the last remaining item is inbounded → combined Inbound + Outbound button <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">9</span><span>Bulk buttons sit above the table — Bulk Inbound (Selected) / Inbound + Outbound All Remaining (inbounding everything completes the order, so it auto-outbounds too; Hold Shipment orders stop at Inbound) <span class="ref">— C Behavior + F Hold</span></span></li>
+    <li><span class="n">10</span><span>Label changed from "Outbound to Deleo Baroship" to "Outbound" <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">11</span><span>Order Comments button — click to expand; @tag → automatic Slack alert <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">12</span><span>Barcode input value persists after inbound <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">13</span><span>Actor Log — records time · action · SKU · qty · worker · memo (when written in e.g. the cancel modal); shown at the bottom across States 1–5 <span class="ref">— C Log</span></span></li>
+    <li><span class="n">14</span><span>Clicking anywhere on the page + right after an Inbound/Outbound action → search box auto-focuses (select-all), ready for the next barcode. <b>Behavior only, no on-screen text</b> <span class="ref">— C Search</span></span></li>
+    <li><span class="n">15</span><span>No refresh after processing — only a top-right success/failure toast. <b>Protocol common to all states</b> (the toast is illustrated in only some states). Outbound-family buttons (Outbound · Inbound + Outbound · bulk) play a <b>send sound</b> on click (added 2026-08-03) — lets workers confirm acceptance by ear during continuous scanning without watching the screen <span class="ref">— C Search</span></span></li>
+    <li><span class="n">16</span><span>Bottom-left floating panel — live barcode feed, collapsed by default (click to expand), shows at most 20 rows on screen (full history kept in backend), export by date <span class="ref">— C Log</span></span></li>
+    <li><span class="n">17</span><span>Location column — right of Sourcing Route; shows the current location of warehouse-stored (Existing Inventory) products. Common to States 1–5 <span class="ref">— B/E linkage</span></span></li>
+    <li><span class="n">18</span><span>Brand name always shown at the front of Product Name — products missing the brand need the product-name logic fixed <span class="ref">— B</span></span></li>
+    <li><span class="n">19</span><span>Results-area Comments panel — <b>expanded by default</b> (collapsible via the Comments button); each comment's ★ saves it → aggregated in the top-right Comments hub's Saved tab <span class="ref">— 0. UI 1+2</span></span></li>
+    <li><span class="n">22</span><span><b>Print Return Labels</b> (bottom right; work states 1·1b·2·3) — when wrong/damaged items are found during scanning, select products → modal (M4): pick or type a carrier + optional size·qty → prints carrier name · product name (KR) · size · qty on label stock, attached to the supplier-return box. A separate concept from Customer Return mode (State 4, customer→us) <span class="ref">— C</span></span></li>
+    <li><span class="n">20</span><span>Products without a barcode show an <b>always-visible input in the Barcode column</b> (all states) — an entered value is saved to the product master and recognized from the next scan. e.g. 미감수 브라이트 클렌징 티슈 <span class="ref">— C Search</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): single-item orders auto-print the label the moment the barcode is scanned — only for orders with no inbound history; Existing Inventory stock does not count as inbound history (B). Scanning an unrecognized barcode opens the <b>order-number lookup popup (M2)</b> — on a successful order-number match the tracking number is registered on the spot (rescan is then recognized); with no order number / failed match, send to the Missing Tracking List (M2b) (F — see the modal tabs above). Confirming a match writes the tracking number directly onto that order's product line — rescanning the same barcode then resolves normally (see Unrecognized Tracking M1). <b>Scanning the tracking number of an Inbound Request (I) switches to the dedicated Internal Inbound screen, not a customer-order screen</b> — stock-intake flow (no Outbound); see the <b>[6 · Internal Inbound]</b> tab above. <b>Exception (2026-08-03):</b> a number registered on a <b>CANCELLED</b> request no longer matches — matching is deactivated with the cancellation, so the scan falls to the unrecognized pool (M2b) like any unknown barcode and a person decides what the arrived goods are; a dead request must never swallow a live scan.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 1b : Scan result — normal (2 not yet inbounded) ══════════════ -->
+<section class="state" id="s1b">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox1b">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1b">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input">
+        <input value="10323775317888" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413902</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>5</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf"><label>Shelf</label><input value=""></div>
+      <button class="btn btn-gray btn-sm">Outbound</button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel1b">💬 Comments <span class="badge-n">1</span></button>
+    </div>
+    <div class="cpanel" id="cpanel1b" style="display:block">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Egita</span> 413902 — are both JIT items arriving today?</span><time>07-09 09:40</time><button class="star" title="Save">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-green btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">2 not yet inbounded — processing all triggers auto Outbound (Hold orders: Inbound only)</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td><b>COSRX</b> 석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr class="row-hit">
+          <td><input type="checkbox" checked></td>
+          <td class="num">100005104</td><td><div class="thumb">IMG</div></td>
+          <td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml</td>
+          <td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809571501234</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td class="anno"><button class="btn btn-green btn-sm">Inbound</button><span class="dot" style="top:-11px;right:-10px">21</span></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td>–</td><td>–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">–</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775317888</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td><button class="btn btn-green btn-sm">Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
+    <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 1b — Changes: Scan Result (normal: 2 items not yet inbounded)</h3>
+  <ol>
+    <li><span class="n">21</span><span>When the last-item condition is <b>not</b> met, the scanned row's button is just <b>Inbound</b> — this order still has 2 JIT items (the scanned Pore Remedy + the not-yet-arrived Medicube), so no combined action. The moment only 1 uninbounded item remains it becomes <b>Inbound + Outbound</b> as in State 1. The Outbound button also stays disabled until every item is inbounded <span class="ref">— C Behavior</span></span></li>
+  </ol>
+</div>
+</section>
+
+
+<!-- ══════════════ STATE 2 : All inbounded ══════════════ -->
+<section class="state" id="s2">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox2">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox2">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-processing">Processing</span>
+      <span class="kv">Total Quantity: <b>5</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf"><label>Shelf</label><input value="3"></div>
+      <button class="btn btn-green btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">1</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel2">💬 Comments <span class="badge-n">2</span></button>
+    </div>
+    <div class="cpanel" id="cpanel2" style="display:block">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Nothing left to bulk-process — all items inbounded</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td><b>COSRX</b> 석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm anno" data-modal="m-cancel">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">2</span></button></td>
+        </tr>
+<tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100005104</td><td><div class="thumb">IMG</div></td>
+          <td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml</td>
+          <td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809571501234</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
+
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
+
+    <div class="logsec anno">
+      <h4>Inbound / Outbound Log</h4>
+      <table class="logtbl">
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 — Changes: All Inbounded</h3>
+  <ol>
+    <li><span class="n">1</span><span>Outbound button activates (green) once every item is inbounded — label is "Outbound" <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">2</span><span>Clicking Cancel Inbound → restock popup (qty · optional restock location · memo, confirm via button) <span class="ref">— C Behavior</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : Outbound complete ══════════════ -->
+<section class="state" id="s3">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast anno"><span>✓ Outbound complete — Order 413865</span><small>Status: prepare shipment</small><span class="dot" style="top:-11px;left:-11px">3</span></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox3">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox3">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10323775316153" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">413865</b></span>
+      <span class="kv">Order Status:</span><span class="status st-prepare">Prepare Shipment</span>
+      <span class="kv">Total Quantity: <b>5</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf"><label>Shelf</label><input value="3"></div>
+      <button class="btn btn-gray btn-sm anno">✓ Outbounded<span class="dot" style="top:-11px;right:-11px">1</span></button>
+      <button class="btn btn-red-line btn-sm anno" onclick="alert('Status rollback: prepare shipment → processing')">Cancel Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel3">💬 Comments <span class="badge-n">2</span></button>
+    </div>
+    <div class="cpanel" id="cpanel3" style="display:block">
+      <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Only 1 of 2 JIT items has been inbounded. Please check if the other arrives today.</span><time>07-09 10:42</time><button class="star" title="Save">★</button></div>
+      <div class="c-item"><span class="who">Yongwon</span><span><span class="at">@Dean</span> Checked Coupang — arriving this afternoon. Please prioritize this order on arrival.</span><time>07-09 11:03</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+
+    <div class="bulkbar" style="margin-top:10px">
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Nothing left to bulk-process — all items inbounded</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100040311</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Pomegranate &amp; Collagen Volume Lifting Cream, 100ml</td>
+          <td><b>COSRX</b> 석류 엔 콜라겐 볼륨탄력 크림</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8801051283860</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-gray btn-sm anno">Cancel Inbound<span class="dot" style="top:-12px;right:-10px">4</span></button></td>
+        </tr>
+<tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100005104</td><td><div class="thumb">IMG</div></td>
+          <td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml</td>
+          <td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td>150ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809571501234</td>
+          <td class="num">24101467541797</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+        <tr class="row-exist">
+          <td><input type="checkbox"></td>
+          <td class="num">100024743</td><td><div class="thumb">IMG</div></td>
+          <td><b>The Face Shop</b> Rice Water Bright Cleansing Wipes, 50ea</td>
+          <td><b>The Face Shop</b> 미감수 브라이트 클렌징 티슈</td><td>50ea</td>
+          <td><span class="qty">1</span></td>
+          <td><input class="bcin" placeholder="Enter barcode"></td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-wholesale">WHOLESALE</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td>
+          <td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10323775316153</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td><td class="num">–</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 4 item(s) in this order · Found 1 order(s)</p>
+
+        <div style="display:flex;margin-top:12px"><span style="flex:1"></span><button class="btn btn-line" data-modal="m-retlabel">🖨 Print Return Labels (2)</button></div>
+
+    <div class="logsec anno">
+      <h4>Inbound / Outbound Log</h4>
+      <table class="logtbl">
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 11:47</td><td class="act-out">OUTBOUND</td><td class="num">All (4 SKU)</td><td class="num">5</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:45</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:32</td><td class="act-in">INBOUND</td><td class="num">100038120</td><td class="num">2</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-09 11:31</td><td class="act-cancel">INBOUND Cancelled (Restocked)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">1 box damaged — restocked, needs inspection</span></td></tr>
+        <tr><td class="num">07-09 10:58</td><td class="act-in">INBOUND</td><td class="num">100024743</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 — Changes: Outbound Complete</h3>
+  <ol>
+    <li><span class="n">1</span><span>After outbound the button becomes "✓ Outbounded" and is unclickable (gray, disabled) <span class="ref">— user request</span></span></li>
+    <li><span class="n">2</span><span>Cancel Outbound button — cancelling rolls the order status back from prepare shipment → processing <span class="ref">— C Behavior</span></span></li>
+    <li><span class="n">3</span><span>Toast after completion with no refresh → scan the next barcode right away <span class="ref">— C Search</span></span></li>
+    <li><span class="n">4</span><span>Individual Cancel Inbound disabled after outbound — to revert, Cancel Outbound first (prevents out-of-order state) <span class="ref">— adopted provisionally (2026-08-03, owner review pending)</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 4 : Customer return mode ══════════════ -->
+<section class="state" id="s4">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox4">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox4">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow anno">
+      <div class="search-input"><input value="10322198837710" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+      <span class="dot" style="top:-11px;left:-10px">5</span>
+    </div>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="retbanner anno">
+      <b>⟲ Customer Return Order</b>
+      <span>A returned tracking barcode was scanned — Order <b>412990</b> · Tracking 10322198837710</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+    </div>
+    <div class="ordercard">
+      <span class="kv">Order ID: <b style="color:var(--blue)">412990</b></span>
+      <span class="kv">Order Status:</span><span class="anno" style="display:inline-block"><span class="status" style="background:var(--red-soft);color:var(--red)">refunded</span><span class="dot" style="top:-11px;right:-9px">6</span></span>
+      <span class="kv">Total Quantity: <b>4</b></span>
+      <div class="shelf"><label>Shelf</label><input value=""></div>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel4">💬 Comments <span class="badge-n">1</span></button>
+    </div>
+    <div class="cpanel" id="cpanel4" style="display:block">
+      <div class="c-item"><span class="who">Kai</span><span><span class="at">@Dean</span> Please use B-01-4 for all return restocks.</span><time>07-08 16:20</time><button class="star on" title="Saved">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-gray btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <button class="btn btn-green" data-modal="m-restock">Restock Selected to Warehouse (3)</button>
+      <span class="cnt">Opens the restock confirmation modal — confirm qty · location · memo per item, then process in bulk</span>
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox" checked></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-exist">
+          <td><input type="checkbox" checked></td><td class="num">100031877</td><td><div class="thumb">IMG</div></td>
+          <td><b>Beauty of Joseon</b> Glow Serum, 30ml</td>
+          <td><b>Beauty of Joseon</b> 글로우 세럼 (프로폴리스+나이아신아마이드)</td><td>30ml</td><td><span class="qty">1</span></td>
+          <td class="num">✓ 8809738317481</td><td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">A-03-2</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td><td class="num">100038120</td><td><div class="thumb">IMG</div></td>
+          <td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td><td><span class="qty qty-warn">2</span></td>
+          <td class="num">✓ 8809894261234</td><td class="num">24101467888120</td><td class="num" style="color:var(--blue)">10322198837710</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-partnership">PARTNERSHIP</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" checked></td><td class="num">100045210</td><td><div class="thumb">IMG</div></td>
+          <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
+          <td><b>Anua</b> 어성초 77% 수딩 토너</td><td>250ml</td><td><span class="qty">1</span></td>
+          <td class="num">✓ 8809640733458</td><td class="num">24101467999310</td><td class="num" style="color:var(--blue)">10322198837710</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-red-line btn-sm" data-modal="m-cancel">Cancel Inbound → Add Stock</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 3 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>Inbound / Outbound Log</h4>
+      <table class="logtbl">
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">Return Restock (Stock added)</td><td class="num">100031877</td><td class="num">1</td><td>Dean</td><td><span style="color:var(--ink-2)">Customer change-of-mind return — no visible damage</span></td></tr>
+        <tr><td class="num">07-09 14:05</td><td class="act-in">Return Restock (Stock added)</td><td class="num">100038120</td><td class="num">1</td><td>Dean</td><td>–</td></tr>
+        <tr><td class="num">07-02 09:12</td><td class="act-out">OUTBOUND</td><td class="num">All (3 SKU)</td><td class="num">4</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 4 — Changes: Customer Return Restock Process</h3>
+  <ol>
+    <li><span class="n">1</span><span>Scanning a returned tracking barcode shows a distinct "Customer Return Order" banner <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">2</span><span>Restock Selected to Warehouse button → opens the restock confirmation modal (qty·location columns removed from the table, moved into the modal; confirm via button) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">3</span><span>Restock confirmation modal (M3) — restock qty input (<b>default 0</b>; enter only the qty actually returned, 0 = excluded; no checkboxes) + location (auto-filled for existing stock, JIT-only SKUs need assignment) + memo. Confirm button count = items with qty &gt; 0 (see modal M3 — no on-screen dot) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">4</span><span>If any item has restock qty &gt; 0 but no location, the confirm button is disabled — assign a location to enable (see modal M3 — no on-screen dot) <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">5</span><span>Searchable by last-mile (return) barcode too — the unified search auto-detects return barcodes <span class="ref">— C Returns</span></span></li>
+    <li><span class="n">6</span><span><b>Explicit status for customer-return orders</b> — the system has no "returned" status (the 8 real statuses: pending/processing/on-hold/completed/refunded/failed/shipped/prepare-shipment). Return orders are usually <b>refunded</b> (collected after refund), sometimes <b>failed</b> (delivery failure), and returns before refund (refused delivery · customs return) can arrive <b>still in completed</b> — returns are detected by <b>scanning the last-mile return barcode</b>, not by status <span class="ref">— C Returns</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 5 : Hold order ══════════════ -->
+<section class="state" id="s5">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox5">💬 Comments<span class="badge-n">3</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox5">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413865</b> · Dean: "@Yongwon Only 1 of 2 JIT items has arrived. Please check"<br><time>10:42</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413650</b> · Kai: "@Yongwon Where should the return restock location be?"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413501</b> · Dean: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413712</b> · Miranti: "@Yongwon Please take extra care packing this order"<br><time>09:15</time></div><button class="star on" title="Unsave">★</button></div>
+        <div class="it"><div class="body"><b>Order 412990</b> · Kai: "Use B-01-4 for all return restocks"<br><time>Yesterday</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+    <div class="searchrow">
+      <div class="search-input"><input value="10324880021991" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number"></div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+    <p class="sub" style="margin-top:18px">Search Results</p>
+    <div class="holdbanner anno">
+      <b>⏸ Hold Shipment</b>
+      <span>CS team put this order on Hold per customer request (address change) — Order <b>414102</b> · Requested by Sara(CS) 07-13 09:20</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+    </div>
+    <div class="ordercard anno">
+      <span class="kv">Order ID: <b style="color:var(--blue)">414102</b></span>
+      <span class="kv">Order Status:</span><span class="status st-hold">On Hold</span>
+      <span class="kv">Total Quantity: <b>2</b></span>
+      <button class="btn btn-line btn-sm">🖨 Print</button>
+      <div class="shelf"><label>Shelf</label><input value="7"></div>
+      <button class="btn btn-gray btn-sm anno">Outbound<span class="dot" style="top:-11px;right:-11px">2</span></button>
+      <button class="btn btn-line btn-sm comment-btn" data-open="cpanel5">💬 Comments <span class="badge-n">1</span></button>
+    </div>
+    <div class="cpanel" id="cpanel5" style="display:block">
+      <div class="c-item"><span class="who">Mia (CS)</span><span><span class="at">@Dean</span> Put on Hold — customer requested an address change. Will release once the address is confirmed.</span><time>07-09 09:02</time><button class="star" title="Save">★</button></div>
+      <div class="cwrite"><input placeholder="Write a comment — @name sends an automatic Slack alert (order no · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+    </div>
+
+    <div class="bulkbar anno" style="margin-top:10px">
+      <button class="btn btn-green-line btn-sm">Bulk Inbound (Selected)</button>
+      <button class="btn btn-gray btn-sm">Inbound + Outbound All Remaining</button>
+      <span class="cnt">Hold order — Inbound allowed, Outbound blocked (ship after Hold release)</span>
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>SKU</th><th>Image</th><th>Product Name</th><th>Product Name KR</th><th>Size</th><th>Qty</th>
+        <th>Barcode</th><th>Inbound Order No</th><th>Tracking No</th><th>Inbound Status</th><th>Sourcing Route</th><th>Location</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100041002</td><td><div class="thumb">IMG</div></td>
+          <td><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
+          <td><b>COSRX</b> 어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809416470726</td>
+          <td class="num">24101468120440</td><td class="num" style="color:var(--blue)">10324880021991</td>
+          <td><span class="tag tag-inbounded">INBOUNDED</span></td>
+          <td><span class="tag tag-smartbuy">SMART BUY</span></td><td class="num">–</td>
+          <td><button class="btn btn-gray btn-sm">Cancel Inbound</button></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td class="num">100052117</td><td><div class="thumb">IMG</div></td>
+          <td><b>Round Lab</b> 1025 Dokdo Toner, 200ml</td>
+          <td><b>Round Lab</b> 1025 독도 토너</td><td>200ml</td>
+          <td><span class="qty">1</span></td>
+          <td class="num">✓ 8809556351025</td>
+          <td class="num">–</td><td class="num">–</td>
+          <td><span class="tag tag-pending">PENDING</span></td>
+          <td><span class="tag tag-jit">JIT (Coupang)</span></td><td class="num">–</td>
+          <td><button class="btn btn-green btn-sm">Inbound</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:14px">Found 2 item(s) in this order · Found 1 order(s)</p>
+
+    <div class="logsec anno">
+      <h4>Inbound / Outbound Log</h4>
+      <table class="logtbl">
+        <tr><th>Time</th><th>Action</th><th>SKU</th><th>Qty</th><th>Worker</th><th>Memo</th></tr>
+        <tr><td class="num">07-13 09:20</td><td class="act-cancel">HOLD Applied</td><td class="num">All</td><td class="num">–</td><td>Sara (CS)</td><td><span style="color:var(--ink-2)">Customer address change request — shipment held</span></td></tr>
+        <tr><td class="num">07-13 08:55</td><td class="act-in">INBOUND</td><td class="num">100040311</td><td class="num">1</td><td>Miranti</td><td>–</td></tr>
+      </table>
+    </div>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 5 — Changes: Hold Order (Shipment Held)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Hold banner — orders put on Hold by the CS team in OMS/Order detail are flagged instantly on scan (requester · reason · time) <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">2</span><span>Hold orders have the <b>Outbound button disabled</b> — no shipping until the Hold is released <span class="ref">— F Hold</span></span></li>
+    <li><span class="n">3</span><span>Bulk actions — Inbound stays available (intake is not blocked); only "Inbound + Outbound All Remaining" is blocked <span class="ref">— F Hold + C Behavior</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">The Hold itself is applied via the "Hold Shipment" button in OMS/Order detail or Order Management (CS team). View Orders only displays the resulting status and blocks outbound.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 6 : Internal inbound — Inbound Request scan (in progress) ══════════════ -->
+<section class="state" id="s6">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox6">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox6">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon Moved yesterday's inbound to row B locations"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input anno">
+        <input value="10325661220417" placeholder="Tracking No / Inbound Order No / Product Order No / Last-mile barcode — scan any number">
+        <span class="dot" style="top:-10px;left:-10px">1</span>
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="intbanner anno">
+      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <div class="big">📦 Internal Inbound — Inbound Request</div>
+      <div class="warnline">Not a customer order · Goes into Inventory · No Outbound step</div>
+      <div class="kv">
+        <span>Inbound No. <b>202607120001</b></span>
+        <span>Channel <span class="tag tag-wholesale">WHOLESALE</span></span>
+        <span>Supplier <b>비엠유통</b></span>
+        <span>Requested by <b>Dean</b> · 07-12</span>
+        <span>Expected arrival <b>07-18</b></span>
+        <span><a style="color:var(--blue);cursor:pointer" href="../inbound-request/index.html#reqlist">View in Inbound Request List →</a></span>
+      </div>
+    </div>
+
+    <div class="tiles anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <div class="tile"><div class="lab">Expected Qty (Total)</div><div class="val">800</div></div>
+      <div class="tile ok"><div class="lab">Received (scanned)</div><div class="val">620</div></div>
+      <div class="tile warn"><div class="lab">Remaining</div><div class="val">180</div></div>
+      <div class="tile"><div class="lab">SKU</div><div class="val">2 SKUs <span style="font-size:13px;font-weight:600;color:var(--green)">(1 done)</span></div></div>
+    </div>
+
+    <div class="scannote anno">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      Now <b>scan product barcodes</b> — each scan adds <b>+1</b> to that product's received qty (continuous scanning · cursor auto-return · warning sound for products not in the request)
+    </div>
+
+    <div class="anno" style="position:relative">
+    <span class="dot" style="top:2px;left:-12px">5</span>
+    <table class="tbl">
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th class="anno">Expected Qty<span class="dot" style="top:-11px;right:-8px">9</span></th>
+        <th class="anno">Received Qty<span class="dot" style="top:-11px;right:-8px">6</span></th>
+        <th class="anno">Location<span class="dot" style="top:-11px;right:-8px">7</span></th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500 <button class="qedit" data-modal="m-qtyedit" title="Edit Expected Qty">✎</button></td>
+          <td><input class="qtyin" value="500" readonly style="border-color:var(--green)"></td>
+          <td><input class="locin" value="A-05-11"></td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
+        </tr>
+        <tr class="row-part">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300 <button class="qedit" data-modal="m-qtyedit" title="Edit Expected Qty">✎</button></td>
+          <td><input class="qtyin" value="120"></td>
+          <td><input class="locin" value="B-02-07"></td>
+          <td><span class="tag tag-part">In progress · 180 remaining</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="anno" style="display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap">
+      <span class="dot" style="top:-11px;left:-10px">8</span>
+      <button class="btn btn-gray">Confirm Full Inbound (180 remaining)</button>
+      <button class="btn btn-line" data-modal="m-partial">Save Partial Inbound</button>
+      <span class="mut">On confirm: reflected in Inventory (Current Stocks) · Inbound Request List switches to <b>INBOUNDED</b> · Received Date recorded automatically</span>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 6 — Changes: Internal Inbound (Inbound Request Scan)</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>Automatic branch on tracking scan</b> — if the scanned tracking number belongs to an <b>Inbound Request (I), this screen opens instead of customer-order states (1–5)</b>. Separates customer orders (inbound → immediate outbound) from internal inbound (stock intake) at the view level. An inbound request may have multiple tracking numbers registered (split shipments) — every registered number matches and enters this screen (2026-08-03) <span class="ref">— I + C Search</span></span></li>
+    <li><span class="n">2</span><span><b>Internal Inbound banner</b> — a large purple-bordered banner makes "not a customer order · no outbound" instantly clear. Inbound No. · channel badge · Supplier · requester · expected arrival + shortcut to the Inbound Request List <span class="ref">— new</span></span></li>
+    <li><span class="n">3</span><span>Progress tiles — Expected Qty vs Received (scan cumulative) vs Remaining, plus a per-SKU completion count <span class="ref">— new</span></span></li>
+    <li><span class="n">4</span><span><b>Continuous product-barcode scanning</b> — each scan adds +1 to that SKU's Received Qty, cursor auto-returns (same scan protocol as states 1–5). Warning sound when scanning a product not in the request (wrong-delivery detection) <span class="ref">— C Scan Protocol</span></span></li>
+    <li><span class="n">5</span><span>Request-vs-received reconciliation table — SKU No. / Brand / Product Name come straight from the Inbound Request (matches the sheet columns) <span class="ref">— I</span></span></li>
+    <li><span class="n">6</span><span>Received Qty = scan cumulative + <b>directly editable</b> (manual entry for box-level bulk inbound) <span class="ref">— new</span></span></li>
+    <li><span class="n">7</span><span>Location = <b>Inventory intake position</b> — existing-stock SKUs auto-suggest their current location (one location per SKU rule); new SKUs need manual assignment <span class="ref">— E Location Protocol</span></span></li>
+    <li><span class="n">8</span><span><b>Confirm Full Inbound</b> — enabled only when received qty <b>exactly matches Expected Qty for every SKU</b> (same match gating as closing). While mismatched, use <b>Save Partial Inbound (M5)</b> to record a reason and continue later. Over-scanning warns <span class="ref">— new</span></span></li>
+    <li><span class="n">9</span><span><b>Edit Expected Qty (new, decided 2026-08-02)</b> — click ✎ on Expected Qty → new qty + required reason (supplier qty change / damage·defect / other) (M6). Saving recalculates the remaining and full-confirm gating — e.g. damage 300→120 makes received 120 = 120/120, enabling full confirm. The edit history is auto-posted as a comment on the Inbound Request + <b>Slack alert to @requester</b> <span class="ref">— new</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): on confirm ① reflected in Inventory (Current Stocks) with locations ② Inbound Request List status auto-switches <b>REQUESTED / PARTIAL → INBOUNDED</b> ③ <b>Received Date recorded automatically</b> (for sheet sync — automatic Carrier recording is not supported, confirmed 2026-08-03) ④ focus returns to the search box for the next tracking scan. Unlike customer-order states (1–5), this screen has <b>no Outbound</b>.</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 6b : Internal inbound — fully received ══════════════ -->
+<section class="state" id="s6b">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ Inbound complete — Inbound No. 202607120001</span><small>Inventory updated · Request list INBOUNDED · ready for the next tracking scan</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn" data-open="inbox6b">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox6b">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Inbound 202607100005</b> · Miranti: "@Yongwon Moved yesterday's inbound to row B locations"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Inbound 202607120001</b> · Dean: "@Yongwon 비엠유통 — remaining 180 units arriving Friday"<br><time>11:05</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <h2>WMS - View Orders</h2>
+    <p class="sub">Search Orders</p>
+
+    <div class="searchrow">
+      <div class="search-input">
+        <input value="" placeholder="Scan a tracking barcode — continue with the next one">
+      </div>
+      <button class="btn btn-blue">🔍 Search</button>
+    </div>
+
+    <div class="donebanner anno">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <div class="big">✓ Full Inbound Complete — Inbound No. 202607120001</div>
+      <div class="kv">
+        <span>Received <b>800 / 800</b> (2 SKUs)</span>
+        <span>Inventory <b>updated</b> (A-05-11 · B-02-07)</span>
+        <span>Inbound Request List switched to <b>INBOUNDED</b></span>
+        <span>Received Date <b>07-26 14:02</b> · Carrier is not recorded</span>
+      </div>
+    </div>
+
+    <table class="tbl">
+      <thead><tr>
+        <th>SKU No.</th><th>Brand</th><th>Product Name</th><th>Expected Qty</th><th>Received Qty</th><th>Location</th><th>Status</th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-done">
+          <td class="num">100052117</td><td><b>Round Lab</b></td><td>1025 Dokdo Toner, 200ml</td>
+          <td class="num">500</td><td class="num"><b>500</b></td><td class="num">A-05-11</td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
+        </tr>
+        <tr class="row-done">
+          <td class="num">100052124</td><td><b>Round Lab</b></td><td>1025 Dokdo Cleanser, 150ml</td>
+          <td class="num">300</td><td class="num"><b>300</b></td><td class="num">B-02-07</td>
+          <td><span class="tag tag-done">✓ INBOUNDED</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note anno" style="max-width:none">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      Cursor returns to <b>the search box immediately on completion</b> — scan the next tracking number with no refresh. This stock is visible in Inventory (Current Stocks) with its locations.
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 6b — Changes: Internal Inbound Fully Complete</h3>
+  <ol>
+    <li><span class="n">1</span><span>Completion banner — the result of an <b>exact match (800/800)</b> confirm. Inventory locations · Request List INBOUNDED · automatic Received Date, all at a glance <span class="ref">— new</span></span></li>
+    <li><span class="n">2</span><span>Focus returns to the search box immediately on completion — continuous scanning of the next tracking number with no refresh (protocol common to all states) <span class="ref">— C Scan Protocol</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : Cancel Inbound — restock confirm ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Cancel Inbound — 100038120<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">1. Restock this inventory?</b>
+      <div class="qrow">
+        <label><input type="radio" name="restock" value="yes" checked> Yes — restock</label>
+        <label><input type="radio" name="restock" value="no"> No</label>
+      </div>
+      <div class="qrow">
+        <b style="color:var(--ink)">2. Restock Qty</b>
+        <input value="2" id="restockQty"> <span class="mut">Default = qty that was inbounded (editable) · disabled when "No" is selected</span>
+      </div>
+      <div class="qrow">
+        <b style="color:var(--ink)">3. Location (Optional)</b>
+        <input value="B-01-4" id="restockLoc"> <span class="mut">Default = the SKU's registered location (editable · updates the SKU's location) · required if the SKU has none · disabled when "No" is selected</span>
+      </div>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink)">4. Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Cancellation reason or notes — also recorded in the order's Comments history"></textarea>
+      </div>
+      <div class="note">The SKU's <b>Reserved Quantity → Available</b> updates automatically.<br>Use cases: mid-order cancellation, or a JIT order placed by mistake when warehouse stock exists.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Close</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Unrecognized barcode — step 1 order-number lookup ══════════════ -->
+<div class="overlay" id="m-unrec">
+  <div class="modal anno" style="max-width:640px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Barcode Not Recognized<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">No order matches the scanned barcode <span class="num">8809110223344</span>.</b>
+      <p class="mut" style="margin:8px 0 0">Enter the Coupang purchase <b>order number</b> to find matching products and register the tracking number on the spot.</p>
+      <div class="qrow" style="margin-top:12px">
+        <b style="color:var(--ink)">Order No</b>
+        <input id="unrecNo" value="12101316464794" style="flex:1;min-width:220px;text-align:left;font-weight:600">
+        <button class="btn btn-blue btn-sm" id="unrecSearch">🔍 Look up</button>
+      </div>
+      <p class="mut" style="margin:6px 0 0;font-size:11.5px">Demo: look up with this value = match-found path · change the value = no-match path</p>
+      <div id="unrecFound" style="display:none;margin-top:12px">
+        <p class="mut" style="margin:0 0 6px">Order number <b class="num" style="color:var(--blue)">12101316464794</b> matched <b>2</b> products — click the match button on the scanned product's row</p>
+        <table class="tbl" style="min-width:0;font-size:12.5px;margin-top:0">
+          <thead><tr><th>Image</th><th>Product Name</th><th>Order</th><th>Qty</th><th>Tracking No</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Pore Remedy Renewing Foam Cleanser, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 포어레미디 리뉴잉 폼 클렌저</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100835644</td><td><button class="btn btn-green btn-sm trkmatch">Match Tracking No</button></td></tr>
+            <tr><td><div class="thumb">IMG</div></td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam, 150ml<br><span class="mut"><b>Dr.Jart+</b> — 시카페어 젠틀 클렌징 폼</span></td><td class="num" style="color:var(--blue)">414230</td><td class="num">1</td><td class="num">10323100000001</td><td><button class="btn btn-green btn-sm trkmatch">Match Tracking No</button></td></tr>
+          </tbody>
+        </table>
+        <div class="note">Clicking match registers the tracking number on that line and closes this window — <b>rescanning the same barcode is then recognized normally.</b></div>
+      </div>
+      <div id="unrecNone" style="display:none;margin-top:12px">
+        <div class="note" style="background:var(--red-soft)"><b>No products match</b> the entered order number (possible typo or a number from another channel). Send it to the Missing Tracking List.</div>
+        <div style="margin-top:8px"><button class="btn btn-blue btn-sm" id="unrecToSend">Send to Missing Tracking List</button></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" id="unrecNoNum">No order number</button>
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Send to Missing Tracking List — step 2 (no order number / match failed) ══════════════ -->
+<div class="overlay" id="m-unrec2">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2b</span>
+    <header>Send to Missing Tracking List<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Barcode <span class="num">8809110223344</span> — send it to the Missing Tracking List?</b>
+      <p class="mut" id="unrecCarried" style="display:none;margin:8px 0 0">The looked-up order number <b class="num" id="unrecCarriedNo"></b> (match failed) is recorded together.</p>
+      <p class="mut" style="margin:10px 0 4px">Enter the product name (English — autocomplete · Korean name shown alongside)</p>
+      <div class="auto">
+        <input value="glow ser">
+        <div class="opt sel">Beauty of Joseon — <b>Glow Serum : Propolis + Niacinamide, 30ml</b> <small><b>Beauty of Joseon</b> — 프로폴리스 나이아신아마이드 글로우 세럼</small></div>
+        <div class="opt">Beauty of Joseon — Glow Deep Serum : Rice + Arbutin, 30ml <small><b>Beauty of Joseon</b> — 글로우 딥 세럼 : 쌀 + 알부틴</small></div>
+        <div class="opt">COSRX — The Vitamin C 23 Glow Serum, 20ml <small><b>COSRX</b> — 더 비타민C 23 세럼</small></div>
+      </div>
+      <div class="qrow" style="margin-top:12px">
+        <b style="color:var(--ink)">Qty</b>
+        <input value="1" style="width:64px">
+      </div>
+      <div style="margin-top:10px">
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="e.g. Box label damaged, looks like a 1+1 set — shown in the Missing Tracking List and the Slack alert"></textarea>
+      </div>
+      <div class="note">On send, the <b>#unrecognized-tracking</b> channel gets an "Unrecognized product added" alert (product name · barcode · qty · memo · order number if lookup failed) <b>and @mentions every suspected PIC</b> (once per person) so handlers are pushed, not polled → shown in the unrecognized pool on the Missing Tracking List page.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>No</button>
+      <button class="btn btn-blue btn-sm" id="unrec2Send" data-close>Send to Missing Tracking List</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="unrecToast" style="display:none;position:fixed;top:18px;right:18px;z-index:99">
+  <span>✓ Tracking No 10323100835644 matched and registered</span><small>Order 414230 · <b>Dr.Jart+</b> 포어레미디 폼 — rescanning the same barcode is now recognized</small>
+</div>
+
+<!-- ══════════════ MODAL : Print return labels (supplier return) ══════════════ -->
+<div class="overlay" id="m-retlabel">
+  <div class="modal anno" style="max-width:640px">
+    <span class="dot" style="top:-11px;left:-11px">M4</span>
+    <header>Print Return Labels — 2 Selected Products (Supplier Return)<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Carrier</b>
+      <div class="carrier-chips">
+        <button class="cchip on">CJ대한통운</button><button class="cchip">롯데택배</button><button class="cchip">한진택배</button><button class="cchip">우체국택배</button><button class="cchip">로젠택배</button><button class="cchip" id="cchipCustom">✎ Custom</button>
+      </div>
+      <div id="rlCustomRow" style="display:none;margin-top:8px">
+        <input id="rlCarrierCustom" placeholder="Enter carrier name" style="width:260px;border:1px solid var(--blue);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+      </div>
+      <table class="tbl" style="margin-top:12px;font-size:12.5px">
+        <thead><tr><th>Product Name KR</th><th style="width:110px">Size (optional)</th><th style="width:90px">Qty (optional)</th></tr></thead>
+        <tbody>
+          <tr><td><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저</td><td><input class="rl-size" value="150ml" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="1" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+          <tr><td><b>Medicube</b> 제로 모공 패드 2.0</td><td><input class="rl-size" placeholder="omitted if empty" style="width:100%;border:1px dashed var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit"></td><td><input class="rl-qty" value="2" style="width:100%;border:1px solid var(--line-strong);border-radius:6px;padding:5px 7px;font:inherit;text-align:center"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink);font-size:12.5px">Label Preview</b>
+        <div style="border:2px solid var(--ink);border-radius:8px;padding:14px 16px;margin-top:6px;background:#fff;color:#000;max-width:360px">
+          <div id="rlPreviewCarrier" style="font-size:18px;font-weight:800;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px">CJ대한통운</div>
+          <div style="font-size:13px;padding:2px 0"><b>Dr.Jart+</b> 포어레미디 리뉴잉 폼 클렌저 · 150ml · 1개</div>
+          <div style="font-size:13px;padding:2px 0"><b>Medicube</b> 제로 모공 패드 2.0 · 2개</div>
+        </div>
+      </div>
+      <div class="note">Use case: during inbound scanning, <b>return items to the supplier (e.g. Coupang seller) when wrong/damaged items are found</b>. Printing puts <b>carrier name + product name (KR) + size + qty</b> on the label — size/qty omitted if empty; attach it to the return box.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>🖨 Print</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Customer return restock confirmation ══════════════ -->
+<div class="overlay" id="m-restock">
+  <div class="modal anno" style="max-width:720px">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>Warehouse Restock — Order 412990<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <p style="margin:0 0 10px">Confirm the products, quantities, and locations to restock. Products with existing stock get their current location auto-filled. <b>Restock qty defaults to 0</b> — enter only the qty actually returned (0 = excluded).</p>
+      <table class="tbl" style="margin-top:0;font-size:12.5px">
+        <thead><tr><th>Product</th><th>Ordered Qty</th><th>Restock Qty</th><th>Location</th></tr></thead>
+        <tbody>
+          <tr><td><b>Beauty of Joseon</b> Glow Serum, 30ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="A-03-2"></div></td></tr>
+          <tr><td><b>Medicube</b> Zero Pore Pad 2.0, 1+1</td><td><span class="qty qty-warn">2</span></td><td><div class="loc-inline"><input value="1" style="width:52px"></div></td><td><div class="loc-inline"><input value="B-01-4"></div></td></tr>
+          <tr><td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td><td><span class="qty">1</span></td><td><div class="loc-inline"><input value="0" style="width:52px"></div></td><td><div class="loc-inline loc-need"><input value="" placeholder="required"></div></td></tr>
+        </tbody>
+      </table>
+      <div class="anno" style="margin-top:12px">
+        <span class="dot" style="top:-8px;left:150px">M3b</span>
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Return reason · condition (visible damage etc.) · notes — also recorded in the order's Comments history and the inbound log"></textarea>
+      </div>
+      <div class="note" style="background:var(--amber-soft);margin-top:10px"><b style="color:var(--amber)">Anua has restock qty 0 → excluded.</b> Entering a qty requires a location; if qty &gt; 0 with no location, confirm stays disabled.</div>
+      <div class="note">On completion, Current Stocks quantities and locations update automatically.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Confirm Restock (2)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Save Partial Inbound (Internal Inbound State 6) ══════════════ -->
+<div class="overlay" id="m-partial">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M5</span>
+    <header>Save Partial Inbound — Inbound No. 202607120001<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Only 620 of the 800 expected units have been received (180 remaining).</b>
+      <p class="mut" style="margin:8px 0 0">1025 Dokdo Cleanser, 150ml — expected 300 / received 120 / remaining 180</p>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">Reason</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>Split shipment — remainder arriving later</option>
+          <option>Short delivery (needs supplier confirmation)</option>
+          <option>Partially damaged — will be returned to supplier</option>
+        </select>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="e.g. Remaining 180 units arriving Friday — also recorded in the request's Comments"></textarea>
+      </div>
+      <div class="note">On save — the 620 received units are <b>added to Inventory immediately</b>, and the Inbound Request List switches to <b>Partial Inbound (620/800)</b> (3 stages: REQUESTED → PARTIAL → INBOUNDED). When the remainder arrives, rescan the same tracking number to continue in State 6.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save Partial Inbound</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Edit Expected Qty (Internal Inbound State 6) ══════════════ -->
+<div class="overlay" id="m-qtyedit">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M6</span>
+    <header>Edit Expected Qty — Inbound No. 202607120002<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">1025 Dokdo Cleanser, 150ml — current Expected Qty 300</b>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">New Expected Qty</b>
+        <input class="qtyin" value="120">
+        <span class="mut">300 → 120 (−180)</span>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <b style="color:var(--ink)">Reason (required)</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option>Damaged/defective — cannot accept</option>
+          <option>Supplier qty change</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">Memo</b>
+        <textarea class="mtextarea" placeholder="e.g. 1 box damaged — 180 units rejected, returned to supplier">1 box damaged — 180 units rejected, returned to supplier</textarea>
+      </div>
+      <div class="note">On save — Expected Qty updates 300 → <b>120</b>, and the remaining / full-confirm gating recalculates (current received 120 = <b>120/120 → Confirm Full Inbound enabled</b>). The edit is auto-posted as a Comment on this Inbound Request and the <b>requester (@Dean)</b> gets a Slack alert. The request list qty cell shows the edit history (300→120).</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm" data-close>Save Qty Edit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    document.getElementById(t.dataset.state).classList.add('on');
+    window.scrollTo({top:0});
+  });
+});
+/* Unrecognized barcode — step 1 order-number lookup → match found/failed/none demo */
+document.getElementById('unrecSearch').addEventListener('click',()=>{
+  const hit=document.getElementById('unrecNo').value.trim()==='12101316464794';
+  document.getElementById('unrecFound').style.display=hit?'block':'none';
+  document.getElementById('unrecNone').style.display=hit?'none':'block';
+});
+function unrecOpenSend(carriedNo){
+  document.getElementById('m-unrec').classList.remove('open');
+  const c=document.getElementById('unrecCarried');
+  if(carriedNo){document.getElementById('unrecCarriedNo').textContent=carriedNo;c.style.display='block';}
+  else c.style.display='none';
+  document.getElementById('m-unrec2').classList.add('open');
+}
+document.getElementById('unrecNoNum').addEventListener('click',()=>unrecOpenSend(null));
+document.getElementById('unrecToSend').addEventListener('click',()=>unrecOpenSend(document.getElementById('unrecNo').value.trim()));
+document.querySelectorAll('.trkmatch').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById('m-unrec').classList.remove('open');
+  const t=document.getElementById('unrecToast');
+  t.style.display='flex';setTimeout(()=>{t.style.display='none';},4000);
+}));
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments hub tab switching (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ save toggle */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+const sf=document.getElementById('scanfloat');
+sf.querySelector('header').addEventListener('click',()=>{
+  sf.classList.toggle('collapsed');
+  sf.querySelector('.x').textContent = sf.classList.contains('collapsed') ? '▾' : '–';
+});
+/* Return label — carrier chip select (custom input shown only for the Custom chip, synced to preview) */
+document.querySelectorAll('.cchip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.cchip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    const custom=c.id==='cchipCustom';
+    document.getElementById('rlCustomRow').style.display=custom?'block':'none';
+    document.getElementById('rlPreviewCarrier').textContent=custom?(document.getElementById('rlCarrierCustom').value||'Carrier name'):c.textContent;
+    if(custom) document.getElementById('rlCarrierCustom').focus();
+  });
+});
+document.getElementById('rlCarrierCustom').addEventListener('input',e=>{
+  document.getElementById('rlPreviewCarrier').textContent=e.target.value||'Carrier name';
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
+});
+
+/* Cancel Inbound modal — selecting "No" disables restock qty + clears the value */
+const rq=document.getElementById('restockQty');
+const rl=document.getElementById('restockLoc');
+document.querySelectorAll('input[name="restock"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    const no=document.querySelector('input[name="restock"][value="no"]').checked;
+    if(no){rq.dataset.prev=rq.value;rq.value='';rq.disabled=true;
+           rl.dataset.prev=rl.value;rl.value='';rl.disabled=true;}
+    else{rq.disabled=false;rq.value=rq.dataset.prev||'2';
+         rl.disabled=false;rl.value=rl.dataset.prev||'B-01-4';}
+  });
+});
+
+/* Comments hub — search all comments (reverse-chronological) */
+const CSEARCH_DATA=[{o:'413865',a:'Dean',t:'Today 10:42',ts:8,x:'@Yongwon Only 1 of 2 JIT items has arrived. Please check'},{o:'413712',a:'Miranti',t:'Today 09:15',ts:7,x:'@Yongwon Please take extra care packing this order'},{o:'413650',a:'Aldo',t:'Today 08:50',ts:6,x:'Moved to shelf B-12'},{o:'413650',a:'Kai',t:'Yesterday 18:10',ts:5.5,x:'@Yongwon Where should the return restock location be?'},{o:'413501',a:'Dean',t:'Yesterday 17:30',ts:5,x:'Resolved'},{o:'412990',a:'Kai',t:'Yesterday 16:20',ts:4.5,x:'Use B-01-4 for all return restocks'},{o:'413390',a:'Miranti',t:'Yesterday 11:02',ts:4,x:'Included 3 sachets per customer request'},{o:'413118',a:'Dean',t:'7/26 15:44',ts:3,x:'Box damaged — repacked and shipped'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">No matching comments</div>');
+  pane.style.display='block';
+}
+
+/* Shelf/location inputs — floating save button (shown on input; click/Enter saves instantly, no refresh) */
+document.querySelectorAll('.shelf input, .locin').forEach(inp=>{
+  const btn=document.createElement('button');
+  btn.className='flsave'; btn.textContent='Save'; btn.style.display='none'; btn.type='button';
+  inp.insertAdjacentElement('afterend',btn);
+  inp.dataset.saved=inp.value;
+  const save=()=>{
+    inp.dataset.saved=inp.value;
+    btn.textContent='✓ Saved'; btn.classList.add('ok');
+    setTimeout(()=>{btn.style.display='none';btn.classList.remove('ok');btn.textContent='Save';},900);
+  };
+  inp.addEventListener('input',()=>{
+    if(inp.value!==inp.dataset.saved){btn.style.display='inline-flex';btn.classList.remove('ok');btn.textContent='Save';}
+    else btn.style.display='none';
+  });
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&btn.style.display!=='none'){e.preventDefault();save();}});
+  btn.addEventListener('click',e=>{e.stopPropagation();save();});
+});
+
+/* State 0 — Expected Inbound summary badge toggle */
+const it=document.getElementById('inexpToggle');
+if(it){it.addEventListener('click',()=>{
+  const t=document.getElementById('inexpTable');
+  const open=t.style.display==='none';
+  t.style.display=open?'block':'none';
+  it.textContent=(open?'▾':'▸')+' Expected Inbound 4 — 2 with tracking · 1 Partial Inbound';
+});}
+
+/* Outbound send sound — audible confirmation that processing was accepted (2026-08-03) */
+function sndOutbound(){
+  try{
+    const ac = sndOutbound.ac || (sndOutbound.ac = new (window.AudioContext||window.webkitAudioContext)());
+    const t = ac.currentTime;
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(340,t); o.frequency.exponentialRampToValueAtTime(940,t+0.16);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+0.28);
+    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+0.3);
+    const o2=ac.createOscillator(), g2=ac.createGain();
+    o2.type='triangle'; o2.frequency.setValueAtTime(1250,t+0.14);
+    g2.gain.setValueAtTime(0.0001,t+0.14); g2.gain.exponentialRampToValueAtTime(0.12,t+0.17); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.34);
+    o2.connect(g2); g2.connect(ac.destination); o2.start(t+0.14); o2.stop(t+0.36);
+  }catch(e){}
+}
+document.querySelectorAll('button').forEach(b=>{
+  const tx=b.textContent||'';
+  if(/Outbound/.test(tx) && !/Cancel/.test(tx) && !/Outbounded/.test(tx)){ b.addEventListener('click',sndOutbound); }
+});
+
+/* M2b send → green confirm toast, no refresh (2026-08-03) */
+const u2s=document.getElementById('unrec2Send');
+if(u2s){u2s.addEventListener('click',()=>{
+  let t=document.getElementById('gtoast');
+  if(!t){t=document.createElement('div');t.id='gtoast';t.className='gtoast';
+    t.innerHTML='✓ Sent to Missing Tracking List<small>PIC notified via #unrecognized-tracking · No refresh</small>';
+    document.body.appendChild(t);}
+  t.style.display='block'; setTimeout(()=>{t.style.display='none';},2600);});}
+</script>

@@ -1,0 +1,424 @@
+<title>WMS 2.0 — Unrecognized Tracking Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* Existing admin is a single light theme, so fixed with no dark mode */
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+.pagepad{padding:18px 16px 0}   /* C: reduced side margins */
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.row-hit td{background:var(--hl);border-top:2px solid var(--hl-line);border-bottom:2px solid var(--hl-line)}
+.tag{display:inline-block;border-radius:5px;padding:2.5px 8px;font-size:11px;font-weight:800;letter-spacing:.3px}
+/* sourcing-route badge — plain bold black text only, no color (same notation convention as View Orders) */
+.tag-jit{background:transparent;color:var(--ink);padding:0;font-size:11.5px;font-weight:800;letter-spacing:.3px}
+.mut{color:var(--ink-3);font-size:12.5px}
+/* ★ save (bookmark) toggle — shared by Mentions/Saved */
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red)}
+.toast small{opacity:.85;font-weight:400}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+/* ── removal confirm modal fields (M2 — PD-5/PD-60 owner-confirmed 2026-08-03) ── */
+.rlabel{display:block;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rsel{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13.5px;color:var(--ink);background:var(--page)}
+.rerr{display:none;margin-top:5px;font-size:12px;color:var(--red);font-weight:600}
+/* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.state{display:none}
+.state.on{display:block}
+/* ── tracking-missing only (minimal new classes) ───── */
+/* top unrecognized product pool header — attention highlight */
+.poolhead{margin-top:16px;background:var(--hl);border:1.5px solid var(--hl-line);border-radius:8px;
+  padding:11px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.poolhead b{color:var(--amber);font-size:14.5px}
+.poolhead .cnt{font-size:12.5px;color:var(--ink-2)}
+.poolhead .sp{flex:1}
+</style>
+<div class="wf-bar">
+  <h1>WMS 2.0 · Unrecognized Tracking Wireframe</h1>
+  <span class="hint">v3 — ✕ removal now confirms with a reason (2026-08-03) · purple numbers = new/changed annotations</span>
+  <div class="wf-tabs">
+    <button class="wf-tab" data-modal="m-match">Modal: Match Review (M1)</button>
+    <button class="wf-tab" data-modal="m-remove">Modal: Remove Confirm (M2)</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+  </div>
+</div>
+<!-- ══════════════ Unrecognized product pool + resolution log ══════════════ -->
+<section class="state on" id="s1">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:3px;left:-30px">5</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 414190</b> · Dean: "@Yongwon This Coupang order still has no tracking number after 12 hours. Needs re-checking"<br><time>10:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Unrecognized pool</b> · Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"<br><time>10:12</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 414102</b> · Harshit: "@Yongwon This is my order. Tracking entered"<br><time>09:50</time></div><button class="star" title="Save">★</button></div>
+        <div class="it"><div class="body"><b>Order 413998</b> · Miranti: "Resolved"<br><time>Yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Unrecognized pool</b> · Miranti: "@Yongwon Left a memo on the Snail essence (box label damaged). Please check whose order this is"<br><time>10:12</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">0</span>
+    <h2>WMS - Unrecognized Tracking List</h2>
+    <p class="sub">Unrecognized &amp; missing-tracking status <span class="mut" style="font-weight:400">· Coupang creates the order number immediately but generates the tracking number a few hours later → unrecognized items are tracked here</span></p>
+    <!-- ── Top: unrecognized product pool ── -->
+    <div class="poolhead anno" style="margin-top:20px">
+      <b>⚠ Unrecognized product pool · <span id="poolCount">3</span> items</b>
+      <span class="cnt">Physical products sent from View Orders after barcode recognition failure. The last-mile <b>tracking number is auto-collected</b> at scan time and shown together. <b>The order number (Coupang purchase) is mostly "–"</b> — items successfully matched by Coupang order-number lookup are already resolved at the registration step and never reach this pool. Suspected orders are auto-matched only from <b>Processing orders</b> that contain the product (multiple possible), mostly non-Coupang channels such as Naver and the official mall.</span>
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+    </div>
+    <div class="mockwrap"><table class="tbl" style="margin-top:8px">
+      <thead><tr>
+        <th>Tracking No</th><th>Order No</th><th class="anno">Product Name<span class="dot" style="top:-11px;left:96px">4</span></th><th>Product Name KR</th><th>Size</th>
+        <th>Barcode</th><th>Qty</th><th>Memo</th><th>Registrant (Center)</th><th>Registered At</th><th class="anno">Suspected Orders (Auto-matched)<span class="dot" style="top:-11px;left:70px">2</span></th><th class="anno">Action<span class="dot" style="top:-11px;right:-8px">3</span></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-hit" id="poolrow1">
+          <td class="num">10323100841207</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+                    <td><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml</td>
+          <td><b>COSRX</b> 어드밴스드 스네일 96 뮤신 에센스</td><td>100ml</td>
+          <td class="num">8809416470726</td>
+          <td class="num">1</td><td class="mut">Box label damaged</td>
+          <td>Miranti</td><td class="num">07-13 10:12</td>
+          <td style="font-size:12px;line-height:1.5">
+            <div><b>Dean</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414230</span> · <span class="mut">JIT (Naver) · Processing</span></div>
+            <div><b>Egita</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413871</span> · <span class="mut">JIT (Official Mall) · Processing</span></div>
+          </td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">Review &amp; Match</button> <button class="btn btn-line btn-sm xdel" title="Remove from list" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
+        </tr>
+        <tr class="row-hit">
+          <td class="num">10323100838455</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+                    <td><b>Anua</b> Heartleaf 77% Soothing Toner, 250ml</td>
+          <td><b>Anua</b> 어성초 77% 수딩 토너</td><td>250ml</td>
+          <td class="num">8809640733458</td>
+          <td class="num">1</td><td class="mut">–</td>
+          <td>Dean</td><td class="num">07-13 09:48</td>
+          <td style="font-size:12px;line-height:1.5"><div><b>Harshit</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 414102</span> · <span class="mut">JIT (Naver) · Processing</span></div></td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">Review &amp; Match</button> <button class="btn btn-line btn-sm xdel" title="Remove from list" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
+        </tr>
+        <tr class="row-hit">
+          <td class="num">10323100836690</td>
+          <td class="num" style="color:var(--ink-3)">–</td>
+                    <td><b>medicube</b> Zero Pore Pad 2.0, 1+1</td>
+          <td><b>Medicube</b> 제로 모공 패드 2.0 (1+1)</td><td>70ea</td>
+          <td class="num">8809894261234</td>
+          <td class="num">2</td><td class="mut">Looks like a 1+1 set</td>
+          <td>Dean</td><td class="num">07-13 09:30</td>
+          <td style="font-size:12px;line-height:1.5"><div><b>Miranti</b> · <span class="num" style="color:var(--blue);font-weight:700">Order 413998</span> · <span class="mut">JIT (Official Mall) · Processing</span></div></td>
+          <td style="white-space:nowrap"><button class="btn btn-blue btn-sm" data-modal="m-match">Review &amp; Match</button> <button class="btn btn-line btn-sm xdel" title="Remove from list" style="border-color:var(--red);color:var(--red);padding:5px 9px">✕</button></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p class="mut" style="margin-top:16px">Unrecognized pool · <span id="poolCountBottom">3</span> items</p>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>Unrecognized Tracking — Changes (new admin page)</h3>
+  <ol>
+    <li><span class="n">0</span><span>New admin page — replaces the manual process of setting orders without a tracking number aside. Coupang creates the order number instantly but generates the tracking number later → unrecognized / unentered items are collected and tracked here <span class="ref">— F Tracking Automation</span></span></li>
+    <li><span class="n">1</span><span><b>Unrecognized product pool</b> — aggregates physical products sent via the View Orders barcode-recognition-failure popup, highlighted in yellow. The <b>last-mile tracking number collected at scan time is shown to the left of the order number</b>. The order number (Coupang purchase) is mostly "–" — lookup-matched items are resolved at the registration step and never reach the pool. Each item shows brand, product name, size, barcode, quantity, and memo <span class="ref">— F Flow 5</span></span></li>
+    <li><span class="n">2</span><span><b>Suspected orders (auto-matched)</b> — via barcode→product comparison, candidates are shown <b>only when an order containing this product exists and that order is in the Processing stage</b>, <b>multiple possible</b>. Mostly JIT orders from non-Coupang channels such as Naver and the official mall (Coupang items are filtered out by the order-number lookup). On registration, the automatic #unrecognized-tracking notification also @mentions the suspected PICs → handlers only need to come and confirm <span class="ref">— 2026-07-23 UX inversion</span></span></li>
+    <li><span class="n">3</span><span><b>"Review &amp; Match" button → match modal (M1)</b> — click a candidate <b>product line</b> to match (matched to a product line, not order-level). The candidate list covers every "contains the product + Processing" order, so there is <b>no separate PIC search</b> (if it is not here, the data is wrong — manual-search fallback removed 2026-07-23). On confirm, the <b>tracking number is registered to that product line</b>, the item is removed from the pool, and a comment is automatically posted to the order's Comments (<b>@mentions the registrant</b> "Matched to the order" → Slack notification). Row <b style="color:var(--red)">✕</b> on the right now opens the <b>removal confirm modal (M2)</b>: a mandatory reason (Registered by mistake / Routed to inbound request + Inbound No. / No action needed / Other + memo) → soft-delete with reason·actor·time recorded, a green "✓ Removed from pool" toast, and an auto-comment on the pool item <span class="ref">— PD-5/PD-60 owner-confirmed 2026-08-03 · F Flow 2·5</span></span></li>
+    <li><span class="n">4</span><span>Brand name always shown at the front of Product Name (inherits View Orders decision B) <span class="ref">— B</span></span></li>
+    <li><span class="n">5</span><span>Comments — top-right hub ([@ Mentions]+[★ Saved]+search across all comments · newest first). @mentions trigger automatic Slack notifications; clicking a comment opens the order page <span class="ref">— 0. UI 1+2</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)"><b>2026-07-23 simplification decision:</b> removed the per-PIC group tables, bulk-action bar, Slack-notified column, resolved log, unified search bar, and the in-page register button and modal. Registration has a single entry point — the View Orders popup — and notifications are sent automatically. <b>Matching UX inversion:</b> handlers searching for their own name per product (old) → the system presents suspected orders and handlers first, and handlers only confirm (new). Since candidates are the full set of "contains the product + Processing" orders, the manual-search fallback was removed as well (2026-07-23). <b>(2026-08-03)</b> the one-click ✕ removal was replaced by the confirm modal M2 per the owner-confirmed rule that every destructive action gets a confirm step, a reason, and a toast (PD-5/PD-60); the dead v1 CSS/JS leftovers of the 2026-07-23 simplification were also deleted (WF-10).</p>
+  <p style="margin:8px 0 0;font-size:12.5px;color:var(--ink-3)">Flow summary: (1) View Orders barcode recognition fails → <b>order-number lookup popup</b> → (2a) match succeeds → the tracking number is matched and registered on the spot (never enters this list; rescanning recognizes it normally) / (2b) no order number or match fails → send-to-unrecognized modal (English product-name autocomplete · quantity · memo) → (3) automatic #unrecognized-tracking notification (suspected PICs @mentioned) → (4) shown in this page's unrecognized pool together with the tracking number and suspected orders ("contains the product + Processing" condition, multiple possible) → (5) the responsible PIC reviews &amp; matches via "Review &amp; Match" (M1) → removed from the pool + the registrant is @mentioned via a comment automatically posted to the order's Comments. See the View Orders wireframe for the registration popup mock. <b>(Confirmed 2026-08-02) Unrequested inbound shipments also use this pool</b> — when the invoice scan of arrived stock matches neither a customer order nor an inbound request, it is sent to unrecognized the same way. After the owner creates an inbound request, enters the invoice number, and removes the row from the pool (✕ → removal confirm modal M2, reason "Routed to inbound request" + Inbound No. — 2026-08-03), rescanning enters the View Orders internal-inbound screen (State 6) normally. Leaving a "suspected inbound stock" note in the registration memo speeds up routing to the owner.</p></div>
+</section>
+
+<!-- Modal: Review & Match (confirm & match the suspected product line) -->
+<div class="overlay" id="m-match">
+  <div class="modal anno" style="max-width:700px">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Review &amp; Match — Unrecognized Product<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div style="display:flex;gap:10px;align-items:center;background:var(--hl);border:1px solid var(--hl-line);border-radius:8px;padding:10px 12px">
+        <div style="font-size:13px"><b>COSRX</b> Advanced Snail 96 Mucin Power Essence, 100ml<br>
+          <span class="mut" style="font-size:12px">Barcode 8809416470726 · Tracking 10323100841207 · No order number · 1 unit · Registered by: Miranti (Center) 07-13 10:12 · Memo "Box label damaged"</span></div>
+      </div>
+      <div style="margin-top:14px;border:1.5px solid var(--green);background:var(--green-soft);border-radius:10px;padding:12px 14px">
+        <b style="font-size:13px;color:var(--ink)">Suspected orders (auto-matched)</b> <span class="mut" style="font-size:12px">— only <b>Processing orders</b> containing this product are shown as candidates (multiple possible). Match by selecting a <b>product line</b>, not the order</span>
+        <table class="tbl" style="min-width:0;font-size:12.5px;margin-top:8px">
+          <thead><tr><th>Order</th><th>PIC</th><th>Channel</th><th>Included Product</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="num" style="color:var(--blue)"><b>414230</b></td><td>Dean</td><td><span class="tag tag-jit">JIT (Naver)</span></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td><button class="btn btn-green btn-sm pmatch">Match to this product</button></td></tr>
+            <tr><td class="num" style="color:var(--blue)"><b>413871</b></td><td>Egita</td><td><span class="tag tag-jit">JIT (Official Mall)</span></td><td><b>COSRX</b> Snail 96 Essence ×1</td><td><button class="btn btn-green btn-sm pmatch">Match to this product</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">On match confirmation — tracking number <b>10323100841207</b> is registered to the selected product line, this item disappears from the pool, and it is automatically posted to the order's Comments: <b>"@Miranti (unrecognized registrant) Matched the unrecognized product (COSRX Snail 96 Essence) to this order"</b> → Slack notification to the registrant.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Remove Confirm (M2) — PD-5/PD-60 owner-confirmed 2026-08-03, closes WF-6 -->
+<div class="overlay" id="m-remove">
+  <div class="modal anno" style="max-width:480px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Remove this item from the pool?<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div id="rmSummary" style="background:var(--hl);border:1px solid var(--hl-line);border-radius:8px;padding:10px 12px;font-size:13px"></div>
+      <label class="rlabel" for="rmReason">Reason <span style="color:var(--red)">*</span></label>
+      <select class="rsel" id="rmReason">
+        <option value="">Select a reason…</option>
+        <option>Registered by mistake</option>
+        <option>Routed to inbound request</option>
+        <option>No action needed</option>
+        <option>Other</option>
+      </select>
+      <div id="rmInboundWrap" style="display:none">
+        <label class="rlabel" for="rmInbound">Inbound No. <span class="mut" style="font-weight:400">(optional — links the removal to the inbound request)</span></label>
+        <input class="rsel num" id="rmInbound" placeholder="YYYYMMDDNNNN" maxlength="12" inputmode="numeric">
+        <div class="rerr" id="rmInboundErr">Inbound No. must be 12 digits (YYYYMMDDNNNN)</div>
+      </div>
+      <label class="rlabel" for="rmMemo">Memo <span class="mut" style="font-weight:400">(optional · required for "Other")</span></label>
+      <textarea class="mtextarea" id="rmMemo" placeholder="Why is this item leaving the pool?"></textarea>
+      <div class="note">On confirm — the item is <b>soft-deleted</b> from the pool with <b>reason · actor · time</b> recorded permanently, a comment is auto-posted on the pool item, and a green <b>"✓ Removed from pool"</b> toast confirms it. Comments already on the item survive the removal.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Cancel</button>
+      <button class="btn btn-red btn-sm" id="rmConfirm" disabled>Remove from pool</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="matchToast" style="display:none;position:fixed;top:18px;right:18px">
+  <span>✓ Matched to Order 414230 · COSRX Snail 96</span><small>Tracking 10323100841207 registered · removed from pool · @Miranti notified via Slack</small>
+</div>
+
+<script>
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(b.dataset.modal==='m-remove') prepRemove(document.querySelector('.mock table.tbl tbody tr'));
+    document.getElementById(b.dataset.modal).classList.add('open');
+  });
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments hub tab switch (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ save toggle */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* shared toast (match + removal reuse #matchToast) */
+let toastTimer=null;
+function showToast(main,sub){
+  const t=document.getElementById('matchToast');
+  t.textContent='';
+  const sp=document.createElement('span');sp.textContent=main;
+  const sm=document.createElement('small');sm.textContent=sub;
+  t.appendChild(sp);t.appendChild(sm);
+  t.style.display='flex';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.style.display='none';},4000);
+}
+/* pool counters — always derived alongside the rendered rows */
+function poolDec(){
+  const n=Math.max(0,parseInt(document.getElementById('poolCount').textContent)-1);
+  document.getElementById('poolCount').textContent=n;
+  document.getElementById('poolCountBottom').textContent=n;
+}
+/* Review & Match — suspected product-line match demo */
+function finishMatch(){
+  document.getElementById('m-match').classList.remove('open');
+  const row=document.getElementById('poolrow1');
+  if(row){row.remove();poolDec();}
+  showToast('✓ Matched to Order 414230 · COSRX Snail 96',
+    'Tracking 10323100841207 registered · removed from pool · @Miranti notified via Slack');
+}
+document.querySelectorAll('.pmatch').forEach(b=>b.addEventListener('click',finishMatch));
+/* Row ✕ → removal confirm modal (M2). One-click removal retired 2026-08-03 (WF-6). */
+let rmRow=null;
+function prepRemove(row){
+  rmRow=row;
+  const sum=document.getElementById('rmSummary');
+  if(row){
+    const c=row.cells;
+    const memo=c[7].textContent.trim();
+    sum.innerHTML=c[2].innerHTML;
+    const meta=document.createElement('span');
+    meta.className='mut';meta.style.fontSize='12px';
+    meta.textContent='Tracking '+c[0].textContent+' · Qty '+c[6].textContent+' · Registered by: '+c[8].textContent+' ('+'Center'+') '+c[9].textContent+(memo!=='–'?' · Memo "'+memo+'"':'');
+    sum.appendChild(document.createElement('br'));
+    sum.appendChild(meta);
+  }else{
+    sum.innerHTML='<span class="mut">No pool item selected (demo entry)</span>';
+  }
+  document.getElementById('rmReason').value='';
+  document.getElementById('rmInbound').value='';
+  document.getElementById('rmMemo').value='';
+  document.getElementById('rmInboundWrap').style.display='none';
+  document.getElementById('rmInboundErr').style.display='none';
+  syncRemove();
+}
+function syncRemove(){
+  const reason=document.getElementById('rmReason').value;
+  const inb=document.getElementById('rmInbound').value.trim();
+  const memo=document.getElementById('rmMemo').value.trim();
+  const inbOk=reason!=='Routed to inbound request'||inb===''||/^\d{12}$/.test(inb);
+  document.getElementById('rmInboundErr').style.display=inbOk?'none':'block';
+  const memoOk=reason!=='Other'||memo!=='';
+  document.getElementById('rmConfirm').disabled=!(reason&&inbOk&&memoOk);
+}
+document.getElementById('rmReason').addEventListener('change',()=>{
+  document.getElementById('rmInboundWrap').style.display=
+    document.getElementById('rmReason').value==='Routed to inbound request'?'block':'none';
+  syncRemove();
+});
+document.getElementById('rmInbound').addEventListener('input',syncRemove);
+document.getElementById('rmMemo').addEventListener('input',syncRemove);
+document.querySelectorAll('.xdel').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  prepRemove(b.closest('tr'));
+  document.getElementById('m-remove').classList.add('open');
+}));
+document.getElementById('rmConfirm').addEventListener('click',()=>{
+  document.getElementById('m-remove').classList.remove('open');
+  /* guard: decrement only when a rendered row was actually removed (WF-NEW-D fix) */
+  if(rmRow&&rmRow.isConnected){
+    const prod=rmRow.cells[2].textContent.trim();
+    const trk=rmRow.cells[0].textContent.trim();
+    const reason=document.getElementById('rmReason').value;
+    rmRow.remove();poolDec();
+    showToast('✓ Removed from pool · '+prod,'Reason: '+reason+' · Tracking '+trk);
+  }
+  rmRow=null;
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
+});
+</script>

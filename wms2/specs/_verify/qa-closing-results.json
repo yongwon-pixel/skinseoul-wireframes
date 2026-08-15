@@ -1,0 +1,629 @@
+[
+ {
+  "id": "QA-S0-01",
+  "title": "page opens on the pre-start screen",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [
+   "'the card heading' names no selector; resolved by exact-text search inside #s0"
+  ],
+  "unrun": [],
+  "npass": 15
+ },
+ {
+  "id": "QA-S0-02",
+  "title": "(negative) Start blocked with an empty count [E-16]",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-S0-03",
+  "title": "Start with a value enters the in-progress screen (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-S0-04",
+  "title": "(negative) pre-start screen exposes nothing but the count",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-SCAN-01",
+  "title": "scan input present and correctly shaped",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-SCAN-02",
+  "title": "(negative) no scan surface before start [E-9]",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-SCAN-13",
+  "title": "(negative) State 4 scan input rendered enabled (U-b)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-SCAN-16",
+  "title": "(negative) wireframe implements no refocus loop",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 1
+ },
+ {
+  "id": "QA-VERDICT-01",
+  "title": "OK row renders green with the exact pill",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 8
+ },
+ {
+  "id": "QA-VERDICT-02",
+  "title": "compact OK line byte-exact",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-VERDICT-03",
+  "title": "Processing scan renders warning row + in-row action",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 9
+ },
+ {
+  "id": "QA-VERDICT-04",
+  "title": "(negative) OK rows carry no resolution button",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-VERDICT-05",
+  "title": "scan-list column contract",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-UNKNOWN-01",
+  "title": "unknown row renders with dashes and the red pill",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 7
+ },
+ {
+  "id": "QA-UNKNOWN-02",
+  "title": "prescribed operator copy is intact",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 1
+ },
+ {
+  "id": "QA-UNKNOWN-03",
+  "title": "warnings tile names the unknown class",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-DUP-01",
+  "title": "duplicate row cites the collision with time and worker",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-DUP-02",
+  "title": "State 1 duplicate row variant",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-DUP-03",
+  "title": "first scan of a duplicated tracking is annotated",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-VOICE-01",
+  "title": "entering a warning state speaks the exact utterance",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 15
+ },
+ {
+  "id": "QA-VOICE-02",
+  "title": "the toggle reflects state",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-VOICE-03",
+  "title": "(negative) voice OFF never suppresses the visual warning",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-VOICE-04",
+  "title": "Test voice overrides the toggle without changing it",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-VOICE-05",
+  "title": "turning the toggle ON plays one confirmation utterance",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-VOICE-08",
+  "title": "replay control exists in every state",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-COUNT-01",
+  "title": "State 1 tiles render the demo values (U-a)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-COUNT-02",
+  "title": "progress bar segments",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-COUNT-03",
+  "title": "progress label states the gate rule verbatim",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 1
+ },
+ {
+  "id": "QA-COUNT-09",
+  "title": "warning-state tiles in the demo",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-COUNT-10",
+  "title": "State 2 tiles and bar",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-TARGET-01",
+  "title": "locked banner shows the target and the starter",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-TARGET-02",
+  "title": "Edit count unlocks the field (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-TARGET-03",
+  "title": "Save re-locks the field",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-TARGET-04",
+  "title": "(negative) cancel without a dialog (WF-7) (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-TARGET-12",
+  "title": "(negative) warning states render a muted target line (U-j)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 12
+ },
+ {
+  "id": "QA-M1-01",
+  "title": "modal opens from the warning row",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-M1-02",
+  "title": "modal content is byte-exact",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 9
+ },
+ {
+  "id": "QA-M1-03",
+  "title": "footer buttons",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-M1-04",
+  "title": "(negative) dismissal changes nothing",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 9
+ },
+ {
+  "id": "QA-M1-11",
+  "title": "(negative) wireframe does not gate the button on the checkbox",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-DEL-01",
+  "title": "modal identifies the row it will remove",
+  "verdict": "FAIL",
+  "fails": [
+   "header reads 'Delete Scan Row' | spec='Delete Scan Row' page='Delete Scan Row✕'"
+  ],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-DEL-02",
+  "title": "(negative) 'No' is a true no-op",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-DEL-03",
+  "title": "'Yes — remove' removes the row, preserves numbering (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-DEL-04",
+  "title": "retention promise stated in the modal",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 1
+ },
+ {
+  "id": "QA-DEL-05",
+  "title": "(negative) wireframe does not recompute tiles (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-DEL-10",
+  "title": "modal also reachable from the wf-bar tab",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-CONFIRM-01",
+  "title": "disabled button carries the blockers",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-CONFIRM-02",
+  "title": "button renders as disabled",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-CONFIRM-03",
+  "title": "completion panel is the only large panel on the page",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 8
+ },
+ {
+  "id": "QA-CONFIRM-04",
+  "title": "confirmation toast copy",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-CONFIRM-05",
+  "title": "Closing Report banner, and no print affordance",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-CONFIRM-06",
+  "title": "Warning Resolution Summary and the State 4 tiles",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 6
+ },
+ {
+  "id": "QA-CONFIRM-15",
+  "title": "(negative) State 4 exposes no session controls",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-HIST-01",
+  "title": "history page reachable from the closing screen",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 8
+ },
+ {
+  "id": "QA-HIST-02",
+  "title": "table contract",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 1
+ },
+ {
+  "id": "QA-HIST-03",
+  "title": "today's row and the CSV action",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [
+   "'the green highlight' is not given a value or selector; resolved via the inline style token and a diff against row 2"
+  ],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-HIST-04",
+  "title": "the invariant is stated on screen",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 2
+ },
+ {
+  "id": "QA-HIST-05",
+  "title": "the Closing tab returns to the previous view",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-HIST-10",
+  "title": "every demo row is a Match",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-HUB-01",
+  "title": "hub opens with an unread badge",
+  "verdict": "FAIL",
+  "fails": [
+   "nav button reads \"💬 Comments\" | spec='💬 Comments' page='💬 Comments2'",
+   "Mentions pane header reads \"Comments where I'm tagged\" | spec=\"Comments where I'm tagged\" page=\"Comments where I'm tagged Mark all read\""
+  ],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-HUB-02",
+  "title": "tab switching",
+  "verdict": "FAIL",
+  "fails": [
+   "saved pane header | spec='Comments I saved' page='Comments I saved Unstar to remove from this list'"
+  ],
+  "amb": [],
+  "unrun": [],
+  "npass": 5
+ },
+ {
+  "id": "QA-HUB-03",
+  "title": "the star toggle (destructive)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-HUB-07",
+  "title": "(negative) only State 1 wires the dropdown (U-e)",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 12
+ },
+ {
+  "id": "QA-CHROME-01",
+  "title": "global nav present on every state",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 63
+ },
+ {
+  "id": "QA-CHROME-02",
+  "title": "page header and in-page tabs",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [
+   "'p.sub reads X' — s0/s1/s2/s2b/s3/s4 each contain 2 p.sub nodes (the 2nd is the 'Scan list' caption); resolved as membership"
+  ],
+  "unrun": [],
+  "npass": 28
+ },
+ {
+  "id": "QA-CHROME-03",
+  "title": "toast slot shape",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 4
+ },
+ {
+  "id": "QA-CHROME-04",
+  "title": "(negative) wf-bar duplicate tab must not be counted",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [
+   "'the tab count, which would give 23' — the spec never defines what 'the tab count' counts. document.querySelectorAll('.wf-tab') = 10, not 23. (Reconstructible only as 19 li + 1 p + 3 modal TABS = 23, but that method is not stated.) Clause left unasserted."
+  ],
+  "unrun": [],
+  "npass": 3
+ },
+ {
+  "id": "QA-CHROME-06",
+  "title": "single-screen layout constraint",
+  "verdict": "PASS",
+  "fails": [],
+  "amb": [],
+  "unrun": [],
+  "npass": 3
+ }
+]

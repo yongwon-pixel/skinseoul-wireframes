@@ -1,0 +1,536 @@
+<title>WMS 2.0 — Order Management Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#1B1F24; --nav-fg:#C7CBD1;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --mkt:#7C3AED; --mkt-soft:#F3EEFF;
+  --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1500px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+.mockwrap{overflow-x:auto}
+.mock{min-width:1240px;background:var(--page);min-height:520px;padding-bottom:80px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:15px;padding:9px 18px;font-size:13px;flex-wrap:wrap}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .navlink{font-size:11px;line-height:1.12}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600;font-size:12.5px}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 10px;font-size:12.5px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
+
+.pagepad{padding:16px 22px 0}
+.ptitle{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ptitle h2{font-size:22px;margin:0}
+.ptitle .count{color:var(--ink-3);font-size:13px}
+.btn{border-radius:7px;border:1px solid transparent;padding:7px 13px;font-size:13px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-mkt{background:var(--mkt);color:#fff}
+.btn-gray{background:var(--page);border-color:var(--line-strong);color:var(--ink-2)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* filter bar */
+.filterbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px}
+.filterbar .sep{width:1px;height:26px;background:var(--line-strong);margin:0 2px}
+.sel,.inp,.date{border:1px solid var(--line-strong);border-radius:8px;padding:7px 10px;font-size:12.5px;background:var(--page);color:var(--ink)}
+.inp{min-width:170px}
+.chkgrp{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--ink-2)}
+.chkgrp label{display:flex;gap:4px;align-items:center}
+.filterbar .sp{flex:1}
+
+/* actions row */
+.actionrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.actionrow .sel-info{font-size:12.5px;color:var(--ss-purple);font-weight:700}
+.actionrow .sp{flex:1}
+
+/* table */
+.tblwrap{border:1px solid var(--line);border-radius:10px;overflow:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1180px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 11px;font-weight:600;white-space:nowrap;position:sticky;top:0}
+.tbl td{border-bottom:1px solid var(--line);padding:8px 11px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.tbl tr.mkt{background:var(--mkt-soft)}
+.tbl tr:hover{background:var(--blue-soft)}
+.tbl tr.mkt:hover{background:#EBE1FF}
+.oid{color:var(--blue);font-weight:700}
+.mkt-badge{display:inline-block;background:var(--mkt);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;letter-spacing:.3px;margin-left:5px;vertical-align:middle}
+.st{border-radius:5px;padding:2px 9px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.st-completed{background:var(--blue-soft);color:var(--blue)}
+.st-processing{background:var(--green-soft);color:var(--green)}
+.st-prepare{background:#EDE7F6;color:var(--ss-purple)}
+.st-hold{background:var(--amber);color:#fff}
+.prov{border:1px solid var(--line-strong);border-radius:5px;padding:1px 7px;font-size:10.5px;font-weight:700}
+.prov-yun{border-color:var(--green);color:var(--green)}
+.prov-deleo{border-color:var(--blue);color:var(--blue)}
+.tag{display:inline-block;border-radius:4px;padding:1.5px 6px;font-size:9.5px;font-weight:800;letter-spacing:.2px}
+/* 4 sourcing routes — no color, bold black text only */
+.tag-smartbuy,.tag-jit,.tag-wholesale,.tag-partnership{background:transparent;color:var(--ink);padding:0}
+.rowmenu{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;width:28px;height:26px;font-size:13px}
+
+/* pagination */
+.pager{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:12px;font-size:12.5px}
+.pager button{border:1px solid var(--line-strong);background:var(--page);border-radius:6px;padding:4px 10px}
+.pager button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* Order Type chips */
+.cchip{border:1px solid var(--line-strong);border-radius:99px;padding:6px 14px;background:var(--page);font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.cchip.on{background:var(--mkt);color:#fff;border-color:var(--mkt)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);border-radius:12px;max-width:560px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal.wide{max-width:680px}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.note{margin-top:10px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px}
+.note.mkt{background:var(--mkt-soft)}
+.fld{margin-bottom:11px}
+.fld label{display:block;font-size:12px;color:var(--ink-3);font-weight:600;margin-bottom:4px}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-size:13px;background:var(--page);color:var(--ink)}
+.dropzone{border:2px dashed var(--line-strong);border-radius:10px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px}
+
+/* Comments hub (same pattern as View Orders/RTO) */
+.inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+.gtoast{position:fixed;top:16px;right:16px;z-index:200;background:var(--green);color:#fff;border-radius:9px;
+  padding:11px 16px;font-size:13.5px;font-weight:700;box-shadow:0 6px 24px rgba(0,0,0,.25);display:none}
+.gtoast small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+/* WF-17 (2026-08-03): disabled state for confirming buttons (zero-selection guard) */
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · Order Management Dashboard Wireframe</h1>
+  <span class="hint">Based on the live dashboard · Order list table unchanged (omitted) · Purple numbers = new annotations</span>
+  <div class="wf-tabs">
+    <button class="wf-tab" data-modal="m-import">Modal: Marketing Import</button>
+    <button class="wf-tab" data-modal="m-sampleon">Modal: Sample Assignment ON</button>
+    <button class="wf-tab" data-modal="m-sampleoff">Modal: Cancel Sample Assignment</button>
+    <button class="wf-toggle" id="impPreviewToggle">Import preview: unconnected row</button>
+  <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+  </div>
+</div>
+
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>System Management ▾</span><span>Customer Management ▾</span>
+    <span class="navlink">Agent<br>Telemetry</span><span class="navlink">Role<br>Assets</span><span class="navlink">Shared Asset<br>Health</span><span class="navlink">SkinSeoul<br>WP Admin</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">3</span></button>
+      <span class="dot" style="top:2px;left:-26px">5</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">3</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40233</b> · Harshit: "@Yongwon Can you check if the 12 seeding orders can ship today?"<br><time>10:05</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check"<br><time>09:22</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 421771</b> · Adinda: "@Yongwon Please confirm the sample assignment end date is correct"<br><time>08:40</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order MKT-40218</b> · EuJin: "@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check"<br><time>09:22</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <div class="ptitle">
+      <h2>Order Management Dashboard</h2>
+      <span class="count">2,818 orders</span>
+    </div>
+
+    <!-- filter bar -->
+    <div class="filterbar">
+      <input class="date" type="text" value="2026-06-01" title="Start Date">
+      <span style="color:var(--ink-3)">~</span>
+      <input class="date" type="text" value="2026-07-14" title="End Date">
+      <span class="sep"></span>
+      <input class="inp" placeholder="Search (order / product)">
+      <input class="inp" placeholder="Search PIC" style="min-width:120px">
+      <select class="sel"><option>All Status</option><option>Processing</option><option>Prepare Shipment</option><option>Completed</option><option>On Hold</option></select>
+      <div class="chkgrp"><label><input type="checkbox" checked> Order #</label><label><input type="checkbox"> Tracking #</label></div>
+      <select class="sel"><option>Country: AU</option><option>All</option><option>NZ</option><option>US</option></select>
+      <select class="sel"><option>15</option><option>30</option><option>50</option></select>
+      <span class="sp"></span>
+      <button class="btn btn-gray btn-sm">▦ Columns</button>
+      <button class="btn btn-gray btn-sm">⬇ Export</button>
+      <button class="btn btn-gray btn-sm">⬇ Yun Export</button>
+      <span class="anno"><button class="btn btn-mkt btn-sm" data-modal="m-import">⬆ Import</button><span class="dot" style="top:-11px;right:-8px">1</span></span>
+    </div>
+
+    <!-- action row -->
+    <div class="actionrow">
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> Select all</label>
+      <span class="sel-info">2 selected</span>
+      <button class="btn btn-line btn-sm">⧉ Merge Orders</button>
+      <span class="anno"><button class="btn btn-green btn-sm" data-modal="m-sampleon">Sample Assignment ON</button><span class="dot" style="top:-11px;left:-9px">2</span></span>
+      <span class="anno"><button class="btn btn-gray btn-sm" data-modal="m-sampleoff">Cancel Sample Assignment</button><span class="dot" style="top:-11px;right:-9px">2</span></span>
+      <span class="sp"></span>
+    </div>
+
+    <!-- ===== Order list table: unchanged — omitted ===== -->
+    <div class="anno" style="display:block;border:1.5px dashed var(--line-strong);border-radius:10px;padding:36px 20px;text-align:center;background:var(--page)">
+      <div style="font-size:14px;font-weight:700;color:var(--ink)"><span class="dot" style="position:static;display:inline-flex;vertical-align:middle;margin-right:7px">4</span>Order list table — same as the current admin (omitted)</div>
+      <div style="margin-top:7px;font-size:12.5px;color:var(--ink-3)">Default columns ↔ Columns toggle view, 2,818 total, and pagination — all unchanged.<br>However, imported <b style="color:var(--mkt)">MKT- marketing orders</b> appear in this list with a purple tint + MKT badge + PIC.</div>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>Order Management Dashboard — Changes (spec G + F)</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>Manual Marketing Order Import</b> (M1, confirmed 2026-07-23) — dev team's standard <b>Download Template (.xlsx)</b> → fill in → upload → <b>Preview</b> → set Order Type (Influencer Seeding preset + custom input) and PIC (default = logged-in user, <b>✎ Custom input allowed</b> — 2026-08-03) → confirm. <b>On confirm (confirmed 2026-08-03)</b>: ① each row's country gets its <b>connected carrier auto-assigned</b> (M1b column); countries with no connected carrier show <b>"Not connected — contact the Fulfillment Center"</b> ② if no issues, a <b>green toast "Confirmed"</b> appears top-right. <b>No stock validation</b> (import can come before inbound; Notion G's stock-error item dropped — not surfaced in UI copy) · Once confirmed, orders appear immediately in the RTO Marketing view regardless of stock <span class="ref">— G</span></span></li>
+    <li><span class="n">2</span><span><b>Sample Assignment ON/OFF</b> (redesigned 2026-07-23) — ON modal (M2): target = 2 options, "All new orders in this period" / "Selected orders only" + start datetime (Y/M/D/h) and end or forever; no sample-type selection. <b>Cancel Sample Assignment (M3)</b>: select and cancel from the list of current/past assignment periods (overlaps allowed). Even with overlapping periods, <b>exactly 1 sample set per order</b> (no duplicate assignment, confirmed 2026-08-03). <b>Dual-view (confirmed 2026-08-03)</b>: during an assignment period, <b>carrier-facing data</b> only appends "(+ sample set)" to the last product name (avoids tax issues), while the <b>internal invoice &amp; picking label</b> mark the sample included and show <b>which sample and how many</b> — internal and carrier see different information <span class="ref">— G</span></span></li>
+    <li><span class="n">3</span><span>Bulk Hold Shipment button removed — Hold is handled via Change Status (on-hold) on the order detail page (F); the OMS dashboard stays as the live screen (removed item — no on-screen dot) <span class="ref">— cleanup</span></span></li>
+    <li><span class="n">4</span><span>The order list table is <b>identical to the current admin</b>, so it is omitted from the wireframe (no changes, including default columns ↔ Columns toggle). However, imported MKT- marketing order rows get a purple tint + MKT badge + PIC display to visually separate them from regular sales (settlement &amp; volume separation) <span class="ref">— G</span></span></li>
+    <li><span class="n">5</span><span>Top-right Comments hub — <b>shared across all screens</b>, includes full comment search <span class="ref">— 0. UI 2</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Global nav · filter bar (dates · Search · PIC · Status · Order#/Tracking# checkboxes · Country · page size) · Merge Orders · Export/Yun Export · 2,818 total · pagination all stay as in the live screen. Sample assignment was redesigned 2026-07-23 as a <b>simple ON/OFF</b> (no product-type selection) — see legend item 2.</p>
+</div>
+
+<!-- Modal: Sample Assignment ON -->
+<div class="overlay" id="m-sampleon">
+  <div class="modal anno" style="max-width:520px">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Sample Assignment ON<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Assignment Target</b>
+      <div style="display:flex;flex-direction:column;gap:6px;margin:8px 0 14px">
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget" checked> All new orders in this period</label>
+        <label style="border:1px solid var(--line-strong);border-radius:7px;padding:8px 11px"><input type="radio" name="samptarget"> Selected orders only (2)</label>
+      </div>
+      <b style="color:var(--ink)">Assignment Period</b>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <input id="sampStartDate" value="2026-07-23" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input id="sampStartTime" value="10:00" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <span style="color:var(--ink-3)">~</span>
+        <input id="sampEndDate" placeholder="End date" style="width:110px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit"><input id="sampEndTime" placeholder="Time" style="width:64px;border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px;font:inherit">
+        <label style="font-size:12.5px;display:flex;gap:4px;align-items:center"><input type="checkbox" checked id="sampForever"> forever (no end date)</label>
+      </div>
+      <div class="note">Sample <b>product type is not selected</b> — when ON, "(+ sample set)" is auto-appended to the last product name of target orders and a sample-set row is added at the bottom of the invoice (defined in G). Multiple overlapping periods can be registered — but even with overlapping periods, <b>exactly 1 sample set per order</b> (no duplicate assignment).</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-green btn-sm" data-close id="sampStartBtn">Start Assignment (ON)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Cancel Sample Assignment (period list) -->
+<div class="overlay" id="m-sampleoff">
+  <div class="modal anno" style="max-width:600px">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>Cancel Sample Assignment — Current Assignment Periods<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <table class="tbl" style="font-size:12.5px">
+        <thead><tr><th style="width:30px"></th><th>Assignment Period</th><th>Target</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked></td><td class="num">2026-07-01 09:00 → <b>forever</b></td><td>All new orders</td><td><span class="st st-processing">Active</span></td></tr>
+          <tr><td><input type="checkbox"></td><td class="num">2026-07-15 00:00 → 2026-07-20 23:59</td><td>34 selected orders</td><td><span class="st st-processing">Active</span></td></tr>
+          <tr style="color:var(--ink-3)"><td></td><td class="num">2026-06-01 00:00 → 2026-06-30 23:59</td><td>All new orders</td><td><span class="st" style="background:var(--line);color:var(--ink-3)">Ended</span></td></tr>
+        </tbody>
+      </table>
+      <div class="note">Multiple assignment periods may exist — select the period(s) to cancel, then confirm. Ended periods are for record only (cannot be cancelled). Cancellation immediately stops new assignments for that period (already-assigned orders are kept).</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Close</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" id="sampCancelBtn">Cancel Selected Periods</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Manual Marketing Order Import -->
+<div class="overlay" id="m-import">
+  <div class="modal wide anno" style="max-width:720px">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Marketing Order Import<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <b style="color:var(--ink)">1. Template</b>
+        <button class="btn btn-line btn-sm">⬇ Download Template (.xlsx)</button>
+        <span style="font-size:11.5px;color:var(--ink-3)">Standard form from the dev team — Recipient · Contact · Address · Country · SKU · Qty · Campaign name</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+        <b style="color:var(--ink)">2. Order Type</b>
+        <button class="cchip on" id="otChipSeed">Influencer Seeding</button>
+        <button class="cchip" id="otChipCustom">✎ Custom</button>
+        <input id="otCustom" placeholder="Enter type (e.g. Pop-up event giveaway)" style="display:none;width:220px;border:1px solid var(--mkt);border-radius:8px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+        <b style="color:var(--ink)">3. PIC</b>
+        <select style="border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink)">
+          <option selected>Yongwon Ryu (me)</option><option>Harshit</option><option>EuJin</option><option>Adinda</option>
+        </select>
+        <button class="btn btn-line btn-sm" id="picCustomBtn" type="button">✎ Custom</button>
+        <input id="picCustomIn" style="display:none;border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;font:inherit;background:var(--page);color:var(--ink);width:170px" placeholder="Enter PIC name">
+        <span style="font-size:11.5px;color:var(--ink-3)">Default = logged-in user · Recorded as the PIC for this entire import — shown in the order list &amp; RTO</span>
+      </div>
+      <b style="color:var(--ink)">4. Upload</b>
+      <div class="dropzone" style="margin-top:6px">📄 Drag the completed template here or click to upload</div>
+      <div style="margin-top:14px">
+        <b style="color:var(--ink);font-size:13px">Preview — mkt_seeding_batch3.xlsx · 12 rows parsed · 0 errors</b>
+        <table class="tbl" style="margin-top:6px;font-size:12px">
+          <thead><tr><th>Recipient</th><th>Country</th><th>SKU</th><th>Product Name</th><th>Qty</th><th>Campaign</th><th class="anno">Carrier (auto)<span class="dot" style="top:-11px;right:-8px">M1b</span></th></tr></thead>
+          <tbody>
+            <tr><td>Svetlana Jaloba</td><td>GB</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">2</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td>Zoe Garner</td><td>GB</td><td class="num">100012534</td><td><b>Dr.Jart+</b> Cicapair Sleepair Mask</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td>Mariana Maheha</td><td>GB</td><td class="num">100005611</td><td><b>innisfree</b> Green Tea Seed Hyaluronic Serum</td><td class="num">1</td><td>July Seeding</td><td style="color:var(--green);font-weight:700">YunExpress</td></tr>
+            <tr><td colspan="7" style="text-align:center;color:var(--ink-3)">⋯ +8 more rows</td></tr>
+          <tr><td>Lucia Ramos</td><td>PE</td><td class="num">100043697</td><td><b>Dr.Jart+</b> Cicapair Gentle Cleansing Foam</td><td class="num">1</td><td>July Seeding</td><td id="mktPECell" style="color:var(--green);font-weight:700">YunExpress</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note mkt">On confirm, orders are created as MKT- orders and <b>appear immediately in Ready to be Outbonded (Marketing view) regardless of stock or inbound status</b>.</div>
+    </div>
+    <div id="mktBlock" style="display:none;margin:10px 0 0;padding:10px 12px;border:1px solid var(--red);background:var(--red-soft);color:var(--red);font-weight:600;border-radius:4px;font-size:13px">Cannot import — these countries have no connected carrier: PE. Ask the fulfillment team to connect them, or remove those rows and upload again.</div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-mkt btn-sm" data-close id="mktConfirm">Confirm Import (12 orders)</button>
+    </div>
+  </div>
+</div>
+
+<!-- WF-17 (2026-08-03): confirm dialog before period cancellation — spec §3.7.5 [PD-5] -->
+<div class="overlay" id="m-sampcancel-confirm">
+  <div class="modal" style="max-width:430px">
+    <header id="sampConfirmTitle">Cancel 1 assignment period(s)?<button class="x" data-close>✕</button></header>
+    <div class="body" style="font-size:13px;color:var(--ink-2)">New assignments stop immediately. Orders already assigned keep their sample set.</div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Keep periods</button>
+      <button class="btn btn-sm" style="background:var(--red);color:#fff" id="sampConfirmGo">Cancel periods</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Import Order Type chips — Influencer Seeding (default) / Custom */
+document.querySelectorAll('#otChipSeed,#otChipCustom').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('#otChipSeed,#otChipCustom').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    const custom=c.id==='otChipCustom';
+    document.getElementById('otCustom').style.display=custom?'inline-block':'none';
+    if(custom) document.getElementById('otCustom').focus();
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
+});
+/* Comments hub — open / tab switch / ★ save / full search (same pattern as View Orders/RTO) */
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    document.getElementById(b.dataset.open).classList.toggle('open');
+  });
+});
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{p.style.display=p.dataset.pane===b.dataset.tab?'block':'none';});
+  });
+});
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+const CSEARCH_DATA=[{o:'MKT-40233',a:'Harshit',t:'Today 10:05',ts:8,x:'@Yongwon Can you check if the 12 seeding orders can ship today?'},{o:'MKT-40218',a:'EuJin',t:'Today 09:22',ts:7,x:'@Yongwon Updated the recipient address for the pop-up event giveaways. Please double-check'},{o:'421771',a:'Adinda',t:'Today 08:40',ts:6,x:'@Yongwon Please confirm the sample assignment end date is correct'},{o:'MKT-40191',a:'Harshit',t:'Yesterday 17:10',ts:5,x:'Standardized the campaign name to July Seeding'},{o:'421502',a:'EuJin',t:'07-12 11:30',ts:4,x:'Re-shipped the returned influencer packages'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">No matching comments</div>');
+  pane.style.display='block';
+}
+
+/* M1 PIC custom-input toggle + Import confirm toast (2026-08-03) */
+const pcb=document.getElementById('picCustomBtn');
+if(pcb){pcb.addEventListener('click',()=>{const x=document.getElementById('picCustomIn');
+  const show=x.style.display==='none'; x.style.display=show?'inline-block':'none'; if(show)x.focus();});}
+/* WF-18 (2026-08-03): explicit toast stack — concurrent toasts keep their own nodes but never overlap */
+function stackToasts(){
+  let y=16;
+  document.querySelectorAll('.gtoast').forEach(t=>{
+    if(t.style.display==='block'){t.style.top=y+'px';y+=t.offsetHeight+8;}
+  });
+}
+function showToast(id,html){
+  let t=document.getElementById(id);
+  if(!t){t=document.createElement('div');t.id=id;t.className='gtoast';document.body.appendChild(t);}
+  t.innerHTML=html;
+  t.style.display='block';stackToasts();
+  clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none';stackToasts();},2600);
+}
+const mc=document.getElementById('mktConfirm');
+if(mc){mc.addEventListener('click',()=>{
+  showToast('gtoast','✓ Confirmed — 12 orders imported<small>Carrier auto-assigned per country</small>');});}
+
+/* WF-16b (2026-08-04): import preview carries BOTH states per [G-17].
+   Wireframe-only chrome — the toggle must not ship. Default = clean file. */
+(function(){
+  const btn=document.getElementById('impPreviewToggle');
+  const cell=document.getElementById('mktPECell');
+  const block=document.getElementById('mktBlock');
+  const conf=document.getElementById('mktConfirm');
+  if(!btn||!cell||!block||!conf)return;
+  let blocked=false;
+  btn.addEventListener('click',()=>{
+    blocked=!blocked;
+    if(blocked){
+      cell.textContent='Cannot import — no connected carrier';
+      cell.style.color='var(--red)';
+      block.style.display='block';
+      conf.setAttribute('disabled','');conf.setAttribute('aria-disabled','true');
+      btn.textContent='Import preview: clean file';
+    }else{
+      cell.textContent='YunExpress';
+      cell.style.color='var(--green)';
+      block.style.display='none';
+      conf.removeAttribute('disabled');conf.removeAttribute('aria-disabled');
+      btn.textContent='Import preview: unconnected row';
+    }
+  });
+})();
+
+/* WF-16 (2026-08-03): Start Assignment (ON) — green confirmation toast per spec §3.6.5 [G-2] */
+const ssb=document.getElementById('sampStartBtn');
+if(ssb){ssb.addEventListener('click',()=>{
+  const allNew=document.querySelector('#m-sampleon input[name="samptarget"]').checked;
+  let sub;
+  if(allNew){
+    const sd=document.getElementById('sampStartDate').value,st=document.getElementById('sampStartTime').value;
+    const fv=document.getElementById('sampForever').checked;
+    const ed=document.getElementById('sampEndDate').value,et=document.getElementById('sampEndTime').value;
+    sub='All new sales orders from '+sd+' '+st+' → '+(fv?'forever':(ed+' '+et).trim())+' · exactly 1 sample set per order';
+  }else{
+    sub='2 orders assigned · 0 skipped (already assigned) · 0 skipped (not eligible)';
+  }
+  showToast('gtoast3','✓ Sample assignment started<small>'+sub+'</small>');
+});}
+
+/* WF-19 (2026-08-03): forever wins — end fields cleared and disabled while checked (spec §3.6.3 [E-23]) */
+const sfv=document.getElementById('sampForever');
+if(sfv){
+  const eD=document.getElementById('sampEndDate'),eT=document.getElementById('sampEndTime');
+  const syncF=()=>{if(sfv.checked){eD.value='';eT.value='';}eD.disabled=sfv.checked;eT.disabled=sfv.checked;};
+  sfv.addEventListener('change',syncF); syncF();
+}
+
+/* WF-17 (2026-08-03): Cancel Selected Periods — disabled at zero selection + confirm step before cancellation [PD-5];
+   the green toast (unchanged copy) now fires only after "Cancel periods" confirms */
+const scb=document.getElementById('sampCancelBtn');
+if(scb){
+  const boxes=[...document.querySelectorAll('#m-sampleoff tbody input[type="checkbox"]')];
+  const sync=()=>{scb.disabled=!boxes.some(b=>b.checked);};
+  boxes.forEach(b=>b.addEventListener('change',sync)); sync();
+  scb.addEventListener('click',()=>{
+    const n=boxes.filter(b=>b.checked).length;
+    if(!n) return;
+    document.getElementById('sampConfirmTitle').childNodes[0].textContent='Cancel '+n+' assignment period(s)?';
+    document.getElementById('m-sampcancel-confirm').classList.add('open');
+  });
+  document.getElementById('sampConfirmGo').addEventListener('click',()=>{
+    document.getElementById('m-sampcancel-confirm').classList.remove('open');
+    document.getElementById('m-sampleoff').classList.remove('open');
+    showToast('gtoast2','✓ Assignment period cancelled<small>New assignments stopped for the selected period · already-assigned orders kept</small>');
+  });
+}
+
+/* WF-20 (2026-08-03): Esc dismisses the topmost open overlay, else the Comments hub [E-97] */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape') return;
+  const open=document.querySelectorAll('.overlay.open');
+  if(open.length){open[open.length-1].classList.remove('open');return;}
+  document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));
+});
+/* WF-21 (2026-08-03): outside click closes the Comments hub — the live handler the existing stopPropagation guards were written for */
+document.addEventListener('click',e=>{
+  if(e.target.closest('.inboxdd')) return;
+  document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));
+});
+</script>

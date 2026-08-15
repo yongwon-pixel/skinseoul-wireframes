@@ -1,0 +1,995 @@
+<title>WMS 2.0 — Closing Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#212529; --nav-fg:#ADB5BD;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --hl:#FFFBD6; --hl-line:#F59E0B; --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+/* the existing admin is light-only, so no dark mode — fixed light theme */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+/* ── wireframe chrome ─────────────────────────── */
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.wf-tab{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;
+  border-radius:99px;padding:5px 14px;font-size:12.5px}
+.wf-tab.on{background:#fff;color:var(--ss-purple);font-weight:700;border-color:#fff}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px}
+
+/* ── annotations ──────────────────────────────── */
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;
+  background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1720px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);
+  border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+/* ── admin mock ───────────────────────────────── */
+.mockwrap{overflow-x:auto}
+.mock{min-width:1280px;background:var(--page);min-height:520px;padding-bottom:120px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:18px;padding:11px 20px;font-size:13.5px}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;
+  padding:4px 10px;font-size:13px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;
+  font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #5A6067;color:#fff;border-radius:7px;padding:4px 12px}
+
+.pagepad{padding:18px 16px 0}
+.pagepad h2{font-size:27px;margin:6px 0 2px}
+.pagepad .sub{font-size:17px;font-weight:700;margin:0 0 10px}
+
+.btn{border-radius:7px;border:1px solid transparent;padding:8px 16px;font-size:13.5px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green-line{background:var(--page);border-color:var(--green);color:var(--green)}
+.btn-red-line{background:var(--page);border-color:var(--red);color:var(--red)}
+.btn-gray{background:var(--line);color:var(--ink-3);cursor:not-allowed}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.scanbig input[disabled]{background:var(--canvas);color:var(--ink-3)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px;vertical-align:middle}
+.tbl .num{font-variant-numeric:tabular-nums}
+.qty{display:inline-flex;min-width:24px;height:22px;border-radius:6px;background:var(--line);color:var(--ink-2);
+  align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 6px}
+.mut{color:var(--ink-3);font-size:12.5px}
+
+/* comment panel — same grammar as View Orders */
+.cpanel{margin-top:12px;border:1px solid var(--line);border-radius:8px;background:var(--page);padding:14px 16px}
+.cpanel .c-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.cpanel .c-item:last-of-type{border-bottom:none}
+.cpanel .who{font-weight:700;white-space:nowrap}
+.cpanel .at{color:var(--blue);font-weight:700}
+.cpanel time{color:var(--ink-3);font-size:11.5px;white-space:nowrap;margin-left:auto}
+.cpanel .cwrite{display:flex;gap:8px;margin-top:10px}
+.cpanel input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+
+/* ★ save (bookmark) toggle — shared by Mentions/Saved */
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+/* actor log */
+.logtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.logtbl th{text-align:left;color:var(--ink-3);font-weight:600;border-bottom:1.5px solid var(--line-strong);padding:6px 8px}
+.logtbl td{border-bottom:1px solid var(--line);padding:6px 8px;color:var(--ink-2)}
+.act-in{color:var(--green);font-weight:700}.act-out{color:var(--blue);font-weight:700}.act-cancel{color:var(--red);font-weight:700}
+
+
+/* toast */
+.toast{position:absolute;top:60px;right:16px;z-index:50;background:var(--green);color:#fff;border-radius:8px;
+  padding:10px 16px;font-size:13px;font-weight:600;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center}
+.toast.err{background:var(--red)}
+.toast small{opacity:.85;font-weight:400}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:480px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex;border-radius:12px 12px 0 0}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px}
+.modal .body{padding:18px 20px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 12px 12px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+.mtextarea{width:100%;margin-top:6px;border:1px solid var(--line-strong);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;color:var(--ink);background:var(--page);min-height:60px;resize:vertical}
+
+/* header comment inbox dropdown — Comments hub (Mentions / Saved tabs) */
+.inboxdd{position:absolute;top:46px;right:110px;width:370px;background:var(--page);border:1px solid var(--line-strong);
+  border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+
+.state{display:none}
+.state.on{display:block}
+
+/* ══ closing-page-only new elements (existing palette colors only) ══ */
+/* large barcode scan input — fast continuous scanning with a warehouse scanner */
+.scanbig{display:flex;gap:10px;align-items:stretch;margin-top:14px;max-width:900px}
+.scanbig input{flex:1;font-size:22px;font-weight:700;letter-spacing:1px;padding:14px 18px;
+  border:2px solid var(--ink);border-radius:9px;background:var(--page);color:var(--ink);outline:none;font-variant-numeric:tabular-nums}
+.scanbig .btn{font-size:16px;padding:0 26px}
+
+/* voice alert toggle bar */
+.voicebar{display:flex;align-items:center;gap:16px;margin-top:10px;flex-wrap:wrap}
+.vswitch{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;color:var(--ink-2);cursor:pointer;user-select:none}
+.vtrack{width:42px;height:22px;border-radius:99px;background:var(--green);position:relative;transition:background .15s}
+.vtrack.off{background:var(--line-strong)}
+.vtrack i{position:absolute;top:2px;left:22px;width:18px;height:18px;border-radius:99px;background:#fff;transition:left .15s}
+.vtrack.off i{left:2px}
+
+/* large status display — recognizable from a distance (core of Dean's request) */
+.bigstatus{display:flex;align-items:center;gap:22px;margin-top:16px;border-radius:12px;padding:24px 30px}
+.bigstatus .ic{font-size:56px;line-height:1;flex:none}
+.bigstatus .big{font-size:38px;font-weight:800;letter-spacing:-.5px;line-height:1.05}
+.bigstatus .bmeta{font-size:15px;font-weight:600;margin-top:7px;color:var(--ink-2)}
+.bigstatus .bside{margin-left:auto;text-align:right;font-size:13px;color:var(--ink-2)}
+.bigstatus .bside b{font-size:19px;color:var(--ink)}
+.bs-ok{background:var(--green-soft);border:2px solid var(--green);color:var(--green)}
+.bs-warn{background:var(--red-soft);border:3px solid var(--red);color:var(--red);animation:bspulse 1s ease-in-out infinite}
+.bs-neutral{background:var(--canvas);border:2px solid var(--line-strong);color:var(--ink-2)}
+@keyframes bspulse{0%,100%{box-shadow:0 0 0 0 rgba(220,53,69,0)}50%{box-shadow:0 0 0 7px rgba(220,53,69,.20)}}
+
+/* closing progress counts + progress bar */
+.clsstat{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.tile{flex:1;min-width:132px;border:1px solid var(--line);border-radius:9px;padding:12px 16px;background:var(--page)}
+.tile .lab{font-size:12px;color:var(--ink-3);font-weight:600}
+.tile .val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;color:var(--ink)}
+.tile.ok .val{color:var(--green)} .tile.warn .val{color:var(--red)}
+.prog{height:14px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:14px;display:flex}
+.prog i{display:block;height:100%}
+.prog .p-ok{background:var(--green)} .prog .p-warn{background:var(--red)}
+.proglab{font-size:12px;color:var(--ink-3);margin-top:6px}
+
+/* closing status pill */
+.pagetabs{display:flex;border-bottom:1px solid var(--line-strong);margin:2px 0 14px}
+.pagetabs button{border:1px solid transparent;background:transparent;color:var(--blue);padding:8px 16px;font-size:13.5px;border-radius:7px 7px 0 0;margin-bottom:-1px}
+.pagetabs button.on{border-color:var(--line-strong);border-bottom-color:var(--page);background:var(--page);color:var(--ink);font-weight:600}
+.okline{display:flex;gap:10px;align-items:center;margin-top:12px;background:var(--green-soft);border:1px solid var(--green);border-radius:8px;padding:9px 14px;font-size:13px;color:var(--ink)}
+.okline b{color:var(--green)}
+.okline .sp{flex:1}
+.cs-shipped{background:var(--green-soft);color:var(--green);border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.cs-processing{background:var(--red-soft);color:var(--red);border:1px solid var(--red);border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.cs-dup{background:var(--red);color:#fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:800}
+.row-bad td{background:color-mix(in srgb,var(--red-soft) 60%,var(--page))}
+.row-ok td{background:color-mix(in srgb,var(--green-soft) 38%,var(--page))}
+
+/* banners (Ready to be Outbounded recheck, etc.) */
+.clsbanner{margin-top:16px;border-radius:8px;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.clsbanner.info{background:var(--blue-soft);border:1px solid var(--blue)}
+.clsbanner.info b{color:var(--blue)}
+.clsbanner.warn{background:var(--amber-soft);border:1px solid var(--amber-line)}
+.clsbanner.warn b{color:var(--amber)}
+.clsbanner.done{background:var(--green-soft);border:1px solid var(--green)}
+.clsbanner.done b{color:var(--green)}
+.clsbanner .btn{margin-left:auto}
+
+/* amend closing (PD-74 owner decision, 2026-08-03) */
+.amended-badge{display:inline-block;background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-line);
+  border-radius:6px;padding:1px 8px;font-size:11px;font-weight:800;white-space:nowrap;margin-top:3px}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · Closing Wireframe</h1>
+  <span class="hint">v1 — switch states with the tabs · purple numbers = change annotations</span>
+  <div class="wf-tabs">
+    <button class="wf-tab on" data-state="s0">0 · Before Start (manual count)</button>
+    <button class="wf-tab" data-state="s1">1 · OK Scan (outbounded)</button>
+    <button class="wf-tab" data-state="s2">2 · Warning · Processing (not outbounded)</button>
+    <button class="wf-tab" data-state="s2b">2b · Warning · Unknown Order</button>
+    <button class="wf-tab" data-state="s3">3 · Warning · Duplicate Scan</button>
+    <button class="wf-tab" data-state="s4">4 · Closing Complete</button>
+    <button class="wf-tab" data-modal="m-process">Modal: Process Processing Order</button>
+    <button class="wf-tab" data-state="shist">5 · Closing History (page)</button>
+    <button class="wf-tab" data-modal="m-scandel">Modal: Delete Scan Row</button>
+    <button class="wf-tab" data-modal="m-amend">Modal: Amend Closing</button>
+    <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+  </div>
+</div>
+
+<!-- ══════════════ STATE 0 : Before Closing Start (manual count input) ══════════════ -->
+<section class="state on" id="s0">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div>
+
+    <div class="anno" style="display:block;margin-top:26px;border:1.5px solid var(--blue);border-radius:14px;padding:46px 24px;text-align:center;background:var(--blue-soft)">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <div style="font-size:30px">🧮</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px;color:var(--ink)">① Today's Outbound Target (manual count)</div>
+      <div class="mut" style="margin-top:6px">Enter the <b>hand-counted number</b> of physically packed parcels and start closing — the OK-scan count must <b>exactly match</b> this number to confirm closing</div>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;align-items:center">
+        <input id="targetIn0" value="" placeholder="Hand-counted qty" style="width:150px;font-size:20px;border:1.5px solid var(--blue);border-radius:9px;padding:10px;font:inherit;font-weight:800;text-align:center;background:var(--page);color:var(--ink)">
+        <span style="font-weight:700;color:var(--ink)">orders</span>
+        <button class="btn btn-blue" id="startBtn0">Start Closing</button>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>State 0 Changes — Before Closing Start (manual count input)</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>The pre-start screen exposes only the count input</b> — the scan input, count tiles and every other interface are hidden to make "enter the number first" explicit (simplified 2026-07-23). [Start Closing] requires the hand-counted number of packed parcels; starting switches to the in-progress screen (State 1). After starting, the count can still be <b>edited and the closing cancelled</b> at the top of State 1. Records up to yesterday are viewed in the Closing History tab above <span class="ref">— F Closing</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 1 : OK Scan (outbounded) ══════════════ -->
+<section class="state" id="s1">
+<div class="mockwrap"><div class="mock anno">
+
+  <div class="toast"><span>✓ Outbound confirmed — YT2618100700000004</span><small>Ready for the next barcode scan</small></div>
+
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+      <span class="dot" style="top:3px;left:-30px">7</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 413540</b> · Dean: "@Yongwon this order showed Processing at closing, so I checked it at Zero Packing"<br><time>18:02</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 3 duplicate scans — combined-box orders, this is fine"<br><time>17:44</time></div><button class="star on" title="Saved">★</button></div>
+        <div class="it"><div class="body"><b>Order 413330</b> · Kai: "Confirmed today's closing is complete"<br><time>yesterday</time></div><button class="star" title="Save">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 413498</b> · Miranti: "@Yongwon 3 duplicate scans — combined-box orders, this is fine"<br><time>17:44</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagepad">
+    <span class="dot" style="margin-left:-6px">9</span>
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="anno"><div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div><span class="dot" style="top:-11px;right:-9px">11</span></div>
+
+    <div class="clsbanner warn" id="amendBanner" style="display:none;margin:0 0 12px">
+      <b id="amendBannerB">AMENDING — 07-13 closing (confirmed 84/84)</b>
+      <span>The confirmed record stays until you re-confirm — raise the target, scan the found parcel, and press <b>Re-confirm Closing</b> (exact match + 0 warnings required)</span>
+      <button class="btn btn-line btn-sm" id="amendExit">✕ Exit amendment</button>
+    </div>
+
+    <div class="clsbanner info anno" style="margin:0 0 12px">
+      <span class="dot" style="top:-11px;left:-10px">10</span>
+      <b>① Today's Outbound Target (manual count)</b>
+      <span>Closing in progress (started 18:02 · Dean) — the OK-scan count must <b>exactly match</b> this number to confirm closing</span>
+      <input id="targetIn1" value="84" disabled style="width:64px;border:1.5px solid var(--line-strong);border-radius:7px;padding:6px;font:inherit;font-weight:800;text-align:center;background:var(--canvas);color:var(--ink)"> orders
+      <button class="btn btn-line btn-sm" id="targetEdit">↺ Edit count</button>
+      <button class="btn btn-red-line btn-sm" id="closeCancel">✕ Cancel Closing</button>
+    </div>
+
+    <div class="scanbig anno">
+      <input value="YT2618100700000004" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+      <button class="btn btn-blue">Scan</button>
+    </div>
+    <div class="voicebar anno">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <span class="vswitch" id="voiceToggle"><span class="vtrack"><i></i></span> Voice alert: <span id="voiceState" style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm" id="voiceTest">🔊 Test voice</button>
+    </div>
+
+    <!-- OK-scan confirmation — compact line (large panel is warning-state only) -->
+    <div class="okline anno">
+      <span class="dot" style="top:-11px;left:-11px">2</span>
+      <b>✓ #5 Outbounded</b>
+      <span>Order 413540 · Tracking YT2618100700000004 · Prepare Shipment</span>
+      <span class="sp"></span>
+      <span class="mut">18:41:07 · Dean</span>
+    </div>
+
+    <!-- closing progress counts -->
+    <div class="clsstat anno">
+      <span class="dot" style="top:-11px;left:-10px">4</span>
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">3</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">2</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">79</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:3.6%"></i><i class="p-warn" style="width:2.4%"></i></div>
+    <p class="proglab">Closing progress 3.6% — OK 3/84 (81 short of the manual count) · 2 warnings to resolve — <b>closing confirms only at an exact OK 84/84 match with 0 warnings; over-scan is also a mismatch</b></p>
+
+
+    <p class="sub" style="margin-top:22px">Scan list <span class="mut" style="font-weight:400">— OK (green) / Warning (red), in order from #1 — new scans append at the bottom</span></p>
+    <table class="tbl anno">
+      <thead><tr>
+        <th>#<span class="dot" style="top:2px;left:-12px">6</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th class="anno">Closing Verdict<span class="dot" style="top:-11px;right:-8px">5</span></th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#1</td>
+          <td class="num">18:39:52</td><td class="num">YT2618100700000003</td><td class="num" style="color:var(--blue)">413472</td>
+          <td class="num">2</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#2</td>
+          <td class="num">18:40:18</td><td class="num">YT2618100700000005</td><td class="num" style="color:var(--blue)">413498</td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Miranti</td><td>First scan</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#3</td>
+          <td class="num">18:40:31</td><td class="num">YT2618100700000005</td><td class="num" style="color:var(--blue)">413498</td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-dup">⚠ Duplicate scan</span></td><td>Miranti</td><td class="mut"><b>Duplicate of #2</b> — same tracking no. (check for combined box)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#4</td>
+          <td class="num">18:40:55</td><td class="num">YT2618100700000006</td><td class="num" style="color:var(--blue)">413511</td>
+          <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td><span class="cs-processing">⚠ Not outbounded</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">Process this order</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
+          <td class="num">18:41:07</td><td class="num">YT2618100700000004</td><td class="num" style="color:var(--blue)">413540</td>
+          <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mut" style="margin-top:12px">Sequence (#) = cumulative from 1 after closing starts · lowest first · all rows stored in the backend (fully included in the closing report export)</p>
+
+    <div class="clsbanner done anno" style="margin-top:20px">
+      <span class="dot" style="top:-11px;left:-10px">8</span>
+      <b>Confirm Closing</b>
+      <span>This button is <b>only enabled</b> once the OK-scan count <b>exactly matches today's manually entered outbound target (84)</b> with 0 warnings — <b>no auto-confirm; closing happens only when this button is pressed.</b> The scan input stays active even after the match (e.g. an 85th parcel turns up after counting 84) — an over-scan makes it a mismatch and disables the button again → edit the count (↺) or clear the extra scans, then confirm. Confirming saves the closing record — the admin's <b>Closing History</b> replaces the retired Daily Shipping Status spreadsheet</span>
+      <button class="btn btn-gray btn-sm" id="confirmBtn1">Confirm Closing (79 remaining · 2 warnings)</button>
+    </div>
+
+  </div>
+
+
+</div></div>
+
+<div class="legend">
+  <h3>State 1 Changes — OK Scan (outbounded)</h3>
+  <ol>
+    <li><span class="n">1</span><span>Closing-dedicated large barcode scan input — scan the <b>carrier-handover tracking number</b> of today's packed orders to verify (e.g. YUN Express uses the YT prefix — YT2618100700000004). Outbound status is judged the instant it is scanned. The scanner's <b>auto-Enter submits → verdict → focus returns with all text selected</b>, repeating for continuous scanning. <b>Scanner protocol</b>: a barcode scanner types the number followed by an automatic Enter. During continuous scanning the cursor must always stay in this scan input, and the page must <b>never refresh</b> between scans — every scan lands in this same input with no extra clicks (shared with View Orders scan protocol) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">2</span><span>OK-scan confirmation = <b>compact one-line bar</b> (green: sequence · order · tracking · status · time · worker). <b>A large panel appears only on the State 4 completion screen</b> — the large OK and warning panels were both removed (2026-07-23); warnings are read in the row, announced by the voice alert <span class="ref">— F Dean · reworded 2026-08-03</span></span></li>
+    <li><span class="n">3</span><span>Voice alert toggle (on by default) — plays "Please check this order" automatically on warnings, so warnings register without watching the screen during fast scanning. A Test voice button is provided <span class="ref">— F Dean</span></span></li>
+    <li><span class="n">4</span><span>Closing progress counts — outbound target (<b>manually entered value</b>) / OK / warnings / remaining scans + a progress bar (green OK · red warning segments) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">5</span><span>OK scan = <b>only orders whose status is Prepare Shipment</b> → green "Outbounded". Every other status (Processing etc.) is a warning (replaces the current closing step "check whether it was outbound-processed") <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">6</span><span>Scan list — OK (green tint) / warning (red tint) rows, <b>leftmost # = scan sequence # (line number)</b>. Duplicate warnings <b>state which scans collide by #</b> (e.g. #3 ↔ #2). Sorted lowest to highest, new scans append at the bottom. The <b style="color:var(--red)">✕</b> on the right of each row = delete scan row (confirm modal "Remove this scan? Yes / No") — for clearing mis-scans and unknown orders; deleted rows are excluded from the counts (M2) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">7</span><span>Comments hub in the top bar — @Mentions + Saved + full comment search (newest first), aggregating the communication trail of closing exceptions <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">8</span><span>Confirm Closing button — enabled only when <b>OK-scan count = the manually entered outbound target (exact match; over-scan is also a mismatch) + 0 warnings</b>. <b>Enabled ≠ auto-confirmed; closing requires the click</b> (scanning stays possible after the match — finding an extra disables it again). Confirming saves the closing record — the admin's Closing History replaces the retired Daily Shipping Status spreadsheet (owner decision 2026-08-03) <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">9</span><span>Reduced side margins — every column + status fits on one screen without scrolling <span class="ref">— C Screen (common)</span></span></li>
+    <li><span class="n">10</span><span><b>Today's outbound target manual count</b> — the value entered at closing start (State 0) is shown locked. <b>[↺ Edit count]</b> edits the target; <b>[✕ Cancel Closing]</b> cancels today's closing session (returns to the pre-start screen; discarding scan records requires confirmation). The baseline is the physical count, not a system figure <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">11</span><span><b>Top menu [Closing | Closing History]</b> — Closing History switches to a <b>separate page</b> (not a modal): daily snapshots · CSV export. See the "5 · Closing History" tab above for details <span class="ref">— F Closing</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Behavior rules (off-screen): <b>the scan input is disabled until closing starts (manual count entered).</b> After closing starts, clicking anywhere on the page auto-focuses the scan input (all text selected) for continuous scanning, and results show as a top-right toast without a reload — implemented purely as behavior, with no on-screen copy. The scanned tracking number's order status is looked up instantly → <b>Prepare Shipment = OK</b> (green · silent); any other status (Processing etc.) or a tracking number already scanned today (duplicate) = warning (red · voice). <b>Closing confirm condition = OK-scan count exactly matches the manually entered outbound target + 0 warnings</b> (over-scan is also a mismatch). <b>Reaching the match only enables the Confirm button — it is not auto-closing</b>: a person must press [Confirm Closing] after checking that everything was scanned, and the scan input stays alive after the match, so an extra parcel (an 85th) flips it to a mismatch warning and disables the button again. Outbound in Process Processing Order (M1) is a <b>real order-status change</b> reflected on every screen. A tracking number with no matching order = <b>"unknown order" warning (State 2b)</b> — excluded from the closing count. <b>Closing progress is stored server-side</b> — leaving for another page and coming back, or refreshing, keeps the count, scan list and warnings intact; nothing clears until closing is confirmed or explicitly restarted. <b>Continuous scanning:</b> the scanner's automatic Enter substitutes for pressing Scan (no button click needed), and right after the verdict the cursor returns to the scan input with the text fully selected — the next scan overwrites the previous value, so any number of scans run without interruption. The scanner types the number followed by an automatic Enter; during continuous scanning the cursor must always stay in this scan input, and the page must <b>never refresh</b> between scans — every scan lands in this same input with no extra clicks (shared with View Orders scan protocol).</p>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2 : Warning · Processing (not outbounded) ══════════════ -->
+<section class="state" id="s2" data-voice="Please check this order">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
+    <div class="scanbig">
+      <input value="YT2618100700000006" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
+    </div>
+
+
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:3.6%"></i></div>
+    <p class="proglab">Closing progress 4.8% — Confirm Closing becomes available after resolving 3 warnings</p>
+
+    <p class="sub" style="margin-top:22px">Scan list <span class="mut" style="font-weight:400">— warning rows highlighted with a red tint</span></p>
+    <table class="tbl anno">
+      <thead><tr>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-bad">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#4</td>
+          <td class="num">18:40:55</td><td class="num">YT2618100700000006</td><td class="num" style="color:var(--blue)">413511</td>
+          <td class="num">1</td><td><span class="cs-processing">Processing</span></td>
+          <td><span class="cs-processing">⚠ Not outbounded</span></td><td>Dean</td><td><button class="btn btn-red-line btn-sm" data-modal="m-process">Process this order</button></td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
+          <td class="num">18:41:07</td><td class="num">YT2618100700000004</td><td class="num" style="color:var(--blue)">413540</td>
+          <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2 Changes — Warning · Processing (not outbounded)</h3>
+  <ol>
+    <li><span class="n">1</span><span>A Processing (not outbounded) scan = <b>red-tinted list row + "⚠ Not outbounded" verdict + auto-play of the "Please check this order" voice</b>. Handling happens in the list too — the row's <b>[Process this order]</b> button (M1: Zero Packing check → Outbound, a <b>real order-status change</b> Processing → Prepare Shipment reflected on every screen). The large warning panel and action banner were removed 2026-07-23 (verifying and handling in the list is enough) <span class="ref">— F Closing</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 2b : Warning · Unknown Order ══════════════ -->
+<section class="state" id="s2b" data-voice="Please check this order">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
+    <div class="scanbig">
+      <input value="YT2618100700000007" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
+    </div>
+
+
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate · unknown order)</div><div class="val">4</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:4.8%"></i></div>
+    <p class="proglab">Closing progress 4.8% — unknown orders are not counted; Confirm Closing after resolving warnings</p>
+
+    <p class="sub" style="margin-top:22px">Scan list</p>
+    <table class="tbl anno">
+      <thead><tr>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#5</td>
+          <td class="num">18:41:07</td><td class="num">YT2618100700000004</td><td class="num" style="color:var(--blue)">413540</td>
+          <td class="num">3</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Dean</td><td>–</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#7</td>
+          <td class="num">18:42:05</td><td class="num">YT2618100700000007</td><td class="num" style="color:var(--ink-3)">–</td>
+          <td class="num" style="color:var(--ink-3)">–</td><td class="num" style="color:var(--ink-3)">–</td>
+          <td><span class="cs-dup">⚠ Unknown order</span></td><td>Dean</td><td class="mut">Mistyped tracking no. or an order from another system — check the physical label</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 2b Changes — Warning · Unknown Order</h3>
+  <ol>
+    <li><span class="n">1</span><span>A tracking number with no matching order = <b>red-tinted list row + "⚠ Unknown order" verdict</b> (Order · status "–") + auto voice. <b>Not included in the closing count</b> — recheck the physical label and rescan; if still not found, escalate to a manager. Distinct from the View Orders unrecognized (product barcode) flow — here the tracking number itself does not exist in the system <span class="ref">— added 2026-07-23</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 3 : Warning · Duplicate Scan ══════════════ -->
+<section class="state" id="s3" data-voice="Please check this order">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
+    <div class="scanbig">
+      <input value="YT2618100700000005" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span> — plays "Please check this order" automatically on warnings</span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Play again</button>
+    </div>
+
+
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">4</div></div>
+      <div class="tile warn"><div class="lab">Warnings (not outbounded · duplicate)</div><div class="val">3</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">80</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:4.8%"></i><i class="p-warn" style="width:3.6%"></i></div>
+    <p class="proglab">Closing progress 4.8% — duplicates are not double-counted</p>
+
+    <p class="sub" style="margin-top:22px">Scan list</p>
+    <table class="tbl anno">
+      <thead><tr>
+        <th>#<span class="dot" style="top:2px;left:-12px">1</span></th><th>Scan Time</th><th>Tracking Barcode</th><th>Order ID</th><th>Items</th><th>Order Status</th><th>Closing Verdict</th><th>Worker</th><th>Notes</th><th style="width:44px"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="row-ok">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#2</td>
+          <td class="num">18:40:18</td><td class="num">YT2618100700000005</td><td class="num" style="color:var(--blue)">413498</td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-shipped">✓ Outbounded</span></td><td>Miranti</td><td>First scan</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+        <tr class="row-bad">
+          <td class="num" style="color:var(--ink-3);font-weight:700">#6</td>
+          <td class="num">18:41:44</td><td class="num">YT2618100700000005</td><td class="num" style="color:var(--blue)">413498</td>
+          <td class="num">5</td><td><span class="cs-shipped">Prepare Shipment</span></td>
+          <td><span class="cs-dup">⚠ Duplicate scan</span></td><td>Dean</td><td class="mut"><b>Duplicate of #2</b> — first scanned 18:40:18 (Miranti)</td>
+          <td><button class="btn btn-line btn-sm scandel" title="Delete scan row" style="border-color:var(--red);color:var(--red);padding:4px 8px">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 3 Changes — Warning · Duplicate Scan</h3>
+  <ol>
+    <li><span class="n">1</span><span>Rescanning a tracking number already scanned today = <b>red-tinted list row + "⚠ Duplicate scan" verdict</b> + auto voice — a digital replacement for the Excel column-A duplicate-value check. The Notes column <b>states which scans collide by line number</b> (#6 ↔ #2, with first scan time and worker, to judge combined-box cases). Duplicates are not double-counted toward closing; combined-box reasons are logged in the order's Comments <span class="ref">— F Dean / current process 1</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ STATE 4 : Closing Complete ══════════════ -->
+<section class="state" id="s4">
+<div class="mockwrap"><div class="mock anno">
+  <div class="toast"><span>✓ Today's closing confirmed — 84/84 orders</span><small>Closing record saved · replaces the retired Daily Shipping Status sheet</small></div>
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="pagetabs">
+      <button class="on">Closing</button>
+      <button data-goto="shist">Closing History</button>
+    </div>
+    <p class="mut" style="margin:0 0 8px">① Today's outbound target (manual count): <b style="color:var(--ink)">84 orders</b> — closing started 18:02 (Dean)</p>
+    <div class="scanbig">
+      <input value="" placeholder="Scan the tracking barcode — outbound status is judged instantly on scan">
+      <button class="btn btn-blue">Scan</button>
+    </div>
+    <div class="voicebar">
+      <span class="vswitch"><span class="vtrack"><i></i></span> Voice alert: <span style="color:var(--green)">On</span></span>
+      <button class="btn btn-line btn-sm sim-voice">🔊 Test voice</button>
+    </div>
+
+    <div class="bigstatus bs-ok anno">
+      <span class="dot" style="top:-11px;left:-11px">1</span>
+      <span class="ic">✓</span>
+      <div>
+        <div class="big">Today's closing complete — all orders verified</div>
+        <div class="bmeta">Manual count 84 = OK scans 84, an <b>exact match</b> · 0 warnings · closing confirmed 2026-07-13 18:52 (Yongwon)</div>
+      </div>
+      <div class="bside">Warnings<br><b style="color:var(--green)">0</b><br>Remaining scans 0</div>
+    </div>
+
+    <div class="clsstat">
+      <div class="tile"><div class="lab">Today's outbound target (manual input)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">OK (outbounded)</div><div class="val">84</div></div>
+      <div class="tile ok"><div class="lab">Warnings (resolved)</div><div class="val">0</div></div>
+      <div class="tile"><div class="lab">Remaining scans</div><div class="val">0</div></div>
+    </div>
+    <div class="prog"><i class="p-ok" style="width:100%"></i></div>
+    <p class="proglab">Closing progress 100% — OK 84/84 exact match + 0 warnings → closing confirmed · today's record saved to Closing History</p>
+
+    <div class="clsbanner done anno">
+      <span class="dot" style="top:-11px;left:-10px">2</span>
+      <b>Closing Report</b>
+      <span>Exports today's closing result — replaces the manual copy/paste and formula-stripping into <b>SS Daily Shipping Status</b> (sheet retired 2026-08-03). A snapshot is saved automatically on closing confirmation.</span>
+      <button class="btn btn-green-line btn-sm">Download Closing Report (CSV)</button>
+    </div>
+
+    <div class="clsbanner info anno" style="margin-top:12px">
+      <span class="dot" style="top:-11px;left:-10px">3</span>
+      <b>Warning Resolution Summary</b>
+      <span>3 warnings today — 1 Processing (413511, resolved after Outbound) · 2 duplicates (combined-box confirmed, logged in Comments). See the log and Comments for details.</span>
+    </div>
+
+  </div>
+</div></div>
+<div class="legend">
+  <h3>State 4 Changes — Closing Complete</h3>
+  <ol>
+    <li><span class="n">1</span><span>This screen requires <b>pressing [Confirm Closing]</b> while OK scans are an <b>exact match</b> with the manual count target and warnings are 0 — no auto-closing (room to find extra parcels even after the match). Confirmation time and confirmer are recorded. On confirmation today's snapshot is saved to the Closing History page <span class="ref">— F Closing · corrected 2026-08-03</span></span></li>
+    <li><span class="n">2</span><span>Closing report export (CSV) — replaces the manual copy/paste and formula-stripping into SS Daily Shipping Status (sheet retired 2026-08-03) <span class="ref">— F Closing (current process)</span></span></li>
+    <li><span class="n">3</span><span>Warning resolution summary — aggregates today's Processing/duplicate warnings and their resolutions <span class="ref">— F Dean</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ Closing History page ══════════════ -->
+<section class="state" id="shist">
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span>
+    <span class="sp"></span>
+    <button class="icon-btn">💬 Comments<span class="badge-n">2</span></button>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+  </div>
+  <div class="pagepad">
+    <h2>WMS - Closing</h2>
+    <p class="sub">Barcode-scan verification of today's packed orders</p>
+    <div class="anno"><div class="pagetabs">
+      <button data-goto="back">Closing</button>
+      <button class="on">Closing History</button>
+    </div><span class="dot" style="top:-11px;left:120px">1</span></div>
+
+    <p class="mut" style="margin:0 0 10px">Daily snapshots saved automatically on closing confirmation — an audit trail of outbound target (manual count) · OK scans · warning resolution · confirmer</p>
+    <table class="logtbl anno" style="font-size:13px">
+      <tr><th>Date</th><th>Outbound Target (manual)</th><th>OK Scans</th><th>Warnings (raised→resolved)</th><th>Match</th><th>Closed By</th><th>Confirmed At</th><th><span class="dot" style="top:-13px;right:-8px">2</span></th></tr>
+      <tr style="background:var(--green-soft)"><td class="num"><b>07-13 (today)</b></td><td class="num">84</td><td class="num">84</td><td class="num">3→3</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Yongwon</td><td class="num">18:52</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-13" data-meta="84/84 · 18:52 (Yongwon)">Amend</button></td></tr>
+      <tr><td class="num">07-12<br><span class="amended-badge">Amended v2 · Dean · 07-13 09:12</span></td><td class="num">91</td><td class="num">91</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:02</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-12" data-meta="91/91 · 19:02 (Dean)">Amend</button></td></tr>
+      <tr><td class="num">07-11</td><td class="num">78</td><td class="num">78</td><td class="num">0</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:47</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-11" data-meta="78/78 · 18:47 (Miranti)">Amend</button></td></tr>
+      <tr><td class="num">07-10</td><td class="num">103</td><td class="num">103</td><td class="num">1→1</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Dean</td><td class="num">19:15</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-10" data-meta="103/103 · 19:15 (Dean)">Amend</button></td></tr>
+      <tr><td class="num">07-09</td><td class="num">88</td><td class="num">88</td><td class="num">2→2</td><td style="color:var(--green);font-weight:800">✓ Match</td><td>Miranti</td><td class="num">18:58</td><td><button class="btn btn-line btn-sm">CSV</button> <button class="btn btn-line btn-sm amendbtn" data-date="07-09" data-meta="88/88 · 18:58 (Miranti)">Amend</button></td></tr>
+    </table>
+    <p class="mut" style="margin-top:10px">Closing cannot be confirmed while mismatched, so records are always saved as "Match" — mismatch causes (missed scans · over-scans · unresolved warnings) must be resolved before confirmation.</p>
+  </div>
+</div></div>
+<div class="legend">
+  <h3>Closing History — New Annotations</h3>
+  <ol>
+    <li><span class="n">1</span><span><b>Closing History is a separate page</b> — switched via the top tabs [Closing | Closing History] (not a modal; converted 2026-07-23). Daily snapshot: date · outbound target (manual) · OK scans · warnings raised→resolved · match · closed by · confirmed at. <b>The per-day CSV button on each closing date's row downloads that day's closing report individually (full scan list included)</b>. Pressing the "Closing" tab returns to the closing screen you were viewing <span class="ref">— F Closing</span></span></li>
+    <li><span class="n">2</span><span><b>Amend (per-row)</b> — reopens that date's confirmed closing for correction (owner decision 2026-08-03, resolves PD-74). Clicking [Amend] asks <b>"Amend the closing for {date}? The confirmed record stays until you re-confirm."</b> (M3). Confirming opens <b>Amendment mode</b>: the closing screen loads the day's confirmed scan list in full under an amber <b>"AMENDING — {date} closing (confirmed 84/84)"</b> banner, the manual target stays editable (84 → 85) and the scan input is active. Scanning the found parcel to an exact 85/85 match with 0 warnings enables <b>[Re-confirm Closing]</b> — the record updates <b>in place</b> (never a second row, one row per date preserved) with an <b>"Amended" badge</b> (version · actor · timestamp; see the 07-12 row) — Closing History itself is the system of record (the Daily Shipping Status sheet was retired 2026-08-03), and a green toast confirms. Exiting amendment keeps the confirmed record untouched <span class="ref">— added 2026-08-03</span></span></li>
+  </ol>
+</div>
+</section>
+
+<!-- ══════════════ MODAL : Process Processing Order (Zero Packing check → Outbound) ══════════════ -->
+<div class="overlay" id="m-process">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Process Processing Order — Order 413511<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">This order has not been outbound-processed yet.</b>
+      <p class="mut" style="margin:6px 0 0">Tracking YT2618100700000006 · 1 item · Status <span class="cs-processing">Processing</span></p>
+      <div style="margin-top:14px">
+        <label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox"> <span><b style="color:var(--ink)">Packing status of this order verified at Zero Packing</b> — check when proper packing is confirmed (step 6 of the current closing process)</span></label>
+      </div>
+      <div style="margin-top:12px">
+        <b style="color:var(--ink)">Memo (Optional)</b>
+        <textarea class="mtextarea" placeholder="Packing status and actions taken — if written, it is also recorded to the order's Comments history and the closing log"></textarea>
+      </div>
+      <div class="note">Processing Outbound <b>changes the real order status Processing → Prepare Shipment</b> (immediately reflected on every screen — order detail, View Orders, etc.). In the closing list this row is re-judged as green <b>"Outbounded"</b>. If packing is incomplete, handle it separately and rescan.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Close</button>
+      <button class="btn btn-green btn-sm" data-close>Process Outbound → resolve warning</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Delete Scan Row confirmation ══════════════ -->
+<div class="overlay" id="m-scandel">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M2</span>
+    <header>Delete Scan Row<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Remove this scan?</b>
+      <p class="mut" id="scandelInfo" style="margin:8px 0 0">#7 · YT2618100700000007</p>
+      <div class="note">Deleting excludes it from the list and the closing counts — for clearing mis-scans, unknown orders, etc. Deletion history is kept in the backend.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>No</button>
+      <button class="btn btn-sm" id="scandelYes" style="background:var(--red);color:#fff">Yes — remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Amend Closing confirmation (PD-74 owner decision, 2026-08-03) ══════════════ -->
+<div class="overlay" id="m-amend">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M3</span>
+    <header>Amend Closing — <span id="amendDateHdr">07-13</span><button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">Amend the closing for <span id="amendDateBody">07-13</span>? The confirmed record stays until you re-confirm.</b>
+      <p class="mut" id="amendMeta" style="margin:8px 0 0">Confirmed 84/84 · 18:52 (Yongwon)</p>
+      <div class="note">Amendment mode reloads the day's confirmed scan list with the scan input active. Raise the manual target (e.g. 84 → 85), scan the found parcel, and press <b>Re-confirm Closing</b> — the record is updated <b>in place</b> with an <b>Amended</b> badge (version · actor · timestamp). Closing History itself is the system of record — the retired Daily Shipping Status sheet needs no update.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep the record</button>
+      <button class="btn btn-blue btn-sm" id="amendYes">Amend — open the closing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODAL : Cancel Closing confirmation (WF-7 fix, 2026-08-03) ══════════════ -->
+<div class="overlay" id="m-cancel">
+  <div class="modal">
+    <header>Cancel today's closing?<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <b style="color:var(--ink)">5 scans will be removed from this session.</b>
+      <p class="mut" style="margin:8px 0 0">The scan records are kept in the audit log and can be reviewed later, but the session will restart from the count entry.</p>
+    </div>
+    <div class="foot">
+      <button class="btn btn-line btn-sm" data-close>Keep scanning</button>
+      <button class="btn btn-sm" id="cancelYes" style="background:var(--red);color:#fff">Yes — cancel closing</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.wf-tab[data-state]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.querySelectorAll('.state').forEach(s=>s.classList.remove('on'));
+    const st=document.getElementById(t.dataset.state);
+    st.classList.add('on');
+    window.scrollTo({top:0});
+    /* entering a warning state auto-plays the voice (demo of Dean's request) */
+    if(st.dataset.voice) speak(st.dataset.voice);
+  });
+});
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'block' : 'none';
+  });
+});
+/* Comments hub tab switch (Mentions / Saved) */
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{
+      p.style.display = p.dataset.pane===b.dataset.tab ? 'block' : 'none';
+    });
+  });
+});
+/* ★ save toggle */
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+
+/* ── voice alert (Web Speech API) — actually plays the warning phrase ── */
+let voiceOn = true;
+function speak(text){
+  if(!voiceOn) return;
+  try{
+    const u = new SpeechSynthesisUtterance(text);
+    const vs = window.speechSynthesis.getVoices();
+    u.voice = vs.find(v=>v.name==='Samantha') || vs.find(v=>/en[-_]US/i.test(v.lang||'')) || null;
+    u.lang = 'en-US'; u.rate = 1; u.pitch = 1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+const vt=document.getElementById('voiceToggle');
+if(vt){
+  vt.addEventListener('click',()=>{
+    voiceOn=!voiceOn;
+    vt.querySelector('.vtrack').classList.toggle('off',!voiceOn);
+    const st=document.getElementById('voiceState');
+    st.textContent = voiceOn?'On':'Off';
+    st.style.color = voiceOn?'var(--green)':'var(--ink-3)';
+    if(voiceOn) speak('Please check this order');
+  });
+}
+const vtest=document.getElementById('voiceTest');
+if(vtest) vtest.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;});
+document.querySelectorAll('.sim-voice').forEach(b=>b.addEventListener('click',()=>{const o=voiceOn;voiceOn=true;speak('Please check this order');voiceOn=o;}));
+
+/* State 0 — manual count input + Start Closing → switch to in-progress screen (State 1) demo.
+   WF-8 fix (2026-08-03): empty/invalid input now raises an explicit red validation toast. */
+function s0toast(msg){
+  const m=document.querySelector('#s0 .mock');
+  const t=document.createElement('div');
+  t.className='toast err';
+  const s=document.createElement('span'); s.textContent=msg; t.appendChild(s);
+  m.prepend(t); setTimeout(()=>t.remove(),2600);
+}
+document.getElementById('startBtn0').addEventListener('click',()=>{
+  const v=document.getElementById('targetIn0').value.trim();
+  if(!v){s0toast('✕ Enter the hand-counted parcel count first');return;}
+  if(!/^\d+$/.test(v)||parseInt(v,10)<1){s0toast('✕ The count must be a whole number of 1 or more');return;}
+  document.querySelector('.wf-tab[data-state="s1"]').click();
+});
+/* scan row ✕ — delete after confirm modal */
+let delRow=null;
+document.querySelectorAll('.scandel').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  delRow=b.closest('tr');
+  const c=delRow.cells;
+  document.getElementById('scandelInfo').textContent=c[0].textContent.trim()+' · '+c[2].textContent.trim();
+  document.getElementById('m-scandel').classList.add('open');
+}));
+document.getElementById('scandelYes').addEventListener('click',()=>{
+  if(delRow){delRow.remove();delRow=null;}
+  document.getElementById('m-scandel').classList.remove('open');
+});
+/* edit count / cancel closing (State 1 banner) */
+document.getElementById('targetEdit').addEventListener('click',()=>{
+  const i=document.getElementById('targetIn1'), b=document.getElementById('targetEdit');
+  if(i.disabled){i.disabled=false;i.focus();i.select();b.textContent='Save';}
+  else{i.disabled=true;b.textContent='↺ Edit count';}
+});
+/* WF-7 fix (2026-08-03): Cancel Closing now takes a confirm dialog before returning to State 0 */
+document.getElementById('closeCancel').addEventListener('click',()=>{
+  document.getElementById('m-cancel').classList.add('open');
+});
+document.getElementById('cancelYes').addEventListener('click',()=>{
+  document.getElementById('m-cancel').classList.remove('open');
+  showState('s0');
+});
+/* Closing History page switch — top tabs */
+let lastState='s0';
+function showState(id){
+  document.querySelectorAll('.state').forEach(x=>x.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.wf-tab[data-state]').forEach(x=>x.classList.toggle('on',x.dataset.state===id));
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.goto==='back'){showState(lastState);}
+  else{const cur=document.querySelector('.state.on');if(cur&&cur.id!=='shist')lastState=cur.id;showState(b.dataset.goto);}
+}));
+/* ── Amend Closing (PD-74 owner decision, 2026-08-03) ──
+   shist row [Amend] → M3 confirm → Amendment mode demo:
+   State 1 + amber AMENDING banner + target raised by 1 + Re-confirm label. Exit restores. */
+let amendDate='07-13', amendMeta='84/84 · 18:52 (Yongwon)';
+document.querySelectorAll('.amendbtn').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();
+  amendDate=b.dataset.date; amendMeta=b.dataset.meta;
+  document.getElementById('amendDateHdr').textContent=amendDate;
+  document.getElementById('amendDateBody').textContent=amendDate;
+  document.getElementById('amendMeta').textContent='Confirmed '+amendMeta;
+  document.getElementById('m-amend').classList.add('open');
+}));
+document.getElementById('amendYes').addEventListener('click',()=>{
+  document.getElementById('m-amend').classList.remove('open');
+  showState('s1');
+  document.getElementById('amendBannerB').textContent='AMENDING — '+amendDate+' closing (confirmed '+amendMeta.split(' · ')[0]+')';
+  document.getElementById('amendBanner').style.display='flex';
+  document.getElementById('targetIn1').value=String(parseInt(amendMeta,10)+1);
+  document.getElementById('confirmBtn1').textContent='Re-confirm Closing (1 remaining)';
+});
+document.getElementById('amendExit').addEventListener('click',()=>{
+  document.getElementById('amendBanner').style.display='none';
+  document.getElementById('targetIn1').value='84';
+  document.getElementById('confirmBtn1').textContent='Confirm Closing (79 remaining · 2 warnings)';
+  showState('shist');
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent = document.body.classList.contains('no-anno') ? 'Show annotations' : 'Hide annotations';
+});
+</script>

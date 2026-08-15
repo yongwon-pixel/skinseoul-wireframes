@@ -1,0 +1,490 @@
+<title>WMS 2.0 — Ready to be Outbounded Wireframe</title>
+<style>
+:root{
+  --ss-purple:#582DB5; --ss-purple-100:#E1D3FF; --ss-purple-50:#F7F3FF;
+  --canvas:#F1F2F4; --page:#FFFFFF; --ink:#14101B; --ink-2:#413E48; --ink-3:#7E7C83;
+  --line:#DEE2E6; --line-strong:#BBBABE;
+  --nav:#1B1F24; --nav-fg:#C7CBD1;
+  --blue:#0D6EFD; --blue-soft:#E7F1FF;
+  --green:#198754; --green-soft:#D1E7DD;
+  --red:#DC3545; --red-soft:#F8D7DA;
+  --amber:#B45309; --amber-soft:#FFF3E0; --amber-line:#FDBA74;
+  --mkt:#7C3AED; --mkt-soft:#F3EEFF;
+  --jit-soft:#FFFBD6;
+  --star:#F59E0B;
+  --shadow:0 2px 10px rgba(20,16,27,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+button{font:inherit;cursor:pointer}
+
+.wf-bar{position:sticky;top:0;z-index:60;background:var(--ss-purple);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wf-bar h1{font-size:15px;margin:0;font-weight:700}
+.wf-bar .hint{font-size:12px;opacity:.75}
+.wf-toggle{border:none;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:5px 12px;font-size:12.5px;margin-left:auto}
+
+.anno{position:relative}
+.dot{position:absolute;z-index:40;width:20px;height:20px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--ss-purple-100);pointer-events:none}
+body.no-anno .dot,body.no-anno .legend{display:none!important}
+.legend{max-width:1500px;margin:26px auto 60px;padding:18px 22px;background:var(--ss-purple-50);border:1px solid var(--ss-purple-100);border-radius:10px}
+.legend h3{margin:0 0 10px;font-size:13px;color:var(--ss-purple);text-transform:uppercase;letter-spacing:.6px}
+.legend ol{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:7px 26px}
+.legend li{display:flex;gap:9px;font-size:13px;color:var(--ink-2)}
+.legend .n{flex:none;width:19px;height:19px;border-radius:99px;background:var(--ss-purple);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.legend .ref{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+
+.mockwrap{overflow-x:auto}
+.mock{min-width:1240px;background:var(--page);min-height:520px;padding-bottom:80px}
+.nav{background:var(--nav);color:var(--nav-fg);display:flex;align-items:center;gap:15px;padding:9px 18px;font-size:13px;flex-wrap:wrap}
+.nav .brand{color:#fff;font-weight:800;font-size:16px}
+.nav .sp{flex:1}
+.nav .user{color:#fff;font-weight:600;font-size:12.5px}
+.nav .avatar{display:inline-flex;width:24px;height:24px;border-radius:99px;background:var(--blue);color:#fff;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-right:6px}
+.icon-btn{position:relative;background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 10px;font-size:12.5px}
+.badge-n{position:absolute;top:-7px;right:-7px;background:var(--red);color:#fff;border-radius:99px;font-size:10.5px;font-weight:700;padding:1px 5.5px;line-height:1.3}
+.logout{background:transparent;border:1px solid #444B53;color:#fff;border-radius:7px;padding:4px 12px;font-size:12.5px}
+
+/* Reduced side padding (D) */
+.pagepad{padding:16px 14px 0}
+.ptitle h2{font-size:26px;margin:0 0 2px}
+.psub{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
+.psub h3{font-size:20px;margin:0}
+.psub .sp{flex:1}
+.btn{border-radius:7px;border:1px solid transparent;padding:7px 14px;font-size:13px;font-weight:600}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-line{background:var(--page);border-color:var(--blue);color:var(--blue)}
+.btn-green{background:var(--green);color:#fff}
+.btn-gray{background:var(--page);border:1px solid var(--line-strong);color:var(--ink-2)}
+.btn-sm{padding:5px 11px;font-size:12.5px}
+
+/* View tabs (All/Inventory/Marketing/JIT) */
+.viewtabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.vtab{border:1px solid var(--line-strong);border-radius:8px;padding:6px 14px;background:var(--page);font-weight:700;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.vtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Bulk action bar + progress */
+.bulkbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px}
+.bulkbar .cnt{font-size:12.5px;color:var(--ss-purple);font-weight:700}
+.progressrow{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.pbar{flex:1;min-width:260px;height:14px;background:var(--line);border-radius:99px;overflow:hidden}
+.pbar .fill{height:100%;width:60%;background:var(--green);border-radius:99px}
+.pbar-label{font-size:12.5px;color:var(--ink-2);font-weight:600;white-space:nowrap}
+.toast{position:absolute;top:54px;right:16px;z-index:80;background:var(--green);color:#fff;border-radius:10px;padding:10px 16px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:center;font-size:13px}
+.toast small{opacity:.85;font-size:11.5px}
+
+/* Table (actual admin structure) */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--ink);color:var(--page);text-align:left;padding:10px 12px;font-weight:600;white-space:nowrap}
+.tbl td{border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:middle}
+.tbl tr.striped{background:#FAFAFB}
+.tbl tr.row-jit td{background:var(--jit-soft)}
+.tbl tr.row-mkt td{background:var(--mkt-soft)}
+.oid{color:#4DA3D6;font-weight:600;text-decoration:underline}
+.cntbadge{display:inline-flex;min-width:26px;height:24px;border-radius:6px;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;padding:0 7px;color:#fff}
+.cb-total{background:var(--ink-3)}
+.cb-ready{background:var(--green)}
+.skupill{display:inline-block;background:var(--canvas);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;margin-right:6px}
+.locpill{display:inline-block;background:var(--page);border:1px solid var(--line-strong);border-radius:6px;padding:2px 9px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.locline{display:flex;align-items:center;padding:2px 0}
+.qtypill{display:inline-block;background:#CFF0FF;color:#0B76A0;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px}
+.item-line{display:flex;align-items:center;padding:2px 0;white-space:nowrap}
+.printbtn{width:40px;height:34px;border:1px solid var(--line-strong);background:var(--page);border-radius:8px;font-size:15px}
+.cmtbtn{position:relative;border:1px solid var(--blue);background:var(--page);color:var(--blue);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:600}
+.mkt-badge{display:inline-block;background:var(--mkt);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;margin-left:6px;vertical-align:middle}
+.jit-badge{display:inline-block;background:var(--amber);color:#fff;border-radius:5px;padding:1px 7px;font-size:9.5px;font-weight:800;margin-left:6px;vertical-align:middle}
+
+/* Inline comment panel per row */
+.crow td{background:var(--blue-soft);padding:12px 16px}
+.crow .c-item{display:flex;gap:10px;padding:6px 0;font-size:13px;align-items:flex-start}
+.crow .who{font-weight:700;white-space:nowrap}
+.crow .at{color:var(--blue);font-weight:700}
+.crow time{color:var(--ink-3);font-size:11.5px;margin-left:auto;white-space:nowrap}
+.crow .cwrite{display:flex;gap:8px;margin-top:8px}
+.crow input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:7px 10px;background:var(--page);color:var(--ink)}
+.star{border:none;background:none;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1;padding:0 2px}
+.star.on{color:var(--star)}
+
+.foundtxt{color:var(--ink-3);font-size:13.5px;margin:14px 0 18px}
+.howto{font-size:13.5px;color:var(--ink-2)}
+.howto b{display:block;margin-bottom:6px}
+.howto ul{margin:0;padding-left:22px}
+.howto li{margin-bottom:3px}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(10,6,20,.55);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--page);color:var(--ink);border-radius:12px;max-width:640px;width:100%;box-shadow:0 18px 60px rgba(0,0,0,.4);position:relative}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:15px;display:flex}
+.modal header .x{margin-left:auto;border:none;background:none;color:var(--ink-3);font-size:17px;cursor:pointer}
+.modal .body{padding:16px 18px;font-size:13.5px;color:var(--ink-2)}
+.modal .foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.picktbl{width:100%;border-collapse:collapse;font-size:13px}
+.picktbl th{background:var(--ink);color:var(--page);text-align:left;padding:7px 10px;font-weight:600}
+.picktbl td{border-bottom:1px solid var(--line);padding:7px 10px}
+.note{margin-top:12px;background:var(--blue-soft);border-radius:7px;padding:9px 12px;font-size:12.5px;color:var(--ink-2)}
+
+/* Comments hub */
+.inboxdd{position:absolute;top:44px;right:150px;width:370px;background:var(--page);border:1px solid var(--line-strong);border-radius:10px;box-shadow:var(--shadow);z-index:70;overflow:hidden;display:none}
+.inboxdd.open{display:block}
+.inboxdd .tabs{display:flex;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .tabs button{flex:1;border:none;background:none;padding:9px 8px;font-size:12.5px;font-weight:700;color:var(--ink-3);border-bottom:2px solid transparent}
+.inboxdd .tabs button.on{color:var(--ss-purple);border-bottom-color:var(--ss-purple);background:var(--page)}
+.inboxdd .paneheader{padding:8px 14px;font-size:11.5px;color:var(--ink-3);border-bottom:1px solid var(--line);display:flex}
+.inboxdd .paneheader small{margin-left:auto;color:var(--blue);font-weight:600;cursor:pointer}
+.inboxdd .it{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.inboxdd .it.unread{background:var(--blue-soft)}
+.inboxdd .it .body{flex:1}
+.inboxdd .it b{color:var(--ink)}
+.inboxdd .it time{color:var(--ink-3);font-size:11px}
+.inboxdd .empty{padding:22px 14px;text-align:center;color:var(--ink-3);font-size:12px}
+.inboxdd .csearch{display:flex;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--canvas)}
+.inboxdd .csearch input{flex:1;border:1px solid var(--line-strong);border-radius:6px;padding:6px 9px;font-size:12.5px;background:var(--page);color:var(--ink);outline:none}
+.inboxdd .csearch input:focus{border-color:var(--ss-purple)}
+.inboxdd .it mark{background:color-mix(in srgb,var(--ss-purple) 18%,var(--page));color:var(--ss-purple);font-weight:700;padding:0 1px;border-radius:2px}
+</style>
+
+<div class="wf-bar">
+  <h1>WMS 2.0 · Ready to be Outbounded Wireframe</h1>
+  <span class="hint">Based on the actual admin (captured 2026-07-21) · 5 sample orders · purple numbers = new annotations</span>
+  <button class="wf-toggle" data-modal="m-pick" style="background:rgba(255,255,255,.28)">Modal: Print Pick Locations (Picking List)</button>
+  <button class="wf-tab" data-modal="m-pick">Modal: Print Pick Locations</button>
+  <button class="wf-toggle" id="annoToggle">Hide annotations</button>
+</div>
+
+<div class="mockwrap"><div class="mock anno">
+  <div class="nav">
+    <span class="brand">SkinSeoul</span>
+    <span>Operation AI ▾</span><span>Catalog Management ▾</span><span>OMS Center ▾</span><span>Site Management ▾</span><span>Customer Management ▾</span><span>SkinSeoul WP Admin</span>
+    <span class="sp"></span>
+    <span style="position:relative">
+      <button class="icon-btn" data-open="inbox1">💬 Comments<span class="badge-n">2</span></button>
+      <span class="dot" style="top:2px;left:-26px">10</span>
+    </span>
+    <span class="user"><span class="avatar">Y</span>Yongwon Ryu</span>
+    <button class="logout">Logout</button>
+    <div class="inboxdd" id="inbox1">
+      <div class="csearch" onclick="event.stopPropagation()"><input placeholder="🔍 Search all comments — order no. · author · text" oninput="cSearch(this)"></div>
+      <div class="tabs">
+        <button class="on" data-tab="mentions">@ Mentions <span class="badge-n" style="position:static;margin-left:4px">2</span></button>
+        <button data-tab="saved">★ Saved</button>
+      </div>
+      <div class="tabpane" data-pane="mentions">
+        <div class="paneheader">Comments mentioning me · Click to open the order <small>Mark all read</small></div>
+        <div class="it unread"><div class="body"><b>Order 422165</b> · Dean: "@Yongwon Please take extra care packing this order"<br><time>10:12</time></div><button class="star" title="Save">★</button></div>
+        <div class="it unread"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon Please double-check the ×5 quantity"<br><time>09:40</time></div><button class="star on" title="Saved">★</button></div>
+      </div>
+      <div class="tabpane" data-pane="saved" style="display:none">
+        <div class="paneheader">Saved comments · Click to open the order <small>Unstar to remove from the list</small></div>
+        <div class="it"><div class="body"><b>Order 422221</b> · Egita: "@Yongwon Please double-check the ×5 quantity"<br><time>09:40</time></div><button class="star on" title="Unsave">★</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" style="display:none"><b>✓ Bulk Print Labels complete — 3 orders</b><small>Disappears automatically after a few seconds</small></div>
+
+  <div class="pagepad anno">
+    <span class="dot" style="top:6px;left:2px">11</span>
+    <div class="ptitle"><h2>WMS - Ready to be Outbonded</h2></div>
+    <div class="psub">
+      <h3>Ready to be Outbonded Orders</h3>
+      <span class="sp"></span>
+      <button class="btn btn-blue">Refresh</button>
+    </div>
+
+    <!-- View tabs (new) -->
+    <div class="viewtabs anno">
+      <span class="dot" style="top:-11px;left:-10px">14</span>
+      <button class="vtab on" data-view="all">All <span style="font-weight:400">(5)</span></button>
+      <button class="vtab" data-view="inv">Inventory <span style="font-weight:400">(3)</span></button>
+      <button class="vtab" data-view="mkt">Marketing <span style="font-weight:400">(1)</span></button>
+      <button class="vtab" data-view="jit">JIT <span style="font-weight:400">(1)</span></button>
+    </div>
+
+    <!-- Bulk action bar (new, D) -->
+    <div class="bulkbar anno">
+      <span class="dot" style="top:-11px;left:-10px">1</span>
+      <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox"> Select all</label>
+      <span class="anno"><button class="btn btn-line btn-sm" data-modal="m-pick">🖨 Print Pick Locations (3 orders · 8 items)</button><span class="dot" style="top:-11px;right:-8px">2</span></span>
+      <span class="anno"><button class="btn btn-line btn-sm bulk-run" data-label="Bulk Print Labels">🖨 Bulk Print Labels (3 orders)</button><span class="dot" style="top:-11px;right:-8px">3</span></span>
+      <span class="anno"><button class="btn btn-green btn-sm bulk-run" data-label="Bulk Outbound">📦 Bulk Outbound (3 orders)</button><span class="dot" style="top:-11px;right:-8px">4</span></span>
+      <span class="cnt">3 selected</span>
+    </div>
+
+    <!-- Progress (shared by the 3 bulk buttons) + completion toast (new, D) -->
+    <div class="progressrow anno">
+      <span class="dot" style="top:-11px;left:-10px">5</span>
+      <div class="pbar"><div class="fill" id="pfill"></div></div>
+      <span class="pbar-label anno" id="pbarLabel">Bulk Print Labels in progress — 3/5 (60%) · No refresh · selection kept · toast on completion<span class="dot" style="top:-11px;right:-26px">6</span></span>
+    </div>
+
+    <!-- Table (actual admin structure + checkbox & comment columns) -->
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34px"><input type="checkbox"></th>
+        <th>Order ID</th><th>Order Date</th><th>Customer</th><th class="anno">Total Items<span class="dot" style="top:-11px;right:-8px">13</span></th><th>Ready Item Details</th>
+        <th class="anno">Pick Locations<span class="dot" style="top:-11px;right:-8px">12</span></th>
+        <th class="anno">Comments<span class="dot" style="top:-11px;right:-8px">9</span></th><th>Print</th>
+      </tr></thead>
+      <tbody>
+        <tr data-view="inv">
+          <td><input type="checkbox" checked></td>
+          <td><span class="oid">422221</span></td><td>2026. 7. 21.</td><td>Sophia Kim</td>
+          <td><span class="cntbadge cb-total">5</span></td>
+          <td><div class="item-line"><span class="skupill">100039958</span> <b>AtoBarrier365</b> Body …<span class="qtypill">×5</span></div></td>
+          <td><div class="locline"><span class="locpill">A-02-13</span></div></td>
+          <td><button class="cmtbtn" data-open="crow1">💬 <span class="badge-n">1</span></button></td>
+          <td><button class="printbtn">🖨</button></td>
+        </tr>
+        <tr class="crow" id="crow1" data-view="inv" style="display:none"><td colspan="9">
+          <div class="c-item"><span class="who">Egita</span><span><span class="at">@Yongwon</span> Please double-check the ×5 quantity.</span><time>07-21 09:40</time><button class="star on" title="Saved">★</button></div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification (order no. · text · time · author)"><button class="btn btn-blue btn-sm">Post</button></div>
+        </td></tr>
+        <tr data-view="inv" class="striped">
+          <td><input type="checkbox" checked></td>
+          <td><span class="oid">422176</span></td><td>2026. 7. 21.</td><td>Jazmin Harrison</td>
+          <td><span class="cntbadge cb-total">1</span></td>
+          <td><div class="item-line"><span class="skupill">100035912</span> <b>Illiyoon</b> 세라마이드 아토 컨센트레이트 크림<span class="qtypill">×1</span></div></td>
+          <td><div class="locline"><span class="locpill">B-01-07</span></div></td>
+          <td><button class="cmtbtn" data-open="crow2">💬</button></td>
+          <td><button class="printbtn">🖨</button></td>
+        </tr>
+        <tr class="crow" id="crow2" data-view="inv" style="display:none"><td colspan="9">
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
+        </td></tr>
+        <tr data-view="inv">
+          <td><input type="checkbox" checked></td>
+          <td><span class="oid">422165</span></td><td>2026. 7. 21.</td><td>Janine Eames</td>
+          <td><span class="cntbadge cb-total">2</span></td>
+          <td>
+            <div class="item-line"><span class="skupill">100039420</span> <b>Centellian24</b> 마데카 크림 타이트닝<span class="qtypill">×1</span></div>
+            <div class="item-line"><span class="skupill">100013286</span> <b>Centellian24</b> 마데카 크림 타임 리버스<span class="qtypill">×1</span></div>
+          </td>
+          <td>
+            <div class="locline"><span class="locpill">A-03-02</span></div>
+            <div class="locline"><span class="locpill">B-02-11</span></div>
+          </td>
+          <td><button class="cmtbtn" data-open="crow3">💬 <span class="badge-n">1</span></button></td>
+          <td><button class="printbtn">🖨</button></td>
+        </tr>
+        <tr class="crow" id="crow3" data-view="inv" style="display:none"><td colspan="9">
+          <div class="c-item"><span class="who">Dean</span><span><span class="at">@Yongwon</span> Please take extra care packing this order. This is a VIP customer.</span><time>07-21 10:12</time><button class="star" title="Save">★</button></div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
+        </td></tr>
+        <tr class="row-mkt anno" data-view="mkt">
+          <td><input type="checkbox"></td>
+          <td><span class="oid">MKT-40233</span><span class="mkt-badge">MKT</span><span class="dot" style="top:-4px;left:-12px">8</span></td>
+          <td>2026. 7. 21.</td><td>Influencer @glowwithjade<div style="font-size:11px;color:var(--ink-3)">PIC: Harshit</div></td>
+          <td><span class="cntbadge cb-total">3</span></td>
+          <td>
+            <div class="item-line"><span class="skupill">100043697</span> <b>Dr.Jart+</b> 시카페어 젠틀 클렌징 폼<span class="qtypill">×2</span></div>
+            <div class="item-line"><span class="skupill">100012534</span> <b>Dr.Jart+</b> 시카페어 슬리페어 마스크<span class="qtypill">×1</span></div>
+          </td>
+          <td>
+            <div class="locline"><span class="locpill">A-01-04</span></div>
+            <div class="locline"><span class="locpill" style="border-color:var(--amber-line);background:var(--amber-soft);color:var(--amber)">Not inbounded</span></div>
+          </td>
+          <td><button class="cmtbtn" data-open="crow5">💬</button></td>
+          <td><button class="printbtn">🖨</button></td>
+        </tr>
+        <tr class="crow" id="crow5" data-view="mkt" style="display:none"><td colspan="9">
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
+        </td></tr>
+        <tr class="row-jit anno" data-view="jit">
+          <td><input type="checkbox"></td>
+          <td><span class="oid">422164</span><span class="jit-badge">Fully Inbounded</span><span class="dot" style="top:-4px;left:-12px">7</span></td>
+          <td>2026. 7. 21.</td><td>Siobhain Lowthe</td>
+          <td><span class="cntbadge cb-total">2</span></td>
+          <td><div class="item-line"><span class="skupill">100005611</span> <b>innisfree</b> 그린티 씨드 히알루로닉 세럼<span class="qtypill">×2</span></div></td>
+          <td><div class="locline"><span class="locpill">Shelf 3</span></div></td>
+          <td><button class="cmtbtn" data-open="crow4">💬</button></td>
+          <td><button class="printbtn">🖨</button></td>
+        </tr>
+        <tr class="crow" id="crow4" data-view="jit" style="display:none"><td colspan="9">
+          <div class="c-item" style="color:var(--ink-3)">No comments yet</div>
+          <div class="cwrite"><input placeholder="Write a comment — @mention sends an automatic Slack notification"><button class="btn btn-blue btn-sm">Post</button></div>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <p class="foundtxt" id="foundTxt">Found 5 order(s) with items ready for outbound</p>
+
+    <div class="howto">
+      <b>How to use:</b>
+      <ul>
+        <li>Click "Refresh" to load the latest orders ready for outbound</li>
+        <li>Orders shown here have at least one line item with "INBOUNDED" status</li>
+        <li>Click the Order ID link to see full order details and process outbound</li>
+        <li>Only items marked as INBOUNDED are ready for outbound processing</li>
+        <li>This page uses the dedicated readyToBeOutbonded API for optimized results</li>
+      </ul>
+    </div>
+  </div>
+</div></div>
+
+<div class="legend">
+  <h3>Ready to be Outbounded — Changes</h3>
+  <ol>
+    <li><span class="n">1</span><span>Per-row checkboxes + select all — target selection for the 3 bulk buttons below. Buttons show the <b>total count of selected orders and items</b> <span class="ref">— D</span></span></li>
+    <li><span class="n">2</span><span>Print Pick Locations — opens the <b>Picking List modal (M1)</b>: which products and how many to pick from which locations for the selected orders, <b>sorted by location (ascending)</b> (A-02-13 → B-01-07 → Shelf 3). Print → progress → completion toast <span class="ref">— D</span></span></li>
+    <li><span class="n">3</span><span>Bulk Print Labels — prints shipping labels for the selected orders in one go (count shown) <span class="ref">— D</span></span></li>
+    <li><span class="n">4</span><span>Bulk Outbound — outbounds the selected orders in one go. <b>Refreshes after completion · plays a send sound on execution (2026-08-03)</b> <span class="ref">— D</span></span></li>
+    <li><span class="n">5</span><span>0–100% progress bar — <b>shared by the 3 buttons: Print Pick Locations · Bulk Print Labels · Bulk Outbound</b>. Print actions: no refresh + selection kept; Outbound refreshes after completion <span class="ref">— D</span></span></li>
+    <li><span class="n">6</span><span>Completion notice — shown as a <b>top-right toast</b>, auto-dismisses after a few seconds. No failure case (all-success is the normal behavior). Click a bulk button above to see the demo <span class="ref">— D</span></span></li>
+    <li><span class="n">7</span><span>JIT order with every item inbounded (staff has not clicked the final Outbound) = <b>yellow row tint + "Fully Inbounded" badge</b> (wording changed from "JIT (channel) completed" on 2026-08-03 to avoid confusion with the colorless Sourcing Route labels), <b>always sorted to the bottom of the list</b> — keeps them apart from warehouse-stock orders <span class="ref">— D</span></span></li>
+    <li><span class="n">8</span><span>Manually imported Marketing Order = <b>purple row tint + MKT badge</b>, sorted below regular Ready and above completed JIT. <b>Always shown immediately on import regardless of stock or inbound status</b> (items not yet inbounded show an amber "Not inbounded" instead of a location) · shows the person in charge (PIC) <span class="ref">— D + G</span></span></li>
+    <li><span class="n">14</span><span><b>View tabs</b> — All (default) / Inventory (warehouse-stock Ready) / Marketing (manually imported marketing) / JIT (all items inbounded but Outbound not clicked) — filter by order type, linked to the Found count <span class="ref">— D</span></span></li>
+    <li><span class="n">13</span><span>Total Items = changed to the <b>total quantity sum</b> — the current admin shows only the number of SKUs, so even a ×5 order reads "1" → now shows the actual units to pick (e.g. 5 for 422221) <span class="ref">— D picking</span></span></li>
+    <li><span class="n">12</span><span><b>New Pick Locations column</b> — per-item locations listed vertically at the same eye level as Ready Item Details (warehouse stock = location, fully inbounded JIT = shelf number). The Ready Items column was removed as a duplicate of Total Items <span class="ref">— D picking</span></span></li>
+    <li><span class="n">9</span><span>Per-row Comments button — expands an inline comment panel under the order row (no need to open the order page), @mention sends an automatic Slack notification <span class="ref">— 0. UI 1</span></span></li>
+    <li><span class="n">10</span><span>Top-right Comments hub — @ Mentions / ★ Saved, click to open the order (shared across all screens) · <b>search box at the top</b> searches all comments (matches order no. · author · text, newest first) <span class="ref">— 0. UI 2</span></span></li>
+    <li><span class="n">11</span><span>Reduced side padding — fills the full screen width (same principle as View Orders) <span class="ref">— C/D</span></span></li>
+  </ol>
+  <p style="margin:12px 0 0;font-size:12.5px;color:var(--ink-3)">Base structure (including the "Ready to be Outbonded" spelling in the page title) and columns follow the actual screen, minus Ready Items and plus the new Pick Locations (checkbox/Order ID/Order Date/Customer/Total Items/Ready Item Details/Pick Locations/Comments/Print); Refresh, Found N order(s), and How to use are exactly as in the actual admin (captured 2026-07-21). One row per order, with SKU · <b>Korean product name (EN brand in bold)</b> · ×quantity in Ready Item Details — pickers locate items faster by the Korean name (2026-08-03 decision); the EN name remains on the order pages. The picking-list modal (M1) uses Korean names for the same reason. <b>Print buttons output the label immediately on click</b> — no browser print dialog (local print agent, see handoff note). Sort order: regular Ready orders → Marketing (MKT) → completed JIT. Actions column simplified to Print (2026-07-22) — View Order button removed; details open via the Order ID link.</p>
+</div>
+
+<!-- Modal: Print Pick Locations — Picking List (locations ascending) -->
+<div class="overlay" id="m-pick">
+  <div class="modal anno">
+    <span class="dot" style="top:-11px;left:-11px">M1</span>
+    <header>Print Pick Locations — Picking List (3 orders selected · 4 SKUs · 8 units total)<button class="x" data-close>✕</button></header>
+    <div class="body">
+      <table class="picktbl">
+        <thead><tr><th>Location</th><th>SKU</th><th>Product</th><th>Qty</th><th>Order</th></tr></thead>
+        <tbody>
+          <tr><td><b>A-02-13</b></td><td class="num">100039958</td><td>AtoBarrier365 Body …</td><td><b>5</b></td><td>422221</td></tr>
+          <tr><td><b>A-03-02</b></td><td class="num">100039420</td><td>마데카 크림 타이트닝</td><td>1</td><td>422165</td></tr>
+          <tr><td><b>B-01-07</b></td><td class="num">100035912</td><td>세라마이드 아토 컨센트레이트 크림</td><td>1</td><td>422176</td></tr>
+          <tr><td><b>B-02-11</b></td><td class="num">100013286</td><td>마데카 크림 타임 리버스</td><td>1</td><td>422165</td></tr>
+          <!-- WF-9 (2026-08-03): sample-set picking line per [G-13]/[BR-21] — PD-51 v1 keeps the single label "sample set" -->
+          <tr style="background:var(--amber-soft)"><td><span class="locpill" style="border-color:var(--amber-line);background:var(--page);color:var(--amber)">Sample</span></td><td class="num">—</td><td style="color:var(--amber);font-weight:700">sample set</td><td><b>×1</b></td><td>422165</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><b>Sorted by location (ascending)</b> (A-02-13 → B-01-07 → Shelf 3) — pick everything in one pass along the route. Printing: no refresh · selection kept; progress bar, then a top-right completion toast.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-gray btn-sm" data-close>Cancel</button>
+      <button class="btn btn-blue btn-sm bulk-run" data-label="Print Pick Locations" data-close>🖨 Print</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('[data-modal]').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();document.getElementById(b.dataset.modal).classList.add('open');});
+});
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>b.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+document.querySelectorAll('[data-open]').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const el=document.getElementById(b.dataset.open);
+    if(el.classList.contains('inboxdd')) el.classList.toggle('open');
+    else el.style.display = el.style.display==='none' ? 'table-row' : 'none';
+  });
+});
+document.querySelectorAll('.inboxdd .tabs button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    const dd=b.closest('.inboxdd');
+    dd.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{p.style.display=p.dataset.pane===b.dataset.tab?'block':'none';});
+  });
+});
+document.querySelectorAll('.star').forEach(s=>{
+  s.addEventListener('click',e=>{e.stopPropagation();s.classList.toggle('on');});
+});
+/* Bulk button demo — progress runs, then a top-right completion toast (auto-dismisses after 3s) */
+document.querySelectorAll('.bulk-run').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const fill=document.getElementById('pfill'), label=document.getElementById('pbarLabel');
+    const name=btn.dataset.label; let p=0;
+    const mode=(name==='Bulk Outbound')?'refreshes after completion':'No refresh · selection kept';
+    fill.style.width='0%';
+    /* RTO-WFX-9 (2026-08-03): write the label synchronously so the first ~250 ms never shows the previous run's mode string */
+    label.childNodes[0].textContent=name+' in progress — 0% · '+mode+' · toast on completion';
+    const t=setInterval(()=>{
+      p+=20; fill.style.width=Math.min(p,100)+'%';
+      label.childNodes[0].textContent=name+' in progress — '+Math.min(p,100)+'% · '+mode+' · toast on completion';
+      if(p>=100){clearInterval(t);
+        const toast=document.getElementById('toast');
+        toast.querySelector('b').textContent='✓ '+name+' complete — 3 orders';
+        toast.style.display='flex';
+        setTimeout(()=>{toast.style.display='none';},3000);
+      }
+    },250);
+  });
+});
+/* View tab filter — All/Inventory/Marketing/JIT */
+document.querySelectorAll('.vtab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.vtab').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    const v=t.dataset.view; let n=0;
+    document.querySelectorAll('tbody tr[data-view]').forEach(r=>{
+      const match=(v==='all'||r.dataset.view===v);
+      if(r.classList.contains('crow')){ r.style.display='none'; }
+      else { r.style.display=match?'':'none'; if(match) n++; }
+    });
+    document.getElementById('foundTxt').textContent='Found '+n+' order(s) with items ready for outbound';
+  });
+});
+document.getElementById('annoToggle').addEventListener('click',function(){
+  document.body.classList.toggle('no-anno');
+  this.textContent=document.body.classList.contains('no-anno')?'Show annotations':'Hide annotations';
+});
+/* Comments hub — closes on outside click (clicks inside the hub keep it open) */
+document.addEventListener('click',()=>{document.querySelectorAll('.inboxdd.open').forEach(d=>d.classList.remove('open'));});
+document.querySelectorAll('.inboxdd').forEach(d=>d.addEventListener('click',e=>e.stopPropagation()));
+/* Comments hub — search all comments (newest first) */
+const CSEARCH_DATA=[{o:'422165',a:'Dean',t:'Today 10:12',ts:8,x:'@Yongwon Please take extra care packing this order. This is a VIP customer.'},{o:'422221',a:'Egita',t:'Today 09:40',ts:7,x:'@Yongwon Please double-check the ×5 quantity'},{o:'422176',a:'Miranti',t:'Today 08:52',ts:6,x:'Reprinted the shipping label'},{o:'422108',a:'Dean',t:'Yesterday 16:45',ts:5,x:'Enclosed 2 sachet samples per customer request'},{o:'421990',a:'Aldo',t:'07-20 15:31',ts:4,x:'Box damaged — repacked and shipped'}];
+function cSearch(inp){
+  const dd=inp.closest('.inboxdd'), q=inp.value.trim().toLowerCase();
+  const tabs=dd.querySelector('.tabs');
+  let pane=dd.querySelector('[data-pane="csr"]');
+  if(!pane){pane=document.createElement('div');pane.className='tabpane';pane.dataset.pane='csr';pane.style.display='none';dd.appendChild(pane);}
+  if(!q){
+    pane.style.display='none';tabs.style.display='flex';
+    const on=dd.querySelector('.tabs button.on');
+    dd.querySelectorAll('.tabpane').forEach(p=>{if(p.dataset.pane!=='csr')p.style.display=p.dataset.pane===on.dataset.tab?'block':'none';});
+    return;
+  }
+  tabs.style.display='none';
+  dd.querySelectorAll('.tabpane').forEach(p=>p.style.display='none');
+  const hits=CSEARCH_DATA.filter(c=>(c.o+' '+c.a+' '+c.x).toLowerCase().includes(q)).sort((a,b)=>b.ts-a.ts);
+  const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  const hl=s=>{const i=s.toLowerCase().indexOf(q);if(i<0)return esc(s);
+    return esc(s.slice(0,i))+'<mark>'+esc(s.slice(i,i+q.length))+'</mark>'+esc(s.slice(i+q.length));};
+  pane.innerHTML='<div class="paneheader">'+hits.length+' results · newest first · click to open the order</div>'
+    +(hits.length?hits.map(c=>'<div class="it"><div class="body"><b>Order '+hl(c.o)+'</b> · '+hl(c.a)+': "'+hl(c.x)+'"<br><time>'+c.t+'</time></div></div>').join('')
+      :'<div class="empty">No matching comments</div>');
+  pane.style.display='block';
+}
+
+/* Outbound send sound — audible feedback that the action was received (2026-08-03) */
+function sndOutbound(){
+  try{
+    const ac = sndOutbound.ac || (sndOutbound.ac = new (window.AudioContext||window.webkitAudioContext)());
+    const t = ac.currentTime;
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(340,t); o.frequency.exponentialRampToValueAtTime(940,t+0.16);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.03); g.gain.exponentialRampToValueAtTime(0.0001,t+0.28);
+    o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+0.3);
+    const o2=ac.createOscillator(), g2=ac.createGain();
+    o2.type='triangle'; o2.frequency.setValueAtTime(1250,t+0.14);
+    g2.gain.setValueAtTime(0.0001,t+0.14); g2.gain.exponentialRampToValueAtTime(0.12,t+0.17); g2.gain.exponentialRampToValueAtTime(0.0001,t+0.34);
+    o2.connect(g2); g2.connect(ac.destination); o2.start(t+0.14); o2.stop(t+0.36);
+  }catch(e){}
+}
+document.querySelectorAll('button').forEach(b=>{
+  const tx=b.textContent||'';
+  if(/Outbound/.test(tx) && !/Cancel/.test(tx) && !/Outbounded/.test(tx)){ b.addEventListener('click',sndOutbound); }
+});
+</script>
